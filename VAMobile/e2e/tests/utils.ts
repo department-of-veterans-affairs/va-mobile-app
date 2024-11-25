@@ -603,6 +603,14 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await element(by.text('OK')).atIndex(0).tap()
     }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
+    if (AFUseCaseUpgrade) {
+      try {
+        await expect(element(by.text('Update now'))).toExist()
+      } catch (ex) {
+        await expect(element(by.text('Update now')).atIndex(1)).toExist()
+      }
+    }
+
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
       try {
@@ -622,16 +630,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
-      await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
-    }
-
-    if (AFUseCaseUpgrade) {
-      try {
-        await expect(element(by.text('Update now'))).toExist()
-      } catch (ex) {
-        await expect(element(by.text('Update now')).atIndex(1)).toExist()
-      }
     }
   }
 
