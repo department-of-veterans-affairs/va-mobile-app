@@ -6,12 +6,10 @@ import { CommonE2eIdConstants } from './utils'
 export const SignE2eIdConstants = {
   LOGIN_PAGE_ID: 'Login-page',
   LOA_P1_TEXT:
-    'Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.',
-  LOA_P2_TEXT: 'If you haven’t yet verified your identity, we’ll help you complete the process when you sign in.',
-  LOA_GATE_EXPAND_MSG_ID: 'loaGateExpandMsgID',
-  LOA_GATE_READ_MORE_P1:
-    'We’ll verify your identity through a secure process from ID.me or Login.gov. This trusted partner provides the strongest identity verification system available.',
-  LOA_GATE_READ_MORE_P2: 'To complete the process on your smartphone, you’ll need these items:',
+    'You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.',
+  LOA_P2_TEXT:
+    'Don’t yet have a verified account? Continue to the sign-in page. Follow the instructions to create a Login.gov or ID.me account. Then come back here and sign in. We’ll help you verify your identity for your account.',
+  LOA_P3_TEXT: 'Not sure if your account is verified? Sign in now. We’ll tell you if you need to verify.',
   CONTINUE_SIGN_IN_BTN_ID: 'Continue to sign in',
 }
 
@@ -34,7 +32,7 @@ describe('Sign In', () => {
     await expect(element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P1_TEXT))).toExist()
     await expect(element(by.text(SignE2eIdConstants.LOA_P2_TEXT))).toExist()
-    await expect(element(by.id(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_ID))).toExist()
+    await expect(element(by.text(SignE2eIdConstants.LOA_P3_TEXT))).toExist()
     await expect(element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID))).toExist()
   })
 
@@ -43,12 +41,6 @@ describe('Sign In', () => {
     await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
-    await element(by.id(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_ID)).tap()
-    await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P1))).toExist()
-    await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P2))).toExist()
-    await element(by.id(SignE2eIdConstants.LOA_GATE_EXPAND_MSG_ID)).tap()
-    await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P1))).not.toExist()
-    await expect(element(by.text(SignE2eIdConstants.LOA_GATE_READ_MORE_P2))).not.toExist()
     await element(by.id(SignE2eIdConstants.CONTINUE_SIGN_IN_BTN_ID)).tap()
     await setTimeout(7000)
     await device.takeScreenshot('VALoginWebview')
