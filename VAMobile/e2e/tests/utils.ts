@@ -603,6 +603,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await element(by.text('OK')).atIndex(0).tap()
     }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
+    await device.disableSynchronization()
     if (AFUseCaseUpgrade) {
       try {
         await expect(element(by.text('Update now'))).toExist()
@@ -612,7 +613,6 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     }
 
     if (device.getPlatform() === 'android') {
-      await device.disableSynchronization()
       try {
         await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
@@ -630,8 +630,8 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
-      await device.enableSynchronization()
     }
+    await device.enableSynchronization()
   }
 
   if (AFUseCase !== 'AllowFunction') {
