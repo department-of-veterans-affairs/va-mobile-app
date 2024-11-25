@@ -104,7 +104,6 @@ export const CommonE2eIdConstants = {
   CONTACT_INFO_USE_THIS_ADDRESS_ID: 'Use this address',
   CONTACT_INFO_STREET_ADDRESS_LINE_2_ID: 'streetAddressLine2TestID',
   DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
-  //developer screen
   DEVELOPER_SCREEN_SCROLL_ID: 'developerScreenTestID',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
