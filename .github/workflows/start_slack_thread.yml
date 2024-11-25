@@ -35,7 +35,7 @@ jobs:
         run: |
           id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000 |
+            https://slack.com/api/conversations.list\?limit=5000 |
             jq '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' )
           echo SLACK_CHANNEL_ID=${id} >> $GITHUB_OUTPUT
   start_thread:
