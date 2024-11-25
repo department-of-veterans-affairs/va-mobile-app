@@ -46,7 +46,6 @@ export const MessagesE2eIdConstants = {
   MESSAGE_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete' : 'Delete ',
   MESSAGE_CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   MESSAGE_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save' : 'Save ',
-  VIEW_MESSAGE_ID: 'viewMessageTestID',
   EDIT_DRAFT_MESSAGE_FIELD_ID: 'messageText',
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
   EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
@@ -65,12 +64,12 @@ export const MessagesE2eIdConstants = {
 const tapItems = async (items: string, type: string) => {
   // if (type === 'url' || type === 'map' || type === 'email') {
   //   if (items != 'https://www.va.gov/') {
-  //     await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+  //     await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
   //   }
   // }
   await waitFor(element(by.text(items)))
     .toBeVisible()
-    .whileElement(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID))
+    .whileElement(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID))
     .scroll(50, 'down')
   await device.disableSynchronization()
   await element(by.text(items)).tap()
@@ -247,7 +246,7 @@ describe('Messages Screen', () => {
   })
 
   it('should tap reply and verify the correct information is displayed', async () => {
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID)).tap()
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
@@ -469,7 +468,7 @@ describe('Messages Screen', () => {
         'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2024 Appointment: Preparing for your visit',
       ),
     ).tap()
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
     await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
     await expect(element(by.text('Testing '))).toExist()
@@ -483,7 +482,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify message threads with more than two lines', async () => {
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     messageCollapsed = await device.takeScreenshot('MessageCollapsed')
     checkImages(messageCollapsed)
     await element(
@@ -491,7 +490,7 @@ describe('Messages Screen', () => {
         'Please fast for at least 12 hours before your upcoming visit on October 19th. Eating or drinking anything besides water will have an effect on your blood lab  results.  Thank you.',
       ),
     ).tap()
-    await element(by.id(MessagesE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     messageExpanded = await device.takeScreenshot('MessageExpanded')
     await element(by.text('Sent')).tap()
     await element(by.text('Messages')).tap()

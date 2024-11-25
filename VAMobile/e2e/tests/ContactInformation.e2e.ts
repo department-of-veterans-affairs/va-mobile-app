@@ -4,7 +4,6 @@ import { setTimeout } from 'timers/promises'
 import { CommonE2eIdConstants, loginToDemoMode, openContactInfo, openProfile, toggleRemoteConfigFlag } from './utils'
 
 export const ContactInfoE2eIdConstants = {
-  CONTACT_INFO_PAGE_ID: 'ContactInfoTestID',
   MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
   MAILING_ADDRESS_2_ID: 'Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
   HOME_ADDRESS_ID: 'Home address Add your home address',
@@ -27,7 +26,6 @@ export const ContactInfoE2eIdConstants = {
   CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   REMOVE_KEEP_TEXT: 'Keep',
   REMOVE_REMOVE_TEXT: 'Remove',
-  SAVE_TEXT: 'Save',
   DISMISS_TEXT: 'Dismiss',
   EDIT_ADDRESS_ID: 'EditAddressTestID',
   COUNTRY_PICKER_CONFIRM_ID: 'countryPickerConfirmID',
@@ -82,10 +80,10 @@ export async function fillHomeAddressFields() {
 
 export async function validateAddresses(addressID: string, addressType: string) {
   it('update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('top')
     await waitFor(element(by.id(addressID)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(50, 'down')
     await element(by.id(addressID)).tap()
   })
@@ -124,10 +122,10 @@ export async function validateAddresses(addressID: string, addressType: string) 
   })
 
   it('should open and update the ' + addressType + ' address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('top')
     await waitFor(element(by.id(addressID)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(addressID)).tap()
     await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
@@ -183,7 +181,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should open the ' + phoneType + ' phone number', async () => {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
   })
@@ -243,7 +241,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it('should update the ' + phoneType + ' with an extension', async () => {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     if (phoneType === 'Work') {
@@ -279,7 +277,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it(phoneType + ': verify user can remove the extension', async () => {
     await waitFor(element(by.id(phoneID)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(phoneID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.PHONE_NUMBER_EXTENSION_ID)).clearText()
@@ -301,10 +299,10 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
 
 export async function removeContactInfoFeature(contactInfoTypeText: string, type: string) {
   it('should tap remove ' + type + ' and verify remove pop up appears', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('top')
     await waitFor(element(by.id(contactInfoTypeText)))
       .toBeVisible()
-      .whileElement(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID))
+      .whileElement(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID))
       .scroll(100, 'down')
     await element(by.id(contactInfoTypeText)).tap()
     await element(by.text('Remove ' + type)).tap()
@@ -443,7 +441,7 @@ describe(':ios: Contact Info Screen', () => {
   removeContactInfoFeature(ContactInfoE2eIdConstants.MOBILE_PHONE_ID, 'mobile phone')
 
   it('should open the email address', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
   })
 
@@ -469,7 +467,7 @@ describe(':ios: Contact Info Screen', () => {
   })
 
   it('should update the email address and remove the +', async () => {
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('bottom')
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID)).tap()
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).clearText()
     await element(by.id(ContactInfoE2eIdConstants.EMAIL_ADDRESS_EDIT_ID)).typeText('attended1@gmail.com')
@@ -483,7 +481,7 @@ describe(':ios: Contact Info Screen', () => {
       await expect(element(by.text('Email address saved'))).toExist()
       await element(by.text(ContactInfoE2eIdConstants.DISMISS_TEXT)).tap()
     } catch (ex) {}
-    await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_PAGE_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SCREEN_ID)).scrollTo('top')
   })
 
   removeContactInfoFeature(ContactInfoE2eIdConstants.EMAIL_ADDRESS_ID, 'email address')
