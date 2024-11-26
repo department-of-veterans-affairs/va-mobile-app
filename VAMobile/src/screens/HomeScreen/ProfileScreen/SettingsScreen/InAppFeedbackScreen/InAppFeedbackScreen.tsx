@@ -32,18 +32,18 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     const { found, newText } = checkStringForPII(task)
     // logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
     if (found) {
-      Alert.alert('Please Remove PII', 'We detected something that seems like PII, please remove it to continue', [
+      Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
         {
-          text: 'Return to feedback',
+          text: t('inAppFeedback.personalInfo.edit'),
           style: 'cancel',
-          onPress: () => {},
         },
         {
-          text: 'submit anyways',
+          text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
             setTaskOverride(newText)
             navigation.goBack()
           },
+          style: 'default',
         },
       ])
     } else {
