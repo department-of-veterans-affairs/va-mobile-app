@@ -46,6 +46,7 @@ export const CommonE2eIdConstants = {
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  VETERAN_CRISIS_LINE_HEADING_TEXT: 'Veterans Crisis Line',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',

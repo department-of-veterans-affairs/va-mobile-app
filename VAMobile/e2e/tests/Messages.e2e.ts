@@ -252,7 +252,7 @@ describe('Messages Screen', () => {
 
   it('reply: verify talk to the veterans crisis line now is displayed', async () => {
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
-    await expect(element(by.text('Veterans Crisis Line'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_HEADING_TEXT))).toExist()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
   })
 
@@ -340,7 +340,7 @@ describe('Messages Screen', () => {
 
   it(':ios: new message: verify talk to the veterans crisis line now', async () => {
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
-    await expect(element(by.text('Veterans Crisis Line'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_HEADING_TEXT))).toExist()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
   })
 
