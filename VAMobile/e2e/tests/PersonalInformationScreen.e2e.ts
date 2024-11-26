@@ -143,7 +143,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT)).atIndex(0)).toExist()
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).replaceText('Kimberlee')
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).tapReturnKey()
-    await element(by.text('Save')).tap()
+    await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text('Preferred name saved'))).toExist()
