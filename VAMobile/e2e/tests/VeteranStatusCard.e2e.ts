@@ -20,7 +20,6 @@ import {
 
 export const VeteranStatusCardConstants = {
   VETERAN_STATUS_ID: 'veteranStatusButtonID',
-  VETERAN_STATUS_NAME_TEXT: 'Kimberly Washington',
   VETERAN_STATUS_MILITARY_BRANCH_TEXT: 'United States Coast Guard',
   VETERAN_STATUS_DISABILITY_RATING_TEXT: '100% service connected',
   VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT: 'United States Army',
