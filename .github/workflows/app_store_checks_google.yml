@@ -1,3 +1,4 @@
+# workflow to check that PR does not break any Googke Play Store max file or max character limits
 name: "App Store requirement checks"
 
 on:
@@ -15,34 +16,34 @@ jobs:
     with:
       max_size: 8
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots
-      file_counting_function: ls | wc -l
+      counting_function: ls | wc -l
   check_max_android_seven_inch_screenshots:
     uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 8
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/images/sevenInchScreenshots
-      file_counting_function: ls | wc -l
+      counting_function: ls | wc -l
   check_android_long_description:
     uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 4000
       working_dir: VAMobile/android/fastlane/metadata/android/en-US
-      file_counting_function: wc -c full-description.txt | awk '{print $1}'
+      counting_function: wc -c full-description.txt | awk '{print $1}'
   check_android_short_description:
     uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 80
       working_dir: VAMobile/android/fastlane/metadata/android/en-US
-      file_counting_function: wc -c short-description.txt | awk '{print $1}'
+      counting_function: wc -c short-description.txt | awk '{print $1}'
   check_android_change_log:
     uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 500
       working_dir: VAMobile/android/fastlane/metadata/android/en-US/changelogs
-      file_counting_function: wc -c default.txt | awk '{print $1}'
+      counting_function: wc -c default.txt | awk '{print $1}'
   check_android_release_name:
     uses: ./.github/workflows/check_max_size.yml
     with:
       max_size: 50
       working_dir: VAMobile/android/fastlane/metadata/android/en-US
-      file_counting_function: wc -c title.txt | awk '{print $1}'
+      counting_function: wc -c title.txt | awk '{print $1}'
