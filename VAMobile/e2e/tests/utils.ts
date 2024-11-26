@@ -23,6 +23,12 @@ const mockNotification = {
 }
 
 export const CommonE2eIdConstants = {
+  //device
+  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
+  CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
+  PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
+  FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
   //universal
   SAVE_TEXT: 'Save',
   ENABLED_TEXT: 'Enabled',
@@ -34,8 +40,6 @@ export const CommonE2eIdConstants = {
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   OK_UNIVERSAL_TEXT: 'OK',
-  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
-  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',

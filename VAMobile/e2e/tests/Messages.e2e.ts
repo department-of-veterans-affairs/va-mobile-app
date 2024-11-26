@@ -27,9 +27,6 @@ export const MessagesE2eIdConstants = {
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
   ONLY_USE_MESSAGES_TEXT: 'Only use messages for non-urgent needs',
   ATTACHMENTS_BUTTON_ID: 'messagesAttachmentsAddFilesID',
-  ATTACHMENT_CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
-  ATTACHMENT_PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
-  ATTACHMENT_FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
   MESSAGE_INPUT_ID: 'reply field',
   SEND_BUTTON_ID: 'sendButtonTestID',
   SELECT_A_FILE_ID: 'messagesSelectAFileID',
@@ -286,9 +283,9 @@ describe('Messages Screen', () => {
   it('verify tap select a file action sheet options are correct', async () => {
     await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
     await element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_CAMERA_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_PHOTO_GALLERY_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.ATTACHMENT_FILE_FOLDER_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CAMERA_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.PHOTO_GALLERY_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.FILE_FOLDER_TEXT))).toExist()
   })
 
   it('should close the action sheet and tap cancel', async () => {
