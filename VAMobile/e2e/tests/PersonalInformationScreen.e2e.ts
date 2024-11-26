@@ -102,10 +102,10 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
 
-    await expect(element(by.text('Preferred name'))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT))).toExist()
     await expect(element(by.text('Sharing your preferred name is optional.'))).toExist()
 
-    await expect(element(by.text('Gender identity'))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_HEADER_TEXT))).toExist()
     await expect(element(by.text('Woman'))).toExist()
   })
 
