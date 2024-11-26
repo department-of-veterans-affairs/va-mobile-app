@@ -168,7 +168,7 @@ describe('Veteran Status Card', () => {
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await openBenefits()
     await openDisabilityRating()
-    await expect(element(by.text('100%')).atIndex(1)).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT)).atIndex(1)).toExist()
   })
 
   verifyMilitaryInfo('United States Coast Guard')

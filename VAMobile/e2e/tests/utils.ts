@@ -53,6 +53,7 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_TTY_ID: 'veteransCrisisLineHearingLossNumberTestID',
   VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
+  MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
@@ -71,6 +72,7 @@ export const CommonE2eIdConstants = {
   HOME_TAB_BUTTON_ID: 'Home',
   PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
   HOME_SCREEN_SCROLL_ID: 'homeScreenID',
+  DISABILITY_RATING_PERCENT_TEXT: '100%',
   //health
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
