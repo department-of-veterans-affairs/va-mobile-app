@@ -23,7 +23,6 @@ export const HomeE2eIdConstants = {
   DISABILITY_RATING_SUBTEXT_TEXT: 'service connected',
   MONTHLY_PAYMENT_TITLE_TEXT: 'Monthly compensation payment',
   MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.75',
-  HOME_SCREEN_SCROLL_ID: 'homeScreenID',
 }
 
 beforeAll(async () => {
@@ -112,7 +111,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     await waitFor(element(by.text(HomeE2eIdConstants.APPOINTMENTS_BUTTON_SUBTEXT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.APPOINTMENTS_BUTTON_SUBTEXT_TEXT)).atIndex(0).tap()
     await expect(element(by.text(CommonE2eIdConstants.UPCOMING_APPT_BUTTON_TEXT))).toExist()
@@ -122,7 +121,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))).toExist()
@@ -132,7 +131,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     await waitFor(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
@@ -142,7 +141,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
     await waitFor(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
@@ -155,7 +154,7 @@ describe('Home Screen', () => {
     } catch (e) {}
     await waitFor(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
@@ -173,7 +172,7 @@ describe('Home Screen', () => {
   it('should show home page VA Resources content', async () => {
     await waitFor(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT))).toExist()
@@ -215,7 +214,7 @@ describe('Home Screen', () => {
     await element(by.text('Done')).tap()
     await waitFor(element(by.text(HomeE2eIdConstants.ANNOUNCEMENT_BANNER_TEXT)))
       .toBeVisible()
-      .whileElement(by.id(HomeE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(HomeE2eIdConstants.ANNOUNCEMENT_BANNER_TEXT))).toExist()
   })
