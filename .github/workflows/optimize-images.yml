@@ -64,8 +64,7 @@ jobs:
           branch: ${{ env.BRANCH_NAME }}
           base: ${{ github.ref_name }}
           title: "Optimize images before release build"
-          body: |
-            This PR optimizes images in preparation for the release build.
+          body-path: .github/PULL_REQUEST_TEMPLATE/pr-template.md
       # Check if a PR was created
       - name: Pull Request Details
         run: |
