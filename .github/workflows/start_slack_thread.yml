@@ -54,7 +54,6 @@ jobs:
           
           while [[ -z "$id" ]]
           do
-            echo "while loop"
             get_cursor
             fetch_page
             get_id
