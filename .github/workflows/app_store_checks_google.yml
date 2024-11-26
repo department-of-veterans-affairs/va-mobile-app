@@ -1,5 +1,4 @@
 # workflow to check that PR does not break any Googke Play Store max file or max character limits
-
 name: "App Store requirement checks"
 
 on:
