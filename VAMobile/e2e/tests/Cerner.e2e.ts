@@ -105,7 +105,7 @@ describe(':android: Cerner Notice', () => {
       .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).toExist()
-    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_2_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
@@ -121,7 +121,7 @@ describe(':android: Cerner Notice', () => {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).swipe('down')
     await element(by.text(CernerIdConstants.CERNER_NOTE_HEADING_TEXT)).tap()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).not.toExist()
-    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_2_TEXT))).not.toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).not.toExist()
   })
 
   it('tap on messages and verify the cerner notification is present and collapsed', async () => {
