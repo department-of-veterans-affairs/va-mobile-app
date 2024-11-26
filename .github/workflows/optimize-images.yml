@@ -5,7 +5,7 @@ name: '[Build] Optimize Image'
 on:
   push:
     branches:
-      - chanel-test-pr-9697-test1
+      - chanel-test-pr-9687-test1
 
 jobs:
   optimize_images:
