@@ -361,6 +361,14 @@ export function AuthGuard() {
             url: event.url,
             queryClient: queryClient,
           }
+          showActionSheetWithOptions(
+            {
+              title: 'handle token callback',
+              options,
+              cancelButtonIndex: 0,
+            },
+            () => {},
+          )
           handleTokenCallbackUrl(params)
         }
       }
