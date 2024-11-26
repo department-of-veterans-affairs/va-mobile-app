@@ -25,7 +25,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState } from 'store/slices'
+import { AnalyticsState, dispatchUpdateDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { debugResetFirstTimeLogin } from 'utils/auth'
 import { showSnackBar } from 'utils/common'
@@ -143,6 +143,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         {
           text: t('reset'),
           onPress: () => {
+            dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(true))
             console.debug('Resetting first time login flag')
             debugResetFirstTimeLogin(logout)
           },
