@@ -7,6 +7,7 @@ import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
+import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { UseMutateFunction } from '@tanstack/react-query'
 
 import { authKeys } from 'api/auth'
@@ -335,29 +336,71 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+export const initializeAuth = async (
+  dispatch: AppDispatch,
+  refreshAccessToken: () => void,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+) => {
+  const options = ['close']
   if (store.getState().demo.demoMode) {
     return
   }
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
+    showActionSheetWithOptions(
+      {
+        title: 'login unlock hit',
+        options,
+        cancelButtonIndex: 0,
+      },
+      () => {},
+    )
     await finishInitialize(dispatch, false)
-    await startBiometricsLogin(dispatch, refreshAccessToken)
+    await startBiometricsLogin(dispatch, refreshAccessToken, showActionSheetWithOptions)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
+      showActionSheetWithOptions(
+        {
+          title: 'login refreshing access token hit',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
       await refreshAccessToken()
     } else {
+      showActionSheetWithOptions(
+        {
+          title: 'login clear credentials',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
       await clearStoredAuthCreds()
       await finishInitialize(dispatch, false)
     }
   }
 }
 
-const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+const startBiometricsLogin = async (
+  dispatch: AppDispatch,
+  refreshAccessToken: () => void,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+) => {
+  const options = ['close']
   const loading = store.getState().auth.loading
   if (loading) {
+    showActionSheetWithOptions(
+      {
+        title: 'biometrics loading',
+        options,
+        cancelButtonIndex: 0,
+      },
+      () => {},
+    )
     return
   }
   await logAnalyticsEvent(Events.vama_login_start(true, true))
@@ -365,13 +408,37 @@ const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: (
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
+      showActionSheetWithOptions(
+        {
+          title: 'refresh token biometrics',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
       loginStart(dispatch, true)
       await refreshAccessToken()
     } else {
+      showActionSheetWithOptions(
+        {
+          title: 'no refresh token biometrics',
+          options,
+          cancelButtonIndex: 0,
+        },
+        () => {},
+      )
       await finishInitialize(dispatch, false)
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    showActionSheetWithOptions(
+      {
+        title: 'biometrics error',
+        options,
+        cancelButtonIndex: 0,
+      },
+      () => {},
+    )
     if (isAndroid()) {
       if (err?.message?.indexOf('Cancel') > -1) {
         return

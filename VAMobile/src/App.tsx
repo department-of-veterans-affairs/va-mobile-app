@@ -77,7 +77,7 @@ import { finishInitialize, initializeAuth, processAuthResponse } from 'utils/aut
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { setFileSystemRefreshAccessToken } from 'utils/filesystem'
-import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useIsScreenReaderEnabled, useShowActionSheet } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
@@ -243,6 +243,7 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   const { requestNotificationPreferenceScreen } = useNotificationContext()
+  const showActionSheetWithOptions = useShowActionSheet()
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -305,11 +306,21 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
+    const options = ['close']
     const mutateOptions: MutateOptions<Response, Error, string, void> = {
       onSuccess: async (data) => {
         const authCredentials = await processAuthResponse(data)
         await finishInitialize(dispatch, true, authCredentials)
         postLoggedIn()
+        showActionSheetWithOptions(
+          {
+            title: 'should login',
+
+            options,
+            cancelButtonIndex: 0,
+          },
+          () => {},
+        )
       },
       onError: async (error) => {
         if (isErrorObject(error)) {
@@ -318,6 +329,15 @@ export function AuthGuard() {
           if (error.status) {
             await logAnalyticsEvent(Events.vama_login_token_refresh(error))
           }
+          showActionSheetWithOptions(
+            {
+              title: 'login failure on app.tsx initialize auth',
+              message: error.message + ' ' + error.status || 'no status given',
+              options,
+              cancelButtonIndex: 0,
+            },
+            () => {},
+          )
         }
         await finishInitialize(dispatch, false)
       },
@@ -327,9 +347,13 @@ export function AuthGuard() {
       console.debug('User tapped foreground notification. Skipping initializeAuth.')
       setTappedForegroundNotification(false)
     } else if (!loggedIn) {
-      initializeAuth(dispatch, () => {
-        refreshAccessToken(getAccessToken() || '', mutateOptions)
-      })
+      initializeAuth(
+        dispatch,
+        () => {
+          refreshAccessToken(getAccessToken() || '', mutateOptions)
+        },
+        showActionSheetWithOptions,
+      )
 
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
@@ -353,6 +377,7 @@ export function AuthGuard() {
     handleTokenCallbackUrl,
     postLoggedIn,
     dispatch,
+    showActionSheetWithOptions,
   ])
 
   useEffect(() => {
