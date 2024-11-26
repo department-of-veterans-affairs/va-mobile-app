@@ -4,7 +4,6 @@ import { setTimeout } from 'timers/promises'
 import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
-  PAYMENTS_BTN_ID: 'Payments',
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
   LOCATION_FINDER_ROW_TEXT: 'Find a VA location',
   CONTACT_VA_ROW_TEXT: 'Contact us',
