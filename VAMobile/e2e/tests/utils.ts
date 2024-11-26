@@ -68,6 +68,9 @@ export const CommonE2eIdConstants = {
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
   APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
+  ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
+  GET_DIRECTIONS_ID: 'directionsTestID',
+  DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
   VIEW_MESSAGE_ID: 'viewMessageTestID',
@@ -77,6 +80,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
+  CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
@@ -86,6 +90,7 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
   CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
+  APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
   DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
   //payments

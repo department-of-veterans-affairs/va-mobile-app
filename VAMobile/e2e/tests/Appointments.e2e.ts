@@ -23,13 +23,7 @@ const lastYear = lastYearDateTime.get('year')
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
-  ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
-  GET_DIRECTIONS_ID: 'directionsTestID',
-  PHONE_NUMBER_ASSISTANCE_LINK_ID: 'CallVATestID',
-  PHONE_NUMBER_ID: 'CallTTYTestID',
-  PATIENT_CANCELLATION: 'You canceled this appointment.',
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
-  DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
 }
 
@@ -47,31 +41,31 @@ describe('Appointments Screen', () => {
       .scroll(200, 'down')
     await element(by.text('Vilanisi Reddy')).tap()
     if (device.getPlatform() === 'android') {
-      await element(by.id(Appointmentse2eConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
+      await element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentCalendar')
       await device.launchApp({ newInstance: false })
 
-      await element(by.id(Appointmentse2eConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
+      await element(by.id(CommonE2eIdConstants.GET_DIRECTIONS_ID)).atIndex(0).tap()
       await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
       await device.disableSynchronization()
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
       await device.takeScreenshot('appointmentVALocationPhoneNumber')
       await device.launchApp({ newInstance: false })
 
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       await device.takeScreenshot('apointmentVALocationTTY')
       await device.launchApp({ newInstance: false })
 
       await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(1).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1).tap()
       await device.takeScreenshot('appointmentCancelPhoneNumber')
       await device.launchApp({ newInstance: false })
 
-      await element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(1).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
       await device.takeScreenshot('appointmentCancelTTY')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
@@ -106,21 +100,21 @@ describe('Appointments Screen', () => {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.id('apptsPastID')).tap()
     if (device.getPlatform() === 'android') {
-      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
+      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
-      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
+      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
     }
   })
 
   it('should show the same date field after cancelling', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     if (device.getPlatform() === 'android') {
-      await element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
+      await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
       await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
+      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
     } else {
       await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text(Appointmentse2eConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
+      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
     }
   })
 

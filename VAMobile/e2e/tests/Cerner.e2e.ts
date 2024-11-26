@@ -20,7 +20,6 @@ export const CernerIdConstants = {
   CERNER_NOTE_HEADING_ID: 'cernerAlertTestID',
   CERNER_NOTE_RECORDS_SHOW_TEXT: "You'll need to use our My VA Health portal to manage your care at these facilities:",
   CERNER_NOTE_FACILITY_TEXT: 'Cary VA Medical Center',
-  CERNER_NOTE_FACILITY_2_TEXT: 'Cheyenne VA Medical Center',
   CERNER_NOTE_MESSAGES_TEXT: 'Sending a message to a care team at these facilities:',
   CERNER_NOTE_MESSAGES_HEADER_TEXT: 'Your care team uses My VA Health',
   CERNER_HOME_SUBTEXT_TEXT: 'Information from My VA Health portal not included.',
@@ -96,9 +95,7 @@ describe(':android: Cerner Notice', () => {
     await element(by.id(CernerIdConstants.HEALTH_CATEGORY_ID)).scrollTo('top')
     await openAppointments()
     await expect(element(by.id(CernerIdConstants.CERNER_NOTE_HEADING_ID))).toExist()
-    await expect(
-      element(by.text("You'll need to use our My VA Health portal to manage your care at these facilities:")),
-    ).not.toExist()
+    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_RECORDS_SHOW_TEXT))).not.toExist()
   })
 
   it('should match the cerner notice design', async () => {
@@ -136,9 +133,9 @@ describe(':android: Cerner Notice', () => {
 
   it('verify the correct information is displayed for multiple facilities', async () => {
     await element(by.id(CernerIdConstants.CERNER_NOTE_HEADING_ID)).tap()
-    await expect(element(by.text('Sending a message to a care team at these facilities:'))).toExist()
-    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
-    await expect(element(by.text('Cary VA Medical Center'))).toExist()
+    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
+    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).toExist()
     await expect(element(by.text("You'll need to use our My VA Health portal to send your message"))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
