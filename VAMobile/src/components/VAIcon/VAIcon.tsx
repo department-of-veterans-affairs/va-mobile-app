@@ -14,9 +14,6 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
 import CheckMark from './svgs/CheckMark.svg'
-// Chevrons
-import ChevronLeft from './svgs/ChevronLeft.svg'
-import ChevronRight from './svgs/ChevronRight.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
@@ -64,8 +61,6 @@ export const VA_ICON_MAP = {
   CheckBoxFilled,
   CheckBoxIntermediate,
   CheckMark,
-  ChevronLeft,
-  ChevronRight,
   CircleCheckMark,
   CircleExternalLink,
   CirclePhone,

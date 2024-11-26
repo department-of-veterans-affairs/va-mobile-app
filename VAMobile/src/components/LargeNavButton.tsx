@@ -3,12 +3,12 @@ import ContentLoader, { Rect } from 'react-content-loader/native'
 import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-
-import colors from '../styles/themes/VAColors'
 
 const SkeletonLoader = () => {
   const theme = useTheme()
@@ -62,7 +62,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     paddingVertical: theme.dimensions.cardPadding,
     paddingHorizontal: theme.dimensions.buttonPadding,
     marginBottom: theme.dimensions.condensedMarginBetween,
-    shadowColor: colors.black,
+    shadowColor: colors.vadsColorBlack,
     ...Platform.select({
       ios: {
         shadowOffset: { width: 0, height: 2 },
@@ -107,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
           height={24}
           name="RightArrowInCircle"
           fill={theme.colors.icon.largeNavButton}
-          fill2={theme.colors.icon.transparent}
+          fill2={'transparent'}
           ml={theme.dimensions.listItemDecoratorMarginLeft}
           preventScaling={true}
         />

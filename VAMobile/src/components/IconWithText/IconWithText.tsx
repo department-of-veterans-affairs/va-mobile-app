@@ -32,7 +32,7 @@ const IconWithText: FC<IconWithTextProps> = ({ label, labelColor, labelA11y, mt,
   const textProps: TextViewProps = {
     variant: 'textWithIconButton',
     mt: mt || 3, // 6px total combined with line height
-    color: labelColor || 'textWithIconButton',
+    color: labelColor || 'link',
     accessibilityLabel: labelA11y,
     allowFontScaling: false,
   }

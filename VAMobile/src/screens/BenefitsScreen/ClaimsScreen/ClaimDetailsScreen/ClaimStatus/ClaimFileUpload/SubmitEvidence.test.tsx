@@ -13,7 +13,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('FileRequest', () => {
+context('SubmitEvidence', () => {
   const renderWithData = (): void => {
     const props = mockNavProps(undefined, undefined, { params: { claimID: '600156928' } })
 

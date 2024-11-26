@@ -43,6 +43,7 @@ describe('Settings Screen', () => {
     await expect(element(by.id(SettingsE2eIdConstants.NOTIFICATIONS_ROW_ID))).toExist()
     await expect(element(by.id(SettingsE2eIdConstants.SHARE_APP_ROW_ID))).toExist()
     await expect(element(by.id(SettingsE2eIdConstants.PRIVACY_ROW_ID))).toExist()
+    await expect(element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_ID))).toExist()
   })
 
   it('should show "Manage account" screen', async () => {

@@ -21,14 +21,15 @@ import {
   PhotoAdd,
   PhotoPreview,
   TextView,
+  VAScrollView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
@@ -44,7 +45,9 @@ import {
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
-type UploadOrAddPhotosProps = StackScreenProps<BenefitsStackParamList, 'UploadOrAddPhotos'>
+import { FileRequestStackParams } from '../../FileRequestSubtask'
+
+type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
 
 function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -92,19 +95,17 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         {
           text: t('fileUpload.continueUpload'),
         },
-
         {
           text: t('fileUpload.cancelUpload'),
-          onPress: () => {
-            if (request) {
-              navigateTo('FileRequestDetails', { claimID, request })
-            } else {
-              navigateTo('SubmitEvidence', { claimID })
-            }
-          },
+          onPress: () => navigation.dispatch(e.data.action),
         },
       ],
     })
+  })
+
+  useSubtaskProps({
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => onCancel(),
   })
 
   useEffect(() => {
@@ -345,22 +346,22 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
     setTotalBytesUsed(bytesUsed)
   }
 
+  const onCancel = () => {
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_2(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'photo',
+      ),
+    )
+    navigation.dispatch(StackActions.pop(2))
+  }
+
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
-      title={t('fileUpload.uploadPhotos')}
-      onLeftButtonPress={() => {
-        logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(
-            claimID,
-            request?.trackedItemId || null,
-            request?.type || 'Submit Evidence',
-            'photo',
-          ),
-        )
-        navigation.dispatch(StackActions.pop(2))
-      }}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
+      <SubtaskTitle title={t('fileUpload.uploadPhotos')} />
+
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
@@ -428,7 +429,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               />
             </Box>
           </Box>
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box
+            mt={theme.dimensions.standardMarginBetween}
+            mb={theme.dimensions.contentMarginBottom}
+            mx={theme.dimensions.gutter}>
             <Button
               onPress={() => {
                 if (imagesList?.length === 0) {
@@ -442,7 +446,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
           </Box>
         </>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

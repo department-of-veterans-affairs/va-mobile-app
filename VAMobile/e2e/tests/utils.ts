@@ -27,38 +27,23 @@ export const CommonE2eIdConstants = {
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
   DEMO_BTN_ID: 'demo-btn',
   SIGN_IN_BTN_ID: 'Sign in',
-  SKIP_BTN_TEXT: 'Skip',
   TURN_ON_NOTIFICATIONS_TEXT: 'Turn on notifications',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
-  PROFILE_TAB_BUTTON_TEXT: 'Profile',
   HEALTH_TAB_BUTTON_TEXT: 'Health',
-  APPOINTMENTS_TAB_BUTTON_TEXT: 'Appointments',
   PAYMENTS_TAB_BUTTON_TEXT: 'Payments',
-  DIRECT_DEPOSIT_ROW_TEXT: 'Direct deposit information',
   BENEFITS_TAB_BUTTON_TEXT: 'Benefits',
   HOME_TAB_BUTTON_TEXT: 'Home',
-  PERSONAL_INFORMATION_ROW_TEXT: 'Personal information',
-  LETTERS_ROW_TEXT: 'VA letters and documents',
-  DISABILITY_RATING_ROW_TEXT: 'Disability rating',
   SETTINGS_ROW_TEXT: 'Settings',
-  MILITARY_INFORMATION_ROW_TEXT: 'Military information',
-  VACCINE_RECORDS_BUTTON_TEXT: 'V\ufeffA vaccine records',
-  MESSAGES_ROW_TEXT: 'Messages',
   BACK_BTN_LABEL: 'Back',
   LEAVING_APP_POPUP_TEXT: 'Leave the mobile app?',
   LEAVING_APP_CANCEL_TEXT: 'Go back',
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
-  PRESCRIPTIONS_BUTTON_TEXT: 'Prescriptions',
   OK_UNIVERSAL_TEXT: 'OK',
-  CONTACT_INFORMATION_TEXT: 'Contact information',
-  VA_PAYMENT_HISTORY_BUTTON_TEXT: 'VA payment history',
-  CLAIMS_BUTTON_TEXT: 'Claims',
-  CLAIMS_HISTORY_BUTTON_TEXT: 'Claims history',
+  CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
-  DEVELOPER_SCREEN_ROW_TEXT: 'Developer Screen',
   RESET_INAPP_REVIEW_BUTTON_TEXT: 'Reset in-app review actions',
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
@@ -88,6 +73,32 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_BACK_ID: 'claimsDetailsBackTestID',
   CLAIMS_HISTORY_BACK_ID: 'claimsHistoryBackTestID',
   CLAIMS_HISTORY_CLOSED_TAB_ID: 'claimsHistoryClosedID',
+  SKIP_BACK_BUTTON_ID: 'onboardingSkipBackButtonID',
+  HEALTH_TAB_BUTTON_ID: 'Health',
+  PAYMENTS_TAB_BUTTON_ID: 'Payments',
+  BENEFITS_TAB_BUTTON_ID: 'Benefits',
+  HOME_TAB_BUTTON_ID: 'Home',
+  AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
+  AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
+  CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
+  ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
+  PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
+  PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',
+  CONTACT_INFO_BUTTON_ID: 'toContactInfoID',
+  MILITARY_HISTORY_BUTTON_ID: 'toMilitaryHistoryID',
+  SETTINGS_BUTTON_ID: 'toSettingsID',
+  PROFILE_SCROLL_ID: 'profileID',
+  CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
+  LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
+  DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
+  PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
+  DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
+  APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
+  MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
+  PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
+  VACCINES_BUTTON_ID: 'toVaccineListID',
+  DEVELOPER_SCREEN_BUTTON_ID: 'toDeveloperScreenID',
+  PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
 }
 
 /** Log the automation into demo mode
@@ -123,13 +134,13 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
-  await element(by.text(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
   if (skipOnboarding === true) {
-    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BTN_TEXT, true)
+    const ifCarouselSkipBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)
 
     if (ifCarouselSkipBtnExist) {
-      await element(by.text(CommonE2eIdConstants.SKIP_BTN_TEXT)).tap()
+      await element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID)).tap()
     }
   }
   const turnOnNotificationsBtnExist = await checkIfElementIsPresent(
@@ -304,83 +315,83 @@ export async function openVeteransCrisisLine() {
 }
 
 export async function openProfile() {
-  await element(by.text(CommonE2eIdConstants.PROFILE_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID)).tap()
 }
 
 export async function openSettings() {
-  await waitFor(element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)))
+  await waitFor(element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)))
     .toBeVisible()
-    .whileElement(by.id('profileID'))
+    .whileElement(by.id(CommonE2eIdConstants.PROFILE_SCROLL_ID))
     .scroll(50, 'down')
-  await element(by.text(CommonE2eIdConstants.SETTINGS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.SETTINGS_BUTTON_ID)).tap()
 }
 
 export async function openPersonalInformation() {
-  await element(by.text(CommonE2eIdConstants.PERSONAL_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PERSONAL_INFO_BUTTON_ID)).tap()
 }
 
 export async function openMilitaryInformation() {
-  await element(by.text(CommonE2eIdConstants.MILITARY_INFORMATION_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MILITARY_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openHealth() {
-  await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.HEALTH_TAB_BUTTON_ID)).tap()
 }
 
 export async function openAppointments() {
-  await element(by.text(CommonE2eIdConstants.APPOINTMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
-  await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openDirectDeposit() {
-  await element(by.text(CommonE2eIdConstants.DIRECT_DEPOSIT_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID)).tap()
 }
 
 export async function openPrescriptions() {
-  await element(by.text(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID)).tap()
 }
 
 export async function openContactInfo() {
-  await element(by.text(CommonE2eIdConstants.CONTACT_INFORMATION_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_BUTTON_ID)).tap()
 }
 
 export async function openVAPaymentHistory() {
-  await element(by.text(CommonE2eIdConstants.VA_PAYMENT_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openBenefits() {
-  await element(by.text(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.BENEFITS_TAB_BUTTON_ID)).tap()
 }
 
 export async function openLetters() {
-  await element(by.text(CommonE2eIdConstants.LETTERS_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openDisabilityRating() {
-  await element(by.text(CommonE2eIdConstants.DISABILITY_RATING_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DISABILITY_RATING_BUTTON_ID)).tap()
 }
 
 export async function openVaccineRecords() {
-  await element(by.text(CommonE2eIdConstants.VACCINE_RECORDS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID)).tap()
 }
 
 export async function openMessages() {
-  await element(by.text(CommonE2eIdConstants.MESSAGES_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID)).tap()
 }
 
 export async function openClaims() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID)).tap()
 }
 
 export async function openClaimsHistory() {
-  await element(by.text(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_BUTTON_ID)).tap()
 }
 
 export async function openDeveloperScreen() {
-  await element(by.text(CommonE2eIdConstants.DEVELOPER_SCREEN_ROW_TEXT)).tap()
+  await element(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_BUTTON_ID)).tap()
 }
 
 /**
@@ -400,11 +411,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await waitFor(element(by.text('Remote Config')))
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.text('Remote Config')).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
     await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
       .toBeVisible()
@@ -420,30 +431,30 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 
   if (AFAppUpdate) {
     try {
-      await expect(element(by.id('remoteConfigAppUpdateTestID'))).toHaveToggleValue(true)
+      await expect(element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID))).toHaveToggleValue(true)
     } catch (ex) {
-      await element(by.text('appUpdateButton')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_APP_UPDATE_BUTTON_TOGGLE_ID)).tap()
     }
   } else if (AFFeature === 'WG_Health') {
     try {
-      await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+      await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
     } catch (ex) {
-      await element(by.text('Enabled')).tap()
+      await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
     }
   }
 
   if (!AFAppUpdate) {
     if (AFUseCase === 'AllowFunction') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     } else if (AFUseCase === 'DenyAccess') {
       try {
-        await expect(element(by.id('remoteConfigEnableTestID'))).toHaveToggleValue(false)
+        await expect(element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID))).toHaveToggleValue(false)
       } catch (ex) {
-        await element(by.text('Enabled')).tap()
+        await element(by.id(CommonE2eIdConstants.AF_ENABLE_TOGGLE_ID)).tap()
       }
     }
   }
@@ -453,6 +464,9 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await element(by.id('AFErrorMsgTitleTestID')).tapReturnKey()
   await element(by.id('AFErrorMsgBodyTestID')).replaceText('AF Body Test')
   await element(by.id('AFErrorMsgBodyTestID')).tapReturnKey()
+  await setTimeout(3000)
+  await element(by.id('AFErrorPhoneNumberTestID')).replaceText('8006982411')
+  await element(by.id('AFErrorPhoneNumberTestID')).tapReturnKey()
 
   await element(by.text('Save')).tap()
   if (AFUseCase === 'DenyAccess') {
@@ -465,7 +479,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
       await loginToDemoMode()
     }
   } else {
-    await element(by.text('Home')).tap()
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   }
 }
 
@@ -479,11 +493,11 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await waitFor(element(by.text('Remote Config')))
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
     .toBeVisible()
     .whileElement(by.id('developerScreenTestID'))
     .scroll(200, 'down')
-  await element(by.text('Remote Config')).tap()
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
@@ -492,7 +506,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await element(by.text('Enabled')).tap()
   await element(by.text('Save')).tap()
 
-  await element(by.text('Home')).tap()
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
 
   if (featureNavigationArray !== undefined) {
     await navigateToFeature(featureNavigationArray)
@@ -510,13 +524,13 @@ const navigateToFeature = async (featureNavigationArray) => {
     } else if (featureNavigationArray[j] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (featureNavigationArray[j] === 'Get prescription tracking') {
       await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).atIndex(0).tap()
     } else if (
@@ -543,7 +557,7 @@ const navigateToFeature = async (featureNavigationArray) => {
     ) {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
         .scroll(50, 'down')
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
@@ -592,17 +606,19 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
       try {
-        await element(by.text('800-698-2411')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('800-698-2411').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID'))).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2PhoneNumber')
       await device.launchApp({ newInstance: false })
       try {
-        await element(by.text('TTY: 711')).atIndex(0).tap()
+        await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
-        await element(by.text('TTY: 711').withAncestor(by.id('AFUseCase2TestID'))).tap()
+        await element(
+          by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID).withAncestor(by.id('AFUseCase2TestID')),
+        ).tap()
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
