@@ -33,10 +33,32 @@ jobs:
       - name: Search Slack for channel ID
         id: search_slack
         run: |
-          id=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+          fetch_page() {
+            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000 |
-            jq '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' )
+            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
+          }
+          get_id() {
+            id=$(jq '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' <<< $last_response)
+          }
+            
+          get_cursor() {
+            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
+          }
+          
+          id=""
+          cursor=""
+          last_response=""
+          fetch_page
+          get_id
+          
+          while [[ -z "$id" ]]
+          do
+            echo "while loop"
+            get_cursor
+            fetch_page
+            get_id
+          done
           echo SLACK_CHANNEL_ID=${id} >> $GITHUB_OUTPUT
   start_thread:
     name: Start thread
