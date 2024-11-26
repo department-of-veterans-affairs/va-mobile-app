@@ -41,11 +41,9 @@ export const MessagesE2eIdConstants = {
   START_NEW_MESSAGE_SAVE_ID: 'startNewMessageSaveTestID',
   START_NEW_MESSAGE_CANCEL_ID: 'startNewMessageCancelTestID',
   MESSAGE_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete' : 'Delete ',
-  MESSAGE_CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   MESSAGE_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save' : 'Save ',
   EDIT_DRAFT_MESSAGE_FIELD_ID: 'messageText',
   EDIT_DRAFT_CANCEL_ID: 'editDraftCancelTestID',
-  EDIT_DRAFT_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   EDIT_DRAFT_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save Changes' : 'Save Changes ',
   EDIT_DRAFT_PAGE_TEST_ID: 'editDraftTestID',
   BACK_TO_MESSAGES_ID: 'backToMessagesID',
@@ -308,15 +306,15 @@ describe('Messages Screen', () => {
     await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
   it('should tap keep editing and send the message', async () => {
-    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
     await element(by.id(MessagesE2eIdConstants.REPLY_PAGE_TEST_ID)).scroll(300, 'down', NaN, 0.8)
     await element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID)).tap()
     await expect(element(by.text('Message sent'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('should tap and move a message', async () => {
@@ -325,7 +323,7 @@ describe('Messages Screen', () => {
     await element(by.text('Custom Folder 2')).tap()
     await element(by.id(MessagesE2eIdConstants.MOVE_PICKER_CONFIRM_ID)).tap()
     await expect(element(by.text('Message moved to Custom Folder 2'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
     await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
   })
 
@@ -430,11 +428,11 @@ describe('Messages Screen', () => {
     await expect(element(by.text("If you save as a draft, we'll remove the attachments."))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_DELETE_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_SAVE_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
   it(':ios: verify the previous made fields are filled on keep editing', async () => {
-    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
     await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
   })
@@ -510,19 +508,19 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
     await expect(element(by.text('Delete changes to draft?'))).toExist()
     await expect(element(by.text("If you save your changes, we'll remove the attachments."))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT))).toExist()
-    await expect(element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
   it('drafts: verify the previous made fields are filled on keep editing', async () => {
-    await element(by.text(MessagesE2eIdConstants.MESSAGE_CANCEL_KEEP_EDITING_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
     await expect(element(by.text('Testing'))).toExist()
   })
 
   it('verify that the draft is still in the list after cancel', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
-    await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_DELETE_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
   })
 
@@ -540,7 +538,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
     await element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT)).tap()
     await expect(element(by.text('Draft saved'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('should open a draft message and verify it can be deleted', async () => {

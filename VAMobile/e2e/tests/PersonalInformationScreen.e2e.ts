@@ -80,7 +80,7 @@ export async function updateGenderIdentify(genderIdentityOption) {
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
     await expect(element(by.text('Gender identity saved'))).toExist()
     await expect(element(by.text(genderIdentityOption))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
 
     await element(by.id(PersonalInfoConstants.PERSONAL_INFO_SCROLL_ID)).scrollTo('bottom')
     await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_ROW_ID)).tap()

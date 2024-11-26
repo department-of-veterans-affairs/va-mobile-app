@@ -83,7 +83,7 @@ describe('Appointments Screen', () => {
     await element(by.id('Cancel request')).tap()
     await element(by.text(Appointmentse2eConstants.APPOINTMENT_CANCEL_REQUEST_TEXT)).tap()
     await expect(element(by.text('Request canceled'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('verify the appointment details after cancel', async () => {

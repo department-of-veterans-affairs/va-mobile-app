@@ -77,7 +77,7 @@ export async function tapPhoneAndTTYLinks() {
     await element(by.id('veteranStatusTestID')).scrollTo('bottom')
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     try {
-      await element(by.text('Dismiss')).tap()
+      await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
       await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     } catch (e) {}
     await setTimeout(2000)

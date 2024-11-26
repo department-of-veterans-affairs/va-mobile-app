@@ -15,7 +15,6 @@ export const DirectDepositConstants = {
     'You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.',
   WHERE_CAN_I_FIND_ID: 'directDepositFindTheseNumbersID',
   CANCEL_CONFIRM_TEXT: 'Delete changes to your direct deposit information?',
-  CANCEL_CONFIRM_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   SAVE_ID: 'directDepositSaveID',
   BACK_ID: 'directDepositBackID',
   DIRECT_DEPOSIT_EDIT_SCROLL_ID: 'DirectDepositEditAccount',
@@ -79,7 +78,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Check your direct deposit information'))).toExist()
     await expect(element(by.text('Enter a 9-digit routing number'))).toExist()
     await element(by.id(DirectDepositConstants.BACK_ID)).tap()
-    await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
   })
 
   it('should fill out Account form for checking', async () => {
@@ -100,7 +99,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Checking account'))).toExist()
     await expect(element(by.text('Direct deposit information saved'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('should fill out Account form for savings', async () => {
@@ -121,7 +120,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Savings account'))).toExist()
     await setTimeout(2000)
     await expect(element(by.text('Direct deposit information saved'))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   })
 
   it('should show cancel confirmation after user enters information', async () => {
@@ -131,7 +130,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('053100300\n')
     await element(by.id(DirectDepositConstants.BACK_ID)).tap()
     await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
-    await element(by.text(DirectDepositConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
 
     await expect(element(by.text(DirectDepositConstants.SCREEN_TITLE))).toExist()
   })
