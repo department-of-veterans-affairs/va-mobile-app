@@ -5,7 +5,7 @@ name: '[Build] Optimize Image'
 on:
   push:
     branches:
-      - chanel-9687-automation-update-optimization-workflow-to-automatically-push-changes-through-pr
+      - chanel-test-pr-9697-test1
 
 jobs:
   optimize_images:
@@ -62,7 +62,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.BRANCH_NAME }}
-          base: develop
+          base: ${{ github.ref_name }}
           title: "Optimize images before release build"
           body: |
             This PR optimizes images in preparation for the release build.
@@ -70,21 +70,3 @@ jobs:
       - name: Pull Request Details
         run: |
           echo "Pull request URL: ${{ steps.create_pr.outputs.pull-request-url }}"
-
-  start_slack_thread:
-      name: Start Slack thread
-      runs-on: ubuntu-latest
-      if: ${{ success() }}
-      needs: optimize_images
-      steps:
-      - name: Notify Slack
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          channel_name: va-mobile-app-automation-test-channel
-          message: 'Pull request created to review optimzed images before release build: ${{ needs.optimize_images.outputs.pr_url }}. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-        run: |
-          curl -X POST \
-               -H "Authorization: Bearer $SLACK_API_TOKEN" \
-               -H "Content-Type: application/json" \
-               -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
-               https://slack.com/api/chat.postMessage
