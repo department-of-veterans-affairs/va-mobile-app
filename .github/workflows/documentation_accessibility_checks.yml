@@ -8,9 +8,7 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: '0 9 * * 1,2,3,4,5'
-  push:
-    branches:
-      [patrick-test-actions]
+
 jobs:
   axe-scan:
     name: Accessibility Check
@@ -55,13 +53,15 @@ jobs:
           
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
+            # save output so that we can send it to std out AND do an operation on it
             output=$(axe "$url")
+            # send output to stdout
             echo "${output}"
             
-            echo "Checking number of issues"
+            # regex number of issues NOTE: grep exits 1 if it finds no match. GH Actions exits the runner if anything exits 1 so we add the || true to overcome that
             issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
 
-            echo "number of issues: $issues"
+            # If issues is not an empty string, there were issues
             if [[ ! -z "$issues" ]]
             then
               pages_with_errors=$((pages_with_errors + 1))
