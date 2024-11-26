@@ -7,7 +7,7 @@ on:
       max_size:
         required: true
         type: string
-      file_counting_function:
+      counting_function:
         required: true
         type: string
 
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          if [[ $(${{ inputs.file_counting_function }}) -gt ${{ inputs.max_size }} ]]
+          if [[ $(${{ inputs.counting_function }}) -gt ${{ inputs.max_size }} ]]
           then
             echo "PR exceeds app store limits of ${{ inputs.max_size }} for this check"
             exit 1
