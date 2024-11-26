@@ -22,8 +22,6 @@ export const ClaimsE2eIdConstants = {
     'Compensation Received March 22, 2019 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on July 18, 2019',
   CLAIM_6_ID:
     'Dependency Received January 01, 2016 Step 4 of 5: Preparation for notification Moved to this step on July 30, 2016',
-  CLOSED_CLAIM_DECISION_LETTER_ID:
-    'Compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
   CLAIM_3_STATUS_STEP_1_ID: 'Step 1 of 5. Claim received. Complete.',
   CLAIM_3_STATUS_STEP_2_ID: 'Step 2 of 5. Initial review. Current step. Step 1 complete.',
   CLAIM_3_STATUS_STEP_3_ID: 'Step 3 of 5. Evidence gathering, review, and decision. Incomplete.',
@@ -364,7 +362,7 @@ describe('Claims Screen', () => {
   })
 
   it('verify the status details page of closed claim with decision letter', async () => {
-    await element(by.id(ClaimsE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CLOSED_CLAIM_DECISION_LETTER_ID)).tap()
     await expect(element(by.text('Decision letter ready'))).toExist()
     await expect(
       element(
