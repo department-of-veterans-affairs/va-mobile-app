@@ -164,7 +164,11 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        <LargeNavButton title="Allergies" onPress={() => navigateTo('AllergyList')} testID="toAllergyListID" />
+        <LargeNavButton
+          title={t('vaAllergies.buttonTitle')}
+          onPress={() => navigateTo('AllergyList')}
+          testID="toAllergyListID"
+        />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {cernerExist && (

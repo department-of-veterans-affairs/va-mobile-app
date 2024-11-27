@@ -47,6 +47,9 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     error: vaccineError,
     refetch: refetchVaccines,
   } = useAllergies({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+
+  // console.log(JSON.stringify(allergies, null, 3))
+
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -64,8 +67,8 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
 
   const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: allergy.attributes?.groupName }), variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(allergy.attributes?.date || '') },
+      { text: allergy.attributes?.code?.text ?? '', variant: 'MobileBodyBold' },
+      { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
     ]
 
     const allergyButton: DefaultListItemObj = {
@@ -113,10 +116,10 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title="Allergies"
-      titleA11y={a11yLabelVA(t('vaVaccines'))}
+      titleA11y={a11yLabelVA(t('vaAllergies'))}
       scrollViewProps={scrollViewProps}>
       {loading ? (
-        <LoadingComponent text={t('vaccines.loading')} />
+        <LoadingComponent text={t('allergies.loading')} />
       ) : vaccineError || vaccinesInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}

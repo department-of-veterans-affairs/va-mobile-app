@@ -10,7 +10,7 @@ import { allergyKeys } from './queryKeys'
  * Fetch user Allergies
  */
 const getAllergies = (): Promise<AllergyListPayload | undefined> => {
-  return get<AllergyListPayload>('/v1/health/immunizations', {
+  return get<AllergyListPayload>('/v0/health/allergy-intolerances', {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'date',

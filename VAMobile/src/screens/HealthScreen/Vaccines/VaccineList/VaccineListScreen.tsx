@@ -47,6 +47,9 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     error: vaccineError,
     refetch: refetchVaccines,
   } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+
+  console.log(JSON.stringify(vaccines, null, 3))
+
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()

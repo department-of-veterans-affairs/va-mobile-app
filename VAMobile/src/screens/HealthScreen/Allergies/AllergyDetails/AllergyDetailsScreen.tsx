@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { every } from 'underscore'
 
+import { useAllergies } from 'api/allergies/getAllergies'
 import { useAllergyLocation } from 'api/allergies/getAllergyLocation'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -25,12 +26,13 @@ type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Allergy
  */
 function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
   const { allergy } = route.params
-  const { data: location, isLoading: detailsLoading } = useAllergyLocation(
-    allergy.relationships?.location?.data?.id || '',
-    {
-      enabled: !!allergy.relationships?.location?.data?.id && screenContentAllowed('WG_VaccineDetails'),
-    },
-  )
+  // const { data: location, isLoading: detailsLoading } = useAllergyLocation(
+  //   allergy.relationships?.location?.data?.id || '',
+  //   {
+  //     enabled: !!allergy.relationships?.location?.data?.id && screenContentAllowed('WG_VaccineDetails'),
+  //   },
+  // )
+  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_VaccineDetails') })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -39,45 +41,45 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
 
   const placeHolder = t('noneNoted')
 
-  useEffect(() => {
-    logAnalyticsEvent(Events.vama_vaccine_details(allergy?.attributes?.groupName || ''))
-  }, [dispatch, allergy])
+  // analtyics
+  // useEffect(() => {
+  //   logAnalyticsEvent(Events.vama_vaccine_details(allergy?.attributes?.groupName || ''))
+  // }, [dispatch, allergy])
 
   if (!allergy) {
     return <></>
   }
 
-  const displayDate = allergy.attributes?.date ? formatDateMMMMDDYYYY(allergy.attributes.date) : placeHolder
-
-  const displayName = allergy.attributes?.groupName
-    ? t('vaccines.vaccineName', { name: allergy.attributes.groupName })
+  const displayDate = allergy.attributes?.recordedDate
+    ? formatDateMMMMDDYYYY(allergy.attributes.recordedDate)
     : placeHolder
 
-  const hasSeries = allergy.attributes?.doseNumber && allergy.attributes?.doseSeries
-  const displaySeries = hasSeries
-    ? t('vaccines.details.series.display', {
-        doseNumber: allergy.attributes?.doseNumber,
-        seriesDoses: allergy.attributes?.doseSeries,
-      })
+  const displayName = allergy.attributes?.code?.text
+    ? t('allergies.allergyName', { name: allergy.attributes?.code?.text })
     : placeHolder
 
-  const optionalFields = [hasSeries, allergy.attributes?.note, location?.data, allergy.attributes?.reaction]
+  const hasType = allergy.attributes?.category
+  // const displayType = hasType ? allergy.attributes?.category : placeHolder
+
+  const optionalFields = [
+    hasType,
+    allergy.attributes?.notes,
+    // allergy.attributes?.reaction,
+    allergy.attributes?.recorder,
+  ]
   const isPartialData = !every(optionalFields)
-
-  // Only show the manufacturer label if the vaccine is COVID-19, any other type should not be displayed
-  const isCovidVaccine = allergy.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaVaccines')}
-      backLabelA11y={a11yLabelVA(t('vaVaccines'))}
+      backLabel={t('vaAllergies')}
+      backLabelA11y={a11yLabelVA(t('vaAllergies'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       backLabelTestID="allergiesDetailsBackID">
       {detailsLoading ? (
-        // <LoadingComponent text={t('vaccines.details.loading')} />
-        <LoadingComponent text="Loading your allergy record" />
+        <LoadingComponent text={t('allergies.details.loading')} />
       ) : (
+        // <LoadingComponent text="Loading your allergy record" />
         <Box mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -87,70 +89,68 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               <TextView variant="MobileBodyBold">{displayName}</TextView>
             </Box>
             <TextView variant="MobileBodyBold" selectable={true}>
-              {t('vaccines.details.typeAndDosage')}
+              {'Type'}
             </TextView>
+
             <TextView
               variant="MobileBody"
               selectable={true}
               mb={standardMarginBetween}
-              testID={'Type And Dosage ' + allergy.attributes?.shortDescription || placeHolder}>
-              {allergy.attributes?.shortDescription || placeHolder}
+              testID={'Type ' + allergy.attributes?.category || placeHolder}>
+              {allergy.attributes?.category || placeHolder}
             </TextView>
-            {isCovidVaccine && (
-              <>
-                <TextView variant="MobileBodyBold">{t('vaccines.details.manufacturer')}</TextView>
-                <TextView
-                  variant="MobileBody"
-                  selectable={true}
-                  mb={standardMarginBetween}
-                  testID={'Manufacturer ' + allergy.attributes?.manufacturer || placeHolder}>
-                  {allergy.attributes?.manufacturer || placeHolder}
-                </TextView>
-              </>
-            )}
-            <TextView variant="MobileBodyBold">{t('vaccines.details.series')}</TextView>
-            <TextView variant="MobileBody" selectable={true} testID={'Series status' + displaySeries}>
-              {displaySeries}
-            </TextView>
+
             <Box mt={theme.dimensions.standardMarginBetween}>
               <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
-              {location && (
-                <>
-                  <TextView variant="MobileBody" selectable={true}>
-                    {location.data.attributes.name}
-                  </TextView>
-                  <TextView variant="MobileBody" selectable={true}>
-                    {location.data.attributes.address?.street}
-                  </TextView>
-                  <TextView variant="MobileBody" selectable={true}>
-                    {t('vaccines.details.address', {
-                      city: location.data.attributes.address?.city,
-                      state: location.data.attributes.address?.state,
-                      zip: location.data.attributes.address?.zipCode,
-                    })}
-                  </TextView>
-                </>
-              )}
-              {!location && (
-                <TextView variant="MobileBody" selectable={true}>
-                  {placeHolder}
-                </TextView>
-              )}
+              <TextView variant="MobileBody" selectable={true} testID={'Series status'}>
+                {allergy.attributes?.recorder?.display || placeHolder}
+              </TextView>
             </Box>
+
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Box>
                 <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
-                <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
-                  {allergy.attributes?.reaction || placeHolder}
-                </TextView>
+                {allergy?.attributes?.reactions?.length ? (
+                  allergy.attributes?.reactions?.map((reaction, index) => {
+                    return reaction.manifestation?.map((manifestation, i) => (
+                      <TextView
+                        key={i}
+                        variant="MobileBody"
+                        selectable={true}
+                        testID={'Reaction ' + manifestation.text || placeHolder}>
+                        {manifestation.text || placeHolder}
+                      </TextView>
+                    ))
+                  })
+                ) : (
+                  <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
+                    {placeHolder}{' '}
+                  </TextView>
+                )}
               </Box>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-              <TextView
-                variant="MobileBody"
-                selectable={true}
-                testID={'Notes ' + allergy.attributes?.note || 'None noted'}>
-                {allergy.attributes?.note || placeHolder}
-              </TextView>
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+                {console.log(JSON.stringify(allergy.attributes?.notes, null, 2))}
+                {allergy?.attributes?.notes?.length ? (
+                  allergy.attributes?.notes?.map((note, index) => {
+                    console.log('NOTE: ' + JSON.stringify(note, null, 2))
+                    console.log('NOTE TEXT: ' + note.text)
+                    return (
+                      <TextView
+                        key={index}
+                        variant="MobileBody"
+                        selectable={true}
+                        testID={'Note ' + note.text || placeHolder}>
+                        {note.text || placeHolder}
+                      </TextView>
+                    )
+                  })
+                ) : (
+                  <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
+                    {placeHolder}{' '}
+                  </TextView>
+                )}
+              </Box>
             </Box>
           </TextArea>
           {isPartialData && (

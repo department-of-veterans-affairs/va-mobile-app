@@ -1,0 +1,218 @@
+{
+  "/v1/health/allergy-intolerances": {
+    "1": {
+      "data": [
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000000",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Latex Allergy",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-01-14T09:30:21Z",
+            "notes": "Latex allergy",
+            "recorder": "DR. THOMAS359 REYNOLDS206 PHD",
+            "reaction": "Itchy Watery Eyes"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000001",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Peanut",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-02-20T11:45:00Z",
+            "notes": "Peanut allergy",
+            "recorder": "DR. JANE DOE",
+            "reaction": "Hives"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000002",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Pollen",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-03-10T14:20:00Z",
+            "notes": "Pollen allergy",
+            "recorder": "DR. JOHN SMITH",
+            "reaction": "Sneezing"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000003",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Dust",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-04-15T09:00:00Z",
+            "notes": "Dust allergy",
+            "recorder": "DR. EMILY JOHNSON",
+            "reaction": "Coughing"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000004",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Cat",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-05-20T10:30:00Z",
+            "notes": "Cat allergy",
+            "recorder": "DR. MICHAEL BROWN",
+            "reaction": "Itchy Skin"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000005",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Dog",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-06-25T13:15:00Z",
+            "notes": "Dog allergy",
+            "recorder": "DR. LUCY WILLIAMS",
+            "reaction": "Runny Nose"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000006",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Shellfish",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-07-30T15:45:00Z",
+            "notes": "Shellfish allergy",
+            "recorder": "DR. DAVID MARTIN",
+            "reaction": "Swelling"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000007",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Milk",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-08-05T11:00:00Z",
+            "notes": "Milk allergy",
+            "recorder": "DR. ROBERT CLARK",
+            "reaction": "Stomach Pain"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000008",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Egg",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-09-10T09:30:00Z",
+            "notes": "Egg allergy",
+            "recorder": "DR. PATRICIA MOORE",
+            "reaction": "Rash"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000009",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Wheat",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-10-15T14:00:00Z",
+            "notes": "Wheat allergy",
+            "recorder": "DR. CHRISTOPHER TAYLOR",
+            "reaction": "Bloating"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000010",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Soy",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2021-11-20T10:00:00Z",
+            "notes": "Soy allergy",
+            "recorder": "DR. MARY ANDERSON",
+            "reaction": "Nausea"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000011",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Tree Nut",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2021-12-25T12:30:00Z",
+            "notes": "Tree nut allergy",
+            "recorder": "DR. JAMES LEE",
+            "reaction": "Anaphylaxis"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000012",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Fish",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2022-01-30T09:45:00Z",
+            "notes": "Fish allergy",
+            "recorder": "DR. LINDA HARRIS",
+            "reaction": "Swelling"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000013",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Insect Sting",
+            "type": "allergy",
+            "clinicalStatus": "inactive",
+            "recordedDate": "2022-02-15T11:15:00Z",
+            "notes": "Insect sting allergy",
+            "recorder": "DR. WILLIAM WALKER",
+            "reaction": "Swelling"
+          }
+        },
+        {
+          "id": "I2-FY4N5GUAQ4IZQVQZUPDFN43S4A000014",
+          "type": "allergy_intolerance",
+          "attributes": {
+            "name": "Mold",
+            "type": "allergy",
+            "clinicalStatus": "active",
+            "recordedDate": "2022-03-20T13:00:00Z",
+            "notes": "Mold allergy",
+            "recorder": "DR. BARBARA SCOTT",
+            "reaction": "Sneezing"
+          }
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 15
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=1",
+        "first": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=1",
+        "prev": null,
+        "next": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=2",
+        "last": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=2"
+      }
+    }
+  }
+}
