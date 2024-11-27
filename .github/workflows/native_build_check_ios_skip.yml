@@ -1,0 +1,13 @@
+# This test has the opposite filter of native_build_check_ios.yml so that required checks dont hang
+name: '[Code Quality] Check Native iOs Builds'
+
+on:
+  pull_request:
+    paths:
+      - "!VAMobile/ios/**"
+
+jobs:
+  ios_native_build:
+    name: iOS Test Build
+    uses: ./.github/workflows/native_build_check_ios_reusable.yml
+
