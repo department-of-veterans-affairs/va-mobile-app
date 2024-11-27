@@ -306,6 +306,13 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
+    if (loggedIn && tappedForegroundNotification) {
+      console.debug('User tapped foreground notification.')
+      setTappedForegroundNotification(false)
+    }
+  }, [loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
+
+  useEffect(() => {
     const options = ['close']
     const mutateOptions: MutateOptions<Response, Error, string, void> = {
       onSuccess: async (data) => {
@@ -343,10 +350,7 @@ export function AuthGuard() {
       },
     }
     console.debug('AuthGuard: initializing')
-    if (loggedIn && tappedForegroundNotification) {
-      console.debug('User tapped foreground notification. Skipping initializeAuth.')
-      setTappedForegroundNotification(false)
-    } else if (!loggedIn) {
+    if (!loggedIn) {
       initializeAuth(
         dispatch,
         () => {
@@ -354,7 +358,12 @@ export function AuthGuard() {
         },
         showActionSheetWithOptions,
       )
+    }
+  }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch, showActionSheetWithOptions])
 
+  useEffect(() => {
+    const options = ['close']
+    if (!loggedIn) {
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
           const params = {
@@ -377,16 +386,7 @@ export function AuthGuard() {
         sub?.remove()
       }
     }
-  }, [
-    loggedIn,
-    tappedForegroundNotification,
-    setTappedForegroundNotification,
-    refreshAccessToken,
-    handleTokenCallbackUrl,
-    postLoggedIn,
-    dispatch,
-    showActionSheetWithOptions,
-  ])
+  }, [loggedIn, handleTokenCallbackUrl, showActionSheetWithOptions])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
