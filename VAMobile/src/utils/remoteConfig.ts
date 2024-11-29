@@ -22,6 +22,7 @@ export type FeatureToggleType =
   | 'haptics'
   | 'homeScreenPrefetch'
   | 'inAppRecruitment'
+  | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
   | 'patientCheckIn'
@@ -41,6 +42,7 @@ type FeatureToggleValues = {
   haptics: boolean
   homeScreenPrefetch: boolean
   inAppRecruitment: boolean
+  inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
   patientCheckIn: boolean
@@ -61,6 +63,7 @@ export const defaults: FeatureToggleValues = {
   haptics: true,
   homeScreenPrefetch: true,
   inAppRecruitment: false,
+  inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
   patientCheckIn: false,

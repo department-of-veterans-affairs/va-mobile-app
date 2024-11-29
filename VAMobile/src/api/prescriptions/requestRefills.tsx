@@ -40,7 +40,7 @@ export const useRequestRefills = () => {
       const prescriptionIds = variables.map((prescription) => prescription.id)
       logAnalyticsEvent(Events.vama_rx_refill_success(prescriptionIds))
       queryClient.invalidateQueries({ queryKey: prescriptionKeys.prescriptions })
-      registerReviewEvent()
+      registerReviewEvent(false, 'refillRequest')
     },
     onError: (error, variables) => {
       const prescriptionIds = variables.map((prescription) => prescription.id)
