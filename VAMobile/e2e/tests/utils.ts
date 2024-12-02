@@ -604,6 +604,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
     }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
     await device.disableSynchronization()
+    await setTimeout(3000)
     if (AFUseCaseUpgrade) {
       try {
         await expect(element(by.text('Update now'))).toExist()
