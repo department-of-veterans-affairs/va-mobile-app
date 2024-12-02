@@ -13,7 +13,7 @@ const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
 const navigationDic = {
   Home: [
-    ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
+    ['HomeScreen.e2e', 'Contact us', 'Contact VA1'],
     [
       ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
       ['Profile', 'Personal information'],
