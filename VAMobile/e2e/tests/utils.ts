@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script for functions/constants that effect multiple other scripts.  
+When to update:
+New functions/constants should be added when anything is created that might effect multiple scripts.
+*/
 import { expect as jestExpect } from '@jest/globals'
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
@@ -122,8 +128,10 @@ export const CommonE2eIdConstants = {
   AF_USE_CASE_TWO_ID: 'AFUseCase2TestID',
 }
 
-/** Log the automation into demo mode
- * */
+/** Logs into demo mode.
+* @param skipOnboarding: Boolean value that defaults to true.  Set this to false if you want the detox test to view the onboarding carasoul on login
+* @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
+* */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
@@ -181,7 +189,6 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
  * @param waitForElement - boolean to wait for an element
  * @param timeOut - time to wait for the element
  * */
-
 export async function checkIfElementIsPresent(
   matchString: string,
   findbyText = false,
@@ -212,7 +219,7 @@ export async function checkIfElementIsPresent(
   }
 }
 
-/* Scroll down inside container until specified text is found, then tap the text
+/** Scroll down inside container until specified text is found, then tap the text
  *
  * @param text - string of the text to match
  * @param containerID - testID of the container
@@ -225,7 +232,7 @@ export async function scrollToThenTap(text: string, containerID: string) {
   await element(by.text(text)).tap()
 }
 
-/* Scroll down inside container until specified testID is found, then tap the testID
+/** Scroll down inside container until specified testID is found, then tap the testID
  *
  * @param scrollToID - testID of the item to scroll to
  * @param containerID - testID of the container
@@ -238,7 +245,7 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
-/*This function will open, check for, and dismiss the leaving app popup from a specified launching point
+/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
  * @param findbyText - boolean to search by testID or Text
@@ -426,6 +433,11 @@ export async function backButton(backButtonName: string) {
   }
 }
 
+/** Enables the availibility banner.
+* @param AFFeature: Name of the AF waygate.  
+* @param AFUseCase: Name of the AF type. 
+* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+* */
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
   await loginToDemoMode()
@@ -504,7 +516,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   }
 }
 
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+/** Disables the availibility banner.
+* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature
+* @param AFFeature: Name of the AF waygate.  
+* @param AFUseCaseName: Name of the AF type. 
+* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+* */
+export async function disableAF(featureNavigationArray, AFFeature, AFUseCaseName) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
@@ -538,6 +556,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await device.installApp()
 }
 
+/** Function that allows the AF script to navigate to a certain feature
+* */
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
     if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
@@ -605,6 +625,11 @@ const navigateToFeature = async (featureNavigationArray) => {
   }
 }
 
+/** Verifies that the availibility banner is the correct type and is populated with the correct information.
+* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature 
+* @param AFUseCaseName: Name of the AF type. 
+* @param AFUseCaseUpgrade: Boolean value that tells the script whether to enable the update now button or not
+* */
 export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgrade = false) {
   let featureName
   if (AFUseCase !== 'AllowFunction') {
@@ -665,10 +690,9 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   }
 }
 
-/* Toggle the specified remote config feature flag
- *
+/** Toggle the specified remote config feature flag
  * @param flagName - name of flag to toggle
- */
+* */
 export async function toggleRemoteConfigFlag(flagName: string) {
   await loginToDemoMode()
   await openProfile()
