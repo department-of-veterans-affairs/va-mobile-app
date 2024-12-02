@@ -1,6 +1,9 @@
 /*
 Description:
-Detox script that runs dark mode, landscape, and font size accessibility tests
+Detox script that runs dark mode, landscape, and font size accessibility tests.
+The script can run either as a full suite or a subset:
+* Full suite: The script will check every page outlined in navigationDic.  A full suite run occurs either on the nightly dev build or when you check "run full e2e test" in the workflow options (if running manually).
+* Subset: The script will only check the pages where the test name given in the array matches the test name typed into the "List tests to test in" workflow option.
 When to update:
 This script should be updated whenever a new feature/new page that has the bottom nav bar is added to the app. See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
 */
