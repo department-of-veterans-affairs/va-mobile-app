@@ -242,7 +242,7 @@ jobs:
           script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         
       - name: Pass workflow if rerun passes
-        if: (${{needs.output_detox_tests_to_run.outputs.output2 != ''}} && steps.run_e2e_tests_retry.outcome == 'success')
+        if: (success() || failure()) && steps.run_e2e_tests_retry.outcome == 'success'
         run: exit 0
 
       - name: Upload e2e-junit
