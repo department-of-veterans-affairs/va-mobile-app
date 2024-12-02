@@ -10,7 +10,7 @@ import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { lettersKeys } from './queryKeys'
 
@@ -23,6 +23,7 @@ const downloadLetter = async (
   letterType: LetterTypes,
   lettersOption: LettersDownloadParams,
 ): Promise<boolean | undefined> => {
+  const registerReviewEvent = useReviewEvent()
   const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
   const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, lettersOption as unknown as Params)

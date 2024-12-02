@@ -6,7 +6,7 @@ import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { decisionLettersKeys } from './queryKeys'
 
@@ -16,6 +16,7 @@ const { API_ROOT } = getEnv()
  * Fetch user decision letter
  */
 const downloadDecisionLetter = async (id: string): Promise<boolean | undefined> => {
+  const registerReviewEvent = useReviewEvent()
   const escapedId = encodeURI(id) // escape chars like {} in document ID
   const decisionLettersEndpoint = `${API_ROOT}/v0/claims/decision-letters/${escapedId}/download`
   const filePath = store.getState().demo.demoMode
