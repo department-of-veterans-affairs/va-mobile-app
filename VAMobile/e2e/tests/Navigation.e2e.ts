@@ -1,3 +1,12 @@
+/*
+Description:
+Detox script that runs dark mode, landscape, and font size accessibility tests.
+The script can run either as a full suite or a subset:
+* Full suite: The script will check every page outlined in navigationDic.  A full suite run occurs either on the nightly dev build or when you check "run full e2e test" in the workflow options (if running manually).
+* Subset: The script will only check the pages where the test name given in the array matches the test name typed into the "List tests to test in" workflow option.
+When to update:
+This script should be updated whenever a new feature/new page that has the bottom nav bar is added to the app. See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -110,6 +119,8 @@ const featureID = {
 let scrollID
 let textResized
 
+/*Constants for accessibility related command line options.  
+Any new accessibility related command line options should be added here. */
 export const NavigationE2eConstants = {
   DARK_MODE_OPTIONS:
     device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
@@ -127,6 +138,12 @@ export const NavigationE2eConstants = {
   DISPLAY_RESIZING_RESET: 'adb shell wm density reset',
 }
 
+/*
+Takes a screenshot for each accessibility option and compares it to a known screenshot (when done locally).
+param key: Dictionary key from navigationDic. Corresponds to the sections given on the lower nav bar (Home, Health, Benefits, Payments)
+param navigationDicValue: Dictionary value from navigationDic. Corresponds to the feature in the section that has a lower nav bar
+param accessibilityFeatureType: String value that tells the test what accessability test to run or null value that verifies that a feature is in the right place navigation wise
+*/
 const accessibilityOption = async (key, navigationDicValue, accessibilityFeatureType: string | null) => {
   const navigationArray = navigationDicValue
   if (accessibilityFeatureType === 'landscape') {
