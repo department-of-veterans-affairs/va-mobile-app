@@ -229,6 +229,7 @@ jobs:
 
       - name: Run e2e tests for Android on failure
         if: failure() && steps.run_e2e_tests_nav_AF.outcome == 'failure'
+        id: run_e2e_tests_retry
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
@@ -240,6 +241,10 @@ jobs:
           avd-name: Pixel_4_XL_API_28
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         
+      - name: Pass workflow if rerun passes
+        if: (${{needs.output_detox_tests_to_run.outputs.output2 != ''}} && steps.run_e2e_tests_retry.outcome == 'success')
+        run: exit 0
+
       - name: Upload e2e-junit
         if: failure() || success()
         uses: actions/upload-artifact@v4
