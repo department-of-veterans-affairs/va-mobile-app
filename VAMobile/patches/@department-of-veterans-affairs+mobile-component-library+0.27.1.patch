@@ -1,0 +1,43 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx
+index 2e5c464..a696fa9 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx
+@@ -1,4 +1,4 @@
+-import { useContext } from 'react'
++import { useCallback, useContext, useMemo } from 'react'
+ 
+ import * as Toast from 'react-native-toast-notifications'
+ 
+@@ -22,9 +22,9 @@ export function useSnackbar() {
+     throw new Error('useSnackbar must be used within a SnackbarProvider')
+   }
+ 
+-  const show = (message: string, snackbarOptions?: SnackbarOptions) => {
+-    const { offset, setOffset } = context
++  const { offset, setOffset } = context
+ 
++  const show = useCallback((message: string, snackbarOptions?: SnackbarOptions) => {
+     const customOffset = snackbarOptions?.offset
+ 
+     // Custom offset if provided, else default
+@@ -43,11 +43,13 @@ export function useSnackbar() {
+ 
+     toast.hideAll()
+     toast.show(message, { data: snackbarOptions, duration })
+-  }
+-
+-  return {
+-    show,
+-    hide: toast.hideAll,
+-    isOpen: toast.isOpen,
+-  }
++  }, [defaultOffset, offset, screenReaderEnabled, setOffset, toast])
++
++  return useMemo(
++    () => ({
++      show,
++      hide: toast.hideAll,
++      isOpen: toast.isOpen,
++    }), [show, toast.hideAll, toast.isOpen]
++  )
+ }
