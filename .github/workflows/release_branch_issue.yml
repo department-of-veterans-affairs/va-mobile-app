@@ -7,7 +7,7 @@ jobs:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
-      ticketNumber: ${{steps.create-issue.outputs.number}}
+      ticketNumber: ${{steps.create_issue.outputs.number}}
       versionNumber: ${{env.VERSION}}
       releaseDate: ${{env.RELEASE_DATE}}
       qaDueDate: ${{env.QA_DUE_DATE}}
@@ -20,7 +20,7 @@ jobs:
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
       - run: gh auth login --with-token < token.txt
       - run: |
           sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
@@ -32,7 +32,8 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - uses: JasonEtco/create-an-issue@v2
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
         env:
@@ -43,7 +44,17 @@ jobs:
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: create-issue
+        id: create_issue
+      - name: Assign Users to Release Ticket
+        if: ${{ success() }}
+        run: |
+          # Fetch GitHub Group Members
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}  
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket

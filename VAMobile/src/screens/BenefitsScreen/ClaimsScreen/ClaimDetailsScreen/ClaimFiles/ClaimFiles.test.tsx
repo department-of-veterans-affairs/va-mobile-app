@@ -12,7 +12,15 @@ jest.mock('utils/remoteConfig')
 
 context('ClaimDetailsScreen', () => {
   const renderWithData = (claim: ClaimData): void => {
-    render(<ClaimFiles claim={claim} />)
+    render(
+      <ClaimFiles
+        claim={claim}
+        eFolderDocuments={undefined}
+        setDownloadFile={jest.fn()}
+        setDocumentID={jest.fn()}
+        setFileName={jest.fn()}
+      />,
+    )
   }
 
   describe('When there are files to display', () => {

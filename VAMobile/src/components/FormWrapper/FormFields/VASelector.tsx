@@ -125,7 +125,7 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
-  const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'link'
+  const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
   const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
   const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? t('error', { error }) : ''}`
 

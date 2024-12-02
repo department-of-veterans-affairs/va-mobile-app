@@ -8,7 +8,6 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import colors from 'styles/themes/VAColors'
 import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
@@ -170,7 +169,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
     style: bannerShadow
       ? {
-          shadowColor: colors.black,
+          shadowColor: 'black',
           ...Platform.select({
             ios: {
               shadowOffset: { width: 0, height: 6 },
@@ -201,7 +200,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
   if (leftButton) {
     leftTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
@@ -228,7 +227,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (rightButton) {
     rightTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
