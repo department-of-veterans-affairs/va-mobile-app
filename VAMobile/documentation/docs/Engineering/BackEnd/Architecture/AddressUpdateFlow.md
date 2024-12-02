@@ -2,10 +2,7 @@
 title: Address Update Flow
 ---
 
-Updating an address is a two step process with different option for what to send in the request body. 
-Below are three scenarios for updating when the user has entered a valid address with a single match.
-A valid address with multiple suggested address matches. And when a user has entered what the validation
-service considers and invalid addres but the user would like to override that and use it anyway.
+Updating an address is a two step process with different option for what to send in the request body.Below are three scenarios for updating when the user has entered a valid address with a single match.A valid address with multiple suggested address matches. And when a user has entered what the validation service considers and invalid addres but the user would like to override that and use it anyway.
 
 ## Single match valid address
 
@@ -31,8 +28,7 @@ POST /v0/user/addresses/validate
 
 ### Validate Address Response
 
-The address has a 100% confidence score. The address that's returned can be sent in a new/update request.
-In this case the address object in the meta data should be passed along in that request.
+The address has a 100% confidence score. The address that's returned can be sent in a new/update request. In this case the address object in the meta data should be passed along in that request.
 
 ```json
 {
@@ -135,8 +131,7 @@ POST /v0/user/addresses/validate
 
 ### Multiple Addresses Response
 
-In this case two address matches are returned and should be displayed to the user so they can pick
-which they'd like to use. As above the `meta.address` object is passed along in the new/update request.
+In this case two address matches are returned and should be displayed to the user so they can pick which they'd like to use. As above the `meta.address` object is passed along in the new/update request.
 
 ```json
 {
@@ -265,8 +260,7 @@ POST /v0/user/addresses/validate
 
 ### Invalid Address Response
 
-This response comes back with a 0% confidence score. We can let the user override the validation
-by passing back the `meta.validationKey` in the new/update request.
+This response comes back with a 0% confidence score. We can let the user override the validation by passing back the `meta.validationKey` in the new/update request.
 
 ```json
 {
