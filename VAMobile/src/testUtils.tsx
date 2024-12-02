@@ -22,7 +22,6 @@ import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
-import snackbarReducer from 'store/slices/snackBarSlice'
 import theme from 'styles/themes/standardTheme'
 import i18nReal from 'utils/i18n'
 
@@ -81,7 +80,6 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       demo: demoReducer as any,
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
-      snackBar: snackbarReducer as any,
       settings: settingsReducer as any,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
