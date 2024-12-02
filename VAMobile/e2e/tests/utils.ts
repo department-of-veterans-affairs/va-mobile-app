@@ -29,7 +29,7 @@ export const CommonE2eIdConstants = {
   CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
   PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
   FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
-  CANCEL_CONFIRM_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
+  CANCEL_DELETE_CHANGES_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
   CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   //universal
   SAVE_TEXT: 'Save',

@@ -78,7 +78,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text('Check your direct deposit information'))).toExist()
     await expect(element(by.text('Enter a 9-digit routing number'))).toExist()
     await element(by.id(DirectDepositConstants.BACK_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
   })
 
   it('should fill out Account form for checking', async () => {
@@ -130,7 +130,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.id(DirectDepositConstants.DIRECT_DEPOSIT_EDIT_ROUTING_NUM_ID)).typeText('053100300\n')
     await element(by.id(DirectDepositConstants.BACK_ID)).tap()
     await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
-    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
 
     await expect(element(by.text(DirectDepositConstants.SCREEN_TITLE))).toExist()
   })

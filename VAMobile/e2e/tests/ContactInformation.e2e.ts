@@ -97,7 +97,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + addressType.toLowerCase() + ' address?'))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
@@ -113,7 +113,7 @@ export async function validateAddresses(addressID: string, addressType: string) 
 
   it(addressType + ': verify contact info screen is displayed on delete', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
     await expect(element(by.id(addressID))).toExist()
   })
 
@@ -217,7 +217,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
     await expect(element(by.text('Delete changes to your ' + phoneType.toLowerCase() + ' phone number?'))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
 
@@ -230,7 +230,7 @@ export async function validatePhoneNumbers(phoneID: string, phoneType: string) {
   it(phoneType + ': verify contact info screen is displayed on delete', async () => {
     await element(by.id(ContactInfoE2eIdConstants.CONTACT_INFO_BACK_ID)).tap()
     await setTimeout(2000)
-    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
     await expect(element(by.id(phoneID))).toExist()
   })
 

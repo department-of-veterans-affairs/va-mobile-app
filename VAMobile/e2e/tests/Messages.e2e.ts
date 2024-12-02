@@ -508,7 +508,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
     await expect(element(by.text('Delete changes to draft?'))).toExist()
     await expect(element(by.text("If you save your changes, we'll remove the attachments."))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_SAVE_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT))).toExist()
   })
@@ -520,7 +520,7 @@ describe('Messages Screen', () => {
 
   it('verify that the draft is still in the list after cancel', async () => {
     await element(by.id(MessagesE2eIdConstants.EDIT_DRAFT_CANCEL_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.CANCEL_CONFIRM_BUTTON_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
     await expect(element(by.text('Test: Test Inquiry'))).toExist()
   })
 
