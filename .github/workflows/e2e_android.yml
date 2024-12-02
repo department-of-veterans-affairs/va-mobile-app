@@ -258,7 +258,7 @@ jobs:
           retention-days: 1
 
       - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests.outcome == 'failure' || steps.run_e2e_tests_retry == 'failure'
+        if: steps.run_e2e_tests.outcome == 'failure'
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
