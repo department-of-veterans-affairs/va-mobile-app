@@ -625,7 +625,7 @@ const navigateToFeature = async (featureNavigationArray) => {
   }
 }
 
-/** Disables the availibility banner.
+/** Verifies that the availibility banner is the correct type and is populated with the correct information.
 * @param featureNavigationArray: Array that tells the AF script how to navigate to the feature 
 * @param AFUseCaseName: Name of the AF type. 
 * @param AFUseCaseUpgrade: Boolean value that tells the script whether to enable the update now button or not
