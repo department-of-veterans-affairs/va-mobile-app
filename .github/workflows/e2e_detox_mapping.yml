@@ -60,8 +60,6 @@ jobs:
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
         run: |
-          directoryFound="false"
-          noFileFound="false"
           fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
@@ -70,22 +68,15 @@ jobs:
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
             if [[ "$fileFound" == "null" ]]; then
               fileDirectory=$(dirname $file)
-              echo "$fileDirectory"
-              for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
-                if [[ $fileDirectory =~ $directory ]]; then
-                  directoryFound="true"
-                  break
-                fi
-              done
-              if [[ "$directoryFound" == "false" ]]; then
+              baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
+              baseDirectory=$(echo $baseDirectory | sed 's/ //g')
+              directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+              if [[ "$directoryFound" == "null" ]]; then
                 echo "Missing File: $file or missing directory: $fileDirectory"
-                noFileFound="true"
+                exit 1
               fi
             fi
           done
-          if [[ "$noFileFound" == "true" ]]; then
-            exit 1
-          fi
       - name: Check if directory/file is spelled correctly
         id: detox_mapping_spell_check
         run: |
@@ -140,23 +131,17 @@ jobs:
             fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
             if [[ "$fileFound" == "null" ]]; then
               fileDirectory=$(dirname $file)
-              echo "$fileDirectory"
-              for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
-                if [[ "$fileDirectory" =~ "$directory" ]]; then
-                  echo "$directory"
-                  directoryFound=$(echo $directoryNames | jq --arg fileName "$directory" -r '.[$fileName]')
-                  echo "$directoryFound"
-                  if [[ "$firstInstanceFile" == "true" ]]; then
-                    test_matrix=$directoryFound
-                    test_matrix=$(echo $test_matrix | jq -c '.')
-                    firstInstanceFile="false"
-                  else
-                    test_matrix=$(echo $test_matrix | jq -c '.')
-                    test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
-                  fi
-                  break
-                fi
-              done
+              baseDirectory=$(echo $fileDirectory | sed 's#.*/##')
+              baseDirectory=$(echo $baseDirectory | sed 's/ //g')
+              directoryFound=$(echo $directoryNames | jq --arg fileName "$baseDirectory" '.[$fileName]')
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix=$directoryFound
+                test_matrix=$(echo $test_matrix | jq -c '.')
+                firstInstanceFile="false"
+              else
+                test_matrix=$(echo $test_matrix | jq -c '.')
+                test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
+              fi
             else
               if [[ "$firstInstanceFile" == "true" ]]; then
                 test_matrix=$fileFound
