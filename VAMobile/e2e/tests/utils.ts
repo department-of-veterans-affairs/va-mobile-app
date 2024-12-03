@@ -622,6 +622,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
+      await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }
 
