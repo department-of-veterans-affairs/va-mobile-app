@@ -73,7 +73,6 @@ jobs:
               echo "$fileDirectory"
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
                 if [[ $fileDirectory =~ $directory ]]; then
-                  echo "$directory"
                   directoryFound="true"
                   break
                 fi
@@ -144,7 +143,7 @@ jobs:
               echo "$fileDirectory"
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
                 if [[ "$fileDirectory" =~ "$directory" ]]; then
-                  directoryFound=$(echo $directoryNames | jq --arg fileName "$directory" '.[$fileName]')
+                  directoryFound=$(echo $directoryNames | jq --argjson fileName "$directory" '.[$fileName]')
                   if [[ "$firstInstanceFile" == "true" ]]; then
                     test_matrix=$directory
                     test_matrix=$(echo $test_matrix | jq -c '.')
