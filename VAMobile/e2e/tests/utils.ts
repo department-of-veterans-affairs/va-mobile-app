@@ -603,17 +603,8 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       await element(by.text('OK')).atIndex(0).tap()
     }
   } else if (AFUseCase === 'DenyContent' || AFUseCase === 'AllowFunction') {
-    await device.disableSynchronization()
-    await setTimeout(3000)
-    if (AFUseCaseUpgrade) {
-      try {
-        await expect(element(by.text('Update now'))).toExist()
-      } catch (ex) {
-        await expect(element(by.text('Update now')).atIndex(1)).toExist()
-      }
-    }
-
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       try {
         await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       } catch (ex) {
@@ -631,6 +622,15 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
       }
       await setTimeout(5000)
       await device.takeScreenshot(featureName + 'AFUseCase2TTY')
+      await device.enableSynchronization()
+    }
+
+    if (AFUseCaseUpgrade) {
+      try {
+        await expect(element(by.text('Update now'))).toExist()
+      } catch (ex) {
+        await expect(element(by.text('Update now')).atIndex(1)).toExist()
+      }
     }
   }
 

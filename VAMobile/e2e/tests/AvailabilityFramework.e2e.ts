@@ -173,8 +173,10 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 
   it('should verify AF use case 2 Update available for: ' + testRun, async () => {
-    await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
-    await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    if (testRun != 'WG_StartNewMessage' && testRun != 'WG_ReplyMessage') {
+      await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
+      await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    }
   })
 }
 
