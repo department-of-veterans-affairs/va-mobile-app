@@ -51,8 +51,8 @@ describe('Appointments Screen', () => {
       await device.takeScreenshot('appointmentGetDirections')
       await device.launchApp({ newInstance: false })
 
-      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ID)).atIndex(0)).toExist()
-      await expect(element(by.id(Appointmentse2eConstants.PHONE_NUMBER_ASSISTANCE_LINK_ID)).atIndex(0)).toExist()
+      await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
+      await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_I)).atIndex(0)).toExist()
 
       await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
 
