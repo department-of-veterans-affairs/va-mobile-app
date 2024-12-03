@@ -72,10 +72,10 @@ jobs:
               fileDirectory=$(dirname $file)
               echo "$fileDirectory"
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
-                echo "$directory"
-                if [[ "$fileDirectory" =~ "$directory" ]]; then
+                if [[ $fileDirectory =~ $directory ]]; then
+                  echo "$directory"
                   directoryFound="true"
-                  continue
+                  break
                 fi
               done
               if [[ "$directoryFound" == "false" ]]; then
@@ -153,6 +153,7 @@ jobs:
                     test_matrix=$(echo $test_matrix | jq -c '.')
                     test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
                   fi
+                  break
                 fi
               done
             else
