@@ -143,9 +143,11 @@ jobs:
               echo "$fileDirectory"
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
                 if [[ "$fileDirectory" =~ "$directory" ]]; then
-                  directoryFound=$(echo $directoryNames | jq --argjson fileName "$directory" '.[$fileName]')
+                  echo "$directory"
+                  directoryFound=$(echo $directoryNames | jq --arg fileName "$directory" -r '.[$fileName]')
+                  echo "$directoryFound"
                   if [[ "$firstInstanceFile" == "true" ]]; then
-                    test_matrix=$directory
+                    test_matrix=$directoryFound
                     test_matrix=$(echo $test_matrix | jq -c '.')
                     firstInstanceFile="false"
                   else
