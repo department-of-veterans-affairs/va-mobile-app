@@ -61,14 +61,14 @@ const AFNavigationForIndividual = [
   ['Messages.e2e', 'WG_FolderMessages', 'Health', 'Messages', 'Folders', 'Sent'],
   ['Prescriptions.e2e', 'WG_PrescriptionDetails', 'Health', 'Prescriptions', 'Get prescription details'],
   ['Prescriptions.e2e', 'WG_PrescriptionHistory', 'Health', 'Prescriptions'],
-  //['Messages.e2e', 'WG_SecureMessaging', 'Health', 'Messages'],
+  ['Messages.e2e', 'WG_SecureMessaging', 'Health', 'Messages'],
   ['Appointments.e2e', 'WG_UpcomingAppointmentDetails', 'Health', 'Appointments', 'Podiatry'],
   ['Appointments.e2e', 'WG_PastAppointmentDetails', 'Health', 'Appointments', 'Past', 'Podiatry'],
   ['VaccineRecords.e2e', 'WG_VaccineDetails', 'Health', 'V\ufeffA vaccine records', 'January 14, 2021'],
   ['VaccineRecords.e2e', 'WG_VaccineList', 'Health', 'V\ufeffA vaccine records'],
   ['Messages.e2e', 'WG_StartNewMessage', 'Health', 'Messages', 'Start new message'],
   ['Messages.e2e', 'WG_ReplyMessage', 'Health', 'Messages', 'Medication: Naproxen side effects', 'Reply'],
-  /*[
+  [
     'Messages.e2e',
     'WG_ReplyHelp',
     'Health',
@@ -78,7 +78,7 @@ const AFNavigationForIndividual = [
   ],
   ['Messages.e2e', 'WG_ViewMessage', 'Health', 'Messages', 'Folders', 'Sent', 'Medication: Naproxen side effects'],
   ['Messages.e2e', 'WG_EditDraft', 'Health', 'Messages', 'Folders', 'Drafts (3)', 'Test: Test Inquiry'],
-  */ [
+  [
     'Prescriptions.e2e',
     'WG_RefillRequestSummary',
     'Health',
