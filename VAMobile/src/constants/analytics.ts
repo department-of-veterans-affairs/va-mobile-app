@@ -635,20 +635,36 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
-  vama_feedback_page_ent: (): Event => {
+  vama_feedback_page_ent: (screen: string): Event => {
     return {
       name: 'vama_feedback_page_ent',
+      params: {
+        screen,
+      },
     }
   },
-  vama_feedback_page_exit: (): Event => {
+  vama_feedback_ask: (screen: string, response: boolean): Event => {
+    return {
+      name: 'vama_feedback_ask',
+      params: {
+        screen,
+        response,
+      },
+    }
+  },
+  vama_feedback_closed: (screen: string): Event => {
     return {
       name: 'vama_feedback_page_exit',
+      params: {
+        screen,
+      },
     }
   },
-  vama_feedback_submitted: (taskCompleted: string, satisfaction: string): Event => {
+  vama_feedback_submitted: (screen: string, taskCompleted: string, satisfaction: string): Event => {
     return {
       name: 'vama_feedback_submitted',
       params: {
+        screen,
         taskCompleted,
         satisfaction,
       },

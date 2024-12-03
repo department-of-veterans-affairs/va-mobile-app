@@ -19,11 +19,12 @@ const { LINK_URL_OMB_PAGE } = getEnv()
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
-function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
+function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
+  const { screen } = route.params
   let submittedCheck = false
   const launchExternalLink = useExternalLink()
 
@@ -31,7 +32,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     if (submittedCheck === true) {
       return
     }
-    logAnalyticsEvent(Events.vama_feedback_page_exit())
+    logAnalyticsEvent(Events.vama_feedback_closed(screen))
   })
 
   const onSubmit = (): void => {
@@ -45,7 +46,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         {
           text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
-            logAnalyticsEvent(Events.vama_feedback_submitted(newText, satisfaction))
+            logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
             submittedCheck = true
             navigation.goBack()
           },
@@ -53,7 +54,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         },
       ])
     } else {
-      logAnalyticsEvent(Events.vama_feedback_submitted(task, satisfaction))
+      logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
       submittedCheck = true
       navigation.goBack()
     }
