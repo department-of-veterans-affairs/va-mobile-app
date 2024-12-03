@@ -4,11 +4,9 @@ import { setTimeout } from 'timers/promises'
 import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
-  PAYMENTS_BTN_ID: 'Payments',
   VETERAN_STATUS_TEXT: 'Proof of Veteran status',
-  LOCATION_FINDER_ROW_TEXT: 'Find a VA location',
+  LOCATION_FINDER_TEXT: 'Find a VA location',
   CONTACT_VA_ROW_TEXT: 'Contact us',
-  HOME_PAGE_MILITARY_BRANCH: 'United States Coast Guard',
   CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
   CONTACT_VA_BODY:
     'My V-A 4 1 1 is our main V-A information line. We can help connect you to any of our V-A contact centers.',
@@ -19,7 +17,6 @@ export const HomeE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
-  DISABILITY_RATING_PERCENT_TEXT: '100%',
   DISABILITY_RATING_SUBTEXT_TEXT: 'service connected',
   MONTHLY_PAYMENT_TITLE_TEXT: 'Monthly compensation payment',
   MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.75',
@@ -36,7 +33,7 @@ describe('Home Screen', () => {
   })
 
   it(':android: should disable AF use case 3', async () => {
-    await disableAF(undefined, 'WG_Home', 'AllowFunction')
+    await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode()
   })
@@ -156,25 +153,25 @@ describe('Home Screen', () => {
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(HomeE2eIdConstants.HOME_PAGE_MILITARY_BRANCH))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.VETERAN_STATUS_TEXT))).toExist()
     const militaryBadge = await element(by.id('United States Coast Guard Emblem')).takeScreenshot(
       'MilitaryServiceBadgeHome',
     )
     checkImages(militaryBadge)
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_TITLE_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_SUBTEXT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_TITLE_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT))).toExist()
   })
 
   it('should show home page VA Resources content', async () => {
-    await waitFor(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)))
+    await waitFor(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_TEXT)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
-    await expect(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.LOCATION_FINDER_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT))).toExist()
   })
 
@@ -205,7 +202,7 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await element(by.text(HomeE2eIdConstants.LOCATION_FINDER_ROW_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.LOCATION_FINDER_TEXT)).tap()
     await setTimeout(5000)
     await device.takeScreenshot('HomeFindAVALocationScreenshot')
   })
