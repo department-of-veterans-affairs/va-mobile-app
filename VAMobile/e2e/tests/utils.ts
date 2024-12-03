@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script for functions/constants that effect multiple other scripts.  
+When to update:
+New functions/constants should be added when anything is created that might effect multiple scripts.
+*/
 import { expect as jestExpect } from '@jest/globals'
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
@@ -23,6 +29,14 @@ const mockNotification = {
 }
 
 export const CommonE2eIdConstants = {
+  //device-specific
+  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
+  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
+  CAMERA_TEXT: device.getPlatform() === 'ios' ? 'Camera' : 'Camera ',
+  PHOTO_GALLERY_TEXT: device.getPlatform() === 'ios' ? 'Photo Gallery' : 'Photo gallery ',
+  FILE_FOLDER_TEXT: device.getPlatform() === 'ios' ? 'File Folder' : 'File folder ',
+  CANCEL_DELETE_CHANGES_BUTTON_TEXT: device.getPlatform() === 'ios' ? 'Delete Changes' : 'Delete Changes ',
+  CANCEL_KEEP_EDITING_TEXT: device.getPlatform() === 'ios' ? 'Keep Editing' : 'Keep Editing ',
   //universal
   SAVE_TEXT: 'Save',
   ENABLED_TEXT: 'Enabled',
@@ -34,11 +48,11 @@ export const CommonE2eIdConstants = {
   LEAVING_APP_LEAVE_TEXT: 'Leave',
   CANCEL_UNIVERSAL_TEXT: 'Cancel',
   OK_UNIVERSAL_TEXT: 'OK',
-  OK_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Ok' : 'OK',
-  CANCEL_PLATFORM_SPECIFIC_TEXT: device.getPlatform() === 'ios' ? 'Cancel' : 'Cancel ',
+  DISMISS_TEXT: 'Dismiss',
   CALL_VA_PHONE_NUMBER_ID: 'CallVATestID',
   CALL_VA_TTY_PHONE_NUMBER_ID: 'CallTTYTestID',
   GO_TO_VA_GOV_LINK_ID: 'goToVAGovID',
+  VETERAN_CRISIS_LINE_HEADING_TEXT: 'Veterans Crisis Line',
   VETERAN_CRISIS_LINE_BTN_TEXT: 'Talk to the Veterans Crisis Line now',
   VETERAN_CRISIS_LINE_BTN_ID: 'veteransCrisisLineID',
   VETERAN_CRISIS_LINE_BACK_ID: 'veteranCrisisLineBackID',
@@ -46,6 +60,8 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_TTY_ID: 'veteransCrisisLineHearingLossNumberTestID',
   VETERANS_CRISIS_LINE_TEXT_ID: 'veteransCrisisLineTextNumberTestID',
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
+  MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
+  MILITARY_PERIOD_OF_SERVICE: 'July 13, 1970 – August 31, 1998',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
@@ -64,10 +80,14 @@ export const CommonE2eIdConstants = {
   HOME_TAB_BUTTON_ID: 'Home',
   PROFILE_HEADER_BUTTON_ID: 'toProfileScreenID',
   HOME_SCREEN_SCROLL_ID: 'homeScreenID',
+  DISABILITY_RATING_PERCENT_TEXT: '100%',
   //health
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
   APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
+  ADD_TO_CALENDAR_ID: 'addToCalendarTestID',
+  GET_DIRECTIONS_ID: 'directionsTestID',
+  DATE_RANGE_INITIAL_TEXT: 'Past 3 months',
   START_NEW_MESSAGE_BUTTON_ID: 'startNewMessageButtonTestID',
   MESSAGES_INBOX_BUTTON_ID: 'toMessageInboxID',
   VIEW_MESSAGE_ID: 'viewMessageTestID',
@@ -77,6 +97,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
+  CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
   CLAIMS_HISTORY_SCROLL_ID: 'claimsHistoryID',
@@ -86,6 +107,9 @@ export const CommonE2eIdConstants = {
   CLAIMS_DETAILS_SCREEN_ID: 'ClaimDetailsScreen',
   ALERT_FILE_REQUEST_BUTTON_ID: 'Review file requests',
   CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
+  APPEALS_DETAILS_ID: 'appealsDetailsTestID',
+  CLOSED_CLAIM_DECISION_LETTER_ID:
+    'Compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
   LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
   DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
   //payments
@@ -122,8 +146,10 @@ export const CommonE2eIdConstants = {
   AF_USE_CASE_TWO_ID: 'AFUseCase2TestID',
 }
 
-/** Log the automation into demo mode
- * */
+/** Logs into demo mode.
+* @param skipOnboarding: Boolean value that defaults to true.  Set this to false if you want the detox test to view the onboarding carasoul on login
+* @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
+* */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
@@ -146,6 +172,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
       .toExist()
       .withTimeout(60000)
   }
+  await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)).multiTap(7)
 
   if (DEMO_PASSWORD !== undefined) {
@@ -155,6 +185,10 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
+  await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
+    .toBeVisible()
+    .whileElement(by.id('Login-page'))
+    .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)).tap()
 
   if (skipOnboarding === true) {
@@ -181,7 +215,6 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
  * @param waitForElement - boolean to wait for an element
  * @param timeOut - time to wait for the element
  * */
-
 export async function checkIfElementIsPresent(
   matchString: string,
   findbyText = false,
@@ -212,7 +245,7 @@ export async function checkIfElementIsPresent(
   }
 }
 
-/* Scroll down inside container until specified text is found, then tap the text
+/** Scroll down inside container until specified text is found, then tap the text
  *
  * @param text - string of the text to match
  * @param containerID - testID of the container
@@ -225,7 +258,7 @@ export async function scrollToThenTap(text: string, containerID: string) {
   await element(by.text(text)).tap()
 }
 
-/* Scroll down inside container until specified testID is found, then tap the testID
+/** Scroll down inside container until specified testID is found, then tap the testID
  *
  * @param scrollToID - testID of the item to scroll to
  * @param containerID - testID of the container
@@ -238,7 +271,7 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
-/*This function will open, check for, and dismiss the leaving app popup from a specified launching point
+/** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
  * @param findbyText - boolean to search by testID or Text
@@ -426,6 +459,11 @@ export async function backButton(backButtonName: string) {
   }
 }
 
+/** Enables the availibility banner.
+* @param AFFeature: Name of the AF waygate.  
+* @param AFUseCase: Name of the AF type. 
+* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+* */
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
   await loginToDemoMode()
@@ -504,7 +542,13 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   }
 }
 
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+/** Disables the availibility banner.
+* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature
+* @param AFFeature: Name of the AF waygate.  
+* @param AFUseCaseName: Name of the AF type. 
+* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+* */
+export async function disableAF(featureNavigationArray, AFFeature, AFUseCaseName) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
@@ -538,6 +582,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
   await device.installApp()
 }
 
+/** Function that allows the AF script to navigate to a certain feature
+* */
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
     if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
@@ -605,6 +651,11 @@ const navigateToFeature = async (featureNavigationArray) => {
   }
 }
 
+/** Verifies that the availibility banner is the correct type and is populated with the correct information.
+* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature 
+* @param AFUseCaseName: Name of the AF type. 
+* @param AFUseCaseUpgrade: Boolean value that tells the script whether to enable the update now button or not
+* */
 export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgrade = false) {
   let featureName
   if (AFUseCase !== 'AllowFunction') {
@@ -665,10 +716,9 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
   }
 }
 
-/* Toggle the specified remote config feature flag
- *
+/** Toggle the specified remote config feature flag
  * @param flagName - name of flag to toggle
- */
+* */
 export async function toggleRemoteConfigFlag(flagName: string) {
   await loginToDemoMode()
   await openProfile()

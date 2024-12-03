@@ -57,6 +57,9 @@ export const MAIL_TO_REGEX_EXP = new RegExp(
 export const PHONE_REGEX_EXP = new RegExp(
   /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
 )
+
+export const SSN_REGEX_EXP = new RegExp(/^\d{3}-?\d{2}-?\d{4}$/)
+
 export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)

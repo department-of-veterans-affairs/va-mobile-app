@@ -37,9 +37,9 @@ Understanding what’s guiding the app’s current information architecture and 
 ### Sitemap/flow diagram 
 A sitemap is a planning tool that visually shows how information will be grouped and labeled, where content will be located, and how a user will move through the app. This adaptation of a standard sitemap includes the system display logic for screens that have variants, key actions (buttons, links), common processes and points where it makes use of native mobile integrations. **This is the source of truth for the app’s IA.** 
 
-<iframe width="800" height="450" title="Flagship mobile app sitemap" src="https://www.figma.com/design/bTPnmfYSuj1ICA4AqHMiQg/Sitemap%2FFlow-Diagram-2.0---%F0%9F%9A%A2-Shipped-(FJ)---VA-Mobile?node-id=0-1&t=5sKeYKmQ1pUk0rr1-1" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Flagship mobile app sitemap" src="https://embed.figma.com/design/bTPnmfYSuj1ICA4AqHMiQg/Sitemap%2FFlow-Diagram-2.0---%F0%9F%9A%A2-Shipped-(FJ)---VA-Mobile?node-id=20-2673&embed-host=share" allowfullscreen></iframe>
 
-[VA Mobile App - Detailed sitemap 2.0 (FigJam)](https://www.figma.com/design/bTPnmfYSuj1ICA4AqHMiQg/Sitemap%2FFlow-Diagram-2.0---%F0%9F%9A%A2-Shipped-(FJ)---VA-Mobile?node-id=0-1&t=5sKeYKmQ1pUk0rr1-1)
+[VA Mobile App - Detailed sitemap 2.0](https://www.figma.com/design/bTPnmfYSuj1ICA4AqHMiQg/Sitemap%2FFlow-Diagram-2.0---%F0%9F%9A%A2-Shipped-(FJ)---VA-Mobile?node-id=0-1&t=5sKeYKmQ1pUk0rr1-1)
 
 
 
