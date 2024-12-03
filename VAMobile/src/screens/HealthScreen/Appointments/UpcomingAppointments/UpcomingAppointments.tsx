@@ -75,7 +75,7 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
 
   return (
     <Box>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} testID="Test">
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
       {getGroupedAppointments(appointmentsToShow, theme, { t }, onUpcomingAppointmentPress, false, pagination)}
