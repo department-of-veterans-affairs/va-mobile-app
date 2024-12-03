@@ -43,6 +43,7 @@ export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (
             DateTime.fromMillis(parseInt(lastFeedback, 10)).diffNow('days').days > IN_APP_FEEDBACK_INTERVAL_DAYS) ||
           !lastFeedback
         ) {
+          logAnalyticsEvent(Events.vama_feedback_page_ent())
           inAppFeedback(feedbackScreen)
           await AsyncStorage.setItem(feedbackKey, '0')
           await AsyncStorage.setItem(STORAGE_LAST_FEEDBACK_PROMPT_DATE_MILLIS, `${DateTime.now().millisecond}`)
