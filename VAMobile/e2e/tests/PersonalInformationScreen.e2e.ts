@@ -80,7 +80,7 @@ export async function updateGenderIdentify(genderIdentityOption) {
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
     await expect(element(by.text('Gender identity saved'))).toExist()
     await expect(element(by.text(genderIdentityOption))).toExist()
-    await element(by.text('Dismiss')).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
 
     await element(by.id(PersonalInfoConstants.PERSONAL_INFO_SCROLL_ID)).scrollTo('bottom')
     await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_ROW_ID)).tap()
@@ -102,10 +102,10 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
 
-    await expect(element(by.text('Preferred name'))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT))).toExist()
     await expect(element(by.text('Sharing your preferred name is optional.'))).toExist()
 
-    await expect(element(by.text('Gender identity'))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_HEADER_TEXT))).toExist()
     await expect(element(by.text('Woman'))).toExist()
   })
 
@@ -143,7 +143,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT)).atIndex(0)).toExist()
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).replaceText('Kimberlee')
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).tapReturnKey()
-    await element(by.text('Save')).tap()
+    await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text('Preferred name saved'))).toExist()

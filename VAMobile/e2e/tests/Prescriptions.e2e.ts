@@ -38,7 +38,6 @@ export const PrescriptionsE2eIdConstants = {
     "This list shows refill requests you've submitted. It also shows refills the  V-A  pharmacy is processing.",
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT: 'We got your refill requests',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
@@ -422,7 +421,7 @@ describe('Prescriptions Screen', () => {
 
   it('verify refill request summary screen information', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
@@ -459,7 +458,7 @@ describe('Prescriptions Screen', () => {
       .scroll(500, 'down')
     await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
