@@ -92,9 +92,9 @@ body:
 - type: input
   id: duedate
   attributes:
-    label: 12.) What is your ideal due date for this change request? 
+    label: 12.) Is there a hard deadline associated with this request? 
     description: 
-    placeholder: MM/DD/YYYY or Quarter 
+    placeholder: MM/DD/YYYY 
   validations:
     required: true    
 
