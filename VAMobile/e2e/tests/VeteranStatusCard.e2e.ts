@@ -20,11 +20,8 @@ import {
 
 export const VeteranStatusCardConstants = {
   VETERAN_STATUS_ID: 'veteranStatusButtonID',
-  VETERAN_STATUS_NAME_TEXT: 'Kimberly Washington',
-  VETERAN_STATUS_MILITARY_BRANCH_TEXT: 'United States Coast Guard',
   VETERAN_STATUS_DISABILITY_RATING_TEXT: '100% service connected',
   VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT: 'United States Army',
-  VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT: 'July 13, 1970 – August 31, 1998',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT: 'September 01, 1998 – January 01, 2000',
   VETERAN_STATUS_DISCLAIMER_TEXT:
     "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any VA benefits.",
@@ -77,7 +74,7 @@ export async function tapPhoneAndTTYLinks() {
     await element(by.id('veteranStatusTestID')).scrollTo('bottom')
     await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     try {
-      await element(by.text('Dismiss')).tap()
+      await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
       await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0).tap()
     } catch (e) {}
     await setTimeout(2000)
@@ -149,15 +146,15 @@ describe('Veteran Status Card', () => {
 
   it('verify the period of service matches app', async () => {
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT)).atIndex(1)).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD)).atIndex(1)).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await setTimeout(2000)
     await openMilitaryInformation()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_1_TEXT))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_MILITARY_BRANCH_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
     await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.BACK_TO_PROFILE_ID)).tap()
   })
@@ -168,7 +165,7 @@ describe('Veteran Status Card', () => {
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await openBenefits()
     await openDisabilityRating()
-    await expect(element(by.text('100%')).atIndex(1)).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT)).atIndex(1)).toExist()
   })
 
   verifyMilitaryInfo('United States Coast Guard')

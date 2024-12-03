@@ -30,8 +30,8 @@ export type PaginationProps = {
 type PaginationArrowProps = {
   /** function called when pressed */
   onPress: () => void
-  /** optional accessibility hint */
-  a11yHint?: string
+  /** optional accessibility label */
+  a11yLabel?: string
   /** whether or not this button is disabled */
   disabled: boolean
   /** test id */
@@ -40,7 +40,7 @@ type PaginationArrowProps = {
   iconProps: IconProps
 }
 
-export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, iconProps, testID, disabled }) => {
+export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yLabel, iconProps, testID, disabled }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -48,7 +48,6 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
     accessibilityRole: 'link',
     disabled,
     accessible: true,
-    accessibilityHint: a11yHint,
     accessibilityState: disabled ? { disabled: true } : {},
   }
 
@@ -59,7 +58,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
     borderRadius: 5,
   }
   return (
-    <Pressable {...pressableProps} testID={testID} accessibilityLabel={testID}>
+    <Pressable {...pressableProps} testID={testID} accessibilityLabel={a11yLabel}>
       <Box {...boxProps}>
         <Icon fill={theme.colors.icon.pagination} width={36} height={36} preventScaling={true} {...iconProps} />
       </Box>
@@ -92,7 +91,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   const previousProps: PaginationArrowProps = {
     onPress: onPrevPress,
     testID: 'previous-page',
-    a11yHint: t('pagination.previous'),
+    a11yLabel: t('pagination.previous'),
     iconProps: { name: 'ChevronLeft', fill: theme.colors.icon.pagination },
     disabled: page === 1,
   }
@@ -100,7 +99,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   const nextProps: PaginationArrowProps = {
     onPress: onNextPress,
     testID: 'next-page',
-    a11yHint: t('pagination.next'),
+    a11yLabel: t('pagination.next'),
     iconProps: { name: 'ChevronRight', fill: theme.colors.icon.pagination },
     disabled: page * pageSize >= totalEntries,
   }

@@ -3,7 +3,6 @@ import { by, element, expect, waitFor } from 'detox'
 import { CommonE2eIdConstants, checkImages } from './utils'
 
 export const LoginE2eIdConstants = {
-  LOGIN_PAGE_ID: 'Login-page',
   LOGIN_FIND_VA_BUTTON_ID: 'Find a VA location',
   LOGIN_APP_VERSION_ID: 'AppVersionTestID',
 }
