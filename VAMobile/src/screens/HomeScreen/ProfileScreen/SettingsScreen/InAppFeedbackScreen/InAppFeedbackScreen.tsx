@@ -32,9 +32,6 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
 
   const onSubmit = (): void => {
     const { found, newText } = checkStringForPII(task)
-    console.log('found: ', found)
-    console.log('task: ', task)
-    console.log('newText: ', newText)
     if (found) {
       Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
         {
@@ -44,8 +41,6 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         {
           text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
-            console.log('task: ', task)
-            console.log('newText: ', newText)
             logAnalyticsEvent(Events.vama_feedback_submitted(newText, satisfaction))
             navigation.goBack()
           },
@@ -53,7 +48,6 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         },
       ])
     } else {
-      console.log('task: ', task)
       logAnalyticsEvent(Events.vama_feedback_submitted(task, satisfaction))
       navigation.goBack()
     }
