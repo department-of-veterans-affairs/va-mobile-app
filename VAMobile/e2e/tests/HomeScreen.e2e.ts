@@ -33,7 +33,7 @@ describe('Home Screen', () => {
   })
 
   it(':android: should disable AF use case 3', async () => {
-    await disableAF(undefined, 'WG_Home', 'AllowFunction')
+    await disableAF(undefined, 'WG_Home', undefined, 'AllowFunction')
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await loginToDemoMode()
   })

@@ -548,7 +548,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 * @param AFUseCaseName: Name of the AF type. 
 * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
 * */
-export async function disableAF(featureNavigationArray, AFFeature, AFUseCaseName) {
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
