@@ -4,7 +4,6 @@ import { setTimeout } from 'timers/promises'
 import { CommonE2eIdConstants } from './utils'
 
 export const SignE2eIdConstants = {
-  LOGIN_PAGE_ID: 'Login-page',
   LOA_P1_TEXT:
     'You’ll need to sign in with an identity-verified account through one of our account providers. Identity verification helps us protect all Veterans’ information and prevent scammers from stealing your benefits.',
   LOA_P2_TEXT:

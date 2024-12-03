@@ -180,7 +180,7 @@ describe('AppealsExpanded', () => {
         if (appealInfo[2] === 'Opt in to the new decision review process') {
           await waitFor(element(by.text(appealInfo[2])))
             .toBeVisible()
-            .whileElement(by.id('appealsDetailsTestID'))
+            .whileElement(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID))
             .scroll(300, 'down')
           await element(by.text(appealInfo[2])).tap()
           await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
