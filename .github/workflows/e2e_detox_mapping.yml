@@ -71,7 +71,7 @@ jobs:
             if [[ "$fileFound" == "null" ]]; then
               fileDirectory=$(dirname $file)
               for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
-                if [[ "$fileDirectory" =~ "$directory"]]; then
+                if [[ "$fileDirectory" =~ "$directory" ]]; then
                   directoryFound="true"
                   continue
                 fi
