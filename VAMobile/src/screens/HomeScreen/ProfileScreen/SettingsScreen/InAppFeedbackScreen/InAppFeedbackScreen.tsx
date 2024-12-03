@@ -24,9 +24,13 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
+  let submittedCheck = false
   const launchExternalLink = useExternalLink()
 
   useBeforeNavBackListener(navigation, () => {
+    if (submittedCheck === true) {
+      return
+    }
     logAnalyticsEvent(Events.vama_feedback_page_exit())
   })
 
@@ -42,6 +46,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
           text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
             logAnalyticsEvent(Events.vama_feedback_submitted(newText, satisfaction))
+            submittedCheck = true
             navigation.goBack()
           },
           style: 'default',
@@ -49,6 +54,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
       ])
     } else {
       logAnalyticsEvent(Events.vama_feedback_submitted(task, satisfaction))
+      submittedCheck = true
       navigation.goBack()
     }
   }
