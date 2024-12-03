@@ -50,21 +50,31 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug Staged Changes
+        run: |
+          git status
+          git diff --cached
       - name: Debug Git Information
         run: |
           echo "Current Branch: $(git branch --show-current)"
           echo "GitHub Ref: ${{ github.ref }}"
           echo "GitHub Run ID: ${{ github.run_id }}"
           git remote -v
+          git log --oneline -n 5
       - name: Create a Pull Request
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ env.BRANCH_NAME }}
+          token: ${{ secrets.GH_ACTIONS_PAT}}
           base: ${{ github.ref_name }}
+          labels: devops
+          branch: ${{ env.BRANCH_NAME }}
           title: "Optimize images before release build"
           body-path: .github/pull_request_template.md
+      - name: Debug PR Creation
+        run: |
+          echo "Branch: ${{ env.BRANCH_NAME }}"
+          echo "Base: ${{ github.ref_name }}"
       # Check if a PR was created
       - name: Pull Request Details
         run: |
