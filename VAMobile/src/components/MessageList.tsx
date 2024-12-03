@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonDecoratorType, VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { ButtonDecoratorType } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 import { useTheme } from 'utils/hooks'
@@ -62,7 +64,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
             </Box>
           )}
         </Box>
-        <VAIcon
+        <Icon
           name="ChevronRight"
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}

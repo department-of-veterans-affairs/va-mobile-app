@@ -121,7 +121,6 @@ function OnboardingCarousel() {
       name: 'OnboardingAppOverview',
       component: OnboardingAppOverview,
       a11yHints: {
-        skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 1 }),
         continueHint: t('onboarding.continueA11yHint.healthOnboarding'),
       },
@@ -130,7 +129,6 @@ function OnboardingCarousel() {
       name: 'OnboardingHealth',
       component: OnboardingHealth,
       a11yHints: {
-        skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
         continueHint: t('onboarding.continueA11yHint.benefitsOnboarding'),
         backHint: t('onboarding.backA11yHint.overviewOnboarding'),
@@ -140,7 +138,6 @@ function OnboardingCarousel() {
       name: 'OnboardingBenefits',
       component: OnboardingBenefits,
       a11yHints: {
-        skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
         continueHint: t('onboarding.continueA11yHint.paymentsOnboarding'),
         backHint: t('onboarding.backA11yHint.healthOnboarding'),
@@ -151,7 +148,6 @@ function OnboardingCarousel() {
       component: OnboardingPayments,
       a11yHints: {
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 4 }),
-        doneHint: t('onboarding.skipA11yHint'),
         backHint: t('onboarding.backA11yHint.benefitsOnboarding'),
       },
     },

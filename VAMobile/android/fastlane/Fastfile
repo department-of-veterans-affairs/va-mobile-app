@@ -113,6 +113,11 @@ platform :android do
     )
   end
 
+  desc "Makes a test build to ensure changes to native directories did not break build process. DOES NOT DISTRIBUTE"
+  lane :test_build_only do |options|
+    bundle("Release")
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
@@ -191,7 +196,7 @@ platform :android do
   def upload(track, skip_meta = true)
     puts "Skip meta: " + skip_meta.to_s
     supply(
-      track: track, 
+      track: track,
       package_name: "gov.va.mobileapp",
       skip_upload_metadata: skip_meta,
       skip_upload_changelogs: skip_meta,

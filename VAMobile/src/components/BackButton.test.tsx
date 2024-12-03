@@ -10,13 +10,12 @@ import BackButton from './BackButton'
 context('BackButton', () => {
   const onPressSpy = jest.fn()
 
-  const renderWithProps = (canGoBack: boolean, showCarat?: boolean, a11yHint?: string, label?: BackButtonLabel) => {
+  const renderWithProps = (canGoBack: boolean, a11yHint?: string, label?: BackButtonLabel) => {
     render(
       <BackButton
         onPress={onPressSpy}
         label={label || BackButtonLabelConstants.back}
         canGoBack={canGoBack}
-        showCarat={showCarat}
         a11yHint={a11yHint}
       />,
     )
@@ -39,23 +38,18 @@ context('BackButton', () => {
     expect(onPressSpy).toHaveBeenCalled()
   })
 
-  it('shows carat when showCarat is true', () => {
-    renderWithProps(true, true)
-    expect(screen.getByTestId('BackButtonCarat')).toBeTruthy()
-  })
-
   it('shows custom a11yHint', () => {
-    renderWithProps(true, false, 'Action on click')
+    renderWithProps(true, 'Action on click')
     expect(screen.getByA11yHint('Action on click')).toBeTruthy()
   })
 
   it('shows correct a11yHint when label is "Cancel"', () => {
-    renderWithProps(true, undefined, undefined, BackButtonLabelConstants.cancel)
+    renderWithProps(true, undefined, BackButtonLabelConstants.cancel)
     expect(screen.getByA11yHint('Cancels changes and navigates to the previous page')).toBeTruthy()
   })
 
   it('shows correct a11yHint when label is "Done"', () => {
-    renderWithProps(true, undefined, undefined, BackButtonLabelConstants.done)
+    renderWithProps(true, undefined, BackButtonLabelConstants.done)
     expect(screen.getByA11yHint('Exits out of the web view and navigates to the previous page')).toBeTruthy()
   })
 })
