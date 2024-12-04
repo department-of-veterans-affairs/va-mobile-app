@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import * as api from 'store/api'
 import { completeSync, initialAuthState } from 'store/slices'
@@ -65,17 +66,17 @@ context('SyncScreen', () => {
 
   it('shows "Signing you in" text', () => {
     initializeTestInstance()
-    expect(screen.getByText('Signing you in...')).toBeTruthy()
+    expect(screen.getByText(t('sync.progress.signin'))).toBeTruthy()
   })
 
   it('shows "Signing you out" text when logging out', () => {
     initializeTestInstance(false, true, true)
-    expect(screen.getByText('Signing you out...')).toBeTruthy()
+    expect(screen.getByText(t('sync.progress.signout'))).toBeTruthy()
   })
 
   it('shows "Signing you out" text when logging out and data is not loaded', () => {
     initializeTestInstance(true, true, true)
-    expect(screen.getByText('Signing you out...')).toBeTruthy()
+    expect(screen.getByText(t('sync.progress.signout'))).toBeTruthy()
   })
 
   describe('sync completion', () => {
