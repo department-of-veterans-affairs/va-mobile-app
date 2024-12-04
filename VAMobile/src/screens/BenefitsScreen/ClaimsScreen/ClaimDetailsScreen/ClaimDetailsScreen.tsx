@@ -317,6 +317,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
+      backLabelA11y={t('back.a11yLabel', { screenName: backLabel })}
       backLabelOnPress={navigation.goBack}
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
