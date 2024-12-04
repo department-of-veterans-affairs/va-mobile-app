@@ -635,14 +635,6 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
-  vama_feedback_page_ent: (screen: string): Event => {
-    return {
-      name: 'vama_feedback_page_ent',
-      params: {
-        screen,
-      },
-    }
-  },
   vama_feedback_ask: (screen: string, response: boolean): Event => {
     return {
       name: 'vama_feedback_ask',
