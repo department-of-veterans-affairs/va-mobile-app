@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
+import { useAuthSettings } from 'api/auth'
 import {
   AlertWithHaptics,
   Box,
@@ -22,11 +23,11 @@ import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
+import { AuthState } from 'store/slices'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
@@ -35,8 +36,8 @@ import DemoAlert from './DemoAlert'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { firstTimeLogin, loadingRefreshToken } = useSelector<RootState, AuthState>((state) => state.auth)
-  const { authParamsLoadingState } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { data: userAuthSettings } = useAuthSettings()
+  const { loadingRefreshToken } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const dispatch = useAppDispatch()
   const isPortrait = useOrientation()
@@ -46,12 +47,6 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
-
-  useEffect(() => {
-    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
-      dispatch(setPKCEParams())
-    }
-  }, [authParamsLoadingState, dispatch])
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -93,9 +88,9 @@ function LoginScreen() {
   const onLoginInit = demoMode
     ? () => {
         setNewSession()
-        dispatch(loginStart(true))
+        loginStart(dispatch, true)
       }
-    : firstTimeLogin
+    : userAuthSettings?.firstTimeLogin
       ? () => {
           setFirstTimeLogin()
           setNewSession()

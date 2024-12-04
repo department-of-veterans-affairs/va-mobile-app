@@ -2,31 +2,32 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { authKeys } from 'api/auth'
 import * as api from 'store/api'
-import { completeSync, initialAuthState } from 'store/slices'
-import { context, render, waitFor, when } from 'testUtils'
+import { QueriesData, context, render, when } from 'testUtils'
 
 import { SyncScreen } from './index'
 
-jest.mock('store/slices', () => {
-  const actual = jest.requireActual('store/slices')
-  return {
-    ...actual,
-    completeSync: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 context('SyncScreen', () => {
   const initializeTestInstance = (loggedIn = false, loggingOut = false, syncing = true): void => {
-    const store = {
-      auth: { ...initialAuthState, loggedIn, loggingOut, syncing },
-    }
-    render(<SyncScreen />, { preloadedState: store })
+    const queriesData: QueriesData = [
+      {
+        queryKey: authKeys.settings,
+        data: {
+          firstTimeLogin: false,
+        },
+      },
+    ]
+    render(<SyncScreen />, {
+      preloadedState: {
+        auth: {
+          loggedIn: loggedIn,
+          loggingOut: loggingOut,
+          syncing: syncing,
+        },
+      },
+      queriesData: queriesData,
+    })
   }
 
   beforeEach(() => {
@@ -76,14 +77,5 @@ context('SyncScreen', () => {
   it('shows "Signing you out" text when logging out and data is not loaded', () => {
     initializeTestInstance(true, true, true)
     expect(screen.getByText('Signing you out...')).toBeTruthy()
-  })
-
-  describe('sync completion', () => {
-    it('should complete the sync when all loading is finished', async () => {
-      initializeTestInstance(true, false, false)
-      await waitFor(() => {
-        expect(completeSync).toHaveBeenCalled()
-      })
-    })
   })
 })

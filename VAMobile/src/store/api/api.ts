@@ -1,12 +1,12 @@
 import { Platform } from 'react-native'
 
+import { MutateOptions, UseMutateFunction } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
 import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
-import { ReduxToolkitStore } from 'store'
-import { logout, refreshAccessToken } from 'store/slices'
+import store from 'store'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 
@@ -17,9 +17,9 @@ const { API_ROOT } = getEnv()
 
 let _token: string | undefined
 let _refresh_token: string | undefined
-let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
-let _store: ReduxToolkitStore | undefined
+let _logout: UseMutateFunction<Response, Error, void, void> | undefined
+let _RefreshAccessToken: UseMutateFunction<Response, Error, string, void> | undefined
 
 const DEMO_MODE_DELAY = 300
 const METHODS_THAT_ALLOW_PARAMS = ['GET']
@@ -27,6 +27,13 @@ const METHODS_THAT_ALLOW_PARAMS = ['GET']
 const DEVICE_MODEL = Platform.OS === 'ios' ? 'iPhone' : Platform.constants.Model
 // @ts-expect-error
 const OS_VERSION = Platform.OS === 'ios' ? `iOS ${Platform.Version}` : `Android ${Platform.constants.Release}`
+
+export const setlogout = (logout: UseMutateFunction<Response, Error, void, void>) => {
+  _logout = logout
+}
+export const setRefreshAccessToken = (refreshAccessToken: UseMutateFunction<Response, Error, string, void>) => {
+  _RefreshAccessToken = refreshAccessToken
+}
 
 export const setAccessToken = (token?: string): void => {
   _token = token
@@ -46,10 +53,6 @@ export const getRefreshToken = (): string | undefined => {
 
 export const setDemoMode = (demoMode: boolean): void => {
   _demoMode = demoMode
-}
-
-export const injectStore = (store: ReduxToolkitStore): void => {
-  _store = store
 }
 
 export type Params = {
@@ -145,30 +148,29 @@ const call = async function <T>(
     const accessTokenExpired = response.status === 403 && responseBody?.errors === 'Access token has expired'
 
     if (accessTokenExpired) {
-      console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
-      // If the access token is expired, attempt to refresh it and redo the request
-      if (!refreshPromise) {
-        // If there is not already a refresh request in flight, create one
-        refreshPromise = refreshAccessToken(_refresh_token || '')
-      }
-
       // Wait for the token refresh to complete and try the call again
-      const didRefresh = await refreshPromise
-      refreshPromise = undefined
-      if (didRefresh) {
-        console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
-        try {
-          response = await doRequest(method, endpoint, params, contentType, abortSignal)
-        } catch (networkError) {
-          // networkError coming back as `AbortError` means abortController.abort() was called
-          // @ts-ignore
-          if (networkError?.name === 'AbortError') {
-            return
-          }
-          throw { networkError: true }
+      if (_RefreshAccessToken) {
+        const mutateOptions: MutateOptions<unknown, Error, string, void> = {
+          onSuccess: async () => {
+            console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
+            try {
+              response = await doRequest(method, endpoint, params, contentType, abortSignal)
+            } catch (networkError) {
+              // networkError coming back as `AbortError` means abortController.abort() was called
+              // @ts-ignore
+              if (networkError?.name === 'AbortError') {
+                return
+              }
+              throw { networkError: true }
+            }
+          },
+          onError: () => {
+            if (_logout) {
+              _logout()
+            }
+          },
         }
-      } else {
-        _store?.dispatch(logout())
+        await _RefreshAccessToken(_refresh_token || '', mutateOptions)
       }
     }
     if (response.status === 204) {
@@ -207,7 +209,7 @@ const call = async function <T>(
     // No errors found, return the response
     return await response.json()
   } else {
-    const overrideErrors = _store?.getState().demo.overrideErrors as APIError[]
+    const overrideErrors = store.getState().demo.overrideErrors as APIError[]
     if (overrideErrors) {
       _.forEach(overrideErrors, (error) => {
         if (error.endpoint && endpoint.includes(error.endpoint)) {

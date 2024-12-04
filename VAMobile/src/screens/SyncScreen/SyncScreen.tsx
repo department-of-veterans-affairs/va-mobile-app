@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { StatusBar, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useAppointments } from 'api/appointments'
@@ -19,10 +20,11 @@ import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
+import { AuthState, ErrorsState, checkForDowntimeErrors, dispatchUpdateSyncing } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import { loginFinish } from 'utils/auth'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
 
@@ -37,10 +39,11 @@ function SyncScreen({}: SyncScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
+  const queryClient = useQueryClient()
+  const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const { ENVIRONMENT } = getEnv()
 
-  const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const { isFetched: authorizedServicesFetched } = useAuthorizedServices()
@@ -73,9 +76,9 @@ function SyncScreen({}: SyncScreenProps) {
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
-      dispatch(logInDemoMode())
+      loginFinish(dispatch, false)
     }
-  }, [dispatch, demoMode, loggedIn])
+  }, [dispatch, demoMode, loggedIn, queryClient])
 
   useEffect(() => {
     if (syncing) {
@@ -89,10 +92,20 @@ function SyncScreen({}: SyncScreenProps) {
     }
 
     if (!loggingOut && loggedIn && downtimeWindowsFetched && authorizedServicesFetched) {
+      dispatch(dispatchUpdateSyncing(false))
       setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
-      dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, downtimeWindowsFetched, authorizedServicesFetched, t, syncing, ENVIRONMENT])
+  }, [
+    loggedIn,
+    loggingOut,
+    downtimeWindowsFetched,
+    authorizedServicesFetched,
+    t,
+    syncing,
+    queryClient,
+    ENVIRONMENT,
+    dispatch,
+  ])
 
   return (
     <VAScrollView contentContainerStyle={splashStyles} removeInsets={true}>

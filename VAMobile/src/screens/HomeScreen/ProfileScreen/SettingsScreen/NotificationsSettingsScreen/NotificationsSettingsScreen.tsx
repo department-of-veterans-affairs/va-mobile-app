@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert, Linking } from 'react-native'
 import { Notifications } from 'react-native-notifications'
-import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
@@ -33,16 +32,15 @@ import {
   SimpleListItemObj,
   TextView,
 } from 'components'
+import { useNotificationContext } from 'components/NotificationManager'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useOnResumeForeground, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -55,7 +53,6 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
@@ -79,13 +76,14 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { data: personalInformation } = usePersonalInformation()
   const { mutate: registerDevice, isPending: registeringDevice } = useRegisterDevice()
   const { mutate: setPushPref, isPending: settingPreference } = useUpdatePushPreferences()
-  const { requestNotifications } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { requestNotifications, setRequestNotifications, setRequestNotificationPreferenceScreen } =
+    useNotificationContext()
 
   const onUseNotifications = (): void => {
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
-    dispatch(setNotificationsPreferenceScreen(false))
+    setRequestNotificationPreferenceScreen(false)
     //This actually triggers the notification manager code to request via OS.
-    dispatch(setRequestNotifications(true))
+    setRequestNotifications(true)
   }
 
   const openSettings = () => {
