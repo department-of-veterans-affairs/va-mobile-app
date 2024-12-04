@@ -10,6 +10,7 @@ export type PersonalInformationPayload = {
       signinService: string
       birthDate: string | null
       hasFacilityTransitioningToCerner: boolean
+      edipi: string | null
     }
   }
 }

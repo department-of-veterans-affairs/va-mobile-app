@@ -4626,10 +4626,15 @@ detect-node@^2.0.4:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-detox@*, detox@^20.25.5:
-  version "20.25.5"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.25.5.tgz#2b3986abf4baa6c127f33bb018f1e0b3230250db"
-  integrity sha512-d37Uik4KCZrNow278HpMix+o9MxsIDO1s2ejBQ65mRq29Qr0M40f2fYI0YV9nN2JWXTGPniRyRzhFcFRxNRPgA==
+detox-copilot@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/detox-copilot/-/detox-copilot-0.0.24.tgz#e505073866d1f4ff00641f2e48ef441a4dff6bbc"
+  integrity sha512-42g0QyJS31URl28YRxc4hGozSXhbbB1sKwzxEjZR9WtLoSx6WYDsQkQD8+yP5t1NExiSCZAfvNmBw8PYQwDKwg==
+
+detox@*, detox@^20.28.0:
+  version "20.28.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.28.0.tgz#7ae848e8df028c17d65cd0672040cd1c18338b25"
+  integrity sha512-JeUkWNnYE7lqby3S9AeYJP3ttCBKH+qZWACjWXwvSbe3tm6JeXvecVUYkzSoNfC4IzTX5p+rWvG0IPsfOsZSFw==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -4637,6 +4642,7 @@ detox@*, detox@^20.25.5:
     caf "^15.0.1"
     chalk "^4.0.0"
     child-process-promise "^2.2.0"
+    detox-copilot "^0.0.24"
     execa "^5.1.1"
     find-up "^5.0.0"
     fs-extra "^11.0.0"
@@ -9382,10 +9388,10 @@ react-native-webp-format@^1.2.0:
   resolved "https://registry.yarnpkg.com/react-native-webp-format/-/react-native-webp-format-1.2.0.tgz#6c7cbed4cdc8247711c7d7f656d0d4f739836c82"
   integrity sha512-tUL/AbM6QwUsxsGutJ1bN4RW8JdD2w5Mpj+An4DvYKkm0bKHbODj7U7gI1+8X68GqJWOy+Ps2cbVmgNpSDfRPQ==
 
-react-native-webview@^13.12.3:
-  version "13.12.3"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.12.3.tgz#3aa9d2fc982ba2681e56d3e96e22b63a0d929270"
-  integrity sha512-Y1I5YyDYyE7NC96RHLhd2nxh7ymLYOYLTefgx5ixxw2OToQK0ow3OJ+o77QcI1Tuevj5PCxwqC/14ceS/7yPJQ==
+react-native-webview@^13.12.4:
+  version "13.12.4"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.12.4.tgz#1a563a7fbd6bf53d688388d46708f273ed0ebb94"
+  integrity sha512-8lWeYPVWeOj0ya9ZpDesOQPRgczuN3ogQHlhS21sNXndd4kvfPG+WjlRdrvxYgj//udpwmzcWzagwLnEp60Aqg==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
