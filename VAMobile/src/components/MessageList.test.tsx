@@ -34,7 +34,7 @@ context('MessageList', () => {
           },
           {
             leftTextProps: { text: 'test2-subject-line' },
-            leftIconProps: { name: 'Trash', width: 16, height: 16, testID: 'Trash' },
+            leftIconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' },
           },
         ],
         isSentFolder: false,
@@ -78,7 +78,7 @@ context('MessageList', () => {
 
   it('should render the VAIcon components for unread item with attachment', () => {
     expect(screen.getByTestId('Unread')).toBeTruthy()
-    expect(screen.getByTestId('Trash')).toBeTruthy()
+    expect(screen.getByTestId('PaperClip')).toBeTruthy()
   })
 
   it('should render chevron icons', () => {
