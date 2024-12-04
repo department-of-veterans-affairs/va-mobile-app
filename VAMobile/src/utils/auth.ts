@@ -341,44 +341,19 @@ export const initializeAuth = async (
   refreshAccessToken: () => void,
   showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
 ) => {
-  const options = ['close']
   if (store.getState().demo.demoMode) {
     return
   }
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-    showActionSheetWithOptions(
-      {
-        title: 'login unlock hit',
-        options,
-        cancelButtonIndex: 0,
-      },
-      () => {},
-    )
     await finishInitialize(dispatch, false)
     await startBiometricsLogin(dispatch, refreshAccessToken, showActionSheetWithOptions)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
-      showActionSheetWithOptions(
-        {
-          title: 'login refreshing access token hit',
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
       await refreshAccessToken()
     } else {
-      showActionSheetWithOptions(
-        {
-          title: 'login clear credentials',
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
       await clearStoredAuthCreds()
       await finishInitialize(dispatch, false)
     }
