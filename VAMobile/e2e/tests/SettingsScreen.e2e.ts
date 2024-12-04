@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the settings test case found in testRail (VA Mobile App > RC Regression Test > Manual > Profile Page - Elements)
+When to update:
+This script should be updated whenever new items are added to the settings screen list or there are any changes within the settings screen options.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -63,6 +69,7 @@ describe('Settings Screen', () => {
     await element(by.id(SettingsE2eIdConstants.BACK_TO_SETTINGS_SCREEN_ID)).tap()
   })
 
+  //The share the app dialog in the android simulator does not go away on device.launchApp.  For this reason this test is only run on iOS.
   it('should show "Share the app" screen', async () => {
     if (device.getPlatform() === 'ios') {
       await element(by.id(SettingsE2eIdConstants.SHARE_APP_ROW_ID)).tap()
