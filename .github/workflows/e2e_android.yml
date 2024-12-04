@@ -212,6 +212,7 @@ jobs:
           avd-name: Pixel_6_Pro_API_33
           script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         continue-on-error: true
+        retry: 2
 
       - name: Run e2e tests for Android
         id: run_e2e_tests_nav_AF
