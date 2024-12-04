@@ -79,3 +79,9 @@ jobs:
       - name: Pull Request Details
         run: |
           echo "Pull request URL: ${{ steps.create_pr.outputs.pull-request-url }}"
+      - name: Capture Pull Request URL
+        run: |
+          PR_URL=$(gh pr view --json url -q ".url")
+          echo "Pull request URL: $PR_URL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
