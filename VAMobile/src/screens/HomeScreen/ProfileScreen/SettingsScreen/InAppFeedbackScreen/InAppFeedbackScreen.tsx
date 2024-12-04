@@ -11,9 +11,9 @@ import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextV
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { checkStringForPII } from 'utils/common'
+import { checkStringForPII, showSnackBar } from 'utils/common'
 import getEnv from 'utils/env'
-import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
+import { useAppDispatch, useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
@@ -24,6 +24,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
+  const dispatch = useAppDispatch()
   const { screen } = route.params
   let submittedCheck = false
   const launchExternalLink = useExternalLink()
@@ -49,6 +50,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
             logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
             submittedCheck = true
             navigation.goBack()
+            showSnackBar(t('inAppFeedback.snackbar.success'), dispatch, undefined, true, false, false)
           },
           style: 'default',
         },
@@ -57,6 +59,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
       logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
       submittedCheck = true
       navigation.goBack()
+      showSnackBar(t('inAppFeedback.snackbar.success'), dispatch, undefined, true, false, false)
     }
   }
 
