@@ -336,18 +336,14 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (
-  dispatch: AppDispatch,
-  refreshAccessToken: () => void,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
-) => {
+export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
   if (store.getState().demo.demoMode) {
     return
   }
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
-    await startBiometricsLogin(dispatch, refreshAccessToken, showActionSheetWithOptions)
+    await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
@@ -360,22 +356,9 @@ export const initializeAuth = async (
   }
 }
 
-const startBiometricsLogin = async (
-  dispatch: AppDispatch,
-  refreshAccessToken: () => void,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
-) => {
-  const options = ['close']
+const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
   const loading = store.getState().auth.loading
   if (loading) {
-    showActionSheetWithOptions(
-      {
-        title: 'biometrics loading',
-        options,
-        cancelButtonIndex: 0,
-      },
-      () => {},
-    )
     return
   }
   await logAnalyticsEvent(Events.vama_login_start(true, true))
@@ -383,37 +366,13 @@ const startBiometricsLogin = async (
   try {
     const refreshToken = await retrieveRefreshToken()
     if (refreshToken) {
-      showActionSheetWithOptions(
-        {
-          title: 'refresh token biometrics',
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
       loginStart(dispatch, true)
       await refreshAccessToken()
     } else {
-      showActionSheetWithOptions(
-        {
-          title: 'no refresh token biometrics',
-          options,
-          cancelButtonIndex: 0,
-        },
-        () => {},
-      )
       await finishInitialize(dispatch, false)
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    showActionSheetWithOptions(
-      {
-        title: 'biometrics error',
-        options,
-        cancelButtonIndex: 0,
-      },
-      () => {},
-    )
     if (isAndroid()) {
       if (err?.message?.indexOf('Cancel') > -1) {
         return

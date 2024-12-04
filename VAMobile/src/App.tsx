@@ -77,7 +77,7 @@ import { finishInitialize, initializeAuth, processAuthResponse } from 'utils/aut
 import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { setFileSystemRefreshAccessToken } from 'utils/filesystem'
-import { useAppDispatch, useFontScale, useIsScreenReaderEnabled, useShowActionSheet } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
@@ -243,7 +243,6 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   const { requestNotificationPreferenceScreen } = useNotificationContext()
-  const showActionSheetWithOptions = useShowActionSheet()
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -332,15 +331,11 @@ export function AuthGuard() {
     }
     console.debug('AuthGuard: initializing')
     if (!loggedIn) {
-      initializeAuth(
-        dispatch,
-        () => {
-          refreshAccessToken(getAccessToken() || '', mutateOptions)
-        },
-        showActionSheetWithOptions,
-      )
+      initializeAuth(dispatch, () => {
+        refreshAccessToken(getAccessToken() || '', mutateOptions)
+      })
     }
-  }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch, showActionSheetWithOptions])
+  }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch])
 
   useEffect(() => {
     if (!loggedIn) {
