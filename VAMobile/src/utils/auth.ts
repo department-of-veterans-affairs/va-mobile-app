@@ -7,7 +7,6 @@ import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { UseMutateFunction } from '@tanstack/react-query'
 
 import { authKeys } from 'api/auth'
