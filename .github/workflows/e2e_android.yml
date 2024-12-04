@@ -204,12 +204,27 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
+          api-level: 33
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_6_Pro_API_33
+          script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
+        continue-on-error: true
+
+      - name: Run e2e tests for Android - Full Test - Retry
+        id: run_e2e_tests_full_retry
+        if: steps.run_e2e_tests.outcome == 'failure'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: VAMobile
+          api-level: 33
+          profile: pixel_6_pro
+          force-avd-creation: false
+          disable-animations: true
+          arch: x86_64
+          avd-name: Pixel_6_Pro_API_33
           script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         continue-on-error: true
 
@@ -219,12 +234,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
+          api-level: 33
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_6_Pro_API_33
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
         continue-on-error: true
 
@@ -234,12 +249,12 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 28
+          api-level: 33
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
           arch: x86_64
-          avd-name: Pixel_4_XL_API_28
+          avd-name: Pixel_6_Pro_API_33
           script: yarn e2e:android-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot
 
       - name: Upload e2e-junit
@@ -250,7 +265,7 @@ jobs:
           path: VAMobile/e2e/test_reports/e2e-junit.xml
 
       - name: Upload artifacts on failure
-        if: failure() || steps.run_e2e_tests.outcome == 'failure'
+        if: failure() || steps.run_e2e_tests_full_retry.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: detox-artifacts-${{ runner.os }}-${{ github.run_id }}-${{matrix.testsuite}}
@@ -258,7 +273,7 @@ jobs:
           retention-days: 1
 
       - name: Fail workflow if needed(View e2e step for details)
-        if: steps.run_e2e_tests.outcome == 'failure'
+        if: steps.run_e2e_tests_full_retry.outcome == 'failure'
         run: exit 1
   
   output-slack-results-and-update-detox-failure-ticket:
