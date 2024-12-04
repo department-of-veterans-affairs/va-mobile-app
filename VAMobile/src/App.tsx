@@ -319,15 +319,6 @@ export function AuthGuard() {
         const authCredentials = await processAuthResponse(data)
         await finishInitialize(dispatch, true, authCredentials)
         postLoggedIn()
-        showActionSheetWithOptions(
-          {
-            title: 'should login',
-
-            options,
-            cancelButtonIndex: 0,
-          },
-          () => {},
-        )
       },
       onError: async (error) => {
         if (isErrorObject(error)) {
@@ -336,15 +327,6 @@ export function AuthGuard() {
           if (error.status) {
             await logAnalyticsEvent(Events.vama_login_token_refresh(error))
           }
-          showActionSheetWithOptions(
-            {
-              title: 'login failure on app.tsx initialize auth',
-              message: error.message + ' ' + error.status || 'no status given',
-              options,
-              cancelButtonIndex: 0,
-            },
-            () => {},
-          )
         }
         await finishInitialize(dispatch, false)
       },
@@ -362,7 +344,6 @@ export function AuthGuard() {
   }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch, showActionSheetWithOptions])
 
   useEffect(() => {
-    const options = ['close']
     if (!loggedIn) {
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
@@ -370,14 +351,6 @@ export function AuthGuard() {
             url: event.url,
             queryClient: queryClient,
           }
-          showActionSheetWithOptions(
-            {
-              title: 'handle token callback',
-              options,
-              cancelButtonIndex: 0,
-            },
-            () => {},
-          )
           handleTokenCallbackUrl(params)
         }
       }
@@ -386,7 +359,7 @@ export function AuthGuard() {
         sub?.remove()
       }
     }
-  }, [loggedIn, handleTokenCallbackUrl, showActionSheetWithOptions])
+  }, [loggedIn, handleTokenCallbackUrl])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
