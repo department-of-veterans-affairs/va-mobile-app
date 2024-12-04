@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the profile page test case found in testRail (VA Mobile App > RC Regression Test > Manual > Profile Page - Elements)
+When to update:
+This script should be updated whenever new menu options are added/changed in the profile page.
+*/
 import { by, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
