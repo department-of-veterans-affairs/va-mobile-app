@@ -8,77 +8,73 @@ on:
 
 jobs:
   axe-scan:
-    name: Acessibility Check
+    name: Accessibility Check
     runs-on: ubuntu-latest
+    outputs:
+      pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
+      total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup node and restore yarn cache
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Install Axe CLI globally
+        run: |
+          npm install @axe-core/cli -g
+      - uses: actions/setup-node@v4
         with:
           node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
-      - name: Clean npm cache
-        run: npm cache clean --force
-      - name: Install Axe CLI globally
-        run: npm install -g @axe-core/cli@latest
-      - name: Install latest version of chromeDriver
-        run: npm install -g chromedriver@latest
-      - name: Run build to generate sitemap
+          cache: yarn
+          cache-dependency-path: VAMobile/documentation/yarn.lock
+      - name: Install ChromeDriver
+        run: npm install -g chromedriver
+      - name: Install mobile app modules
         working-directory: VAMobile
         run: |
           yarn install --frozen-lockfile
-          cd documentation
-          npx update-browserslist-db@latest
-          yarn install --frozen-lockfile
-          yarn build
       - name: Start web server
         working-directory: VAMobile/documentation
-        run: npm start & npx wait-on http://localhost:3000 &
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          yarn start &
+          npx wait-on http://localhost:3000 &
+          sleep 10
       - name: Check accessibility issues
         id: accessibility_check
         run: |
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
-    
-          # Counter for the number of accessibility issues detected
-          num_issues=0
-    
-          # Extract URLs from sitemap and iterate
-          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//'); do
-            if axe "$url" --chromedriver-path $(npm root -g)/chromedriver/bin/chromedriver --exit; then
-              echo "No accessibility issues found in $url"
-            else
-              echo "Accessibility issues found in $url"
-              echo "$url" >> accessibility_issues.txt
-              num_issues=$((num_issues+1))
+          
+          # Counter for urls with errors
+          pages_with_errors=0
+          # Counter for total errors
+          total_errors=0
+          
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
+          do
+            # save output so that we can send it to std out AND do an operation on it
+            output=$(axe "$url")
+            # send output to stdout
+            echo "${output}"
+          
+            # regex number of issues NOTE: grep exits 1 if it finds no match. GH Actions exits the runner if anything exits 1 so we add the || true to overcome that
+            issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
+
+            # If issues is not an empty string, there were issues
+            if [[ ! -z "$issues" ]]
+            then
+              pages_with_errors=$((pages_with_errors + 1))
+              total_errors=$((total_errors + issues))
             fi
           done
-          num_issues_issues=$(grep -c 'Accessibility issues found' accessibility_issues.txt)
-          echo "Accessibility issues detected: $num_issues"
-
-          # Fail the workflow if accessibility issues are detected
-          if [ "$num_issues" -gt 0 ]; then
-            echo "Accessibility issues were detected."
-            exit 1
-          else
-            echo "No accessibility issues were found."
-          fi
+          
+          # Output to runner
+          echo "pages_with_errors=$pages_with_errors" >> $GITHUB_OUTPUT
+          echo "total_errors=$total_errors" >> $GITHUB_OUTPUT
 
   start_slack_thread:
     name: Start Slack thread
-    runs-on: ubuntu-latest
-    if: ${{ failure() }}
     needs: axe-scan
-    steps:
-      - name: Notify Slack
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          channel_name: va-mobile-build-alerts
-          message: 'Accessibility issues detected. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
-        run: |
-          curl -X POST \
-               -H "Authorization: Bearer $SLACK_API_TOKEN" \
-               -H "Content-Type: application/json" \
-               -d "{\"channel\":\"$channel_name\",\"text\":\"$message\"}" \
-               https://slack.com/api/chat.postMessage
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }} Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'
