@@ -30,7 +30,6 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   return (
     <FeatureLandingTemplate
       backLabel={t('benefits.title')}
-      backLabelA11y={t('back.a11yLabel', { screenName: t('benefits.title') })}
       backLabelOnPress={navigation.goBack}
       title={t('claims.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>

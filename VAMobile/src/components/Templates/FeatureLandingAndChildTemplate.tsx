@@ -74,9 +74,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const headerProps: HeaderBannerProps = {
     leftButton: {
       text: backLabel,
-      a11yLabel: backLabelA11y,
-      // ? t('back.a11yLabel', { screenName: backLabelA11y })
-      // : t('back.a11yLabel', { screenName: backLabel }),
+      a11yLabel: backLabelA11y
+        ? t('back.a11yLabel', { screenName: backLabelA11y })
+        : t('back.a11yLabel', { screenName: backLabel }),
       testID: backLabelTestID,
       onPress: backLabelOnPress,
       descriptiveBack: true,

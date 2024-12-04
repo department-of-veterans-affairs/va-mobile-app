@@ -127,7 +127,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
-      backLabelA11y={t('back.a11yLabel', { screenName: backLabel })}
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID"
