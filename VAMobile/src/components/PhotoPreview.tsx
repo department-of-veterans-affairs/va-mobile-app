@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Image, Pressable, PressableProps } from 'react-native'
 import { Asset } from 'react-native-image-picker/src/types'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
@@ -12,7 +13,6 @@ import { themeFn } from 'utils/theme'
 
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
-import { VAIcon } from './index'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -119,8 +119,8 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         {selected && <Box {...blueOpacity} />}
         <Box pt={photoPreviewIconPadding} pr={photoPreviewIconPadding} position="absolute" alignSelf="flex-end">
           {selected && (
-            <VAIcon
-              name={'Minus'}
+            <Icon
+              name={'RemoveCircle'}
               width={photoPreviewIconSize}
               height={photoPreviewIconSize}
               maxWidth={photoPreviewMaxIconSize}
@@ -128,8 +128,8 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
             />
           )}
           {!selected && (
-            <VAIcon
-              name={'Remove'}
+            <Icon
+              name={'Cancel'}
               width={photoPreviewIconSize}
               height={photoPreviewIconSize}
               maxWidth={photoPreviewMaxIconSize}

@@ -2,10 +2,10 @@ import React, { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { Box, TextView, VAIcon } from 'components/index'
+import { Box, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { getFileDisplay } from 'utils/common'
@@ -52,7 +52,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({
             flexWrap="wrap"
             mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}>
             <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
-              <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
+              <Icon name={'AttachFile'} fill={theme.colors.icon.spinner} width={20} height={20} />
               <TextView
                 variant="MobileBodyBold"
                 ml={theme.dimensions.textIconMargin}
