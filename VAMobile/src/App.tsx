@@ -313,7 +313,6 @@ export function AuthGuard() {
   }, [loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
 
   useEffect(() => {
-    const options = ['close']
     const mutateOptions: MutateOptions<Response, Error, string, void> = {
       onSuccess: async (data) => {
         const authCredentials = await processAuthResponse(data)
