@@ -646,7 +646,7 @@ export const Events = {
   },
   vama_feedback_closed: (screen: string): Event => {
     return {
-      name: 'vama_feedback_page_exit',
+      name: 'vama_feedback_closed',
       params: {
         screen,
       },
