@@ -27,7 +27,7 @@ jobs:
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
           imagemin * --out-dir=.
-          
+
           cd phoneScreenshots/
           imagemin * --out-dir=.
           
@@ -65,7 +65,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GH_ACTIONS_PAT}}
+          token: ${{ secrets.GH_ACTIONS_PAT }}
           base: ${{ github.ref_name }}
           labels: devops
           branch: ${{ env.BRANCH_NAME }}
