@@ -11,6 +11,8 @@ jobs:
   optimize_images:
     name: Optimize Images
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     outputs:
       pr_url: ${{ steps.create_pr.outputs.pull-request-url }} # Declare the output for PR URL
     env:
@@ -65,7 +67,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           base: ${{ github.ref_name }}
           labels: devops
           branch: ${{ env.BRANCH_NAME }}
