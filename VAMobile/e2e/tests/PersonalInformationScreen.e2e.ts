@@ -58,7 +58,7 @@ const scrollToThenTap = async (text: string, scrollID?: string, id?: boolean) =>
   }
 }
 
-/** This function will check the nearest VA center and call links. This script is only run on android because iOS does not have phone capabilities 
+/** This function will check the nearest VA center and call links. This script is only run on the Android simulator because the iOS simulator does not have phone capabilities 
 * @param scrollID: String text of the testID of the page with the scrollView
 * */
 const checkLocatorAndContactLinks = async (scrollID?: string) => {
