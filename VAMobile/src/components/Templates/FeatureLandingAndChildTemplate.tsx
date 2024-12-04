@@ -1,9 +1,11 @@
 import React, { FC, ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
+import { NAMESPACE } from 'constants/namespaces'
 import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
@@ -57,6 +59,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -71,7 +74,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const headerProps: HeaderBannerProps = {
     leftButton: {
       text: backLabel,
-      a11yLabel: backLabelA11y,
+      a11yLabel: backLabelA11y
+        ? t('back.a11yLabel', { screenName: backLabelA11y })
+        : t('back.a11yLabel', { screenName: backLabel }),
       testID: backLabelTestID,
       onPress: backLabelOnPress,
       descriptiveBack: true,
