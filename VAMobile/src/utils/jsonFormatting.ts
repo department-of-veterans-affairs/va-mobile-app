@@ -23,4 +23,7 @@ export const fixSpecialCharacters = (text: string): string => {
     .replace(/&amp;/g, '&')
     .replace(/&ldquo;/g, '"')
     .replace(/&rsquo;/g, "'")
+    .replace(/&rdquo;/g, '"')
+    .replace(/&lsquo;/g, "'")
+    .replace(/&#39;/g, "'")
 }

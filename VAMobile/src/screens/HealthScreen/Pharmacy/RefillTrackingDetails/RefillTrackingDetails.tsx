@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTrackingInfo } from 'api/prescriptions'
@@ -26,6 +27,7 @@ import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -71,6 +73,12 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   useBeforeNavBackListener(navigation, () => {
     logAnalyticsEvent(Events.vama_rx_trackdet_close(prescription.id))
   })
+
+  useFocusEffect(
+    React.useCallback(() => {
+      registerReviewEvent(true)
+    }, []),
+  )
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
     const noOtherPrescriptions = !otherPrescriptions || otherPrescriptions.length === 0
@@ -120,7 +128,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
       const mainContent = (
         <>
-          <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('prescriptions.refillTracking.trackingNumber')}
+          </TextView>
           {trackingLink && trackingNumber ? (
             <LinkWithAnalytics
               type="url"
@@ -153,9 +163,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           {trackingInfo?.length > 1 ? (
             <Box mb={condensedMarginBetween}>
               <TextView
-                variant={
-                  'MobileBodyBold'
-                }>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+                variant="MobileBodyBold"
+                accessibilityRole="header">{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
             <></>
@@ -172,7 +181,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
     return (
       <>
-        <TextView variant="BitterBoldHeading" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.condensedMarginBetween}>
           {prescriptionName}
         </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>
@@ -190,7 +199,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     <FullScreenSubtask
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
-      testID="refillTrackingDetailsTestID">
+      testID="refillTrackingDetailsTestID"
+      rightButtonTestID="prescriptionsBackTestID">
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingTrackingInfo ? (

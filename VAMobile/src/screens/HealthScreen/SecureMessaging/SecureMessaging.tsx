@@ -66,7 +66,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     isFetched: inboxFetched,
     refetch: refetchInbox,
     isFetching: refetchingInbox,
-  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, 1, {
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.INBOX, {
     enabled:
       isFocused &&
       screenContentAllowed('WG_SecureMessaging') &&
@@ -80,6 +80,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
   const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
+  const controlIDs = ['inboxID', 'foldersID']
   const [scrollPage, setScrollPage] = useState(1)
 
   // Resets scroll position to top whenever current page appointment list changes:
@@ -175,6 +176,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                 selected={secureMessagingTab}
                 a11yHints={a11yHints}
                 a11yLabels={[t('secureMessaging.inbox')]}
+                testIDs={controlIDs}
               />
             </Box>
             <CernerAlertSM />

@@ -3,8 +3,7 @@ import { View, ViewStyle } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
-import { testIdProps } from 'utils/accessibility'
+import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VALogo, VAScrollView } from 'components'
 import { useAccessibilityFocus, useOrientation, useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
@@ -22,7 +21,6 @@ function GenericOnboarding({
   header,
   text,
   displayLogo,
-  headerA11yLabel,
   textA11yLabel,
   listOfText,
   centerHeader,
@@ -36,7 +34,6 @@ function GenericOnboarding({
   const headerProps: TextViewProps = {
     variant: 'MobileBodyBold',
     color: 'primaryContrast',
-    accessibilityRole: 'header',
     mt: displayLogo ? theme.dimensions.standardMarginBetween : 0,
   }
 
@@ -54,19 +51,17 @@ function GenericOnboarding({
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween} alignItems={'center'}>
-            <VAIcon name="Logo" testID="VAIconOnboardingLogo" />
+            <VALogo variant="dark" testID="VAIconOnboardingLogo" />
           </Box>
         )}
         <Box alignItems={centerHeader ? 'center' : 'flex-start'}>
-          <View ref={focusRef} accessible={true}>
-            <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
-              {header}
-            </TextView>
+          <View ref={focusRef} accessible={true} accessibilityRole={'header'}>
+            <TextView {...headerProps}>{header}</TextView>
           </View>
         </Box>
         {text && (
           <TextView
-            {...testIdProps(textA11yLabel || text)}
+            accessibilityLabel={textA11yLabel}
             variant="MobileBody"
             color="primaryContrast"
             mt={theme.dimensions.standardMarginBetween}>
@@ -75,7 +70,7 @@ function GenericOnboarding({
         )}
         {listOfText && (
           <Box mt={theme.dimensions.standardMarginBetween} ml={theme.dimensions.gutter}>
-            <VABulletList listOfText={listOfText} />
+            <VABulletList listOfText={listOfText} paragraphSpacing={true} bulletColor={'carouselBullet'} />
           </Box>
         )}
       </Box>

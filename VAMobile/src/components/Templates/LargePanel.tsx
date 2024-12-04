@@ -107,6 +107,7 @@ export const LargePanel: FC<LargePanelProps> = ({
       ? {
           text: rightButtonText,
           a11yLabel: rightButtonA11yLabel,
+          accessibilityRole: 'link',
           onPress: rightTitleButtonPress,
           testID: rightButtonTestID,
         }

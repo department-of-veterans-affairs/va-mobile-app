@@ -10,35 +10,53 @@ import { useClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import {
   Box,
-  ChildTemplate,
   ErrorComponent,
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
   TextArea,
   TextView,
+  VAScrollView,
 } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type FileRequestProps = StackScreenProps<BenefitsStackParamList, 'FileRequest'>
+import { FileRequestStackParams } from './FileRequestSubtask'
+
+type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
 function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const { claimID } = route.params
-  const { data: claim, error: claimError, refetch: refetchClaim, isFetching: loadingClaim } = useClaim(claimID)
-  const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
+  const { claimID, claim } = route.params
+  const {
+    data: claimFallBack,
+    error: claimError,
+    refetch: refetchClaim,
+    isFetching: loadingClaim,
+  } = useClaim(claimID, { enabled: !claim })
+  const requests = currentRequestsForVet(
+    claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
+  )
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
-  const count = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
+  useSubtaskProps({
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => navigation.goBack(),
+    leftButtonTestID: 'fileRequestPageBackID',
+  })
+
+  const count = numberOfItemsNeedingAttentionFromVet(
+    claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
+  )
 
   const getRequests = (): Array<SimpleListItemObj> => {
     let requestNumber = 1
@@ -86,16 +104,23 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const viewEvaluationDetailsPress = () => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
+    } else if (claimFallBack) {
+      logAnalyticsEvent(
+        Events.vama_claim_eval(
+          claimFallBack.id,
+          claimFallBack.attributes.claimType,
+          claimFallBack.attributes.phase,
+          count,
+        ),
+      )
     }
     navigateTo('AskForClaimDecision', { claimID })
   }
 
   return (
-    <ChildTemplate
-      backLabel={t('claim.backLabel')}
-      backLabelOnPress={navigation.goBack}
-      title={t('fileRequest.title')}
-      testID="fileRequestPageTestID">
+    <VAScrollView testID="fileRequestPageTestID">
+      <SubtaskTitle title={t('fileRequest.title')} />
+
       {loadingClaim ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaim')} />
       ) : claimError ? (
@@ -109,10 +134,10 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"
-            accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequest', { count }))}
+            accessibilityLabel={a11yLabelVA(t('claimPhase.youHaveFileRequestVA', { count }))}
             mb={condensedMarginBetween}
             mx={gutter}>
-            {t('claimPhase.youHaveFileRequest', { count })}
+            {t('claimPhase.youHaveFileRequestVA', { count })}
           </TextView>
           <Box>
             <SimpleList items={getRequests()} />
@@ -143,7 +168,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
           </Box>
         </Box>
       )}
-    </ChildTemplate>
+    </VAScrollView>
   )
 }
 

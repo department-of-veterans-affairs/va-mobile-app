@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIsFocused } from '@react-navigation/native'
 
 import { useFolderMessages } from 'api/secureMessaging'
-import { SecureMessagingSystemFolderIdConstants } from 'api/types'
+import { SecureMessagingMessageData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -23,11 +24,17 @@ function Inbox({ setScrollPage }: InboxProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
   const [page, setPage] = useState(1)
+  const [messagesToShow, setMessagesToShow] = useState<Array<SecureMessagingMessageData>>([])
   const { data: inboxMessagesData, isLoading: loadingInbox } = useFolderMessages(
     SecureMessagingSystemFolderIdConstants.INBOX,
-    page,
     { enabled: isFocused },
   )
+
+  useEffect(() => {
+    const messageList = inboxMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setMessagesToShow(messageList || [])
+  }, [inboxMessagesData?.data, page])
+
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
   const onInboxMessagePress = (messageID: number): void => {
@@ -35,8 +42,7 @@ function Inbox({ setScrollPage }: InboxProps) {
     navigateTo('ViewMessage', {
       messageID,
       folderID: SecureMessagingSystemFolderIdConstants.INBOX,
-      currentPage: paginationMetaData?.currentPage || 1,
-      messagesLeft: inboxMessagesData?.data?.length,
+      currentPage: page,
     })
   }
 
@@ -58,7 +64,7 @@ function Inbox({ setScrollPage }: InboxProps) {
       setScrollPage(page - 1)
     },
     totalEntries: paginationMetaData?.totalEntries || 0,
-    pageSize: paginationMetaData?.perPage || 0,
+    pageSize: DEFAULT_PAGE_SIZE,
     page,
     tab: 'inbox messages',
   }
@@ -66,12 +72,7 @@ function Inbox({ setScrollPage }: InboxProps) {
   return (
     <Box>
       <MessageList
-        items={getMessagesListItems(
-          inboxMessagesData?.data || [],
-          t,
-          onInboxMessagePress,
-          FolderNameTypeConstants.inbox,
-        )}
+        items={getMessagesListItems(messagesToShow, t, onInboxMessagePress, FolderNameTypeConstants.inbox)}
         title={t('secureMessaging.inbox')}
       />
       <Box mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>

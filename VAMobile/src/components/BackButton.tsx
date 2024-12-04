@@ -6,12 +6,11 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}
@@ -23,8 +22,6 @@ export type BackButtonProps = {
   canGoBack: boolean | undefined
   /** translation key to use for the display text, as well as the testID for the component */
   label: BackButtonLabel
-  /** whether to show the carat left of the text */
-  showCarat?: boolean | true
   /** optional param to add accessibility hint to back button */
   a11yHint?: string
   /** boolean to specify if we want accesibility to focus on the back button */
@@ -42,7 +39,6 @@ export const BackButton: FC<BackButtonProps> = ({
   onPress,
   canGoBack,
   label,
-  showCarat,
   a11yHint,
   backButtonTestID,
   focusOnButton = true,
@@ -59,15 +55,13 @@ export const BackButton: FC<BackButtonProps> = ({
     return null
   }
 
-  const chevron = showCarat ? <VAIcon mt={1} name={'ChevronLeft'} fill="backButton" testID="BackButtonCarat" /> : <></>
-
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
   return (
     <TouchableWithoutFeedback
       ref={focusRef}
       onPress={onPress}
-      {...testIdProps(label)}
+      accessibilityLabel={label}
       {...a11yHintProp(a11yHintPropParam)}
       accessibilityRole="button"
       accessible={true}
@@ -78,10 +72,9 @@ export const BackButton: FC<BackButtonProps> = ({
         ml={theme.dimensions.headerButtonSpacing}
         height={theme.dimensions.headerHeight}
         alignItems={'center'}>
-        {chevron}
         <TextView
           variant="ActionBar"
-          color={webview ? 'footerButton' : undefined}
+          color={webview ? 'link' : undefined}
           ml={theme.dimensions.textIconMargin}
           allowFontScaling={false}
           accessible={false}>

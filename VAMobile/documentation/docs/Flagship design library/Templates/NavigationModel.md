@@ -4,7 +4,7 @@ sidebar_position: 2
 ---
 The VA Health & Benefits mobile app's navigation model is the same on both iOS and Android.
 
-<iframe width="550" height = "500" alt="image of mobile app screen depicting tab bar, top bar with icon]" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D618%253A2662%26t%3D5UziMU7XqCBMFsno-1" allowfullscreen></iframe>
+<iframe width="550" height = "500" title="image of mobile app screen depicting tab bar, top bar with icon]" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2Fcdp7Be4UdYesq9fXeqaOgt%2FVAMobile-Navigation2.0-ScreenTemplates-Shipped%25F0%259F%259A%25A2%3Fnode-id%3D618%253A2662%26t%3D5UziMU7XqCBMFsno-1" allowfullscreen></iframe>
 
 * **Primary navigation:** The  app uses a standard tab navigation for its primary navigation.
   * The tab bar/bottom navigation bar is located at the bottom of the screen and is persistent—it appears on every screen in the hierarchy (except those that are modally presented) so that the user has a clear sense of all the main sections of the app and quick access to switch between them.

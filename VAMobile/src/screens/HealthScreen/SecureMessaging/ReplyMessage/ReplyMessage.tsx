@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -27,11 +27,11 @@ import {
 } from 'api/types'
 import {
   Box,
-  CollapsibleView,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
+  LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
   TextArea,
@@ -115,6 +115,16 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
+  const messageData = {
+    body: messageReply,
+    category: category,
+    subject: subject,
+    recipient_id: receiverID,
+  } as SecureMessagingFormData
+  // Ref for use in snackbar callbacks to ensure we have the latest messageData
+  const messageDataRef = useRef<SecureMessagingFormData>(messageData)
+  messageDataRef.current = messageData
+
   const snackbarMessages: SnackbarMessages = {
     successMsg: t('secureMessaging.draft.saved'),
     errorMsg: t('secureMessaging.draft.saved.error'),
@@ -140,48 +150,6 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
       setOnSendClicked(true)
     }
   }, [saveDraftConfirmFailed])
-
-  useEffect(() => {
-    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
-      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
-        setReplyTriageError(true)
-      } else {
-        const messageData = {
-          body: messageReply,
-          category: category,
-          subject: subject,
-          recipient_id: receiverID,
-        } as SecureMessagingFormData
-        const mutateOptions = {
-          onSuccess: () => {
-            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
-            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-            navigateTo('SecureMessaging', { activeTab: 0 })
-          },
-        }
-        const params: SendMessageParameters = {
-          messageData: messageData,
-          uploads: attachmentsList,
-          replyToID: message.messageId,
-        }
-        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
-      }
-    }
-  }, [
-    dispatch,
-    sendMessageError,
-    sendMessageErrorDetails,
-    snackbarSentMessages.successMsg,
-    snackbarSentMessages.errorMsg,
-    attachmentsList,
-    category,
-    messageReply,
-    receiverID,
-    subject,
-    message.messageId,
-    navigateTo,
-    sendMessage,
-  ])
 
   /**
    * Intercept navigation action before leaving the screen, used the handle OS swipe/hardware back behavior
@@ -222,6 +190,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
@@ -241,16 +210,16 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   ]
 
   const sendReplyOrSaveDraft = (): void => {
-    const messageData = { body: messageReply, category } as SecureMessagingFormData
+    const reducedMessageData = { body: messageReply, category } as SecureMessagingFormData
     if (onSaveDraftClicked) {
       saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
-        const params: SaveDraftParameters = { messageData: messageData, replyID: message.messageId }
+        const params: SaveDraftParameters = { messageData: reducedMessageData, replyID: message.messageId }
         const mutateOptions = {
           onSuccess: () => {
             showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
-            logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
+            logAnalyticsEvent(Events.vama_sm_save_draft(reducedMessageData.category))
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             navigateTo('SecureMessaging', { activeTab: 1 })
             navigateTo('FolderMessages', {
@@ -260,7 +229,24 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
             })
           },
           onError: () => {
-            showSnackBar(snackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+            showSnackBar(
+              snackbarMessages.errorMsg,
+              dispatch,
+              // passing messageDataRef to ensure we have the latest messageData
+              () =>
+                saveDraft(
+                  {
+                    messageData: {
+                      body: messageDataRef.current.body,
+                      category: messageDataRef.current.category,
+                    },
+                    replyID: message.messageId,
+                  },
+                  mutateOptions,
+                ),
+              false,
+              true,
+            )
           },
         }
         saveDraft(params, mutateOptions)
@@ -271,6 +257,32 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           navigateTo('SecureMessaging', { activeTab: 0 })
+        },
+        onError: () => {
+          if (
+            sendMessageError &&
+            isErrorObject(sendMessageErrorDetails) &&
+            hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
+          ) {
+            setReplyTriageError(true)
+          } else {
+            showSnackBar(
+              snackbarSentMessages.errorMsg,
+              dispatch,
+              // passing messageDataRef to ensure we have the latest messageData
+              () =>
+                sendMessage(
+                  {
+                    messageData: messageDataRef.current,
+                    uploads: attachmentsList,
+                    replyToID: message.messageId,
+                  },
+                  mutateOptions,
+                ),
+              false,
+              true,
+            )
+          }
         },
       }
       const params: SendMessageParameters = {
@@ -328,15 +340,11 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
               onPress={navigateToReplyHelp}
-              accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+            />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
@@ -368,7 +376,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
               borderColor={'primary'}
               borderBottomWidth={'default'}
               p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="MobileBodyBold">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, thread)}
           </Box>
@@ -397,7 +405,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
         setOnSaveDraftClicked(true)
         setOnSendClicked(true)
       }}
-      showCrisisLineCta={!isLoading}
+      showCrisisLineButton={!isLoading}
       testID="replyPageTestID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />

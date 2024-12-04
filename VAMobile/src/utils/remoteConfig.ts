@@ -17,46 +17,61 @@ export let overrideRemote = false
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
   | 'appointmentRequests'
-  | 'prescriptions'
-  | 'testFeature'
-  | 'inAppRecruitment'
-  | 'inAppUpdates'
-  | 'preferredNameGenderWaygate'
+  | 'cernerTrueForDemo'
+  | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
-  | 'whatsNewUI'
-  | 'decisionLettersWaygate'
+  | 'inAppRecruitment'
+  | 'inAppReview'
+  | 'inAppUpdates'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
+  | 'preferredNameGenderWaygate'
+  | 'prescriptions'
+  | 'submitEvidenceExpansion'
+  | 'sso'
+  | 'testFeature'
+  | 'useOldLinkComponent'
+  | 'whatsNewUI'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
-  prescriptions: boolean
-  testFeature: boolean
-  inAppRecruitment: boolean
-  inAppUpdates: boolean
-  preferredNameGenderWaygate: boolean
+  cernerTrueForDemo: boolean
+  decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
-  whatsNewUI: boolean
-  decisionLettersWaygate: boolean
+  inAppRecruitment: boolean
+  inAppReview: boolean
+  inAppUpdates: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
+  preferredNameGenderWaygate: boolean
+  prescriptions: boolean
+  submitEvidenceExpansion: boolean
+  sso: boolean
+  testFeature: boolean
+  useOldLinkComponent: boolean
+  whatsNewUI: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
-  prescriptions: true,
-  testFeature: false,
-  inAppRecruitment: false,
-  inAppUpdates: true,
-  preferredNameGenderWaygate: true,
+  cernerTrueForDemo: false,
+  decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
-  whatsNewUI: true,
-  decisionLettersWaygate: true,
+  inAppRecruitment: false,
+  inAppReview: true,
+  inAppUpdates: true,
   patientCheckIn: false,
   patientCheckInWaygate: true,
+  preferredNameGenderWaygate: true,
+  prescriptions: true,
+  submitEvidenceExpansion: false,
+  sso: false,
+  testFeature: false,
+  useOldLinkComponent: true,
+  whatsNewUI: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults

@@ -7,19 +7,22 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AlertBox, Box, TextArea, TextView } from 'components'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { AlertWithHaptics, Box, TextArea, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
 const { IS_TEST } = getEnv()
 
-type SelectFilesProps = StackScreenProps<BenefitsStackParamList, 'SelectFile'>
+type SelectFilesProps = StackScreenProps<FileRequestStackParams, 'SelectFile'>
 
 function SelectFile({ navigation, route }: SelectFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -37,13 +40,20 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     }
   })
 
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => onCancel(),
+  })
+
   const onFileFolder = async (): Promise<void> => {
     const {
       pickSingle,
       types: { images, plainText, pdf },
     } = DocumentPicker
 
-    logAnalyticsEvent(Events.vama_evidence_cont_1(claimID, request.trackedItemId || null, request.type, 'file'))
+    logAnalyticsEvent(
+      Events.vama_evidence_cont_1(claimID, request?.trackedItemId || null, request?.type || 'Submit Evidence', 'file'),
+    )
 
     try {
       const document = (await pickSingle({
@@ -102,37 +112,48 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   const onCancel = () => {
-    logAnalyticsEvent(Events.vama_evidence_cancel_1(claimID, request.trackedItemId || null, request.type, 'file'))
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_1(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'file',
+      ),
+    )
     navigation.goBack()
   }
 
   return (
-    <FullScreenSubtask
-      scrollViewRef={scrollViewRef}
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={onCancel}
-      title={t('fileUpload.selectFiles')}>
-      <Box mb={theme.dimensions.contentMarginBottom}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
+      <SubtaskTitle title={t('fileUpload.selectFiles')} />
+
+      <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox scrollViewRef={scrollViewRef} text={error} border="error" />
+            <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
           </Box>
         )}
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
+            {request
+              ? t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })
+              : t('fileUpload.selectAFileToUploadSubmitEvidence')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.pleaseRequestFromPhoneFiles')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.pleaseRequestFromPhoneFiles.bolded')}
-              <TextView variant="MobileBody">{t('fileUpload.pleaseRequestFromPhoneFiles.pt2')}</TextView>
+              <TextView variant="MobileBody">
+                {request
+                  ? t('fileUpload.pleaseRequestFromPhoneFiles.pt2')
+                  : t('fileUpload.pleaseRequestFromPhoneFiles.pt2SubmitEvidence')}
+              </TextView>
             </TextView>
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
-          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')} paragraphSpacing={true}>
+          <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
             {t('fileUpload.50MB')}
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
@@ -140,11 +161,14 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
-        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
-        </Box>
       </Box>
-    </FullScreenSubtask>
+      <Box
+        mt={theme.dimensions.standardMarginBetween}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
+        <Button onPress={onSelectFile} label={t('fileUpload.selectAFile')} testID={buttonTestId} />
+      </Box>
+    </VAScrollView>
   )
 }
 

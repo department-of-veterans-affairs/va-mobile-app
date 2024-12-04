@@ -112,17 +112,17 @@ export type PrescriptionsPaginationData = {
 }
 
 export type PrescriptionStatusCountData = {
-  active?: number
-  isRefillable?: number
-  discontinued?: number
-  expired?: number
-  historical?: number
-  pending?: number
-  transferred?: number
-  submitted?: number
-  hold?: number
-  unknown?: number
-  total?: number
+  active: number
+  isRefillable: number
+  discontinued: number
+  expired: number
+  historical: number
+  pending: number
+  transferred: number
+  submitted: number
+  hold: number
+  unknown: number
+  total: number
 }
 
 export type PrescriptionsPaginationLinks = {

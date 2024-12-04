@@ -18,7 +18,11 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
-    <LargePanel title={t('profile.help.title')} rightButtonText={t('close')}>
+    <LargePanel
+      title={t('profile.help.title')}
+      rightButtonText={t('close')}
+      rightButtonTestID="whatToKnowBackID"
+      testID="whatToKnowID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.genderIdentity.whatToKnow.title')}
@@ -26,43 +30,30 @@ function WhatToKnowScreen({}: WhatToKnowScreenProps) {
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('personalInformation.genderIdentity.whatToKnow.description')}
         </TextView>
-        <Box mt={theme.dimensions.formMarginBetween}>
+        <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.standardMarginBetween}>
           <VABulletList
             listOfText={[
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.ReasonsToShare.2'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.whoCanAccess'),
                 text: t('personalInformation.genderIdentity.whatToKnow.privacy'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.whoCanAccess') +
-                  t('personalInformation.genderIdentity.whatToKnow.privacy'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.healthRecordsOnly.2'),
               },
               {
                 variant: 'MobileBody',
                 boldedTextPrefix: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1'),
                 text: t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
-                a11yLabel:
-                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.1') +
-                  t('personalInformation.genderIdentity.whatToKnow.birthCertificate.2'),
               },
             ]}
-            paragraphSpacing={true}
           />
         </Box>
         <LinkWithAnalytics

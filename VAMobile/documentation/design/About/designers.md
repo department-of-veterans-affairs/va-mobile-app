@@ -48,12 +48,12 @@ Once you’ve loaded the library, you should be able to access everything in it 
 
 ## Figma
 
-VA mobile design teams at Ad Hoc use Figma to view, share, and collaborate on our work. Only designers actively working on products at VA can be added to Figma. Once you have been added, you may access the libraries in the cloud.
+VA mobile app design teams use Figma to view, share, and collaborate on our work. Currently, only designers at Ad Hoc can be added as Editors to the Mobile App team's Figma account. If you're working on an external Experience Team and need access to our files, you can follow the steps below to be added as a Viewer.
 
 ### Get added to Figma
 
 1. Go to [figma.com](https://www.figma.com/) and [create a Figma account](https://help.figma.com/hc/en-us/articles/360039811114-Create-a-Figma-account)
-2. In the #va-mobile-design-system channel in Slack, ping a Figma admin (currently Jen Ecker and Jessica Woodin) requesting to be added.
+2. In the [#va-mobile-app-shared-systems](https://dsva.slack.com/archives/C05HF9ULKJ4) channel in Slack, ping a Figma admin (currently Kelly Lein, Jessica Woodin, and Holly Collier) requesting to be added.
 3. Receive the invite via email and accept the invitation.
 4. Boom, you’re in!
 
@@ -66,3 +66,14 @@ Figma contains a few important features that help teams work together:
 * You can see what everyone else is working on in the VA workspace
 * Developers can inspect any element on a page
 * You can [create a branch](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-branching) of your file at any time
+
+### Designers on Experience Teams
+Currently, designers on Experience Teams can only be added as Viewers in the **VA Mobile App's Figma account**. In order to use the Mobile App libraries in the **VA.gov Platform team's Figma account**, designers should follow the steps below.
+
+1.  In the [VA Mobile App team's Figma account](https://www.figma.com/files/827597988283174959/team/1114266503868297401), open the [Component Library](https://www.figma.com/design/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library---Design-System---VA-Mobile?m=auto&t=h1T1ozCx1hqbFSDa-7) and/or [Flagship Library](https://www.figma.com/design/QVLPB3eOunmKrgQOuOt0SU/Flagship-Library---%F0%9F%93%90-Resource---VA-Mobile?m=auto&t=h1T1ozCx1hqbFSDa-7).
+2. Find the component you need.
+3. Copy the component.
+4. In the [VA.gov Platform team's Figma account](https://www.figma.com/files/team/1278375444205744118/all-projects), open your working file.
+5. Paste the component into your working file.
+
+If you have questions or need assistance, reach out in the [#va-mobile-app-shared-systems](https://dsva.slack.com/archives/C05HF9ULKJ4) channel.

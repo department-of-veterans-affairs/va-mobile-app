@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { PushPreference } from 'store/api'
-import { ScreenIDTypesConstants } from 'store/api/types'
-import { ErrorsState, InitialState, initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
-import { context, mockNavProps, render } from 'testUtils'
+import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
+
+import { notificationKeys } from 'api/notifications'
+import { GetPushPrefsResponse, PushPreference } from 'api/types'
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 
@@ -15,22 +17,6 @@ jest.mock('utils/notifications', () => {
   return {
     notificationsEnabled: jest.fn(() => {
       return Promise.resolve(mockPushEnabled)
-    }),
-  }
-})
-
-jest.mock('store/slices/', () => {
-  const actual = jest.requireActual('store/slices')
-  const notification = jest.requireActual('store/slices').initialNotificationsState
-  return {
-    ...actual,
-    loadPushPreferences: jest.fn(() => {
-      return {
-        type: '',
-        payload: {
-          ...notification,
-        },
-      }
     }),
   }
 })
@@ -49,82 +35,137 @@ context('NotificationsSettingsScreen', () => {
   }
 
   const renderWithProps = (
+    requestNots: boolean,
     notificationsEnabled: boolean,
     systemNotificationsOn: boolean,
     preferences: PushPreference[],
-    errorsState: ErrorsState = initialErrorsState,
   ) => {
     const props = mockNavProps()
+
     mockPushEnabled = notificationsEnabled
 
-    render(<NotificationsSettingsScreen {...props} />, {
-      preloadedState: {
-        ...InitialState,
-        notifications: {
-          ...InitialState.notifications,
-          preferences,
-          systemNotificationsOn,
+    const notificationQueriesData: QueriesData = [
+      {
+        queryKey: notificationKeys.pushPreferences,
+        data: {
+          preferences: preferences,
         },
-        errors: errorsState,
       },
+      {
+        queryKey: notificationKeys.systemSettings,
+        data: {
+          systemNotificationsOn: systemNotificationsOn,
+        },
+      },
+    ]
+
+    render(<NotificationsSettingsScreen {...props} />, {
+      queriesData: notificationQueriesData,
+      preloadedState: { auth: { requestNotifications: requestNots } },
     })
   }
 
   describe('appointment reminders switch', () => {
-    it('value should be true when pref is set to true', () => {
-      renderWithProps(false, true, [apptPrefOn])
-      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-        true,
+    it('value should be true when pref is set to true', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOn],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/push/prefs/1')
+        .mockResolvedValue(responseData)
+      renderWithProps(true, true, true, [apptPrefOn])
+      await waitFor(() =>
+        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+          true,
+        ),
       )
     })
 
-    it('value should be false when pref is set to true', () => {
-      renderWithProps(false, true, [apptPrefOff])
-      expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
-        false,
+    it('value should be false when pref is set to true', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOff],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/push/prefs/1')
+        .mockResolvedValue(responseData)
+      renderWithProps(true, true, true, [apptPrefOff])
+      await waitFor(() =>
+        expect(screen.getByRole('switch', { name: 'Upcoming appointments' }).props.accessibilityState.checked).toEqual(
+          false,
+        ),
       )
     })
   })
 
   describe('when system notifications are disabled', () => {
-    it('hides the notification switches', () => {
-      renderWithProps(false, false, [apptPrefOff])
-      expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy()
-      expect(
-        screen.getByText(
-          "To get notifications from the VA mobile app, you'll need to turn them on in your system settings.",
-        ),
-      ).toBeTruthy()
+    it('hides the notification switches', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
+
+      const responseData: GetPushPrefsResponse = {
+        data: {
+          type: 'string',
+          id: 'string',
+          attributes: {
+            preferences: [apptPrefOff],
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/push/prefs/1')
+        .mockResolvedValue(responseData)
+      renderWithProps(true, false, false, [apptPrefOff])
+      await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
+      await waitFor(() =>
+        expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy(),
+      )
+    })
+  })
+  describe('when system notifications havent been requested', () => {
+    it('hides the notification switches', async () => {
+      renderWithProps(false, true, true, [apptPrefOff])
+      await waitFor(() => expect(screen.getByText(t('requestNotifications.getNotified'))).toBeTruthy())
     })
   })
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      renderWithProps(false, true, [apptPrefOn], errorState)
-      expect(screen.getByText("The app can't be loaded.")).toBeTruthy()
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', () => {
-      const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] =
-        CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
-
-      const errorState: ErrorsState = {
-        ...initialErrorsState,
-        errorsByScreenID,
-      }
-
-      renderWithProps(false, true, [apptPrefOn], errorState)
-      expect(screen.queryByText("The app can't be loaded.")).toBeFalsy()
-    })
+  it("renders error component when preferences can't be loaded", async () => {
+    const responseData: GetPushPrefsResponse = {
+      data: {
+        type: 'string',
+        id: 'string',
+        attributes: {
+          preferences: [],
+        },
+      },
+    }
+    when(api.get as jest.Mock)
+      .calledWith('/v0/push/prefs/1')
+      .mockResolvedValue(responseData)
+    renderWithProps(true, true, true, [])
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
+        ),
+      ).toBeTruthy(),
+    )
   })
 })

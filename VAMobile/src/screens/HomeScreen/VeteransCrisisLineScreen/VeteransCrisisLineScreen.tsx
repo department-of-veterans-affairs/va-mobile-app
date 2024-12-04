@@ -20,10 +20,13 @@ const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 function VeteransCrisisLineScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
   return (
-    <LargePanel title={t('veteransCrisisLine.title')} rightButtonText={t('done')}>
+    <LargePanel
+      title={t('veteransCrisisLine.title')}
+      rightButtonText={t('done')}
+      rightButtonTestID="veteranCrisisLineBackID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView
           variant="MobileBodyBold"
@@ -31,10 +34,8 @@ function VeteransCrisisLineScreen() {
           accessibilityLabel={t('veteransCrisisLine.weAreHereForYou.a11yLabel')}>
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <Box mt={standardMarginBetween}>
-          <TextView variant="MobileBody" paragraphSpacing={true}>
-            {t('veteransCrisisLine.connectWithResponders')}
-          </TextView>
+        <Box my={condensedMarginBetween}>
+          <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
         </Box>
         <VeteransCrisisLineNumbers />
         <Box mt={standardMarginBetween}>
@@ -42,17 +43,15 @@ function VeteransCrisisLineScreen() {
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={standardMarginBetween}>
-          <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_VETERANS_CRISIS_LINE}
-            text={t('veteransCrisisLine.urlDisplayed')}
-            a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
-            a11yHint={t('veteransCrisisLine.urlA11yHint')}
-            analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
-            testID="veteransCrisisLineGetMoreResourcesTestID"
-          />
-        </Box>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_VETERANS_CRISIS_LINE}
+          text={t('veteransCrisisLine.urlDisplayed')}
+          a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
+          a11yHint={t('veteransCrisisLine.urlA11yHint')}
+          analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
+          testID="veteransCrisisLineGetMoreResourcesTestID"
+        />
       </Box>
     </LargePanel>
   )

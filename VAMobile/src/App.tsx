@@ -24,6 +24,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
+import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
@@ -42,12 +43,16 @@ import {
   getHomeScreens,
   getPaymentsScreens,
 } from 'screens'
-import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
+import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
+import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
+import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
+import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, NotificationsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -64,7 +69,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-import NotificationManager from './components/NotificationManager'
+import NotificationManager, { useNotificationContext } from './components/NotificationManager'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import OnboardingCarousel from './screens/OnboardingCarousel'
 import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -97,12 +102,21 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditDirectDeposit: {
     displayTitle: string
   }
+  FileRequestSubtask: {
+    claimID: string
+    claim: ClaimData | undefined
+  }
+  SubmitEvidenceSubtask: {
+    claimID: string
+  }
+  InAppFeedback: { task: string }
   Tabs: undefined
 }
 
 type StackNavParamList = WebviewStackParams & {
   Splash: undefined
   BiometricsPreference: undefined
+  RequestNotifications: undefined
   Sync: undefined
   Login: undefined
   LoaGate: undefined
@@ -187,8 +201,16 @@ function MainApp() {
 
 export function AuthGuard() {
   const dispatch = useAppDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
-    useSelector<RootState, AuthState>((state) => state.auth)
+  const {
+    initializing,
+    loggedIn,
+    syncing,
+    firstTimeLogin,
+    canStoreWithBiometric,
+    displayBiometricsPreferenceScreen,
+    requestNotificationsPreferenceScreen,
+  } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -268,18 +290,22 @@ export function AuthGuard() {
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
-    dispatch(initializeAuth())
-
-    const listener = (event: { url: string }): void => {
-      if (event.url?.startsWith('vamobile://login-success?')) {
-        dispatch(handleTokenCallbackUrl(event.url))
+    if (loggedIn && tappedForegroundNotification) {
+      console.debug('User tapped foreground notification. Skipping initializeAuth.')
+      setTappedForegroundNotification(false)
+    } else if (!loggedIn) {
+      dispatch(initializeAuth())
+      const listener = (event: { url: string }): void => {
+        if (event.url?.startsWith('vamobile://login-success?')) {
+          dispatch(handleTokenCallbackUrl(event.url))
+        }
+      }
+      const sub = Linking.addEventListener('url', listener)
+      return (): void => {
+        sub?.remove()
       }
     }
-    const sub = Linking.addEventListener('url', listener)
-    return (): void => {
-      sub?.remove()
-    }
-  }, [dispatch])
+  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -343,6 +369,16 @@ export function AuthGuard() {
     )
   } else if (firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
+  } else if (!firstTimeLogin && loggedIn && requestNotificationsPreferenceScreen) {
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RequestNotifications"
+          component={RequestNotificationsScreen}
+          options={{ ...topPaddingAsHeaderStyles }}
+        />
+      </Stack.Navigator>
+    )
   } else if (loggedIn) {
     content = (
       <>
@@ -392,8 +428,7 @@ export function AppTabs() {
 
 export function AuthedApp() {
   const headerStyles = useHeaderStyles()
-  const { initialUrl } = useSelector<RootState, NotificationsState>((state) => state.notifications)
-
+  const { initialUrl } = useNotificationContext()
   const homeScreens = getHomeScreens()
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()
@@ -434,6 +469,17 @@ export function AuthedApp() {
           component={EditDirectDepositScreen}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
+        <RootNavStack.Screen
+          name="SubmitEvidenceSubtask"
+          component={SubmitEvidenceSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen
+          name="FileRequestSubtask"
+          component={FileRequestSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

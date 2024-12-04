@@ -1,5 +1,6 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -8,7 +9,8 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,6 +37,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   } = useAuthorizedServices({ enabled: screenContentAllowed('WG_ClaimsHistoryScreen') })
   const claimsAndAppealsAccess = userAuthorizedServices?.claims || userAuthorizedServices?.appeals
   const controlLabels = [t('claimsTab.active'), t('claimsTab.closed')]
+  const controlIDs = ['claimsHistoryActiveID', 'claimsHistoryClosedID']
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(0)
   const [claimsServiceErrors, setClaimsServiceErrors] = useState(false)
@@ -49,7 +52,12 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     error: claimsAndAppealsListError,
     isFetching: loadingClaimsAndAppealsList,
     refetch: refetchClaimsAndAppealsList,
-  } = useClaimsAndAppeals(claimType, 1)
+  } = useClaimsAndAppeals(claimType)
+
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
 
   const title =
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
@@ -101,7 +109,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox title={alertTitle} text={alertText} border="error" />
+          <AlertWithHaptics variant="error" header={alertTitle} description={alertText} />
         </Box>
       )
     }
@@ -121,7 +129,9 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={title}
-      testID="claimsHistoryID">
+      testID="claimsHistoryID"
+      scrollViewProps={scrollViewProps}
+      backLabelTestID="claimsHistoryBackTestID">
       {!claimsNotInDowntime && !appealsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
       ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
@@ -149,13 +159,14 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={accessibilityHints}
+                testIDs={controlIDs}
               />
             </Box>
           )}
           {serviceErrorAlert()}
           {!claimsAndAppealsServiceErrors && (
             <Box flex={1}>
-              <ClaimsAndAppealsListView claimType={claimType} />
+              <ClaimsAndAppealsListView claimType={claimType} scrollViewRef={scrollViewRef} />
             </Box>
           )}
         </Box>

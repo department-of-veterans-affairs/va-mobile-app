@@ -39,11 +39,9 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
 
   const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj, index) => {
     // Move all of the properties except text lines to the standard list item object
-    const { text, icon, testId, isSelected, ...listItemObj } = item
+    const { text, icon, testId, isSelected, detoxTestID, ...listItemObj } = item
 
-    const textLine = icon
-      ? [{ text, iconProps: icon, color: icon.fill } as TextLineWithIconProps]
-      : [{ text } as TextLine]
+    const textLine = icon ? [{ text, iconProps: icon } as TextLineWithIconProps] : [{ text } as TextLine]
     const content = <TextLines listOfText={textLine} />
 
     const backgroundColor = isSelected ? 'pickerSelectedItem' : 'list'
@@ -51,6 +49,7 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
 
     const defaultTestId = text ? text : t('picker.noSelection')
     const testIdToUse = testId ? testId : defaultTestId
+    const detoxTestIDToUse = detoxTestID ? detoxTestID : testIdToUse
 
     const a11yValue = t('listPosition', { position: index + 1, total: items.length })
     const a11yState = {
@@ -64,8 +63,9 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
       decorator,
       testId: testIdToUse,
       a11yValue,
-      a11yRole: 'menuitem',
+      a11yRole: 'link',
       a11yState,
+      detoxTestID: detoxTestIDToUse,
     }
   })
 

@@ -61,7 +61,7 @@ context('MessageList', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'another line' }))
+    fireEvent.press(screen.getByRole('link', { name: 'another line' }))
     expect(onPressSpy).toBeCalled()
   })
 

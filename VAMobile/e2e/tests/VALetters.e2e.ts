@@ -1,3 +1,10 @@
+/*
+Description:
+Detox script that follows the VA Letters and Documents test case found in testRail (VA Mobile App > RC Regression Test > Manual > Benefits Page Elements)
+Note: This test does not cover verifying that the correct letter is downloaded because demo mode mocks the letter downloads.
+When to update:
+This script should be updated whenever new things are added/changed in src/screens/BenefitsScreen/Letters, anything is added/changed in src/api/letters or if anything is changed in src/store/api/demo/mocks/letters.json.
+*/
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -9,13 +16,19 @@ import {
   openContactInfo,
   openLetters,
   openProfile,
-  resetInAppReview,
+  toggleRemoteConfigFlag,
 } from './utils'
 
+//Add any new letter type to the letter_types array here.
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
   DOWNLOAD_DOCUMENTS_TEXT: 'Downloaded documents will list your address as:',
   LETTER_FILE_NAME: 'demo_mode_benefit_summary',
+  LETTER_REVIEW_LETTERS_BUTTON_ID: 'lettersOverviewViewLettersButtonID',
+  LETTER_BENEFIT_SUMMARY_ROW_ID: 'BenefitSummaryServiceVerificationTestID',
+  LETTER_BENEFIT_SUMMARY_ASK_VA_LINK_ID: 'lettersBenefitServiceGoToAskVAID',
+  LETTER_BENEFIT_SUMMARY_BACK_ID: 'BenefitSummaryServiceVerificationBackID',
+  LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID: 'lettersBenefitServiceViewLetterID',
   LETTER_TYPES: [
     {
       name: 'Benefit summary and service verification letter',
@@ -61,6 +74,7 @@ export const LettersConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
   await openBenefits()
   await openLetters()
@@ -74,18 +88,18 @@ describe('VA Letters', () => {
   it('should tap address and open edit screen', async () => {
     await element(by.text(LettersConstants.MAILING_ADDRESS)).tap()
 
-    await element(by.id('streetAddressLine2TestID')).typeText('2')
-    await element(by.id('streetAddressLine2TestID')).tapReturnKey()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
 
-    await element(by.text('Save')).tap()
-    await element(by.id('suggestedAddressTestID')).tap()
-    await element(by.id('Use this address')).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
 
     await expect(element(by.text(LettersConstants.DOWNLOAD_DOCUMENTS_TEXT))).toExist()
   })
 
   it('should verify address change is reflected in contact info', async () => {
-    await element(by.text('Home')).tap()
+    await element(by.id('Home')).tap()
     await openProfile()
     await openContactInfo()
     await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
@@ -95,15 +109,15 @@ describe('VA Letters', () => {
     await openBenefits()
     await element(by.text('3101 N Fort Valley Rd, 2')).tap()
 
-    await element(by.id('streetAddressLine2TestID')).clearText()
-    await element(by.text('Save')).tap()
-    await element(by.id('suggestedAddressTestID')).tap()
-    await element(by.id('Use this address')).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).clearText()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
   it('should view letter types', async () => {
-    await element(by.text('Review letters')).tap()
+    await element(by.id(LettersConstants.LETTER_REVIEW_LETTERS_BUTTON_ID)).tap()
 
     for (const letterType of LettersConstants.LETTER_TYPES) {
       await expect(element(by.text(letterType.name))).toExist()
@@ -112,36 +126,28 @@ describe('VA Letters', () => {
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
     it(`should view ${letterType.name}`, async () => {
-      // need in-app reset in iOS before checking proof of service card to avoid false fail
-      if (device.getPlatform() === 'ios' && letterType.name === 'Proof of minimum essential coverage letter') {
-        await resetInAppReview()
-        await openBenefits()
-        await openLetters()
-        await element(by.text('Review letters')).tap()
-      }
-
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
 
       if (device.getPlatform() === 'ios') {
-        const isBenefitSummaryLetter = await checkIfElementIsPresent('BenefitSummaryServiceVerificationTestID')
+        const isBenefitSummaryLetter = await checkIfElementIsPresent(LettersConstants.LETTER_BENEFIT_SUMMARY_ROW_ID)
 
         if (isBenefitSummaryLetter) {
-          await element(by.id('BenefitSummaryServiceVerificationTestID')).scrollTo('bottom')
-          await element(by.text('Go to Ask VA')).tap()
+          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_ROW_ID)).scrollTo('bottom')
+          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_ASK_VA_LINK_ID)).tap()
           await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
         }
 
-        await element(by.text('Review letter')).tap()
+        await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
         await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
         await element(by.text('Done')).tap()
       }
 
-      await element(by.text('Review letters')).tap()
+      await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_BACK_ID)).tap()
     })
   }
 })

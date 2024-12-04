@@ -3,20 +3,31 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { Box, FeatureLandingTemplate, TextArea, TextView, VATextInput } from 'components'
+import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
+import {
+  Box,
+  ButtonDecoratorType,
+  FeatureLandingTemplate,
+  SimpleList,
+  SimpleListItemObj,
+  TextArea,
+  TextView,
+  VATextInput,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { DEVICE_ENDPOINT_SID, NotificationsState } from 'store/slices/notificationSlice'
+import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -26,8 +37,8 @@ import {
   overrideLocalVersion,
   setVersionSkipped,
 } from 'utils/homeScreenAlerts'
-import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { resetReviewActionCount } from 'utils/inAppReviews'
+import { useAlert, useAppDispatch, useGiveFeedback, useRouteNavigation, useTheme } from 'utils/hooks'
+import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppReviews'
 
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
@@ -40,11 +51,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
+  const resetFirstTimeLoginAlert = useAlert()
+  const inAppFeedback = useGiveFeedback()
   const [localVersionName, setVersionName] = useState<string>()
   const [whatsNewLocalVersion, setWhatsNewVersion] = useState<string>()
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
+  const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
 
   async function checkEncourageUpdateLocalVersion() {
@@ -89,6 +103,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       componentMounted.current = false
     }
   }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
+    }, []),
+  )
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
@@ -96,9 +116,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   // push data
-  const { deviceToken } = useSelector<RootState, NotificationsState>((state) => state.notifications)
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
+  const [deviceToken, setDeviceToken] = useState<string>('')
+  getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
   getAsyncStoredData(DEVICE_ENDPOINT_SID, setDeviceAppSid)
 
   Object.keys(tokenInfo).forEach((key) => {
@@ -109,16 +130,54 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const envVars = getEnv()
 
   const onResetFirstTimeLogin = (): void => {
-    console.debug('Resetting first time login flag')
-    dispatch(debugResetFirstTimeLogin())
+    resetFirstTimeLoginAlert({
+      title: t('areYouSure'),
+      message: 'This will clear all session activity and redirect you back to the login screen.',
+      buttons: [
+        {
+          text: t('cancel'),
+        },
+        {
+          text: t('reset'),
+          onPress: () => {
+            console.debug('Resetting first time login flag')
+            dispatch(debugResetFirstTimeLogin())
+          },
+        },
+      ],
+    })
   }
 
-  const resetInAppReview = (): void => {
-    resetReviewActionCount()
+  const resetInAppReview = async () => {
+    try {
+      await resetReviewActionCount()
+      getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
+      showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
+    } catch {
+      showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
+    }
   }
 
-  const onClickFirebaseDebugMode = (): void => {
-    dispatch(toggleFirebaseDebugMode())
+  const firebaseList: Array<SimpleListItemObj> = [
+    {
+      text: 'Firebase debug mode',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: firebaseDebugMode,
+      },
+      onPress: () => dispatch(toggleFirebaseDebugMode()),
+    },
+    {
+      text: 'Remote Config',
+      decorator: ButtonDecoratorType.Navigation,
+      onPress: () => navigateTo('RemoteConfig'),
+      testId: 'Remote Config',
+    },
+  ]
+
+  const onFeedback = () => {
+    //logAnalyticsEvent(Events.vama_feedback_page_entered())
+    inAppFeedback('Developer')
   }
 
   return (
@@ -127,6 +186,13 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('debug.title')}
       testID="developerScreenTestID">
+      <TextView
+        variant={'MobileBodyBold'}
+        accessibilityRole={'header'}
+        mx={theme.dimensions.gutter}
+        mb={theme.dimensions.standardMarginBetween}>
+        Reset options
+      </TextView>
       <Box>
         <TextArea>
           <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
@@ -135,24 +201,37 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box>
         <TextArea>
           <Button onPress={resetInAppReview} label={'Reset in-app review actions'} />
+          <Box mt={theme.dimensions.condensedMarginBetween} flexDirection="row" alignItems="flex-end">
+            <TextView variant={'MobileBody'}>In-App Review Count:</TextView>
+            <TextView ml={theme.dimensions.standardMarginBetween}>
+              {reviewCount ? parseInt(reviewCount, 10) : 0}
+            </TextView>
+          </Box>
+        </TextArea>
+        <TextArea>
+          <Button onPress={onFeedback} label={'In App Feedback Screen'} />
         </TextArea>
       </Box>
       <Box>
-        <TextArea>
-          <Button
-            onPress={onClickFirebaseDebugMode}
-            label={`${firebaseDebugMode ? 'Disable' : 'Enable'} Firebase debug mode`}
-          />
-        </TextArea>
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Firebase
+        </TextView>
+        <SimpleList items={firebaseList} />
       </Box>
-      <Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
-          <Button onPress={() => navigateTo('RemoteConfig')} label={'Remote Config'} />
+          <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            Auth Tokens
+          </TextView>
         </TextArea>
       </Box>
       {Object.keys(tokenInfo).map((key: string) => {
@@ -168,7 +247,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       })}
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Authorized Services</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            Authorized Services
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
@@ -187,7 +268,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Environment Variables</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            Environment Variables
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
@@ -205,7 +288,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Encouraged Update and What's New Versions</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            Encouraged Update and What's New Versions
+          </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
           <TextView>{localVersionName}</TextView>
           <TextView variant="MobileBodyBold">What's New Local Version</TextView>
@@ -261,7 +346,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>
-          <TextView variant="BitterBoldHeading">Push Notifications</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            Push Notifications
+          </TextView>
         </TextArea>
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>

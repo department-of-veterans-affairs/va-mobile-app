@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
 import { ViewStyle } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import LottieView from 'lottie-react-native'
 
 import { Box, TextView, VAScrollView } from 'components'
-import colors from 'styles/themes/VAColors'
 import { useTheme } from 'utils/hooks'
 
 export type LoadingComponentProps = {
@@ -22,6 +22,8 @@ export type LoadingComponentProps = {
   spinnerWidth?: number
   /** Hex string to set the spinner color*/
   spinnerColor?: string
+  /** Override VAScrollView style */
+  scrollViewStyle?: ViewStyle
 }
 
 /**A common component to show a loading spinner */
@@ -33,12 +35,14 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
   spinnerWidth,
   spinnerColor,
   inlineSpinner,
+  scrollViewStyle,
 }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
+    ...scrollViewStyle,
   }
 
   const spinnerStyle: ViewStyle = {
@@ -46,6 +50,8 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
     width: spinnerWidth || 50,
     alignContent: 'center',
   }
+
+  const spinnerIconColor = spinnerColor || colors.vadsColorPrimary
 
   const getSpinner = () => {
     return (
@@ -58,11 +64,11 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
         colorFilters={[
           {
             keypath: 'Shape Layer 9',
-            color: spinnerColor || colors.primary,
+            color: spinnerIconColor,
           },
           {
             keypath: 'Shape Layer 11',
-            color: spinnerColor || colors.primary,
+            color: spinnerIconColor,
           },
         ]}
       />
@@ -77,17 +83,21 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
         </Box>
       ) : inlineSpinner ? (
         <Box
-          justifyContent="center"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.contentMarginTop}
-          mb={theme.dimensions.contentMarginBottom}
-          alignItems={'center'}>
-          {getSpinner()}
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
-              {text}
-            </TextView>
+          flexDirection="row"
+          alignItems="center"
+          accessible={true}
+          accessibilityRole="text"
+          accessibilityLabel={a11yLabel ? a11yLabel : text}>
+          <Box accessible={false} importantForAccessibility="no">
+            {getSpinner()}
           </Box>
+          <TextView
+            ml={theme.dimensions.condensedMarginBetween}
+            variant="HelperText"
+            accessible={false}
+            importantForAccessibility="no">
+            {text}
+          </TextView>
         </Box>
       ) : (
         <VAScrollView contentContainerStyle={scrollStyles}>

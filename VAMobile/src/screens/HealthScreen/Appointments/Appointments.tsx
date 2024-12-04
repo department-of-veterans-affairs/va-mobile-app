@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { AppointmentsDateRange, AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertBox, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AppointmentsErrorServiceTypesConstants } from 'api/types'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -18,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -29,21 +29,12 @@ import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
-export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
-  const todaysDate = DateTime.local()
-  const futureDate = todaysDate.plus({ days: 390 })
-
-  return {
-    startDate: todaysDate.startOf('day').toISO(),
-    endDate: futureDate.endOf('day').toISO(),
-  }
-}
-
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
+  const controlIDs = ['apptsUpcomingID', 'apptsPastID']
   const [selectedTab, setSelectedTab] = useState(0)
   const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
@@ -60,9 +51,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     data: apptsData,
     error: appointmentsHasError,
     isFetching: loadingAppointments,
-    isFetched: apptsDataFetched,
     refetch: refetchAppts,
-  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, page, {
+  } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
   // Resets scroll position to top whenever current page appointment list changes:
@@ -71,25 +61,13 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   // since the appointment list sizes differ depending on content
   const scrollViewRef = useRef<ScrollView | null>(null)
 
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-  }, [apptsDataFetched, page])
-
   const onTabChange = (tab: number) => {
     if (selectedTab !== tab) {
       if (tab === 0) {
         setDateRange(getUpcomingAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.UPCOMING)
       } else {
-        const todaysDate = DateTime.local()
-        const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-
-        const pastRange: AppointmentsDateRange = {
-          startDate: threeMonthsEarlier.startOf('day').toISO(),
-          endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
-        }
-
-        setDateRange(pastRange)
+        setDateRange(getPastAppointmentDateRange())
         setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
       }
       setPage(1)
@@ -108,14 +86,14 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     })
     if (serviceError) {
       return (
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
+        <Box mb={theme.dimensions.condensedMarginBetween}>
+          <AlertWithHaptics
+            variant="error"
+            header={t('appointments.appointmentsStatusSomeUnavailable')}
+            headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            description={t('appointments.troubleLoadingSomeAppointments')}
+            descriptionA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
             scrollViewRef={scrollViewRef}
-            title={t('appointments.appointmentsStatusSomeUnavailable')}
-            text={t('appointments.troubleLoadingSomeAppointments')}
-            border="error"
-            titleA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
-            textA11yLabel={a11yLabelVA(t('appointments.troubleLoadingSomeAppointments'))}
           />
         </Box>
       )
@@ -134,7 +112,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
-      testID="appointmentsTestID">
+      testID="appointmentsTestID"
+      backLabelTestID="appointmentsBackTestID">
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
@@ -152,38 +131,37 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
           error={appointmentsHasError}
         />
       ) : (
-        <Box flex={1} justifyContent="flex-start">
+        <Box>
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
               onChange={onTabChange}
               selected={selectedTab}
               a11yHints={a11yHints}
+              testIDs={controlIDs}
             />
           </Box>
           {serviceErrorAlert()}
-          {CernerAlert ? (
-            <Box mb={theme.dimensions.contentMarginBottom}>
-              <CernerAlert />
-            </Box>
-          ) : (
-            <></>
-          )}
-          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+          <CernerAlert />
+          <Box mb={theme.dimensions.contentMarginBottom}>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}
+                page={page}
                 setPage={setPage}
                 loading={loadingAppointments || fetchingAuthServices}
                 setDateRange={setDateRange}
                 setTimeFrame={setTimeFrame}
+                scrollViewRef={scrollViewRef}
               />
             )}
             {selectedTab === 0 && (
               <UpcomingAppointments
                 appointmentsData={apptsData}
+                page={page}
                 setPage={setPage}
                 loading={loadingAppointments || fetchingAuthServices}
+                scrollViewRef={scrollViewRef}
               />
             )}
           </Box>

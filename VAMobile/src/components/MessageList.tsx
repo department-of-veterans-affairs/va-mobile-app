@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonDecoratorType, VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { ButtonDecoratorType } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 import { useTheme } from 'utils/hooks'
@@ -42,7 +44,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
   const theme = useTheme()
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
-    const { inlineTextWithIcons, testId, ...listItemObj } = item
+    const { inlineTextWithIcons, testId, detoxTestID, ...listItemObj } = item
     let testIdToUse = testId ? testId : generateTestIDForInlineTextIconList(inlineTextWithIcons, t)
 
     // We want to display black 'Read' tag only for sent messages that have been seen by the recipients
@@ -62,7 +64,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
             </Box>
           )}
         </Box>
-        <VAIcon
+        <Icon
           name="ChevronRight"
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
@@ -74,8 +76,15 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
 
     // Append accessibility label for Sent messages 'READ' tag
     testIdToUse = `${testIdToUse} ${sentReadTagA11y}`.trim()
+    const detoxTestIDToUse = detoxTestID ? detoxTestID : testIdToUse
 
-    return { ...listItemObj, content, testId: testIdToUse, decorator: ButtonDecoratorType.None }
+    return {
+      ...listItemObj,
+      content,
+      testId: testIdToUse,
+      decorator: ButtonDecoratorType.None,
+      detoxTestID: detoxTestIDToUse,
+    }
   })
 
   return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />

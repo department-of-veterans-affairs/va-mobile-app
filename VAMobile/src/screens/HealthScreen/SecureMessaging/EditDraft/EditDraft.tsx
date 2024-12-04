@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -30,9 +30,8 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
-  CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -151,7 +150,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
-  const [to, setTo] = useState(message?.recipientId?.toString() || '')
+  const [to, setTo] = useState((message?.recipientId || '').toString())
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
@@ -184,7 +183,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
-      setTo(message?.recipientId.toString() || '')
+      setTo((message?.recipientId || '').toString())
     }
   }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
 
@@ -239,7 +238,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return message?.body !== body
     } else {
       return (
-        message?.recipientId?.toString() !== to ||
+        (message?.recipientId || '').toString() !== to ||
         message?.category !== category ||
         message?.subject !== subject ||
         message?.body !== body
@@ -274,7 +273,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             onSuccess: () => {
               showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
               queryClient.invalidateQueries({
-                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
               })
               navigateTo('FolderMessages', {
                 folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
@@ -316,7 +315,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     menuViewActions.push({
       actionText: t('save'),
       addDivider: true,
-      iconName: 'Folder',
+      iconProps: { name: 'Folder', fill: theme.colors.icon.defaultMenuItem },
       accessibilityLabel: t('secureMessaging.saveDraft'),
       onPress: () => {
         setOnSaveDraftClicked(true)
@@ -327,9 +326,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   menuViewActions.push({
     actionText: t('delete'),
     addDivider: false,
-    iconName: 'Trash',
+    iconProps: { name: 'Delete', fill: theme.colors.icon.error },
     accessibilityLabel: t('secureMessaging.deleteDraft.menuBtnA11y'),
-    iconColor: 'error',
     textColor: 'error',
     onPress: onDeletePressed,
   })
@@ -449,6 +447,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
@@ -483,7 +482,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               queryKey: [secureMessagingKeys.message, messageID],
             })
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             goToDraftFolder(true)
           },
@@ -499,7 +498,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           queryClient.invalidateQueries({
-            queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+            queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
           })
           goToDraftFolder(false)
         },
@@ -512,11 +511,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderAlert() {
     return (
       <Box my={theme.dimensions.standardMarginBetween}>
-        <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-            {t('secureMessaging.reply.olderThan45Days')}
-          </TextView>
-        </AlertBox>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('secureMessaging.reply.youCanNoLonger')}
+          description={t('secureMessaging.reply.olderThan45Days')}
+        />
       </Box>
     )
   }
@@ -524,14 +523,14 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   function renderForm() {
     if (noProviderError) {
       return (
-        <AlertBox
-          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
-          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
-          border="error"
+        <AlertWithHaptics
+          variant="error"
+          header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertBox>
+        </AlertWithHaptics>
       )
     }
 
@@ -592,15 +591,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
               onPress={navigateToReplyHelp}
-              accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}>
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+            />
           </Box>
           {!replyDisabled && renderButton()}
         </TextArea>
@@ -631,7 +626,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               borderColor={'primary'}
               borderBottomWidth={'default'}
               p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+              <TextView variant="MobileBodyBold">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messageThread)}
           </Box>
@@ -650,6 +645,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     isDiscarded ||
     refetchingRecipients ||
     refetchingThread
+
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : sendingMessage
@@ -668,9 +664,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={isLoading ? undefined : leftButtonAction}
       menuViewActions={isLoading ? undefined : menuViewActions}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
-      testID="editDraftTestID">
+      testID="editDraftTestID"
+      rightButtonTestID="editDraftMoreID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

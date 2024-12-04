@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { DateTime } from 'luxon'
 
-import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
+import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
@@ -16,6 +18,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
   loading: boolean
+  page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
   setTimeFrame: React.Dispatch<
@@ -29,12 +32,34 @@ type PastAppointmentsProps = {
       | 'pastAllLastYear'
     >
   >
+  scrollViewRef: RefObject<ScrollView>
 }
 
-function PastAppointments({ appointmentsData, loading, setPage, setDateRange, setTimeFrame }: PastAppointmentsProps) {
+function PastAppointments({
+  appointmentsData,
+  loading,
+  page,
+  setPage,
+  setDateRange,
+  setTimeFrame,
+  scrollViewRef,
+}: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
+
+  const pagination = {
+    currentPage: page,
+    perPage: DEFAULT_PAGE_SIZE,
+    totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
+  }
+  const { perPage, totalEntries } = pagination
+
+  useEffect(() => {
+    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
+    setAppointmentsToShow(appointmentsList || [])
+  }, [appointmentsData?.data, page, perPage])
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -172,28 +197,22 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
     )
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const pagination = appointmentsData.meta?.pagination || {
-    currentPage: 1,
-    perPage: 10,
-    totalEntries: 0,
-  }
-  const { currentPage, perPage, totalEntries } = pagination
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
     navigateTo('PastAppointmentDetails', { appointment })
   }
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(currentPage + 1)
+      setPage(page + 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
-      setPage(currentPage - 1)
+      setPage(page - 1)
+      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries: totalEntries,
     pageSize: perPage,
-    page: currentPage,
+    page,
     tab: 'past appointments',
   }
 
@@ -206,9 +225,11 @@ function PastAppointments({ appointmentsData, loading, setPage, setDateRange, se
           pickerOptions={pickerOptions}
           labelKey={'pastAppointments.selectADateRange'}
           testID="getDateRangeTestID"
+          confirmTestID="pastApptsDateRangeConfirmID"
+          cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
-      {getGroupedAppointments(appointmentsData.data, theme, { t }, onPastAppointmentPress, true, pagination)}
+      {getGroupedAppointments(appointmentsToShow, theme, { t }, onPastAppointmentPress, true, pagination)}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

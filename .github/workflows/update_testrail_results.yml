@@ -10,19 +10,17 @@ on:
         description: "TestRail api key"
         required: true
     inputs:
-      test_names:
-        type: string
-        default: ''
       testRail_name:
         type: string
         default: ''
-      test_specific_OS_needed:
-        type: boolean
-        default: false
       test_OS_name:
         type: string
         default: ''
-  
+    outputs:
+      test_run_id_number:
+        description: "The id number for the test run"
+        value: ${{ jobs.send_test_results_to_testrail.outputs.output1 }}
+
 defaults:
   run:
     working-directory: VAMobile
@@ -30,13 +28,15 @@ defaults:
 jobs:
   send_test_results_to_testrail:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.run-id-selection.outputs.TEST_RUN_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download junit file
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with: 
-          name: ${{inputs.test_names}}-e2e-junit
+          pattern: e2e-junit-*
       - name: 'Find run ID in testRail'
         id: run-id-selection
         run: | 
@@ -47,18 +47,13 @@ jobs:
           echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
           if [ "$resp" == '' ]; then
             if [[ "${{ inputs.testRail_name }}" == "" ]]; then
-              if [[ ${{ inputs.test_specific_OS_needed}} == true ]]; then
-                OS_name="${{inputs.test_OS_name}}: "
-              else
-                OS_name=''
-              fi
               resp=$(curl -X POST -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  -d '{"suite_id": 92, "include_all": false, "name": "'"${OS_name}$(date +'%Y-%m-%d')"'"}' \
+                  -d '{"suite_id": 92, "include_all": false, "name": "'"$(date +'%Y-%m-%d')"'"}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29" )
               resp=$(curl -X GET -H 'Content-Type: application/json' \
                   -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="'"${OS_name}$(date +'%Y-%m-%d')"'") | .id')
+                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_runs/29&is_completed=0" | jq '.runs[] | select(.name =="'"$(date +'%Y-%m-%d')"'") | .id')
               echo "$resp"
               echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
             else
@@ -88,16 +83,19 @@ jobs:
           python-version: '3.x'
       - name: TestRail CLI upload results
         if: always()
-        run: |      
+        run: |
           pip install trcli
-          trcli -y \
-            -h https://dsvavsp.testrail.io/ \
-            --project "VA Mobile App" \
-            --project-id 29 \
-            -u ${{secrets.TEST_RAIL_USER}} \
-            -k ${{secrets.TEST_RAIL_KEY}} \
-            parse_junit \
-            --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
-            --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
-            -f "/home/runner/work/va-mobile-app/va-mobile-app/e2e-junit.xml"
+          for dir in /home/runner/work/va-mobile-app/va-mobile-app/e2e-junit-*/; do
+              echo "$dir"
+              trcli -y \
+                -h https://dsvavsp.testrail.io/ \
+                --project "VA Mobile App" \
+                --project-id 29 \
+                -u ${{secrets.TEST_RAIL_USER}} \
+                -k ${{secrets.TEST_RAIL_KEY}} \
+                parse_junit \
+                --run-id ${{steps.run-id-selection.outputs.TEST_RUN_ID}} \
+                --section-id ${{steps.section-id-selection.outputs.SECTION_RUN_ID}} \
+                -f "${dir}e2e-junit.xml"            
+          done
 

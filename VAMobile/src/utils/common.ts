@@ -8,12 +8,14 @@ import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import { contains, isEmpty, map } from 'underscore'
+import _ from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
 import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
 import { Events } from 'constants/analytics'
+import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, SSN_REGEX_EXP } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
@@ -395,36 +397,6 @@ export const getFileDisplay = (
   return { fileName: fileName || '', fileSize: formattedFileSize, fileSizeA11y: formattedFileSizeA11y }
 }
 
-// TODO #3959 ticket to remove HalfPanel
-// function to animate a full screen panel into half the size
-export function halfPanelCardStyleInterpolator({
-  current,
-  inverted,
-}: StackCardInterpolationProps): StackCardInterpolatedStyle {
-  // height of the visible application window
-  const windowHeight = Dimensions.get('window').height
-
-  const translateY = Animated.multiply(
-    current.progress.interpolate({
-      inputRange: [0, 1],
-      outputRange: [windowHeight, windowHeight / 2], // modify constant for size of panel
-      extrapolate: 'clamp',
-    }),
-    inverted,
-  )
-  const overlayOpacity = current.progress.interpolate({
-    inputRange: [0, 1, 1.0001, 2],
-    outputRange: [0, 0.3, 1, 1],
-  })
-  return {
-    cardStyle: {
-      transform: [{ translateY }],
-      maxHeight: Dimensions.get('window').height / 2,
-    },
-    overlayStyle: { opacity: overlayOpacity },
-  }
-}
-
 export function fullPanelCardStyleInterpolator({
   current,
   inverted,
@@ -451,4 +423,45 @@ export function fullPanelCardStyleInterpolator({
     },
     overlayStyle: { opacity: overlayOpacity },
   }
+}
+
+/**
+ * When passed a string of text this function will identify if it has any PII
+ * that will need to be replaced within it
+ * Checks for:
+ * Phone Number
+ * SSN
+ * email/mailto
+ * @param body - String to check for PII
+ * @returns either a boolean or the edited string
+ */
+export function checkStringForPII(body: string): { found: boolean; newText: string } {
+  let found = false
+  let newText = ''
+  let phoneMatch, ssnMatch, emailMatch, mailToMatch
+  const whiteSpace = body
+    .trim()
+    .split(/\S/)
+    .reverse()
+    .filter((value) => value !== '')
+  const bodySplit = body.split(/\s/).filter((value) => value !== '')
+  _.forEach(bodySplit, (text) => {
+    phoneMatch = PHONE_REGEX_EXP.exec(text)
+    ssnMatch = SSN_REGEX_EXP.exec(text)
+    emailMatch = EMAIL_REGEX_EXP.exec(text)
+    mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
+    if (phoneMatch) {
+      found = true
+      text = '###-###-####'
+    } else if (ssnMatch) {
+      found = true
+      text = '###-##-####'
+    } else if (emailMatch || mailToMatch) {
+      found = true
+      text = 'xxxxxxx@xxx.xxx'
+    }
+    newText = newText.concat(text)
+    newText = newText.concat(whiteSpace.pop() || '')
+  })
+  return { found, newText }
 }

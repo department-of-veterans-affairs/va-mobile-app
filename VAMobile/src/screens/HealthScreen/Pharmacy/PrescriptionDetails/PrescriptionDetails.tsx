@@ -18,6 +18,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import DetailsTextSections from './DetailsTextSections'
@@ -59,6 +60,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   useFocusEffect(
     React.useCallback(() => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
+      registerReviewEvent(true)
     }, []),
   )
 
@@ -120,6 +122,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
         <Button
           label={t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 })}
           onPress={requestRefillButtonPress}
+          testID="requestRefillsButtonID"
         />
       </Box>
     )
@@ -141,7 +144,8 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     <ChildTemplate
       backLabel={t('prescription.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('prescriptionDetails')}>
+      title={t('prescriptionDetails')}
+      backLabelTestID="prescriptionsDetailsBackTestID">
       {loadingHistory ? (
         <LoadingComponent text={t('prescription.details.loading')} />
       ) : (
@@ -150,7 +154,9 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
           {getRefillVAHealthButton()}
           <Box mb={contentMarginBottom}>
             <TextArea>
-              <TextView variant="BitterBoldHeading">{prescriptionName}</TextView>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {prescriptionName}
+              </TextView>
               <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
                 {rxNumber}
               </TextView>

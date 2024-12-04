@@ -2,8 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import * as api from 'store/api'
 import { completeSync, initialAuthState } from 'store/slices'
-import { context, render, waitFor } from 'testUtils'
+import { context, render, waitFor, when } from 'testUtils'
 
 import { SyncScreen } from './index'
 
@@ -29,6 +30,32 @@ context('SyncScreen', () => {
   }
 
   beforeEach(() => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/user/authorized-services')
+      .mockResolvedValue({
+        data: {
+          attributes: {
+            authorizedServices: {
+              appeals: true,
+              appointments: true,
+              claims: true,
+              decisionLetters: true,
+              directDepositBenefits: true,
+              directDepositBenefitsUpdate: true,
+              disabilityRating: true,
+              genderIdentity: true,
+              lettersAndDocuments: true,
+              militaryServiceHistory: true,
+              paymentHistory: true,
+              preferredName: true,
+              prescriptions: true,
+              scheduleAppointments: true,
+              secureMessaging: true,
+              userProfileUpdate: true,
+            },
+          },
+        },
+      })
     initializeTestInstance()
   })
 

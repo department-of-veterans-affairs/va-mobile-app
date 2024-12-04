@@ -65,6 +65,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
         on: enabledOverride,
+        testID: 'remoteConfigEnableTestID',
       },
       onPress: (): void => setEnabledOverride(!enabledOverride),
     },
@@ -73,6 +74,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
         on: appUpdateButtonOverride,
+        testID: 'remoteConfigAppUpdateTestID',
       },
       onPress: (): void => setAppUpdateButtonOverride(!appUpdateButtonOverride),
     },

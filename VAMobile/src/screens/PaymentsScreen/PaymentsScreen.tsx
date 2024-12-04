@@ -39,24 +39,10 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <LargeNavButton
-          title={t('vaPaymentHistory')}
-          onPress={onPayments}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
         {userAuthorizedServices?.directDepositBenefits && (
-          <LargeNavButton
-            title={t('directDeposit.information')}
-            onPress={onDirectDeposit}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
+          <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
         )}
       </Box>
     </CategoryLanding>

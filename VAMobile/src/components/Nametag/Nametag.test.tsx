@@ -51,15 +51,15 @@ context('Nametag', () => {
         mostRecentBranch: branch,
       }
       renderWithBranch(serviceHistoryMock)
-      expect(screen.getByTestId(branch)).toBeTruthy()
-      expect(screen.getByRole('button', { name: branch })).toBeTruthy()
-      fireEvent.press(screen.getByRole('button', { name: branch }))
+      expect(screen.getByTestId(`${branch} Emblem`)).toBeTruthy()
+      expect(screen.getByRole('link', { name: branch })).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: branch }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('VeteranStatus')
     })
   }
 
   it('does not display branch when service history is empty', () => {
     renderWithBranch({} as ServiceHistoryAttributes)
-    expect(screen.queryByRole('button')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeFalsy()
   })
 })

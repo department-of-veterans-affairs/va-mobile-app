@@ -1,10 +1,9 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { map } from 'underscore'
-
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { usePayments } from 'api/payments'
 import { PaymentsData } from 'api/types'
 import {
@@ -15,6 +14,7 @@ import {
   LoadingComponent,
   Pagination,
   PaginationProps,
+  PickerItem,
   VAModalPicker,
   VAModalPickerProps,
 } from 'components'
@@ -29,57 +29,45 @@ import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 
 function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
+  const { data: userAuthorizedServices } = useAuthorizedServices()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { standardMarginBetween, gutter } = theme.dimensions
   const [page, setPage] = useState(1)
-  const [yearPickerOption, setYearPickerOption] = useState<yearsDatePickerOption>()
-  const [pickerOptions, setpickerOptions] = useState<Array<yearsDatePickerOption>>([])
+  const [yearPickerOption, setYearPickerOption] = useState<PickerItem>()
+  const [pickerOptions, setPickerOptions] = useState<Array<PickerItem>>([])
+  const [selectedYear, setSelectedYear] = useState<string>()
   const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
+  const accessToPaymentHistory = userAuthorizedServices?.paymentHistory
   const {
     data: payments,
     isFetching: loading,
     error: hasError,
     refetch: refetchPayments,
-  } = usePayments(yearPickerOption?.label, page, { enabled: !paymentsInDowntime })
+  } = usePayments(selectedYear, page)
   const noPayments = payments?.meta.availableYears?.length === 0
 
-  type yearsDatePickerOption = {
-    label: string
-    value: string
-    a11yLabel: string
-  }
-
-  const getPickerOptions = useCallback((): Array<yearsDatePickerOption> => {
-    if (payments?.meta.availableYears) {
-      return map(payments.meta.availableYears, (item) => {
-        const year = item.toString()
+  useEffect(() => {
+    if (!pickerOptions.length && payments?.meta.availableYears?.length) {
+      const years = payments.meta.availableYears.map((yearNumber) => {
+        const year = yearNumber.toString()
         return {
           label: year,
           value: year,
-          a11yLabel: year,
         }
       })
+      setPickerOptions(years)
+      setYearPickerOption(years[0])
     }
-    return []
-  }, [payments])
-
-  useEffect(() => {
-    if (pickerOptions.length === 0 && getPickerOptions().length > 0) {
-      setpickerOptions(getPickerOptions())
-    }
-  }, [payments?.meta.availableYears, getPickerOptions, pickerOptions])
-
-  useEffect(() => {
-    setYearPickerOption(pickerOptions[0])
-  }, [pickerOptions])
+  }, [payments?.meta.availableYears, pickerOptions])
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
     if (curSelectedRange) {
       setYearPickerOption(curSelectedRange)
       setPage(1)
+      setSelectedYear(curSelectedRange.value)
     }
   }
 
@@ -93,6 +81,8 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     onSelectionChange: setValuesOnPickerSelect,
     pickerOptions,
     testID: 'selectAYearTestID',
+    cancelTestID: 'selectAYearCancelTestID',
+    confirmTestID: 'selectAYearConfirmTestID',
   }
 
   const getPaymentsData = (): ReactNode => {
@@ -147,7 +137,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
           error={hasError}
           onTryAgain={refetchPayments}
         />
-      ) : noPayments ? (
+      ) : noPayments || !accessToPaymentHistory ? (
         <NoPaymentsScreen />
       ) : (
         <>

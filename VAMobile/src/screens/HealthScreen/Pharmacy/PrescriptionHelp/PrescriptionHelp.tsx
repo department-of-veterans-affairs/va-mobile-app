@@ -39,13 +39,19 @@ function PrescriptionHelp({}: PrescriptionHelpProps) {
   ]
 
   return (
-    <LargePanel testID="PrescriptionsHelpTestID" title={t('prescriptionsHelp')} rightButtonText={t('close')}>
+    <LargePanel
+      testID="PrescriptionsHelpTestID"
+      title={t('prescriptionsHelp')}
+      rightButtonText={t('close')}
+      rightButtonTestID="prescriptionsBackTestID">
       <Box mx={gutter} mb={contentMarginBottom}>
-        <TextView variant="MobileBodyBold">{t('prescription.help.header')}</TextView>
-        <TextView mt={condensedMarginBetween} variant="MobileBody" paragraphSpacing={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('prescription.help.header')}
+        </TextView>
+        <TextView mt={condensedMarginBetween} variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('prescription.help.listHeader')}
         </TextView>
-        <VABulletList listOfText={medicationNoIncludedList} />
+        <VABulletList listOfText={medicationNoIncludedList} paragraphSpacing={true} />
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.help.footer'))}>
           {t('prescription.help.footer')}
         </TextView>

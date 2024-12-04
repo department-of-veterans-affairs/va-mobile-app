@@ -1,6 +1,13 @@
+/*
+Description:
+Detox script that follows the vaccines - view list of all immunization records and vaccines - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in vaccines or if anything is changed in src/store/api/demo/mocks/vaccine.json.
+*/
+import { combineReducers } from '@reduxjs/toolkit'
 import { by, element, expect } from 'detox'
 
-import { checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
@@ -8,6 +15,7 @@ export const VaccinesE2eIdConstants = {
   VACCINE_3_ID: 'FLU vaccine May 10, 2018',
   VACCINE_5_ID: 'PneumoPPV vaccine April 28, 2016',
   VACCINE_6_ID: 'FLU vaccine April 28, 2016',
+  VACCINE_DETAILS_BACK_ID: 'vaccinesDetailsBackID',
 }
 
 beforeAll(async () => {
@@ -36,7 +44,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.id('Type And Dosage COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose'))).toExist()
     await expect(element(by.id('Manufacturer Moderna US, Inc.'))).toExist()
     await expect(element(by.id('Series status None noted')))
-    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.text('2360 East Pershing Boulevard'))).toExist()
     await expect(element(by.text('Cheyenne, WY 82001-5356'))).toExist()
     await expect(element(by.text('Reaction'))).toExist()
@@ -54,7 +62,7 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
   it('verify no disclaimer is displayed when all fields are populated', async () => {
@@ -67,12 +75,12 @@ describe('Vaccine Records Screen', () => {
         ),
       ),
     ).not.toExist()
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
   it('verify no manufacturer for non COVID-19 record', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()
-    await element(by.text('VA vaccines')).tap()
+    await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 })

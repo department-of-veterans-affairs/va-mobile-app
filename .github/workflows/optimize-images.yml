@@ -1,0 +1,46 @@
+
+# Image optimization before release build. This workflow commit only images that have been optimized
+
+
+name: '[Build] Optimize Image'
+
+on:
+  push:
+    branches:
+      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  optimize_images:
+    name: Optimize Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install imagemin-cli
+        run: npm install -g imagemin-cli
+      - name: Optimize iOS images
+        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
+      - name: Optimize Android images
+        run: |
+          cd VAMobile/android/fastlane/metadata/android/en-US/images/
+          imagemin * --out-dir=.
+          
+          cd phoneScreenshots/
+          imagemin * --out-dir=.
+          
+          cd ../sevenInchScreenshots/
+          imagemin * --out-dir=.
+      - name: Commit optimized images
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@users.noreply.github.com'
+          git add VAMobile/ios/fastlane/screenshots/en-US
+          git add VAMobile/android/fastlane/metadata/android/en-US/images
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Optimize images before release build"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

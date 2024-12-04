@@ -31,13 +31,13 @@ context('FeatureLandingAndChildTemplate', () => {
   })
 
   it('should render a back label and onPress', () => {
-    expect(screen.getByRole('button', { name: 'Back' })).toBeTruthy()
-    fireEvent.press(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByRole('link', { name: 'Back' })).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: 'Back' }))
     expect(onBackPressSpy).toHaveBeenCalled()
   })
 
   it('should render a header button and onPress if passed in', () => {
-    initializeTestInstance({ label: 'test', icon: { name: 'HomeSelected' }, onPress: onPressSpy })
+    initializeTestInstance({ label: 'test', icon: { name: 'HomeOutlined' }, onPress: onPressSpy })
     fireEvent.press(screen.getByRole('button', { name: 'test' }))
     expect(onPressSpy).toHaveBeenCalled()
   })

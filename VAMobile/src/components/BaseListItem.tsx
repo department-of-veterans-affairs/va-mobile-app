@@ -2,8 +2,10 @@ import React, { FC, ReactElement, useState } from 'react'
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
-import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
 
@@ -82,6 +84,9 @@ export type BaseListItemProps = {
 
   /** Optional min height */
   minHeight?: number
+
+  /** test id string for detox */
+  detoxTestID?: string
 }
 
 export const ButtonDecorator: FC<{
@@ -160,12 +165,11 @@ export const ButtonDecorator: FC<{
 
     default:
       return (
-        <VAIcon
+        <Icon
           name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
-          {...decoratorProps}
         />
       )
   }
@@ -191,6 +195,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     claimsRequestNumber,
     fileUploaded,
     minHeight,
+    detoxTestID,
   } = props
   const theme = useTheme()
 
@@ -227,15 +232,14 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     }
   }
 
-  // Default role for list item is button
-  const accessibilityRole = a11yRole || (isSwitchRow ? 'switch' : 'button')
+  // Default role for list item is menuitem
+  const accessibilityRole = a11yRole || (isSwitchRow ? 'switch' : 'link')
 
   const pressableProps: PressableProps = {
     onPress: onOuterPress,
     onPressIn: _onPressIn,
     onPressOut: _onPressOut,
     accessible: true,
-    accessibilityRole,
     disabled: decorator === ButtonDecoratorType.RadioDisabled,
   }
 
@@ -243,7 +247,8 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     width: '100%',
     minHeight: minHeight || theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    pl: theme.dimensions.gutter,
+    pr: decorator === undefined ? theme.dimensions.buttonPadding : theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
@@ -254,10 +259,11 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   }
 
   const a11yProps: AccessibilityProps = {
-    ...testIdProps(testId || ''),
     ...a11yHintProp(a11yHint),
     ...a11yValueProp(a11yValue ? { text: a11yValue } : {}),
     accessibilityState: a11yState ? a11yState : {},
+    accessibilityLabel: testId,
+    accessibilityRole: onPress ? accessibilityRole : 'text',
   }
 
   if (isSwitchRow && decoratorProps) {
@@ -270,7 +276,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   const generateItem = (accessibilityProps?: AccessibilityProps): ReactElement => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
-      <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
+      <Box {...boxProps} {...accessibilityProps} testID={accessibilityProps?.accessibilityLabel} accessible={!onPress}>
         {claimsRequestNumber !== undefined ? (
           <FileRequestNumberIndicator requestNumber={claimsRequestNumber} fileUploaded={fileUploaded} />
         ) : (
@@ -278,7 +284,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         )}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box
+            ml={decorator === undefined ? 0 : theme.dimensions.listItemDecoratorMarginLeft}
+            importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}
@@ -289,7 +297,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...a11yProps} {...pressableProps}>
+      <Pressable {...a11yProps} {...pressableProps} testID={detoxTestID}>
         {generateItem()}
       </Pressable>
     )

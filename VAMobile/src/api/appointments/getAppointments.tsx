@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 
 import { appointmentsKeys } from './queryKeys'
@@ -17,15 +19,15 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  page: number,
 ): Promise<AppointmentsGetData | undefined> => {
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
-    'page[number]': page.toString(),
-    'page[size]': DEFAULT_PAGE_SIZE.toString(),
+    'page[number]': '1',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
     'included[]': 'pending',
+    useCache: 'false',
   } as Params)
 }
 
@@ -36,20 +38,37 @@ export const useAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  page: number,
   options?: { enabled?: boolean },
 ) => {
+  const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
-  const appointmentsInDowntime = useDowntime('appointments')
+  const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
-    queryKey: [appointmentsKeys.appointments, timeFrame, page],
-    queryFn: () => getAppointments(startDate, endDate, timeFrame, page),
+    queryKey: [appointmentsKeys.appointments, timeFrame],
+    queryFn: () => {
+      if (timeFrame === TimeFrameTypeConstants.UPCOMING && !queryClient.getQueryData(pastAppointmentsQueryKey)) {
+        const pastRange = getPastAppointmentDateRange()
+
+        // Prefetch past appointments when upcoming appointments are being fetched so that the default
+        // appointments list in the `Past` tab will already be loaded if a user views past appointments.
+        queryClient.prefetchQuery({
+          queryKey: pastAppointmentsQueryKey,
+          queryFn: () =>
+            getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
+          staleTime: ACTIVITY_STALE_TIME,
+        })
+      }
+
+      return getAppointments(startDate, endDate, timeFrame)
+    },
     meta: {
       errorName: 'getAppointments: Service error',
     },
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }

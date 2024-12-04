@@ -15,10 +15,11 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import { registerReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import NeedHelpData from '../NeedHelpData/NeedHelpData'
 import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
@@ -29,34 +30,27 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
+  const segmentedControlTestIDs = ['appealStatus', 'appealIssues']
+
   const [selectedTab, setSelectedTab] = useState(0)
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
   ]
-  const abortController = new AbortController()
-  const abortSignal = abortController.signal
   const { appealID } = route.params
   const {
     data: appeal,
     error: appealError,
     refetch: refetchAppeals,
     isFetching: loadingAppeal,
-  } = useAppeal(appealID, abortSignal, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
+  } = useAppeal(appealID, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } =
     attributes || ({} as AppealAttributesData)
 
-  useBeforeNavBackListener(navigation, () => {
-    // if appeals is still loading cancel it
-    if (loadingAppeal) {
-      abortController.abort()
-    }
-  })
-
   useEffect(() => {
     if (appeal && !loadingAppeal && !appealError) {
-      registerReviewEvent()
+      registerReviewEvent(true)
     }
   }, [appeal, loadingAppeal, appealError])
 
@@ -110,7 +104,8 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       backLabel={t('claims.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appealDetails.title')}
-      testID="appealsDetailsTestID">
+      testID="appealsDetailsTestID"
+      backLabelTestID="appealsBackID">
       {loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />
       ) : appealError ? (
@@ -122,10 +117,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.gutter}>
-            <TextView
-              variant="BitterBoldHeading"
-              mb={theme.dimensions.condensedMarginBetween}
-              accessibilityRole="header">
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
               {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
             </TextView>
             <TextView variant="MobileBody" testID="appealsUpToDateTestID">
@@ -138,6 +130,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 onChange={onTabChange}
                 selected={selectedTab}
                 a11yHints={segmentedControlA11yHints}
+                testIDs={segmentedControlTestIDs}
               />
             </Box>
           </Box>
@@ -155,6 +148,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
               />
             )}
             {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
+          </Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <NeedHelpData isAppeal={true} />
           </Box>
         </Box>
       )}

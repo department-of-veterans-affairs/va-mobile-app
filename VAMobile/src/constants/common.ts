@@ -3,6 +3,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { Events } from './analytics'
 
 export const DEFAULT_PAGE_SIZE = 10
+export const LARGE_PAGE_SIZE = 5000
 
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes
@@ -56,9 +57,14 @@ export const MAIL_TO_REGEX_EXP = new RegExp(
 export const PHONE_REGEX_EXP = new RegExp(
   /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
 )
+
+export const SSN_REGEX_EXP = new RegExp(/^\d{3}-?\d{2}-?\d{4}$/)
+
 export const NUMBERS_ONLY_REGEX_EXP = new RegExp(/^[0-9]/)
 
 export const URL_REGEX_EXP = new RegExp(/^((https:|http:)\S*)/)
 export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})/)
 export const ASCENDING = 'ascending'
 export const DESCENDING = 'descending'
+
+export const ACTIVITY_STALE_TIME = 300000 // 5 minutes

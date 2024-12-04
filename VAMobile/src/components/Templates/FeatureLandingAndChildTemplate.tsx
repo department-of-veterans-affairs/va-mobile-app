@@ -83,12 +83,13 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           a11yLabel: headerButton.labelA11y,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
+          testID: headerButton.testID,
         }
       : undefined,
   }
 
   const subtitleProps: TextViewProps = {
-    variant: 'BitterBoldHeading',
+    variant: 'BitterHeading',
     mt: 0,
     ml: theme.dimensions.condensedMarginBetween,
     mb: theme.dimensions.standardMarginBetween,

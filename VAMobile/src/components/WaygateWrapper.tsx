@@ -1,11 +1,9 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useIsFocused, useNavigationState } from '@react-navigation/native'
+import { useNavigationState } from '@react-navigation/native'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-
-import { AlertBox, Box, ClickToCallPhoneNumber } from 'components'
+import { AlertWithHaptics, Box, ClickToCallPhoneNumber } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -25,9 +23,8 @@ export type WaygateWrapperProps = {
 export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName, bypassAlertBox }) => {
   const theme = useTheme()
   const waygateStateScreen = 'WG_' + useNavigationState((state) => state.routes[state.routes.length - 1]?.name)
-  const waygateScreen = waygateName || waygateStateScreen
+  const [waygateScreen] = useState(waygateName || waygateStateScreen)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isFocused = useIsFocused()
   const openAppStore = useOpenAppStore()
 
   const waygateTypeCheck = (waygateType: string | undefined) => {
@@ -45,27 +42,29 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
     const errorMsgBodyV2 = fixedWhiteSpaceString(waygate.errorMsgBodyV2)
     const text = errorMsgBodyV2.length > 0 ? errorMsgBodyV2 : waygate.errorMsgBody
-    const phoneNumber =
-      waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : t('8006982411')
+    const phoneNumber = waygate.errorPhoneNumber && waygate.errorPhoneNumber.length > 0 ? waygate.errorPhoneNumber : ''
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <AlertBox
-          border={waygate.type === 'DenyContent' ? 'error' : 'warning'}
-          title={waygate.errorMsgTitle}
-          titleA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
-          text={text}
-          textA11yLabel={a11yLabelVA(text || '')}
+        <AlertWithHaptics
+          variant={waygate.type === 'DenyContent' ? 'error' : 'warning'}
+          header={waygate.errorMsgTitle}
+          headerA11yLabel={a11yLabelVA(waygate.errorMsgTitle || '')}
+          description={text}
+          descriptionA11yLabel={a11yLabelVA(text || '')}
+          primaryButton={
+            waygate.appUpdateButton === true ? { label: t('updateNow'), onPress: onUpdateButtonPress } : undefined
+          }
           focusOnError={false}
-          testId="AFUseCase2TestID">
-          <Box my={theme.dimensions.standardMarginBetween}>
+          testID="AFUseCase2TestID">
+          {phoneNumber ? (
             <ClickToCallPhoneNumber
               displayedText={displayedTextPhoneNumber(phoneNumber)}
               phone={phoneNumber}
               a11yLabel={a11yLabelID(phoneNumber)}
+              variant={'base'}
             />
-          </Box>
-          {waygate.appUpdateButton === true && <Button onPress={onUpdateButtonPress} label={t('updateNow')} />}
-        </AlertBox>
+          ) : null}
+        </AlertWithHaptics>
       </Box>
     )
   }
@@ -81,7 +80,7 @@ export const WaygateWrapper: FC<WaygateWrapperProps> = ({ children, waygateName,
     }
   }, [bypassAlertBox, waygateScreen, showAlertBox, waygate.appUpdateButton])
 
-  if (isFocused && showAlertBox) {
+  if (showAlertBox) {
     const showScreenContent = waygate.type === 'AllowFunction' || waygateName === 'WG_Login'
     return (
       <>

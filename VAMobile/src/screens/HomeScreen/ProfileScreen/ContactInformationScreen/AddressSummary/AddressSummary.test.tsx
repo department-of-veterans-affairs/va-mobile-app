@@ -237,9 +237,9 @@ describe('AddressSummary', () => {
 
   describe('when the address summary is clicked', () => {
     it('calls onPress', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Mailing address' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Mailing address' }))
       expect(mailingAddressOnPressSpy).toBeCalled()
-      fireEvent.press(screen.getByRole('button', { name: 'Home address' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Home address' }))
       expect(residentialAddressOnPressSpy).toBeCalled()
     })
   })

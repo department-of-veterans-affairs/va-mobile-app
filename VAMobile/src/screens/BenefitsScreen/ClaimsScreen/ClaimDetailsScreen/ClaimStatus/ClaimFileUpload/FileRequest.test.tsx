@@ -69,7 +69,7 @@ context('FileRequest', () => {
       ]
 
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .calledWith(`/v0/claim/600156928`, {})
         .mockResolvedValue({
           data: {
             ...Claim,
@@ -90,7 +90,7 @@ context('FileRequest', () => {
   describe('when number of requests is equal to 1', () => {
     it('display correctly', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .calledWith(`/v0/claim/600156928`, {})
         .mockResolvedValue({
           data: {
             ...Claim,
@@ -119,7 +119,7 @@ context('FileRequest', () => {
           ),
         ).toBeTruthy(),
       )
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Request 1' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Request 1' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
           claimID: '600156928',
@@ -132,7 +132,7 @@ context('FileRequest', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, undefined)
+        .calledWith(`/v0/claim/600156928`, {})
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData(request)
@@ -162,7 +162,7 @@ context('FileRequest', () => {
           },
         ]
         when(api.get as jest.Mock)
-          .calledWith(`/v0/claim/600156928`, {}, undefined)
+          .calledWith(`/v0/claim/600156928`, {})
           .mockResolvedValue({
             data: {
               ...Claim,

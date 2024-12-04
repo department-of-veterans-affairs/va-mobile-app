@@ -14,12 +14,10 @@ context('WhatDoIDoIfDisagreement', () => {
   })
 
   it('Renders WhatDoIDoIfDisagreement', () => {
-    expect(
-      screen.getByText('What should I do if I disagree with your decision on my VA disability claim?'),
-    ).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'What to do if you disagree with our decision' })).toBeTruthy()
     expect(
       screen.getByText(
-        'If you disagree with a claim decision that you received on or after February 19, 2019, you can ask us to review the decision. You have 3 decision review options to choose from.',
+        'If you disagree with our decision, you can ask for a decision review. You have 3 decision review options to choose from.',
       ),
     ).toBeTruthy()
     expect(screen.getByText('Learn more about decision reviews and appeals')).toBeTruthy()

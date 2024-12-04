@@ -4,23 +4,14 @@ import { FlexAlignType, View, ViewProps } from 'react-native'
 import styled from 'styled-components'
 import _ from 'underscore'
 
-import {
-  VABackgroundColors,
-  VABorderColors,
-  VAButtonBackgroundColors,
-  VAButtonBorderColors,
-  VAListTagColors,
-  VATheme,
-} from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VATheme } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
-type VAListTagColorsVariant = keyof VAListTagColors
-export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant | VAListTagColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors
-type VAButtonBorderColorsVariant = keyof VAButtonBorderColors
 export type BorderColorVariant = VABorderColorsVariant | VAButtonBackgroundColorsVariant
 export type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
 export type BorderWidths = 'default' | number
@@ -80,6 +71,8 @@ export type BoxProps = ViewProps & {
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   /**controls which directions children of a container go*/
   flexDirection?: 'column' | 'row'
+  /** sets the gaps between rows and columns */
+  gap?: number
   /**controls how children are measured and displayed*/
   overflow?: 'hidden' | 'visible' | 'scroll'
   /**aligns children in the main direction*/
@@ -192,8 +185,7 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
   }
   return (
     theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
-    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant] ||
-    theme.colors.listTag[bgVariant as VAListTagColorsVariant]
+    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant]
   )
 }
 
@@ -216,9 +208,7 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] =
-      theme.colors.border[color as VABorderColorsVariant] ||
-      theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
+    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant]
   }
   return styles
 }
@@ -259,6 +249,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     'flex-shrink': props.flexShrink,
     'flex-grow': props.flexGrow,
     'flex-wrap': props.flexWrap,
+    gap: typeof props.gap === 'number' ? `${props.gap}px` : props.gap,
     'text-align': props.textAlign,
     overflow: props.overflow,
     ...mStyles,
@@ -300,8 +291,8 @@ const StyledBox = styled(View)`
  *
  * @returns TextView component
  */
-const Box: FC<BoxProps> = (props, { testID }) => {
-  return <StyledBox testID={testID} {...props} />
+const Box: FC<BoxProps> = (props) => {
+  return <StyledBox {...props} />
 }
 
 export default Box

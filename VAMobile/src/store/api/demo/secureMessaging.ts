@@ -10,13 +10,12 @@ import {
 import { Params } from '../api'
 import { DemoStore } from './store'
 
-type MessagePageNumber = '1' | '2'
+type MessagePageNumber = '1'
 
 type folderMessages =
   | {
       '/v0/messaging/health/folders/0/messages': {
         '1': SecureMessagingFolderMessagesGetData
-        '2': SecureMessagingFolderMessagesGetData
       }
     }
   | {

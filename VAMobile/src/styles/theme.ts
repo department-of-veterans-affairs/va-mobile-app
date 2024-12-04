@@ -2,89 +2,55 @@ import { ColorSchemeTypes } from './themes/standardTheme'
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
-  buttonPrimaryActive: string
-  buttonSecondary: string
-  buttonSecondaryActive: string
-  buttonDisabled: string
   buttonSecondaryDisabled: string
-  buttonDestructive: string
-  buttonDestructiveActive: string
-  buttonWhite: string
-  buttonWhiteActive: string
-  brandedPrimary: string
-  brandedPrimaryActive: string
   overFlowMenuButton: string
-}
-
-export type VAButtonBorderColors = {
-  buttonSecondary: string
-  buttonSecondaryActive: string
-  buttonDestructive: string
-  buttonDestructiveActive: string
-  brandedPrimary: string
-  brandedPrimaryActive: string
-}
-
-export type VAButtonTextColors = {
-  buttonPrimary: string
-  buttonSecondary: string
-  buttonDisabled: string
-  buttonDestructive: string
-  buttonWhite: string
-  brandedPrimary: string
+  activityButton: string
+  activityButtonActive: string
+  announcementBanner: string
+  crisisLine: string
+  crisisLineActive: string
 }
 
 export type VATextColors = {
-  descriptiveBackButton: string
-  footerButton: string
-  footerButtonActive: string
-  navBar: string
+  appVersionAndBuild: string
   primary: string
   primaryContrast: string
-  secondary: string
   link: string
   error: string
   placeholder: string
   checkboxDisabled: string
-  claimPhase: string
   input: string
   inputFocused: string
-  brandedPrimaryText: string
-  segmentControllerActive: string
-  segmentControllerInactive: string
   snackBarBtn: string
-  snackBarTxt: string
+  snackBar: string
   actionBar: string
   actionBarDisabled: string
   bodyText: string
   showAll: string
-  defaultMenuItem: string
-  warningTag: string
-  statusDescription: string
-  tabSelectorInactive: string
-  tabSelectorActive: string
-  closePanel: string
   labelTag: string
-  textWithIconButton: string
   textWithIconButtonInactive: string
   veteranStatus: string
+  veteranStatusBranch: string
+  veteranStatusProof: string
   webviewTitle: string
+  crisisLineButton: string
+  activityButton: string
+  announcementBanner: string
+  homeScreen: string
+  profileScreen: string
+  activityFooter: string
+  categoryLandingError: string
+  categoryLandingWarning: string
 }
 
 export type VAIconColors = {
-  footerButton: string
-  footerButtonActive: string
   link: string
-  nav: string
   largeNav: string
   deleteFill: string
-  disclosure: string
   success: string
   error: string
   active: string
   inactive: string
-  contrast: string
-  expandCollapse: string
   checkboxEnabledPrimary: string
   checkboxDisabled: string
   checkboxDisabledContrast: string
@@ -95,32 +61,47 @@ export type VAIconColors = {
   chevronCollapsible: string
   chevronListItem: string
   webviewReload: string
-  backButton: string
   unreadMessage: string
-  veteransCrisisLineArrow: string
   snackBarIcon: string
   defaultMenuItem: string
-  statusInfoIcon: string
-  infoIcon: string
-  prescriptionHelper: string
-  infoIconContrast: string
   radioDisabled: string
   tagInfoIcon: string
-  transparent: string
+  activityButton: string
+  announcementBanner: string
+  inlineSpinner: string
+  categoryLandingAlert: string
+  linkRow: string
+  largeNavButton: string
+  ussf: string
 }
 
 export type VATypographyThemeVariants = {
+  AboutYou: string
   ActionBar: string
+  ActivityButtonHeader: string
+  ActivityButtonSubtext: string
+  ActivityFooter: string
+  AnnouncementBannerTitle: string
   BitterBoldHeading: string
+  BitterHeading: string
+  CategoryLandingError: string
+  CategoryLandingWarning: string
   ClaimPhase: string
+  CrisisLineButton: string
   DescriptiveBackButton: string
+  HomeScreen: string
+  HomeScreenHeader: string
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LargeNavButton: string
+  LargeNavSubtext: string
   MobileBody: string
   MobileBodyBold: string
   MobileBodyLink: string
   MobileBodyTight: string
+  NametagNumber: string
+  ProfileScreenHeader: string
   SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
@@ -129,34 +110,30 @@ export type VATypographyThemeVariants = {
   UnreadMessagesTag: string
   VAHeader: string
   VASelector: string
+  VeteranStatusBranch: string
+  VeteranStatusProof: string
   webviewTitle: string
+  MobileFooterLink: string
 }
 
 export type VABackgroundColors = {
   main: string
   largePanelHeader: string
-  footerButtonActive: string
   textBox: string
   textBoxInactive: string
   list: string
   listActive: string
-  segmentedController: string
   headerDropShadow: string
-  shadow: string
   profileBanner: string
-  ctaButton: string
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
   splashScreen: string
+  loginScreen: string
   carousel: string
-  unreadMessagesTag: string
-  navHeader: string
   modalOverlay: string
-  overlayOpacity: string
   pickerSelectedItem: string
   navButton: string
-  brandedMainBackground: string
   carouselTab: string
   contentBox: string
   snackbar: string
@@ -164,16 +141,21 @@ export type VABackgroundColors = {
   pickerControls: string
   menu: string
   alertBox: string
-  panelHeader: string
-  modalButton: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
   tagGreen: string
   veteranStatus: string
+  veteranStatusHome: string
+  linkRow: string
+  skeletonLoader: string
+  skeletonLoaderSecondary: string
+  bullet: string
+  carouselBullet: string
 }
 
 export type VABorderColors = {
+  aboutYou: string
   primary: string
   secondary: string
   informational: string
@@ -182,18 +164,12 @@ export type VABorderColors = {
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
   success: string
-  primaryDarkest: string
   photoAdd: string // todo rename photoAdd border color to be more abstract (talk to design)
   pickerAndInput: string
   focusedPickerAndInput: string
-  confirmation: string
-  footerButton: string
   menuDivider: string
-  tabSelectorInactive: string
-  tabSelectorActive: string
   photoUpload: string
-  prescriptionDivider: string
-  modalButton: string
+  divider: string
   tagBlue: string
   tagInactive: string
   tagYellow: string
@@ -207,34 +183,18 @@ export type VAFontSizes = {
   letterSpacing?: number
 }
 
-export type VAListTagColors = {
-  tagActive: string
-  tagExpired: string
-  tagSuspended: string
-  tagInProgress: string
-}
-
 export type VAColorScheme = {
   background: VABackgroundColors
   border: VABorderColors
   icon: VAIconColors
   text: VATextColors
   buttonBackground: VAButtonBackgroundColors
-  buttonText: VAButtonTextColors
-  buttonBorder: VAButtonBorderColors
   selectCopyText: string
-  listTag: VAListTagColors
 
   control: {
-    tintColor: string
     switchOnTrack: string
     switchOffTrack: string
     switchOnThumb: string
-    switchOffThumb: string
-  }
-  segmentedControl: {
-    buttonActive: string
-    buttonInactive: string
   }
 }
 
@@ -268,6 +228,7 @@ export type VATheme = {
     snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
+    linkRowChevronPaddingRight: number
     headerButtonSpacing: number
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
@@ -279,8 +240,13 @@ export type VATheme = {
     altBold: string
   }
   fontSizes: {
+    ActivityButtonSubtext: VAFontSizes
+    AnnouncementBannerTitle: VAFontSizes
+    BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
+    CategoryLandingAlert: VAFontSizes
     ClaimPhase: VAFontSizes
+    CrisisLineButton: VAFontSizes
     HelperText: VAFontSizes
     LabelTag: VAFontSizes
     MobileBody: VAFontSizes
@@ -290,6 +256,7 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
+    FooterText: VAFontSizes
   }
   mode: ColorSchemeTypes
   paragraphSpacing: {

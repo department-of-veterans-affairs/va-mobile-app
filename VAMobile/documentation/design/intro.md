@@ -23,6 +23,7 @@ A system to help you write, design, and build digital services on the VA Mobile 
 ### Alerts and progress
 - [Alert](/va-mobile-app/design/Components/Alerts%20and%20progress/Alert)
 - [Loading indicator](/va-mobile-app/design/Components/Alerts%20and%20progress/LoadingIndicator)
+- [Snackbar](/va-mobile-app/design/Components/Alerts%20and%20progress/Snackbar)
 
 ### Buttons and links
 - [Button](/va-mobile-app/design/Components/Buttons%20and%20links/Button)
@@ -30,6 +31,9 @@ A system to help you write, design, and build digital services on the VA Mobile 
 
 ### Navigation
 - [Segmented control](/va-mobile-app/design/Components/Navigation/Secondary/SegmentedControl)
+
+### Selection and input
+- [Checkbox](/va-mobile-app/design/Components/Selection%20and%20input/Checkbox)
 
 -----
 

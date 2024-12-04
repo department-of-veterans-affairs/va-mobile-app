@@ -10,25 +10,25 @@ A button draws attention to important actions with a large selectable surface.
 
 #### Primary
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--primary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-606&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--primary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 #### Secondary
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--secondary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-607&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Base
 
 #### Primary
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-595&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 #### Secondary
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--base-secondary)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-596&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base-secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--base-secondary&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ### Destructive
 **Open in**: [Storybook](https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/docs/button--destructive)  |   [Figma](https://www.figma.com/file/Zzt8z60hCtdEzXx2GFWghH/%F0%9F%93%90-Component-Library?type=design&node-id=224-586&mode=design&t=CNVVTHmCkOFHUVbq-4)
-<iframe width="620" height="" alt="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--destructive&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
+<iframe width="620" height="" title="Image of component in Storybook" src="https://department-of-veterans-affairs.github.io/va-mobile-library/?path=/story/button--destructive&full=1&shortcuts=false&singleStory=true" allowfullscreen></iframe>
 
 ## Usage
 [Refer to the VA Design System for usage guidance](https://design.va.gov/components/button/)
@@ -60,6 +60,7 @@ A button draws attention to important actions with a large selectable surface.
     * Instead of disabling a button in the mobile app, always attempt to find an alternative solution such as:
         * Providing additional context surrounding a button that tells a user what to expect when a button is tapped.
         * Allowing a user to attempt to submit a form even if an error exists in an input field (and then presenting the errors to the user to fix).
+* For guidance on choosing between a Button or Link, see [additional documentation](/va-mobile-app/docs/Flagship%20design%20library/Components/Buttons%20and%20Links/).
 * For additional guidance, refer to the [VA Design System for accessibility considerations](https://design.va.gov/components/button/#accessibility-considerations).
 
 ## Related
@@ -73,4 +74,3 @@ A button draws attention to important actions with a large selectable surface.
 ## Differences with VADS
 * The Base button style exists due to mobile app specific needs in dark mode. For example: The v3 Alert component has a colored background for each variation. While working on dark mode, the mobile app team found that the Default button style did not meet color contrast requirements and clashed with the background colors. For this reason, we created a new Base button style that's based on a USWDS Base button style.
 * The Destructive button style is currently used in the mobile app to cancel an appointment or remove contact information. The mobile design system team presented to the Design System Council in February 2024 and this button will be added to the larger VA Design System.
-* In Storybook, a White button style is available for use on the Login page. The mobile app team is working to remove this button in the app. Once it is removed in the app, it will be removed from Storybook. It's currently not included in this documentation or Figma to prevent designers from using it in the future.

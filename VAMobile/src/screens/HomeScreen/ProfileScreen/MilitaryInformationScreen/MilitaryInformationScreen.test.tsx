@@ -2,7 +2,9 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
 import * as api from 'store/api'
@@ -11,16 +13,19 @@ import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import MilitaryInformationScreen from './index'
 
 context('MilitaryInformationScreen', () => {
+  const serviceHistoryMockAtributes = {
+    branchOfService: BranchesOfServiceConstants.MarineCorps,
+    beginDate: '1993-06-04',
+    endDate: '1995-07-10',
+    formattedBeginDate: 'June 04, 1993',
+    formattedEndDate: 'July 10, 1995',
+    characterOfDischarge: 'Honorable',
+    honorableServiceIndicator: 'Y',
+  }
   const serviceHistoryMock: ServiceHistoryAttributes = {
     serviceHistory: [
       {
-        branchOfService: BranchesOfServiceConstants.MarineCorps,
-        beginDate: '1993-06-04',
-        endDate: '1995-07-10',
-        formattedBeginDate: 'June 04, 1993',
-        formattedEndDate: 'July 10, 1995',
-        characterOfDischarge: 'Honorable',
-        honorableServiceIndicator: 'Y',
+        ...serviceHistoryMockAtributes,
       },
     ],
   }
@@ -33,12 +38,33 @@ context('MilitaryInformationScreen', () => {
       addListener: jest.fn(),
     },
   )
-  const initializeTestInstance = (serviceHistory = serviceHistoryMock) => {
+  const initializeTestInstance = (serviceHistory = serviceHistoryMock, authorized = true) => {
     const queriesData: QueriesData = [
       {
         queryKey: militaryServiceHistoryKeys.serviceHistory,
         data: {
           ...serviceHistory,
+        },
+      },
+      {
+        queryKey: authorizedServicesKeys.authorizedServices,
+        data: {
+          appeals: true,
+          appointments: true,
+          claims: true,
+          decisionLetters: true,
+          directDepositBenefits: true,
+          directDepositBenefitsUpdate: true,
+          disabilityRating: true,
+          genderIdentity: true,
+          lettersAndDocuments: true,
+          militaryServiceHistory: authorized,
+          paymentHistory: true,
+          preferredName: true,
+          prescriptions: true,
+          scheduleAppointments: true,
+          secureMessaging: true,
+          userProfileUpdate: true,
         },
       },
     ]
@@ -59,8 +85,8 @@ context('MilitaryInformationScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(militaryServiceHistoryData)
-      initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("We can't access your military information")).toBeTruthy())
+      initializeTestInstance(undefined, false)
+      await waitFor(() => expect(screen.getByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeTruthy())
     })
   })
 
@@ -79,7 +105,7 @@ context('MilitaryInformationScreen', () => {
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(militaryServiceHistoryData)
       initializeTestInstance({} as ServiceHistoryAttributes)
-      await waitFor(() => expect(screen.getByText("We can't access your military information")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeTruthy())
     })
   })
 
@@ -94,14 +120,14 @@ context('MilitaryInformationScreen', () => {
     when(api.get as jest.Mock)
       .calledWith('/v0/military-service-history')
       .mockResolvedValue(militaryServiceHistoryData)
+    const { branchOfService, formattedBeginDate, formattedEndDate } = serviceHistoryMockAtributes
     initializeTestInstance()
-    await waitFor(() => expect(screen.queryByText("We can't access your military information")).toBeFalsy())
-    await waitFor(() => expect(screen.getByText('Period of service')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('United States Marine Corps')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('June 04, 1993 – July 10, 1995')).toBeTruthy())
+    await waitFor(() => expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy())
+    await waitFor(() => expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(branchOfService)).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByText("What if my military service information doesn't look right?")).toBeTruthy(),
+      expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link')).toBeTruthy())
   })
 })

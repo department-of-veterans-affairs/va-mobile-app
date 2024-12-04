@@ -15,10 +15,14 @@ function ConsolidatedClaimsNote({}: ConsolidatedClaimsNoteProps) {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('claimDetails.claimsHelp.pageTitle')} rightButtonText={t('close')}>
+    <LargePanel
+      title={t('claimDetails.claimsHelp.pageTitle')}
+      rightButtonText={t('close')}
+      rightButtonTestID="claimsWhyCombineCloseID"
+      testID="claimsWhyCombineID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('claimDetails.consolidatedClaims.noteHeader')}
+          {t('claimDetails.whyWeCombinePanel')}
         </TextView>
         <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>
       </Box>

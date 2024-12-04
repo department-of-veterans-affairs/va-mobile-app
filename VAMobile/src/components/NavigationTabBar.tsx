@@ -1,22 +1,22 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
-import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
+import { NavigationHelpers, ParamListBase, TabNavigationState, useIsFocused } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yValueProp, testIdProps } from 'utils/accessibility'
+import { a11yValueProp } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { themeFn } from 'utils/theme'
 
 import Box from './Box'
-import { VA_ICON_MAP } from './VAIcon'
-import VAIconWithText, { VAIconWithTextProps } from './VAIconWithText/VAIconWithText'
+import IconWithText, { IconWithTextProps } from './IconWithText'
 
 type TabBarRoute = {
   key: string
@@ -45,6 +45,13 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const isNavBarFocused = useIsFocused()
+
+  useEffect(() => {
+    const navBarColor = isNavBarFocused ? theme.colors.background.navButton : theme.colors.background.main
+    const isLightTheme = theme.mode === 'light'
+    changeNavigationBarColor(navBarColor, isLightTheme, false)
+  }, [isNavBarFocused, theme])
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -93,26 +100,48 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             key: route.name,
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
-            accessibilityRole: 'tab',
+            accessibilityRole: 'link',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
             accessible: true,
           }
 
-          const iconProps: VAIconWithTextProps = {
-            name: `${routeName}${isFocused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
-            fill: isFocused ? 'active' : 'inactive',
+          const iconProps: IconWithTextProps = {
+            name: 'Home',
+            fill: isFocused ? theme.colors.icon.active : theme.colors.icon.inactive,
             label: routeName,
-            labelColor: isFocused ? 'textWithIconButton' : 'textWithIconButtonInactive',
+            labelColor: isFocused ? 'link' : 'textWithIconButtonInactive',
+            height: 24,
+            width: 24,
+          }
+          switch (routeName) {
+            case 'Home':
+              iconProps.height = 28
+              iconProps.width = 28
+              iconProps.mt = -1
+              iconProps.name = isFocused ? 'Home' : 'HomeOutlined'
+              break
+            case 'Health':
+              iconProps.name = isFocused ? 'MedicalServices' : 'MedicalServicesOutlined'
+              break
+            case 'Benefits':
+              iconProps.name = isFocused ? 'Description' : 'DescriptionOutlined'
+              break
+            case 'Payments':
+              iconProps.name = isFocused ? 'RequestQuote' : 'RequestQuoteOutlined'
+              break
+            default:
+              iconProps.name = 'Home'
           }
 
           return (
             <TouchableWithoutFeedback
-              {...testIdProps(translatedName)}
+              accessibilityLabel={translatedName}
+              testID={translatedName}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
-                  <VAIconWithText {...iconProps} />
+                  <IconWithText {...iconProps} />
                 </Box>
               </Box>
             </TouchableWithoutFeedback>

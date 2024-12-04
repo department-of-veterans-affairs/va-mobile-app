@@ -13,16 +13,9 @@ import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
 // See VAIcon function documentation below for guidance on adding new SVGs
 import Add from './svgs/Add.svg'
 import Building from './svgs/Building.svg'
-import Bullet from './svgs/Bullet.svg'
 import CheckMark from './svgs/CheckMark.svg'
-// Chevrons
-import ChevronDown from './svgs/ChevronDown.svg'
-import ChevronLeft from './svgs/ChevronLeft.svg'
-import ChevronRight from './svgs/ChevronRight.svg'
-import ChevronUp from './svgs/ChevronUp.svg'
 import CircleCheckMark from './svgs/CircleCheckMark.svg'
 import Compose from './svgs/Compose.svg'
-import Ellipsis from './svgs/Ellipsis.svg'
 import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
 import ExternalLink from './svgs/ExternalLink.svg'
 import Folder from './svgs/Folder.svg'
@@ -36,9 +29,7 @@ import QuestionMark from './svgs/QuestionMark.svg'
 import Redo from './svgs/Redo.svg'
 import Remove from './svgs/Remove.svg'
 import Reply from './svgs/Reply.svg'
-import Sort from './svgs/Sort.svg'
 import Trash from './svgs/Trash.svg'
-import Truck from './svgs/Truck.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
@@ -47,12 +38,6 @@ import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
 import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
 import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
 import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
-// Branch icons
-import AirForce from './svgs/dodBranch/AirForce.svg'
-import Army from './svgs/dodBranch/Army.svg'
-import CoastGuard from './svgs/dodBranch/CoastGuard.svg'
-import MarineCorps from './svgs/dodBranch/MarineCorps.svg'
-import Navy from './svgs/dodBranch/Navy.svg'
 // Links
 import Calendar from './svgs/links/Calendar.svg'
 import Chat from './svgs/links/Chat.svg'
@@ -63,27 +48,12 @@ import PhoneTTY from './svgs/links/PhoneTTY.svg'
 import Text from './svgs/links/Text.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 // Navigation
-import BenefitsSelected from './svgs/navIcon/BenefitsSelected.svg'
-import BenefitsUnselected from './svgs/navIcon/BenefitsUnselected.svg'
-import HealthSelected from './svgs/navIcon/HealthSelected.svg'
-import HealthUnselected from './svgs/navIcon/HealthUnselected.svg'
-import HomeSelected from './svgs/navIcon/HomeSelected.svg'
-import HomeUnselected from './svgs/navIcon/HomeUnselected.svg'
-import PaymentsSelected from './svgs/navIcon/PaymentsSelected.svg'
-import PaymentsUnselected from './svgs/navIcon/PaymentsUnselected.svg'
-import ProfileSelected from './svgs/navIcon/ProfileSelected.svg'
 import RadioEmpty from './svgs/radio/RadioEmpty.svg'
 import RadioFilled from './svgs/radio/RadioFilled.svg'
-import Logo from './svgs/vaParentLogo/Logo.svg'
 
 export const VA_ICON_MAP = {
   Add,
-  AirForce,
-  Army,
-  BenefitsSelected,
-  BenefitsUnselected,
   Building,
-  Bullet,
   Calendar,
   Chat,
   CheckBoxEmpty,
@@ -91,37 +61,21 @@ export const VA_ICON_MAP = {
   CheckBoxFilled,
   CheckBoxIntermediate,
   CheckMark,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronUp,
   CircleCheckMark,
   CircleExternalLink,
   CirclePhone,
-  CoastGuard,
   Compose,
   Directions,
-  Ellipsis,
   ExclamationTriangle,
   ExternalLink,
   Folder,
-  HealthSelected,
-  HealthUnselected,
-  HomeSelected,
-  HomeUnselected,
   Inbox,
   Info,
   Lock,
-  Logo,
-  MarineCorps,
   Minus,
-  Navy,
   PaperClip,
-  PaymentsSelected,
-  PaymentsUnselected,
   Phone,
   PhoneTTY,
-  ProfileSelected,
   QuestionMark,
   RadioEmpty, // Also used for RadioDisabled content--same icon, different colors
   RadioFilled,
@@ -129,10 +83,8 @@ export const VA_ICON_MAP = {
   Remove,
   Reply,
   RightArrowInCircle, // TODO: Ticket 3402 (or separate implementation ticket) to remove this icon
-  Sort,
   Text,
   Trash,
-  Truck,
   Unread,
   UploadPhoto,
   VideoCamera,

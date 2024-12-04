@@ -32,23 +32,9 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       backLabel={t('benefits.title')}
       backLabelOnPress={navigation.goBack}
       title={t('claims.title')}>
-      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <LargeNavButton
-          title={t('claimsHistory.title')}
-          onPress={onClaimsHistory}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
-        <LargeNavButton
-          title={t('claimLetters.title')}
-          onPress={onClaimLettersPress}
-          borderWidth={theme.dimensions.buttonBorderWidth}
-          borderColor={'secondary'}
-          borderColorActive={'primaryDarkest'}
-          borderStyle={'solid'}
-        />
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} testID="toClaimsHistoryID" />
+        <LargeNavButton title={t('claimLetters.title')} onPress={onClaimLettersPress} testID="toClaimLettersID" />
       </Box>
     </FeatureLandingTemplate>
   )

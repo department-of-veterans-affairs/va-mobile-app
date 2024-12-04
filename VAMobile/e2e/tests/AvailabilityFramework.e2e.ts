@@ -50,8 +50,12 @@ const AFNavigationForIndividual = [
   ['SettingsScreen.e2e', 'WG_AccountSecurity', 'Profile', 'Settings', 'Account security'],
   ['SettingsScreen.e2e', 'WG_NotificationsSettings', 'Profile', 'Settings', 'Notifications'],
   ['SettingsScreen.e2e', 'WG_InAppRecruitment', 'Profile', 'Settings', 'Give feedback'],
-  ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact VA'],
-  ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'talk-to-the-veterans-crisis-line-now'],
+  ['HomeScreen.e2e', 'WG_ContactVA', 'Home', 'Contact us'],
+  ['HomeScreen.e2e', 'WG_SecureMessaging', 'Messages'],
+  ['HomeScreen.e2e', 'WG_PrescriptionHistory', 'Prescriptions'],
+  ['HomeScreen.e2e', 'WG_ClaimsHistoryScreen', 'Claims'],
+  ['HomeScreen.e2e', 'WG_Appointments', 'Appointments'],
+  ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'Talk to the Veterans Crisis Line now'],
   ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],
   ['Messages.e2e', 'WG_FolderMessages', 'Health', 'Messages', 'Folders', 'Sent'],
@@ -100,7 +104,7 @@ const AFNavigationForIndividual = [
   ],
   ['Payments.e2e', 'WG_PaymentMissing', 'Payments', 'VA payment history', "What if I'm missing a payment?"],
   [
-    'Payments.e2e',
+    'DirectDeposit.e2e',
     'WG_EditDirectDeposit',
     'Payments',
     'Direct deposit information',
@@ -126,6 +130,15 @@ const AFNavigationForIndividual = [
   ],
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
   ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
+  // [
+  // 'Claims.e2e',
+  // 'WG_SubmitEvidence',
+  // 'Benefits',
+  // 'Claims',
+  // 'Claims history',
+  // 'Received December 05, 2021',
+  // 'Submit evidence',
+  // ],
   ['Appeals.e2e', 'WG_AppealDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received July 17, 2008'],
   [
     'Claims.e2e',
@@ -134,7 +147,7 @@ const AFNavigationForIndividual = [
     'Claims',
     'Claims history',
     'Received December 05, 2021',
-    'Why does VA sometimes combine claims?',
+    'Find out why we sometimes combine claims',
   ],
   [
     'Claims.e2e',
@@ -142,8 +155,9 @@ const AFNavigationForIndividual = [
     'Benefits',
     'Claims',
     'Claims history',
-    'Received December 05, 2021',
-    "What should I do if I disagree with VA's decision on my disability claim?",
+    'Closed',
+    'Received January 01, 2021',
+    'Learn what to do if you disagree with our decision',
   ],
 ]
 
@@ -159,8 +173,10 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 
   it('should verify AF use case 2 Update available for: ' + testRun, async () => {
-    await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
-    await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    if (testRun != 'WG_StartNewMessage' && testRun != 'WG_ReplyMessage') {
+      await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
+      await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    }
   })
 }
 

@@ -36,6 +36,7 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       URLQueryItem(name: "code_challenge", value: codeChallenge),
       URLQueryItem(name: "application", value: "vamobile"),
       URLQueryItem(name: "oauth", value: "true"),
+      URLQueryItem(name: "scope", value: "device_sso"),
     ]
 
     guard var comps = URLComponents(string: authUrl) else {

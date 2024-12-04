@@ -431,6 +431,10 @@ export type ClaimsAndAppealsList = {
     updatedAt: string
     displayTitle: string
     decisionLetterSent: boolean
+    phase?: number | string
+    claimTypeCode?: string
+    documentsNeeded?: boolean
+    developmentLetterSent?: boolean
   }
 }
 
@@ -455,6 +459,21 @@ export type ClaimEventData = {
   suspenseDate?: string | null
   documents?: Array<ClaimEventDocumentData>
   phase?: number
+  documentId?: string
+}
+
+export type ClaimEFolderData = {
+  data: Array<ClaimEFolderDocuments>
+}
+
+export type ClaimEFolderDocuments = {
+  id: string
+  type: string
+  attributes: {
+    doc_type: string
+    type_description: string
+    received_at: string
+  }
 }
 
 export type ClaimAttributesData = {
@@ -472,6 +491,7 @@ export type ClaimAttributesData = {
   currentPhaseBack: boolean
   requestedDecision: boolean
   claimType: string
+  claimTypeCode: string
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string
@@ -530,6 +550,7 @@ export type ClaimEventDocumentData = {
   documentType?: string
   filename?: string
   uploadDate: string
+  documentId?: string
 }
 
 export type ClaimPhaseData = {
@@ -583,6 +604,7 @@ export const FILE_REQUEST_STATUS: {
 
 export type UploadFileToClaimParamaters = {
   claimID: string
-  request: ClaimEventData
+  documentType: string
+  request: ClaimEventData | undefined
   files: Array<Asset> | Array<DocumentPickerResponse>
 }

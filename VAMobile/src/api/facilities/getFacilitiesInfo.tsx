@@ -15,14 +15,16 @@ const getFacilitiesInfo = async (): Promise<Array<Facility> | undefined> => {
 }
 
 /**
- * Returns a query for user demographics
+ * Returns a query for a user's facility information
  */
-export const useFacilitiesInfo = () => {
+export const useFacilitiesInfo = (options?: { enabled?: boolean }) => {
   return useQuery({
+    ...options,
     queryKey: facilitiesKeys.facilities,
     queryFn: () => getFacilitiesInfo(),
     meta: {
       errorName: 'getFacilitiesInfo: Service error',
     },
+    staleTime: Infinity,
   })
 }

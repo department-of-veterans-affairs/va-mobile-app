@@ -231,7 +231,8 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       backLabel={t('letters.overview.viewLetters')}
       backLabelOnPress={navigation.goBack}
       title={t('letters.details.title')}
-      testID="BenefitSummaryServiceVerificationTestID">
+      testID="BenefitSummaryServiceVerificationTestID"
+      backLabelTestID="BenefitSummaryServiceVerificationBackID">
       {loadingCheck ? (
         <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
       ) : letterDownloadError ? (
@@ -285,6 +286,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
               text={t('letters.benefitService.sendMessage')}
               a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
               a11yHint={t('letters.benefitService.sendMessageA11yHint')}
+              testID="lettersBenefitServiceGoToAskVAID"
             />
           </Box>
 
@@ -292,7 +294,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
             <Button
               onPress={onViewLetter}
               label={t('letters.benefitService.viewLetter')}
-              testID={t('letters.benefitService.viewLetter')}
+              testID="lettersBenefitServiceViewLetterID"
             />
           </Box>
         </Box>

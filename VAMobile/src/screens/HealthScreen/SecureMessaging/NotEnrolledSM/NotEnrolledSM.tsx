@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import { Box, LinkWithAnalytics, TextArea, TextView, VABulletList, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
 
 function NotEnrolledSM() {
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_sm_notenrolled())
+  }, [])
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
@@ -43,14 +47,14 @@ function NotEnrolledSM() {
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
-        <Box
-          {...testIdProps(t('notEnrolledSM.title'))}
+        <TextView
+          variant="MobileBodyBold"
           accessibilityRole="header"
           accessible={true}
           mx={theme.dimensions.gutter}
           mb={standardMarginBetween}>
-          <TextView variant="BitterBoldHeading">{t('notEnrolledSM.title')}</TextView>
-        </Box>
+          {t('notEnrolledSM.title')}
+        </TextView>
         <Box>
           <TextArea>
             <TextView variant="MobileBody" paragraphSpacing={true}>

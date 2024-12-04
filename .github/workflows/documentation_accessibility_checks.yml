@@ -1,7 +1,4 @@
-
 name: '[Documentation] Accessibility Check'
-
-# Adapted from https://docusaurus.io/docs/deployment
 
 on:
   workflow_dispatch:

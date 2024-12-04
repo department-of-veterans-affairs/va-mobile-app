@@ -1,4 +1,6 @@
-# Feature Flagging
+---
+title: Feature Flagging
+---
 
 ## Flipper
 

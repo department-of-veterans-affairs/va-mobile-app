@@ -181,9 +181,8 @@ context('AppealStatus', () => {
         ),
       ).toBeTruthy()
       expect(
-        screen.getByLabelText("Submit VA Form 9 to continue your appeal to the Board of Veterans' Appeals,"),
+        screen.getByText("Submit VA Form 9 to continue your appeal to the Board of Veterans' Appeals, or"),
       ).toBeTruthy()
-      expect(screen.getByText('or')).toBeTruthy()
       expect(screen.getByText('Opt in to the new decision review process')).toBeTruthy()
     })
   })
@@ -465,7 +464,7 @@ context('AppealStatus', () => {
       expect(
         screen.getByText('for the decision review that contains the issues from this appeal, or learn more about'),
       ).toBeTruthy()
-      expect(screen.getByText('decision reviews under the Appeals Modernization Act')).toBeTruthy()
+      expect(screen.getByText('decision reviews under the Appeals Modernization Act.')).toBeTruthy()
     })
   })
 

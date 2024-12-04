@@ -1,4 +1,7 @@
-# Parallel Calls
+---
+title: Parallel Calls
+---
+
 The mobile API often needs to make requests to external services to fetch data to return to the client. In some cases, a single request from the client can require data from multiple external services. This can cause those requests to be slow and creates a bad user experience.
 
 To mitigate the issue, we use the [Parallel Gem](https://github.com/grosser/parallel), which provides a simple interface for executing functions in parallel using threads. A simple use pattern is:

@@ -5,6 +5,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
@@ -19,10 +20,9 @@ import {
   RefillStatusConstants,
 } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   BoxProps,
-  CollapsibleAlert,
-  CollapsibleAlertProps,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
@@ -32,8 +32,6 @@ import {
   Pagination,
   PaginationProps,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
@@ -217,7 +215,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       const detailsPressableProps: PressableProps = {
         onPress: () => prescriptionDetailsClicked(prescription),
         accessible: true,
-        accessibilityRole: 'button',
+        accessibilityRole: 'link',
         accessibilityLabel: t('prescription.history.getDetails'),
       }
 
@@ -235,7 +233,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
                 {t('prescription.history.getDetails')}
               </TextView>
-              <VAIcon
+              <Icon
                 name={'ChevronRight'}
                 fill={theme.colors.icon.chevronListItem}
                 width={theme.dimensions.chevronListItemWidth}
@@ -263,9 +261,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         const bottomContent = (
           <Box {...bottomContentProps}>
             <Box mr={8}>
-              <VAIcon name={'Truck'} fill={'link'} height={16} width={16} />
+              <Icon name={'LocalShipping'} fill={theme.colors.icon.link} height={18} width={18} />
             </Box>
-            <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+            <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID="getPrescriptionTrackingTestID">
               {t('prescription.history.tracking')}
             </TextView>
           </Box>
@@ -368,7 +366,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       setFilterToUse(selectedFilter)
       setSortByToUse(selectedSortBy)
       setSortOnToUse(selectedSortBy === PrescriptionSortOptionConstants.REFILL_DATE ? DESCENDING : ASCENDING)
-      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter, selectedSortBy))
+      logAnalyticsEvent(Events.vama_rx_filter_sel(selectedFilter || 'all', selectedSortBy))
     },
     onCancel: () => {
       logAnalyticsEvent(Events.vama_rx_filter_cancel())
@@ -402,36 +400,31 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       url: LINK_URL_GO_TO_PATIENT_PORTAL,
       text: t('goToMyVAHealth'),
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      variant: 'base',
+      testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
-    const props: CollapsibleAlertProps = {
-      border: 'warning',
-      headerText: t('prescription.history.transferred.title'),
-      body: (
-        <>
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="warning"
+          expandable={true}
+          focusOnError={false}
+          header={t('prescription.history.transferred.title')}
+          description={t('prescription.history.transferred.instructions')}
+          descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
+          analytics={{
+            onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
+          }}
+          testID="prescriptionRefillWarningTestID">
           <TextView
             mt={theme.dimensions.standardMarginBetween}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
-            paragraphSpacing={true}>
-            {t('prescription.history.transferred.instructions')}
-          </TextView>
-          <TextView
             paragraphSpacing={true}
             accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
             {t('prescription.history.transferred.youCan')}
           </TextView>
           <LinkWithAnalytics {...linkProps} />
-        </>
-      ),
-      a11yLabel: t('prescription.history.transferred.title'),
-      onExpand() {
-        logAnalyticsEvent(Events.vama_cerner_alert_exp())
-      },
-    }
-
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <CollapsibleAlert {...props} />
+        </AlertWithHaptics>
       </Box>
     )
   }
@@ -440,6 +433,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     return (
       <Box mx={theme.dimensions.buttonPadding}>
         <Button
+          testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
           onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
         />
@@ -499,6 +493,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
+              accessibilityRole="header"
               variant={'MobileBodyBold'}>
               {prescriptionListTitle()}
             </TextView>
@@ -521,9 +516,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
   }
 
-  const helpIconProps: VAIconProps = {
-    name: 'QuestionMark',
-    fill2: theme.colors.icon.transparent,
+  const helpIconProps: IconProps = {
+    name: 'HelpOutline',
+    fill: theme.colors.icon.active,
   }
 
   const headerButton = {
@@ -533,6 +528,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_rx_help())
       navigateTo('PrescriptionHelp')
     },
+    testID: 'prescriptionsHelpID',
   }
 
   // ErrorComponent normally handles both downtime and error but only for 1 screenID.

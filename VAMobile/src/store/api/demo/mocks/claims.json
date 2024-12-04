@@ -10,7 +10,11 @@
             "completed": false,
             "dateFiled": "2021-07-20",
             "updatedAt": "2021-07-20",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 2,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -21,7 +25,11 @@
             "completed": false,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-05-05",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 3,
+            "claimTypeCode": "010LCOMP",
+            "documentsNeeded": true,
+            "developmentLetterSent": false
           }
         },
         {
@@ -30,9 +38,13 @@
           "attributes": {
             "subtype": "Compensation",
             "completed": false,
-            "dateFiled": "2021-01-01",
-            "updatedAt": "2021-05-04",
-            "displayTitle": "Compensation"
+            "dateFiled": "2019-03-22",
+            "updatedAt": "2019-07-18",
+            "displayTitle": "Compensation",
+            "phase": 3,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -43,7 +55,11 @@
             "completed": false,
             "dateFiled": "2016-01-01",
             "updatedAt": "2016-07-30",
-            "displayTitle": "Dependency"
+            "displayTitle": "Dependency",
+            "phase": 7,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -54,7 +70,11 @@
             "completed": false,
             "dateFiled": "2021-12-04",
             "updatedAt": "2021-12-04",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 8,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -65,7 +85,11 @@
             "completed": false,
             "dateFiled": "2021-12-05",
             "updatedAt": "2021-12-05",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 1,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         },
         {
@@ -395,7 +419,7 @@
             "completed": false,
             "dateFiled": "2008-07-11",
             "updatedAt": "2011-12-20",
-            "displayTitle": "Higher level review recieved appeal"
+            "displayTitle": "Higher level review received appeal"
           }
         },
         {
@@ -473,7 +497,7 @@
           "totalPages": 5,
           "totalEntries": 42
         },
-        "activeClaimsCount": 3
+        "activeClaimsCount": 5
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
@@ -494,7 +518,11 @@
             "decisionLetterSent": true,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-04-09",
-            "displayTitle": "Compensation"
+            "displayTitle": "Compensation",
+            "phase": 8,
+            "claimTypeCode": "",
+            "documentsNeeded": false,
+            "developmentLetterSent": false
           }
         }
       ],
@@ -536,6 +564,7 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "claimTypeCode": "010LCOMP",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -555,7 +584,8 @@
             "suspenseDate": null,
             "documents": [],
             "uploadDate": null,
-            "date": "2021-06-04"
+            "date": "2021-06-04",
+            "documentId": null
           },
           {
             "type": "never_received_from_you_list",
@@ -577,14 +607,16 @@
                 "fileType": "Photographs",
                 "documentType": "L070",
                 "filename": "multifile.pdf",
-                "uploadDate": "2021-05-21"
+                "uploadDate": "2021-05-21",
+                "documentId": "X123"
               },
               {
                 "trackedItemId": 293441,
                 "fileType": "Photographs",
                 "documentType": "L070",
                 "filename": "multifile.pdf",
-                "uploadDate": "2021-05-21"
+                "uploadDate": "2021-05-21",
+                "documentId": "X124"
               }
             ],
             "uploadDate": "2021-05-21",
@@ -940,14 +972,16 @@
                 "fileType": "Photographs",
                 "documentType": "L070",
                 "filename": "multifile.pdf",
-                "uploadDate": "2021-05-21"
+                "uploadDate": "2021-05-21",
+                "documentId": "X121"
               },
               {
                 "trackedItemId": 293441,
                 "fileType": "Photographs",
                 "documentType": "L070",
                 "filename": "multifile.pdf",
-                "uploadDate": "2021-05-21"
+                "uploadDate": "2021-05-21",
+                "documentId": "X122"
               }
             ],
             "uploadDate": "2021-05-21",
@@ -1160,13 +1194,14 @@
             "date": "2021-01-01"
           },
           {
-            "trackedItemId": null,
+            "trackedItemId": 123,
             "fileType": "Photographs",
             "documentType": "L070",
-            "filename": null,
-            "uploadDate": null,
+            "filename": "test",
+            "uploadDate": "2021-05-13",
             "type": "other_documents_list",
-            "date": null
+            "date": "2021-05-13",
+            "documentId": "X125"
           },
           {
             "trackedItemId": null,
@@ -3775,15 +3810,6 @@
         "vaRepresentative": null,
         "eventsTimeline": [
           {
-            "trackedItemId": null,
-            "fileType": "VA 21-526EZ, Fully Developed Claim (Compensation)",
-            "documentType": null,
-            "filename": "Jesse_Gray_600461886_526.pdf",
-            "uploadDate": "2023-12-04",
-            "type": "other_documents_list",
-            "date": "2023-12-04"
-          },
-          {
             "type": "phase1",
             "date": "2023-12-04"
           },
@@ -5442,5 +5468,54 @@
         "updated": "2021-12-03T13:39:54-05:00"
       }
     }
+  },
+  "/v0/efolder/documents": {
+    "data": [
+      {
+        "id": "X121",
+        "type": "efolder_document",
+        "attributes": {
+          "doc_type": 1215,
+          "type_description": "DMC - Debt Increase Letter",
+          "received_at": "2020-05-28"
+        }
+      },
+      {
+        "id": "X122",
+        "type": "efolder_document",
+        "attributes": {
+          "doc_type": 1215,
+          "type_description": "DMC - Debt Increase Letter",
+          "received_at": "2020-05-28"
+        }
+      },
+      {
+        "id": "X123",
+        "type": "efolder_document",
+        "attributes": {
+          "doc_type": 1215,
+          "type_description": "DMC - Debt Increase Letter",
+          "received_at": "2020-05-28"
+        }
+      },
+      {
+        "id": "X124",
+        "type": "efolder_document",
+        "attributes": {
+          "doc_type": 1215,
+          "type_description": "DMC - Debt Increase Letter",
+          "received_at": "2020-05-28"
+        }
+      },
+      {
+        "id": "X125",
+        "type": "efolder_document",
+        "attributes": {
+          "doc_type": 1215,
+          "type_description": "DMC - Debt Increase Letter",
+          "received_at": "2020-05-28"
+        }
+      }
+    ]
   }
 }

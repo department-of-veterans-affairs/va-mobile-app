@@ -95,6 +95,7 @@ export type WaygateToggleType =
   | 'WG_FileRequest'
   | 'WG_FileRequestDetails'
   | 'WG_AskForClaimDecision'
+  | 'WG_SubmitEvidence'
   | 'WG_SelectFile'
   | 'WG_TakePhotos'
   | 'WG_UploadFile'
@@ -104,6 +105,7 @@ export type WaygateToggleType =
   | 'WG_GenericLetter'
   | 'WG_Webview'
   | 'WG_InAppRecruitment'
+  | 'WG_HealthHelp'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -142,6 +144,7 @@ type WaygateToggleValues = {
   WG_VaccineList: Waygate
   WG_ViewMessage: Waygate
   WG_PrepareForVideoVisit: Waygate
+  WG_SubmitEvidence: Waygate
   WG_StartNewMessage: Waygate
   WG_ReplyMessage: Waygate
   WG_EditDraft: Waygate
@@ -184,6 +187,7 @@ type WaygateToggleValues = {
   WG_GenericLetter: Waygate
   WG_Webview: Waygate
   WG_InAppRecruitment: Waygate
+  WG_HealthHelp: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -261,6 +265,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_AppealDetailsScreen: { ...waygateDefault },
   WG_ConsolidatedClaimsNote: { ...waygateDefault },
   WG_WhatDoIDoIfDisagreement: { ...waygateDefault },
+  WG_SubmitEvidence: { ...waygateDefault },
   WG_FileRequest: { ...waygateDefault },
   WG_FileRequestDetails: { ...waygateDefault },
   WG_AskForClaimDecision: { ...waygateDefault },
@@ -273,6 +278,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_GenericLetter: { ...waygateDefault },
   WG_Webview: { ...waygateDefault },
   WG_InAppRecruitment: { ...waygateDefault },
+  WG_HealthHelp: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -24,9 +24,8 @@ import {
   SendMessageParameters,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
-  CollapsibleView,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -129,53 +128,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
-  useEffect(() => {
-    if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
-      if (hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)) {
-        setReplyTriageError(true)
-      } else {
-        const messageData = {
-          recipient_id: parseInt(to, 10),
-          category: category as CategoryTypes,
-          body: message,
-          subject,
-        } as SecureMessagingFormData
-        const mutateOptions = {
-          onSuccess: () => {
-            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
-            logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
-            navigateTo('SecureMessaging', { activeTab: 0 })
-          },
-        }
-        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
-        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
-      }
-    }
-  }, [
-    dispatch,
-    sendMessageError,
-    sendMessageErrorDetails,
-    snackbarSentMessages.successMsg,
-    snackbarSentMessages.errorMsg,
-    attachmentsList,
-    category,
-    message,
-    to,
+  const messageData = {
+    recipient_id: parseInt(to, 10),
+    category: category as CategoryTypes,
+    body: message,
     subject,
-    navigateTo,
-    sendMessage,
-  ])
+  } as SecureMessagingFormData
+  // Ref for use in snackbar callbacks to ensure we have the latest messageData
+  const messageDataRef = useRef<SecureMessagingFormData>(messageData)
+  messageDataRef.current = messageData
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
-    const messageData = {
-      recipient_id: parseInt(to, 10),
-      category: category as CategoryTypes,
-      body: message,
-      subject,
-    } as SecureMessagingFormData
     composeCancelConfirmation({
       origin: FormHeaderTypeConstants.compose,
       draftMessageID: undefined,
@@ -262,6 +228,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'to field',
+        confirmTestID: 'messagePickerConfirmID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
@@ -275,6 +242,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'picker',
+        confirmTestID: 'messagePickerConfirmID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.category.fieldError'),
     },
@@ -307,6 +275,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             : undefined,
         buttonPress: attachmentsList.length < theme.dimensions.maxNumMessageAttachments ? onAddFiles : undefined,
         attachmentsList,
+        testID: 'messagesAttachmentsAddFilesID',
       },
     },
     {
@@ -330,13 +299,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   }
 
   const onMessageSendOrSave = (): void => {
-    const messageData = {
-      recipient_id: parseInt(to, 10),
-      category: category as CategoryTypes,
-      body: message,
-      subject,
-    } as SecureMessagingFormData
-
     if (onSaveDraftClicked) {
       saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
         const params: SaveDraftParameters = { messageData: messageData }
@@ -345,7 +307,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
-              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS, 1],
+              queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
             })
             navigateTo('SecureMessaging', { activeTab: 1 })
             navigateTo('FolderMessages', {
@@ -355,7 +317,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             })
           },
           onError: () => {
-            showSnackBar(snackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+            showSnackBar(
+              snackbarMessages.errorMsg,
+              dispatch,
+              // passing messageDataRef to ensure we have the latest messageData
+              () => saveDraft({ messageData: messageDataRef.current }, mutateOptions),
+              false,
+              true,
+            )
           },
         }
         saveDraft(params, mutateOptions)
@@ -367,6 +336,24 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           navigateTo('SecureMessaging', { activeTab: 0 })
         },
+        onError: () => {
+          if (
+            sendMessageError &&
+            isErrorObject(sendMessageErrorDetails) &&
+            hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, sendMessageErrorDetails)
+          ) {
+            setReplyTriageError(true)
+          } else {
+            showSnackBar(
+              snackbarSentMessages.errorMsg,
+              dispatch,
+              // passing messageDataRef to ensure we have the latest messageData
+              () => sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions),
+              false,
+              true,
+            )
+          }
+        },
       }
       const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
       sendMessage(params, mutateOptions)
@@ -376,13 +363,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   function renderContent() {
     if (noProviderError) {
       return (
-        <AlertBox
-          title={t('secureMessaging.startNewMessage.noMatchWithProvider')}
-          text={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
-          textA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
-          border="error">
+        <AlertWithHaptics
+          variant="error"
+          header={t('secureMessaging.startNewMessage.noMatchWithProvider')}
+          description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
+          descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}>
           <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
-        </AlertBox>
+        </AlertWithHaptics>
       )
     }
 
@@ -413,16 +400,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             setErrorList={setErrorList}
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <Pressable
+            <LinkWithAnalytics
+              type="custom"
+              text={t('secureMessaging.replyHelp.onlyUseMessages')}
               onPress={navigateToReplyHelp}
-              accessibilityRole={'button'}
-              accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-              importantForAccessibility={'yes'}
-              testID="startNewMessageOnlyUseMessagesTestID">
-              <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-                <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-              </Box>
-            </Pressable>
+              testID="startNewMessageOnlyUseMessagesTestID"
+            />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
@@ -437,8 +420,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       </Box>
     )
   }
-
-  !hasLoadedRecipients || savingDraft || !signatureFetched || isDiscarded || refetchingRecipients || refetchingSignature
 
   const hasError = recipientsError || signatureError
   const isLoading =
@@ -476,7 +457,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}
       {...rightButtonProps}
-      showCrisisLineCta={!(isLoading || hasError)}
+      showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
       leftButtonTestID="startNewMessageCancelTestID">
       {isLoading ? (

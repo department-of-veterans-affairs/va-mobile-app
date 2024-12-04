@@ -2,15 +2,15 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 export type PaginationProps = {
   /** page number */
@@ -30,17 +30,17 @@ export type PaginationProps = {
 type PaginationArrowProps = {
   /** function called when pressed */
   onPress: () => void
-  /** optional accessibility hint */
-  a11yHint?: string
+  /** optional accessibility label */
+  a11yLabel?: string
   /** whether or not this button is disabled */
   disabled: boolean
   /** test id */
   testID: string
   /** props for icon */
-  iconProps: VAIconProps
+  iconProps: IconProps
 }
 
-export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, iconProps, testID, disabled }) => {
+export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yLabel, iconProps, testID, disabled }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -48,20 +48,19 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
     accessibilityRole: 'link',
     disabled,
     accessible: true,
-    accessibilityHint: a11yHint,
     accessibilityState: disabled ? { disabled: true } : {},
   }
 
   const boxProps: BoxProps = {
     backgroundColor: disabled ? 'buttonSecondaryDisabled' : 'buttonPrimary',
     minHeight: theme.dimensions.touchableMinHeight,
-    p: 15,
+    p: 5,
     borderRadius: 5,
   }
   return (
-    <Pressable {...pressableProps} {...testIdProps(testID)}>
+    <Pressable {...pressableProps} testID={testID} accessibilityLabel={a11yLabel}>
       <Box {...boxProps}>
-        <VAIcon fill={theme.colors.icon.pagination} width={16} height={16} preventScaling={true} {...iconProps} />
+        <Icon fill={theme.colors.icon.pagination} width={36} height={36} preventScaling={true} {...iconProps} />
       </Box>
     </Pressable>
   )
@@ -92,7 +91,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   const previousProps: PaginationArrowProps = {
     onPress: onPrevPress,
     testID: 'previous-page',
-    a11yHint: t('pagination.previous'),
+    a11yLabel: t('pagination.previous'),
     iconProps: { name: 'ChevronLeft', fill: theme.colors.icon.pagination },
     disabled: page === 1,
   }
@@ -100,7 +99,7 @@ const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev,
   const nextProps: PaginationArrowProps = {
     onPress: onNextPress,
     testID: 'next-page',
-    a11yHint: t('pagination.next'),
+    a11yLabel: t('pagination.next'),
     iconProps: { name: 'ChevronRight', fill: theme.colors.icon.pagination },
     disabled: page * pageSize >= totalEntries,
   }

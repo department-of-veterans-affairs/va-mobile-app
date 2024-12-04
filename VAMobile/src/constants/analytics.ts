@@ -123,6 +123,16 @@ export const Events = {
       name: 'vama_cerner_alert_exp',
     }
   },
+  vama_be_af_refresh: (): Event => {
+    return {
+      name: 'vama_be_af_refresh',
+    }
+  },
+  vama_be_af_shown: (): Event => {
+    return {
+      name: 'vama_be_af_shown',
+    }
+  },
   vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
     return {
       name: 'vama_claim_call',
@@ -140,6 +150,7 @@ export const Events = {
     step_expanded: boolean,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_current_step: number,
   ): Event => {
     return {
       name: 'vama_claim_details_exp',
@@ -150,6 +161,7 @@ export const Events = {
         step_expanded,
         claim_step_change,
         claim_submitted_date,
+        claim_current_step,
       },
     }
   },
@@ -159,6 +171,8 @@ export const Events = {
     claim_step: number,
     claim_step_change: string,
     claim_submitted_date: string,
+    claim_type_code: string,
+    is_disability_comp_claim: boolean,
   ): Event => {
     return {
       name: 'vama_claim_details_open',
@@ -168,6 +182,8 @@ export const Events = {
         claim_step,
         claim_step_change,
         claim_submitted_date,
+        claim_type_code,
+        is_disability_comp_claim,
       },
     }
   },
@@ -277,6 +293,11 @@ export const Events = {
       },
     }
   },
+  vama_claim_file_view: (): Event => {
+    return {
+      name: 'vama_claim_file_view',
+    }
+  },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_review',
@@ -300,6 +321,23 @@ export const Events = {
         claim_type,
         claim_step,
         claim_submitted_date,
+      },
+    }
+  },
+  vama_claim_submit_ev: (claim_id: string): Event => {
+    return {
+      name: 'vama_claim_submit_ev',
+      params: {
+        claim_id,
+      },
+    }
+  },
+  vama_claim_submit_tap: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_claim_submit_tap',
+      params: {
+        claim_id,
+        claim_type,
       },
     }
   },
@@ -368,14 +406,6 @@ export const Events = {
         text_clicked,
         screen_name,
         additional_details,
-      },
-    }
-  },
-  vama_covid_links: (referringScreen: string): Event => {
-    return {
-      name: 'vama_covid_links',
-      params: {
-        referringScreen,
       },
     }
   },
@@ -575,11 +605,6 @@ export const Events = {
       },
     }
   },
-  vama_exchange_failed: (): Event => {
-    return {
-      name: 'vama_exchange_failed',
-    }
-  },
   vama_fail: (): Event => {
     return {
       name: 'vama_fail',
@@ -610,6 +635,25 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
+  // vama_feedback_page_entered: (): Event => {
+  //   return {
+  //     name: 'vama_feedback_page_entered',
+  //   }
+  // },
+  // vama_feedback_page_closed: (): Event => {
+  //   return {
+  //     name: 'vama_feedback_page_closed',
+  //   }
+  // },
+  // vama_feedback_submitted: (taskCompleted: string, satisfaction: string): Event => {
+  //   return {
+  //     name: 'vama_feedback_submitted',
+  //     params: {
+  //       taskCompleted,
+  //       satisfaction,
+  //     },
+  //   }
+  // },
   vama_givefb_close: (screenName: string): Event => {
     return {
       name: 'vama_givefb_close',
@@ -634,6 +678,14 @@ export const Events = {
       },
     }
   },
+  vama_hs_appts_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_appts_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
   vama_hs_claims_count: (claimsCount: number): Event => {
     return {
       name: 'vama_hs_claims_count',
@@ -642,9 +694,9 @@ export const Events = {
       },
     }
   },
-  vama_hs_load_time: (loadTime: number): Event => {
+  vama_hs_claims_load_time: (loadTime: number): Event => {
     return {
-      name: 'vama_hs_load_time',
+      name: 'vama_hs_claims_load_time',
       params: {
         loadTime,
       },
@@ -658,11 +710,36 @@ export const Events = {
       },
     }
   },
+  vama_hs_rx_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_rx_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
   vama_hs_sm_count: (smCount: number): Event => {
     return {
       name: 'vama_hs_sm_count',
       params: {
         smCount,
+      },
+    }
+  },
+  vama_hs_sm_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_sm_load_time',
+      params: {
+        loadTime,
+      },
+    }
+  },
+
+  vama_hs_load_time: (loadTime: number): Event => {
+    return {
+      name: 'vama_hs_load_time',
+      params: {
+        loadTime,
       },
     }
   },
@@ -720,11 +797,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_fetch: (status_code: number): Event => {
+  vama_login_token_fetch: (error: Error): Event => {
     return {
       name: 'vama_login_token_fetch',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -736,11 +813,11 @@ export const Events = {
       },
     }
   },
-  vama_login_token_refresh: (status_code: number): Event => {
+  vama_login_token_refresh: (error: Error): Event => {
     return {
       name: 'vama_login_token_refresh',
       params: {
-        status_code,
+        error: JSON.stringify(error),
       },
     }
   },
@@ -818,6 +895,11 @@ export const Events = {
       params: {
         status,
       },
+    }
+  },
+  vama_review_prompt: (): Event => {
+    return {
+      name: 'vama_review_prompt',
     }
   },
   vama_request_details: (claim_id: string, claim_request_id: number | null, claim_request_type: string): Event => {
@@ -1030,6 +1112,11 @@ export const Events = {
       name: 'vama_sm_nonurgent',
     }
   },
+  vama_sm_notenrolled: (): Event => {
+    return {
+      name: 'vama_sm_notenrolled',
+    }
+  },
   vama_sm_open: (sm_id: number, location: string, status: string): Event => {
     return {
       name: 'vama_sm_open',
@@ -1067,6 +1154,14 @@ export const Events = {
       name: 'vama_snackbar_null',
       params: {
         location,
+      },
+    }
+  },
+  vama_sso_cookie_received: (received: boolean): Event => {
+    return {
+      name: 'vama_sso_cookie_received',
+      params: {
+        received,
       },
     }
   },
@@ -1124,6 +1219,14 @@ export const Events = {
       name: 'vama_vet_status_zStatus',
       params: {
         charOfDis,
+      },
+    }
+  },
+  vama_webview_fail: (error: string): Event => {
+    return {
+      name: 'vama_webview_fail',
+      params: {
+        error,
       },
     }
   },

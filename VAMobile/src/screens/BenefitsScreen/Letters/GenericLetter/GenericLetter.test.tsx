@@ -25,8 +25,6 @@ context('GenericLetter', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Review letters')).toBeTruthy()
-    expect(screen.getByTestId('Letters: header-page')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy()
   })
 

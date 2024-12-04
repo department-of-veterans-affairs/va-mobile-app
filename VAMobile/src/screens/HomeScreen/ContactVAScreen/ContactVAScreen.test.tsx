@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import ContactVAScreen from './ContactVAScreen'
 
@@ -18,14 +20,10 @@ context('ContactVAScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('button', { name: 'Talk to the Veterans Crisis Line now' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Call MyVA411' })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('crisisLineButton.label') })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('contactVA.va411.callMy') })).toBeTruthy()
+    expect(screen.getByText(t('contactVA.va411.body'))).toBeTruthy()
+    expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8006982411')) })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
   })
 })

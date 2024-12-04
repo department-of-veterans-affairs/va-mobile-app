@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { testIdProps } from 'utils/accessibility'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -36,6 +35,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
             text={t('goToVAGov')}
             a11yLabel={a11yLabelVA(t('goToVAGov'))}
             a11yHint={t('appealDetails.goToVAGovA11yHint')}
+            testID="goToVAGovID"
           />
         </Box>
       </Box>
@@ -44,16 +44,16 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
 
   return (
     <TextArea>
-      <Box {...testIdProps(t('claimDetails.needHelp'))} accessible={true}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('claimDetails.needHelp')}
-        </TextView>
-      </Box>
-      <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('claimDetails.callVA')}
-        </TextView>
-      </Box>
+      <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
+        {t('claimDetails.needHelp')}
+      </TextView>
+      <TextView
+        variant="MobileBody"
+        mb={theme.dimensions.standardMarginBetween}
+        accessible={true}
+        accessibilityLabel={t('claimDetails.callVA.a11yLabel')}>
+        {t('claimDetails.callVA')}
+      </TextView>
       <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
       {renderAppealData()}
     </TextArea>

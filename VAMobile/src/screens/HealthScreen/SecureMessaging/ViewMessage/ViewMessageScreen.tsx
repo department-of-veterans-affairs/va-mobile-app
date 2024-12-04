@@ -4,11 +4,19 @@ import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { secureMessagingKeys, useFolders, useMessage, useMoveMessage, useThread } from 'api/secureMessaging'
+import {
+  secureMessagingKeys,
+  useFolderMessages,
+  useFolders,
+  useMessage,
+  useMoveMessage,
+  useThread,
+} from 'api/secureMessaging'
 import {
   MoveMessageParameters,
   SecureMessagingAttachment,
@@ -22,7 +30,7 @@ import {
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   ChildTemplate,
   ErrorComponent,
@@ -44,6 +52,7 @@ import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDowntimeByScreenID, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -84,7 +93,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const messageID = Number(route.params.messageID)
   const currentFolderIdParam = Number(route.params.folderID) || SecureMessagingSystemFolderIdConstants.INBOX
   const currentPage = Number(route.params.currentPage)
-  const messagesLeft = Number(route.params.messagesLeft)
   const [newCurrentFolderID, setNewCurrentFolderID] = useState<string>(currentFolderIdParam.toString())
   const [showModalPicker, setShowModalPicker] = useState(false)
 
@@ -133,6 +141,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     enabled: isScreenContentAllowed && smNotInDowntime,
   })
 
+  const {
+    data: inboxMessagesData,
+    isFetching: loadingFolderMessages,
+    error: folderMessagesError,
+    refetch: refetchFolderMessages,
+  } = useFolderMessages(currentFolderIdParam, {
+    enabled: isScreenContentAllowed && smNotInDowntime,
+  })
+
   const folders = foldersData?.data || ([] as SecureMessagingFolderList)
   const message = messageData?.data.attributes || ({} as SecureMessagingMessageAttributes)
   const includedAttachments = messageData?.included?.filter((included) => included.type === 'attachments')
@@ -151,18 +168,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
+      registerReviewEvent(true)
     }
   }, [threadFetched])
 
   useEffect(() => {
     if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
       let updateQueries = false
-      const inboxMessagesData = queryClient.getQueryData([
-        secureMessagingKeys.folderMessages,
-        currentFolderIdParam,
-        currentPage,
-      ]) as SecureMessagingFolderMessagesGetData
-      const newInboxMessages = inboxMessagesData.data.map((m) => {
+      const newInboxMessages = inboxMessagesData?.data.map((m) => {
         if (m.attributes.messageId === message.messageId && m.attributes.readReceipt !== READ) {
           updateQueries = true
           m.attributes.readReceipt = READ
@@ -208,6 +221,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     messageData?.included,
     foldersData,
     messageData,
+    inboxMessagesData,
   ])
 
   const getFolders = (): PickerItem[] => {
@@ -280,11 +294,10 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             return 'custom'
         }
       }
-      const page = currentPage === 1 ? currentPage : messagesLeft === 1 ? currentPage - 1 : currentPage
       const mutateOptions = {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
-          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, page] })
+          queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam] })
           logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
           showSnackBar(
             snackbarMessages.successMsg,
@@ -295,7 +308,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 onSuccess: () => {
                   queryClient.invalidateQueries({ queryKey: [secureMessagingKeys.message, messageID] })
                   queryClient.invalidateQueries({
-                    queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam, currentPage],
+                    queryKey: [secureMessagingKeys.folderMessages, currentFolderIdParam],
                   })
                   logAnalyticsEvent(Events.vama_sm_move_outcome(folder()))
                   showSnackBar(
@@ -347,14 +360,15 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     }
   }
 
-  const moveIconProps: VAIconProps = {
+  const moveIconProps: IconProps = {
     name: 'Folder',
+    fill: theme.colors.icon.active,
   }
 
   // If error is caused by an individual message, we want the error alert to be
   // contained to that message, not to take over the entire screen
-  const hasError = foldersError || messageError || threadError || !smNotInDowntime
-  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage
+  const hasError = folderMessagesError || foldersError || messageError || threadError || !smNotInDowntime
+  const isLoading = loadingFolder || loadingThread || loadingMessage || loadingMoveMessage || loadingFolderMessages
   const isEmpty = !message || !thread
   const loadingText = loadingMoveMessage ? t('secureMessaging.movingMessage') : t('secureMessaging.viewMessage.loading')
 
@@ -368,6 +382,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             logAnalyticsEvent(Events.vama_sm_move())
             setShowModalPicker(true)
           },
+          testID: 'pickerMoveMessageID',
         }
 
   return (
@@ -376,15 +391,24 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('reviewMessage')}
       headerButton={headerButton}
-      testID="viewMessageTestID">
+      testID="viewMessageTestID"
+      backLabelTestID="backToMessagesID">
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (
         <ErrorComponent
           screenID={screenID}
-          error={foldersError || messageError || threadError}
+          error={folderMessagesError || foldersError || messageError || threadError}
           onTryAgain={
-            foldersError ? refetchFolders : messageError ? refetchMessage : threadError ? refetchThread : undefined
+            folderMessagesError
+              ? refetchFolderMessages
+              : foldersError
+                ? refetchFolders
+                : messageError
+                  ? refetchMessage
+                  : threadError
+                    ? refetchThread
+                    : undefined
           }
         />
       ) : isEmpty ? (
@@ -404,15 +428,18 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmBtnText={'pickerLaunchBtn'}
               key={newCurrentFolderID}
               showModalByDefault={true}
+              cancelTestID="pickerMoveMessageCancelID"
+              confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
           {replyExpired && (
             <Box my={theme.dimensions.standardMarginBetween}>
-              <AlertBox border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')}>
-                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
-                  {t('secureMessaging.reply.olderThan45Days')}
-                </TextView>
-              </AlertBox>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.youCanNoLonger')}
+                description={t('secureMessaging.reply.olderThan45Days')}
+                testID="secureMessagingOlderThan45DaysAlertID"
+              />
             </Box>
           )}
           <MessageCard message={message} />

@@ -1,27 +1,29 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps } from 'react-native'
+import { Platform, Pressable, PressableProps } from 'react-native'
+
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants, ServiceHistoryData } from 'api/types'
-import { BackgroundVariant, Box, TextView, VAIcon } from 'components'
+import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-export const Nametag: FC = () => {
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
-  const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
-  const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
+export const Nametag = () => {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
+  const { data: serviceHistory } = useServiceHistory({ enabled: false })
+  const accessToMilitaryInfo =
+    userAuthorizedServices?.militaryServiceHistory && !!serviceHistory?.serviceHistory?.length
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const branch = serviceHistory?.mostRecentBranch || ''
 
   useEffect(() => {
     if (personalInfo) {
@@ -31,86 +33,81 @@ export const Nametag: FC = () => {
     }
   }, [personalInfo])
 
-  const fullName = personalInfo?.fullName
+  const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
+    (service) => service.honorableServiceIndicator === 'Y',
+  )
 
-  const branch = mostRecentBranch || ''
-
-  let showVeteranStatus = false
-  serviceHistory.forEach((service) => {
-    if (service.honorableServiceIndicator === 'Y') {
-      showVeteranStatus = true
-    }
-  })
-
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 50,
-      height: 50,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="United States Air Force" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="United States Army" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="United States Coast Guard" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="United States Marine Corps" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="United States Navy" name="Navy" {...dimensions} />
-    }
+  let accLabel
+  if (!accessToMilitaryInfo) {
+    accLabel = undefined
+  } else {
+    accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
   }
 
   const pressableProps: PressableProps = {
     onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo ? 'button' : undefined,
-    accessibilityLabel: accessToMilitaryInfo ? `${fullName} ${branch} ${t('veteranStatus.proofOf')}` : undefined,
+    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
+    accessibilityLabel: accLabel,
+    style: ({ pressed }) => [
+      {
+        backgroundColor: pressed
+          ? theme.colors.background.listActive
+          : (theme.colors.background.veteranStatusHome as BackgroundVariant),
+        justifyContent: 'center',
+        minHeight: accessToMilitaryInfo ? 82 : undefined,
+        paddingLeft: theme.dimensions.buttonPadding,
+        borderRadius: 8,
+        marginBottom: theme.dimensions.standardMarginBetween,
+        paddingRight: theme.dimensions.buttonPadding,
+        marginHorizontal: theme.dimensions.condensedMarginBetween,
+        shadowColor: colors.vadsColorBlack,
+        ...Platform.select({
+          ios: {
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.15,
+            shadowRadius: 8,
+          },
+          android: {
+            elevation: 8,
+          },
+        }),
+      },
+    ],
   }
 
   return (
-    <Pressable {...pressableProps}>
-      <Box
-        width="100%"
-        backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
-        minHeight={accessToMilitaryInfo || fullName ? 85 : undefined}
-        display="flex"
-        justifyContent="center"
-        mb={theme.dimensions.standardMarginBetween}
-        pr={theme.dimensions.cardPadding}>
-        <Box py={theme.dimensions.cardPadding} display="flex" flexDirection="row">
-          {accessToMilitaryInfo && <Box pl={theme.dimensions.cardPadding}>{getBranchSeal()}</Box>}
-          <Box ml={theme.dimensions.cardPadding} flex={1}>
-            <TextView
-              textTransform="capitalize"
-              mb={accessToMilitaryInfo ? theme.dimensions.textIconMargin : 0}
-              variant="BitterBoldHeading"
-              color="primaryContrast">
-              {fullName}
-            </TextView>
-            {accessToMilitaryInfo && (
-              <TextView textTransform="capitalize" variant="MobileBodyBold" color="primaryContrast">
+    <Box>
+      {accessToMilitaryInfo && branch !== '' && (
+        <Pressable {...pressableProps} testID="veteranStatusButtonID">
+          <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
+            <MilitaryBranchEmblem branch={branch} width={40} height={40} />
+            <Box ml={theme.dimensions.buttonPadding} flex={1}>
+              <TextView variant={'VeteranStatusBranch'} pb={4}>
                 {branch}
               </TextView>
-            )}
-            {accessToMilitaryInfo && showVeteranStatus && (
-              <Box flexDirection={'row'} alignItems={'center'} mt={theme.dimensions.standardMarginBetween}>
-                <TextView variant="MobileBody" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                  {t('veteranStatus.proofOf')}
-                </TextView>
-                <VAIcon
+              {showVeteranStatus && (
+                <Box flexDirection={'row'} alignItems={'center'}>
+                  <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                    {t('veteranStatus.proofOf')}
+                  </TextView>
+                </Box>
+              )}
+            </Box>
+            {showVeteranStatus && (
+              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+                <Icon
                   name={'ChevronRight'}
-                  fill={theme.colors.icon.contrast}
+                  fill={theme.colors.icon.linkRow}
                   width={theme.dimensions.chevronListItemWidth}
                   height={theme.dimensions.chevronListItemHeight}
-                  mr={theme.dimensions.listItemDecoratorMarginLeft}
+                  preventScaling={true}
                 />
               </Box>
             )}
           </Box>
-        </Box>
-      </Box>
-    </Pressable>
+        </Pressable>
+      )}
+    </Box>
   )
 }
 

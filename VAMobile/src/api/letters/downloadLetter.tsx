@@ -28,10 +28,9 @@ const downloadLetter = async (
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME, lettersOption as unknown as Params)
     : await downloadFile('POST', lettersAPI, `${letterType}.pdf`, lettersOption as unknown as Params, 3)
   if (filePath) {
-    registerReviewEvent()
     logAnalyticsEvent(Events.vama_letter_download(letterType))
     setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
-    await FileViewer.open(filePath)
+    await FileViewer.open(filePath, { onDismiss: () => registerReviewEvent() })
     return true
   }
 }

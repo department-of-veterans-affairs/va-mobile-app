@@ -7,6 +7,7 @@ import {
   PreferredNameUpdatePayload,
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { Params } from '../api'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
@@ -144,7 +145,9 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/notifications.json'),
     import('./mocks/contactInformation.json'),
     import('./mocks/getAuthorizedServices.json'),
-    import('./mocks/getFacilitiesInfo.json'),
+    featureEnabled('cernerTrueForDemo')
+      ? import('./mocks/getFacilitiesInfoCerner.json')
+      : import('./mocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),
     import('./mocks/personalInformation.json'),
   ])

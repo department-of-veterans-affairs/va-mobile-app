@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useReducer, useState } from 'react'
-import { Animated, Easing, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
+import { AccessibilityRole, Animated, Easing, Platform, TouchableWithoutFeedback, View, ViewProps } from 'react-native'
 import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
+import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
 import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
 
@@ -42,8 +44,9 @@ export type HeaderVATitleProps = {
 export type HeaderRightButtonProps = {
   text: string
   a11yLabel?: string
+  accessibilityRole?: AccessibilityRole
   onPress: () => void
-  icon?: VAIconProps
+  icon?: IconProps
   testID?: string
 }
 
@@ -60,6 +63,8 @@ export type HeaderBannerProps = {
   menuViewActions?: MenuViewActionsType
   /** bypass divider marginbottom */
   dividerMarginBypass?: boolean
+  /** adds shadow to bottom of banner, default no shadow */
+  shadow?: boolean
 }
 
 const HeaderBanner: FC<HeaderBannerProps> = ({
@@ -69,6 +74,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   divider: bannerDivider,
   menuViewActions,
   dividerMarginBypass,
+  shadow: bannerShadow,
 }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
@@ -161,6 +167,20 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     borderBottomWidth: bannerDivider ? theme.dimensions.borderWidth : 0,
     borderBottomColor: 'menuDivider',
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
+    style: bannerShadow
+      ? {
+          shadowColor: 'black',
+          ...Platform.select({
+            ios: {
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.1,
+            },
+            android: {
+              elevation: 8,
+            },
+          }),
+        }
+      : undefined,
   }
 
   const commonBoxProps: BoxProps = {
@@ -178,10 +198,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const titleLength = title?.type === 'VA' ? 2 : title?.title.length || 0
   const totalTextLength = (leftButton?.text.length || 0) + titleLength + (rightButton?.text.length || 0)
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
-
   if (leftButton) {
     leftTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
@@ -208,7 +227,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (rightButton) {
     rightTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
@@ -259,6 +278,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   label={leftButton.text}
                   onPress={leftButton.onPress}
                   focusOnButton={focus === 'Left'}
+                  backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
@@ -293,10 +313,10 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 <TouchableWithoutFeedback
                   ref={focus === 'Right' ? focusRef : () => {}}
                   onPress={rightButton.onPress}
-                  accessibilityRole="button">
+                  accessibilityRole={rightButton.accessibilityRole || 'button'}>
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
-                      <VAIconWithText
+                      <IconWithText
                         testID={rightButton.testID}
                         label={rightButton.text}
                         labelA11y={rightButton.a11yLabel}

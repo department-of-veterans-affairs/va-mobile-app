@@ -1,4 +1,6 @@
-# Maintenance Windows
+---
+title: Maintenance Windows
+---
 
 ## Overview
 
@@ -6,12 +8,13 @@ Maintenance windows are periods of time during which specific vets-api functiona
 
 ## Back-end
 
-Unlike most of the data used in the vets-api engine, `MaintenanceWindows` come from the vets-api database and not from upstream servers. They contain the external service name, start time, and end time. Maintenance windows are added to PagerDuty by other teams, and a vets-api sidekiq job polls PagerDuty and populates MaintenanceWindow database records with the response. There is a [white list](https://github.com/department-of-veterans-affairs/vsp-infra-application-manifests/blob/9864e007626ceb2cd5c92b8c8838af1dbb3b4b7d/apps/vets-api/prod/values.yaml#L2169) of maintenance windows on GitHub that the sidekiq job uses to connect to PagerDuty and populate the maintenance windows. The mobile app requests maintenance windows via the maintenance windows controller, which searches the database for `MaintenanceWindow` records that end in the future and creates a `ServiceGraph` object to process those windows into a format that is more easily used by the front-end.
+Unlike most of the data used in the vets-api engine, `MaintenanceWindows` come from the vets-api database and not from upstream servers. They contain the external service name, start time, and end time. Maintenance windows are added to PagerDuty by other teams, and a vets-api sidekiq job polls PagerDuty and populates MaintenanceWindow database records with the response. There is an [allow list of maintenance windows](https://github.com/department-of-veterans-affairs/vsp-infra-application-manifests/blob/9864e007626ceb2cd5c92b8c8838af1dbb3b4b7d/apps/vets-api/prod/values.yaml#L2169) on GitHub that the sidekiq job uses to connect to PagerDuty and populate the maintenance windows. The mobile app requests maintenance windows via the maintenance windows controller, which searches the database for `MaintenanceWindow` records that end in the future and creates a `ServiceGraph` object to process those windows into a format that is more easily used by the front-end.
 
 The `ServiceGraph` is an abstraction that accepts a list of arguments that define a hierarchy that matches upstream services to downstream features and returns a list of upcoming `Mobile::MaintenanceWindow` records that have upcoming outages. Note that `Mobile::MaintenanceWindows` are different than `MaintenanceWindows` but contain the same basic data with service names that are specific to mobile app features. This allows the mobile team to define its own mapping of services to features. Each argument is an array of two symbols in which the first element is an upstream service or intermediate service and the second key is either an intermediate service or the feature name that would be received by the mobile app. Intermediate services are not included in the results, only terminal nodes (i.e., second items in the array that do not match the first items of any subsequent arrays).
 
 An example `ServiceGraph` instance could be something like:
-```
+
+```ruby
 Mobile::V0::ServiceGraph.new(
   %i[bgs evss],
   %i[vet360 military_service_history],
@@ -21,7 +24,8 @@ Mobile::V0::ServiceGraph.new(
 ```
 
 This gets processed into a hierarchy like:
-```
+
+```js
 {
   bgs: [claims, direct_deposit_benefits],
   evss: [claims, direct_deposit_benefits],

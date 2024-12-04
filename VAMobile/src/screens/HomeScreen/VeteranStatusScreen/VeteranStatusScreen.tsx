@@ -9,7 +9,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchesOfServiceConstants, ServiceData, ServiceHistoryData } from 'api/types'
+import { BranchOfService, ServiceData, ServiceHistoryData } from 'api/types'
 import {
   BackgroundVariant,
   BorderColorVariant,
@@ -17,12 +17,14 @@ import {
   BoxProps,
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
+  MilitaryBranchEmblem,
   TextView,
-  VAIcon,
+  VALogo,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
+import { registerReviewEvent } from 'utils/inAppReviews'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -30,7 +32,7 @@ import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
-function VeteranStatusScreen({}: VeteranStatusScreenProps) {
+function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
@@ -46,6 +48,10 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
   const combinedPercentText = ratingIsDefined
     ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
     : undefined
+
+  useBeforeNavBackListener(navigation, () => {
+    registerReviewEvent(true)
+  })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branch = t('militaryInformation.branch', { branch: service.branchOfService })
@@ -69,7 +75,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     )
   })
 
-  const branch = mostRecentBranch || ''
+  const branch = mostRecentBranch || ('' as BranchOfService)
 
   const boxProps: BoxProps = {
     minHeight: 81,
@@ -82,38 +88,19 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
     borderStyle: 'solid',
   }
 
-  const getBranchSeal = (): React.ReactNode => {
-    const dimensions = {
-      width: 34,
-      height: 34,
-    }
-
-    switch (branch) {
-      case BranchesOfServiceConstants.AirForce:
-        return <VAIcon testID="VeteranStatusUSAFIconTestID" name="AirForce" {...dimensions} />
-      case BranchesOfServiceConstants.Army:
-        return <VAIcon testID="VeteranStatusUSArmyIconTestID" name="Army" {...dimensions} />
-      case BranchesOfServiceConstants.CoastGuard:
-        return <VAIcon testID="VeteranStatusUSCoastGuardTestID" name="CoastGuard" {...dimensions} />
-      case BranchesOfServiceConstants.MarineCorps:
-        return <VAIcon testID="VeteranStatusUSMarineTestID" name="MarineCorps" {...dimensions} />
-      case BranchesOfServiceConstants.Navy:
-        return <VAIcon testID="VeteranStatusUSNavyTestID" name="Navy" {...dimensions} />
-    }
-  }
-
   return (
     <LargePanel
       title={t('veteranStatus.title')}
       rightButtonText={t('close')}
       dividerMarginBypass={true}
       removeInsets={true}
-      testID="veteranStatusTestID">
+      testID="veteranStatusTestID"
+      rightButtonTestID="veteranStatusCloseID">
       <Box
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}
         alignItems="center"
         mt={theme.dimensions.standardMarginBetween}>
-        <VAIcon testID="VeteranStatusCardVAIcon" name={'Logo'} />
+        <VALogo variant="dark" testID="VeteranStatusCardVAIcon" />
         {/* <Box my={theme.dimensions.standardMarginBetween}>
         //TODO: Put back PhotoUpload later after concerns have been met
           <PhotoUpload width={100} height={100} />
@@ -124,12 +111,19 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
             mb={theme.dimensions.textIconMargin}
             variant="BitterBoldHeading"
             color="primaryContrast"
-            testID="veteranStatusFullNameTestID">
+            testID="veteranStatusFullNameTestID"
+            accessibilityRole="header">
             {personalInfo?.fullName}
           </TextView>
           {accessToMilitaryInfo && (
-            <Box display="flex" flexDirection="row">
-              {getBranchSeal()}
+            <Box display="flex" flexDirection="row" flexWrap="wrap">
+              <MilitaryBranchEmblem
+                testID="veteranStatusCardBranchEmblem"
+                branch={branch}
+                width={34}
+                height={34}
+                variant="dark"
+              />
               <TextView ml={10} variant="MobileBody" color="primaryContrast" testID="veteranStatusBranchTestID">
                 {branch}
               </TextView>
@@ -140,7 +134,7 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
       <Box mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
         {ratingIsDefined && (
           <Box {...boxProps}>
-            <TextView variant="MobileBodyBold" color="primaryContrast">
+            <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
               {t('disabilityRating.title')}
             </TextView>
             <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDisabilityRatingTestID">
@@ -148,25 +142,27 @@ function VeteranStatusScreen({}: VeteranStatusScreenProps) {
             </TextView>
           </Box>
         )}
-        <Box {...boxProps}>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
+        <Box {...boxProps} borderBottomWidth={personalInfo?.edipi ? 0 : theme.dimensions.borderWidth}>
+          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.periodOfService')}
           </TextView>
           {getPeriodOfService}
         </Box>
-        <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
-            {t('personalInformation.dateOfBirth')}
-          </TextView>
-          <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDOBTestID">
-            {personalInfo?.birthDate || t('personalInformation.informationNotAvailable')}
-          </TextView>
-        </Box>
-        <Box mb={theme.dimensions.formMarginBetween}>
+        {personalInfo?.edipi && (
+          <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth}>
+            <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
+              {t('veteranStatus.dodIdNumber')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDODTestID">
+              {personalInfo?.edipi}
+            </TextView>
+          </Box>
+        )}
+        <Box my={theme.dimensions.formMarginBetween}>
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
             {t('veteranStatus.uniformedServices')}
           </TextView>
-          <TextView variant="MobileBodyBold" color="primaryContrast">
+          <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.fixAnError')}
           </TextView>
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>

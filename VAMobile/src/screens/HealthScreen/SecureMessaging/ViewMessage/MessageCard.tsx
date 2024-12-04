@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
-import { AttachmentLink, Box, CollapsibleView, LoadingComponent, TextView } from 'components'
+import { AttachmentLink, Box, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
@@ -17,7 +17,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 
@@ -29,12 +29,13 @@ export type MessageCardProps = {
 function MessageCard({ message }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
+  const isPortrait = useOrientation()
   const { t: tFunction } = useTranslation()
   const { hasAttachments, attachment, attachments, senderName, sentDate, body, subject, category } = message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const navigateTo = useRouteNavigation()
   const fileToGet = {} as SecureMessagingAttachment
-  const { isPending: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
+  const { isFetching: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
   })
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -73,19 +74,25 @@ function MessageCard({ message }: MessageCardProps) {
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
     if (body) {
-      return getLinkifiedText(fixSpecialCharacters(body), t)
+      return getLinkifiedText(fixSpecialCharacters(body), t, isPortrait)
     }
     return <></>
   }
 
   function getAttachment() {
-    if (attachmentFetchPending && !attachments?.length) {
+    if (attachmentFetchPending) {
+      const loadingScrollViewStyle: ViewStyle = {
+        backgroundColor: theme.colors.background.contentBox,
+      }
       return (
         <Box
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.contentMarginTop}
           mb={theme.dimensions.contentMarginBottom}>
-          <LoadingComponent text={t('secureMessaging.viewMessage.loadingAttachment')} inlineSpinner={true} />
+          <LoadingComponent
+            text={t('secureMessaging.viewMessage.loadingAttachment')}
+            scrollViewStyle={loadingScrollViewStyle}
+          />
         </Box>
       )
     } else if (attachments?.length) {
@@ -121,15 +128,11 @@ function MessageCard({ message }: MessageCardProps) {
   function getMessageHelp() {
     return (
       <Box mb={theme.dimensions.condensedMarginBetween}>
-        <Pressable
+        <LinkWithAnalytics
+          type="custom"
+          text={t('secureMessaging.replyHelp.onlyUseMessages')}
           onPress={navigateToReplyHelp}
-          accessibilityRole={'button'}
-          accessibilityLabel={t('secureMessaging.replyHelp.onlyUseMessages')}
-          importantForAccessibility={'yes'}>
-          <Box pointerEvents={'none'} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-            <CollapsibleView text={t('secureMessaging.replyHelp.onlyUseMessages')} showInTextArea={false} />
-          </Box>
-        </Pressable>
+        />
       </Box>
     )
   }
@@ -146,17 +149,13 @@ function MessageCard({ message }: MessageCardProps) {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired ? (
-          <Box mx={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-            <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
-          </Box>
+          <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
-          <Box mx={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('secureMessaging.startNewMessage')}
-              onPress={onStartMessagePress}
-              testID={'startNewMessageButtonTestID'}
-            />
-          </Box>
+          <Button
+            label={t('secureMessaging.startNewMessage')}
+            onPress={onStartMessagePress}
+            testID={'startNewMessageButtonTestID'}
+          />
         )}
       </Box>
     )

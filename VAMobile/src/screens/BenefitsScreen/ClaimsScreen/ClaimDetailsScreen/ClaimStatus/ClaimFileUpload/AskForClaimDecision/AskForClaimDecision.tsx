@@ -12,16 +12,17 @@ import {
   FieldType,
   FormFieldType,
   FormWrapper,
-  FullScreenSubtask,
   LoadingComponent,
   TextArea,
   TextView,
   VABulletList,
+  VAScrollView,
 } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -29,7 +30,9 @@ import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 
-type AskForClaimDecisionProps = StackScreenProps<BenefitsStackParamList, 'AskForClaimDecision'>
+import { FileRequestStackParams } from '../FileRequestSubtask'
+
+type AskForClaimDecisionProps = StackScreenProps<FileRequestStackParams, 'AskForClaimDecision'>
 
 function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const theme = useTheme()
@@ -54,9 +57,15 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => onCancelPress(),
+    leftButtonTestID: 'askForClaimDecisionBackID',
+  })
+
   useEffect(() => {
     if (navigateToClaimsDetailsPage) {
-      navigateTo('ClaimDetailsScreen', { claimID, claimType, focusOnSnackbar: true })
+      navigateTo('ClaimDetailsScreen', { claimID, claimType })
     }
   }, [navigateToClaimsDetailsPage, navigateTo, claimID, claimType])
 
@@ -134,11 +143,9 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   ]
 
   return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      onLeftButtonPress={onCancelPress}
-      title={t('askForClaimDecision.pageTitle')}
-      testID="askForClaimDecisionPageTestID">
+    <VAScrollView testID="askForClaimDecisionPageTestID">
+      <SubtaskTitle title={t('askForClaimDecision.pageTitle')} />
+
       {loadingSubmitClaimDecision || loadingClaim ? (
         <LoadingComponent
           text={loadingSubmitClaimDecision ? t('askForClaimDecision.loading') : t('claimInformation.loading')}
@@ -161,7 +168,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
             <TextView variant="MobileBody" mb={standardMarginBetween}>
               {t('askForClaimDecision.takingFull30Days')}
             </TextView>
-            <VABulletList listOfText={bulletedListOfText} />
+            <VABulletList listOfText={bulletedListOfText} paragraphSpacing={true} />
           </TextArea>
           <Box mx={gutter}>
             <Box my={standardMarginBetween}>
@@ -180,7 +187,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
           </Box>
         </Box>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

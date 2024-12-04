@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
-  AlertBox,
+  AlertWithHaptics,
   Box,
   BoxProps,
   ClickToCallPhoneNumber,
@@ -54,20 +54,22 @@ function PrescriptionHistoryNoPrescriptions() {
   return (
     <VAScrollView>
       <Box {...alertWrapperProps}>
-        <AlertBox
-          border={'informational'}
-          title={t('prescriptions.notFound.title')}
-          titleA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}>
-          <TextView
-            pt={theme.paragraphSpacing.spacing20FontSize}
-            mb={theme.dimensions.condensedMarginBetween}
-            accessibilityLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
-            {t('prescriptions.notFound.yourVA')}
-          </TextView>
-          <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
+        <AlertWithHaptics
+          variant="info"
+          header={t('prescriptions.notFound.title')}
+          headerA11yLabel={a11yLabelVA(t('prescriptions.notFound.title'))}
+          description={t('prescriptions.notFound.yourVA')}
+          descriptionA11yLabel={a11yLabelVA(t('prescriptions.notFound.yourVA'))}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VABulletList listOfText={medicationsNotIncludedList} paragraphSpacing={true} />
+          </Box>
           <TextView paragraphSpacing={true}>{t('prescriptions.notFound.bullets.ifYouThink')}</TextView>
-          <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
-        </AlertBox>
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8773270022'))}
+            phone={t('8773270022')}
+            variant={'base'}
+          />
+        </AlertWithHaptics>
       </Box>
     </VAScrollView>
   )
