@@ -69,6 +69,7 @@ describe('Settings Screen', () => {
     await element(by.id(SettingsE2eIdConstants.BACK_TO_SETTINGS_SCREEN_ID)).tap()
   })
 
+  //The share the app dialog in the android simulator does not go away on device.launchApp.  For this reason this test is only run on iOS.
   it('should show "Share the app" screen', async () => {
     if (device.getPlatform() === 'ios') {
       await element(by.id(SettingsE2eIdConstants.SHARE_APP_ROW_ID)).tap()
