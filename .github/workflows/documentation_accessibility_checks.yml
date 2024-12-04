@@ -77,4 +77,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'Accessibility issues detected. Please review and fix. Build started by ${{ github.actor }}: (:git: `${{ github.ref_name }}`). See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.  Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }} Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'
+      message: 'Accessibility issues detected in the documentation site. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }}. Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'
