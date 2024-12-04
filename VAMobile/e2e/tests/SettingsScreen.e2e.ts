@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the settings test case found in testRail (VA Mobile App > RC Regression Test > Manual > Profile Page - Elements)
+When to update:
+This script should be updated whenever new items are added to the settings screen list or there are any changes within the settings screen options.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
