@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      contents: write
     outputs:
       pr_url: ${{ steps.create_pr.outputs.pull-request-url }} # Declare the output for PR URL
     env:
