@@ -1,6 +1,6 @@
 
 # test build
-name: '[test] testing'
+name: '[build]'
 
 on:
   push:
