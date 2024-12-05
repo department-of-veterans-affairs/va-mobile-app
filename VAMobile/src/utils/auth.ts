@@ -342,7 +342,7 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
-    // await startBiometricsLogin(dispatch, refreshAccessToken)
+    await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
@@ -358,6 +358,7 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
 const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
   const loading = store.getState().auth.loading
   if (loading) {
+    await finishInitialize(dispatch, false)
     return
   }
   await logAnalyticsEvent(Events.vama_login_start(true, true))
@@ -372,6 +373,7 @@ const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: (
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    await finishInitialize(dispatch, false)
     if (isAndroid()) {
       if (err?.message?.indexOf('Cancel') > -1) {
         return
