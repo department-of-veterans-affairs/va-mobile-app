@@ -104,14 +104,45 @@ platform :ios do
       app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
       version = app.get_pending_release_app_store_version
       unless version.nil?
-        Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
-        upload_deobfuscation_file(version.version_string)
-        slack_release_success(version.version_string, "iOS")
-      end
-    rescue => e
-      slack_release_error(version, "iOS", e)
+      # Trigger the release request
+      Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+      # Upload the deobfuscation file
+      upload_deobfuscation_file(version.version_string)
+      # Send an initial success message about release initiation
+      slack_release_success("Release initiated for version #{version.version_string}. Verification will follow shortly.", "iOS")
+      
+      # Introduce a delay before verification
+      UI.message("Waiting for 5 minutes to allow App Store processing...")
+      sleep 300 # 300 seconds (5 minutes); adjust to 600 for 10 minutes if needed
+
+      # Call the verify_release lane
+      verify_release(expected_version: version.version_string)
+    else
+      raise "No version found in 'Awaiting Developer Release' status."
     end
+  rescue => e
+    slack_release_error(version&.version_string, "iOS", e)
   end
+end
+
+desc "Verify if the release is live on the App Store"
+lane :verify_release do |options|
+  begin
+    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+    live_version = app.get_live_app_store_version
+
+    # Check if the live version matches the expected version
+    expected_version = options[:expected_version]
+    if live_version&.version_string == expected_version
+      slack_release_success(live_version.version_string, "iOS")
+    else
+      raise "Expected version #{expected_version} is not live yet. Current live version: #{live_version&.version_string || 'none'}."
+    end
+  rescue => e
+    slack_release_error(options[:expected_version], "iOS", e)
+  end
+end
+
 
   desc "Push new demo version to TestFlight"
   lane :demo do
