@@ -5,7 +5,7 @@ name: '[test] testing'
 on:
   push:
     branches:
-        - chanel-10321-bug-release-issue-tag-flagship-mobile-approver-members
+      - chanel-10321-bug-release-issue-tag-flagship-mobile-approver-members
 
 jobs:
   release_ticket:
