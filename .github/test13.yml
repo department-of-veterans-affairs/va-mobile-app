@@ -1,7 +1,7 @@
 
 # test build
-
 name: '[test] testing'
+
 on:
   push:
     branches:
@@ -9,7 +9,6 @@ on:
 
 jobs:
   release_ticket:
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
       ticketNumber: ${{steps.create_issue.outputs.number}}
