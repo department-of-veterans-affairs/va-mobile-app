@@ -348,6 +348,7 @@
   "automatedPhoneSystem": "Automated phone system: ",
   "back": "Back",
   "back.a11yHint": "Navigates to the previous page",
+  "back.a11yLabel": "Back to {{screenName}}",
   "benefits.title": "Benefits",
   "benefits.activity.error": "We can't get some of your information. Benefits activity may not be accurate.",
   "benefits.activity.nonFatalError": "We can't get some of your information right now. Benefits activity may not be accurate. Check back later.",
