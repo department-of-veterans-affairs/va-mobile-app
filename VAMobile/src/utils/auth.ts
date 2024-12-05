@@ -342,7 +342,7 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
-    await startBiometricsLogin(dispatch, refreshAccessToken)
+    // await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = await retrieveRefreshToken()
