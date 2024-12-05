@@ -635,25 +635,33 @@ export const Events = {
       name: 'vama_gender_id_success',
     }
   },
-  // vama_feedback_page_entered: (): Event => {
-  //   return {
-  //     name: 'vama_feedback_page_entered',
-  //   }
-  // },
-  // vama_feedback_page_closed: (): Event => {
-  //   return {
-  //     name: 'vama_feedback_page_closed',
-  //   }
-  // },
-  // vama_feedback_submitted: (taskCompleted: string, satisfaction: string): Event => {
-  //   return {
-  //     name: 'vama_feedback_submitted',
-  //     params: {
-  //       taskCompleted,
-  //       satisfaction,
-  //     },
-  //   }
-  // },
+  vama_feedback_ask: (screen: string, response: boolean): Event => {
+    return {
+      name: 'vama_feedback_ask',
+      params: {
+        screen,
+        response,
+      },
+    }
+  },
+  vama_feedback_closed: (screen: string): Event => {
+    return {
+      name: 'vama_feedback_closed',
+      params: {
+        screen,
+      },
+    }
+  },
+  vama_feedback_submitted: (screen: string, taskCompleted: string, satisfaction: string): Event => {
+    return {
+      name: 'vama_feedback_submitted',
+      params: {
+        screen,
+        taskCompleted,
+        satisfaction,
+      },
+    }
+  },
   vama_givefb_close: (screenName: string): Event => {
     return {
       name: 'vama_givefb_close',

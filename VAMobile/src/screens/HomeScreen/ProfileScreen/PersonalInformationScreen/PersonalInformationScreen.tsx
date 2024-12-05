@@ -25,7 +25,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -62,6 +62,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
+  const registerReviewEvent = useReviewEvent(true)
   const {
     data: personalInfo,
     isFetching: loadingPersonalInfo,
@@ -86,7 +87,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
   if (!reviewEventRegistered) {
-    registerReviewEvent(true)
+    registerReviewEvent()
     setReviewEventRegistered(true)
   }
 

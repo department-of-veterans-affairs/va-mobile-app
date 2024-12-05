@@ -16,7 +16,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
@@ -28,6 +28,7 @@ type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'Appeal
 function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const registerReviewEvent = useReviewEvent(true)
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const segmentedControlTestIDs = ['appealStatus', 'appealIssues']
@@ -50,9 +51,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   useEffect(() => {
     if (appeal && !loadingAppeal && !appealError) {
-      registerReviewEvent(true)
+      registerReviewEvent()
     }
-  }, [appeal, loadingAppeal, appealError])
+  }, [appeal, loadingAppeal, appealError, registerReviewEvent])
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)

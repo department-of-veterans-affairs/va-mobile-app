@@ -5,7 +5,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { Params, contentTypes, post } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { secureMessagingKeys } from './queryKeys'
 
@@ -58,6 +58,7 @@ const sendMessage = ({ messageData, replyToID, uploads }: SendMessageParameters)
  * Returns a mutation for sending a message
  */
 export const useSendMessage = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: sendMessage,

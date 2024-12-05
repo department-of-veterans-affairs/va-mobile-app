@@ -4,7 +4,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { demographicsKeys } from './queryKeys'
 
@@ -19,6 +19,7 @@ const updateGenderIdentity = (genderIdentity: string) => {
  * Returns a mutation for updating gender identity
  */
 export const useUpdateGenderIdentity = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
 
   return useMutation({
