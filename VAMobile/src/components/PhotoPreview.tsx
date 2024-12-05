@@ -37,9 +37,9 @@ type StyledImageProps = {
 }
 
 const StyledImage = styled(Image)<StyledImageProps>`
-  width: ${themeFn<StyledImageProps>((_theme, props) => props.width.toString())}px;
-  height: ${themeFn<StyledImageProps>((_theme, props) => props.height.toString())}px;
-  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius.toString())}px;
+  width: ${themeFn<StyledImageProps>((_theme, props) => props.width)}px;
+  height: ${themeFn<StyledImageProps>((_theme, props) => props.height)}px;
+  border-radius: ${themeFn<StyledImageProps>((_theme, props) => props.borderRadius)}px;
 `
 
 const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCallback, photoPosition }) => {

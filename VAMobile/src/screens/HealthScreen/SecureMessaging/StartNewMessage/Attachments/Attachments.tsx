@@ -30,8 +30,8 @@ import { themeFn } from 'utils/theme'
 const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
-  max-width: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.maxWidth.toString())};
-  height: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.height.toString())}px;
+  max-width: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.maxWidth)};
+  height: ${themeFn<ImageMaxWidthAndHeight>((_theme, props) => props.height)}px;
 `
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>

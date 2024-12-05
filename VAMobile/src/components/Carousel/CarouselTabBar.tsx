@@ -21,7 +21,7 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 
 const StyledPressable = styled(Pressable)`
-  min-height: ${themeFn((theme) => theme.dimensions.touchableMinHeight.toString())}px;
+  min-height: ${themeFn((theme) => theme.dimensions.touchableMinHeight)}px;
   justify-content: center;
 `
 
