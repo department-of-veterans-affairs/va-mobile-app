@@ -256,8 +256,8 @@ export const completeFirstTimeLogin = async () => {
 }
 
 export const setBiometricsPreference = async (value: boolean) => {
-  await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE)
   const refreshToken = await retrieveRefreshToken()
+  await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE)
   await saveRefreshToken(refreshToken || '')
   const userSettings = queryClient.getQueryData(authKeys.biometrics) as UserBiometricsSettings
   queryClient.setQueryData(authKeys.biometrics, { ...userSettings, shouldStoreWithBiometric: value })
