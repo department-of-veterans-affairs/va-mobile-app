@@ -116,7 +116,7 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
       <Pressable {...pressableProps}>
         <Box {...wrapperProps}>
           {textView}
-          <Box mr={5}>
+          <Box mr={adjustSize ? 5 : 10}>
             <Icon {...infoIconProps} />
           </Box>
         </Box>

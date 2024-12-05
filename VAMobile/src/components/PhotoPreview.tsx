@@ -133,7 +133,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
               width={photoPreviewIconSize}
               height={photoPreviewIconSize}
               maxWidth={photoPreviewMaxIconSize}
-              fill={themeColor.icon.deleteFill}
+              fill={themeColor.icon.error}
             />
           )}
         </Box>
