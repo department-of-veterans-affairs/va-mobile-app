@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-        - chanel-6808-create-system-for-updating-names-on-release-tickets
+        - chanel-10321-bug-release-issue-tag-flagship-mobile-approver-members
 
 jobs:
   release_ticket:
