@@ -25,7 +25,7 @@ export type Allergy = {
     code?: {
       text?: string | null
     } | null
-    category?: string | null
+    category?: Array<string> | null
     recordedDate?: string | null
     notes?: Array<NoteText> | null
     recorder?: {

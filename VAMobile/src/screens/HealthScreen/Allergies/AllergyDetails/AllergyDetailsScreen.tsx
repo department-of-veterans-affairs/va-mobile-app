@@ -6,10 +6,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
 
 import { useAllergies } from 'api/allergies/getAllergies'
-import { useAllergyLocation } from 'api/allergies/getAllergyLocation'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
-import { COVID19 } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -26,13 +24,8 @@ type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Allergy
  */
 function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
   const { allergy } = route.params
-  // const { data: location, isLoading: detailsLoading } = useAllergyLocation(
-  //   allergy.relationships?.location?.data?.id || '',
-  //   {
-  //     enabled: !!allergy.relationships?.location?.data?.id && screenContentAllowed('WG_VaccineDetails'),
-  //   },
-  // )
-  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_VaccineDetails') })
+
+  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_AllergyDetails') })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -42,9 +35,9 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
   const placeHolder = t('noneNoted')
 
   // analtyics
-  // useEffect(() => {
-  //   logAnalyticsEvent(Events.vama_vaccine_details(allergy?.attributes?.groupName || ''))
-  // }, [dispatch, allergy])
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_allergy_details())
+  }, [dispatch, allergy])
 
   if (!allergy) {
     return <></>
@@ -58,13 +51,10 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
     ? t('allergies.allergyName', { name: allergy.attributes?.code?.text })
     : placeHolder
 
-  const hasType = allergy.attributes?.category
-  // const displayType = hasType ? allergy.attributes?.category : placeHolder
-
   const optionalFields = [
-    hasType,
-    allergy.attributes?.notes,
-    // allergy.attributes?.reaction,
+    allergy.attributes?.category?.length,
+    allergy.attributes?.notes?.length,
+    allergy.attributes?.reactions?.length,
     allergy.attributes?.recorder,
   ]
   const isPartialData = !every(optionalFields)
@@ -79,7 +69,6 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
       {detailsLoading ? (
         <LoadingComponent text={t('allergies.details.loading')} />
       ) : (
-        // <LoadingComponent text="Loading your allergy record" />
         <Box mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBody" mb={standardMarginBetween}>
@@ -88,28 +77,41 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
               <TextView variant="MobileBodyBold">{displayName}</TextView>
             </Box>
-            <TextView variant="MobileBodyBold" selectable={true}>
-              {'Type'}
-            </TextView>
 
-            <TextView
-              variant="MobileBody"
-              selectable={true}
-              mb={standardMarginBetween}
-              testID={'Type ' + allergy.attributes?.category || placeHolder}>
-              {allergy.attributes?.category || placeHolder}
-            </TextView>
+            <Box>
+              <TextView variant="MobileBodyBold" selectable={true}>
+                {'Type'}
+              </TextView>
+              {allergy.attributes?.category?.length ? (
+                allergy.attributes?.category?.map((category, index) => (
+                  <TextView
+                    variant="MobileBody"
+                    selectable={true}
+                    testID={'Type ' + category || placeHolder}
+                    key={index}>
+                    {category || placeHolder}
+                  </TextView>
+                ))
+              ) : (
+                <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
+                  {placeHolder}{' '}
+                </TextView>
+              )}
+            </Box>
 
             <Box mt={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
-              <TextView variant="MobileBody" selectable={true} testID={'Series status'}>
+              <TextView variant="MobileBodyBold">{t('health.details.provider')}</TextView>
+              <TextView
+                variant="MobileBody"
+                selectable={true}
+                testID={'Provider ' + allergy.attributes?.recorder?.display || placeHolder}>
                 {allergy.attributes?.recorder?.display || placeHolder}
               </TextView>
             </Box>
 
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Box>
-                <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
+                <TextView variant="MobileBodyBold">{t('health.details.reaction')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
                   allergy.attributes?.reactions?.map((reaction, index) => {
                     return reaction.manifestation?.map((manifestation, i) => (
@@ -128,13 +130,11 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                   </TextView>
                 )}
               </Box>
+
               <Box mt={theme.dimensions.standardMarginBetween}>
-                <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
-                {console.log(JSON.stringify(allergy.attributes?.notes, null, 2))}
+                <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 {allergy?.attributes?.notes?.length ? (
                   allergy.attributes?.notes?.map((note, index) => {
-                    console.log('NOTE: ' + JSON.stringify(note, null, 2))
-                    console.log('NOTE TEXT: ' + note.text)
                     return (
                       <TextView
                         key={index}
@@ -155,8 +155,8 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
           </TextArea>
           {isPartialData && (
             <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('vaccines.details.weBaseThis'))}>
-                {t('vaccines.details.weBaseThis')}
+              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+                {t('health.details.weBaseThis')}
               </TextView>
             </Box>
           )}

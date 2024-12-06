@@ -2,101 +2,225 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
-import { Vaccine } from 'api/types'
-import * as api from 'store/api'
+import { Allergy } from 'api/types'
+// import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-import VaccineDetailsScreen from './VaccineDetailsScreen'
+import AllergyDetailsScreen from './AllergyDetailsScreen'
 
-context('VaccineDetailsScreen', () => {
-  const defaultVaccine = {
-    id: 'N7A6Q5AU6W5C6O4O7QEDZ3SJXM000000',
-    type: 'immunization',
+context('AllergyDetailsScreen', () => {
+  const defaultAllergy = {
+    id: '4-1abLZzsevfVnWK',
+    type: 'allergy_intolerance',
     attributes: {
-      cvxCode: 207,
-      date: '2020-12-18T12:24:55Z',
-      doseNumber: 'Series 1',
-      doseSeries: 1,
-      groupName: 'COVID-19',
-      reaction: 'Fever',
-      manufacturer: 'Janssen',
-      note: 'Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.',
-      shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
-    },
-  }
-
-  const location = {
-    data: {
-      id: 'location1',
-      type: 'location',
-      attributes: {
-        name: 'facility 1',
-        address: {
-          street: '123 abc street',
-          city: 'Tiburon',
-          state: 'CA',
-          zipCode: '94920',
-        },
+      resourceType: 'AllergyIntolerance',
+      type: 'allergy',
+      clinicalStatus: {
+        coding: [
+          {
+            system: 'http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical',
+            code: 'active',
+          },
+        ],
       },
+      category: ['medication'],
+      code: {
+        coding: [
+          {
+            system: 'http://hl7.org/fhir/ndfrt',
+            code: 'N0000008048',
+            display: 'Sulfonamides',
+          },
+        ],
+        text: 'Sulfonamides',
+      },
+      recordedDate: '2019-03-12T16:30:00Z',
+      patient: {
+        reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908',
+        display: 'DAMASO SUPNICK',
+      },
+      notes: [
+        {
+          authorReference: {
+            reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
+            display: 'Dr. Alicia629 Ureña88 MD',
+          },
+          time: '2019-03-12T16:30:00Z',
+          text: 'Sulfonamides',
+        },
+      ],
+      recorder: {
+        reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
+        display: 'Dr. Alicia629 Ureña88 MD',
+      },
+      reactions: [],
     },
   }
 
-  const hasLocationVaccine = {
-    id: 'HASLOCATION',
-    type: 'immunization',
-    attributes: {
-      cvxCode: 207,
-      date: '2020-12-18T12:24:55Z',
-      doseNumber: null,
-      doseSeries: null,
-      groupName: 'COVID-19',
-      manufacturer: null,
-      note: null,
-      shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
+  const reactions = [
+    {
+      substance: {
+        coding: [],
+        text: null,
+      },
+      manifestation: [
+        {
+          coding: [],
+          text: 'Urticaria (Hives)',
+        },
+      ],
     },
-    relationships: {
-      location: location,
+    {
+      substance: {
+        coding: [],
+        text: null,
+      },
+      manifestation: [
+        {
+          coding: [],
+          text: 'Anaphylaxis',
+        },
+      ],
     },
+  ]
+
+  const notes = [
+    {
+      authorReference: {
+        reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
+        display: 'Dr. Alicia629 Ureña88 MD',
+      },
+      time: '2019-03-12T16:30:00Z',
+      text: 'Sulfonamides',
+    },
+    {
+      authorReference: {
+        reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
+        display: 'Dr. Alicia629 Ureña88 MD',
+      },
+      time: '2019-03-13T12:30:00Z',
+      text: 'Patient has a family history of sulfa allergy',
+    },
+    {
+      authorReference: {
+        reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
+        display: 'Dr. Alicia629 Ureña88 MD',
+      },
+      time: '2020-03-15T16:30:00Z',
+      text: 'Additional episode of hives',
+    },
+  ]
+
+  const initializeTestInstance = (allergy: Allergy = defaultAllergy) => {
+    const props = mockNavProps(undefined, undefined, { params: { allergy: allergy } })
+    render(<AllergyDetailsScreen {...props} />)
   }
 
-  const initializeTestInstance = (vaccine: Vaccine = defaultVaccine) => {
-    const props = mockNavProps(undefined, undefined, { params: { vaccine: vaccine } })
-    render(<VaccineDetailsScreen {...props} />)
-  }
-
-  it('initializes correctly for default vaccine', () => {
+  it('initializes correctly for default allergy', async () => {
     initializeTestInstance()
-    expect(screen.getByText('December 18, 2020')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'COVID-19 vaccine' })).toBeTruthy()
-    expect(screen.getByText('Type and dosage')).toBeTruthy()
-    expect(screen.getByText('COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose')).toBeTruthy()
-    expect(screen.getByText('Janssen')).toBeTruthy()
-    expect(screen.getByText('Series status')).toBeTruthy()
-    expect(screen.getByText('Series 1 of 1')).toBeTruthy()
-    expect(screen.getByText('Provider')).toBeTruthy()
-    expect(screen.getByText('None noted')).toBeTruthy()
-    expect(screen.getByText('Reaction')).toBeTruthy()
-    expect(screen.getByText('Notes')).toBeTruthy()
-    expect(
-      screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),
-    ).toBeTruthy()
-    expect(
-      screen.getByText(
-        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
-      ),
-    ).toBeTruthy()
-    expect(screen.queryByText('facility 1')).toBeFalsy()
-    expect(screen.queryByText('123 abc street')).toBeFalsy()
-    expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
+    await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('None noted')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+        ),
+      ).toBeTruthy(),
+    )
   })
 
-  it('initializes correctly for has location vaccine', async () => {
-    when(api.get as jest.Mock)
-      .calledWith(`/v0/health/locations/location1`)
-      .mockResolvedValue({ ...location })
-    initializeTestInstance(hasLocationVaccine)
-    await waitFor(() => expect(screen.getByText('facility 1')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('123 abc street')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy())
+  it('initializes correctly for allergy with reactions', async () => {
+    const allergyWithReactions = {
+      ...defaultAllergy,
+      attributes: {
+        ...defaultAllergy.attributes,
+        reactions: reactions,
+      },
+    }
+
+    initializeTestInstance(allergyWithReactions)
+    await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
+    await waitFor(() => {
+      const textElement = screen.queryByText(
+        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+      )
+      expect(textElement).toBeNull()
+    })
+  })
+
+  it('initializes correctly for allergy with multiple categories', async () => {
+    const allergyWithCategories = {
+      ...defaultAllergy,
+      attributes: {
+        ...defaultAllergy.attributes,
+        reactions: reactions,
+        category: ['medication', 'food'],
+      },
+    }
+
+    initializeTestInstance(allergyWithCategories)
+    await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('food')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
+    await waitFor(() => {
+      const textElement = screen.queryByText(
+        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+      )
+      expect(textElement).toBeNull()
+    })
+  })
+
+  it('initializes correctly for allergy with multiple notes', async () => {
+    const allergyWithNotes = {
+      ...defaultAllergy,
+      attributes: {
+        ...defaultAllergy.attributes,
+        reactions: reactions,
+        category: ['medication', 'food'],
+        notes: notes,
+      },
+    }
+
+    initializeTestInstance(allergyWithNotes)
+    await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('food')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Patient has a family history of sulfa allergy')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Additional episode of hives')).toBeTruthy())
+    await waitFor(() => {
+      const textElement = screen.queryByText(
+        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
+      )
+      expect(textElement).toBeNull()
+    })
   })
 })

@@ -5,23 +5,23 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { context, render } from 'testUtils'
 
-import NoVaccineRecords from './NoVaccineRecords'
+import NoAllergyRecords from './NoAllergyRecords'
 
 context('NoVaccineRecords', () => {
   beforeEach(() => {
-    render(<NoVaccineRecords />)
+    render(<NoAllergyRecords />)
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('heading', { name: "We couldn't find information about your VA vaccines" })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: "We couldn't find information about your VA allergies" })).toBeTruthy()
     expect(
       screen.getByText(
-        "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",
+        "We're sorry. We update your allergy records every 24 hours, but new records can take up to 36 hours to appear.",
       ),
     ).toBeTruthy()
     expect(
       screen.getByText(
-        "If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.",
+        "If you think your allergy records should be here, call our MyVA411 main information line. We're here 24/7.",
       ),
     ).toBeTruthy()
     expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()

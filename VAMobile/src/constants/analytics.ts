@@ -29,6 +29,11 @@ export const Events = {
       name: 'vama_af_updated',
     }
   },
+  vama_allergy_details: (): Event => {
+    return {
+      name: 'vama_allergy_details',
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,

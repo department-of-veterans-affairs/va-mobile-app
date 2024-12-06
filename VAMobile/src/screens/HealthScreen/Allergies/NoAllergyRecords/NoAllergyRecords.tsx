@@ -6,18 +6,18 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
-function NoVaccineRecords() {
+function NoAllergyRecords() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <VAScrollView>
       <AlertWithHaptics
         variant="info"
-        header={t('noVaccineRecords.alert.title')}
-        headerA11yLabel={a11yLabelVA(t('noVaccineRecords.alert.title'))}
-        description={t('noVaccineRecords.alert.text.1')}>
+        header={t('noAllergyRecords.alert.title')}
+        headerA11yLabel={a11yLabelVA(t('noAllergyRecords.alert.title'))}
+        description={t('noAllergyRecords.alert.text.1')}>
         <TextView paragraphSpacing={true} variant="MobileBody">
-          {t('noVaccineRecords.alert.text.2')}
+          {t('noAllergyRecords.alert.text.2')}
         </TextView>
         <ClickToCallPhoneNumber
           phone={t('8006982411')}
@@ -29,4 +29,4 @@ function NoVaccineRecords() {
   )
 }
 
-export default NoVaccineRecords
+export default NoAllergyRecords

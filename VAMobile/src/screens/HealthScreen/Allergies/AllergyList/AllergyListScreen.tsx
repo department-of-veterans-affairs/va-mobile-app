@@ -40,15 +40,13 @@ type AllergyListScreenProps = StackScreenProps<HealthStackParamList, 'AllergyLis
 function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const [page, setPage] = useState(1)
   // checks for downtime, immunizations downtime constant is having an issue with unit test
-  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
+  const allergiesInDowntime = useError(ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID)
   const {
     data: allergies,
     isFetching: loading,
-    error: vaccineError,
-    refetch: refetchVaccines,
-  } = useAllergies({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
-
-  // console.log(JSON.stringify(allergies, null, 3))
+    error: allergyError,
+    refetch: refetchAllergies,
+  } = useAllergies({ enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -61,13 +59,13 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   }
 
   useEffect(() => {
-    const vaccineList = allergies?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
-    setAllergiesToShow(vaccineList || [])
+    const allergyList = allergies?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 
   const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
-      { text: allergy.attributes?.code?.text ?? '', variant: 'MobileBodyBold' },
+      { text: t('allergies.allergyName', { name: allergy.attributes?.code?.text }), variant: 'MobileBodyBold' },
       { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
     ]
 
@@ -76,7 +74,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       onPress: () => {
         navigateTo('AllergyDetails', { allergy: allergy })
       },
-      a11yHintText: t('vaccines.list.a11yHint'),
+      a11yHintText: t('allergies.list.a11yHint'),
       a11yValue: t('listPosition', { position: index + 1, total: allergies?.data.length }),
       testId: getA11yLabelText(textLines),
     }
@@ -120,11 +118,11 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       scrollViewProps={scrollViewProps}>
       {loading ? (
         <LoadingComponent text={t('allergies.loading')} />
-      ) : vaccineError || vaccinesInDowntime ? (
+      ) : allergyError || allergiesInDowntime ? (
         <ErrorComponent
-          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
-          error={vaccineError}
-          onTryAgain={refetchVaccines}
+          screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
+          error={allergyError}
+          onTryAgain={refetchAllergies}
         />
       ) : allergies?.data?.length === 0 ? (
         <NoAllergyRecords />
