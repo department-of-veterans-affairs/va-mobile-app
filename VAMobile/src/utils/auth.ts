@@ -39,8 +39,8 @@ const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
-const KEYCHAIN_STORAGE_KEY = 'vamobile'
-const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
+export const KEYCHAIN_STORAGE_KEY = 'vamobile'
+export const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
 

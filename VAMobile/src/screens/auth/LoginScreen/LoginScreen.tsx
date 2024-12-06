@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StatusBar, StyleProp, ViewStyle } from 'react-native'
+import * as Keychain from 'react-native-keychain'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -27,9 +28,15 @@ import { AuthState } from 'store/slices'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart } from 'utils/auth'
+import {
+  FIRST_TIME_LOGIN,
+  KEYCHAIN_STORAGE_KEY,
+  NEW_SESSION,
+  REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY,
+  loginStart,
+} from 'utils/auth'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
@@ -47,6 +54,8 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
+
+  const showAlert = useShowActionSheet()
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -70,6 +79,7 @@ function LoginScreen() {
     dispatch(updateDemoMode(true))
   }
   const tapForDemo = () => {
+    throwUpAlert()
     demoTaps++
     console.log(`demotaps: ${demoTaps}`)
     if (demoTaps >= TAPS_FOR_DEMO) {
@@ -83,6 +93,33 @@ function LoginScreen() {
   }
   async function setNewSession() {
     await AsyncStorage.setItem(NEW_SESSION, 'true')
+  }
+
+  const throwUpAlert = async () => {
+    const result = await Promise.all([
+      AsyncStorage.getItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY),
+      Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY),
+    ])
+    const reconstructedToken = result[0] && result[1] ? `${result[0]}.${result[1].password}.V0` : undefined
+    const options = [t('cancel')]
+
+    showAlert(
+      {
+        title: 'refresh token details',
+        message:
+          'reconstructedToken: ' +
+          reconstructedToken +
+          ' AsyncStorage: ' +
+          result[0] +
+          ' Keychain: ' +
+          result[1] +
+          ' KeychainPassword: ' +
+          result[1]?.password,
+        options,
+        cancelButtonIndex: 0,
+      },
+      () => {},
+    )
   }
 
   const onLoginInit = demoMode
