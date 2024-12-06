@@ -170,7 +170,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       </Box>
     )
 
-    return <Box>{content}</Box>
+    return <Box focusable>{content}</Box>
   }
 
   return renderTextInput()
