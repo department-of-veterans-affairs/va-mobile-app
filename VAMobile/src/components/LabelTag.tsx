@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
 import { AccessibilityRole, Pressable, PressableProps, useWindowDimensions } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 export const LabelTagTypeConstants: {
   tagBlue: LabelTagTypes
@@ -104,20 +105,20 @@ const LabelTag: FC<LabelTagProps> = ({ text, labelType, onPress, a11yHint, a11yL
       }
     }
 
-    const infoIconProps: VAIconProps = {
+    const infoIconProps: IconProps = {
       name: 'Info',
-      fill: 'tagInfoIcon',
-      fill2: 'transparent',
-      height: adjustSize ? 10 : 16,
-      width: adjustSize ? 10 : 16,
-      mr: adjustSize ? 5 : 10,
+      fill: theme.colors.icon.tagInfoIcon,
+      height: adjustSize ? 13 : 20,
+      width: adjustSize ? 13 : 20,
     }
 
     return (
       <Pressable {...pressableProps}>
         <Box {...wrapperProps}>
           {textView}
-          <VAIcon {...infoIconProps} />
+          <Box mr={adjustSize ? 5 : 10}>
+            <Icon {...infoIconProps} />
+          </Box>
         </Box>
       </Pressable>
     )

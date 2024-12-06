@@ -2,10 +2,10 @@ import React, { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { Box, TextView, VAIcon } from 'components/index'
+import { Box, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { getFileDisplay } from 'utils/common'
@@ -45,21 +45,19 @@ const FormAttachments: FC<FormAttachmentsProps> = ({
       return (
         <Box key={index}>
           <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            flexWrap="wrap"
-            mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}>
-            <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap" justifyContent="space-between">
-              <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
-              <TextView
-                variant="MobileBodyBold"
-                ml={theme.dimensions.textIconMargin}
-                accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
-                {text}
-              </TextView>
+            flexDirection={'row'}
+            mr={theme.dimensions.gutter}
+            mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0}
+            mb={theme.dimensions.condensedMarginBetween}>
+            <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
+              <Icon name="AttachFile" width={20} height={20} fill={theme.colors.icon.spinner} />
             </Box>
+            <TextView
+              variant="MobileBodyBold"
+              ml={theme.dimensions.textIconMargin}
+              accessibilityLabel={fileSizeA11y ? [fileName, fileSizeA11y].join(' ').trim() : undefined}>
+              {text}
+            </TextView>
           </Box>
           <Button
             onPress={() => removeOnPress?.(attachment)}

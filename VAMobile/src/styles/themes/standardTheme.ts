@@ -255,7 +255,7 @@ let theme: VATheme = {
     ...colorScheme,
   },
   dimensions: {
-    attachmentIconTopMargin: 8,
+    attachmentIconTopMargin: 6,
     borderWidth: 1,
     focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,
