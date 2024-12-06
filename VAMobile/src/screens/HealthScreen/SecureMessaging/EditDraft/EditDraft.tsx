@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -45,7 +45,6 @@ import {
   TextView,
 } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -54,10 +53,9 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { isErrorObject, showSnackBar } from 'utils/common'
+import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import {
-  useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
@@ -78,26 +76,12 @@ import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
 function EditDraft({ navigation, route }: EditDraftProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const goToDrafts = useGoToDrafts()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.deleteDraft.snackBarMessage'),
-    errorMsg: t('secureMessaging.deleteDraft.snackBarErrorMessage'),
-  }
-  const saveSnackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.draft.saved'),
-    errorMsg: t('secureMessaging.draft.saved.error'),
-  }
-
-  const snackbarSentMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.startNewMessage.sent'),
-    errorMsg: t('secureMessaging.startNewMessage.sent.error'),
-  }
-
   const {
     data: recipients,
     isFetched: hasLoadedRecipients,
@@ -197,21 +181,23 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
         const mutateOptions = {
           onSuccess: () => {
-            showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+            snackbar.show(t('secureMessaging.startNewMessage.sent'))
             logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
             navigateTo('SecureMessaging', { activeTab: 1 })
           },
         }
         const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
-        showSnackBar(snackbarSentMessages.errorMsg, dispatch, () => sendMessage(params, mutateOptions), false, true)
+        snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
+          isError: true,
+          onActionPressed: () => sendMessage(params, mutateOptions),
+        })
       }
     }
   }, [
-    dispatch,
+    snackbar,
+    t,
     sendMessageError,
     sendMessageErrorDetails,
-    snackbarSentMessages.successMsg,
-    snackbarSentMessages.errorMsg,
     attachmentsList,
     category,
     messageID,
@@ -271,7 +257,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           const params: DeleteMessageParameters = { messageID: messageID }
           const mutateOptions = {
             onSuccess: () => {
-              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              snackbar.show(t('secureMessaging.deleteDraft.snackBarMessage'))
               queryClient.invalidateQueries({
                 queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
               })
@@ -283,7 +269,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
               goToDraftFolder(false)
             },
             onError: () => {
-              showSnackBar(snackbarMessages.errorMsg, dispatch, () => deleteDraft(params, mutateOptions), false, true)
+              snackbar.show(t('secureMessaging.deleteDraft.snackBarErrorMessage'), {
+                isError: true,
+                onActionPressed: () => deleteDraft(params, mutateOptions),
+              })
             },
           }
           deleteDraft(params, mutateOptions)
@@ -476,7 +465,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         const params: SaveDraftParameters = { messageData: messageData, messageID: messageID, replyID: replyToID }
         const mutateOptions = {
           onSuccess: () => {
-            showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            snackbar.show(t('secureMessaging.draft.saved'))
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
               queryKey: [secureMessagingKeys.message, messageID],
@@ -487,7 +476,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             goToDraftFolder(true)
           },
           onError: () => {
-            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+            snackbar.show(t('secureMessaging.draft.saved.error'), {
+              isError: true,
+              onActionPressed: () => saveDraft(params, mutateOptions),
+            })
           },
         }
         saveDraft(params, mutateOptions)
@@ -495,7 +487,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     } else {
       const mutateOptions = {
         onSuccess: () => {
-          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+          snackbar.show(t('secureMessaging.startNewMessage.sent'))
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           queryClient.invalidateQueries({
             queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],

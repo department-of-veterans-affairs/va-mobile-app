@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { secureMessagingKeys, useSaveDraft } from 'api/secureMessaging'
 import { SaveDraftParameters, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'api/types'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -30,18 +29,14 @@ export function useComposeCancelConfirmation(): [
   isDiscarded: boolean,
   composeCancelConfirmation: (props: ComposeCancelConfirmationProps) => void,
 ] {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
   const queryClient = useQueryClient()
   const [isDiscarded, setIsDiscarded] = useState(false)
   const { mutate: saveDraft } = useSaveDraft()
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.draft.saved'),
-    errorMsg: t('secureMessaging.draft.saved.error'),
-  }
 
   return [
     isDiscarded,
@@ -70,7 +65,7 @@ export function useComposeCancelConfirmation(): [
           const params: SaveDraftParameters = { messageData: message, replyID: replyToID, messageID: draftMessageID }
           const mutateOptions = {
             onSuccess: () => {
-              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              snackbar.show(t('secureMessaging.draft.saved'))
               logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
               queryClient.invalidateQueries({
                 queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
@@ -85,7 +80,10 @@ export function useComposeCancelConfirmation(): [
               })
             },
             onError: () => {
-              showSnackBar(snackbarMessages.errorMsg, dispatch, () => saveDraft(params, mutateOptions), false, true)
+              snackbar.show(t('secureMessaging.draft.saved.error'), {
+                isError: true,
+                onActionPressed: () => saveDraft(params, mutateOptions),
+              })
             },
           }
           saveDraft(params, mutateOptions)

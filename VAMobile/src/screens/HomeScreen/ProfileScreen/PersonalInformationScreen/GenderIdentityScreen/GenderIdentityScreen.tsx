@@ -4,6 +4,8 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
@@ -17,15 +19,12 @@ import {
   TextView,
   radioOption,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { showSnackBar } from 'utils/common'
 import {
-  useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useDowntimeByScreenID,
@@ -51,21 +50,16 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
     error: getGenderIdentityOptionsError,
     refetch: refetchGenderIdentityOptions,
   } = useGenderIdentityOptions()
+  const snackbar = useSnackbar()
   const genderIdentityMutation = useUpdateGenderIdentity()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
   const genderIdentityInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.GENDER_IDENTITY_SCREEN_ID)
 
   const [error, setError] = useState('')
   const [genderIdentity, setGenderIdentity] = useState(demographics?.genderIdentity)
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.genderIdentity.saved'),
-    errorMsg: t('personalInformation.genderIdentity.not.saved'),
-  }
 
   useEffect(() => {
     if (genderIdentityMutation.isSuccess) {
@@ -103,8 +97,12 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
   const updateGenderIdentity = () => {
     if (genderIdentity) {
       const mutateOptions = {
-        onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
-        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updateGenderIdentity, false, true, true),
+        onSuccess: () => snackbar.show(t('personalInformation.genderIdentity.saved')),
+        onError: () =>
+          snackbar.show(t('personalInformation.genderIdentity.not.saved'), {
+            isError: true,
+            onActionPressed: updateGenderIdentity,
+          }),
       }
       genderIdentityMutation.mutate(genderIdentity, mutateOptions)
     }

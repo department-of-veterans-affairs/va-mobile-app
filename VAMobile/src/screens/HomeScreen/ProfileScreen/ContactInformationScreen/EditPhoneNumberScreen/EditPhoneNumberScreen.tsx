@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
@@ -18,18 +18,17 @@ import {
   FullScreenSubtask,
   LoadingComponent,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { getFormattedPhoneNumber, isErrorObject, showSnackBar } from 'utils/common'
+import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
 function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
-  const dispatch = useAppDispatch()
+  const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
@@ -54,11 +53,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
       navigation.goBack()
     }
   }, [phoneNumberDeleted, phoneNumberSaved, navigation])
-
-  const saveSnackbarMessages: SnackbarMessages = {
-    successMsg: t('contactInformation.phoneNumber.saved', { type: displayTitle }),
-    errorMsg: t('contactInformation.phoneNumber.not.saved', { type: displayTitle }),
-  }
 
   useBeforeNavBackListener(navigation, (e) => {
     if (noPageChanges()) {
@@ -130,10 +124,14 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     const save = (): void => {
       const mutateOptions = {
         onSuccess: () => {
-          showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+          snackbar.show(t('contactInformation.phoneNumber.saved', { type: displayTitle }))
         },
         onError: (error: unknown) =>
-          isErrorObject(error) && showSnackBar(saveSnackbarMessages.errorMsg, dispatch, save, false, true, true),
+          isErrorObject(error) &&
+          snackbar.show(t('contactInformation.phoneNumber.not.saved', { type: displayTitle }), {
+            isError: true,
+            onActionPressed: save,
+          }),
       }
       savePhoneNumber(phoneDataPayload, mutateOptions)
     }
@@ -141,25 +139,16 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     save()
   }
 
-  const removeSnackbarMessages: SnackbarMessages = {
-    successMsg: t('contactInformation.phoneNumber.removed', { type: displayTitle }),
-    errorMsg: t('contactInformation.phoneNumber.not.removed', { type: displayTitle }),
-  }
-
   const onDelete = (): void => {
     if (phoneData) {
       const mutateOptions = {
-        onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+        onSuccess: () => snackbar.show(t('contactInformation.phoneNumber.removed', { type: displayTitle })),
         onError: (error: unknown) =>
           isErrorObject(error) &&
-          showSnackBar(
-            removeSnackbarMessages.errorMsg,
-            dispatch,
-            () => deletePhoneNumber(phoneData, mutateOptions),
-            false,
-            true,
-            true,
-          ),
+          snackbar.show(t('contactInformation.phoneNumber.not.removed', { type: displayTitle }), {
+            isError: true,
+            onActionPressed: () => deletePhoneNumber(phoneData, mutateOptions),
+          }),
       }
       deletePhoneNumber(phoneData, mutateOptions)
     }

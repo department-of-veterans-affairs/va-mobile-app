@@ -5,7 +5,7 @@ import remoteConfig from '@react-native-firebase/remote-config'
 import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { forEach } from 'underscore'
 
 import {
@@ -21,7 +21,6 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logout } from 'store/slices/authSlice'
-import { showSnackBar } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
@@ -29,6 +28,7 @@ import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
 
 function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -137,7 +137,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
             <Button
               onPress={() => {
                 if (JSON.stringify(currentConfig) === JSON.stringify(toggles)) {
-                  showSnackBar('No values changed', dispatch, undefined, true, true, true)
+                  snackbar.show('No values changed', { isError: true })
                   return
                 }
                 dispatch(logout())

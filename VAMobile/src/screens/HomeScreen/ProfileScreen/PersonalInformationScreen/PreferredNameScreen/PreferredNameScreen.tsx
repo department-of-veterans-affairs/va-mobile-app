@@ -3,25 +3,25 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { showSnackBar } from 'utils/common'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
 const MAX_NAME_LENGTH = 25
 
 function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
+  const snackbar = useSnackbar()
   const { data: demographics } = useDemographics()
   const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
 
@@ -33,11 +33,6 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const [preferredName, setName] = useState(getInitialState())
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('personalInformation.preferredName.saved'),
-    errorMsg: t('personalInformation.preferredName.notSaved'),
-  }
 
   const onConfirmCancel = (): void => {
     if (preferredName !== getInitialState()) {
@@ -68,10 +63,14 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const updatePreferredName = () => {
     const mutateOptions = {
       onSuccess: () => {
-        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false)
+        snackbar.show(t('personalInformation.preferredName.saved'))
         navigation.goBack()
       },
-      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, updatePreferredName, false, true, true),
+      onError: () =>
+        snackbar.show(t('personalInformation.preferredName.notSaved'), {
+          isError: true,
+          onActionPressed: updatePreferredName,
+        }),
     }
     preferredNameMutation.mutate(preferredName, mutateOptions)
   }
