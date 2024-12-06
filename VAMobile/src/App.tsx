@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
+import { SnackbarProvider, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
@@ -406,6 +406,7 @@ export function AppTabs() {
 }
 
 export function AuthedApp() {
+  const snackbar = useSnackbar()
   const headerStyles = useHeaderStyles()
   const { initialUrl } = useNotificationContext()
   const homeScreens = getHomeScreens()
@@ -423,7 +424,19 @@ export function AuthedApp() {
 
   return (
     <>
-      <RootNavStack.Navigator screenOptions={{ ...headerStyles, detachPreviousScreen: false }} initialRouteName="Tabs">
+      <RootNavStack.Navigator
+        screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
+        initialRouteName="Tabs"
+        screenListeners={{
+          transitionStart: (e) => {
+            if (e.data.closing) {
+              snackbar.hide()
+            }
+          },
+          blur: () => {
+            snackbar.hide()
+          },
+        }}>
         <RootNavStack.Screen
           name="Tabs"
           component={AppTabs}
