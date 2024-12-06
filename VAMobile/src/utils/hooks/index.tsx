@@ -347,6 +347,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
         cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
+        autoFocus: true,
       },
       (buttonIndex) => {
         if (buttonIndex || buttonIndex === 0) {
