@@ -42,12 +42,6 @@
       "device": {
         "adbName": ".*"
       }
-    },
-    "attached": {
-      "type": "android.attached",
-      "device": {
-        "adbName": ".*"
-      }
     }
   },
   "configurations": {
