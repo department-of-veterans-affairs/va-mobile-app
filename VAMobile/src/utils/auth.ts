@@ -30,6 +30,8 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty
 import { pkceAuthorizeParams } from './oauth'
 import { isAndroid } from './platform'
 
+let inMemoryRefreshToken: string | undefined
+
 export const NEW_SESSION = '@store_new_session'
 export const FIRST_TIME_LOGIN = '@store_first_time_login'
 export const KEYCHAIN_DEVICE_SECRET_KEY = 'vamobileDeviceSecret'
@@ -39,14 +41,15 @@ const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
-export const KEYCHAIN_STORAGE_KEY = 'vamobile'
-export const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
+const KEYCHAIN_STORAGE_KEY = 'vamobile'
+const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_component'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
 const SSO_COOKIE_NAMES = ['vagov_access_token', 'vagov_anti_csrf_token', 'vagov_info_token']
 
 const { AUTH_SIS_TOKEN_EXCHANGE_URL, ENVIRONMENT, IS_TEST } = getEnv()
 
 export const saveRefreshToken = async (refreshToken: string): Promise<void> => {
+  inMemoryRefreshToken = refreshToken
   const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
@@ -191,6 +194,7 @@ export const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
   await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
+  inMemoryRefreshToken = undefined
 }
 
 /**
@@ -256,9 +260,8 @@ export const completeFirstTimeLogin = async () => {
 }
 
 export const setBiometricsPreference = async (value: boolean) => {
-  const refreshToken = await retrieveRefreshToken()
   await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE)
-  await saveRefreshToken(refreshToken || '')
+  await saveRefreshToken(inMemoryRefreshToken || '')
   const userSettings = queryClient.getQueryData(authKeys.biometrics) as UserBiometricsSettings
   queryClient.setQueryData(authKeys.biometrics, { ...userSettings, shouldStoreWithBiometric: value })
   await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
