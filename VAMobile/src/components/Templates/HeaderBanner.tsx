@@ -81,7 +81,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const TEXT_CONSTRAINT_THRESHOLD = 30
 

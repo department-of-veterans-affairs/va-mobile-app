@@ -59,7 +59,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
 
   const messageToUse = messageWithAttachmentData?.data.attributes || message
   const { attachment, hasAttachments, senderName, sentDate, body } = messageToUse
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
   const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''

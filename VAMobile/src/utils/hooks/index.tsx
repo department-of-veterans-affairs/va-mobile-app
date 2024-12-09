@@ -7,7 +7,6 @@ import {
   AlertButton,
   AppState,
   Dimensions,
-  EmitterSubscription,
   Keyboard,
   Linking,
   PixelRatio,
@@ -188,41 +187,22 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
 }
 
 /**
- * Hook to check if the screen reader is enabled
+ * Hook to check if the screen reader is enabled. Updates when the screen reader is toggled
  *
- * withListener - True to add a listener to live update screen reader status, default false
  * @returns boolean if the screen reader is on
  */
-export function useIsScreenReaderEnabled(withListener = false): boolean {
+export function useIsScreenReaderEnabled(): boolean {
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false)
 
   useEffect(() => {
-    let isMounted = true
-    let screenReaderChangedSubscription: EmitterSubscription
+    const screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
+      'screenReaderChanged',
+      setScreenReaderEnabled,
+    )
+    AccessibilityInfo.isScreenReaderEnabled().then(setScreenReaderEnabled)
 
-    if (withListener) {
-      screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
-        'screenReaderChanged',
-        (isScreenReaderEnabled) => {
-          if (isMounted) {
-            setScreenReaderEnabled(isScreenReaderEnabled)
-          }
-        },
-      )
-    }
-    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
-      if (isMounted) {
-        setScreenReaderEnabled(isScreenReaderEnabled)
-      }
-    })
-
-    return () => {
-      isMounted = false
-      if (withListener) {
-        screenReaderChangedSubscription?.remove()
-      }
-    }
-  }, [screenReaderEnabled, withListener])
+    return () => screenReaderChangedSubscription?.remove()
+  }, [])
 
   return screenReaderEnabled
 }
