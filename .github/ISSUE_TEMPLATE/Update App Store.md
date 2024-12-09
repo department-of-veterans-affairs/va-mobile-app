@@ -1,5 +1,5 @@
 ---
-name: testing Update App Store
+name: Update App Store
 about: Template for work needed to update Google, Apple or Va.Gov app store content and images 
 title: Update App Store
 labels: app store
