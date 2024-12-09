@@ -220,6 +220,10 @@ describe('Claims Screen', () => {
   })
 
   it('should verify details of claim on step 2', async () => {
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
+      .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_3_ID)).tap()
     await expect(element(by.id('Step 2 of 5. Initial review. Current step. Step 1 complete.'))).toExist()
     await expect(
@@ -351,7 +355,10 @@ describe('Claims Screen', () => {
   it('should verify details of claim on step 5', async () => {
     await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_2_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('bottom')
+    await waitFor(element(by.id('Step 5 of 5. Complete. Complete.')))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID))
+      .scroll(100, 'down')
     await element(by.id('Step 5 of 5. Complete. Complete.')).tap()
     await expect(element(by.text('Complete')).atIndex(1)).toExist()
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
