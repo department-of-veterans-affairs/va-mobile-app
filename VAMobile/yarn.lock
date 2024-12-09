@@ -2564,10 +2564,10 @@
     lodash "^4.17.21"
     redent "^3.0.0"
 
-"@testing-library/react-native@^12.8.1":
-  version "12.8.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.8.1.tgz#833c73a825aa87b9127717a44d4aeee44b59a963"
-  integrity sha512-/7PIFCpeqAD3j7nzKQhZtm1T6RR/O/tB1We7JHtYP5RpTBj8rPitEpt6xGrD8R0ymOh+DxDKK7Zovfv5uDSRWg==
+"@testing-library/react-native@^12.9.0":
+  version "12.9.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-12.9.0.tgz#9c727d9ffec91024be3288ed9376df3673154784"
+  integrity sha512-wIn/lB1FjV2N4Q7i9PWVRck3Ehwq5pkhAef5X5/bmQ78J/NoOsGbVY2/DG5Y9Lxw+RfE+GvSEh/fe5Tz6sKSvw==
   dependencies:
     jest-matcher-utils "^29.7.0"
     pretty-format "^29.7.0"
@@ -7396,10 +7396,10 @@ jest-watcher@^29.7.0:
     jest-util "^29.7.0"
     string-length "^4.0.1"
 
-jest-when@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.6.0.tgz#b46ee408d68f671447b218f2ae6bd93fb5028acf"
-  integrity sha512-+cZWTy0ekAJo7M9Om0Scdor1jm3wDiYJWmXE8U22UVnkH54YCXAuaqz3P+up/FdtOg8g4wHOxV7Thd7nKhT6Dg==
+jest-when@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/jest-when/-/jest-when-3.7.0.tgz#9a464964d7312214da8d12ea57957a06fbcc6244"
+  integrity sha512-aLbiyxmtksijcrKFir7n+t+XPbqSLV01eDkRyX28WM4VgA/iSc3mG8R8O2evDtOAa6SefrJiTIt/rTqqyrwVZg==
 
 jest-worker@^29.6.3, jest-worker@^29.7.0:
   version "29.7.0"
