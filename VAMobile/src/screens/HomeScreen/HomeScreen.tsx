@@ -48,7 +48,6 @@ import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
-import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
@@ -65,6 +64,7 @@ import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
@@ -293,11 +293,12 @@ export function HomeScreen({}: HomeScreenProps) {
       fill: theme.colors.icon.active,
     } as IconProps,
     onPress: () => navigateTo('Profile'),
+    testID: 'toProfileScreenID',
   }
 
   const boxProps: BoxProps = {
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
@@ -583,6 +584,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="OverrideAPI"
+        component={OverrideAPIScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}

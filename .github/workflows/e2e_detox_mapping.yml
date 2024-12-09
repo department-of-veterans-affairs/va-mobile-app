@@ -51,108 +51,121 @@ jobs:
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
-      - name: Get file difference by directory
-        id: changed_files_dir
-        uses: tj-actions/changed-files@v41
-        with:
-          dir_names: true
-          json: true
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
       - name: Get file difference by file name
         id: changed_files_file_name
         uses: tj-actions/changed-files@v41
         with:
-          json: true
           base_sha: "${{ steps.get-sha.outputs.sha }}"
+          path: './VAMobile/src'
+      - name: Check if directory/file is in detox mapping
+        id: detox_mapping_check
+        run: |
+          directoryFound="false"
+          noFileFound="false"
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            baseFile=$(echo $file | sed 's#.*/##')
+            baseFile=$(echo $baseFile | sed 's/ //g')
+            fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            if [[ "$fileFound" == "null" ]]; then
+              fileDirectory=$(dirname $file)
+              for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
+                if [[ $fileDirectory =~ $directory ]]; then
+                  directoryFound="true"
+                  break
+                fi
+              done
+              if [[ "$directoryFound" == "false" ]]; then
+                echo "Missing File: $file or missing directory: $fileDirectory"
+                noFileFound="true"
+              fi
+            fi
+          done
+          if [[ "$noFileFound" == "true" ]]; then
+            exit 1
+          fi
+      - name: Check if directory/file is spelled correctly
+        id: detox_mapping_spell_check
+        run: |
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
+            if [[ "$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory")" == "" ]]; then
+              directoryMisspelled="true"
+              echo "Directory misspelled: $directory"
+              exit 1
+            fi
+          done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in $(echo $fileNames | jq -r 'keys | .[]'); do
+            if [[ "$(find ${{ github.workspace }}/VAMobile/src -type f -name "$file")" == "" ]]; then
+              fileMisspelled="true"
+              echo "File misspelled: $file"
+              exit 1
+            fi
+          done
+      - name: Check if e2eNames is spelled correctly
+        id: detox_mapping_e2e_names_spell_check
+        run: |
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for directory in $(echo $directoryNames | jq 'keys | .[]'); do          
+            for e2eTest in $(echo $directoryNames | jq --argjson directory "$directory" --raw-output '.[$directory] | .[]'); do
+              if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
+                echo "e2eTests in $directory are not spelled correctly"
+                echo "$e2eTests misspelled: $e2eTest"
+                exit 1
+              fi
+            done
+          done
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in $(echo $fileNames | jq 'keys | .[]'); do           
+            for e2eTest in $(echo $fileNames | jq --argjson file "$file" --raw-output '.[$file] | .[]'); do
+              if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
+                echo "e2eTests in $file are not spelled correctly"
+                echo "$e2eTests misspelled: $e2eTest"
+                exit 1
+              fi
+            done
+          done
       - name: Get testing matrix array
         id: testing_matrix
         run: |
-          resp=$(echo ${{steps.changed_files_dir.outputs.all_changed_and_modified_files}} |  
-            jq 'select(contains(["LoginScreen"])) += ["LoginScreen"] | 
-            select(contains(["AppealDetailsScreen"])) += ["Appeals", "AppealsExpanded"] |
-            select(contains(["NeedHelpData"]) or contains(["NoClaimsAndAppeals"]) or contains(["NoClaimsAndAppealsAccess"]) or contains(["ClaimsAndAppealsListView"]) or contains(["claimsAndAppeals"])) += ["Appeals", "AppealsExpanded", "Claims"] |
-            select(contains(["ClaimDetailsScreen"]) or contains(["ClaimLettersScreen"]) or contains(["SubmitEvidence"]) or contains(["ClaimsHistoryScreen"])) += ["Claims"] |
-            select(contains(["ClaimLettersScreen"]) or contains(["decisionLetters"])) += ["DecisionLetters"] |
-            select(contains(["DisabilityRatingsScreen"]) or contains(["disabilityRating"])) += ["DisabilityRatings", "VeteranStatusCard"] |
-            select(contains(["Letters"]) or contains(["letters"])) += ["VALetters"] |
-            select(contains(["Appointments"]) or contains(["appointments"])) += ["Appointments", "AppointmentsExpanded"] |
-            select(contains(["CernerAlert"]) or contains(["Facilities"])) += ["Cerner"] |
-            select(contains(["Pharmacy"]) or contains(["prescriptions"])) += ["Prescriptions"] |
-            select(contains(["SecureMessaging"]) or contains(["secureMessaging"])) += ["Messages"] |
-            select(contains(["Vaccines"]) or contains(["vaccines"])) += ["VaccineRecords"] |
-            select(contains(["ContactVAScreen"])) += ["HomeScreen"] |
-            select(contains(["MilitaryInformationScreen"]) or contains(["militaryService"]) or contains(["Nametag"])) += ["MilitaryInformation", "VeteranStatusCard"] |
-            select(contains(["PersonalInformationScreen"]) or contains(["demographics"]) or contains(["personalInformation"])) += ["PersonalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
-            select(contains(["SettingsScreen"])) += ["SettingsScreen"] |
-            select(contains(["VeteransCrisisLineScreen"])) += ["VeteransCrisisLine", "SignIn"] |
-            select(contains(["VeteranStatusScreen"])) += ["VeteranStatusCard"] |
-            select(contains(["OnboardingCarousel"])) += ["Onboarding"] |
-            select(contains(["PaymentHistory"]) or contains(["payments"])) += ["Payments"] |
-            select(contains(["DirectDepositScreen"]) or contains(["directDeposit"])) += ["DirectDeposit"] |
-            select(contains(["SplashScreen"])) += ["Onboarding", "LoginScreen"] |
-            select(contains(["auth"])) += ["SignIn"] |
-            select(contains(["authorizedServices"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "VALetters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
-            select(contains(["contactInformation"]) or contains(["ContactInformationScreen"])) += ["ContactInformation", "VALetters"] |
-            select(contains(["NotificationManager"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["Types"]) or contains(["VAImage"])) +=
-              ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
-            | unique')
-          resp_file=$(echo ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}} |
-            jq 'select(contains(["appealData.tsx"])) += ["Appeals", "AppealsExpanded"] |
-            select(contains(["claimData.tsx"]) or contains(["ClaimsScreen.tsx"]) or contains(["Claims.json"]) or contains(["Claims.ts"]) or contains(["ClaimsAndAppealsSlice"]) 
-              or contains(["ClaimsAndAppealsData"]) or contains(["claims.ts"]) or contains(["claims.tsx"])) += ["Claims", "Appeals", "AppealsExpanded", "DecisionLetters"] |
-            select(contains(["DisabilityRatingData"]) or contains(["disabilityRating.json"]) or contains(["disabilityRating.ts"])) += ["DisabilityRatings", "VeteranStatusCard"] |
-            select(contains(["letters.json"]) or contains(["letters.ts"]) or contains(["Letters.ts"]) or contains(["LettersData"]) or contains(["LetterBeneficiaryData"]) or contains(["BasicError"])) += ["VALetters"] |
-            select(contains(["HealthScreen.tsx"]) or contains(["HealthStackScreens.tsx"])) += ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"] |
-            select(contains(["BenefitsScreen.tsx"]) or contains(["BenefitsStackScreens.tsx"])) += ["DisabilityRating", "Claims", "Appeals", "VALetters"] |
-            select(contains(["Appointments.json"]) or contains(["Appointments.ts"]) or contains(["AppointmentsSlice.ts"]) or contains(["appointments.ts"]) or contains(["canclAppointment.tsx"]) or contains(["getAppointments.tsx"]) or contains(["appointments.tsx"])) += ["Appointments", "AppointmentsExpanded"] |
-            select(contains(["getFacilitiesInfo"]) or contains(["FacilityData"])) += ["Cerner"] |
-            select(contains(["Prescriptions.json"]) or contains(["Prescriptions.ts"]) or contains(["SelectionList"]) or contains(["MultiTouchCard"]) or contains(["RadioGroupModal"])) += ["Prescriptions"] |
-            select(contains(["SecureMessaging.json"]) or contains(["SecureMessaging.ts"]) or contains(["InLineTextWithIcons"]) 
-              or contains(["MessageAlert"]) or contains(["MessageList"]) or contains(["MessagesCountTag"]) or contains(["secureMessaging.ts"]) or contains(["TextLineWithIcon"])) += ["Messages"] |
-            select(contains(["vaccine"])) += ["VaccineRecords"] |
-            select(contains(["EncourageUpdate.tsx"]) or contains(["WhatsNew.tsx"])) += ["HomeScreen"] |
-            select(contains(["countries"]) or contains(["militaryPostOffices"]) or contains(["militaryStates"]) or contains(["states.ts"]) or contains(["PhoneData"]) or contains(["EmailData"])) += ["ContactInformation"] |
-            select(contains(["ServiceHistoryData"])) += ["MilitaryInformation", "VeteranStatusCard"] |
-            select(contains(["demographics"]) or contains(["PersonalInformation"]) or contains(["UserData"]) or contains(["Demographics"])) += ["PeronalInformationScreen", "VeteranStatusCard", "HomeScreen", "ProfileScreen"] |
-            select(contains(["settingsSlice.ts"])) += ["SettingsScreen"] |
-            select(contains(["ProfileScreen.tsx"]) or contains(["profile.json"]) or contains(["profile.ts"])) += ["ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "VALetters", "Payments"] |
-            select(contains(["HomeScreen.tsx"]) or contains(["HomeStackScreens.tsx"])) += ["ContactVAScreen", "ProfileScreen", "VeteranStatusCard"] |
-            select(contains(["carousel"])) += ["Onboarding"] |
-            select(contains(["payments.json"]) or contains(["payments.ts"])) += ["Payments"] |
-            select(contains(["accounts.ts"])) += ["DirectDeposit"] |
-            select(contains(["PaymentsScreen.tsx"]) or contains(["PaymentsStackScreens.tsx"])) += ["Payments", "DirectDeposit"] |
-            select(contains(["decisionLetters.ts"]) or contains(["decisionLetters.json"]) or contains(["claimData.tsx"])) += ["Claims"] |
-            select(contains(["getAuthorizedServices.json"])) += ["Appeals", "AppealsExpanded", "Appointments", "AppointmentsExpanded", "Claims", "DirectDeposit", "DisabilityRatings", "PersonalInformationScreen", "VALetters", "MilitaryInformation", "Payments", "Prescriptions", "Messages", "VeteranStatusCard"] |
-            select(contains(["notifications.json"]) or contains(["notifications.ts"]) or contains(["Notifications.ts"])) += ["SettingsScreen", "PushNotifications"] |
-            select(contains(["ErrorComponent"])) += ["Appeals", "AppealsExpanded", "DisabilityRatings", "VALetters", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "VaccineRecords", "ProfileScreen", "ContactInformation", "MilitaryInformation", "PersonalInformationScreen", "SettingsScreen", "Payments"] |
-            select(contains(["VAModalPicker"])) += ["Appointments", "Messages", "Payments"] |
-            select(contains(["RadioGroup"])) += ["PersonalInformationScreen", "ContactInformation"] |
-            select(contains(["VATextInput"]) or contains(["WaygateWrapper"])) += ["AvailabilityFramework"] |
-            select(contains(["AccordionCollapsible"])) += ["Claims", "Messages"] |
-            select(contains(["AlertWithHaptics"])) += ["AvailabilityFramework", "VALetters", "Appointments", "Prescriptions", "Messages", "ContactInformation", "DirectDeposit", "Cerner", "Prescriptions", "ContactInformation"] |
-            select(contains(["AppVersionAndBuild"])) += ["LoginScreen", "SettingsScreen"] |
-            select(contains(["ClickForActionLink"]) or contains(["ClickToCallPhoneNumber"])) += ["AvailabilityFramework", "Claims", "Appeals", "DisabilityRatings", "Appointments", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"] |
-            select(contains(["CollapsibleView"])) += ["Appeals", "AppealsExpanded", "Messages", "DirectDeposit"] |
-            select(contains(["DefaultList"])) += ["Claims", "DisabilityRattings", "VALetters", "ContactInformation", "Appointments", "VaccineRecords", "MilitaryInformation", "PersonalInformationScreen", "DirectDeposit", "Prescriptions", "Payments", "SettingsScreen"] |
-            select(contains(["LabelTag"])) += ["Prescriptions", "Messages"] |
-            select(contains(["SimpleList"])) += ["Messages", "Claims", "Appeals", "VALetters", "Apppointments", "Prescriptions", "VaccineRecords"] |
-            select(contains(["Pagination"])) += ["Appointments", "Claims", "Appeals", "AppealsExpanded", "Prescriptions", "Messages", "Payments", "VaccinesScreen"] |
-            select(contains(["SnackBar"])) += ["Claims", "Messages", "ContactInformation", "PersonalInformationScreen", "DirectDeposit"] |
-            select(contains(["VABulletList"])) += ["Appeals", "AppealsExpanded", "Claims", "Prescriptions", "Cerner", "Messages", "Onboarding", "SignIn", "SettingsScreen"] |
-            select(contains(["CrisisLineButton"])) += ["HomeScreen", "SignIn", "LoginScreen", "VeteransCrisisLine"] |
-            select(contains(["ActivityButton.tsx"])) += ["HomeScreen", "Prescriptions", "Appointments", "Claims", "Appeals", "DecisionLetters"] |
-            select(contains(["LinkRow.tsx"])) += ["HomeScreen"] |
-            select(contains(["Screens.ts"]) or contains(["BasicError"]) or contains(["LoadingComponent"]) or contains(["Box"]) or contains(["HeaderTitle"]) or contains(["LargeNavButton"]) 
-              or contains(["TextArea"]) or contains(["TextLines"]) or contains(["TextView"]) or contains(["backButtonLabels"]) or contains(["common.ts"])) +=
-              ["AvailabilityFramework", "Cerner", "ContactInformation", "VALetters", "LoginScreen", "Onboarding", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords", "Claims", "Appeals", "AppealsExpanded", "DisabilityRatings", "Appointments", "AppointmentsExpanded", "Prescriptions", "Messages", "MilitaryInformation", "HomeScreen", "VeteransCrisisLine", "VeteranStatusCard", "DirectDeposit", "Payments", "PersonalInformationScreen"]
-            | unique ')
-  
-          test_matrix=$(echo "$resp" | jq  --argjson a "${resp_file}" --argjson b "${resp}" --compact-output '$a + $b | unique')
-          echo "$test_matrix"
-          test_matrix=$(echo $test_matrix | jq --compact-output 'map(select(. == ("Appeals", "AppealsExpanded", "Appointments", "AppointmentExpanded", "AvailabilityFramework", "Cerner", "Claims", 
-          "ContactInformation", "DirectDeposit", "DisabilityRatings", "HomeScreen", "VALetters", "LoginScreen", "Messages", "MilitaryInformation", "Navigation", "Onboarding", "Payments",
-          "PersonalInformationScreen", "Prescriptions", "ProfileScreen", "PushNotifications", "SettingsScreen", "SignIn", "VaccineRecords",
-          "VeteransCrisisLine", "VeteranStatusCard")))')
+          firstInstanceFile="true"
+          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
+            baseFile=$(echo $file | sed 's#.*/##')
+            baseFile=$(echo $baseFile | sed 's/ //g')
+            fileFound=$(echo $fileNames | jq --arg fileName "$baseFile" '.[$fileName]')
+            if [[ "$fileFound" == "null" ]]; then
+              fileDirectory=$(dirname $file)
+              for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
+                if [[ "$fileDirectory" =~ "$directory" ]]; then
+                  directoryFound=$(echo $directoryNames | jq --arg fileName "$directory" -r '.[$fileName]')
+                  if [[ "$firstInstanceFile" == "true" ]]; then
+                    test_matrix=$directoryFound
+                    test_matrix=$(echo $test_matrix | jq -c '.')
+                    firstInstanceFile="false"
+                  else
+                    test_matrix=$(echo $test_matrix | jq -c '.')
+                    test_matrix=$(echo $test_matrix | jq --argjson matrix "$directoryFound" '. += $matrix')
+                  fi
+                  break
+                fi
+              done
+            else
+              if [[ "$firstInstanceFile" == "true" ]]; then
+                test_matrix=$fileFound
+                test_matrix=$(echo $test_matrix | jq -c '.')
+                firstInstanceFile="false"
+              else
+                test_matrix=$(echo $test_matrix | jq -c '.')
+                test_matrix=$(echo $test_matrix | jq --argjson matrix "$fileFound" '. += $matrix')
+              fi
+            fi
+          done
+          test_matrix=$(echo $test_matrix | jq -c 'unique')
           echo "TESTING_MATRIX=$test_matrix" >> $GITHUB_OUTPUT
           echo "TEST_RUN=true" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

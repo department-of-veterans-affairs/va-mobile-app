@@ -24,6 +24,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
+import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
@@ -42,9 +43,13 @@ import {
   getHomeScreens,
   getPaymentsScreens,
 } from 'screens'
-import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
+import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
+import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
+import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
+import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
 import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
@@ -97,12 +102,21 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditDirectDeposit: {
     displayTitle: string
   }
+  FileRequestSubtask: {
+    claimID: string
+    claim: ClaimData | undefined
+  }
+  SubmitEvidenceSubtask: {
+    claimID: string
+  }
+  InAppFeedback: { task: string }
   Tabs: undefined
 }
 
 type StackNavParamList = WebviewStackParams & {
   Splash: undefined
   BiometricsPreference: undefined
+  RequestNotifications: undefined
   Sync: undefined
   Login: undefined
   LoaGate: undefined
@@ -187,8 +201,15 @@ function MainApp() {
 
 export function AuthGuard() {
   const dispatch = useAppDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } =
-    useSelector<RootState, AuthState>((state) => state.auth)
+  const {
+    initializing,
+    loggedIn,
+    syncing,
+    firstTimeLogin,
+    canStoreWithBiometric,
+    displayBiometricsPreferenceScreen,
+    requestNotificationsPreferenceScreen,
+  } = useSelector<RootState, AuthState>((state) => state.auth)
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
@@ -348,6 +369,16 @@ export function AuthGuard() {
     )
   } else if (firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
+  } else if (!firstTimeLogin && loggedIn && requestNotificationsPreferenceScreen) {
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="RequestNotifications"
+          component={RequestNotificationsScreen}
+          options={{ ...topPaddingAsHeaderStyles }}
+        />
+      </Stack.Navigator>
+    )
   } else if (loggedIn) {
     content = (
       <>
@@ -438,6 +469,17 @@ export function AuthedApp() {
           component={EditDirectDepositScreen}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
+        <RootNavStack.Screen
+          name="SubmitEvidenceSubtask"
+          component={SubmitEvidenceSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen
+          name="FileRequestSubtask"
+          component={FileRequestSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

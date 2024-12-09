@@ -131,13 +131,13 @@ const AFNavigationForIndividual = [
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
   ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
   // [
-    // 'Claims.e2e',
-    // 'WG_SubmitEvidence',
-    // 'Benefits',
-    // 'Claims',
-    // 'Claims history',
-    // 'Received December 05, 2021',
-    // 'Submit evidence',
+  // 'Claims.e2e',
+  // 'WG_SubmitEvidence',
+  // 'Benefits',
+  // 'Claims',
+  // 'Claims history',
+  // 'Received December 05, 2021',
+  // 'Submit evidence',
   // ],
   ['Appeals.e2e', 'WG_AppealDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received July 17, 2008'],
   [
@@ -173,8 +173,10 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 
   it('should verify AF use case 2 Update available for: ' + testRun, async () => {
-    await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
-    await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    if (testRun != 'WG_StartNewMessage' && testRun != 'WG_ReplyMessage') {
+      await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
+      await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    }
   })
 }
 

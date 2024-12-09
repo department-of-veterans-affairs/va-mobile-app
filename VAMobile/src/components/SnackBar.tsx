@@ -12,7 +12,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
-import colors from '../styles/themes/VAColors'
 import { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -71,7 +70,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
     flexWrap: 'wrap',
     display: 'flex',
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.6,
     },
@@ -86,7 +85,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
 
   const messageProp: TextViewProps = {
     variant: 'HelperText',
-    color: 'snackBarTxt',
+    color: 'snackBar',
   }
 
   // adjust style depending on if there are 1 or 2 buttons
@@ -122,7 +121,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
   const snackBarIconProps: VAIconProps = {
     name: isError ? 'ExclamationTriangle' : 'CircleCheckMark',
     fill: themeColor.icon.snackBarIcon,
-    fill2: themeColor.icon.transparent,
+    fill2: 'transparent',
     height: 18,
     width: 18,
   }
