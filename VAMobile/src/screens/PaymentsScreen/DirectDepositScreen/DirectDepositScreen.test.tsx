@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { directDepositKeys } from 'api/directDeposit'
 import { DirectDepositData } from 'api/types'
@@ -73,13 +74,13 @@ context('DirectDepositScreen', () => {
         .calledWith('/v0/payment-information/benefits')
         .mockResolvedValue(mockData)
       initializeTestInstance(mockData)
-      await waitFor(() => expect(screen.getByText('Account')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('directDeposit.account'))).toBeTruthy())
       await waitFor(() => expect(screen.getByText('BoA')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('******1234')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Savings account')).toBeTruthy())
       await waitFor(() => fireEvent.press(screen.getByTestId('account-boa-******1234-savings-account')))
       await waitFor(() =>
-        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: 'Edit account' }),
+        expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit', { displayTitle: t('directDeposit.edit.title') }),
       )
     })
   })
@@ -90,7 +91,7 @@ context('DirectDepositScreen', () => {
         .calledWith('/v0/payment-information/benefits')
         .mockResolvedValue(noData)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText('Add your bank account information')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('directDeposit.addBankAccountInformation'))).toBeTruthy())
     })
   })
 
@@ -100,7 +101,9 @@ context('DirectDepositScreen', () => {
         .calledWith('/v0/payment-information/benefits')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
     })
   })
 })
