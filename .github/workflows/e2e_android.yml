@@ -189,7 +189,7 @@ jobs:
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.2'
+          ruby-version: '3.3'
           bundler-cache: true
           working-directory: VAMobile/android
 
