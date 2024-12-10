@@ -345,7 +345,7 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
     await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
-    const refreshToken = (await api.getRefreshToken()) || (await retrieveRefreshToken())
+    const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
       await refreshAccessToken()
     } else {
