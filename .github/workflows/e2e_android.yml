@@ -225,10 +225,8 @@ jobs:
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
-          cores: 3
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: yarn e2e:android-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot
         continue-on-error: true
 
@@ -253,7 +251,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 30
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -268,7 +266,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 30
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
