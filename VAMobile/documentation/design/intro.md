@@ -35,6 +35,9 @@ A system to help you write, design, and build digital services on the VA Mobile 
 ### Selection and input
 - [Checkbox](/va-mobile-app/design/Components/Selection%20and%20input/Checkbox)
 
+### Typography
+- [Text](/va-mobile-app/design/Components/Typography/Text)
+
 -----
 
 ## Design system team
