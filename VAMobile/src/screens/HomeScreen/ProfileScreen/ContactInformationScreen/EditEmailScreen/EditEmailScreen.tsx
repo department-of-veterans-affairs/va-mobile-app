@@ -99,10 +99,11 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       onError: (error: unknown) => {
         if (isErrorObject(error)) {
           if (error.status === 400) {
-            snackbar.show(t('contactInformation.emailAddress.not.saved'), { isError: true })
+            snackbar.show(t('contactInformation.emailAddress.not.saved'), { isError: true, offset: 0 })
           } else {
             snackbar.show(t('contactInformation.emailAddress.not.saved'), {
               isError: true,
+              offset: 0,
               onActionPressed: () => saveEmail(emailData, mutateOptions),
             })
           }
@@ -130,6 +131,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       onError: () =>
         snackbar.show(t('contactInformation.emailAddress.not.removed'), {
           isError: true,
+          offset: 0,
           onActionPressed: () => deleteEmail(emailData, mutateOptions),
         }),
     }

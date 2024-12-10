@@ -306,6 +306,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           onError: () => {
             snackbar.show(t('secureMessaging.draft.saved.error'), {
               isError: true,
+              offset: 0,
               onActionPressed: () => {
                 // passing messageDataRef to ensure we have the latest messageData
                 saveDraft({ messageData: messageDataRef.current }, mutateOptions)
@@ -332,6 +333,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           } else {
             snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
               isError: true,
+              offset: 0,
               onActionPressed: () => {
                 // passing messageDataRef to ensure we have the latest messageData
                 sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions)

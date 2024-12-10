@@ -112,7 +112,11 @@ function AddressValidation({
       const mutateOptions = {
         onSuccess: () => snackbar.show(GenerateAddressMessage(t, addressType, false)),
         onError: () =>
-          snackbar.show(GenerateAddressMessage(t, addressType, true), { isError: true, onActionPressed: () => save }),
+          snackbar.show(GenerateAddressMessage(t, addressType, true), {
+            isError: true,
+            offset: 0,
+            onActionPressed: () => save,
+          }),
       }
       saveAddress({ addressData, revalidate }, mutateOptions)
     }

@@ -146,7 +146,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         snackbar.show(t('fileUpload.submitted'))
       },
       onError: () =>
-        snackbar.show(t('fileUpload.submitted.error'), { isError: true, onActionPressed: onUploadConfirmed }),
+        snackbar.show(t('fileUpload.submitted.error'), {
+          isError: true,
+          offset: 0,
+          onActionPressed: onUploadConfirmed,
+        }),
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)

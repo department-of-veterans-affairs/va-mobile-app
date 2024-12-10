@@ -82,6 +82,7 @@ export function useComposeCancelConfirmation(): [
             onError: () => {
               snackbar.show(t('secureMessaging.draft.saved.error'), {
                 isError: true,
+                offset: 0,
                 onActionPressed: () => saveDraft(params, mutateOptions),
               })
             },

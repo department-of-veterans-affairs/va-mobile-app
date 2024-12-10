@@ -130,6 +130,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
           isErrorObject(error) &&
           snackbar.show(t('contactInformation.phoneNumber.not.saved', { type: displayTitle }), {
             isError: true,
+            offset: 0,
             onActionPressed: save,
           }),
       }
@@ -147,6 +148,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
           isErrorObject(error) &&
           snackbar.show(t('contactInformation.phoneNumber.not.removed', { type: displayTitle }), {
             isError: true,
+            offset: 0,
             onActionPressed: () => deletePhoneNumber(phoneData, mutateOptions),
           }),
       }

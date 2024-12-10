@@ -219,6 +219,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           onError: () => {
             snackbar.show(t('secureMessaging.draft.saved.error'), {
               isError: true,
+              offset: 0,
               onActionPressed: () =>
                 saveDraft(
                   {
@@ -253,6 +254,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           } else {
             snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
               isError: true,
+              offset: 0,
               onActionPressed: () =>
                 sendMessage(
                   {

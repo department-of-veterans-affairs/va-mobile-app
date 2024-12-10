@@ -149,7 +149,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         snackbar.show(t('fileUpload.submitted'))
       },
       onError: () =>
-        snackbar.show(t('fileUpload.submitted.error'), { isError: true, onActionPressed: onUploadConfirmed }),
+        snackbar.show(t('fileUpload.submitted.error'), {
+          isError: true,
+          offset: 0,
+          onActionPressed: onUploadConfirmed,
+        }),
     }
     const params: UploadFileToClaimParamaters = {
       claimID,

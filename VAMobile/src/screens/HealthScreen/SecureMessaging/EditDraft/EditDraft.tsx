@@ -189,6 +189,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
         snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
           isError: true,
+          offset: 0,
           onActionPressed: () => sendMessage(params, mutateOptions),
         })
       }
@@ -271,6 +272,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             onError: () => {
               snackbar.show(t('secureMessaging.deleteDraft.snackBarErrorMessage'), {
                 isError: true,
+                offset: 0,
                 onActionPressed: () => deleteDraft(params, mutateOptions),
               })
             },
@@ -478,6 +480,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           onError: () => {
             snackbar.show(t('secureMessaging.draft.saved.error'), {
               isError: true,
+              offset: 0,
               onActionPressed: () => saveDraft(params, mutateOptions),
             })
           },

@@ -69,6 +69,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
       onError: () =>
         snackbar.show(t('personalInformation.preferredName.notSaved'), {
           isError: true,
+          offset: 0,
           onActionPressed: updatePreferredName,
         }),
     }
