@@ -37,7 +37,7 @@ jobs:
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
-          filename: .github/ISSUE_TEMPLATE/updat_release_issue.md
+          filename: .github/ISSUE_TEMPLATE/release_issuetest.md
         env:
           versionNumber: ${{ env.VERSION }}
           qaDueDate: ${{env.QA_DUE_DATE}}
