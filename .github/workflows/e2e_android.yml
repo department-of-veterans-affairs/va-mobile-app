@@ -141,7 +141,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-14-xl
+    runs-on: macos-14
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
