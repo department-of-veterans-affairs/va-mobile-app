@@ -4,9 +4,10 @@ import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, to
 
 export const AppointmentsExpandede2eConstants = {
   PATIENT_CANCELLATION: 'You canceled this appointment.',
-  VIDEO_VISIT_PREP_ID: 'prepareForVideoVisitTestID',
+  VIDEO_VISIT_PREP_LINK_ID: 'prepareForVideoVisitTestID',
   APPT_DIRECTIONS_ID: 'directionsTestID',
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
+  VIDEO_VISIT_PREP_PANEL_ID: 'videoPrepLargePanelID',
 }
 
 const checkMedicationWording = async ({
@@ -47,13 +48,13 @@ const checkMedicationWording = async ({
 
       if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
         await expect(element(by.text('Get your device ready to join.'))).toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID))).toExist()
-        await waitFor(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID)))
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID))).toExist()
+        await waitFor(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID)))
           .toBeVisible()
           .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
           .scroll(300, 'down')
-        await element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID)).tap()
-        await expect(element(by.text('Appointments help'))).toExist()
+        await element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID)).tap()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_PANEL_ID))).toExist()
         await element(by.text('Close')).tap()
       } else if (appointmentType === 'Claim') {
         await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
@@ -76,7 +77,7 @@ const checkMedicationWording = async ({
         ).not.toExist()
         await expect(element(by.text('Learn more about claim exam appointments'))).not.toExist()
         await expect(element(by.text('Get your device ready to join.'))).not.toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID))).not.toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID))).not.toExist()
       }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
