@@ -2,10 +2,11 @@
 title: Authentication Diagrams
 ---
 
-### Username and Password Authorization Flow
+## Username and Password Authorization Flow
+
 ![Username and Password Authorization Flow](../../../../static/img/backend/username-and-password-authorization-flow.png)
 
-```
+```yaml
 sequenceDiagram
     participant User
     participant App
@@ -16,10 +17,11 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-### Biometrics Flow for Username and Password Initial Login
+## Biometrics Flow for Username and Password Initial Login
+
 ![Biometrics Flow for Username and Password Initial Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-initial-login.png)
 
-```
+```yaml
 sequenceDiagram
     participant User
     participant Keychain
@@ -34,9 +36,11 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-### Biometrics Flow for Username and Password Subsequent Login
+## Biometrics Flow for Username and Password Subsequent Login
+
 ![Biometrics Flow for Username and Password Subsequent Login](../../../../static/img/backend/biometrics-flow-for-username-and-password-subsequent-login.png)
-```
+
+```yaml
 sequenceDiagram
     participant User
     participant Keychain
@@ -53,9 +57,11 @@ sequenceDiagram
     App-->>User: Display auth result
 ```
 
-### VA: Health and Benefits Biometrics Initial Login
+## VA: Health and Benefits Biometrics Initial Login
+
 ![Health and Benefits Biometrics Initial Login](../../../../static/img/backend/health-and-benefits-biometrics-initial-login.png)
-```
+
+```yaml
 sequenceDiagram
     participant User
     participant Secure App Storage
@@ -80,9 +86,11 @@ sequenceDiagram
     App-->>User: Display Auth Result
 ```
 
-### VA: Health and Benefits Biometrics Subsequent Login
+## VA: Health and Benefits Biometrics Subsequent Login
+
 ![Health and Benefits Biometrics Subsequent Login](../../../../static/img/backend/health-and-benefits-biometrics-subsequent-login.png)
-```
+
+```yaml
 sequenceDiagram
     participant User
     participant Secure App Storage
@@ -99,4 +107,4 @@ sequenceDiagram
     App-->>User: Display Auth Result
 ```
 
-In order to regenerate these graphs, add 'mermaid' to the end of the \`\`\` at the beginning of each codeblock
+In order to regenerate these graphs, add 'mermaid' to the end of the \`\`\` at the beginning of each codeblock.

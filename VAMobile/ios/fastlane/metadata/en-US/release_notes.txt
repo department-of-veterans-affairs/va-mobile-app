@@ -1,1 +1,1 @@
-You can now view and download files from your claim in the app.
+We added general improvements and fixed a few bugs.
