@@ -57,5 +57,5 @@ Snackbars provide feedback regarding API interactions at the bottom of the scree
 - If a screen has bottom navigation, the snackbar should open above the navigation.
 - There should only ever be one snackbar on the screen. Opening a new snackbar will close the previous snackbar.
 
-### Related
+## Related
 * [Snackbar - Material Design](https://m3.material.io/components/snackbar/overview)
