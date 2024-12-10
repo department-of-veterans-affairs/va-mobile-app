@@ -141,7 +141,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-xl
+    runs-on: macos-14-xl
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -169,22 +169,22 @@ jobs:
           cd ../app
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
 
-      - name: Install Ruby using rbenv
-        run: |
-          # Install Homebrew if not already installed
-          if ! command -v brew &>/dev/null; then
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-          fi
-          # Install rbenv and ruby-build
-          brew install rbenv ruby-build
-          rbenv init
-          echo 'eval "$(rbenv init -)"' >> ~/.zshrc
-          eval "$(rbenv init -)"
-          # Install the required Ruby version
-          rbenv install -s 3.0.2
-          rbenv global 3.0.2
+      # - name: Install Ruby using rbenv
+      #   run: |
+      #     # Install Homebrew if not already installed
+      #     if ! command -v brew &>/dev/null; then
+      #       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      #       echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+      #       eval "$(/opt/homebrew/bin/brew shellenv)"
+      #     fi
+      #     # Install rbenv and ruby-build
+      #     brew install rbenv ruby-build
+      #     rbenv init
+      #     echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+      #     eval "$(rbenv init -)"
+      #     # Install the required Ruby version
+      #     rbenv install -s 3.0.2
+      #     rbenv global 3.0.2
 
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
