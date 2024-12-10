@@ -345,7 +345,7 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
     await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
-    const refreshToken = await retrieveRefreshToken()
+    const refreshToken = (await api.getRefreshToken()) || (await retrieveRefreshToken())
     if (refreshToken) {
       await refreshAccessToken()
     } else {
@@ -363,7 +363,7 @@ const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: (
   await logAnalyticsEvent(Events.vama_login_start(true, true))
   AsyncStorage.setItem(NEW_SESSION, 'true')
   try {
-    const refreshToken = await retrieveRefreshToken()
+    const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
       loginStart(dispatch, true)
       await refreshAccessToken()
