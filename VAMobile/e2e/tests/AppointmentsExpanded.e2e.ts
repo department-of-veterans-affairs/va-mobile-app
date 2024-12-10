@@ -4,6 +4,9 @@ import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, to
 
 export const AppointmentsExpandede2eConstants = {
   PATIENT_CANCELLATION: 'You canceled this appointment.',
+  VIDEO_VISIT_PREP_ID: 'prepareForVideoVisitTestID',
+  APPT_DIRECTIONS_ID: 'directionsTestID',
+  VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
 }
 
 const checkMedicationWording = async ({
@@ -44,12 +47,12 @@ const checkMedicationWording = async ({
 
       if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
         await expect(element(by.text('Get your device ready to join.'))).toExist()
-        await expect(element(by.id('prepareForVideoVisitTestID'))).toExist()
-        await waitFor(element(by.id('prepareForVideoVisitTestID')))
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID))).toExist()
+        await waitFor(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID)))
           .toBeVisible()
           .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
           .scroll(300, 'down')
-        await element(by.id('prepareForVideoVisitTestID')).tap()
+        await element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID)).tap()
         await expect(element(by.text('Appointments help'))).toExist()
         await element(by.text('Close')).tap()
       } else if (appointmentType === 'Claim') {
@@ -73,7 +76,7 @@ const checkMedicationWording = async ({
         ).not.toExist()
         await expect(element(by.text('Learn more about claim exam appointments'))).not.toExist()
         await expect(element(by.text('Get your device ready to join.'))).not.toExist()
-        await expect(element(by.id('prepareForVideoVisitTestID'))).not.toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_ID))).not.toExist()
       }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
@@ -191,7 +194,7 @@ const checkUpcomingApptDetails = async (
   if (locationAddress != undefined) {
     await expect(element(by.text(locationAddress))).toExist()
     if (appointmentStatus !== 'Pending' && appointmentType !== 'CC') {
-      await expect(element(by.id('directionsTestID'))).toExist()
+      await expect(element(by.id(AppointmentsExpandede2eConstants.APPT_DIRECTIONS_ID))).toExist()
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     }
@@ -269,7 +272,7 @@ const checkUpcomingApptDetails = async (
         }
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1)).toExist()
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1)).toExist()
-        await expect(element(by.id('vaLinkApptsCancelTestID'))).toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.VA_APPT_CANCEL_ID))).toExist()
       }
     } else if (appointmentStatus === 'Pending') {
       if (appointmentType !== 'CC') {
@@ -346,36 +349,36 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
     text === 'At VA Palo Alto Health Care System' ||
     text === 'At Hampton VA Medical Center'
   ) {
-    await element(by.id('appointmentsTestID')).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
   }
   if (pastAppointment !== '') {
     try {
       await waitFor(element(by.text(text)))
         .toBeVisible()
-        .whileElement(by.id('appointmentsTestID'))
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
         .scroll(250, 'down')
     } catch (ex) {
       await waitFor(element(by.text(text)))
         .toBeVisible()
-        .whileElement(by.id('appointmentsTestID'))
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
         .scroll(250, 'up')
     }
   } else {
     await waitFor(element(by.text(text)))
       .toBeVisible()
-      .whileElement(by.id('appointmentsTestID'))
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(300, 'down')
 
     try {
       await waitFor(element(by.text(text)))
         .toBeVisible()
-        .whileElement(by.id('appointmentsTestID'))
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
         .scroll(250, 'down')
     } catch (ex) {
       await waitFor(element(by.text(text)))
         .toBeVisible()
-        .whileElement(by.id('appointmentsTestID'))
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
         .scroll(250, 'up')
     }
   }
@@ -395,7 +398,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      await element(by.id('appointmentsTestID')).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
       await element(by.text('Past')).tap()
     }
     await scrollToThenTap('Vilanisi Reddy', pastAppointmentString)
@@ -711,12 +714,12 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     } else {
       await element(by.text('Past')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     }
     await scrollToThenTap('At Fort Collins VA Clinic - Claim - Canceled', pastAppointmentString)
     await expect(element(by.text('Fort Collins VA Clinic - Claim - Canceled canceled this appointment.'))).toExist()
@@ -803,12 +806,12 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     } else {
       await element(by.text('Past')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     }
 
     await scrollToThenTap('At Central California VA Health Care System', pastAppointmentString)
@@ -901,16 +904,16 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     } else {
       await element(by.text('Past')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     }
 
     await scrollToThenTap('John Jones', pastAppointmentString)
@@ -1002,20 +1005,20 @@ export async function apppointmentVerification(pastAppointment = false) {
       await waitFor(element(by.text('Upcoming')))
         .toExist()
         .withTimeout(10000)
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     } else {
       await element(by.text('Past')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
-      await element(by.id('appointmentsTestID')).scrollTo('bottom')
-      await element(by.id('next-page')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     }
 
     await scrollToThenTap('Jane Jones', pastAppointmentString)
