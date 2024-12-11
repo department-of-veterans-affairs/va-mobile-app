@@ -331,9 +331,7 @@ export function AuthGuard() {
     }
     console.debug('AuthGuard: initializing')
     if (!loggedIn) {
-      initializeAuth(dispatch, () => {
-        refreshAccessToken(getAccessToken() || '', mutateOptions)
-      })
+      initializeAuth(dispatch, () => refreshAccessToken(getAccessToken() || '', mutateOptions))
     }
   }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch])
 
