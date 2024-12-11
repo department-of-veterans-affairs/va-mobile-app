@@ -355,7 +355,7 @@ export const initializeAuth = async (
         onSuccess: async (data) => {
           const authCredentials = await processAuthResponse(data)
           await finishInitialize(dispatch, true, authCredentials)
-          usePostLoggedIn()
+          usePostLoggedIn().mutate()
         },
         onError: async (error) => {
           if (isErrorObject(error)) {
@@ -394,7 +394,7 @@ const startBiometricsLogin = async (
         onSuccess: async (data) => {
           const authCredentials = await processAuthResponse(data)
           await finishInitialize(dispatch, true, authCredentials)
-          usePostLoggedIn()
+          usePostLoggedIn().mutate()
         },
         onError: async (error) => {
           if (isErrorObject(error)) {

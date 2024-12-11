@@ -20,7 +20,7 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { MutateOptions, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
 import {
@@ -28,14 +28,12 @@ import {
   useBiometricsSettings,
   useHandleTokenCallbackUrl,
   useLogout,
-  usePostLoggedIn,
   useRefreshAccessToken,
 } from 'api/auth'
 import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
-import { Events } from 'constants/analytics'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
 import { SnackBarConstants } from 'constants/common'
 import { linking } from 'constants/linking'
@@ -60,7 +58,7 @@ import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformati
 import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
-import { getAccessToken, setRefreshAccessToken, setlogout } from 'store/api'
+import { setRefreshAccessToken, setlogout } from 'store/api'
 import { AnalyticsState, AuthState } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
@@ -72,9 +70,7 @@ import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { finishInitialize, initializeAuth, processAuthResponse } from 'utils/auth'
-import { isErrorObject } from 'utils/common'
+import { initializeAuth } from 'utils/auth'
 import getEnv from 'utils/env'
 import { setFileSystemRefreshAccessToken } from 'utils/filesystem'
 import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
@@ -215,7 +211,6 @@ export function AuthGuard() {
   const { mutate: logout } = useLogout()
   const { mutate: refreshAccessToken } = useRefreshAccessToken()
   const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
-  const { mutate: postLoggedIn } = usePostLoggedIn()
   setlogout(logout)
   setRefreshAccessToken(refreshAccessToken)
   setFileSystemRefreshAccessToken(refreshAccessToken)
