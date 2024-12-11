@@ -16,7 +16,7 @@ function PrepareForVideoVisit({}: PrepareForVideoVisitProps) {
   const theme = useTheme()
 
   return (
-    <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')} testID="videoPrepLargePanelID">
+    <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
           {t('appointmentsTab.medicationWording.howToSetUpDevice')}

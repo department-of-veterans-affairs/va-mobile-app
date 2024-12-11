@@ -7,7 +7,6 @@ export const AppointmentsExpandede2eConstants = {
   VIDEO_VISIT_PREP_LINK_ID: 'prepareForVideoVisitTestID',
   APPT_DIRECTIONS_ID: 'directionsTestID',
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
-  VIDEO_VISIT_PREP_PANEL_ID: 'videoPrepLargePanelID',
 }
 
 const checkMedicationWording = async ({
@@ -54,7 +53,7 @@ const checkMedicationWording = async ({
           .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
           .scroll(300, 'down')
         await element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID)).tap()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_PANEL_ID))).toExist()
+        await expect(element(by.text('Appointments help'))).toExist()
         await element(by.text('Close')).tap()
       } else if (appointmentType === 'Claim') {
         await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
