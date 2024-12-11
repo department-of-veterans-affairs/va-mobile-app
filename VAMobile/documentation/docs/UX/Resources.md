@@ -56,6 +56,8 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 	* This shows all the MVP components laid out as a library visible and inspectable in Invision. Deprecated July 2021.
 * [Library style sheets (deprecated)](https://adhoc.invisionapp.com/share/AX108RJZPB6E#/screens/445194518) 
 Shows the components from the design library. Deprecated July 2021.
+### Figma 1.0 (before 2022)
+* [Figma files](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/figma-files-1.0) that represent MVP feature work, prior to restructuring the IA & Navigation. Deprecated Q1 2022.
 
 ### Components
 * [MVP Mobile App UI Styles on Google Docs (deprecated)](https://docs.google.com/document/d/1VC-CLWnhevB8HLBBHPwkSJvECn8EBie8HOkJylKE1lo/edit?usp=sharing)
