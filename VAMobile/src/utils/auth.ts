@@ -7,9 +7,9 @@ import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 
-import { UseMutateFunction } from '@tanstack/react-query'
+import { MutateOptions, UseMutateFunction } from '@tanstack/react-query'
 
-import { authKeys } from 'api/auth'
+import { authKeys, usePostLoggedIn } from 'api/auth'
 import queryClient from 'api/queryClient'
 import {
   AUTH_STORAGE_TYPE,
@@ -27,6 +27,7 @@ import { dispatchUpdateLoading, dispatchUpdateLoggedIn, dispatchUpdateSyncing } 
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
+import { isErrorObject } from './common'
 import { pkceAuthorizeParams } from './oauth'
 import { isAndroid } from './platform'
 
@@ -335,7 +336,10 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
   }
 }
 
-export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+export const initializeAuth = async (
+  dispatch: AppDispatch,
+  refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
+) => {
   if (store.getState().demo.demoMode) {
     return
   }
@@ -347,7 +351,24 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
   } else {
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
-      await refreshAccessToken()
+      const mutateOptions: MutateOptions<Response, Error, string, void> = {
+        onSuccess: async (data) => {
+          const authCredentials = await processAuthResponse(data)
+          await finishInitialize(dispatch, true, authCredentials)
+          usePostLoggedIn()
+        },
+        onError: async (error) => {
+          if (isErrorObject(error)) {
+            console.error(error)
+            logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
+            if (error.status) {
+              await logAnalyticsEvent(Events.vama_login_token_refresh(error))
+            }
+          }
+          await finishInitialize(dispatch, false)
+        },
+      }
+      await refreshAccessToken(refreshToken || '', mutateOptions)
     } else {
       await clearStoredAuthCreds()
       await finishInitialize(dispatch, false)
@@ -355,7 +376,10 @@ export const initializeAuth = async (dispatch: AppDispatch, refreshAccessToken: 
   }
 }
 
-const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: () => void) => {
+const startBiometricsLogin = async (
+  dispatch: AppDispatch,
+  refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
+) => {
   const loading = store.getState().auth.loading
   if (loading) {
     return
@@ -366,7 +390,24 @@ const startBiometricsLogin = async (dispatch: AppDispatch, refreshAccessToken: (
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
       loginStart(dispatch, true)
-      await refreshAccessToken()
+      const mutateOptions: MutateOptions<Response, Error, string, void> = {
+        onSuccess: async (data) => {
+          const authCredentials = await processAuthResponse(data)
+          await finishInitialize(dispatch, true, authCredentials)
+          usePostLoggedIn()
+        },
+        onError: async (error) => {
+          if (isErrorObject(error)) {
+            console.error(error)
+            logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
+            if (error.status) {
+              await logAnalyticsEvent(Events.vama_login_token_refresh(error))
+            }
+          }
+          await finishInitialize(dispatch, false)
+        },
+      }
+      await refreshAccessToken(refreshToken || '', mutateOptions)
     } else {
       await finishInitialize(dispatch, false)
     }

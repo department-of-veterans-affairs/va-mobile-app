@@ -312,28 +312,11 @@ export function AuthGuard() {
   }, [loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
 
   useEffect(() => {
-    const mutateOptions: MutateOptions<Response, Error, string, void> = {
-      onSuccess: async (data) => {
-        const authCredentials = await processAuthResponse(data)
-        await finishInitialize(dispatch, true, authCredentials)
-        postLoggedIn()
-      },
-      onError: async (error) => {
-        if (isErrorObject(error)) {
-          console.error(error)
-          logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
-          if (error.status) {
-            await logAnalyticsEvent(Events.vama_login_token_refresh(error))
-          }
-        }
-        await finishInitialize(dispatch, false)
-      },
-    }
     console.debug('AuthGuard: initializing')
     if (!loggedIn) {
-      initializeAuth(dispatch, () => refreshAccessToken(getAccessToken() || '', mutateOptions))
+      initializeAuth(dispatch, refreshAccessToken)
     }
-  }, [loggedIn, refreshAccessToken, handleTokenCallbackUrl, postLoggedIn, dispatch])
+  }, [loggedIn, refreshAccessToken, dispatch])
 
   useEffect(() => {
     if (!loggedIn) {
