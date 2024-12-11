@@ -9,7 +9,7 @@ import performance from '@react-native-firebase/perf'
 
 import { MutateOptions, UseMutateFunction } from '@tanstack/react-query'
 
-import { authKeys, usePostLoggedIn } from 'api/auth'
+import { authKeys } from 'api/auth'
 import queryClient from 'api/queryClient'
 import {
   AUTH_STORAGE_TYPE,
@@ -339,6 +339,7 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
 export const initializeAuth = async (
   dispatch: AppDispatch,
   refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
+  postLoggedIn: () => void,
 ) => {
   if (store.getState().demo.demoMode) {
     return
@@ -346,7 +347,7 @@ export const initializeAuth = async (
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
-    await startBiometricsLogin(dispatch, refreshAccessToken)
+    await startBiometricsLogin(dispatch, refreshAccessToken, postLoggedIn)
     return
   } else {
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
@@ -355,7 +356,7 @@ export const initializeAuth = async (
         onSuccess: async (data) => {
           const authCredentials = await processAuthResponse(data)
           await finishInitialize(dispatch, true, authCredentials)
-          usePostLoggedIn().mutate()
+          postLoggedIn()
         },
         onError: async (error) => {
           if (isErrorObject(error)) {
@@ -379,6 +380,7 @@ export const initializeAuth = async (
 const startBiometricsLogin = async (
   dispatch: AppDispatch,
   refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
+  postLoggedIn: () => void,
 ) => {
   const loading = store.getState().auth.loading
   if (loading) {
@@ -394,7 +396,7 @@ const startBiometricsLogin = async (
         onSuccess: async (data) => {
           const authCredentials = await processAuthResponse(data)
           await finishInitialize(dispatch, true, authCredentials)
-          usePostLoggedIn().mutate()
+          postLoggedIn()
         },
         onError: async (error) => {
           if (isErrorObject(error)) {

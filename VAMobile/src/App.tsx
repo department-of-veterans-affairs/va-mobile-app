@@ -28,6 +28,7 @@ import {
   useBiometricsSettings,
   useHandleTokenCallbackUrl,
   useLogout,
+  usePostLoggedIn,
   useRefreshAccessToken,
 } from 'api/auth'
 import queryClient from 'api/queryClient'
@@ -211,6 +212,7 @@ export function AuthGuard() {
   const { mutate: logout } = useLogout()
   const { mutate: refreshAccessToken } = useRefreshAccessToken()
   const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
+  const { mutate: postLoggedIn } = usePostLoggedIn()
   setlogout(logout)
   setRefreshAccessToken(refreshAccessToken)
   setFileSystemRefreshAccessToken(refreshAccessToken)
@@ -309,7 +311,7 @@ export function AuthGuard() {
   useEffect(() => {
     console.debug('AuthGuard: initializing')
     if (!loggedIn) {
-      initializeAuth(dispatch, refreshAccessToken)
+      initializeAuth(dispatch, refreshAccessToken, postLoggedIn)
     }
   }, [loggedIn, refreshAccessToken, dispatch])
 
