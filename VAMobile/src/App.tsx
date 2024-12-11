@@ -313,7 +313,7 @@ export function AuthGuard() {
     if (!loggedIn) {
       initializeAuth(dispatch, refreshAccessToken, postLoggedIn)
     }
-  }, [loggedIn, refreshAccessToken, dispatch])
+  }, [loggedIn, refreshAccessToken, dispatch, postLoggedIn])
 
   useEffect(() => {
     if (!loggedIn) {
