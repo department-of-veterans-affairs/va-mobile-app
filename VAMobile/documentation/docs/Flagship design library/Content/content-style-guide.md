@@ -6,7 +6,7 @@ sidebar_position: 1
 ## Voice and tone
 We follow the [VA design system content principles](https://design.va.gov/content-style-guide/content-principles). In following these principles, we create consistent, clear, and customer-centered content that is based on Veteran feedback. 
 
-In addition, we follow [VA plain language standards](https://design.va.gov/content-style-guide/content-principles/plain-language) to help Veterans and their families find and understand the information they need.
+In addition, we follow [VA plain language standards](https://design.va.gov/content-style-guide/plain-language/) to help Veterans and their families find and understand the information they need.
 
 Since we create content for health-related features, we also follow the [VA content guidelines for health content](https://design.va.gov/content-style-guide/health-content).
 
