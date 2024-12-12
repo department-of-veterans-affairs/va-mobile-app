@@ -1,7 +1,5 @@
 import React from 'react'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
