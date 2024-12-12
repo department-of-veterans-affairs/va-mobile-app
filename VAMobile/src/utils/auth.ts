@@ -23,7 +23,12 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import store, { AppDispatch } from 'store'
 import * as api from 'store/api'
-import { dispatchUpdateLoading, dispatchUpdateLoggedIn, dispatchUpdateSyncing } from 'store/slices'
+import {
+  dispatchUpdateDisplayBiometricsPreferenceScreen,
+  dispatchUpdateLoading,
+  dispatchUpdateLoggedIn,
+  dispatchUpdateSyncing,
+} from 'store/slices'
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
@@ -263,10 +268,14 @@ export const setBiometricsPreference = async (value: boolean) => {
   await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
 }
 
-export const debugResetFirstTimeLogin = async (logout: UseMutateFunction<Response, Error, void, void>) => {
+export const debugResetFirstTimeLogin = async (
+  dispatch: AppDispatch,
+  logout: UseMutateFunction<Response, Error, void, void>,
+) => {
   await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
   await logout()
   await setBiometricsPreference(false)
+  dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(true))
   const userSettings = queryClient.getQueryData(authKeys.settings) as UserAuthSettings
   queryClient.setQueryData(authKeys.settings, { ...userSettings, firstTimeLogin: true })
 }

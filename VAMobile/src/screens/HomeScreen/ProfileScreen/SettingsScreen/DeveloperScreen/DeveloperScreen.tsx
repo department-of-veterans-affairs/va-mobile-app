@@ -145,7 +145,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           onPress: () => {
             dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(true))
             console.debug('Resetting first time login flag')
-            debugResetFirstTimeLogin(logout)
+            debugResetFirstTimeLogin(dispatch, logout)
           },
         },
       ],
