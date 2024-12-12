@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useDecisionLetters, useDownloadDecisionLetter } from 'api/decisionLetters'
@@ -23,7 +24,7 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getA11yLabelText, isErrorObject, showSnackBar } from 'utils/common'
+import { getA11yLabelText, isErrorObject } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -33,6 +34,7 @@ import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
 
 const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
@@ -61,13 +63,9 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   useEffect(() => {
     if (downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('ClaimLetters view letter'))
-      }
-      snackBar?.hideAll()
-      showSnackBar(t('claimLetters.download.error'), dispatch, refetchLetter, false, true, true)
+      snackbar.show(t('claimLetters.download.error'), { isError: true, onActionPressed: refetchLetter })
     }
-  }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter])
+  }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter, snackbar])
 
   const letterButtons = decisionLetters.map((letter, index) => {
     const { typeDescription, receivedAt } = letter.attributes
