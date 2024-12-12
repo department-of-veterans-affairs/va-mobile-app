@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
@@ -134,7 +135,7 @@ describe('EditAddressScreen', () => {
 
       fireEvent.press(countrySelector)
       fireEvent.press(screen.getByText('Algeria'))
-      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(countrySelector.props.children).toEqual('Algeria')
     })
 
@@ -148,7 +149,7 @@ describe('EditAddressScreen', () => {
 
         fireEvent.press(screen.getByTestId('countryPickerTestID'))
         fireEvent.press(screen.getByText('Algeria'))
-        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+        fireEvent.press(screen.getByRole('button', { name: t('done') }))
 
         expect(screen.getByTestId('stateTestID').props.value).toEqual('')
         expect(zipCodeInput.props.value).toEqual('')
@@ -180,7 +181,7 @@ describe('EditAddressScreen', () => {
 
         fireEvent.press(screen.getByTestId('countryPickerTestID'))
         fireEvent.press(screen.getByText('Algeria'))
-        fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+        fireEvent.press(screen.getByRole('button', { name: t('done') }))
 
         expect(screen.getByTestId('stateTestID').props.value).toEqual('Northern Territory')
         expect(screen.getByTestId('zipCodeTestID').props.value).toEqual('5922')
@@ -247,7 +248,7 @@ describe('EditAddressScreen', () => {
 
       fireEvent.press(militaryPostOfficeSelector)
       fireEvent.press(screen.getByText('APO'))
-      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(militaryPostOfficeSelector.props.children).toEqual('APO')
     })
   })
@@ -256,7 +257,7 @@ describe('EditAddressScreen', () => {
     it('updates the value of state', () => {
       fireEvent.press(screen.getByTestId('stateTestID'))
       fireEvent.press(screen.getByText('California'))
-      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
       expect(screen.getByTestId('stateTestID').props.children).toEqual('California')
     })
   })
@@ -425,7 +426,7 @@ describe('EditAddressScreen', () => {
 
       renderWithData(false, { mailingAddress: newAddress })
 
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
       await waitFor(() => expect(goBackSpy).toBeCalled())
     })
   })
@@ -486,32 +487,32 @@ describe('EditAddressScreen', () => {
 
       renderWithData(false, { mailingAddress: newAddress })
 
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
       await waitFor(() =>
         expect(post as jest.Mock).toBeCalledWith('/v0/user/addresses/validate', newAddress, undefined, abortSignal),
       )
-      await waitFor(() => expect(screen.getByText('Verify your address')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('editAddress.validation.verifyAddress.title'))).toBeTruthy())
     })
   })
 
   describe('when content is invalid for domestic address', () => {
     it('displays an AlertBox and a field error for each required field', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Please check your mailing address')).toBeTruthy()
-      expect(screen.getByText('Country is required')).toBeTruthy()
-      expect(screen.getByText('Street address is required')).toBeTruthy()
-      expect(screen.getByText('City is required')).toBeTruthy()
-      expect(screen.getByText('State is required')).toBeTruthy()
-      expect(screen.getByText('Postal code is required')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editAddress.alertError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.countryFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.streetAddressLine1FieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.cityFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.stateFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.zipCodeFieldError'))).toBeTruthy()
     })
   })
 
   describe('when content is invalid for military address', () => {
     it('displays an AlertBox and a field error for each required field', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Please check your mailing address')).toBeTruthy()
-      expect(screen.getByText('Street address is required')).toBeTruthy()
-      expect(screen.getByText('Postal code is required')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editAddress.alertError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.streetAddressLine1FieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.zipCodeFieldError'))).toBeTruthy()
     })
   })
 
@@ -519,10 +520,10 @@ describe('EditAddressScreen', () => {
     it('displays an AlertBox and a field error for each required field', () => {
       fireEvent.press(screen.getByTestId('countryPickerTestID'))
       fireEvent.press(screen.getByText('Algeria'))
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Street address is required')).toBeTruthy()
-      expect(screen.getByText('City is required')).toBeTruthy()
-      expect(screen.getByText('Postal code is required')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editAddress.streetAddressLine1FieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.cityFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editAddress.internationalPostCodeFieldError'))).toBeTruthy()
     })
   })
 
@@ -553,7 +554,7 @@ describe('EditAddressScreen', () => {
 
         renderWithData(false, { mailingAddress: newAddress })
 
-        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+        fireEvent.press(screen.getByRole('button', { name: t('save') }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
@@ -601,7 +602,7 @@ describe('EditAddressScreen', () => {
         }
         renderWithData(false, { mailingAddress: newAddress })
 
-        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+        fireEvent.press(screen.getByRole('button', { name: t('save') }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
@@ -648,7 +649,7 @@ describe('EditAddressScreen', () => {
         }
         renderWithData(false, { mailingAddress: newAddress })
 
-        fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+        fireEvent.press(screen.getByRole('button', { name: t('save') }))
 
         const abortController = new AbortController()
         const abortSignal = abortController.signal
