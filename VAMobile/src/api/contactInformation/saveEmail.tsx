@@ -5,7 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { contactInformationKeys } from './queryKeys'
 
@@ -26,6 +26,7 @@ const saveEmail = (emailData: SaveEmailData) => {
  * Returns a mutation for saving an email
  */
 export const useSaveEmail = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
 
   return useMutation({

@@ -147,9 +147,9 @@ export const CommonE2eIdConstants = {
 }
 
 /** Logs into demo mode.
-* @param skipOnboarding: Boolean value that defaults to true.  Set this to false if you want the detox test to view the onboarding carasoul on login
-* @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
-* */
+ * @param skipOnboarding: Boolean value that defaults to true.  Set this to false if you want the detox test to view the onboarding carasoul on login
+ * @param pushNotifications: Boolean value that tells the detox tests whether to turn on/off push notifications
+ * */
 export async function loginToDemoMode(skipOnboarding = true, pushNotifications?: boolean) {
   try {
     await waitFor(element(by.id(CommonE2eIdConstants.VA_LOGO_ICON_ID)))
@@ -460,10 +460,10 @@ export async function backButton(backButtonName: string) {
 }
 
 /** Enables the availibility banner.
-* @param AFFeature: Name of the AF waygate.  
-* @param AFUseCase: Name of the AF type. 
-* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
-* */
+ * @param AFFeature: Name of the AF waygate.
+ * @param AFUseCase: Name of the AF type.
+ * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+ * */
 export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
   await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
   await loginToDemoMode()
@@ -543,11 +543,11 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
 }
 
 /** Disables the availibility banner.
-* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature
-* @param AFFeature: Name of the AF waygate.  
-* @param AFUseCaseName: Name of the AF type. 
-* @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
-* */
+ * @param featureNavigationArray: Array that tells the AF script how to navigate to the feature
+ * @param AFFeature: Name of the AF waygate.
+ * @param AFUseCaseName: Name of the AF type.
+ * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
+ * */
 export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
@@ -583,7 +583,7 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
 }
 
 /** Function that allows the AF script to navigate to a certain feature
-* */
+ * */
 const navigateToFeature = async (featureNavigationArray) => {
   for (let j = 2; j < featureNavigationArray.length; j++) {
     if (featureNavigationArray[j] === 'Talk to the Veterans Crisis Line now') {
@@ -652,10 +652,10 @@ const navigateToFeature = async (featureNavigationArray) => {
 }
 
 /** Verifies that the availibility banner is the correct type and is populated with the correct information.
-* @param featureNavigationArray: Array that tells the AF script how to navigate to the feature 
-* @param AFUseCaseName: Name of the AF type. 
-* @param AFUseCaseUpgrade: Boolean value that tells the script whether to enable the update now button or not
-* */
+ * @param featureNavigationArray: Array that tells the AF script how to navigate to the feature
+ * @param AFUseCaseName: Name of the AF type.
+ * @param AFUseCaseUpgrade: Boolean value that tells the script whether to enable the update now button or not
+ * */
 export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgrade = false) {
   let featureName
   if (AFUseCase !== 'AllowFunction') {
@@ -718,7 +718,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
 /** Toggle the specified remote config feature flag
  * @param flagName - name of flag to toggle
-* */
+ * */
 export async function toggleRemoteConfigFlag(flagName: string) {
   await loginToDemoMode()
   await openProfile()
