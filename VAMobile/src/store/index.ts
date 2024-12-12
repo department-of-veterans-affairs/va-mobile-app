@@ -11,8 +11,8 @@ import snackbarReducer from 'store/slices/snackBarSlice'
 // Creates the store
 const store = configureStore({
   reducer: {
-    auth: authReducer,
     accessibility: accessabilityReducer,
+    auth: authReducer,
     demo: demoReducer,
     errors: errorReducer,
     analytics: analyticsReducer,

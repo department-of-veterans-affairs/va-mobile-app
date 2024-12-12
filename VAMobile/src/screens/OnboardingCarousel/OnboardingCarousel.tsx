@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { Carousel, CarouselScreen, TextLine } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeFirstTimeLogin } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { completeFirstTimeLogin } from 'utils/auth'
 import { capitalizeWord } from 'utils/formattingUtils'
-import { useAppDispatch } from 'utils/hooks'
 
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
@@ -109,11 +108,10 @@ function OnboardingAppOverview() {
 }
 
 function OnboardingCarousel() {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const onCarouselEnd = (): void => {
-    dispatch(completeFirstTimeLogin())
+  const onCarouselEnd = async () => {
+    await completeFirstTimeLogin()
   }
 
   const screenList: Array<CarouselScreen> = [

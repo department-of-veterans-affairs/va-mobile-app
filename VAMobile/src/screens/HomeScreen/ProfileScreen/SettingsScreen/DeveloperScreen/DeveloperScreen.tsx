@@ -9,6 +9,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
+import { useAuthSettings, useLogout } from 'api/auth'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
 import {
@@ -24,9 +25,9 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState } from 'store/slices'
+import { AnalyticsState, dispatchUpdateDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
-import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { debugResetFirstTimeLogin } from 'utils/auth'
 import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
@@ -44,7 +45,8 @@ type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, '
 
 function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { data: userAuthSettings } = useAuthSettings()
+  const authCredentials = userAuthSettings?.authCredentials
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const tokenInfo =
     (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
@@ -60,6 +62,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const [storeVersion, setStoreVersionScreen] = useState<string>()
   const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
+  const { mutate: logout } = useLogout()
 
   async function checkEncourageUpdateLocalVersion() {
     const version = await getLocalVersion(FeatureConstants.ENCOURAGEUPDATE, true)
@@ -140,8 +143,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         {
           text: t('reset'),
           onPress: () => {
+            dispatch(dispatchUpdateDisplayBiometricsPreferenceScreen(true))
             console.debug('Resetting first time login flag')
-            dispatch(debugResetFirstTimeLogin())
+            debugResetFirstTimeLogin(dispatch, logout)
           },
         },
       ],
