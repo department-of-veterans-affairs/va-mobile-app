@@ -20,7 +20,7 @@ const { AUTH_SIS_REVOKE_URL } = getEnv()
  */
 const logout = async () => {
   const token = api.getAccessToken()
-  const refreshToken = await retrieveRefreshToken()
+  const refreshToken = api.getAccessToken() || (await retrieveRefreshToken())
 
   const queryString = new URLSearchParams({ refresh_token: refreshToken ?? '' }).toString()
 
