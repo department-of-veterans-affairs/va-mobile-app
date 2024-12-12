@@ -7,6 +7,7 @@ export type AuthState = {
   loggingOut: boolean
   syncing: boolean
   displayBiometricsPreferenceScreen: boolean
+  enablePostLogin: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -16,6 +17,7 @@ export const initialAuthState: AuthState = {
   loggingOut: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
+  enablePostLogin: true,
 }
 
 /**
@@ -43,6 +45,9 @@ const authSlice = createSlice({
     dispatchUpdateDisplayBiometricsPreferenceScreen: (state, action: PayloadAction<boolean>) => {
       state.displayBiometricsPreferenceScreen = action.payload
     },
+    dispatchUpdateEnablePostLogin: (state, action: PayloadAction<boolean>) => {
+      state.enablePostLogin = action.payload
+    },
   },
 })
 
@@ -53,5 +58,6 @@ export const {
   dispatchUpdateLoggingOut,
   dispatchUpdateSyncing,
   dispatchUpdateDisplayBiometricsPreferenceScreen,
+  dispatchUpdateEnablePostLogin,
 } = authSlice.actions
 export default authSlice.reducer

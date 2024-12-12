@@ -2,6 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 
 import { handleTokenCallbackParms } from 'api/types'
 import { Events } from 'constants/analytics'
+import store from 'store'
+import { dispatchUpdateEnablePostLogin } from 'store/slices'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getCodeVerifier, loginFinish, loginStart, parseCallbackUrlParams, processAuthResponse } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
@@ -51,7 +53,10 @@ export const useHandleTokenCallbackUrl = () => {
     onSuccess: async (data) => {
       const authCredentials = await processAuthResponse(data)
       await loginFinish(dispatch, false, authCredentials)
-      postLoggedIn()
+      if (store.getState().auth.enablePostLogin) {
+        dispatch(dispatchUpdateEnablePostLogin(false))
+        postLoggedIn()
+      }
     },
     onError: (error) => {
       if (isErrorObject(error)) {
@@ -61,6 +66,7 @@ export const useHandleTokenCallbackUrl = () => {
         }
         loginFinish(dispatch, true)
       }
+      dispatch(dispatchUpdateEnablePostLogin(true))
     },
   })
 }
