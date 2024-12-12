@@ -27,7 +27,6 @@ import { dispatchUpdateLoading, dispatchUpdateLoggedIn, dispatchUpdateSyncing } 
 import getEnv from 'utils/env'
 
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from './analytics'
-import { isErrorObject } from './common'
 import { pkceAuthorizeParams } from './oauth'
 import { isAndroid } from './platform'
 
@@ -339,7 +338,6 @@ export const processAuthResponse = async (response: Response): Promise<AuthCrede
 export const initializeAuth = async (
   dispatch: AppDispatch,
   refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
-  postLoggedIn: () => void,
 ) => {
   if (store.getState().demo.demoMode) {
     return
@@ -347,7 +345,7 @@ export const initializeAuth = async (
   const pType = await getAuthLoginPromptType()
   if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
     await finishInitialize(dispatch, false)
-    await startBiometricsLogin(dispatch, refreshAccessToken, postLoggedIn)
+    await startBiometricsLogin(dispatch, refreshAccessToken)
     return
   } else {
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
@@ -363,7 +361,6 @@ export const initializeAuth = async (
 const startBiometricsLogin = async (
   dispatch: AppDispatch,
   refreshAccessToken: (variables: string, options?: MutateOptions<Response, Error, string, void> | undefined) => void,
-  postLoggedIn: () => void,
 ) => {
   const loading = store.getState().auth.loading
   if (loading) {
