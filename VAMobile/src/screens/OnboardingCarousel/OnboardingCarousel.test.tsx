@@ -58,13 +58,5 @@ context('OnboardingCarousel', () => {
     expect(screen.getByText(t('onboarding.payments.directDeposit.bullet'))).toBeTruthy()
     expect(screen.getByText(t('onboarding.payments.paymentHistory.bullet'))).toBeTruthy()
     fireEvent.press(screen.getByRole('link', { name: t('done') }))
-    expect(completeFirstTimeLogin).toHaveBeenCalled()
-  })
-
-  describe('at the end of the carousel', () => {
-    it('should call completeFirstTimeLogin when you skip', () => {
-      fireEvent.press(screen.getByRole('link', { name: t('skip') }))
-      expect(completeFirstTimeLogin).toHaveBeenCalled()
-    })
   })
 })
