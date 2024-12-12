@@ -134,9 +134,7 @@ context('NotificationsSettingsScreen', () => {
         .mockResolvedValue(responseData)
       renderWithProps(true, false, false, [apptPrefOff])
       await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
-      await waitFor(() =>
-        expect(screen.getByText('To get app notifications, turn them on in your device settings.')).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('notifications.settings.alert.text'))).toBeTruthy())
     })
   })
   describe('when system notifications havent been requested', () => {
@@ -160,12 +158,6 @@ context('NotificationsSettingsScreen', () => {
       .calledWith('/v0/push/prefs/1')
       .mockResolvedValue(responseData)
     renderWithProps(true, true, true, [])
-    await waitFor(() =>
-      expect(
-        screen.getByText(
-          "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
-        ),
-      ).toBeTruthy(),
-    )
+    await waitFor(() => expect(screen.getByText(t('errors.callHelpCenter.sorryWithRefresh'))).toBeTruthy())
   })
 })

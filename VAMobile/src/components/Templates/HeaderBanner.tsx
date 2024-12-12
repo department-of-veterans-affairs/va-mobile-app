@@ -4,11 +4,12 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -81,7 +82,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const TEXT_CONSTRAINT_THRESHOLD = 30
 

@@ -4,6 +4,8 @@ import { View, ViewStyle } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useDownloadFileAttachment, useMessage } from 'api/secureMessaging'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
 import {
@@ -20,7 +22,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useIsScreenReaderEnabled, useOrientation, useTheme } from 'utils/hooks'
+import { useOrientation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { getLinkifiedText } from 'utils/secureMessaging'
 
@@ -59,7 +61,7 @@ function CollapsibleMessage({ message, isInitialMessage, collapsibleMessageRef }
 
   const messageToUse = messageWithAttachmentData?.data.attributes || message
   const { attachment, hasAttachments, senderName, sentDate, body } = messageToUse
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const attachmentBoolean = hasAttachments || attachment
   const attachLabel = attachmentBoolean ? t('secureMessaging.attachments.hasAttachment').toLowerCase() : ''

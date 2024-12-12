@@ -2,9 +2,11 @@ import React, { FC, ReactNode, useState } from 'react'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
-import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -56,7 +58,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
