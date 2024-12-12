@@ -4,6 +4,8 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { RadioButton, RadioButtonProps } from '@department-of-veterans-affairs/mobile-component-library/'
+
 import { useDemographics } from 'api/demographics/getDemographics'
 import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { useUpdateGenderIdentity } from 'api/demographics/updateGenderIdentity'
@@ -131,6 +133,21 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
     })
   }
 
+  const getIdentityTypes2 = (): RadioButtonProps['items'] => {
+    if (!genderIdentityOptions) {
+      return []
+    }
+
+    console.log('genderIdentityOptions: ', genderIdentityOptions)
+
+    return Object.keys(genderIdentityOptions).map((key: string) => {
+      return {
+        text: genderIdentityOptions[key],
+        value: key,
+      }
+    })
+  }
+
   const goToHelp = (): void => {
     logAnalyticsEvent(Events.vama_gender_id_help)
     navigateTo('WhatToKnow')
@@ -190,6 +207,16 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
             <TextView variant="MobileBodyBold">{t('personalInformation.genderIdentity.preferNotToAnswer')}</TextView>
             <TextView variant="MobileBody">.</TextView>
           </TextView>
+          <RadioButton
+            items={getIdentityTypes2()}
+            selectedItem={genderIdentity}
+            error="Test"
+            required
+            header="Test header"
+            hint="Test hint"
+            tile
+            onSelectionChange={(selected) => setGenderIdentity(selected as string)}
+          />
           <RadioGroup {...radioGroupProps} />
           <Pressable onPress={goToHelp} accessibilityRole="link">
             <TextView variant="MobileBodyLink" paragraphSpacing={true} testID="whatToKnowTestID">
