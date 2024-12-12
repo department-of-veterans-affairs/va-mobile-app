@@ -114,7 +114,7 @@ function AddressValidation({
         onError: () =>
           snackbar.show(GenerateAddressMessage(t, addressType, true), {
             isError: true,
-            offset: 0,
+            offset: theme.dimensions.snackBarBottomOffset,
             onActionPressed: () => save,
           }),
       }

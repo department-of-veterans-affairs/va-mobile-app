@@ -105,7 +105,11 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
         snackbar.show('Request sent')
       },
       onError: () =>
-        snackbar.show('Request could not be sent', { isError: true, offset: 0, onActionPressed: () => onSubmit }),
+        snackbar.show('Request could not be sent', {
+          isError: true,
+          offset: theme.dimensions.snackBarBottomOffset,
+          onActionPressed: () => onSubmit,
+        }),
     }
     submitClaimDecision(claimID, mutateOptions)
   }

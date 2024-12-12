@@ -101,7 +101,7 @@ function GenderIdentityScreen({ navigation }: GenderIdentityScreenProps) {
         onError: () =>
           snackbar.show(t('personalInformation.genderIdentity.not.saved'), {
             isError: true,
-            offset: 0,
+            offset: theme.dimensions.snackBarBottomOffset,
             onActionPressed: updateGenderIdentity,
           }),
       }

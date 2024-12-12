@@ -215,7 +215,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
       onError: () =>
         snackbar.show(t('contactInformation.residentialAddress.removed.error'), {
           isError: true,
-          offset: 0,
+          offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: () => deleteAddress,
         }),
     }
@@ -277,7 +277,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
           onError: () =>
             snackbar.show(GenerateAddressMessage(t, addressType, true), {
               isError: true,
-              offset: 0,
+              offset: theme.dimensions.snackBarBottomOffset,
               onActionPressed: () => save,
             }),
         },

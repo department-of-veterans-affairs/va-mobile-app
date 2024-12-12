@@ -122,7 +122,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
           if (!routingNumberError) {
             snackbar.show(t('directDeposit.saved.error'), {
               isError: true,
-              offset: 0,
+              offset: theme.dimensions.snackBarBottomOffset,
               onActionPressed: () => updateBankInfo(updateBankData, mutateOptions),
             })
           }

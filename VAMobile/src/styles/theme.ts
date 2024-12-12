@@ -219,6 +219,7 @@ export type VATheme = {
     maxNumMessageAttachments: number
     navBarHeight: number
     paginationTopPadding: number
+    snackBarBottomOffset: number
     chevronListItemWidth: number
     chevronListItemHeight: number
     linkRowChevronPaddingRight: number

@@ -151,7 +151,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       onError: () =>
         snackbar.show(t('fileUpload.submitted.error'), {
           isError: true,
-          offset: 0,
+          offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: onUploadConfirmed,
         }),
     }

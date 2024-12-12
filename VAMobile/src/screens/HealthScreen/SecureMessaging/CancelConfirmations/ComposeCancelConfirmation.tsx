@@ -10,7 +10,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useDestructiveActionSheet, useRouteNavigation } from 'utils/hooks'
+import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -31,6 +31,7 @@ export function useComposeCancelConfirmation(): [
 ] {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const confirmationAlert = useDestructiveActionSheet()
   const goToDrafts = useGoToDrafts()
@@ -82,7 +83,7 @@ export function useComposeCancelConfirmation(): [
             onError: () => {
               snackbar.show(t('secureMessaging.draft.saved.error'), {
                 isError: true,
-                offset: 0,
+                offset: theme.dimensions.snackBarBottomOffset,
                 onActionPressed: () => saveDraft(params, mutateOptions),
               })
             },

@@ -273,6 +273,7 @@ let theme: VATheme = {
     tagMinWidth: 29,
     maxNumMessageAttachments: 4,
     paginationTopPadding: 40,
+    snackBarBottomOffset: 20,
     chevronListItemWidth: 30,
     chevronListItemHeight: 45,
     linkRowChevronPaddingRight: 18,
