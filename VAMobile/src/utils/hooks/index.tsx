@@ -7,7 +7,6 @@ import {
   AlertButton,
   AppState,
   Dimensions,
-  EmitterSubscription,
   Keyboard,
   Linking,
   PixelRatio,
@@ -23,6 +22,7 @@ import { CommonActions, EventArg, useNavigation } from '@react-navigation/native
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
@@ -185,46 +185,6 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
   }, [ref, dispatch, screenReaderEnabled])
 
   return [ref, setFocus]
-}
-
-/**
- * Hook to check if the screen reader is enabled
- *
- * withListener - True to add a listener to live update screen reader status, default false
- * @returns boolean if the screen reader is on
- */
-export function useIsScreenReaderEnabled(withListener = false): boolean {
-  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false)
-
-  useEffect(() => {
-    let isMounted = true
-    let screenReaderChangedSubscription: EmitterSubscription
-
-    if (withListener) {
-      screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
-        'screenReaderChanged',
-        (isScreenReaderEnabled) => {
-          if (isMounted) {
-            setScreenReaderEnabled(isScreenReaderEnabled)
-          }
-        },
-      )
-    }
-    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
-      if (isMounted) {
-        setScreenReaderEnabled(isScreenReaderEnabled)
-      }
-    })
-
-    return () => {
-      isMounted = false
-      if (withListener) {
-        screenReaderChangedSubscription?.remove()
-      }
-    }
-  }, [screenReaderEnabled, withListener])
-
-  return screenReaderEnabled
 }
 
 /**
