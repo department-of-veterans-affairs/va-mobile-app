@@ -197,6 +197,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }, [
     snackbar,
     t,
+    theme,
     sendMessageError,
     sendMessageErrorDetails,
     attachmentsList,
