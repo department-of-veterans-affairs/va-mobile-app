@@ -23,14 +23,13 @@ import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import * as api from 'store/api'
 import { AuthState } from 'store/slices'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart, retrieveRefreshToken } from 'utils/auth'
+import { FIRST_TIME_LOGIN, NEW_SESSION, loginStart } from 'utils/auth'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 
 import DemoAlert from './DemoAlert'
@@ -48,8 +47,6 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
-
-  const showActionSheet = useShowActionSheet()
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -73,24 +70,6 @@ function LoginScreen() {
     dispatch(updateDemoMode(true))
   }
   const tapForDemo = async () => {
-    const options = [t('cancel')]
-
-    const token = api.getAccessToken() || (await retrieveRefreshToken())
-
-    showActionSheet(
-      {
-        options,
-        cancelButtonIndex: 0,
-        title: 'access token',
-        message: token,
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            break
-        }
-      },
-    )
     demoTaps++
     console.log(`demotaps: ${demoTaps}`)
     if (demoTaps >= TAPS_FOR_DEMO) {
