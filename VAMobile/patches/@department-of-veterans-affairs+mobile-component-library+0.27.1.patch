@@ -1,15 +1,3 @@
-diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/Snackbar.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/Snackbar.tsx
-index 6b2f54d..8931ba9 100644
---- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/Snackbar.tsx
-+++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/Snackbar.tsx
-@@ -160,6 +160,7 @@ export const Snackbar: FC<SnackbarProps> = (toast) => {
-       minHeight: 44,
-       padding: spacing.vadsSpaceSm,
-       marginHorizontal: spacing.vadsSpaceLg,
-+      marginBottom: spacing.vadsSpaceLg,
-       rowGap: spacing.vadsSpace2xs,
-     },
-   }
 diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx
 index 2e5c464..a696fa9 100644
 --- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbar.tsx
@@ -53,15 +41,3 @@ index 2e5c464..a696fa9 100644
 +    }), [show, toast.hideAll, toast.isOpen]
 +  )
  }
-diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbarDefaultOffset.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbarDefaultOffset.tsx
-index e7679fa..135c5fa 100644
---- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbarDefaultOffset.tsx
-+++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/Snackbar/useSnackbarDefaultOffset.tsx
-@@ -1,6 +1,6 @@
- import { useSafeAreaInsets } from 'react-native-safe-area-context'
- 
--const NAV_BAR_HEIGHT = 60
-+const NAV_BAR_HEIGHT = 56
- 
- /**
-  * Returns default Snackbar offset depending on safe area bottom inset
