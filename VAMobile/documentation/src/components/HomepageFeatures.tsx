@@ -23,13 +23,14 @@ const baseUrl = '/va-mobile-app'
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'VA: Health and Benefits App',
+    title: 'VA: Health and Benefits',
     image: `${baseUrl}/img/va-logo.png`,
     alt: `Department of Veteran Affairs logo`,
     useMobileImageCss: true,
     description: (
       <>
-        The mobile app allows Veterans to more easily complete key transactions across VA health and benefits services.
+        With the VA: Health and Benefits app, Veterans can manage the VA health care and benefits tasks they do most
+        often—all in one simple app.
       </>
     ),
   },
