@@ -1,21 +1,27 @@
-
 # Image optimization before release build. This workflow commit only images that have been optimized
-
 
 name: '[Build] Optimize Image'
 
 on:
   push:
     branches:
-      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+      - chanel-9687-automation-update-optimization-workflow-to-automatically-push-changes-through-pr
 
 jobs:
   optimize_images:
     name: Optimize Images
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    outputs:
+      pr_url: ${{ steps.create_pr.outputs.pull-request-url }} # Declare the output for PR URL
+    env:
+      BRANCH_NAME: optimize-images-${{ github.run_id }} # Declare environment variable here
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+  
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
       - name: Optimize iOS images
@@ -24,23 +30,61 @@ jobs:
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
           imagemin * --out-dir=.
-          
+
           cd phoneScreenshots/
           imagemin * --out-dir=.
           
           cd ../sevenInchScreenshots/
           imagemin * --out-dir=.
+      
       - name: Commit optimized images
         run: |
+        
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
+          git checkout -b ${{ env.BRANCH_NAME }}
           git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Optimize images before release build"
-            git push
+            git push --set-upstream origin HEAD
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Debug Staged Changes
+        run: |
+          git status
+          git diff --cached
+      - name: Debug Git Information
+        run: |
+          echo "Current Branch: $(git branch --show-current)"
+          echo "GitHub Ref: ${{ github.ref }}"
+          echo "GitHub Run ID: ${{ github.run_id }}"
+          git remote -v
+          git log --oneline -n 5
+      - name: Create a Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: ${{ github.ref_name }}
+          labels: devops
+          branch: ${{ env.BRANCH_NAME }}
+          title: "Optimize images before release build"
+          body-path: .github/pull_request_template.md
+      - name: Debug PR Creation
+        run: |
+          echo "Branch: ${{ env.BRANCH_NAME }}"
+          echo "Base: ${{ github.ref_name }}"
+      # Check if a PR was created
+      - name: Pull Request Details
+        run: |
+          echo "Pull request URL: ${{ steps.create_pr.outputs.pull-request-url }}"
+      - name: Capture Pull Request URL
+        run: |
+          PR_URL=$(gh pr view --json url -q ".url")
+          echo "Pull request URL: $PR_URL"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
