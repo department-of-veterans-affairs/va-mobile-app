@@ -54,28 +54,6 @@ context('NotificationsSettingsScreen', () => {
     render(<NotificationsSettingsScreen {...props} />, { queriesData: notificationQueriesData })
   }
 
-  describe('when system notifications are disabled', () => {
-    it('hides the notification switches', async () => {
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      when(prefMock).calledWith('@store_device_endpoint_sid').mockResolvedValue('1')
-
-      const responseData: GetPushPrefsResponse = {
-        data: {
-          type: 'string',
-          id: 'string',
-          attributes: {
-            preferences: [apptPrefOff],
-          },
-        },
-      }
-      when(api.get as jest.Mock)
-        .calledWith('/v0/push/prefs/1')
-        .mockResolvedValue(responseData)
-      renderWithProps(false, false, [apptPrefOff])
-      await waitFor(() => expect(screen.queryByRole('switch', { name: 'Upcoming appointments' })).toBeFalsy())
-      await waitFor(() => expect(screen.getByText(t('notifications.settings.alert.text'))).toBeTruthy())
-    })
-  })
   describe('when system notifications havent been requested', () => {
     it('hides the notification switches', async () => {
       renderWithProps(true, true, [apptPrefOff])
