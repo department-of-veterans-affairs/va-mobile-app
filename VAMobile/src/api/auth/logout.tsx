@@ -47,19 +47,19 @@ export const useLogout = () => {
     onMutate: async () => {
       dispatch(dispatchUpdateLoggingOut(true))
       dispatch(dispatchUpdateSyncing(true))
-      await clearCookies()
       if (demoMode) {
         dispatch(updateDemoMode(false, true))
       }
     },
     onSettled: async () => {
+      await finishInitialize(dispatch, false)
       await clearStoredAuthCreds()
       dispatch(dispatchUpdateLoggingOut(false))
+      dispatch(dispatchUpdateEnablePostLogin(true))
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
-      await finishInitialize(dispatch, false)
       queryClient.clear()
-      dispatch(dispatchUpdateEnablePostLogin(true))
+      await clearCookies()
     },
     onError: (error) => {
       if (isErrorObject(error)) {
