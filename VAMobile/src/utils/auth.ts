@@ -352,24 +352,7 @@ export const initializeAuth = async (
   } else {
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
-      const mutateOptions: MutateOptions<Response, Error, string, void> = {
-        onSuccess: async (data) => {
-          const authCredentials = await processAuthResponse(data)
-          await finishInitialize(dispatch, true, authCredentials)
-          postLoggedIn()
-        },
-        onError: async (error) => {
-          if (isErrorObject(error)) {
-            console.error(error)
-            logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
-            if (error.status) {
-              await logAnalyticsEvent(Events.vama_login_token_refresh(error))
-            }
-          }
-          await finishInitialize(dispatch, false)
-        },
-      }
-      await refreshAccessToken(refreshToken || '', mutateOptions)
+      await refreshAccessToken(refreshToken || '')
     } else {
       await clearStoredAuthCreds()
       await finishInitialize(dispatch, false)
@@ -392,24 +375,7 @@ const startBiometricsLogin = async (
     const refreshToken = api.getRefreshToken() || (await retrieveRefreshToken())
     if (refreshToken) {
       loginStart(dispatch, true)
-      const mutateOptions: MutateOptions<Response, Error, string, void> = {
-        onSuccess: async (data) => {
-          const authCredentials = await processAuthResponse(data)
-          await finishInitialize(dispatch, true, authCredentials)
-          postLoggedIn()
-        },
-        onError: async (error) => {
-          if (isErrorObject(error)) {
-            console.error(error)
-            logNonFatalErrorToFirebase(error, `attemptIntializeAuthWithRefreshToken: Auth Service Error`)
-            if (error.status) {
-              await logAnalyticsEvent(Events.vama_login_token_refresh(error))
-            }
-          }
-          await finishInitialize(dispatch, false)
-        },
-      }
-      await refreshAccessToken(refreshToken || '', mutateOptions)
+      await refreshAccessToken(refreshToken || '')
     } else {
       await finishInitialize(dispatch, false)
     }

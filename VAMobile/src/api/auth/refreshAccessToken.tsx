@@ -1,11 +1,15 @@
 import { useMutation } from '@tanstack/react-query'
 
+import { Events } from 'constants/analytics'
 import { dispatchUpdateLoadingRefreshToken } from 'store/slices'
-import { logNonFatalErrorToFirebase } from 'utils/analytics'
-import { clearStoredAuthCreds, processAuthResponse } from 'utils/auth'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { clearStoredAuthCreds, finishInitialize, processAuthResponse } from 'utils/auth'
+import { isErrorObject } from 'utils/common'
 import getEnv from 'utils/env'
 import { useAppDispatch, useShowActionSheet } from 'utils/hooks'
 import { clearCookies } from 'utils/rnAuthSesson'
+
+import { usePostLoggedIn } from './postLoggedIn'
 
 const { AUTH_SIS_TOKEN_REFRESH_URL } = getEnv()
 
@@ -28,6 +32,7 @@ const refreshAccessToken = (refreshToken: string): Promise<Response> => {
  * Returns a mutation for refreshing a user access token
  */
 export const useRefreshAccessToken = () => {
+  const { mutate: postLoggedIn } = usePostLoggedIn()
   const dispatch = useAppDispatch()
   const showActionSheet = useShowActionSheet()
   const options = ['cancel']
@@ -66,8 +71,10 @@ export const useRefreshAccessToken = () => {
         },
       )
     },
-    onSuccess: (data) => {
-      processAuthResponse(data)
+    onSuccess: async (data) => {
+      const authCredentials = await processAuthResponse(data)
+      await finishInitialize(dispatch, true, authCredentials)
+      postLoggedIn()
       showActionSheet(
         {
           options,
@@ -96,7 +103,14 @@ export const useRefreshAccessToken = () => {
           }
         },
       )
-      logNonFatalErrorToFirebase(error, `processAuthResponse: Auth Service Error`)
+      if (isErrorObject(error)) {
+        console.error(error)
+        logNonFatalErrorToFirebase(error, `RefreshToken: Auth Service Error`)
+        if (error.status) {
+          logAnalyticsEvent(Events.vama_login_token_refresh(error))
+        }
+      }
+      finishInitialize(dispatch, false)
       clearStoredAuthCreds()
     },
   })
