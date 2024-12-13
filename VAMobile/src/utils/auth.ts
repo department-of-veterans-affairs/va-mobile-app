@@ -316,7 +316,7 @@ export const loginFinish = async (dispatch: AppDispatch, isError: boolean, authC
     ...userSettings,
     authCredentials: authCredentials,
   })
-  await dispatch(dispatchUpdateLoading(isError))
+  await dispatch(dispatchUpdateLoading(false))
   await dispatch(dispatchUpdateLoggedIn(!isError))
   await dispatch(dispatchUpdateSyncing(store.getState().auth.syncing && !isError))
 }
