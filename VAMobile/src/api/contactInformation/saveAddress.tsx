@@ -5,7 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { contactInformationKeys } from './queryKeys'
 import { validateAddress } from './validateAddress'
@@ -32,6 +32,7 @@ export const saveAddress = async ({ addressData, revalidate }: SaveAddressParame
  * Returns a mutation for saving an address
  */
 export const useSaveAddress = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
 
   return useMutation({

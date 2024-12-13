@@ -19,6 +19,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
@@ -64,7 +65,7 @@ import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import getEnv from 'utils/env'
-import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
@@ -109,7 +110,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   SubmitEvidenceSubtask: {
     claimID: string
   }
-  InAppFeedback: { task: string }
+  InAppFeedback: { screen: string }
   Tabs: undefined
 }
 

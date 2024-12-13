@@ -16,10 +16,10 @@ The following guiding principles are used to help Veterans find information and 
 * **Informed by Veterans:** IA decisions are based on user research conducted with Veterans, examining their mental models around the organization of common tasks and undertanding of labels, as well as getting feedback on proposed solutions. 
 * **Keeps it simple:** Content is prioiritized and includes only what’s absolutely necessary—the fewer elements (number of levels in the hierarchy, number of screens, number of links on a screen) the better.
 
-References:
-[VA.gov Information Architecture (IA) team](https://github.com/department-of-veterans-affairs/va.gov-team/tree/69833737d9fe22b8990bb987e7c50de13205c5d5/platform/information-architecture)
-[Best Practices for IA on VA.gov](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/platform/information-architecture/ia-best-practices.md)
-[VA.gov Design principles](https://design.va.gov/about/principles)  
+### References:
+* [VA.gov Information Architecture (IA) team](https://github.com/department-of-veterans-affairs/va.gov-team/tree/69833737d9fe22b8990bb987e7c50de13205c5d5/platform/information-architecture)
+* [Best Practices for IA on VA.gov](https://github.com/department-of-veterans-affairs/va.gov-team/blob/69833737d9fe22b8990bb987e7c50de13205c5d5/platform/information-architecture/ia-best-practices.md)
+* [VA.gov Design principles](https://design.va.gov/about/principles)  
 
 
 
@@ -68,6 +68,6 @@ The VA Health and Benefits app’s IA contains four top level categories: Home, 
 
 ## Background
 The VA Health and Benefits app’s Information Architecture and navigation model are based on the findings and output from a multi-stage, collaborative and cross-functional design and research process: [Information Architecture and Navigation - High Level Project Summary](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-design/information-architecture-navigation/High%20Level%20Project%20Summary.md)
-* [**Phase I:** Two rounds of card sorting](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/information-architecture) (open and closed) with Veterans
+* [**Phase I:** Two rounds of card sorting](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture-navigation#phase-i---information-architecture-research) (open and closed) with Veterans
 * [**Phase II:** Navigation model design exploration](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture-navigation#phase-ii---navigation-model-exploration--implementation), audit and comparative analysis
-* [**Phase III:** Evaluative testing](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research/usability-testing/new%20navigation%20usability) with Veterans, including a usability study of the proposed navigation model and sitemap reflected through a low-fidelity prototype
+* [**Phase III:** Evaluative testing](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/information-architecture-navigation#phase-iii----evaluative-research) with Veterans, including a usability study of the proposed navigation model and sitemap reflected through a low-fidelity prototype
