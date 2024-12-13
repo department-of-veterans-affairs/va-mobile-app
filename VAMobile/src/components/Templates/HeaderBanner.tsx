@@ -277,6 +277,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton
                   label={leftButton.text}
+                  labelA11y={leftButton.a11yLabel}
                   onPress={leftButton.onPress}
                   focusOnButton={focus === 'Left'}
                   backButtonTestID={leftButton.testID}
