@@ -1380,7 +1380,7 @@
   "selectedOutOfTotal.a11yLabel": "{{selected}} of {{total}} selected",
   "settings.title": "Settings",
   "shareApp.a11yHint": "Opens your device's share sheet with a link to download the app",
-  "shareApp.text": "Download the VA: Health and Benefits on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}",
+  "shareApp.text": "Download VA: Health and Benefits on the App Store ({{appleStoreLink}}) or on Google Play ({{googlePlayLink}})",
   "shareApp.title": "Share the app",
   "signin": "Sign in",
   "skip": "Skip",
