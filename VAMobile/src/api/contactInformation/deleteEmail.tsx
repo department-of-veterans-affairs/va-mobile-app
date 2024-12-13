@@ -5,7 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, del } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { contactInformationKeys } from './queryKeys'
 
@@ -20,6 +20,7 @@ const deleteEmail = (emailData: EmailData) => {
  * Returns a mutation for deleting an email
  */
 export const useDeleteEmail = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
 
   return useMutation({
