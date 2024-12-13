@@ -23,6 +23,7 @@ Follow instructions for FE [Development Setup Instructions](https://department-o
 
 ### Local setup for detox
 1. Check for the [detox pre-reqs](https://wix.github.io/Detox/docs/introduction/getting-started#detox-prerequisites) on your local machine and install if needed using the `yarn` package manager.
+	- If needed find and delete the detoxrc.js file. This file is sometimes created when you initially install detox and is not needed because the VA Mobile App uses .detoxrc.json file. 
 2. Check that the emulators used by the script ([listed in .detoxrc.json](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/.detoxrc.json#L17)) are installed on your machine, and install them if not. [Helpful instructions from detox](https://wix.github.io/Detox/docs/introduction/project-setup#step-3-device-configs)
     - If you need to create a new Android emulator, make sure to bump up the internal storage (default is 800, bumping to 8000 definitely works). If you don't do this, you'll get an out of storage error. One path that works for this: Shift-Shift > search "Virtual Device Manager" > {create new device or edit existing device} > Show Advanced Settings > scroll down to the "Memory and Storage" section to find the "Internal Storage" field
 3. Build and Run App

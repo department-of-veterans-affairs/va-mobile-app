@@ -37,7 +37,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -64,6 +64,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const [downloadFile, setDownloadFile] = useState(false)
 
   const { claimID, claimType } = route.params
+  const registerReviewEvent = useReviewEvent(true)
   const queryClient = useQueryClient()
   const {
     data: claim,
@@ -117,7 +118,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
-      registerReviewEvent(true)
+      registerReviewEvent()
       logAnalyticsEvent(
         Events.vama_claim_details_open(
           claimID,
@@ -133,7 +134,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       // Keep tab switching or panel opening from triggering autoscroll
       setScrollIsEnabled(false)
     }
-  }, [claim, loadingClaim, claimError, claimID, attributes])
+  }, [claim, loadingClaim, claimError, claimID, attributes, registerReviewEvent])
 
   useEffect(() => {
     if (claimType === ClaimTypeConstants.ACTIVE && claim) {

@@ -848,6 +848,7 @@
   "inAppFeedback.personalInfo.body": "You can still submit your feedback. But we recommend deleting any personal information you included.",
   "inAppFeedback.personalInfo.edit": "Edit feedback",
   "inAppFeedback.personalInfo.submit": "Submit anyway",
+  "inAppFeedback.snackbar.success": "Feedback sent",
   "inAppRecruitment.contracts": "VA contracts: 36C10B22C0011 & 36C10X18C0061",
   "inAppRecruitment.goToQuestionnaire": "Go to questionnaire",
   "inAppRecruitment.goToQuestionnaire.loading": "Loading questionnaire...",

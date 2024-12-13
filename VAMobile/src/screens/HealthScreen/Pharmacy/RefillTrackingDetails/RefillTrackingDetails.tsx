@@ -27,7 +27,7 @@ import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -57,6 +57,7 @@ const getTrackingLink = (deliveryService: string): string => {
 function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps) {
   const { prescription } = route.params
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const registerReviewEvent = useReviewEvent(true)
   const {
     data: trackingInfo,
     isFetching: loadingTrackingInfo,
@@ -76,8 +77,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent(true)
-    }, []),
+      registerReviewEvent()
+    }, [registerReviewEvent]),
   )
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {

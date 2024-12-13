@@ -102,7 +102,7 @@ Once designs are ready to be handed off to the engineering team, you can review 
 - If you notice that QA engineering is not finding bugs that should have been caught in earlier tickets, let QA know, so they can improve their work.
 
 ### Launching
-- For major features, team members should expect to work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) and the Product team to prepare the [app store content](https://didactic-robot-p9wpqpp4wwh99w-3000.app.github.dev/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores).
+- For major features, team members should expect to work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) and the Product team to prepare the [app store content](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores).
 
 
 ## Moving/Publishing Work
