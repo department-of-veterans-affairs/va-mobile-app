@@ -51,7 +51,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { GenerateFolderMessage } from 'translations/en/functions'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -107,6 +107,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const registerReviewEvent = useReviewEvent(true)
   const queryClient = useQueryClient()
 
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
@@ -167,9 +168,9 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   useEffect(() => {
     if (threadFetched) {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
-      registerReviewEvent(true)
+      registerReviewEvent()
     }
-  }, [threadFetched])
+  }, [threadFetched, registerReviewEvent])
 
   useEffect(() => {
     if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
