@@ -12,7 +12,9 @@ import { render as rtlRender } from '@testing-library/react-native'
 import path from 'path'
 import { ThemeProvider } from 'styled-components'
 
+import { authKeys } from 'api/auth'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
+import { UserAuthSettings, UserBiometricsSettings } from 'api/types'
 import { RootState } from 'store'
 import { InitialState } from 'store/slices'
 import accessabilityReducer from 'store/slices/accessibilitySlice'
@@ -75,8 +77,8 @@ export class TrackedStore {
 const getConfiguredStore = (state?: Partial<RootState>) => {
   return configureStore({
     reducer: {
-      auth: authReducer as any,
       accessibility: accessabilityReducer as any,
+      auth: authReducer as any,
       demo: demoReducer as any,
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
@@ -204,6 +206,14 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       secureMessaging: true,
       userProfileUpdate: true,
     })
+    queryClient.setQueryData(authKeys.settings, {
+      firstTimeLogin: false,
+    } as UserAuthSettings)
+    queryClient.setQueryData(authKeys.biometrics, {
+      canStoreWithBiometric: true,
+      shouldStoreWithBiometric: true,
+      supportedBiometric: '',
+    } as UserBiometricsSettings)
     if (queriesData?.length) {
       queriesData.forEach(({ queryKey, data }) => {
         queryClient.setQueryData(queryKey, data)
