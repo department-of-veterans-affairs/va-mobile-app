@@ -110,7 +110,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   SubmitEvidenceSubtask: {
     claimID: string
   }
-  InAppFeedback: { task: string }
+  InAppFeedback: { screen: string }
   Tabs: undefined
 }
 

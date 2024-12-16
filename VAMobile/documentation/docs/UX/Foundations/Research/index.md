@@ -59,9 +59,9 @@ The research study lead uses the information provided from Perigean, the VA’s 
 - [Sign Up Sheet Template](https://docs.google.com/spreadsheets/d/1N8pTY9LEujEzMWVuI5Bzf0_9yJ_2JpHt/edit?usp=sharing&ouid=118400044101943019619&rtpof=true&sd=true)
 
 ## VA Mobile app research 
-* [VA mobile app UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research)
+* [VA mobile app UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/777d2cbccd0121a76011b7b43b74720c875f4f34/products/va-mobile-app/research/ux)
 Research plans and findings for VA mobile app features and research efforts, 2020 to present.
-* [Conducting remote User Research with a pre-release production app build & user credentials](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/ux-research/research-operations/research-pre-release-prod-app-build-how-to.md) 
+* [Conducting remote User Research with a pre-release production app build & user credentials](https://github.com/department-of-veterans-affairs/va.gov-team/blob/cffaa1b43377935e24b90dd6b5b21d4135cf67d4/products/va-mobile-app/research/ux/research-operations/research-pre-release-prod-app-build-how-to.md) 
 Planning tips and a template for conducting remote research with a pre-release production app build.
 
 ## VA Research resources
