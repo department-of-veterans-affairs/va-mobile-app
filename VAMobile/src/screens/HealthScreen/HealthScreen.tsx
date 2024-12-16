@@ -179,12 +179,14 @@ export function HealthScreen({}: HealthScreenProps) {
           </Pressable>
         </Box>
       )}
-      {!enrolledInVAHealthCare && (
+      {true && (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <AnnouncementBanner
             title={t('applyForHealthCare')}
             link={LINK_URL_APPLY_FOR_HEALTH_CARE}
             a11yLabel={a11yLabelVA(t('applyForHealthCare'))}
+            useWebView={true}
+            webViewLoadingMessage={t('webview.healthCareApplication.loading')}
           />
         </Box>
       )}

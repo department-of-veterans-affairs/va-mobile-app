@@ -1,11 +1,13 @@
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { Box, TextView } from 'components'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { NAMESPACE } from 'constants/namespaces'
+import { useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 
 interface AnnouncementBannerProps {
   /** Text for announcement title */
@@ -14,11 +16,23 @@ interface AnnouncementBannerProps {
   link: string
   /** Optional accessibilityLabel */
   a11yLabel?: string
+  /** Determines whether to use the WebView for opening link. Defaults to launching link externally. */
+  useWebView?: boolean
+  /** Message to display when loading WebView. `useWebView` must be enabled to take effect. */
+  webViewLoadingMessage?: string
 }
 
-const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabel }: AnnouncementBannerProps) => {
+const AnnouncementBanner: FC<AnnouncementBannerProps> = ({
+  title,
+  link,
+  a11yLabel,
+  useWebView,
+  webViewLoadingMessage,
+}: AnnouncementBannerProps) => {
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
+  const navigateTo = useRouteNavigation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     flexDirection: 'row',
@@ -41,7 +55,16 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
   return (
     <Pressable
       style={pressableStyle}
-      onPress={() => launchExternalLink(link)}
+      onPress={() =>
+        useWebView
+          ? navigateTo('Webview', {
+              url: link,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: webViewLoadingMessage || t('webview.default.loading'),
+              useSSO: true,
+            })
+          : launchExternalLink(link)
+      }
       accessible={true}
       accessibilityRole={'link'}
       accessibilityLabel={a11yLabel}
