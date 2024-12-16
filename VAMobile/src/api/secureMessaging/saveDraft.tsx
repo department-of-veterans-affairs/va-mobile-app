@@ -5,7 +5,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { Params, post, put } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { secureMessagingKeys } from './queryKeys'
 
@@ -28,6 +28,7 @@ const saveDraft = ({ messageID, replyID, messageData }: SaveDraftParameters) => 
  * Returns a mutation for saving a draft message
  */
 export const useSaveDraft = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: saveDraft,
