@@ -144,7 +144,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         }}
         {...scrollViewProps}>
         <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
-          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
+          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
         </View>
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
