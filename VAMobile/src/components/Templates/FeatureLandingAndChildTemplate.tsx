@@ -143,7 +143,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
         {...scrollViewProps}>
-        <View accessible accessibilityLabel={title} onLayout={getTransitionHeaderHeight}>
+        <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
           {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : null}
         </View>
         <WaygateWrapper>{children}</WaygateWrapper>
