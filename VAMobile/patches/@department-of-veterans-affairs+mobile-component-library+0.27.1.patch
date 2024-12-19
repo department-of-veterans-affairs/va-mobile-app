@@ -1,0 +1,42 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/LoadingIndicator/LoadingIndicator.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/LoadingIndicator/LoadingIndicator.tsx
+index dabf3c6..a0c31be 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/LoadingIndicator/LoadingIndicator.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/LoadingIndicator/LoadingIndicator.tsx
+@@ -6,7 +6,7 @@ import {
+   View,
+   ViewStyle,
+ } from 'react-native'
+-import React, { useEffect } from 'react'
++import React, { useEffect, useRef } from 'react'
+ 
+ import { Icon, IconProps } from '../Icon/Icon'
+ import { Spacer } from '../Spacer/Spacer'
+@@ -36,19 +36,17 @@ export const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
+   children,
+ }) => {
+   const theme = useTheme()
+-  const rotation = new Animated.Value(0)
++  const rotation = useRef(new Animated.Value(0)).current
+ 
+   useEffect(() => {
+-    const animate = () => {
+-      rotation.setValue(0) // Reset the rotation value to 0
+-      Animated.timing(rotation, {
+-        toValue: 1,
+-        duration: 1500,
+-        easing: Easing.linear,
+-        useNativeDriver: true,
+-      }).start(() => animate()) // Loop the animation
+-    }
+-    animate()
++    const animation = Animated.loop(Animated.timing(rotation, {
++      toValue: 1,
++      duration: 1500,
++      easing: Easing.linear,
++      useNativeDriver: true,
++    }))
++    animation.start() // Loop the animation
++    return () => animation.stop() // Cleanup animation when component unmounts
+   }, [rotation])
+ 
+   const rotate = rotation.interpolate({
