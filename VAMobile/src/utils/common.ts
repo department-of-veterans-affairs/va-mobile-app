@@ -446,6 +446,12 @@ export function checkStringForPII(body: string): { found: boolean; newText: stri
     .filter((value) => value !== '')
   const bodySplit = body.split(/\s/).filter((value) => value !== '')
   _.forEach(bodySplit, (text) => {
+    const trailingPunctuationMatch = text.match(/[.,!?;:]+$/)
+    let trailingPunctuation = ''
+    if (trailingPunctuationMatch) {
+      trailingPunctuation = trailingPunctuationMatch[0]
+      text = text.slice(0, -trailingPunctuation.length)
+    }
     phoneMatch = PHONE_REGEX_EXP.exec(text)
     ssnMatch = SSN_REGEX_EXP.exec(text)
     emailMatch = EMAIL_REGEX_EXP.exec(text)
@@ -460,6 +466,7 @@ export function checkStringForPII(body: string): { found: boolean; newText: stri
       found = true
       text = 'xxxxxxx@xxx.xxx'
     }
+    text = text + trailingPunctuation
     newText = newText.concat(text)
     newText = newText.concat(whiteSpace.pop() || '')
   })
