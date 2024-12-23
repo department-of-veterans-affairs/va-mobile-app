@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -159,26 +160,28 @@ export const getAppointmentTypeIcon = (
   type: AppointmentType,
   phoneOnly: boolean,
   theme: VATheme,
-): VAIconProps | undefined => {
+): IconProps | undefined => {
   const iconProps = {
     fill: theme.colors.icon.defaultMenuItem,
     height: theme.fontSizes.HelperText.fontSize,
     width: theme.fontSizes.HelperText.fontSize,
-  } as VAIconProps
+  } as IconProps
 
   switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return { ...iconProps, name: 'Building' }
+      return { ...iconProps, name: 'LocationCity', svg: undefined }
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return { ...iconProps, name: 'VideoCamera' }
+      return { ...iconProps, name: 'Videocam', svg: undefined }
     case AppointmentTypeConstants.VA:
-      return phoneOnly ? { ...iconProps, name: 'Phone' } : { ...iconProps, name: 'Building' }
+      return phoneOnly
+        ? { ...iconProps, name: 'Phone', svg: undefined }
+        : { ...iconProps, name: 'LocationCity', svg: undefined }
     case AppointmentTypeConstants.COMMUNITY_CARE:
       return undefined
     default:
-      return phoneOnly ? { ...iconProps, name: 'Phone' } : undefined
+      return phoneOnly ? { ...iconProps, name: 'Phone', svg: undefined } : undefined
   }
 }
 
