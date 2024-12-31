@@ -1,0 +1,22 @@
+diff --git a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
+index 908b7e4..be404c1 100644
+--- a/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
++++ b/node_modules/@department-of-veterans-affairs/mobile-component-library/src/components/SegmentedControl/SegmentedControl.tsx
+@@ -112,7 +112,7 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+         aria-label={accessibilityLabel}
+         aria-valuetext={a11yListPosition}
+         accessibilityHint={a11yHints ? a11yHints[index] : ''}
+-        role={'tab'}
++        accessibilityRole={'tab'}
+         accessibilityState={{ selected: isSelected }}
+         style={PressableOpacityStyle()}
+         testID={testIDs?.[index]}>
+@@ -125,7 +125,7 @@ export const SegmentedControl: FC<SegmentedControlProps> = ({
+ 
+   return (
+     <ComponentWrapper>
+-      <View style={viewStyle} role="tablist">
++      <View style={viewStyle} accessibilityRole="tablist">
+         {labels.map((label, index) => buildSegment(label, index))}
+       </View>
+     </ComponentWrapper>
