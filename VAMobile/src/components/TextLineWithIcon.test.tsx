@@ -1,22 +1,22 @@
 import React from 'react'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { screen } from '@testing-library/react-native'
 
 import { Box } from 'components'
 import { context, render } from 'testUtils'
 
 import TextLineWithIcon from './TextLineWithIcon'
-import { VAIconProps } from './VAIcon'
 
 context('TextLineWithIcon', () => {
   beforeEach(() => {
     const testLine1 = {
       text: 'line1',
-      iconProps: { name: 'Trash', width: 16, height: 16, testID: 'Trash' } as VAIconProps,
+      iconProps: { name: 'Delete', width: 16, height: 16, testID: 'Delete' } as IconProps,
     }
     const testLine2 = {
       text: 'another line2',
-      iconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread', isOwnLine: true } as VAIconProps,
+      iconProps: { name: 'Close', width: 16, height: 16, testID: 'Close', isOwnLine: true } as IconProps,
     }
     const testLine3 = { text: 'line3 no iconProps' }
 
@@ -29,9 +29,9 @@ context('TextLineWithIcon', () => {
     )
   })
 
-  it('renders correct VAIcons', () => {
-    expect(screen.getByTestId('Trash')).toBeTruthy()
-    expect(screen.getByTestId('Unread')).toBeTruthy()
+  it('renders correct Icons', () => {
+    expect(screen.getByTestId('Delete')).toBeTruthy()
+    expect(screen.getByTestId('Close')).toBeTruthy()
   })
 
   it('should render text correctly and not render text for component where icon specified to be in own line', () => {

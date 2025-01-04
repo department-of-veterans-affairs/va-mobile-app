@@ -1,12 +1,12 @@
 import React from 'react'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { screen } from '@testing-library/react-native'
 
 import { Box, InlineTextWithIconsProps } from 'components'
 import { context, render } from 'testUtils'
 
 import InlineTextWithIcons from './InlineTextWithIcons'
-import { VAIconProps } from './VAIcon'
 
 context('InlineTextWithIcons', () => {
   beforeEach(() => {
@@ -16,7 +16,14 @@ context('InlineTextWithIcons', () => {
         variant: 'MobileBodyBold',
         textAlign: 'left',
       },
-      leftIconProps: { name: 'Unread', width: 16, height: 16, isOwnLine: true, testID: 'Unread' } as VAIconProps,
+      // Need to put updated Unread icon here
+      leftIconProps: {
+        name: 'RemoveCircle',
+        width: 16,
+        height: 16,
+        isOwnLine: true,
+        testID: 'RemoveCircle',
+      } as IconProps,
     } as InlineTextWithIconsProps
     const testLine2 = {
       leftTextProps: {
@@ -33,14 +40,14 @@ context('InlineTextWithIcons', () => {
         textAlign: 'left',
         color: 'primary',
       },
-      leftIconProps: { name: 'PaperClip', fill: 'spinner', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
+      leftIconProps: { name: 'AttachFile', width: 16, height: 16, testID: 'AttachFile' } as IconProps,
       rightIconProps: {
         name: 'Chat',
         width: 16,
         height: 16,
         fill: 'spinner',
         testID: 'Chat',
-      } as VAIconProps,
+      } as IconProps,
     } as InlineTextWithIconsProps
 
     render(
@@ -59,8 +66,9 @@ context('InlineTextWithIcons', () => {
   })
 
   it('renders icons', () => {
-    expect(screen.getByTestId('Unread')).toBeTruthy()
-    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+    // TODO: Need to find Unread equivalent using RemoveCircle as placeholder for now
+    expect(screen.getByTestId('RemoveCircle')).toBeTruthy()
+    expect(screen.getByTestId('AttachFile')).toBeTruthy()
     expect(screen.getByTestId('Chat')).toBeTruthy()
   })
 })

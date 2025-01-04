@@ -19,7 +19,7 @@ import {
   AppointmentsList,
   AppointmentsMetaPagination,
 } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, VAIconProps } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 
 import { LabelTagTypeConstants } from '../components/LabelTag'
@@ -154,7 +154,7 @@ export const pendingType = (type: AppointmentType, t: TFunction, phoneOnly: bool
  * @param phoneOnly - boolean tells if the appointment is a phone call
  * @param theme - type VATheme, the theme object to set some properties
  *
- * @returns VAIconProps or undefined
+ * @returns IconProps or undefined
  */
 export const getAppointmentTypeIcon = (
   type: AppointmentType,
@@ -166,22 +166,21 @@ export const getAppointmentTypeIcon = (
     height: theme.fontSizes.HelperText.fontSize,
     width: theme.fontSizes.HelperText.fontSize,
   } as IconProps
-
   switch (type) {
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      return { ...iconProps, name: 'LocationCity', svg: undefined }
+      return { ...iconProps, name: 'LocationCity' } as IconProps
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
-      return { ...iconProps, name: 'Videocam', svg: undefined }
+      return { ...iconProps, name: 'Videocam' } as IconProps
     case AppointmentTypeConstants.VA:
       return phoneOnly
-        ? { ...iconProps, name: 'Phone', svg: undefined }
-        : { ...iconProps, name: 'LocationCity', svg: undefined }
+        ? ({ ...iconProps, name: 'Phone' } as IconProps)
+        : ({ ...iconProps, name: 'LocationCity' } as IconProps)
     case AppointmentTypeConstants.COMMUNITY_CARE:
       return undefined
     default:
-      return phoneOnly ? { ...iconProps, name: 'Phone', svg: undefined } : undefined
+      return phoneOnly ? ({ ...iconProps, name: 'Phone' } as IconProps) : undefined
   }
 }
 

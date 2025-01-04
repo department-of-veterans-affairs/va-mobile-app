@@ -30,11 +30,11 @@ context('MessageList', () => {
         inlineTextWithIcons: [
           {
             leftTextProps: { text: 'test2-sender' },
-            leftIconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread' },
+            leftIconProps: { name: 'RemoveCircle', width: 16, height: 16, testID: 'RemoveCircle' },
           },
           {
             leftTextProps: { text: 'test2-subject-line' },
-            leftIconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' },
+            leftIconProps: { name: 'AttachFile', width: 16, height: 16, testID: 'AttachFile' },
           },
         ],
         isSentFolder: false,
@@ -66,7 +66,7 @@ context('MessageList', () => {
   })
 
   it('should generate correct testId with icon accessibility labels if no testId provided in props', () => {
-    expect(screen.getByTestId('Unread: test2-sender Has attachment test2-subject-line')).toBeTruthy()
+    expect(screen.getByTestId('test2-sender Has attachment test2-subject-line')).toBeTruthy()
     expect(
       screen.getByTestId('test3-recipient test3-sent-item-with-read-tag Recipient has read your message'),
     ).toBeTruthy()
@@ -76,9 +76,10 @@ context('MessageList', () => {
     expect(screen.findByText('Read')).toBeTruthy()
   })
 
-  it('should render the VAIcon components for unread item with attachment', () => {
-    expect(screen.getByTestId('Unread')).toBeTruthy()
-    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+  it('should render the Icon components for unread item with attachment', () => {
+    // TODO: Need to find Unread equivalent using RemoveCircle as placeholder for now
+    expect(screen.getByTestId('RemoveCircle')).toBeTruthy()
+    expect(screen.getByTestId('AttachFile')).toBeTruthy()
   })
 
   it('should render chevron icons', () => {

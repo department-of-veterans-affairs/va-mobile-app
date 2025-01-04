@@ -37,7 +37,6 @@ import {
   LoadingComponent,
   PickerItem,
   TextView,
-  VAIconProps,
   VAModalPicker,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -241,7 +240,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'Folder',
-      } as VAIconProps
+      } as IconProps
 
       if (label === FolderNameTypeConstants.inbox) {
         icon.fill = 'defaultMenuItem'

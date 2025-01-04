@@ -45,7 +45,7 @@ export type FullScreenSubtaskProps = {
   /** Optional TestID for right button */
   rightButtonTestID?: string
   /** icon for title bar right button(must have right button text to display) */
-  rightVAIconProps?: IconProps
+  rightIconProps?: IconProps // Update to rightIconProps??
   /** ref for the VAScrollView component that contains the content */
   scrollViewRef?: Ref<ScrollView>
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
@@ -80,7 +80,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   onRightButtonPress,
   rightButtonA11yLabel,
   rightButtonTestID,
-  rightVAIconProps,
+  rightIconProps,
   scrollViewRef,
   menuViewActions,
   primaryContentButtonText,
@@ -169,7 +169,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           a11yLabel: rightButtonA11yLabel,
           testID: rightButtonTestID,
           onPress: onRightTitleButtonPress,
-          icon: rightVAIconProps,
+          icon: rightIconProps,
         }
       : undefined,
     menuViewActions,
