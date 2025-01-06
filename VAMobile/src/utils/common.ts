@@ -437,38 +437,23 @@ export function fullPanelCardStyleInterpolator({
  */
 export function checkStringForPII(body: string): { found: boolean; newText: string } {
   let found = false
-  let newText = ''
-  let phoneMatch, ssnMatch, emailMatch, mailToMatch
-  const whiteSpace = body
-    .trim()
-    .split(/\S/)
-    .reverse()
-    .filter((value) => value !== '')
-  const bodySplit = body.split(/\s/).filter((value) => value !== '')
-  _.forEach(bodySplit, (text) => {
-    const trailingPunctuationMatch = text.match(/[.,!?;:]+$/)
-    let trailingPunctuation = ''
-    if (trailingPunctuationMatch) {
-      trailingPunctuation = trailingPunctuationMatch[0]
-      text = text.slice(0, -trailingPunctuation.length)
-    }
-    phoneMatch = PHONE_REGEX_EXP.exec(text)
-    ssnMatch = SSN_REGEX_EXP.exec(text)
-    emailMatch = EMAIL_REGEX_EXP.exec(text)
-    mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
-    if (phoneMatch) {
-      found = true
-      text = '###-###-####'
-    } else if (ssnMatch) {
-      found = true
-      text = '###-##-####'
-    } else if (emailMatch || mailToMatch) {
-      found = true
-      text = 'xxxxxxx@xxx.xxx'
-    }
-    text = text + trailingPunctuation
-    newText = newText.concat(text)
-    newText = newText.concat(whiteSpace.pop() || '')
-  })
+  let newText = body
+
+  if (PHONE_REGEX_EXP.test(newText)) {
+    found = true
+    newText = newText.replace(PHONE_REGEX_EXP, '###-###-####')
+  }
+  if (SSN_REGEX_EXP.test(newText)) {
+    found = true
+    newText = newText.replace(SSN_REGEX_EXP, '###-##-####')
+  }
+  if (EMAIL_REGEX_EXP.test(newText)) {
+    found = true
+    newText = newText.replace(EMAIL_REGEX_EXP, 'xxxxxxx@xxx.xxx')
+  }
+  if (MAIL_TO_REGEX_EXP.test(newText)) {
+    found = true
+    newText = newText.replace(MAIL_TO_REGEX_EXP, 'xxxxxxx@xxx.xxx')
+  }
   return { found, newText }
 }

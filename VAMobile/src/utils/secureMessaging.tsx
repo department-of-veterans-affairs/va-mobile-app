@@ -19,7 +19,13 @@ import {
   VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
-import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
+import {
+  EMAIL_REGEX_EXP,
+  MAIL_TO_REGEX_EXP_LINKIFY,
+  PHONE_REGEX_EXP_LINKIFY,
+  URL2_REGEX_EXP,
+  URL_REGEX_EXP,
+} from 'constants/common'
 import {
   FolderNameTypeConstants,
   MAX_IMAGE_DIMENSION,
@@ -497,7 +503,7 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
       const previousText = bodySplit[index - 1]
       const nextText = bodySplit[index + 1]
       const testString = previousText + ' ' + text + ' ' + nextText
-      const phoneMatch = PHONE_REGEX_EXP.exec(testString)
+      const phoneMatch = PHONE_REGEX_EXP_LINKIFY.exec(testString)
       if (phoneMatch) {
         if (savedText.length > 3) {
           savedText = savedText.slice(0, savedText.length - 4)
@@ -527,8 +533,8 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
     }
 
     const emailMatch = EMAIL_REGEX_EXP.exec(text)
-    const mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
-    const phoneMatch = PHONE_REGEX_EXP.exec(text)
+    const mailToMatch = MAIL_TO_REGEX_EXP_LINKIFY.exec(text)
+    const phoneMatch = PHONE_REGEX_EXP_LINKIFY.exec(text)
     const urlMatch = URL_REGEX_EXP.exec(text)
     const url2Match = URL2_REGEX_EXP.exec(text)
     if (emailMatch) {
