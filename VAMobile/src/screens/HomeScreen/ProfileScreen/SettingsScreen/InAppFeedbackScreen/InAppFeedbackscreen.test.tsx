@@ -103,7 +103,7 @@ context('InAppFeedbackScreen', () => {
     // ------------------
     // PHONE NUMBER TEST CASES
     // ------------------
-    it('alerts for a phone number with leading punctuation', async () => {
+    it('alerts for a phone number with leading text', async () => {
       initializeTestInstance()
       submitFeedback('Call me123-456-7890')
       await waitFor(() => {

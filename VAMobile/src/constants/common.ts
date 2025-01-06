@@ -47,24 +47,20 @@ export const DIRECT_DEPOSIT = 'Direct Deposit'
 export const MAX_DIGITS = 10
 export const MAX_DIGITS_AFTER_FORMAT = 14
 
-// NOTE: Only use these patterns for linkification purposes.
-export const MAIL_TO_REGEX_EXP_LINKIFY = new RegExp(
-  /^(mailto:([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-)
-
-export const PHONE_REGEX_EXP_LINKIFY = new RegExp(
-  /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
-)
-
 export const EMAIL_REGEX_EXP = new RegExp(
   /(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
 )
 export const MAIL_TO_REGEX_EXP = new RegExp(
-  /(mailto:(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[1-9]{1,3}\.[1-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))/,
+  /(?:mailto:)?(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/,
 )
 
 export const PHONE_REGEX_EXP = new RegExp(
   '.*(?:\\+?\\d{1,3})?[-. (]*\\d{3}[-. )]*\\d{3}[-. ]*\\d{4}(?: *(?:x|ext)\\.? *\\d+)?.*$',
+)
+
+// NOTE: Due to complexity with identifying various phone numbers we use a different pattern for linking phone numbers.
+export const PHONE_REGEX_EXP_LINKING = new RegExp(
+  /^\s*(?:\+?(\d{0,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *(x)(\d+))?,?.?\s*$/,
 )
 
 export const SSN_REGEX_EXP = new RegExp(/(?<!\d)\d{3}-?\d{2}-?\d{4}(?!\d)/)
