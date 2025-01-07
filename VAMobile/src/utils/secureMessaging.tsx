@@ -572,7 +572,6 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
       )
       savedText += whiteSpace.pop() || ''
     } else if (phoneMatch) {
-      // try to test with these when you get 0-1 back...
       // matches 8006982411 800-698-2411 1-800-698-2411 (800)698-2411 (800)-698-2411 +8006982411 +18006982411
       textReconstructedBody.push(
         <TextView accessible={nonWhiteSpaceCheck} selectable={nonWhiteSpaceCheck} variant="MobileBody">
