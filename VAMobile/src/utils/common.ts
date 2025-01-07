@@ -15,7 +15,7 @@ import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
 import { Events } from 'constants/analytics'
-import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, SSN_REGEX_EXP } from 'constants/common'
+import { EMAIL_REGEX_EXP_PII, MAIL_TO_REGEX_EXP_PII, PHONE_REGEX_EXP_PII, SSN_REGEX_EXP_PII } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
@@ -439,21 +439,21 @@ export function checkStringForPII(body: string): { found: boolean; newText: stri
   let found = false
   let newText = body
 
-  if (PHONE_REGEX_EXP.test(newText)) {
+  if (PHONE_REGEX_EXP_PII.test(newText)) {
     found = true
-    newText = newText.replace(PHONE_REGEX_EXP, '###-###-####')
+    newText = newText.replace(PHONE_REGEX_EXP_PII, '###-###-####')
   }
-  if (SSN_REGEX_EXP.test(newText)) {
+  if (SSN_REGEX_EXP_PII.test(newText)) {
     found = true
-    newText = newText.replace(SSN_REGEX_EXP, '###-##-####')
+    newText = newText.replace(SSN_REGEX_EXP_PII, '###-##-####')
   }
-  if (EMAIL_REGEX_EXP.test(newText)) {
+  if (EMAIL_REGEX_EXP_PII.test(newText)) {
     found = true
-    newText = newText.replace(EMAIL_REGEX_EXP, 'xxxxxxx@xxx.xxx')
+    newText = newText.replace(EMAIL_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
   }
-  if (MAIL_TO_REGEX_EXP.test(newText)) {
+  if (MAIL_TO_REGEX_EXP_PII.test(newText)) {
     found = true
-    newText = newText.replace(MAIL_TO_REGEX_EXP, 'xxxxxxx@xxx.xxx')
+    newText = newText.replace(MAIL_TO_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
   }
   return { found, newText }
 }
