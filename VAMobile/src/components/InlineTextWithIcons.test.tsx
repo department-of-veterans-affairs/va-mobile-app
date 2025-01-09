@@ -7,6 +7,7 @@ import { Box, InlineTextWithIconsProps } from 'components'
 import { context, render } from 'testUtils'
 
 import InlineTextWithIcons from './InlineTextWithIcons'
+import Unread from './VAIcon/svgs/Unread.svg'
 
 context('InlineTextWithIcons', () => {
   beforeEach(() => {
@@ -16,13 +17,12 @@ context('InlineTextWithIcons', () => {
         variant: 'MobileBodyBold',
         textAlign: 'left',
       },
-      // Need to put updated Unread icon here
       leftIconProps: {
-        name: 'RemoveCircle',
+        svg: Unread,
         width: 16,
         height: 16,
         isOwnLine: true,
-        testID: 'RemoveCircle',
+        testID: 'Unread',
       } as IconProps,
     } as InlineTextWithIconsProps
     const testLine2 = {
@@ -66,8 +66,7 @@ context('InlineTextWithIcons', () => {
   })
 
   it('renders icons', () => {
-    // TODO: Need to find Unread equivalent using RemoveCircle as placeholder for now
-    expect(screen.getByTestId('RemoveCircle')).toBeTruthy()
+    expect(screen.getByTestId('Unread')).toBeTruthy()
     expect(screen.getByTestId('AttachFile')).toBeTruthy()
     expect(screen.getByTestId('Chat')).toBeTruthy()
   })

@@ -7,6 +7,7 @@ import { Box } from 'components'
 import { context, render } from 'testUtils'
 
 import TextLineWithIcon from './TextLineWithIcon'
+import Unread from './VAIcon/svgs/Unread.svg'
 
 context('TextLineWithIcon', () => {
   beforeEach(() => {
@@ -16,7 +17,7 @@ context('TextLineWithIcon', () => {
     }
     const testLine2 = {
       text: 'another line2',
-      iconProps: { name: 'Close', width: 16, height: 16, testID: 'Close', isOwnLine: true } as IconProps,
+      iconProps: { svg: Unread, width: 16, height: 16, testID: 'Unread', isOwnLine: true } as IconProps,
     }
     const testLine3 = { text: 'line3 no iconProps' }
 
@@ -31,7 +32,7 @@ context('TextLineWithIcon', () => {
 
   it('renders correct Icons', () => {
     expect(screen.getByTestId('Delete')).toBeTruthy()
-    expect(screen.getByTestId('Close')).toBeTruthy()
+    expect(screen.getByTestId('Unread')).toBeTruthy()
   })
 
   it('should render text correctly and not render text for component where icon specified to be in own line', () => {

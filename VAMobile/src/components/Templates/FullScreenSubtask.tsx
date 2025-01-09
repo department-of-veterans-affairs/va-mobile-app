@@ -45,7 +45,7 @@ export type FullScreenSubtaskProps = {
   /** Optional TestID for right button */
   rightButtonTestID?: string
   /** icon for title bar right button(must have right button text to display) */
-  rightIconProps?: IconProps // Update to rightIconProps??
+  rightIconProps?: IconProps
   /** ref for the VAScrollView component that contains the content */
   scrollViewRef?: Ref<ScrollView>
   /** shows the menu icon with the specified action types (won't be shown if right button text is set) */
