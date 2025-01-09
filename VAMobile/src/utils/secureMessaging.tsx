@@ -30,6 +30,7 @@ import {
   stringToTitleCase,
 } from 'utils/formattingUtils'
 
+import Unread from '../components/VAIcon/svgs/Unread.svg'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
@@ -49,11 +50,8 @@ export const getMessagesListItems = (
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
-    // TODO: Need to find Unread icon using CropSquare as placeholder
     const unreadIconProps =
-      readReceipt !== READ && !isOutbound
-        ? ({ name: 'CropSquare', width: 16, height: 16, fill: theme.colors.icon.active } as IconProps)
-        : undefined
+      readReceipt !== READ && !isOutbound ? ({ svg: Unread, height: 16, width: 16 } as IconProps) : undefined
     const paperClipProps =
       hasAttachments || attachment
         ? ({ name: 'AttachFile', width: 16, height: 16, fill: theme.colors.background.bullet } as IconProps)

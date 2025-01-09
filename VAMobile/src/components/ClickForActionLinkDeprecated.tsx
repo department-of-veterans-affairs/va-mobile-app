@@ -1,19 +1,24 @@
 import React, { FC } from 'react'
 import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+// useTheme
+import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
+
 import { useExternalLink, useTheme } from 'utils/hooks'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 
 import Box from './Box'
 import TextView, { ColorVariant, TextViewProps } from './TextView'
-import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
 /** Icon type for links, defaults to Chat */
 export enum LinkUrlIconType {
   /** Signifies icon with chat bubbles */
   Chat = 'Chat',
   /** Signifies icon with right pointing arrow */
-  Arrow = 'Arrow',
+  Arrow = 'ArrowCircleRight',
+  /** Signifies icon with external links */
+  External = 'Launch',
 }
 
 export const LinkTypeOptionsConstants: {
@@ -152,31 +157,33 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
     launchExternalLink(openUrlText)
   }
 
-  const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
+  const getUrlIcon = (): keyof typeof IconMap => {
     switch (linkUrlIconType) {
       case LinkUrlIconType.Arrow:
-        return 'RightArrowInCircle'
+        return 'ArrowCircleRight'
+      case LinkUrlIconType.External:
+        return 'Launch'
       default:
         return 'Chat'
     }
   }
 
-  const getIconName = (): keyof typeof VA_ICON_MAP => {
+  const getIconName = (): keyof typeof IconMap => {
     switch (linkType) {
       case 'call':
-        return 'CirclePhone'
+        return 'Phone'
       case 'callTTY':
-        return 'PhoneTTY'
+        return 'TTY'
       case 'text':
-        return 'Text'
+        return 'PhoneIphone'
       case 'url':
         return getUrlIcon()
       case 'calendar':
-        return 'Calendar'
+        return 'CalendarToday'
       case 'directions':
         return 'Directions'
       case 'externalLink':
-        return 'CircleExternalLink'
+        return 'Launch'
     }
   }
 
@@ -201,13 +208,14 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
       <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
         {!hideIcon && (
           <Box pr={3}>
-            <VAIcon
-              name={getIconName()}
-              fill={colorOverride ? (colorOverride as ColorVariant) : 'link'}
-              fill2={colorOverride ? 'transparent' : ''}
-              width={25}
-              height={25}
-            />
+            {linkType ? (
+              <Icon
+                name={getIconName()}
+                fill={colorOverride ? (colorOverride as ColorVariant) : theme.colors.icon.link}
+                width={25}
+                height={25}
+              />
+            ) : undefined}
           </Box>
         )}
         <Box flexShrink={1}>

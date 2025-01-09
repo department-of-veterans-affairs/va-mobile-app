@@ -236,14 +236,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       const label = folder.attributes.name
 
       const icon = {
-        fill: 'defaultMenuItem',
+        fill: 'base',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'Folder',
       } as IconProps
 
       if (label === FolderNameTypeConstants.inbox) {
-        icon.fill = 'defaultMenuItem'
+        icon.fill = 'base'
         icon.name = 'Inbox'
       }
 

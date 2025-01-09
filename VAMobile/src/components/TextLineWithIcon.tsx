@@ -20,22 +20,29 @@ export type TextLineWithIconProps = {
 export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, variant, textAlign, color }) => {
   const themes = useTheme()
   const iconNotOwnRow = !(iconProps && iconProps.isOwnLine)
-  const {
-    name: iconName = 'Close',
-    width: iconWidth = 24,
-    height: iconHeight = 24,
-    fill: iconFill,
-    testID: iconTestID,
-  } = iconProps ?? {}
 
   return (
     <Box flexDirection={'row'} alignItems={'center'}>
       <Box
         ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft}
         mr={themes.dimensions.condensedMarginBetween}>
-        {iconProps && (
-          <Icon name={iconName} width={iconWidth} height={iconHeight} fill={iconFill} testID={iconTestID} />
-        )}
+        {iconProps?.svg ? (
+          <Icon
+            svg={iconProps.svg}
+            width={iconProps.width ?? 24}
+            height={iconProps.height ?? 24}
+            fill={iconProps.fill}
+            testID={iconProps.testID}
+          />
+        ) : iconProps?.name ? (
+          <Icon
+            name={iconProps.name}
+            width={iconProps.width ?? 24}
+            height={iconProps.height ?? 24}
+            fill={iconProps.fill}
+            testID={iconProps.testID}
+          />
+        ) : null}
         {!iconProps && <Box mr={16} />}
       </Box>
       {iconNotOwnRow && (

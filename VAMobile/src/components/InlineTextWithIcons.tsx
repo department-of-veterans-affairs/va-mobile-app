@@ -28,31 +28,42 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
   rightTextProps,
 }) => {
   const theme = useTheme()
-  const {
-    name: leftName = 'Close',
-    width: leftWidth = 24,
-    height: leftHeight = 24,
-    fill: leftFill,
-    testID: leftTestID,
-  } = leftIconProps ?? {}
-
-  const {
-    name: rightName = 'Close',
-    width: rightWidth = 24,
-    height: rightHeight = 24,
-    fill: rightFill,
-    testID: rightTestID,
-  } = rightIconProps ?? {}
 
   return (
     <Box flexDirection={'row'} flexGrow={1}>
       {!inlineIcon && leftIconProps && (
-        <Box mt={7} mr={theme.dimensions.condensedMarginBetween}>
-          <Icon name={leftName} width={leftWidth} height={leftHeight} fill={leftFill} testID={leftTestID} />
+        <Box mt={11} mr={theme.dimensions.condensedMarginBetween}>
+          {leftIconProps?.svg ? (
+            <Icon
+              svg={leftIconProps.svg}
+              width={leftIconProps.width ?? 24}
+              height={leftIconProps.height ?? 24}
+              fill={leftIconProps.fill}
+              testID={leftIconProps.testID}
+            />
+          ) : leftIconProps?.name ? (
+            <Icon
+              name={leftIconProps.name}
+              width={leftIconProps.width ?? 24}
+              height={leftIconProps.height ?? 24}
+              fill={leftIconProps.fill}
+              testID={leftIconProps.testID}
+            />
+          ) : null}
         </Box>
       )}
       {inlineIcon && leftIconProps ? (
-        <Icon name={leftName} width={leftWidth} height={leftHeight} fill={leftFill} testID={leftTestID} />
+        leftIconProps.svg ? (
+          <Icon svg={leftIconProps.svg} fill={leftIconProps.fill} testID={leftIconProps.testID} />
+        ) : leftIconProps.name ? (
+          <Icon
+            name={leftIconProps.name}
+            width={leftIconProps.width ?? 24}
+            height={leftIconProps.height ?? 24}
+            fill={leftIconProps.fill}
+            testID={leftIconProps.testID}
+          />
+        ) : null
       ) : (
         <TextView
           mr={theme.dimensions.condensedMarginBetween}
@@ -74,7 +85,13 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
       )}
       {rightIconProps && (
         <Box mt={7}>
-          <Icon name={rightName} width={rightWidth} height={rightHeight} fill={rightFill} testID={rightTestID} />
+          <Icon
+            name={rightIconProps.name ?? 'Close'}
+            width={rightIconProps.width ?? 24}
+            height={rightIconProps.height ?? 24}
+            fill={rightIconProps.fill}
+            testID={rightIconProps.testID}
+          />
         </Box>
       )}
     </Box>
