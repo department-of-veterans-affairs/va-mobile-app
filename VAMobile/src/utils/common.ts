@@ -66,10 +66,10 @@ export const generateTestIDForInlineTextIconList = (
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    // TODO: Temporarily commenting out until Unread icon is added
-    // if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
-    //   listOfTextID.push(t('secureMessaging.unread.a11y'))
-    // }
+    // NOTE: The Unread icon is a local svg file
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.svg) {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
     if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
@@ -90,10 +90,9 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
-    // TODO: Temporarily commenting out until Unread icon is added
-    // if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'Unread') {
-    //   listOfTextID.push(t('secureMessaging.unread.a11y'))
-    // }
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.svg) {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
     if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }

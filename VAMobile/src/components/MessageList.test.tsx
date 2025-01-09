@@ -6,6 +6,7 @@ import { InlineTextWithIconsProps, MessageListItemObj, TextLine } from 'componen
 import { context, render } from 'testUtils'
 
 import MessageList from './MessageList'
+import Unread from './VAIcon/svgs/Unread.svg'
 
 context('MessageList', () => {
   const onPressSpy = jest.fn(() => {})
@@ -30,7 +31,7 @@ context('MessageList', () => {
         inlineTextWithIcons: [
           {
             leftTextProps: { text: 'test2-sender' },
-            leftIconProps: { name: 'RemoveCircle', width: 16, height: 16, testID: 'RemoveCircle' },
+            leftIconProps: { svg: Unread, width: 16, height: 16, testID: 'Unread' },
           },
           {
             leftTextProps: { text: 'test2-subject-line' },
@@ -66,7 +67,7 @@ context('MessageList', () => {
   })
 
   it('should generate correct testId with icon accessibility labels if no testId provided in props', () => {
-    expect(screen.getByTestId('test2-sender Has attachment test2-subject-line')).toBeTruthy()
+    expect(screen.getByTestId('Unread: test2-sender Has attachment test2-subject-line')).toBeTruthy()
     expect(
       screen.getByTestId('test3-recipient test3-sent-item-with-read-tag Recipient has read your message'),
     ).toBeTruthy()
@@ -77,8 +78,7 @@ context('MessageList', () => {
   })
 
   it('should render the Icon components for unread item with attachment', () => {
-    // TODO: Need to find Unread equivalent using RemoveCircle as placeholder for now
-    expect(screen.getByTestId('RemoveCircle')).toBeTruthy()
+    expect(screen.getByTestId('Unread')).toBeTruthy()
     expect(screen.getByTestId('AttachFile')).toBeTruthy()
   })
 

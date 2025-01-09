@@ -116,7 +116,7 @@ context('Inbox', () => {
   describe('when a message is clicked', () => {
     it('should call useRouteNavigation', async () => {
       await waitFor(() =>
-        fireEvent.press(screen.getByTestId('Mock Sender Invalid DateTime General: Default subject line')),
+        fireEvent.press(screen.getByTestId('Unread: Mock Sender Invalid DateTime General: Default subject line')),
       )
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessage', {

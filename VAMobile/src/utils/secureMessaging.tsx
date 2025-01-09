@@ -51,10 +51,18 @@ export const getMessagesListItems = (
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
     const unreadIconProps =
-      readReceipt !== READ && !isOutbound ? ({ svg: Unread, height: 16, width: 16 } as IconProps) : undefined
+      readReceipt !== READ && !isOutbound
+        ? ({ svg: Unread, height: 16, width: 16, testID: 'Unread' } as IconProps)
+        : undefined
     const paperClipProps =
       hasAttachments || attachment
-        ? ({ name: 'AttachFile', width: 16, height: 16, fill: theme.colors.background.bullet } as IconProps)
+        ? ({
+            name: 'AttachFile',
+            width: 16,
+            height: 16,
+            fill: theme.colors.background.bullet,
+            testID: 'AttachFile',
+          } as IconProps)
         : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [
