@@ -79,6 +79,9 @@ export type LinkButtonProps = AccessibilityProps & {
   /** color bypass */
   colorOverride?: string
 
+  /** icon color bypass */
+  iconColorOverride?: string
+
   /** custom onPress */
   customOnPress?: () => void
 
@@ -105,6 +108,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   a11yLabel,
   fireAnalytic,
   colorOverride,
+  iconColorOverride,
   customOnPress,
   hideIcon = false,
   disablePadding = false,
@@ -209,12 +213,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
         {!hideIcon && (
           <Box pr={3}>
             {linkType ? (
-              <Icon
-                name={getIconName()}
-                fill={colorOverride ? (colorOverride as ColorVariant) : theme.colors.icon.link}
-                width={25}
-                height={25}
-              />
+              <Icon name={getIconName()} fill={iconColorOverride ?? theme.colors.icon.link} width={25} height={25} />
             ) : undefined}
           </Box>
         )}

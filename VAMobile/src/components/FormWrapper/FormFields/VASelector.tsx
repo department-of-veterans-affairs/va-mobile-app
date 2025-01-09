@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { TouchableWithoutFeedback } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
@@ -96,6 +97,11 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
+    const buttonSelectedFill =
+      theme.mode === 'dark' ? colors.vadsColorFormsForegroundActiveOnDark : colors.vadsColorFormsForegroundActiveOnLight
+    const buttonUnselectedFill =
+      theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
+
     if (disabled && selectorType === SelectorType.Radio) {
       return (
         <Icon
@@ -122,7 +128,7 @@ const VASelector: FC<VASelectorProps> = ({
     const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxOutlineBlank' : 'RadioButtonUnchecked'
 
     const name = selected ? filledName : emptyName
-    const fill = selected ? theme.colors.icon.checkboxEnabledPrimary : theme.colors.icon.checkboxDisabledContrast
+    const fill = selected ? buttonSelectedFill : buttonUnselectedFill
     const stroke = selected ? undefined : theme.colors.icon.checkboxDisabled
 
     return <Icon {...getIconsProps(name, stroke, fill)} testID={name} />

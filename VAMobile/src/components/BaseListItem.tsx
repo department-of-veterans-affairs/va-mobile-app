@@ -3,6 +3,7 @@ import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, P
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
@@ -97,6 +98,11 @@ export const ButtonDecorator: FC<{
   const radioBtnWidth = 22
   const radioBtnHeight = 22
 
+  const buttonSelectedFill =
+    theme.mode === 'dark' ? colors.vadsColorFormsForegroundActiveOnDark : colors.vadsColorFormsForegroundActiveOnLight
+  const buttonUnselectedFill =
+    theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
+
   const switchOnPress = onPress ? onPress : () => {}
 
   switch (decorator) {
@@ -108,21 +114,11 @@ export const ButtonDecorator: FC<{
       return <Icon name={'Delete'} height={16} width={14} fill={theme.colors.icon.error} />
     case ButtonDecoratorType.RadioFilled:
       return (
-        <Icon
-          name={'RadioButtonChecked'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-        />
+        <Icon name={'RadioButtonChecked'} height={radioBtnHeight} width={radioBtnWidth} fill={buttonSelectedFill} />
       )
     case ButtonDecoratorType.RadioEmpty:
       return (
-        <Icon
-          name={'RadioButtonUnchecked'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
-        />
+        <Icon name={'RadioButtonUnchecked'} height={radioBtnHeight} width={radioBtnWidth} fill={buttonUnselectedFill} />
       )
     case ButtonDecoratorType.RadioDisabled:
       return (
