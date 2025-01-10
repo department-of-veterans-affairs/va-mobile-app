@@ -30,7 +30,7 @@ export enum ButtonDecoratorType {
   /** Filled radio button decorator */
   RadioFilled = 'RadioButtonChecked',
   /** Disabled radio button decorator */
-  RadioDisabled = 'RadioDisabled', // no equivalent??
+  RadioDisabled = 'RadioDisabled',
   /** Empty check box button decorator */
   CheckBoxEmpty = 'CheckBoxOutlineBlank',
   /** Filled check box button decorator */

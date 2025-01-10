@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-// useTheme
 import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
 
 import { useExternalLink, useTheme } from 'utils/hooks'
