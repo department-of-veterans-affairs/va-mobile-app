@@ -3,7 +3,7 @@ name: Release Review Template
 about: Template for requesting a production release for VA mobile app
 title: "{{ env.releaseDate }} Release Sign-Off: {{ env.versionNumber }}"
 labels: release
-assignees: timwright12, chrisj-usds, dumathane, rachelhanster, SarahHuber-AdHoc, DonMcCaugheyUSDS, TKDickson
+assignees: DonMcCaugheyUSDS
 
 ---
 

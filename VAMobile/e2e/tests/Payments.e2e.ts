@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the VA Payment History test case found in testRail (VA Mobile App > RC Regression Test > Manual > Payments Page - Elements)
+When to update:
+This script should be updated whenever new things are added/changed in payments or if anything is changed in src/store/api/demo/mocks/payments.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { t } from 'i18next'
+
 import { PaymentAccountData } from 'api/types'
 import { DirectDepositErrors } from 'constants/errors'
 import * as api from 'store/api'
@@ -43,9 +45,9 @@ context('EditDirectDepositScreen', () => {
   describe('when user selects an account type', () => {
     it('should update the value of the accountType', () => {
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText('Checking'))
-      fireEvent.press(screen.getByText('Done'))
-      expect(screen.getByText('Checking')).toBeTruthy()
+      fireEvent.press(screen.getByText(t('accountType.checking')))
+      fireEvent.press(screen.getByText(t('done')))
+      expect(screen.getByText(t('accountType.checking'))).toBeTruthy()
     })
   })
 
@@ -60,26 +62,26 @@ context('EditDirectDepositScreen', () => {
       fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
       fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText('Checking'))
-      fireEvent.press(screen.getByText('Done'))
+      fireEvent.press(screen.getByText(t('accountType.checking')))
+      fireEvent.press(screen.getByText(t('done')))
       fireEvent.press(screen.getByTestId('checkBox'))
-      fireEvent.press(screen.getByText('Save'))
+      fireEvent.press(screen.getByText(t('save')))
       when(api.put as jest.Mock)
         .calledWith(`/v0/payment-information/benefits`, bankData)
         .mockResolvedValue('success')
-      expect(screen.getByText('Saving your direct deposit information...')).toBeTruthy()
+      expect(screen.getByText(t('directDeposit.savingInformation'))).toBeTruthy()
       await waitFor(() => expect(api.put as jest.Mock).toBeCalledWith(`/v0/payment-information/benefits`, bankData))
     })
   })
 
   describe('when content is invalid', () => {
     it('should display an AlertBox and field errors', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Check your direct deposit information')).toBeTruthy()
-      expect(screen.getByText('Enter a 9-digit routing number')).toBeTruthy()
-      expect(screen.getByText('Enter an account number')).toBeTruthy()
-      expect(screen.getByText('Select an account type')).toBeTruthy()
-      expect(screen.getByText('Select checkbox to confirm information')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editDirectDeposit.pleaseCheckDDInfo'))).toBeTruthy()
+      expect(screen.getByText(t('editDirectDeposit.routingNumberFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editDirectDeposit.accountNumberFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editDirectDeposit.accountTypeFieldError'))).toBeTruthy()
+      expect(screen.getByText(t('editDirectDeposit.checkBoxFieldError'))).toBeTruthy()
     })
   })
 
@@ -95,10 +97,10 @@ context('EditDirectDepositScreen', () => {
       fireEvent.changeText(screen.getByTestId('routingNumber'), '053100300')
       fireEvent.changeText(screen.getByTestId('accountNumber'), '12345678901234567')
       fireEvent.press(screen.getByTestId('accountType'))
-      fireEvent.press(screen.getByText('Checking'))
-      fireEvent.press(screen.getByText('Done'))
+      fireEvent.press(screen.getByText(t('accountType.checking')))
+      fireEvent.press(screen.getByText(t('done')))
       fireEvent.press(screen.getByTestId('checkBox'))
-      fireEvent.press(screen.getByText('Save'))
+      fireEvent.press(screen.getByText(t('save')))
       when(api.put as jest.Mock)
         .calledWith(`/v0/payment-information/benefits`, bankData)
         .mockRejectedValue({
@@ -116,13 +118,7 @@ context('EditDirectDepositScreen', () => {
             ],
           },
         })
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            "We couldn't find a bank linked to this routing number. Please check your bank's 9-digit routing number and enter again.",
-          ),
-        ).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('editDirectDeposit.errorInvalidRoutingNumber'))).toBeTruthy())
     })
   })
 })

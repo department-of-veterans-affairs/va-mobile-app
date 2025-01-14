@@ -24,7 +24,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 
@@ -39,6 +39,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
+  const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -50,7 +51,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     : undefined
 
   useBeforeNavBackListener(navigation, () => {
-    registerReviewEvent(true)
+    registerReviewEvent()
   })
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
@@ -142,13 +143,23 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             </TextView>
           </Box>
         )}
-        <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth} mb={theme.dimensions.formMarginBetween}>
+        <Box {...boxProps} borderBottomWidth={personalInfo?.edipi ? 0 : theme.dimensions.borderWidth}>
           <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
             {t('veteranStatus.periodOfService')}
           </TextView>
           {getPeriodOfService}
         </Box>
-        <Box mb={theme.dimensions.formMarginBetween}>
+        {personalInfo?.edipi && (
+          <Box {...boxProps} borderBottomWidth={theme.dimensions.borderWidth}>
+            <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
+              {t('veteranStatus.dodIdNumber')}
+            </TextView>
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusDODTestID">
+              {personalInfo?.edipi}
+            </TextView>
+          </Box>
+        )}
+        <Box my={theme.dimensions.formMarginBetween}>
           <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
             {t('veteranStatus.uniformedServices')}
           </TextView>

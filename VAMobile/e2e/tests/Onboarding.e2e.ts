@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the Sign in Splash screens (onboarding) test case found in testRail (VA Mobile App > RC Regression Test > Manual > First Launch / Sign In)
+When to update:
+This script should be updated whenever new things are added/changed to the onboarding flow.
+*/
 import { by, device, element, expect } from 'detox'
 
 import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'

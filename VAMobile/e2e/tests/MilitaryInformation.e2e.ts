@@ -11,7 +11,6 @@ import {
 } from './utils'
 
 export const MilitaryInformationE2eIdConstants = {
-  MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
   SERVICE_INFORMATION_INCORRECT_ID: 'militaryServiceIncorrectLinkID',
   SERVICE_INFORMATION_INCORRECT_SWIPE: 'IncorrectServiceTestID',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1:
@@ -45,7 +44,7 @@ export async function verifyMilitaryInfo(militaryBranch: string) {
     await expect(element(by.text(militaryBranch))).toExist()
     await openMilitaryInformation()
     await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
-    await expect(element(by.text(MilitaryInformationE2eIdConstants.MILITARY_DATE_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
   })
 }
 
