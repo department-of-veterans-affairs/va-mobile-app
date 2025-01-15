@@ -31,6 +31,7 @@ import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import { HealthStackParamList } from './HealthStackScreens'
+import MedicalRecordsScreen from './MedicalRecordsScreen'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
@@ -160,14 +161,9 @@ export function HealthScreen({}: HealthScreenProps) {
           />
         )}
         <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          onPress={() => navigateTo('VaccineList')}
-          testID="toVaccineListID"
-        />
-        <LargeNavButton
-          title={t('vaAllergies.buttonTitle')}
-          onPress={() => navigateTo('AllergyList')}
-          testID="toAllergyListID"
+          title={t('vaMedicalRecords.buttonTitle')}
+          onPress={() => navigateTo('MedicalRecordsList')}
+          testID="toMedicalRecordsListID"
         />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
@@ -274,6 +270,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="AllergyList"
         component={AllergyListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="MedicalRecordsList"
+        component={MedicalRecordsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
