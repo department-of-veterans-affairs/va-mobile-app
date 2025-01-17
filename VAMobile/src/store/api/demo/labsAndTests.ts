@@ -9,7 +9,7 @@ type LabsAndTestsPageNumber = '1'
  * Type denoting the demo data store
  */
 export type LabsAndTestsList = {
-  '/v1/health/allergy-intolerances': {
+  '/v0/health/labs-and-tests': {
     '1': LabsAndTestsListPayload
   }
 }
@@ -22,6 +22,6 @@ export type LabsAndTestsDemoStore = LabsAndTestsList
 export type LabsAndTestsDemoReturnTypes = undefined | LabsAndTestsListPayload
 
 export const getLabsAndTestsList = (store: DemoStore, params: Params, endpoint: string): LabsAndTestsListPayload => {
-  const page = params['page[number]']
+  const page = params.page
   return store[endpoint as keyof LabsAndTestsList][page as LabsAndTestsPageNumber] as LabsAndTestsListPayload
 }

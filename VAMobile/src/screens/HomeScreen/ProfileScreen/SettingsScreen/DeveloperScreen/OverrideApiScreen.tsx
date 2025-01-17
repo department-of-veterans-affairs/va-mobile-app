@@ -97,6 +97,10 @@ const APIGroupings: {
     name: 'Vaccines',
     endpoints: ['/v1/health/immunizations', '/v0/health/locations/'],
   },
+  {
+    name: 'Allergies',
+    endpoints: ['/v0/health/allergy-intolerance'],
+  },
 ]
 
 const IndividualQueryDisplay = (

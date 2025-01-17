@@ -29,7 +29,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton
           title={t('labsAndTests.buttonTitle')}
-          onPress={() => navigateTo('')}
+          onPress={() => navigateTo('LabsAndTestsList')}
           testID="toLabsTestsListID"
         />
         <LargeNavButton

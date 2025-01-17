@@ -22,7 +22,7 @@ export type LabsAndTests = {
   id?: string | null
   type?: string | null
   attributes?: {
-    code?: string | null
+    code: string
     category?: string | null
     effectiveDateTime?: string | null
     issued?: string | null
