@@ -8,7 +8,6 @@ import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import { contains, isEmpty, map } from 'underscore'
-import _ from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
 import { TextLineWithIconProps } from 'components'
