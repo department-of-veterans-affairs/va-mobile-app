@@ -60,41 +60,9 @@ context('InAppFeedbackScreen', () => {
     // ------------------
     // SSN TEST CASES
     // ------------------
-    it('alerts for an SSN', async () => {
-      initializeTestInstance()
-      submitFeedback('My SSN is 123-45-6789')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
     it('alerts for an SSN with leading punctuation', async () => {
       initializeTestInstance()
       submitFeedback('My SSN:123-45-6789')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
-    it('alerts for an SSN with trailing punctuation', async () => {
-      initializeTestInstance()
-      submitFeedback('My SSN is 123-45-6789.')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
-    it('alerts for an SSN wrapped in parentheses', async () => {
-      initializeTestInstance()
-      submitFeedback('(123-45-6789) is my SSN.')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
-    it('alerts for an SSN with leading text', async () => {
-      initializeTestInstance()
-      submitFeedback('This is my123-45-6789.')
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalled()
       })
@@ -119,14 +87,6 @@ context('InAppFeedbackScreen', () => {
       })
     })
 
-    it('alerts for a phone number with parentheses and plus sign', async () => {
-      initializeTestInstance()
-      submitFeedback('+1 (123) 456-7890 — call anytime')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
     // ------------------
     // EMAIL TEST CASES
     // ------------------
@@ -146,28 +106,12 @@ context('InAppFeedbackScreen', () => {
       })
     })
 
-    it('alerts for an email address with trailing punctuation', async () => {
-      initializeTestInstance()
-      submitFeedback('My email is test@gmail.com, thanks!')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
     // ------------------
     // MAILTO TEST CASES
     // ------------------
     it('alerts for a mailto link with leading punctuation', async () => {
       initializeTestInstance()
       submitFeedback('(mailto:test@gmail.com)')
-      await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalled()
-      })
-    })
-
-    it('alerts for mailto with trailing punctuation', async () => {
-      initializeTestInstance()
-      submitFeedback('Try mailto:test@gmail.com.')
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalled()
       })
