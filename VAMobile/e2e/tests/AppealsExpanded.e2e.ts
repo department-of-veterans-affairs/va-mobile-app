@@ -147,6 +147,7 @@ describe('AppealsExpanded', () => {
   for (const [key, value] of Object.entries(AppealsExpandedIdConstants)) {
     it('verify ' + key + ' opens and the correct information is displayed', async () => {
       //Note: Most of the wording in the appeals current status is tested using unit tests so it isn't being tested here.
+      console.log('checking ' + key)
       if (
         value === AppealsExpandedIdConstants.HLR_ERROR_APPEAL_ID ||
         value === AppealsExpandedIdConstants.REMAND_APPEAL_ID ||
@@ -154,6 +155,7 @@ describe('AppealsExpanded', () => {
         value === AppealsExpandedIdConstants.MULTIPLE_DECISION_APPEAL_ID
       ) {
         await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('bottom')
+        await new Promise((resolve) => setTimeout(resolve, 500)) // Wait for button to be actionable
         await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
         await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
       }
@@ -162,6 +164,8 @@ describe('AppealsExpanded', () => {
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(300, 'down')
+
+      await new Promise((resolve) => setTimeout(resolve, 500)) // Wait for screen to be actionable after the bounce
 
       await element(by.id(value)).tap()
       const appealInfo = expectedInformation[i]
