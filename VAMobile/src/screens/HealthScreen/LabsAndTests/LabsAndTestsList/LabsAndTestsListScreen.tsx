@@ -73,7 +73,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     const labsAndTestsButton: DefaultListItemObj = {
       textLines,
       onPress: () => {
-        navigateTo('LabsAndTestsDetails', { labsAndTests: labsAndTests })
+        navigateTo('LabsAndTestsDetailsScreen', { labOrTest: labOrTest })
       },
       a11yHintText: t('labsAndTests.list.a11yHint'),
       a11yValue: t('listPosition', { position: index + 1, total: labsAndTests?.data.length }),

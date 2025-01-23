@@ -111,8 +111,8 @@ export type HealthStackParamList = WebviewStackParams & {
     allergy: Allergy
   }
   LabsAndTestsList: undefined
-  LabsAndTestsDetails: {
-    labsAndTests: LabsAndTests
+  LabsAndTestsDetailsScreen: {
+    labOrTest: LabsAndTests
   }
   GeneralHelpScreen: {
     title: string

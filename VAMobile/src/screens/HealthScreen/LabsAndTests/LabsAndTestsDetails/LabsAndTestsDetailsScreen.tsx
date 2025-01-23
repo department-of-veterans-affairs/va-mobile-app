@@ -17,57 +17,66 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 
-type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'AllergyDetails'>
+type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
+
+type LabDisplayData = {
+  typeOfTest: string
+  siteSampled: string
+  collectionSample: string
+  orderedBy: string
+  location: string
+  dateCompleted: string
+}
 
 /**
- * Screen providing details on an allergy
+ * Screen providing details on an lab or test
  */
-function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
-  const { allergy } = route.params
+function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScreenProps) {
+  const dispatch = useAppDispatch()
+  const { labOrTest } = route.params
 
-  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_AllergyDetails') })
+  const detailsLoading = false
+
+  // analtyics
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_lab_or_test_details())
+  }, [dispatch, labOrTest])
+
+  if (!labOrTest) {
+    return <></>
+  }
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
-  const dispatch = useAppDispatch()
 
   const placeHolder = t('noneNoted')
 
-  // analtyics
-  useEffect(() => {
-    logAnalyticsEvent(Events.vama_allergy_details())
-  }, [dispatch, allergy])
-
-  if (!allergy) {
-    return <></>
+  const data: LabDisplayData = {
+    typeOfTest: 'typpeeeee' || placeHolder,
+    siteSampled: 'sample at site' || placeHolder,
+    collectionSample: 'sample collection' || placeHolder,
+    orderedBy: 'Dr Dave' || placeHolder,
+    location: 'Our House' || placeHolder,
+    dateCompleted: labOrTest.attributes?.issued ? formatDateMMMMDDYYYY(labOrTest.attributes.issued) : placeHolder,
   }
 
-  const displayDate = allergy.attributes?.recordedDate
-    ? formatDateMMMMDDYYYY(allergy.attributes.recordedDate)
-    : placeHolder
+  const keys = Object.keys(data)
 
-  const displayName = allergy.attributes?.code?.text
-    ? t('allergies.allergyName', { name: allergy.attributes?.code?.text })
+  const code = labOrTest.attributes?.code
+  const displayDate = labOrTest.attributes?.effectiveDateTime
+    ? formatDateMMMMDDYYYY(labOrTest.attributes.effectiveDateTime)
     : placeHolder
-
-  const optionalFields = [
-    allergy.attributes?.category?.length,
-    allergy.attributes?.notes?.length,
-    allergy.attributes?.reactions?.length,
-    allergy.attributes?.recorder,
-  ]
-  const isPartialData = !every(optionalFields)
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaAllergies')}
-      backLabelA11y={a11yLabelVA(t('vaAllergies'))}
+      backLabel={t('labsAndTests.details.backButton')}
+      backLabelA11y={a11yLabelVA(t('labsAndTests.details.backButton'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       backLabelTestID="allergiesDetailsBackID">
       {detailsLoading ? (
-        <LoadingComponent text={t('allergies.details.loading')} />
+        <LoadingComponent text={t('labsAndTests.details.loading')} />
       ) : (
         <Box mb={contentMarginBottom}>
           <TextArea>
@@ -75,95 +84,19 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               {displayDate}
             </TextView>
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{displayName}</TextView>
+              <TextView variant="MobileBodyBold">{code}</TextView>
             </Box>
-
-            <Box>
-              <TextView variant="MobileBodyBold" selectable={true}>
-                {'Type'}
-              </TextView>
-              {allergy.attributes?.category?.length ? (
-                allergy.attributes?.category?.map((category, index) => (
-                  <TextView
-                    variant="MobileBody"
-                    selectable={true}
-                    testID={'Type ' + category || placeHolder}
-                    key={index}>
-                    {category || placeHolder}
-                  </TextView>
-                ))
-              ) : (
-                <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
-                  {placeHolder}{' '}
-                </TextView>
-              )}
-            </Box>
-
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{t('health.details.provider')}</TextView>
-              <TextView
-                variant="MobileBody"
-                selectable={true}
-                testID={'Provider ' + allergy.attributes?.recorder?.display || placeHolder}>
-                {allergy.attributes?.recorder?.display || placeHolder}
-              </TextView>
-            </Box>
-
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <Box>
-                <TextView variant="MobileBodyBold">{t('health.details.reaction')}</TextView>
-                {allergy?.attributes?.reactions?.length ? (
-                  allergy.attributes?.reactions?.map((reaction) => {
-                    return reaction.manifestation?.map((manifestation, i) => (
-                      <TextView
-                        key={i}
-                        variant="MobileBody"
-                        selectable={true}
-                        testID={'Reaction ' + manifestation.text || placeHolder}>
-                        {manifestation.text || placeHolder}
-                      </TextView>
-                    ))
-                  })
-                ) : (
-                  <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
-                    {placeHolder}{' '}
-                  </TextView>
-                )}
+            {keys.map((key: string) => (
+              <Box key={key} mb={standardMarginBetween}>
+                <TextView variant="MobileBodyBold">{t(`labsAndTests.details.${key}`)}</TextView>
+                <TextView variant="MobileBody">{data[key]}</TextView>
               </Box>
-
-              <Box mt={theme.dimensions.standardMarginBetween}>
-                <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
-                {allergy?.attributes?.notes?.length ? (
-                  allergy.attributes?.notes?.map((note, index) => {
-                    return (
-                      <TextView
-                        key={index}
-                        variant="MobileBody"
-                        selectable={true}
-                        testID={'Note ' + note.text || placeHolder}>
-                        {note.text || placeHolder}
-                      </TextView>
-                    )
-                  })
-                ) : (
-                  <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
-                    {placeHolder}{' '}
-                  </TextView>
-                )}
-              </Box>
-            </Box>
+            ))}
           </TextArea>
-          {isPartialData && (
-            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-                {t('health.details.weBaseThis')}
-              </TextView>
-            </Box>
-          )}
         </Box>
       )}
     </FeatureLandingTemplate>
   )
 }
 
-export default AllergyDetailsScreen
+export default LabsAndTestsDetailsScreen

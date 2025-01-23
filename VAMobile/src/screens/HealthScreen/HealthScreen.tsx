@@ -31,6 +31,7 @@ import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import { HealthStackParamList } from './HealthStackScreens'
+import LabsAndTestsDetailsScreen from './LabsAndTests/LabsAndTestsDetails/LabsAndTestsDetailsScreen'
 import LabsAndTestsListScreen from './LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import MedicalRecordsScreen from './MedicalRecordsScreen'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
@@ -283,6 +284,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="LabsAndTestsList"
         component={LabsAndTestsListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="LabsAndTestsDetailsScreen"
+        component={LabsAndTestsDetailsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
