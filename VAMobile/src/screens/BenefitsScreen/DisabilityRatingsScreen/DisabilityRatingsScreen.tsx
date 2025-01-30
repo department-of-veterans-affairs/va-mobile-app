@@ -25,7 +25,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useDowntime, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
@@ -34,6 +34,7 @@ function DisabilityRatingsScreen() {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
+  const registerReviewEvent = useReviewEvent(true)
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
@@ -57,8 +58,8 @@ function DisabilityRatingsScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      registerReviewEvent(true)
-    }, []),
+      registerReviewEvent()
+    }, [registerReviewEvent]),
   )
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []

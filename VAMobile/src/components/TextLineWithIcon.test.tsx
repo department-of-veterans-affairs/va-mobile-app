@@ -12,7 +12,7 @@ context('TextLineWithIcon', () => {
   beforeEach(() => {
     const testLine1 = {
       text: 'line1',
-      iconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
+      iconProps: { name: 'Trash', width: 16, height: 16, testID: 'Trash' } as VAIconProps,
     }
     const testLine2 = {
       text: 'another line2',
@@ -30,7 +30,7 @@ context('TextLineWithIcon', () => {
   })
 
   it('renders correct VAIcons', () => {
-    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+    expect(screen.getByTestId('Trash')).toBeTruthy()
     expect(screen.getByTestId('Unread')).toBeTruthy()
   })
 
