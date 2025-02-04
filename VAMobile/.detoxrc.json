@@ -36,6 +36,12 @@
       "device": {
         "avdName": "Pixel_6_Pro_API_33"
       }
+    },
+    "attached": {
+      "type": "android.attached",
+      "device": {
+        "adbName": ".*"
+      }
     }
   },
   "configurations": {
@@ -46,6 +52,10 @@
     },
     "android": {
       "device": "emulator",
+      "app": "android"
+    },
+    "attached": {
+      "device": "attached",
       "app": "android"
     }
   },
