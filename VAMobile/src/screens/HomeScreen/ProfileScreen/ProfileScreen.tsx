@@ -67,11 +67,15 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
           <LoadingComponent text={t('profile.loading')} />
         </Box>
       ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          onTryAgain={refetchUserAuthorizedServices}
-          screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
-        />
+        <>
+          <ErrorComponent
+            onTryAgain={refetchUserAuthorizedServices}
+            screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID}
+            error={getUserAuthorizedServicesError}
+          />
+          {/* Need to ALWAYS include the settings page so a user may logout despite circumstance */}
+          <LargeNavButton title={t('settings.title')} onPress={() => navigateTo('Settings')} testID="toSettingsID" />
+        </>
       ) : (
         <>
           {displayName}

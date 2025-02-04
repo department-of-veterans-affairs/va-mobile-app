@@ -111,7 +111,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
       title="Allergies"
       titleA11y={a11yLabelVA(t('vaAllergies'))}

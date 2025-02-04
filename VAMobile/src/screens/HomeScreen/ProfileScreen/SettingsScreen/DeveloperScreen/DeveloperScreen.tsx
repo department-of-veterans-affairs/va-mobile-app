@@ -176,7 +176,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   ]
 
   const onFeedback = () => {
-    //logAnalyticsEvent(Events.vama_feedback_page_entered())
     inAppFeedback('Developer')
   }
 

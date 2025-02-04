@@ -33,6 +33,7 @@ import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
+  MedicalRecordsList: undefined
   Appointments: undefined
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
