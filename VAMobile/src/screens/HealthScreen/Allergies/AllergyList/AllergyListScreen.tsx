@@ -83,6 +83,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   })
 
   // Render pagination for sent and drafts folderMessages only
+  // TODO: DRY for this and vaccines.
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
