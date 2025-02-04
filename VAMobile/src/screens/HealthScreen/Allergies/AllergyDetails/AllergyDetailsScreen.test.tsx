@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react-native'
 
 import { Allergy } from 'api/types'
 // import * as api from 'store/api'
-import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 import AllergyDetailsScreen from './AllergyDetailsScreen'
 

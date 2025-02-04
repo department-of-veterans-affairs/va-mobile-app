@@ -113,7 +113,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               <Box>
                 <TextView variant="MobileBodyBold">{t('health.details.reaction')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
-                  allergy.attributes?.reactions?.map((reaction, index) => {
+                  allergy.attributes?.reactions?.map((reaction) => {
                     return reaction.manifestation?.map((manifestation, i) => (
                       <TextView
                         key={i}
