@@ -2,7 +2,6 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { screen, waitFor } from '@testing-library/react-native'
-import { t } from 'i18next'
 
 import { context, fireEvent, mockNavProps, render } from 'testUtils'
 
