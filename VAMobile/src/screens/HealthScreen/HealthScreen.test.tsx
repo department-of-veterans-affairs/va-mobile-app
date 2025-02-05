@@ -152,7 +152,7 @@ context('HealthScreen', () => {
       expect(screen.getByText('Appointments')).toBeTruthy()
       expect(screen.getByText('Messages')).toBeTruthy()
       expect(screen.queryByText('Prescriptions')).toBeFalsy()
-      expect(screen.getByText('V\ufeffA vaccine records')).toBeTruthy()
+      expect(screen.getByText('Medical records')).toBeTruthy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -244,9 +244,9 @@ context('HealthScreen', () => {
     )
   })
 
-  it("navigates to Vaccines screen when 'VA vaccine records' button is pressed", () => {
+  it("navigates to Medical records screen when 'Medical records' button is pressed", () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'V\ufeffA vaccine records' }))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('VaccineList')
+    fireEvent.press(screen.getByRole('link', { name: 'Medical records' }))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('MedicalRecordsList')
   })
 })
