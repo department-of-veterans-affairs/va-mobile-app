@@ -157,4 +157,15 @@ context('AllergyListScreen', () => {
       await waitFor(() => expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
     })
   })
+
+  describe('when there is an error fetching allergies', () => {
+    it('should show the error state', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/allergy-intolerances', expect.anything())
+        .mockRejectedValue({ networkError: true } as api.APIError)
+
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
+    })
+  })
 })
