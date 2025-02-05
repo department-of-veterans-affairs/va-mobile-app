@@ -262,6 +262,7 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={VaccineListScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
+      // TODO: consider re-factoring this component for brevity.
       <HealthScreenStack.Screen
         name="AllergyDetails"
         component={AllergyDetailsScreen}
