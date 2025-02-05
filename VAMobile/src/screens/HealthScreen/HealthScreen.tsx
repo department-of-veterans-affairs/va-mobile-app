@@ -44,6 +44,7 @@ const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
+// TODO: consider re-factoring this component for brevity.
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -262,7 +263,6 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={VaccineListScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-      // TODO: consider re-factoring this component for brevity.
       <HealthScreenStack.Screen
         name="AllergyDetails"
         component={AllergyDetailsScreen}
