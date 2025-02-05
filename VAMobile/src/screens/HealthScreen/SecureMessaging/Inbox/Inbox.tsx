@@ -32,8 +32,11 @@ function Inbox({ setScrollPage }: InboxProps) {
 
   useEffect(() => {
     const messageList = inboxMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    if (page > 1 && !loadingInbox && messageList?.length === 0) {
+      setPage(page - 1) // avoid empty page if last message on page was moved
+    }
     setMessagesToShow(messageList || [])
-  }, [inboxMessagesData?.data, page])
+  }, [inboxMessagesData?.data, loadingInbox, page])
 
   const paginationMetaData = inboxMessagesData?.meta.pagination
 
