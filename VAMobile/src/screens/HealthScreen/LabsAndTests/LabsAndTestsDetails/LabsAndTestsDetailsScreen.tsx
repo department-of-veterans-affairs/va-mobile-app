@@ -89,7 +89,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
             {keys.map((key: string) => (
               <Box key={key} mb={standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{t(`labsAndTests.details.${key}`)}</TextView>
-                <TextView variant="MobileBody">{data[key]}</TextView>
+                {/* <TextView variant="MobileBody">{data[key]}</TextView> */}
               </Box>
             ))}
           </TextArea>

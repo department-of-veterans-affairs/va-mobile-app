@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
@@ -19,6 +20,7 @@ import {
   PaginationProps,
   TextLine,
   TextView,
+  VAModalPicker,
 } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
@@ -27,11 +29,31 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getA11yLabelText } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { getFormattedDate } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import NoLabsAndTestsRecords from '../NoLabsAndTestsRecords/NoLabsAndTestsRecords'
+
+type TimeFrameType =
+  | 'upcoming'
+  | 'pastThreeMonths'
+  | 'pastFiveToThreeMonths'
+  | 'pastEightToSixMonths'
+  | 'pastElevenToNineMonths'
+  | 'pastAllCurrentYear'
+  | 'pastAllLastYear'
+
+const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
+  UPCOMING: 'upcoming',
+  PAST_THREE_MONTHS: 'pastThreeMonths',
+  PAST_FIVE_TO_THREE_MONTHS: 'pastFiveToThreeMonths',
+  PAST_EIGHT_TO_SIX_MONTHS: 'pastEightToSixMonths',
+  PAST_ELEVEN_TO_NINE_MONTHS: 'pastElevenToNineMonths',
+  PAST_ALL_CURRENT_YEAR: 'pastAllCurrentYear',
+  PAST_ALL_LAST_YEAR: 'pastAllLastYear',
+}
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -83,6 +105,68 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     return labsAndTestsButton
   })
 
+  const getMMMyyyy = (date: DateTime): string => {
+    return getFormattedDate(date.toISO(), 'MMM yyyy')
+  }
+
+  const timeRangeOptions = useMemo(() => {
+    const getDateRange = (startDate: DateTime, endDate: DateTime): string => {
+      return `${getMMMyyyy(startDate)} - ${getMMMyyyy(endDate)}`
+    }
+    const todaysDate = DateTime.local()
+
+    const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+
+    const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
+    const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
+
+    const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
+    const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
+
+    return [
+      {
+        label: t('labsAndTests.list.pastThreeMonths'),
+        value: getDateRange(threeMonthsEarlier.startOf('day'), todaysDate.minus({ days: 1 }).endOf('day')),
+        a11yLabel: t('labsAndTests.list.pastThreeMonths'),
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
+      },
+      {
+        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
+        value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+          date1: getMMMyyyy(fiveMonthsEarlier),
+          date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')),
+        }),
+        dates: { startDate: fiveMonthsEarlier, endDate: threeMonthsEarlier },
+        timeFrame: TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS,
+      },
+      {
+        label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
+        value: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+          date1: getMMMyyyy(eightMonthsEarlier),
+          date2: getMMMyyyy(sixMonthsEarlier),
+        }),
+        dates: { startDate: eightMonthsEarlier, endDate: sixMonthsEarlier },
+        timeFrame: TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS,
+      },
+      {
+        label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
+        value: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+          date1: getMMMyyyy(elevenMonthsEarlier),
+          date2: getMMMyyyy(nineMonthsEarlier),
+        }),
+        dates: { startDate: elevenMonthsEarlier, endDate: nineMonthsEarlier },
+        timeFrame: TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
+      },
+    ]
+  }, [t])
+
+  const [datePickerOption, setDatePickerOption] = useState(timeRangeOptions[0])
+
   // Render pagination for sent and drafts folderMessages only
   function renderPagination() {
     const paginationProps: PaginationProps = {
@@ -126,6 +210,27 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
           </TextView>
         </TextView>
       </Box>
+      <Box mx={theme.dimensions.gutter} accessible={true}>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <VAModalPicker
+            selectedValue={datePickerOption.value}
+            onSelectionChange={(selectValue: string) => {
+              const curSelectedRange = timeRangeOptions.find((el) => el.value === selectValue)
+              if (curSelectedRange) {
+                const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
+                const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+                if (startDate && endDate) {
+                  setPage(1)
+                }
+                setDatePickerOption(curSelectedRange)
+              }
+            }}
+            pickerOptions={timeRangeOptions}
+            labelKey={'labsAndTests.list.selectADateRange'}
+            testID="labsAndTestDataRangeTestID"
+          />
+        </Box>
+      </Box>
       {loading ? (
         <LoadingComponent text={t('labsAndTests.loading')} />
       ) : labsAndTestsError || labsAndTestsInDowntime ? (
@@ -138,10 +243,12 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         <NoLabsAndTestsRecords />
       ) : (
         <>
-          <Box mb={theme.dimensions.contentMarginBottom}>
-            <DefaultList items={labsAndTestsButtons} />
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <Box mb={theme.dimensions.contentMarginBottom}>
+              <DefaultList items={labsAndTestsButtons} />
+            </Box>
+            {renderPagination()}
           </Box>
-          {renderPagination()}
         </>
       )}
     </FeatureLandingTemplate>
