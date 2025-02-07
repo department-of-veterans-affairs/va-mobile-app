@@ -3,194 +3,185 @@
     "1": {
       "data": [
         {
-          "id": "4-1aEhm1pccSEH9H",
+          "id": "4-1aEhm1s6sUyLb9",
           "type": "diagnostic_report",
           "attributes": {
             "category": "Laboratory",
             "code": "Laboratory report",
             "subject": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
+              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013949209V185925",
+              "display": "ANDREW MORKEL"
             },
-            "effectiveDateTime": "2015-03-18T12:08:02Z",
-            "issued": "2015-03-18T12:08:02Z",
+            "effectiveDateTime": "2017-10-14T21:27:13Z",
+            "issued": "2017-10-14T21:27:14Z",
             "result": [
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINpDN8",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmZoXqOFq",
                 "display": "Leukocytes [#/volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINplTC",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmZoXqwLu",
                 "display": "Erythrocytes [#/volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINqJZG",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmZoXrURy",
                 "display": "Hemoglobin [Mass/volume] in Blood"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINqrfK",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmZoXs2Y2",
                 "display": "Hematocrit [Volume Fraction] of Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINrPlO",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmZoXsae6",
                 "display": "MCV [Entitic volume] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINrxrS",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOFMak",
                 "display": "MCH [Entitic mass] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINsVxW",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOFugo",
                 "display": "MCHC [Mass/volume] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINt43a",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOGSms",
                 "display": "Erythrocyte distribution width [Entitic volume] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbINtc9e",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOH0sw",
                 "display": "Platelets [#/volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbISMFM6",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOHYz0",
                 "display": "Platelet distribution width [Entitic volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbISMnSA",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPOI754",
                 "display": "Platelet mean volume [Entitic volume] in Blood by Automated count"
               }
             ]
           }
         },
         {
-          "id": "4-1aEhm1pcvF9lv1",
+          "id": "4-1aEhm1s7B6XtAJ",
           "type": "diagnostic_report",
           "attributes": {
             "category": "Laboratory",
             "code": "Laboratory report",
             "subject": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
+              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013949209V185925",
+              "display": "ANDREW MORKEL"
             },
-            "effectiveDateTime": "2020-12-16T12:22:04Z",
-            "issued": "2020-12-16T12:22:04Z",
+            "effectiveDateTime": "2020-10-17T21:27:13Z",
+            "issued": "2020-10-17T21:27:14Z",
             "result": [
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuFtpp8",
-                "display": "Influenza virus A RNA [Presence] in Respiratory specimen by NAA with probe detection"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPXOvXK",
+                "display": "Total Cholesterol"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuFuNvC",
-                "display": "Influenza virus B RNA [Presence] in Respiratory specimen by NAA with probe detection"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPXPTdO",
+                "display": "Triglycerides"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuFuw1G",
-                "display": "Respiratory syncytial virus RNA [Presence] in Respiratory specimen by NAA with probe detection"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbs6pq",
+                "display": "Low Density Lipoprotein Cholesterol"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuKPDVu",
-                "display": "Rhinovirus RNA [Presence] in Respiratory specimen by NAA with probe detection"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbsevu",
+                "display": "High Density Lipoprotein Cholesterol"
               }
             ]
           }
         },
         {
-          "id": "4-1aEhm1pcvFA2y3",
+          "id": "4-1aEhm1s7BDN5Qx",
           "type": "diagnostic_report",
           "attributes": {
             "category": "Laboratory",
             "code": "Laboratory report",
             "subject": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
+              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013949209V185925",
+              "display": "ANDREW MORKEL"
             },
-            "effectiveDateTime": "2020-12-16T13:51:06Z",
-            "issued": "2020-12-16T13:51:06Z",
+            "effectiveDateTime": "2020-11-28T21:27:13Z",
+            "issued": "2020-11-28T21:27:14Z",
             "result": [
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuKQro6",
-                "display": "SARS-CoV-2 RNA Pnl Resp NAA+probe"
-              }
-            ]
-          }
-        },
-        {
-          "id": "4-1aEhm1pcvFB9AB",
-          "type": "diagnostic_report",
-          "attributes": {
-            "category": "Laboratory",
-            "code": "Laboratory report",
-            "subject": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "effectiveDateTime": "2021-03-03T12:08:02Z",
-            "issued": "2021-03-03T12:08:02Z",
-            "result": [
-              {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuOxtn4",
-                "display": "Leukocytes [#/volume] in Blood by Automated count"
-              },
-              {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuOyRt8",
-                "display": "Erythrocytes [#/volume] in Blood by Automated count"
-              },
-              {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuOyzzC",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbvPQE",
                 "display": "Hemoglobin [Mass/volume] in Blood"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuOzY5G",
-                "display": "Hematocrit [Volume Fraction] of Blood by Automated count"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbvxWI",
+                "display": "Hematocrit [Volume Fraction] of Blood"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuP06BK",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbwVcM",
+                "display": "WBC Auto (Bld) [#/Vol]"
+              },
+              {
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPbx3iQ",
+                "display": "RBC Auto (Bld) [#/Vol]"
+              },
+              {
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgPgus",
                 "display": "MCV [Entitic volume] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhbuP0eHO",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgQF0w",
                 "display": "MCH [Entitic mass] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhcVFNQE2",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgQn70",
                 "display": "MCHC [Mass/volume] by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhcVFNyK6",
-                "display": "Erythrocyte distribution width [Entitic volume] by Automated count"
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgRLD4",
+                "display": "RDW - Erythrocyte distribution width Auto (RBC) [Entitic vol]"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhcVFOWQA",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgRtJ8",
                 "display": "Platelets [#/volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhcVFP4WE",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgSRPC",
                 "display": "Platelet distribution width [Entitic volume] in Blood by Automated count"
               },
               {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-O3ZnhcVFPccI",
+                "reference": "http://127.0.0.1:3000/mobile/v0/health/observations/4-O3ZnmaPgSzVG",
                 "display": "Platelet mean volume [Entitic volume] in Blood by Automated count"
               }
             ]
           }
         },
         {
-          "id": "4-BiPy219kAOhrF0XbSp3A7Wn2ktv",
+          "id": "4-95Twgb31CgDUIq3QAOM",
           "type": "diagnostic_report",
           "attributes": {
-            "category": "Microbiology",
-            "code": "Blood Culture",
+            "category": "Cardiology",
+            "code": "12 Lead ECG/EKG",
             "subject": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908"
+              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013949209V185925",
+              "display": "MORKEL, ANDREW"
             },
-            "effectiveDateTime": "2023-01-31T21:32:00Z",
-            "issued": "2023-01-31T23:23:41Z",
-            "result": [
-              {
-                "reference": "https://staging-api.va.gov/mobile/v0/health/observations/4-monoD27ozceSNw00nTm1OpRdOi9J",
-                "display": "BCGS"
-              }
-            ]
+            "effectiveDateTime": null,
+            "issued": "2024-12-11T15:54:57Z",
+            "result": []
+          }
+        },
+        {
+          "id": "4-95Twgb31CdYnubBfq5K",
+          "type": "diagnostic_report",
+          "attributes": {
+            "category": "Cardiology",
+            "code": "12 Lead ECG/EKG",
+            "subject": {
+              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013949209V185925",
+              "display": "MORKEL, ANDREW"
+            },
+            "effectiveDateTime": null,
+            "issued": "2024-12-11T15:56:08Z",
+            "result": []
           }
         }
       ]

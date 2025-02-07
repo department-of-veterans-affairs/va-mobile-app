@@ -42,18 +42,18 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
     logAnalyticsEvent(Events.vama_lab_or_test_details())
   }, [dispatch, labOrTest])
 
-  if (!labOrTest) {
-    return <></>
-  }
-
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
   const placeHolder = t('noneNoted')
 
+  if (!labOrTest) {
+    return <></>
+  }
+
   const data: LabDisplayData = {
-    typeOfTest: 'typpeeeee' || placeHolder,
+    typeOfTest: labOrTest.attributes?.category || placeHolder,
     siteSampled: 'sample at site' || placeHolder,
     collectionSample: 'sample collection' || placeHolder,
     orderedBy: 'Dr Dave' || placeHolder,
@@ -81,7 +81,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
         <Box mb={contentMarginBottom}>
           <TextArea>
             <TextView variant="MobileBody" mb={standardMarginBetween}>
-              {displayDate}
+              effected date: {displayDate}
             </TextView>
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
               <TextView variant="MobileBodyBold">{code}</TextView>
