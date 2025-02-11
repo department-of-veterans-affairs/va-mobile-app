@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { paymentsKeys } from 'api/payments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
@@ -89,7 +90,7 @@ context('PaymentHistoryScreen', () => {
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
-      expect(screen.getByText('Loading your payment history...')).toBeTruthy()
+      expect(screen.getByText(t('payments.loading'))).toBeTruthy()
     })
   })
 
@@ -107,7 +108,7 @@ context('PaymentHistoryScreen', () => {
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("What if I'm missing a payment?")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('payments.ifIAmMissingPayemt'))).toBeTruthy())
       await waitFor(() => expect(screen.getByText('January 1, 2021')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Compensation & Pension - Recurring')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('$3,746.20')).toBeTruthy())
@@ -133,7 +134,7 @@ context('PaymentHistoryScreen', () => {
         .calledWith(`/v0/payment-history`, {})
         .mockResolvedValue(data)
       initializeTestInstance(data)
-      await waitFor(() => expect(screen.getByText(" We don't have a record of VA payments for you")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('payments.noPayments.title'))).toBeTruthy())
     })
   })
 
@@ -154,7 +155,9 @@ context('PaymentHistoryScreen', () => {
         .calledWith(`/v0/payment-history`, {})
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance(data)
-      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
     })
   })
 
