@@ -9,8 +9,8 @@ import { labsAndTestsKeys } from './queryKeys'
 /**
  * Fetch user Labs and Tests
  */
-const getLabsAndTests = (): Promise<LabsAndTestsListPayload | undefined> => {
-  return get<LabsAndTestsListPayload>('/v0/health/labs-and-tests', {
+const getLabsAndTests = ({ dateRange }: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
+  return get<LabsAndTestsListPayload>(`/v0/health/labs-and-tests`, {
     page: '1',
     // 'page[size]': LARGE_PAGE_SIZE.toString(),
     // sort: 'date',
@@ -18,14 +18,21 @@ const getLabsAndTests = (): Promise<LabsAndTestsListPayload | undefined> => {
   })
 }
 
+export type LabsAndTestQuery = {
+  dateRange: {
+    start: string
+    end: string
+  }
+}
+
 /**
  * Returns a query for user Labs and  Tests
  */
-export const useLabsAndTests = (options?: { enabled?: boolean }) => {
+export const useLabsAndTests = ({ dateRange }: LabsAndTestQuery, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
     queryKey: [labsAndTestsKeys.labsAndTests],
-    queryFn: () => getLabsAndTests(),
+    queryFn: () => getLabsAndTests({ dateRange }),
     meta: {
       errorName: 'getLabsAndTests: Service error',
     },

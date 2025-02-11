@@ -882,6 +882,7 @@
   "labsAndTests.list.selectADateRange": "Select a date range",
   "labsAndTests.list.pastThreeMonths": "Past 3 months",
   "labsAndTests.list.dateRateLabel": "{{date1}} to {{date2}}",
+  "labsAndTests.list.dateRangeA11yLabel": "{{date1}} to {{date2}}",
   "labsAndTests.details.backButton": "Labs and Tests",
   "labsAndTests.details.loading": "Loading your test results...",
   "labsAndTests.details.noneNoted": "None noted",

@@ -62,6 +62,8 @@ type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsA
  */
 function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const [page, setPage] = useState(1)
+  const [datePickerOption, setDatePickerOption] = useState({})
+
   // checks for downtime, immunizations downtime constant is having an issue with unit test
   const labsAndTestsInDowntime = useError(ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID)
   const {
@@ -124,18 +126,23 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
     const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
 
-    return [
+    const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
+    const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
+    const options = [
       {
         label: t('labsAndTests.list.pastThreeMonths'),
-        value: getDateRange(threeMonthsEarlier.startOf('day'), todaysDate.minus({ days: 1 }).endOf('day')),
-        a11yLabel: t('labsAndTests.list.pastThreeMonths'),
+        value: t('labsAndTests.list.pastThreeMonths'),
+        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+          date1: getMMMyyyy(todaysDate),
+          date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')),
+        }),
         dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
         value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
-        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(fiveMonthsEarlier),
           date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')),
         }),
@@ -145,7 +152,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
-        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(eightMonthsEarlier),
           date2: getMMMyyyy(sixMonthsEarlier),
         }),
@@ -155,17 +162,27 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
-        a11yLabel: t('pastAppointments.dateRangeA11yLabel', {
+        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(elevenMonthsEarlier),
           date2: getMMMyyyy(nineMonthsEarlier),
         }),
         dates: { startDate: elevenMonthsEarlier, endDate: nineMonthsEarlier },
         timeFrame: TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
       },
+      {
+        label: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
+        value: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
+        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+          date1: getMMMyyyy(twelveMonthsEarlier),
+          date2: getMMMyyyy(fourteenMonthsEarlier.endOf('month').endOf('day')),
+        }),
+        dates: { startDate: fourteenMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
+      },
     ]
+    setDatePickerOption(options[0])
+    return options
   }, [t])
-
-  const [datePickerOption, setDatePickerOption] = useState(timeRangeOptions[0])
 
   // Render pagination for sent and drafts folderMessages only
   function renderPagination() {
