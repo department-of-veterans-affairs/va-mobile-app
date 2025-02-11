@@ -6,32 +6,34 @@ import { get } from 'store/api'
 
 import { labsAndTestsKeys } from './queryKeys'
 
-/**
- * Fetch user Labs and Tests
- */
-const getLabsAndTests = ({ dateRange }: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
-  return get<LabsAndTestsListPayload>(`/v0/health/labs-and-tests`, {
-    page: '1',
-    // 'page[size]': LARGE_PAGE_SIZE.toString(),
-    // sort: 'date',
-    useCache: 'false',
-  })
-}
-
 export type LabsAndTestQuery = {
   dateRange: {
     start: string
     end: string
   }
+  page?: string
+  timeFrame?: string
+}
+
+/**
+ * Fetch user Labs and Tests
+ */
+const getLabsAndTests = ({ dateRange, page = '1' }: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
+  return get<LabsAndTestsListPayload>(`/v0/health/labs-and-tests`, {
+    startDate: dateRange.start,
+    endDate: dateRange.end,
+    page,
+    useCache: 'false',
+  })
 }
 
 /**
  * Returns a query for user Labs and  Tests
  */
-export const useLabsAndTests = ({ dateRange }: LabsAndTestQuery, options?: { enabled?: boolean }) => {
+export const useLabsAndTests = ({ dateRange, timeFrame }: LabsAndTestQuery, options?: { enabled?: boolean }) => {
   return useQuery({
     ...options,
-    queryKey: [labsAndTestsKeys.labsAndTests],
+    queryKey: [labsAndTestsKeys.labsAndTests, timeFrame],
     queryFn: () => getLabsAndTests({ dateRange }),
     meta: {
       errorName: 'getLabsAndTests: Service error',
