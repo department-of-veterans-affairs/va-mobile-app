@@ -11,8 +11,6 @@ import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailS
 import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
 import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
-import GenderIdentityScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen'
-import WhatToKnowScreen from './ProfileScreen/PersonalInformationScreen/GenderIdentityScreen/WhatToKnowScreen'
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
@@ -29,7 +27,6 @@ export type HomeStackParamList = WebviewStackParams & {
   Developer: undefined
   EditEmail: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
-  GenderIdentity: undefined
   HowDoIUpdate: { screenType: string }
   HowWillYou: undefined
   InAppRecruitment: undefined
@@ -82,12 +79,6 @@ export const getHomeScreens = () => {
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <HomeStack.Screen
-      key={'GenderIdentity'}
-      name="GenderIdentity"
-      component={GenderIdentityScreen}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
-    />,
-    <HomeStack.Screen
       key={'HowDoIUpdate'}
       name="HowDoIUpdate"
       component={HowDoIUpdateScreen}
@@ -116,12 +107,6 @@ export const getHomeScreens = () => {
       name="WaygateEdit"
       component={WaygateEditScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
-    />,
-    <HomeStack.Screen
-      key={'WhatToKnow'}
-      name="WhatToKnow"
-      component={WhatToKnowScreen}
-      options={LARGE_PANEL_OPTIONS}
     />,
   ]
 }
