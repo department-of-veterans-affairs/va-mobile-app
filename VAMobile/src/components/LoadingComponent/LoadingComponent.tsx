@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { ViewStyle } from 'react-native'
 
+import { LoadingIndicator } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import LottieView from 'lottie-react-native'
 
@@ -107,12 +108,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
             mt={theme.dimensions.contentMarginTop}
             mb={theme.dimensions.contentMarginBottom}
             alignItems={'center'}>
-            {getSpinner()}
-            <Box mt={theme.dimensions.condensedMarginBetween}>
-              <TextView textAlign={'center'} variant="MobileBody" accessibilityLabel={a11yLabel}>
-                {text}
-              </TextView>
-            </Box>
+            <LoadingIndicator text={text ?? ''} a11yLabel={a11yLabel} />
           </Box>
         </VAScrollView>
       )}
