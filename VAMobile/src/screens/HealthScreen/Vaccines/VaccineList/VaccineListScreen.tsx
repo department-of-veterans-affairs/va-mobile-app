@@ -64,9 +64,17 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   }, [vaccines?.data, page])
 
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccinesToShow, (vaccine, index) => {
+    const vaccineTitle = vaccine.attributes?.groupName
+      ? t('vaccines.vaccineName', { name: vaccine.attributes?.groupName })
+      : t('vaccine')
+    const vaccineDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes?.date) : t('vaccines.noDate')
+
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
+      {
+        text: vaccineTitle,
+        variant: 'MobileBodyBold',
+      },
+      { text: vaccineDate },
     ]
 
     const vaccineButton: DefaultListItemObj = {

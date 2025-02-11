@@ -41,7 +41,7 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
   } else if (screenID === ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID && error.status && error.status >= 500) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE
   } else if (screenID === ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID && error.status && error.status >= 500) {
-    return CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR_ALLERGY
   } else if (screenID === ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID && error.status && error.status >= 500) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR_DISABILITY_RATING
   } else if (screenID === ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID && error.status && error.status >= 500) {

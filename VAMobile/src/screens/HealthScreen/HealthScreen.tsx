@@ -48,6 +48,7 @@ const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
+// TODO: consider re-factoring this component for brevity.
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()

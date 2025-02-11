@@ -7,7 +7,14 @@ This script should be updated whenever new things are added/changed in vaccines 
 import { combineReducers } from '@reduxjs/toolkit'
 import { by, element, expect } from 'detox'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openMedicalRecords,
+  openVaccineRecords,
+} from './utils'
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
@@ -21,6 +28,7 @@ export const VaccinesE2eIdConstants = {
 beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
+  await openMedicalRecords()
   await openVaccineRecords()
 })
 
