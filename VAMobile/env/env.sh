@@ -12,26 +12,29 @@ cd ./env
 # clear the env file
 echo "" > .env
 # Get the environment related variables
-if [[ $environment == 'staging' ]]
-then
+if [[ $environment == 'staging' ]]; then
   echo "Setting up Staging environment"
-  WEBSITE_PREFIX="staging."
-  API_PREFIX="staging-api."
+  WEBSITE_ROOT_URL="https://staging.va.gov"
+  API_ROOT_URL="https://staging-api.va.gov"
+elif [[ $environment == 'dev' ]]; then
+  echo "Setting up Development environment"
+  WEBSITE_ROOT_URL="https://dev.va.gov"
+  API_ROOT_URL="http://10.0.2.2:3000"
 else
   echo "Setting up Production environment"
-  API_PREFIX="api."
+  WEBSITE_ROOT_URL="https://va.gov"
+  API_ROOT_URL="https://api.va.gov"
 fi
 # set environment
 echo "ENVIRONMENT=$environment" >> .env
 # set api endpoints
-echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
+echo "API_ROOT=${API_ROOT_URL}/mobile" >> .env
 
 # set SIS vars
-AUTH_SIS_ROOT="https://${WEBSITE_PREFIX}va.gov"
-echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+echo "AUTH_SIS_ENDPOINT=${WEBSITE_ROOT_URL}/sign-in" >> .env
+echo "AUTH_SIS_TOKEN_EXCHANGE_URL=${API_ROOT_URL}/v0/sign_in/token" >> .env
+echo "AUTH_SIS_TOKEN_REFRESH_URL=${API_ROOT_URL}/v0/sign_in/refresh" >> .env
+echo "AUTH_SIS_REVOKE_URL=${API_ROOT_URL}/v0/sign_in/revoke" >> .env
 
 if [[ $showDebug == 'true' ]]
 then
