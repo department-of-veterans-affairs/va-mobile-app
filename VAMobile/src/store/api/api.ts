@@ -14,6 +14,7 @@ import { transform } from './demo/store'
 import { APIError } from './types'
 
 const { API_ROOT } = getEnv()
+const { ENVIRONMENT } = getEnv()
 
 let _token: string | undefined
 let _refresh_token: string | undefined
@@ -85,7 +86,7 @@ const doRequest = async function (
       'OS-Version': OS_VERSION,
       'App-Version': queryClient.getQueryData(deviceKeys.appVersion) || '',
     },
-    ...({ signal: abortSignal } || {}),
+    ...(abortSignal ? { signal: abortSignal } : {}),
   }
 
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
@@ -122,7 +123,7 @@ const call = async function <T>(
   contentType?: ContentTypes,
   abortSignal?: AbortSignal,
 ): Promise<T | undefined> {
-  if (!_demoMode) {
+  if (!_demoMode && ENVIRONMENT !== 'dev') {
     let response
     let responseBody
 
@@ -205,6 +206,17 @@ const call = async function <T>(
     }
 
     // No errors found, return the response
+    return await response.json()
+  } else if (ENVIRONMENT === 'dev') {
+    let response
+    try {
+      response = await doRequest(method, endpoint, params, contentType, abortSignal)
+    } catch (e) {
+      console.debug('API: Error in dev mode', e)
+    }
+    if (!response) {
+      return // Something
+    }
     return await response.json()
   } else {
     const overrideErrors = _store?.getState().demo.overrideErrors as APIError[]
