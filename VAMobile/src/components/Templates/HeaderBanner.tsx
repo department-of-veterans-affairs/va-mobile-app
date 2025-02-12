@@ -84,7 +84,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
   const screenReaderEnabled = useIsScreenReaderEnabled()
 
-  const TEXT_CONSTRAINT_THRESHOLD = 30
+  const TEXT_CONSTRAINT_THRESHOLD = 26
 
   const transition = title?.type === 'Transition'
 
