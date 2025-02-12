@@ -3,9 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every } from 'underscore'
-
-import { useAllergies } from 'api/allergies/getAllergies'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,11 +17,8 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
 
 type LabDisplayData = {
-  typeOfTest: string
-  siteSampled: string
-  collectionSample: string
-  orderedBy: string
   location: string
+  siteSampled: string
   dateCompleted: string
 }
 
@@ -53,20 +47,20 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
   }
 
   const data: LabDisplayData = {
-    typeOfTest: labOrTest.attributes?.category || placeHolder,
-    siteSampled: 'sample at site' || placeHolder,
-    collectionSample: 'sample collection' || placeHolder,
-    orderedBy: 'Dr Dave' || placeHolder,
-    location: 'Our House' || placeHolder,
-    dateCompleted: labOrTest.attributes?.issued ? formatDateMMMMDDYYYY(labOrTest.attributes.issued) : placeHolder,
+    siteSampled: labOrTest.attributes?.sampleSite || placeHolder,
+    location: labOrTest.attributes?.location || placeHolder,
+    dateCompleted: labOrTest.attributes?.dateCompleted
+      ? formatDateMMMMDDYYYY(labOrTest.attributes.dateCompleted)
+      : placeHolder,
   }
 
-  const keys = Object.keys(data)
+  const keys = Object.keys(data) as (keyof LabDisplayData)[]
+  const displayName = labOrTest.attributes?.display
 
-  const code = labOrTest.attributes?.code
-  const displayDate = labOrTest.attributes?.effectiveDateTime
-    ? formatDateMMMMDDYYYY(labOrTest.attributes.effectiveDateTime)
-    : placeHolder
+  const decodedReport = labOrTest.attributes?.encodedData ? atob(labOrTest.attributes?.encodedData) : placeHolder
+  // const displayDate = labOrTest.attributes?.dateCompleted
+  //   ? formatDateMMMMDDYYYY(labOrTest.attributes.dateCompleted)
+  //   : placeHolder
 
   return (
     <FeatureLandingTemplate
@@ -80,18 +74,22 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       ) : (
         <Box mb={contentMarginBottom}>
           <TextArea>
-            <TextView variant="MobileBody" mb={standardMarginBetween}>
-              effected date: {displayDate}
-            </TextView>
+            {/* <TextView variant="MobileBody" mb={standardMarginBetween}>
+             {displayDate}
+            </TextView> */}
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{code}</TextView>
+              <TextView variant="MobileBodyBold">{displayName}</TextView>
             </Box>
-            {keys.map((key: string) => (
+            {keys.map((key) => (
               <Box key={key} mb={standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{t(`labsAndTests.details.${key}`)}</TextView>
-                {/* <TextView variant="MobileBody">{data[key]}</TextView> */}
+                <TextView variant="MobileBody">{data[key]}</TextView>
               </Box>
             ))}
+            <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
+              <TextView variant="MobileBodyBold">Report</TextView>
+              <TextView variant="MobileBody">{decodedReport}</TextView>
+            </Box>
           </TextArea>
         </Box>
       )}

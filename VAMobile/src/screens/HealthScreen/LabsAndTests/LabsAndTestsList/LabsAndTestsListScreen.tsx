@@ -174,14 +174,22 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   )
 
   useEffect(() => {
-    const labAndTestsList = labsAndTests?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    const filteredLabsAndTests = labsAndTests?.data
+      .filter((test) => test?.attributes?.testCode === 'SP')
+      .sort((a, b) => {
+        const dateA = b.attributes?.dateCompleted ? new Date(b.attributes.dateCompleted) : new Date(0)
+        const dateB = a.attributes?.dateCompleted ? new Date(a.attributes.dateCompleted) : new Date(0)
+        return dateA.getTime() - dateB.getTime()
+      })
+    console.log('PAGE: ', page)
+    const labAndTestsList = filteredLabsAndTests?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setLabsAndTestsToShow(labAndTestsList || [])
   }, [labsAndTests?.data, page])
 
   const labsAndTestsButtons: Array<DefaultListItemObj> = map(LabsAndTestsToShow, (labOrTest, index) => {
     const textLines: Array<TextLine> = [
-      { text: labOrTest.attributes?.code as string, variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(labOrTest.attributes?.effectiveDateTime || '') },
+      { text: labOrTest.attributes?.display as string, variant: 'MobileBodyBold' },
+      { text: formatDateMMMMDDYYYY(labOrTest.attributes?.dateCompleted || '') },
     ]
 
     const labsAndTestsButton: DefaultListItemObj = {
@@ -202,7 +210,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  // Render pagination for sent and drafts folderMessages only
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
