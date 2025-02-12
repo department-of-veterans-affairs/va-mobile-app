@@ -44,7 +44,7 @@ const APIGroupings: {
   },
   {
     name: 'Demographics',
-    endpoints: ['/v0/user/demographics', '/v0/user/gender_identity/edit'],
+    endpoints: ['/v0/user/demographics'],
   },
   {
     name: 'Direct Deposit',
