@@ -260,6 +260,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             pickerOptions={timeRangeOptions}
             labelKey={'labsAndTests.list.selectADateRange'}
             testID="labsAndTestDataRangeTestID"
+            confirmTestID="labsAndTestsDateRangeConfirmID"
           />
         </Box>
       </Box>
