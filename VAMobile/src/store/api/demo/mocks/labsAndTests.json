@@ -25,18 +25,22 @@
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
             "location": "VA Home TEST"
           }
+        },
+        {
+          "id": "I2-2BCP5BAI6N7NDER54FD22WAA000000",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "MRI",
+            "testCode": "IM",
+            "dateCompleted": "{{now - 42 days}}",
+            "sampleSite": "Blah",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
+            "location": "VA Home TEST"
+          }
         }
-      ],
-      "meta": {
-        "pagination": {
-          "currentPage": 1,
-          "perPage": 10,
-          "totalPages": 1,
-          "totalEntries": 2
-        }
-      }
+      ]
     },
-    "PAST_THREE_TO_SIX_MONTHS": {
+    "PAST_FOUR_TO_SIX_MONTHS": {
       "data": [
         {
           "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000",
@@ -73,16 +77,152 @@
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
             "location": "VA Eye Clinic"
           }
+        },
+        {
+          "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "{{now - 131 days}}",
+            "sampleSite": "BONE MARROW",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-44RE3DD5690N7NQSAPSVID2SFL4I000000",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2025-01-21T08:09:00Z",
+            "sampleSite": "Arm",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-3BCP5BAI6N7NQSAPSVIJ6INQ4A000001",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "{{now - 5 days}}",
+            "sampleSite": "Vein - left arm",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBEZWMgMDEsIDIwMjQgMTA6MzAgIEJsb29kIFRlc3QgUmVzdWx0czogTm9ybWFs",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-4BCP5BAI6N7NQSAPSVIJ6INQ4A000002",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2024-12-15T14:00:00Z",
+            "sampleSite": "Kidney",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBEZWMgMTUsIDIwMjQgMTQ6MDAgIFVyaW5lIFRlc3QgUmVzdWx0czogTm9ybWFs",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-5BCP5BAI6N7NQSAPSVIJ6INQ4A000003",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2025-01-05T09:00:00Z",
+            "sampleSite": "Nasal Swab",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKYW4gMDUsIDIwMjUgMDk6MDAgIFgtUmF5IFJlc3VsdHM6IE5vcm1hbA==",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-6BCP5BAI6N7NQSAPSVIJ6INQ4A000004",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2025-02-10T11:00:00Z",
+            "sampleSite": "Brain",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBGZWIgMTAsIDIwMjUgMTE6MDAgIE1SSSBSZXN1bHRzOiBOb3JtYWw=",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-7BCP5BAI6N7NQSAPSVIJ6INQ4A000005",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2023-03-15T13:00:00Z",
+            "sampleSite": "Abdomen",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBNYXIgMTUsIDIwMjUgMTM6MDAgIENTY2FuIFJlc3VsdHM6IE5vcm1hbA==",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-8BCP5BAI6N7NQSAPSVIJ6INQ4A000006",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2024-04-20T15:00:00Z",
+            "sampleSite": "Pelvis",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBBcHIgMjAsIDIwMjUgMTU6MDAgIFVsdHJhc291bmQgUmVzdWx0czogTm9ybWFs",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-9BCP5BAI6N7NQSAPSVIJ6INQ4A000007",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2024-03-25T10:00:00Z",
+            "sampleSite": "Heart",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBNYXkgMjUsIDIwMjUgMTA6MDAgIEVLRyBSZXN1bHRzOiBOb3JtYWw=",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-10BCP5BAI6N7NQSAPSVIJ6INQ4A000008",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2024-01-30T09:00:00Z",
+            "sampleSite": "Breast",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdW4gMzAsIDIwMjUgMDk6MDAgIE1hbW1vZ3JhbSBSZXN1bHRzOiBOb3JtYWw=",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-11BCP5BAI6N7NQSAPSVIJ6INQ4A000009",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2020-07-15T14:00:00Z",
+            "sampleSite": "Colon",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdWwgMTUsIDIwMjUgMTQ6MDAgIENvbG9ub3Njb3B5IFJlc3VsdHM6IE5vcm1hbA==",
+            "location": "CHYSHR TEST LAB"
+          }
+        },
+        {
+          "id": "I2-11BCP5BAI6N7NQSAPSVIJ6INQ4A000009",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "2020-07-15T14:00:00Z",
+            "sampleSite": "Throat",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdWwgMTUsIDIwMjUgMTQ6MDAgIENvbG9ub3Njb3B5IFJlc3VsdHM6IE5vcm1hbA==",
+            "location": "DAYSHR TEST LAB"
+          }
         }
-      ],
-      "meta": {
-        "pagination": {
-          "currentPage": 1,
-          "perPage": 10,
-          "totalPages": 1,
-          "totalEntries": 3
-        }
-      }
+      ]
     },
     "PAST_SEVEN_TO_NINE_MONTHS": {
       "data": [
@@ -97,7 +237,61 @@
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
           }
         }
-      ]
+      ],
+      "meta": {
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 12
+        }
+      }
+    },
+    "PAST_TEN_TO_TWELVE_MONTHS": {
+      "data": [
+        {
+          "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "{{now - 8 months}}",
+            "sampleSite": "Skin Culture, left leg",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
+          }
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 12
+        }
+      }
+    },
+    "PAST_THIRTEEN_TO_FIFTEEN_MONTHS": {
+      "data": [
+        {
+          "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Surgical Pathology",
+            "testCode": "SP",
+            "dateCompleted": "{{now - 8 months}}",
+            "sampleSite": "Skin Culture, left leg",
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
+          }
+        }
+      ],
+      "meta": {
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 2,
+          "totalEntries": 12
+        }
+      }
     },
     "1": {
       "data": [

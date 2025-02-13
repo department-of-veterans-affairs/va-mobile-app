@@ -2,12 +2,6 @@ export type LabsAndTestsListPayload = {
   data: Array<LabsAndTests>
 
   meta: {
-    pagination: {
-      currentPage: number
-      perPage: number
-      totalPages: number
-      totalEntries: number
-    }
     dataFromStore: boolean
   }
 }

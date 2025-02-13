@@ -228,7 +228,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getVaccineList(store, params, endpoint)
     }
     case '/v0/health/labs-and-tests': {
-      console.log('Getting Labs anbd Tests Mock Data: ', params, endpoint)
       return getLabsAndTestsList(store, params, endpoint)
     }
     case '/v0/health/allergy-intolerances': {

@@ -155,7 +155,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     }
   }
 
-  // checks for downtime, immunizations downtime constant is having an issue with unit test
   const labsAndTestsInDowntime = useError(ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID)
   const {
     data: labsAndTests,
@@ -174,14 +173,12 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   )
 
   useEffect(() => {
-    const filteredLabsAndTests = labsAndTests?.data
-      .filter((test) => test?.attributes?.testCode === 'SP')
-      .sort((a, b) => {
-        const dateA = b.attributes?.dateCompleted ? new Date(b.attributes.dateCompleted) : new Date(0)
-        const dateB = a.attributes?.dateCompleted ? new Date(a.attributes.dateCompleted) : new Date(0)
-        return dateA.getTime() - dateB.getTime()
-      })
-    console.log('PAGE: ', page)
+    const filteredLabsAndTests = labsAndTests?.data.sort((a, b) => {
+      const dateA = b.attributes?.dateCompleted ? new Date(b.attributes.dateCompleted) : new Date(0)
+      const dateB = a.attributes?.dateCompleted ? new Date(a.attributes.dateCompleted) : new Date(0)
+      return dateA.getTime() - dateB.getTime()
+    })
+
     const labAndTestsList = filteredLabsAndTests?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setLabsAndTestsToShow(labAndTestsList || [])
   }, [labsAndTests?.data, page])
@@ -220,11 +217,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         setPage(page - 1)
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
-      totalEntries: labsAndTests?.meta?.pagination?.totalEntries || 0,
+      totalEntries: labsAndTests?.data?.length || 0,
       pageSize: DEFAULT_PAGE_SIZE,
       page,
     }
-
     return (
       <Box
         flex={1}
