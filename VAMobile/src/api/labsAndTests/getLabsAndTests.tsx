@@ -13,16 +13,24 @@ export type LabsAndTestQuery = {
   }
   page?: string
   timeFrame?: string
+  labTypes?: string[]
 }
+
+const defaultLabTypes = ['SP']
 
 /**
  * Fetch user Labs and Tests
  */
-const getLabsAndTests = ({ dateRange, page = '1' }: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
+const getLabsAndTests = ({
+  dateRange,
+  page = '1',
+  labTypes = defaultLabTypes,
+}: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
   return get<LabsAndTestsListPayload>(`/v0/health/labs-and-tests`, {
     startDate: dateRange.start,
     endDate: dateRange.end,
     page,
+    labTypes,
     useCache: 'false',
   })
 }
@@ -30,10 +38,13 @@ const getLabsAndTests = ({ dateRange, page = '1' }: LabsAndTestQuery): Promise<L
 /**
  * Returns a query for user Labs and  Tests
  */
-export const useLabsAndTests = ({ dateRange, timeFrame }: LabsAndTestQuery, options?: { enabled?: boolean }) => {
+export const useLabsAndTests = (
+  { dateRange, timeFrame, labTypes }: LabsAndTestQuery,
+  options?: { enabled?: boolean },
+) => {
   return useQuery({
     ...options,
-    queryKey: [labsAndTestsKeys.labsAndTests, timeFrame],
+    queryKey: [labsAndTestsKeys.labsAndTests, timeFrame, labTypes],
     queryFn: () => getLabsAndTests({ dateRange }),
     meta: {
       errorName: 'getLabsAndTests: Service error',
