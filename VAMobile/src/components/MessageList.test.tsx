@@ -6,6 +6,7 @@ import { InlineTextWithIconsProps, MessageListItemObj, TextLine } from 'componen
 import { context, render } from 'testUtils'
 
 import MessageList from './MessageList'
+import Unread from './VAIcon/svgs/Unread.svg'
 
 context('MessageList', () => {
   const onPressSpy = jest.fn(() => {})
@@ -30,11 +31,11 @@ context('MessageList', () => {
         inlineTextWithIcons: [
           {
             leftTextProps: { text: 'test2-sender' },
-            leftIconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread' },
+            leftIconProps: { svg: Unread, width: 16, height: 16, testID: 'Unread' },
           },
           {
             leftTextProps: { text: 'test2-subject-line' },
-            leftIconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' },
+            leftIconProps: { name: 'AttachFile', width: 16, height: 16, testID: 'AttachFile' },
           },
         ],
         isSentFolder: false,
@@ -76,9 +77,9 @@ context('MessageList', () => {
     expect(screen.findByText('Read')).toBeTruthy()
   })
 
-  it('should render the VAIcon components for unread item with attachment', () => {
+  it('should render the Icon components for unread item with attachment', () => {
     expect(screen.getByTestId('Unread')).toBeTruthy()
-    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+    expect(screen.getByTestId('AttachFile')).toBeTruthy()
   })
 
   it('should render chevron icons', () => {

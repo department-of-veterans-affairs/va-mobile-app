@@ -37,8 +37,8 @@ context('RadioGroup', () => {
 
   it('initializes correctly', () => {
     expect(screen.getAllByRole('radio').length).toEqual(mockOptions.length)
-    expect(screen.getAllByLabelText('RadioEmpty').length).toEqual(mockOptions.length - 1)
-    expect(screen.getAllByLabelText('RadioFilled').length).toEqual(1)
+    expect(screen.getAllByTestId('RadioButtonUnchecked').length).toEqual(mockOptions.length - 1)
+    expect(screen.getAllByTestId('RadioButtonChecked').length).toEqual(1)
   })
 
   it('calls setSelected on press', () => {

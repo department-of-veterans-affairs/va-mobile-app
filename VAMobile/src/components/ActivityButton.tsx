@@ -1,9 +1,10 @@
 import React, { FC } from 'react'
 import { Linking, Platform, Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
-import { Box, TextView, VAIcon } from 'components'
+import { Box, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -75,13 +76,11 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
             <Box flex={1}>
               <TextView variant={'ActivityButtonSubtext'}>{subText}</TextView>
             </Box>
-            <VAIcon
+            <Icon
               width={24}
               height={24}
-              name="RightArrowInCircle"
+              name={'ArrowCircleRight'}
               fill={theme.colors.icon.activityButton}
-              fill2={'transparent'}
-              ml={theme.dimensions.listItemDecoratorMarginLeft}
               preventScaling={true}
             />
           </Box>

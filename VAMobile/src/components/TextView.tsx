@@ -22,7 +22,7 @@ export type ColorVariant = keyof VATextColors
 export type TextViewProps = AccessibilityProps &
   BoxProps & {
     /** Defaults to primary text */
-    color?: ColorVariant
+    color?: string
 
     /** Defaults to regular */
     variant?: FontVariant
@@ -34,7 +34,7 @@ export type TextViewProps = AccessibilityProps &
     textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
 
     /** text decoration color */
-    textDecorationColor?: ColorVariant
+    textDecorationColor?: string
 
     /** onPress callback */
     onPress?: () => void

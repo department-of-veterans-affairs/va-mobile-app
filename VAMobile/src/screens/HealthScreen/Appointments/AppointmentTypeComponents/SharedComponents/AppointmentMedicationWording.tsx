@@ -35,7 +35,7 @@ const getWebViewLink = (
   return (
     <LinkWithAnalytics
       type="custom"
-      icon={{ name: 'Launch' }}
+      icon={{ name: 'Launch', fill: 'default' }}
       onPress={() => {
         navigateTo('Webview', {
           url,

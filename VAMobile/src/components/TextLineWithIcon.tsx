@@ -1,15 +1,16 @@
 import React, { FC } from 'react'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 import { TextLine } from './types'
 
 export type TextLineWithIconProps = {
   /** Props for icon you want to display in this line of text */
-  iconProps?: VAIconProps & {
+  iconProps?: IconProps & {
     /** If the icon is supposed to appear on its own line (ex: read tag) */
     isOwnLine?: boolean
   }
@@ -25,15 +26,23 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
       <Box
         ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft}
         mr={themes.dimensions.condensedMarginBetween}>
-        {iconProps && (
-          <VAIcon
-            name={iconProps.name}
-            width={iconProps.width}
-            height={iconProps.height}
+        {iconProps?.svg ? (
+          <Icon
+            svg={iconProps.svg}
+            width={iconProps.width ?? 24}
+            height={iconProps.height ?? 24}
             fill={iconProps.fill}
             testID={iconProps.testID}
           />
-        )}
+        ) : iconProps?.name ? (
+          <Icon
+            name={iconProps.name}
+            width={iconProps.width ?? 24}
+            height={iconProps.height ?? 24}
+            fill={iconProps.fill}
+            testID={iconProps.testID}
+          />
+        ) : null}
         {!iconProps && <Box mr={16} />}
       </Box>
       {iconNotOwnRow && (

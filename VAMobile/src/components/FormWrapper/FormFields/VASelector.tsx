@@ -2,12 +2,15 @@ import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TouchableWithoutFeedback } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-import { Box, BoxProps, TextView, VAIcon, VAIconProps } from '../../index'
+import { Box, BoxProps, TextView } from '../../index'
 import { renderInputError } from './formFieldUtils'
 
 export enum SelectorType {
@@ -74,14 +77,14 @@ const VASelector: FC<VASelectorProps> = ({
     name: string,
     stroke?: keyof VAIconColors | string,
     fill?: keyof VAIconColors | keyof VATextColors | string,
-  ): VAIconProps => {
+  ): IconProps => {
     return {
       name,
       stroke,
       width: iconWidth,
       height: 22,
       fill,
-    } as VAIconProps
+    } as IconProps
   }
 
   const errorBoxProps: BoxProps = {
@@ -94,34 +97,41 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
+    const buttonSelectedFill =
+      theme.mode === 'dark' ? colors.vadsColorFormsForegroundActiveOnDark : colors.vadsColorFormsForegroundActiveOnLight
+    const buttonUnselectedFill =
+      theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
+
     if (disabled && selectorType === SelectorType.Radio) {
       return (
-        <VAIcon
-          {...getIconsProps('RadioEmpty', 'checkboxDisabled', 'radioDisabled')}
+        <Icon
+          {...getIconsProps(
+            'RadioButtonUnchecked',
+            theme.colors.icon.checkboxDisabled,
+            theme.colors.icon.radioDisabled,
+          )}
           testID="RadioEmpty"
-          accessibilityLabel="RadioEmpty"
         />
       )
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
       return (
-        <VAIcon
-          {...getIconsProps('CheckBoxError', theme.colors.icon.error, 'checkboxDisabledContrast')}
-          testID="CheckBoxError"
-          accessibilityLabel="CheckBoxError"
+        <Icon
+          {...getIconsProps('Error', theme.colors.icon.error, theme.colors.icon.checkboxDisabledContrast)}
+          testID="Error"
         />
       )
     }
 
-    const filledName = selectorType === SelectorType.Checkbox ? 'CheckBoxFilled' : 'RadioFilled'
-    const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxEmpty' : 'RadioEmpty'
+    const filledName = selectorType === SelectorType.Checkbox ? 'CheckBox' : 'RadioButtonChecked'
+    const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxOutlineBlank' : 'RadioButtonUnchecked'
 
     const name = selected ? filledName : emptyName
-    const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
-    const stroke = selected ? undefined : 'checkboxDisabled'
+    const fill = selected ? buttonSelectedFill : buttonUnselectedFill
+    const stroke = selected ? undefined : theme.colors.icon.checkboxDisabled
 
-    return <VAIcon {...getIconsProps(name, stroke, fill)} testID={name} accessibilityLabel={name} />
+    return <Icon {...getIconsProps(name, stroke, fill)} testID={name} />
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}

@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ButtonDecoratorType, List, ListItemObj, VAIconProps } from 'components'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { ButtonDecoratorType, List, ListItemObj } from 'components'
 import { TextLineWithIconProps } from 'components/TextLineWithIcon'
 import { TextLines } from 'components/TextLines'
 import { TextLine } from 'components/types'
@@ -16,7 +18,7 @@ export type PickerListItemObj = {
   /** whether this item is the selected value **/
   isSelected: boolean
   /** icon to show */
-  icon?: VAIconProps
+  icon?: IconProps
 } & Partial<ListItemObj>
 
 /**

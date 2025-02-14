@@ -7,6 +7,8 @@ import { ToastProps } from 'react-native-toast-notifications/lib/typescript/toas
 
 import { useFocusEffect } from '@react-navigation/native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Box, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { triggerHaptic } from 'utils/haptics'
@@ -14,7 +16,6 @@ import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 import { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 export type SnackbarMessages = {
   successMsg: string
@@ -118,18 +119,15 @@ const SnackBar: FC<ToastProps> = (toast) => {
     toast.onHide()
   }
 
-  const snackBarIconProps: VAIconProps = {
-    name: isError ? 'ExclamationTriangle' : 'CircleCheckMark',
+  const snackBarIconProps: IconProps = {
+    name: isError ? 'Warning' : 'CheckCircle',
     fill: themeColor.icon.snackBarIcon,
-    fill2: 'transparent',
     height: 18,
     width: 18,
   }
 
   const iconWrapperBoxProps: BoxProps = {
     mr: 8,
-    alignSelf: 'flex-start',
-    mt: 2,
   }
 
   const vibrate = (): void => {
@@ -148,7 +146,7 @@ const SnackBar: FC<ToastProps> = (toast) => {
             <View accessible={true} accessibilityRole={'alert'} ref={focusRef}>
               <Box {...messageContainerProps}>
                 <Box {...iconWrapperBoxProps}>
-                  <VAIcon {...snackBarIconProps} />
+                  <Icon {...snackBarIconProps} />
                 </Box>
                 <TextView {...messageProp}>{message}</TextView>
               </Box>
