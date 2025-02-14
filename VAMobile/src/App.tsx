@@ -24,6 +24,13 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
+import {
+  useAuthSettings,
+  useBiometricsSettings,
+  useHandleTokenCallbackUrl,
+  useLogout,
+  useRefreshAccessToken,
+} from 'api/auth'
 import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
@@ -46,14 +53,14 @@ import {
 } from 'screens'
 import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
+import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
 import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
-import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
-import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import { setRefreshAccessToken, setlogout } from 'store/api'
+import { AnalyticsState, AuthState } from 'store/slices'
 import { SettingsState } from 'store/slices'
 import {
   AccessibilityState,
@@ -64,7 +71,9 @@ import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import { initializeAuth } from 'utils/auth'
 import getEnv from 'utils/env'
+import { setFileSystemRefreshAccessToken } from 'utils/filesystem'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
@@ -84,7 +93,6 @@ import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/acces
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
 enableScreens(true)
-injectStore(store)
 
 const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
@@ -138,7 +146,6 @@ type RootTabNavParamList = {
 function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
-
   const scheme = useColorScheme()
   setColorScheme(scheme)
 
@@ -202,16 +209,19 @@ function MainApp() {
 
 export function AuthGuard() {
   const dispatch = useAppDispatch()
-  const {
-    initializing,
-    loggedIn,
-    syncing,
-    firstTimeLogin,
-    canStoreWithBiometric,
-    displayBiometricsPreferenceScreen,
-    requestNotificationsPreferenceScreen,
-  } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { mutate: logout } = useLogout()
+  const { mutate: refreshAccessToken } = useRefreshAccessToken()
+  const { mutate: handleTokenCallbackUrl } = useHandleTokenCallbackUrl()
+  setlogout(logout)
+  setRefreshAccessToken(refreshAccessToken)
+  setFileSystemRefreshAccessToken(refreshAccessToken)
+  const { data: userAuthSettings, isLoading: initializingAuth } = useAuthSettings()
+  const { data: userBiometricSettings, isLoading: initializingBiometrics } = useBiometricsSettings()
+  const initializing = initializingAuth || initializingBiometrics
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
+  const { loggedIn, syncing, displayBiometricsPreferenceScreen } = useSelector<RootState, AuthState>(
+    (state) => state.auth,
+  )
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -228,6 +238,7 @@ export function AuthGuard() {
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
+  const { requestNotificationPreferenceScreen } = useNotificationContext()
 
   const snackBarProps: Partial<ToastProps> = {
     duration: SnackBarConstants.duration,
@@ -290,15 +301,28 @@ export function AuthGuard() {
   }, [dispatch, remoteConfigActivated])
 
   useEffect(() => {
-    console.debug('AuthGuard: initializing')
     if (loggedIn && tappedForegroundNotification) {
-      console.debug('User tapped foreground notification. Skipping initializeAuth.')
+      console.debug('User tapped foreground notification.')
       setTappedForegroundNotification(false)
-    } else if (!loggedIn) {
-      dispatch(initializeAuth())
+    }
+  }, [loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
+
+  useEffect(() => {
+    console.debug('AuthGuard: initializing')
+    if (!loggedIn) {
+      initializeAuth(dispatch, refreshAccessToken)
+    }
+  }, [loggedIn, refreshAccessToken, dispatch])
+
+  useEffect(() => {
+    if (!loggedIn) {
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
-          dispatch(handleTokenCallbackUrl(event.url))
+          const params = {
+            url: event.url,
+            queryClient: queryClient,
+          }
+          handleTokenCallbackUrl(params)
         }
       }
       const sub = Linking.addEventListener('url', listener)
@@ -306,7 +330,7 @@ export function AuthGuard() {
         sub?.remove()
       }
     }
-  }, [dispatch, loggedIn, tappedForegroundNotification, setTappedForegroundNotification])
+  }, [loggedIn, handleTokenCallbackUrl])
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
@@ -352,7 +376,12 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
+  } else if (
+    syncing &&
+    userAuthSettings?.firstTimeLogin &&
+    userBiometricSettings?.canStoreWithBiometric &&
+    displayBiometricsPreferenceScreen
+  ) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
         <Stack.Screen
@@ -362,15 +391,17 @@ export function AuthGuard() {
         />
       </Stack.Navigator>
     )
+  } else if (userAuthSettings?.firstTimeLogin && loggedIn) {
+    content = <OnboardingCarousel />
   } else if (syncing) {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
       </Stack.Navigator>
     )
-  } else if (firstTimeLogin && loggedIn) {
+  } else if (userAuthSettings?.firstTimeLogin && loggedIn) {
     content = <OnboardingCarousel />
-  } else if (!firstTimeLogin && loggedIn && requestNotificationsPreferenceScreen) {
+  } else if (!userAuthSettings?.firstTimeLogin && loggedIn && requestNotificationPreferenceScreen) {
     content = (
       <Stack.Navigator>
         <Stack.Screen
@@ -393,16 +424,18 @@ export function AuthGuard() {
     )
   } else {
     content = (
-      <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ ...topPaddingAsHeaderStyles, title: t('login') }}
-        />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
-        <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
-      </Stack.Navigator>
+      <>
+        <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ ...topPaddingAsHeaderStyles, title: t('login') }}
+          />
+          <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
+          <Stack.Screen name="Webview" component={WebviewScreen} />
+          <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </>
     )
   }
 

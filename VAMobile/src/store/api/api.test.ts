@@ -11,13 +11,17 @@ jest.mock('store/slices', () => {
   }
 })
 
-jest.mock('react-native/Libraries/Utilities/Platform', () => ({
-  OS: 'android',
-  constants: {
-    Model: 'Google Pixel 8 Pro',
-    Release: '15',
-  },
-}))
+jest.mock('react-native/Libraries/Utilities/Platform', () => {
+  const original = jest.requireActual('react-native/Libraries/Utilities/Platform')
+  return {
+    ...original,
+    OS: 'android',
+    constants: {
+      Model: 'Google Pixel 8 Pro',
+      Release: '15',
+    },
+  }
+})
 
 context('api', () => {
   it('should handle GET requests', async () => {
