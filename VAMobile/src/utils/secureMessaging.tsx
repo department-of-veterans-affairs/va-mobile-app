@@ -5,6 +5,7 @@ import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-pick
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
@@ -50,6 +51,8 @@ export const getMessagesListItems = (
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
+    const attachFileIconColor =
+      theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
     const unreadIconProps =
       readReceipt !== READ && !isOutbound
         ? ({ svg: Unread, height: 16, width: 16, testID: 'Unread' } as IconProps)
@@ -58,9 +61,9 @@ export const getMessagesListItems = (
       hasAttachments || attachment
         ? ({
             name: 'AttachFile',
-            width: 16,
-            height: 16,
-            fill: theme.colors.background.bullet,
+            width: 24,
+            height: 24,
+            fill: attachFileIconColor,
             testID: 'AttachFile',
           } as IconProps)
         : undefined

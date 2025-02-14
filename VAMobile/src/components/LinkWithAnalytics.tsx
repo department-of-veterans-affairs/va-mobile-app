@@ -70,7 +70,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
       return <TextView>ERROR: Type "attachment" not supported with useOldLinkComponent enabled</TextView>
     } else if (props.type === 'call TTY') {
       linkType = 'callTTY'
-    } else if (props.type === 'custom') {
+    } else if (props.type === 'url') {
       linkType = 'externalLink'
     } else {
       linkType = props.type

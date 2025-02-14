@@ -109,7 +109,7 @@ export const ButtonDecorator: FC<{
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={switchOnPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return <Icon name={'Check'} height={13} width={16} fill={theme.colors.icon.pickerIcon} />
+      return <Icon name={'Check'} height={18} width={18} fill={theme.colors.icon.pickerIcon} />
     case ButtonDecoratorType.Delete:
       return <Icon name={'Delete'} height={16} width={14} fill={theme.colors.icon.error} />
     case ButtonDecoratorType.RadioFilled:
