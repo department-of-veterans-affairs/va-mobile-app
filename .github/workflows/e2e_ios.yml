@@ -84,6 +84,7 @@ jobs:
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
+      output3: ${{ steps.matrix_value.outputs.testRail_matrix}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -96,10 +97,14 @@ jobs:
             if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
               e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
               echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+              testRail=$(echo $e2eNames | tr ',' ' ')
+              testRail=$(echo $testRail | sed 's/\S*\(.e2e.ts\)\S*//g')
+              echo "testRail_matrix=$testRail" >> "$GITHUB_OUTPUT"
               echo "individual_matrix=" >> "$GITHUB_OUTPUT"
             else
               if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                 echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                echo "testRail_matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                 echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
               else
                 echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -112,10 +117,14 @@ jobs:
                 if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
                   e2eNames=$(gh api repos/department-of-veterans-affairs/va-mobile-app/contents/VAMobile/e2e/tests | jq --compact-output 'del(.[] | select(.name == "utils.ts")) | [.[].name]')
                   echo "matrix=$e2eNames" >> "$GITHUB_OUTPUT"
+                  testRail=$(echo $e2eNames | tr ',' ' ')
+                  testRail=$(echo $testRail | sed 's/\S*\(.e2e.ts\)\S*//g')
+                  echo "testRail_matrix=$testRail" >> "$GITHUB_OUTPUT"
                   echo "individual_matrix=" >> "$GITHUB_OUTPUT"
                 else
                   if [[ "${{ inputs.tests_to_run}}" != "" ]]; then
                     echo "matrix=${{ toJson(inputs.tests_to_run)}}" >> "$GITHUB_OUTPUT"
+                    echo "testRail_matrix=${{ inputs.tests_to_run}}" >> "$GITHUB_OUTPUT"
                     echo "individual_matrix=true" >> "$GITHUB_OUTPUT"
                   else
                     echo "matrix=" >> "$GITHUB_OUTPUT" 
@@ -347,6 +356,7 @@ jobs:
         uses: actions/checkout@v3
       - name: update-test-names
         run: |
+          echo "" >> input.json
           for ((i=0; ; i+=250)); do
             echo "i = $i"
             getTestCaseNewName=$(curl -X GET -H 'Content-Type: application/json' \
@@ -358,12 +368,98 @@ jobs:
               break
             fi
           done
+          getTest=$(curl -X GET -H 'Content-Type: application/json' \
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29&section_id=9683" | jq .cases[])
+          getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
+          groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
+          getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
+          for y in ${{needs.output_detox_tests_to_run.outputs.output3}}; do
+            missingCases=""
+            echo "$y"
+            removeBracket=$(echo $y | tr -d '[')
+            removeBracket=$(echo $removeBracket | tr -d ']')
+            removeBracket=$(echo $removeBracket | tr -d ',')
+            addSpace=$(echo $removeBracket | sed 's/\([^[:blank:]]\)\([[:upper:]]\)/\1 \2/g')
+            
+            if [[ "$removeBracket" == "Appointments" ]]; then
+              title="$removeBracket Screen [ios]"
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$title" 'select(.[] == "'"$testsTypedIn"'")')
+              echo "$missingCases"
+            elif [[ "$removeBracket" == "AppointmentsExpanded" ]]; then
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "Appointments Screen Expansion [ios]" '.[] | select(contains($testsTypedIn))')
+            elif [[ "$removeBracket" == "Appeals" ]]; then
+              title="$removeBracket [ios]"
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$title" 'select(.[] == "'"$testsTypedIn"'")')
+            elif [[ "$removeBracket" == "VALetters" ]]; then
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "VA Letters [ios]" '.[] | select(contains($testsTypedIn))') 
+            else
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$removeBracket" '.[] | select(contains($testsTypedIn) and contains("[ios]"))')
+            fi
+            
+            if [[ "$missingCases" == "" ]]; then
+              if [[ "$removeBracket" == "Appointments" ]]; then
+                title="$removeBracket Screen [ios]"
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$getCase"'")')
+              elif [[ "$removeBracket" == "AppointmentsExpanded" ]]; then
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == ":ios: Appointments Screen Expansion [ios]")')
+              elif [[ "$removeBracket" == "VALetters" ]]; then
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "VA Letters [ios]")')
+              elif [[ "$removeBracket" == "Appeals" ]]; then
+                title="$removeBracket [ios]"
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$getCase"'")')
+              else
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$removeBracket" --compact-output 'select(.title | contains($getCase) and contains("[ios]"))')
+              fi
+              echo "" >> input.json
+              echo "$matchMissingCases"
+              if [[ "$matchMissingCases" != "" ]]; then
+                addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
+                echo $addMissingCasesToArray >> input.json
+                continue
+              fi
+            else
+              continue
+            fi
+
+            missingCases=""
+            missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$addSpace" '.[] | select(contains($testsTypedIn) and contains("[ios]"))')
+            if [[ "$missingCases" == "" ]]; then
+              title="$addSpace [ios]"
+              matchMissingCases=$(echo $getTest| jq --arg getCase "$title" --compact-output 'select(.title == "'"$title"'")')
+              echo "$matchMissingCases"
+              if [[ "$matchMissingCases" != "" ]]; then
+                addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
+                echo $addMissingCasesToArray >> input.json
+                continue
+              fi
+            else
+              continue
+            fi
+
+            for z in $(echo $removeBracket | sed 's/[A-Z]\+/\n&/g'); do
+              missingCases=""
+              missingCases=$(echo $getFirstTestNewName | jq --arg testsTypedIn "$z" '.[] | select(contains($testsTypedIn))')
+              if [[ "$missingCases" == "" ]]; then
+                echo "$z"
+                matchMissingCases=$(echo $getTest| jq --arg getCase "$z" --compact-output 'select(.title | contains($getCase) and contains("[ios]"))')
+                if [[ "$matchMissingCases" != "" ]]; then
+                  echo "$matchMissingCases"
+                  addMissingCasesToArray=$(echo $getTestCaseNewName | jq --argjson testToAdd "$matchMissingCases" '. += [$testToAdd]')
+                  echo $addMissingCasesToArray >> input.json
+                  break
+                fi
+              else
+                break
+              fi
+            done
+          done
           getTestCaseNewName=$(jq --compact-output -s 'add' input.json)
           groupTestCasesByTitle=$(echo $getTestCaseNewName | jq --compact-output '[group_by(.title)[] | [.[0].title, .[0].status_id, map(.id)[]]]')
           getFirstTestNewName=$(echo $groupTestCasesByTitle | jq --compact-output '[.[] | .[0]]')
           getCasesID=$(curl -X GET -H 'Content-Type: application/json' \
-                  -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
-                  "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
+            -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+            "https://dsvavsp.testrail.io//index.php?/api/v2/get_cases/29")
           updateRunWithNewCases=$(curl -X POST -H 'Content-Type: application/json' \
             -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
             -d '{"suite_id": 92, "include_all": false, "case_ids": '$(echo $getCasesID | jq --argjson testRailNames "$getFirstTestNewName" --compact-output '.cases | map(select(.title == $testRailNames[])) | map(.id)')'}' \
@@ -394,6 +490,11 @@ jobs:
               resp5=$(curl -X POST -H 'Content-Type: application/json' \
                 -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
                 -d '{"status_id": 1}' \
+                "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
+            else
+              resp5=$(curl -X POST -H 'Content-Type: application/json' \
+                -u "${{secrets.TEST_RAIL_USER}}:${{secrets.TEST_RAIL_KEY}}" \
+                -d '{"status_id": 4, "comment": "Something failed in github actions outside of the e2e tests.  Please try again."}' \
                 "https://dsvavsp.testrail.io//index.php?/api/v2/add_result/"$i"")
             fi
           done
