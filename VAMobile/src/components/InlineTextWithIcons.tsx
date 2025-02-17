@@ -30,9 +30,9 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
   const theme = useTheme()
 
   return (
-    <Box flexDirection={'row'} flexGrow={1}>
+    <Box flexDirection={'row'} flexGrow={1} alignItems="center">
       {!inlineIcon && leftIconProps && (
-        <Box mt={11} mr={theme.dimensions.condensedMarginBetween}>
+        <Box mr={theme.dimensions.condensedMarginBetween}>
           {leftIconProps?.svg ? (
             <Icon
               svg={leftIconProps.svg}

@@ -61,8 +61,8 @@ export const getMessagesListItems = (
       hasAttachments || attachment
         ? ({
             name: 'AttachFile',
-            width: 24,
-            height: 24,
+            width: 21,
+            height: 21,
             fill: attachFileIconColor,
             testID: 'AttachFile',
           } as IconProps)
