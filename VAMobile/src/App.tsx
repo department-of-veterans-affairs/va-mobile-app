@@ -19,11 +19,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
+import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import SnackBar from 'components/SnackBar'
 import { CloseSnackbarOnNavigation, EnvironmentTypesConstants } from 'constants/common'
@@ -42,8 +44,11 @@ import {
   getHomeScreens,
   getPaymentsScreens,
 } from 'screens'
+import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
+import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
 import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
@@ -60,7 +65,7 @@ import { SnackBarState } from 'store/slices/snackBarSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import getEnv from 'utils/env'
-import { useAppDispatch, useFontScale, useIsScreenReaderEnabled } from 'utils/hooks'
+import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
@@ -98,6 +103,14 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditDirectDeposit: {
     displayTitle: string
   }
+  FileRequestSubtask: {
+    claimID: string
+    claim: ClaimData | undefined
+  }
+  SubmitEvidenceSubtask: {
+    claimID: string
+  }
+  InAppFeedback: { screen: string }
   Tabs: undefined
 }
 
@@ -457,6 +470,17 @@ export function AuthedApp() {
           component={EditDirectDepositScreen}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
+        <RootNavStack.Screen
+          name="SubmitEvidenceSubtask"
+          component={SubmitEvidenceSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen
+          name="FileRequestSubtask"
+          component={FileRequestSubtask}
+          options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

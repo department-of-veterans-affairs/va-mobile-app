@@ -10,7 +10,7 @@ import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { lettersKeys } from './queryKeys'
 
@@ -22,6 +22,7 @@ const { API_ROOT } = getEnv()
 const downloadLetter = async (
   letterType: LetterTypes,
   lettersOption: LettersDownloadParams,
+  func: () => Promise<void>,
 ): Promise<boolean | undefined> => {
   const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
   const filePath = store.getState().demo.demoMode
@@ -30,7 +31,7 @@ const downloadLetter = async (
   if (filePath) {
     logAnalyticsEvent(Events.vama_letter_download(letterType))
     setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
-    await FileViewer.open(filePath, { onDismiss: () => registerReviewEvent() })
+    await FileViewer.open(filePath, { onDismiss: () => func() })
     return true
   }
 }
@@ -39,10 +40,11 @@ const downloadLetter = async (
  * Returns a query for a user letter
  */
 export const useDownloadLetter = (letterType: LetterTypes, lettersOption: LettersDownloadParams) => {
+  const registerReviewEvent = useReviewEvent(false)
   return useQuery({
     enabled: false,
     queryKey: [lettersKeys.downloadLetter, letterType, lettersOption],
-    queryFn: () => downloadLetter(letterType, lettersOption),
+    queryFn: () => downloadLetter(letterType, lettersOption, registerReviewEvent),
     meta: {
       errorName: 'downloadLetter: Service error',
     },

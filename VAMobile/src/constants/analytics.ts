@@ -293,6 +293,11 @@ export const Events = {
       },
     }
   },
+  vama_claim_file_view: (): Event => {
+    return {
+      name: 'vama_claim_file_view',
+    }
+  },
   vama_claim_review: (claim_id: string, claim_type: string, num_requests: number): Event => {
     return {
       name: 'vama_claim_review',
@@ -615,19 +620,31 @@ export const Events = {
       name: 'vama_find_location',
     }
   },
-  vama_gender_id_fail: (): Event => {
+  vama_feedback_ask: (screen: string, response: boolean): Event => {
     return {
-      name: 'vama_gender_id_fail',
+      name: 'vama_feedback_ask',
+      params: {
+        screen,
+        response,
+      },
     }
   },
-  vama_gender_id_help: (): Event => {
+  vama_feedback_closed: (screen: string): Event => {
     return {
-      name: 'vama_gender_id_help',
+      name: 'vama_feedback_closed',
+      params: {
+        screen,
+      },
     }
   },
-  vama_gender_id_success: (): Event => {
+  vama_feedback_submitted: (screen: string, taskCompleted: string, satisfaction: string): Event => {
     return {
-      name: 'vama_gender_id_success',
+      name: 'vama_feedback_submitted',
+      params: {
+        screen,
+        taskCompleted,
+        satisfaction,
+      },
     }
   },
   vama_givefb_close: (screenName: string): Event => {

@@ -651,6 +651,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
   await dispatch(logout())
   await dispatch(setBiometricsPreference(false))
   await dispatch(dispatchSetFirstLogin(true))
+  await dispatch(setNotificationsPreferenceScreen(true))
 }
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {

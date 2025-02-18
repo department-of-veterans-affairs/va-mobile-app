@@ -3,6 +3,7 @@ import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { PhoneData, PhoneType } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -31,7 +32,7 @@ describe('EditPhoneNumberScreen', () => {
       },
       {
         params: {
-          displayTitle: 'Home phone',
+          displayTitle: t('editPhoneNumber.homePhoneTitle'),
           phoneData,
           ...data,
         },
@@ -87,7 +88,7 @@ describe('EditPhoneNumberScreen', () => {
 
   describe('when the phone number is saved', () => {
     it('navigates back to the previous screen', async () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
       await waitFor(() => expect(props.navigation.goBack).toBeCalled())
     })
   })
@@ -97,9 +98,9 @@ describe('EditPhoneNumberScreen', () => {
       const phoneNumberInput = screen.getByTestId('phoneNumberTestID')
 
       fireEvent.changeText(phoneNumberInput, '')
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Check your phone number')).toBeTruthy()
-      expect(screen.getByText('Enter a valid phone number')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editPhoneNumber.checkPhoneNumber'))).toBeTruthy()
+      expect(screen.getByText(t('editPhoneNumber.numberFieldError'))).toBeTruthy()
     })
   })
 })

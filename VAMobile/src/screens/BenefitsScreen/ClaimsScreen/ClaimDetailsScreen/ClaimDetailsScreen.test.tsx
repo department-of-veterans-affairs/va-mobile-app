@@ -40,6 +40,10 @@ context('ClaimDetailsScreen', () => {
             ...claim,
           },
         },
+        {
+          queryKey: [claimsAndAppealsKeys.eFolderDocs],
+          data: [],
+        },
       ]
     }
 
@@ -64,6 +68,11 @@ context('ClaimDetailsScreen', () => {
         data: {
           ...claimData,
         },
+      })
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/efolder/documents`, {})
+      .mockResolvedValue({
+        data: [],
       })
   })
 

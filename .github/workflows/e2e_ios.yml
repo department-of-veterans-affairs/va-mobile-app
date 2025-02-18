@@ -9,9 +9,12 @@ on:
     branches:
         - 'dependabot/**'
   pull_request:
-    types: synchronize
+    types: 
+      - synchronize
+      - opened
     paths:
       - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -157,7 +160,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: 15.2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3

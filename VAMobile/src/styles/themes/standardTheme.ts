@@ -1,9 +1,10 @@
 import { Appearance } from 'react-native'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
 
-import colors from './VAColors'
 import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
@@ -214,13 +215,9 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.CategoryLandingAlert,
       scheme.text.categoryLandingWarning,
     ),
-    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.vadsColorWhite),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
-    DescriptiveBackButton: buildFont(
-      'SourceSansPro-Regular',
-      fontSizes.DescriptiveBackButton,
-      scheme.text.descriptiveBackButton,
-    ),
+    DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.link),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
     HomeScreen: buildFont('SourceSansPro-Regular', fontSizes.HomeScreen, scheme.text.homeScreen),
@@ -238,11 +235,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
-    textWithIconButton: buildFont(
-      'SourceSansPro-Regular',
-      fontSizes.textWithIconButton,
-      scheme.text.textWithIconButton,
-    ),
+    textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.link),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
@@ -262,7 +255,7 @@ let theme: VATheme = {
     ...colorScheme,
   },
   dimensions: {
-    attachmentIconTopMargin: 8,
+    attachmentIconTopMargin: 6,
     borderWidth: 1,
     focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,
@@ -287,8 +280,8 @@ let theme: VATheme = {
     paginationTopPadding: 40,
     snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
     snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
-    chevronListItemWidth: 10,
-    chevronListItemHeight: 15,
+    chevronListItemWidth: 30,
+    chevronListItemHeight: 30,
     linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,

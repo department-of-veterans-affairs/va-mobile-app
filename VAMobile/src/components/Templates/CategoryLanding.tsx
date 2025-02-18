@@ -10,9 +10,11 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { CrisisLineButton, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
-import { useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
@@ -43,7 +45,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
   const theme = useTheme()
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const [scrollOffset, setScrollOffset] = useState(0)
   const [trackScrollOffset, setTrackScrollOffset] = useState(true)
@@ -64,6 +66,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
           accessibilityRole: headerButton.accessibilityRole,
           onPress: headerButton.onPress,
           icon: headerButton.icon,
+          testID: headerButton.testID,
         }
       : undefined,
     shadow: theme.mode === 'light',

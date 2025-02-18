@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AddressData, ValidateAddressData } from 'api/types'
 import { SnackbarMessages } from 'components/SnackBar'
@@ -89,18 +90,18 @@ describe('AddressValidation', () => {
 
   describe('when the address validation scenario type is SHOW_SUGGESTIONS_OVERRIDE', () => {
     it('displays the alert texts', () => {
-      const collapsibleAlert = screen.getByText('Verify your address')
+      const collapsibleAlert = screen.getByText(t('editAddress.validation.verifyAddress.title'))
 
       expect(collapsibleAlert).toBeTruthy()
       fireEvent.press(collapsibleAlert)
-      expect(screen.getByText("We can't confirm the address you entered with the U.S. Postal Service.")).toBeTruthy()
+      expect(screen.getByText(t('editAddress.validation.verifyAddress.body.1'))).toBeTruthy()
     })
   })
 
   describe('when use this address button is pressed', () => {
     it('calls updateAddress', () => {
       fireEvent.press(screen.getByTestId('youEnteredTestID'))
-      fireEvent.press(screen.getByRole('button', { name: 'Use this address' }))
+      fireEvent.press(screen.getByRole('button', { name: t('editAddress.validation.useThisAddress') }))
       expect(saveAddressSpy).toBeCalled()
     })
   })
