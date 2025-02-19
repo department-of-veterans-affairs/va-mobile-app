@@ -57,7 +57,8 @@ export const PrescriptionsE2eIdConstants = {
 
 let tempPath
 
-const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
+// const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
+const trackingIndex = 0
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)

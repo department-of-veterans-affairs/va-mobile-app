@@ -116,11 +116,11 @@ function Attachments({ navigation, route }: AttachmentsProps) {
 
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
-    if (IS_TEST) {
-      const img = { fileName: 'file.txt' } as Asset
-      const assets = [img]
-      return callbackOnSuccessfulFileSelection({ assets }, true)
-    }
+    // if (IS_TEST) {
+    //   const img = { fileName: 'file.txt' } as Asset
+    //   const assets = [img]
+    //   return callbackOnSuccessfulFileSelection({ assets }, true)
+    // }
     logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
     onAddFileAttachments(
       t,

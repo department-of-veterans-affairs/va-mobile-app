@@ -475,6 +475,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await expect(element(by.text('Past video appointment at VA location'))).toExist()
     }
     await expect(element(by.text('Sami Alsahhar - Onsite - Confirmed'))).toExist()
+    //  this goes back to list at the end
     await checkUpcomingApptDetails(
       'Onsite',
       'Confirmed',
@@ -522,7 +523,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       } else {
         await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
       }
-      await element(by.text('All of 2023')).tap()
+      await element(by.text('All of 2025')).tap()
       await element(by.text('Done')).tap()
     }
     await scrollToThenTap('Sami Alsahhar - Onsite - Pending', pastAppointmentString)
