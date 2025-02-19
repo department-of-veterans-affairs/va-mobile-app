@@ -65,10 +65,11 @@ export const generateTestIDForInlineTextIconList = (
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
+    // NOTE: The Unread icon is a local svg file
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.leftTextProps.text)
@@ -88,10 +89,10 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'Unread') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.text)
