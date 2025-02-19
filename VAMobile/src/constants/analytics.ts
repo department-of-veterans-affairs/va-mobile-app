@@ -620,21 +620,6 @@ export const Events = {
       name: 'vama_find_location',
     }
   },
-  vama_gender_id_fail: (): Event => {
-    return {
-      name: 'vama_gender_id_fail',
-    }
-  },
-  vama_gender_id_help: (): Event => {
-    return {
-      name: 'vama_gender_id_help',
-    }
-  },
-  vama_gender_id_success: (): Event => {
-    return {
-      name: 'vama_gender_id_success',
-    }
-  },
   vama_feedback_ask: (screen: string, response: boolean): Event => {
     return {
       name: 'vama_feedback_ask',

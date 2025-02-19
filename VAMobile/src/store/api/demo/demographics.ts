@@ -1,23 +1,9 @@
-import {
-  DemographicsPayload,
-  GenderIdentityUpdatePayload,
-  PreferredNameUpdatePayload,
-} from 'api/types/DemographicsData'
+import { DemographicsPayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
 
 import { DemoStore } from './store'
 
 export type DemographicsDemoStore = {
   '/v0/user/demographics': DemographicsPayload
-}
-
-/**
- * Updates the a user's gender identity in the demo store
- *
- * @param store - The demo store
- * @param payload - Payload for updating a user's gender identity
- */
-export const updateGenderIdentity = (store: DemoStore, payload: GenderIdentityUpdatePayload) => {
-  store['/v0/user/demographics'].data.attributes.genderIdentity = payload.code
 }
 
 /**

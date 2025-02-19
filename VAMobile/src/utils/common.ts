@@ -8,14 +8,13 @@ import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import { contains, isEmpty, map } from 'underscore'
-import _ from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
 import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
 import { Events } from 'constants/analytics'
-import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, SSN_REGEX_EXP } from 'constants/common'
+import { EMAIL_REGEX_EXP_PII, MAIL_TO_REGEX_EXP_PII, PHONE_REGEX_EXP_PII, SSN_REGEX_EXP_PII } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
@@ -438,31 +437,23 @@ export function fullPanelCardStyleInterpolator({
  */
 export function checkStringForPII(body: string): { found: boolean; newText: string } {
   let found = false
-  let newText = ''
-  let phoneMatch, ssnMatch, emailMatch, mailToMatch
-  const whiteSpace = body
-    .trim()
-    .split(/\S/)
-    .reverse()
-    .filter((value) => value !== '')
-  const bodySplit = body.split(/\s/).filter((value) => value !== '')
-  _.forEach(bodySplit, (text) => {
-    phoneMatch = PHONE_REGEX_EXP.exec(text)
-    ssnMatch = SSN_REGEX_EXP.exec(text)
-    emailMatch = EMAIL_REGEX_EXP.exec(text)
-    mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
-    if (phoneMatch) {
-      found = true
-      text = '###-###-####'
-    } else if (ssnMatch) {
-      found = true
-      text = '###-##-####'
-    } else if (emailMatch || mailToMatch) {
-      found = true
-      text = 'xxxxxxx@xxx.xxx'
-    }
-    newText = newText.concat(text)
-    newText = newText.concat(whiteSpace.pop() || '')
-  })
+  let newText = body
+
+  if (PHONE_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(PHONE_REGEX_EXP_PII, '###-###-####')
+  }
+  if (SSN_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(SSN_REGEX_EXP_PII, '###-##-####')
+  }
+  if (EMAIL_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(EMAIL_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
+  if (MAIL_TO_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(MAIL_TO_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
   return { found, newText }
 }
