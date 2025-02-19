@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { atob } from 'react-native-quick-base64'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -88,7 +89,9 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
             ))}
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
               <TextView variant="MobileBodyBold">Report</TextView>
-              <TextView variant="MobileBody">{decodedReport}</TextView>
+              <TextView variant="MobileBody" testID="decoded-report">
+                {decodedReport}
+              </TextView>
             </Box>
           </TextArea>
         </Box>
