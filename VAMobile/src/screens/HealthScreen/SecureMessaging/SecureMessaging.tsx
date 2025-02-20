@@ -125,6 +125,14 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const handleRefresh = () => {
+    if (inboxError) {
+      refetchInbox()
+    } else if (foldersError) {
+      refetchFolder()
+    }
+  }
+
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
@@ -182,7 +190,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                       variant="warning"
                       header={t('secureMessaging.inbox.messageDownError.title')}
                       description={t('secureMessaging.inbox.messageDownError.body')}
-                      secondaryButton={{ label: t('refresh'), onPress: refetchInbox }}
+                      secondaryButton={{ label: t('refresh'), onPress: handleRefresh }}
                     />
                   </Box>
                 ) : (
