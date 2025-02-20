@@ -68,7 +68,7 @@ context('SecureMessaging', () => {
         .calledWith(`/v0/messaging/health/folders`)
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText('Your inbox isn’t working right now')).toBeTruthy())
     })
   })
 

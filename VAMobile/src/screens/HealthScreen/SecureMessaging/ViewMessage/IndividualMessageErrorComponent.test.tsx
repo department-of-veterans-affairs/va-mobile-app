@@ -15,7 +15,7 @@ context('IndividualMessageErrorComponent', () => {
   it('initializes correctly', () => {
     expect(screen.getByText('Message could not be found')).toBeTruthy()
     expect(
-      screen.getByText("We're sorry. Something went wrong on our end. Please refresh this screen or try again later."),
+      screen.getByText("We're sorry. Something went wrong on our end. Refresh this screen or try again later."),
     ).toBeTruthy()
     expect(
       screen.getByText(
