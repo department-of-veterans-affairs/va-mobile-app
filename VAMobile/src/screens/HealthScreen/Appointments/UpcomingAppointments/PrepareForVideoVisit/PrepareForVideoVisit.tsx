@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, LargePanel, TextView } from 'components'
+import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -18,39 +18,32 @@ function PrepareForVideoVisit({}: PrepareForVideoVisitProps) {
   return (
     <LargePanel title={t('appointmentsHelp')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+          {t('appointmentsTab.medicationWording.howToSetUpDevice')}
+        </TextView>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('prepareForVideoVisit.beforeYourAppointment')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-          {t('prepareForVideoVisit.downloadBasedOnDevice')}
-        </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('prepareForVideoVisit.cameraAndMicrophone')}
-        </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('prepareForVideoVisit.joinBy')}
-        </TextView>
+        <VABulletList
+          paragraphSpacing
+          listOfText={[
+            t('prepareForVideoVisit.downloadBasedOnDevice'),
+            t('prepareForVideoVisit.cameraAndMicrophone'),
+            t('prepareForVideoVisit.joinBy'),
+          ]}
+        />
 
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
           {t('prepareForVideoVisit.toHaveBestExperience')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-          {t('prepareForVideoVisit.connectFromQuietPlace')}
-        </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('prepareForVideoVisit.checkConnection')}
-        </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={true}>
-          {t('prepareForVideoVisit.connectWithWifi')}
-        </TextView>
-
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('prepareForVideoVisit.medicationReview')}
-        </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} paragraphSpacing={true}>
-          {t('prepareForVideoVisit.reviewEverything')}
-        </TextView>
-        <TextView variant="MobileBody">{t('prepareForVideoVisit.beReadyToTalk')}</TextView>
+        <VABulletList
+          paragraphSpacing
+          listOfText={[
+            t('prepareForVideoVisit.connectFromQuietPlace'),
+            t('prepareForVideoVisit.checkConnection'),
+            t('prepareForVideoVisit.connectWithWifi'),
+          ]}
+        />
       </Box>
     </LargePanel>
   )

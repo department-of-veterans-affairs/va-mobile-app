@@ -2,6 +2,9 @@ import React, { FC, ReactElement, useState } from 'react'
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
@@ -9,7 +12,6 @@ import { useTheme } from 'utils/hooks'
 
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -24,18 +26,18 @@ export enum ButtonDecoratorType {
   /** Trash can decorator */
   Delete = 'Delete',
   /** Empty radio button decorator */
-  RadioEmpty = 'RadioEmpty',
+  RadioEmpty = 'RadioButtonUnchecked',
   /** Filled radio button decorator */
-  RadioFilled = 'RadioFilled',
+  RadioFilled = 'RadioButtonChecked',
   /** Disabled radio button decorator */
   RadioDisabled = 'RadioDisabled',
   /** Empty check box button decorator */
-  CheckBoxEmpty = 'CheckBoxEmpty',
+  CheckBoxEmpty = 'CheckBoxOutlineBlank',
   /** Filled check box button decorator */
-  CheckBoxFilled = 'CheckBoxFilled',
+  CheckBoxFilled = 'CheckBox',
 }
 
-export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
+export type ListItemDecoratorProps = Partial<IconProps> | Partial<SwitchProps>
 
 /**
  * Props for BaseListItem
@@ -96,79 +98,63 @@ export const ButtonDecorator: FC<{
   const radioBtnWidth = 22
   const radioBtnHeight = 22
 
+  const buttonSelectedFill =
+    theme.mode === 'dark' ? colors.vadsColorFormsForegroundActiveOnDark : colors.vadsColorFormsForegroundActiveOnLight
+  const buttonUnselectedFill =
+    theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
+
   const switchOnPress = onPress ? onPress : () => {}
 
   switch (decorator) {
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={switchOnPress} {...decoratorProps} />
     case ButtonDecoratorType.SelectedItem:
-      return (
-        <VAIcon name={'CheckMark'} height={13} width={16} fill={theme.colors.icon.pickerIcon} {...decoratorProps} />
-      )
+      return <Icon name={'Check'} height={18} width={18} fill={theme.colors.icon.pickerIcon} />
     case ButtonDecoratorType.Delete:
-      return <VAIcon name={'Trash'} height={16} width={14} fill={theme.colors.icon.error} {...decoratorProps} />
+      return <Icon name={'Delete'} height={16} width={14} fill={theme.colors.icon.error} />
     case ButtonDecoratorType.RadioFilled:
       return (
-        <VAIcon
-          name={'RadioFilled'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxEnabledPrimary}
-          {...decoratorProps}
-        />
+        <Icon name={'RadioButtonChecked'} height={radioBtnHeight} width={radioBtnWidth} fill={buttonSelectedFill} />
       )
     case ButtonDecoratorType.RadioEmpty:
       return (
-        <VAIcon
-          name={'RadioEmpty'}
-          height={radioBtnHeight}
-          width={radioBtnWidth}
-          fill={theme.colors.icon.checkboxDisabledContrast}
-          stroke={theme.colors.icon.checkboxDisabled}
-          {...decoratorProps}
-        />
+        <Icon name={'RadioButtonUnchecked'} height={radioBtnHeight} width={radioBtnWidth} fill={buttonUnselectedFill} />
       )
     case ButtonDecoratorType.RadioDisabled:
       return (
-        <VAIcon
-          name={'RadioEmpty'}
+        <Icon
+          name={'RadioButtonUnchecked'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.radioDisabled}
-          stroke={theme.colors.icon.checkboxDisabled}
-          {...decoratorProps}
         />
       )
     case ButtonDecoratorType.CheckBoxFilled:
       return (
-        <VAIcon
-          name={'CheckBoxFilled'}
+        <Icon
+          name={'CheckBox'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxEnabledPrimary}
-          {...decoratorProps}
         />
       )
     case ButtonDecoratorType.CheckBoxEmpty:
       return (
-        <VAIcon
-          name={'CheckBoxEmpty'}
+        <Icon
+          name={'CheckBoxOutlineBlank'}
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
-          stroke={theme.colors.icon.checkboxDisabled}
-          {...decoratorProps}
         />
       )
 
     default:
       return (
-        <VAIcon
+        <Icon
           name={'ChevronRight'}
           fill={theme.colors.icon.chevronListItem}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
-          {...decoratorProps}
         />
       )
   }
@@ -246,7 +232,8 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     width: '100%',
     minHeight: minHeight || theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
-    px: theme.dimensions.gutter,
+    pl: theme.dimensions.gutter,
+    pr: decorator === undefined ? theme.dimensions.buttonPadding : theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
@@ -282,7 +269,9 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
         )}
         {children}
         {showDecorator && (
-          <Box ml={theme.dimensions.listItemDecoratorMarginLeft} importantForAccessibility={'no-hide-descendants'}>
+          <Box
+            ml={decorator === undefined ? 0 : theme.dimensions.listItemDecoratorMarginLeft}
+            importantForAccessibility={'no-hide-descendants'}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
         )}

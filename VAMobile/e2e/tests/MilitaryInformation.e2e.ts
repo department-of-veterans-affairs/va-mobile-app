@@ -1,11 +1,18 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { changeMockData, checkImages, loginToDemoMode, openMilitaryInformation, openProfile } from './utils'
+import {
+  CommonE2eIdConstants,
+  changeMockData,
+  checkImages,
+  loginToDemoMode,
+  openMilitaryInformation,
+  openProfile,
+} from './utils'
 
 export const MilitaryInformationE2eIdConstants = {
-  MILITARY_DATE_TEXT: 'July 13, 1970 – August 31, 1998',
-  SERVICE_INFORMATION_INCORRECT_TITLE_TEXT: "What if my military service information doesn't look right?",
+  SERVICE_INFORMATION_INCORRECT_ID: 'militaryServiceIncorrectLinkID',
+  SERVICE_INFORMATION_INCORRECT_SWIPE: 'IncorrectServiceTestID',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1:
     'Some Veterans have reported seeing military service information in their V-A .gov profiles that doesn’t seem right. When this happens, it’s because there’s an error in the information we’re pulling into V-A .gov from the Defense Enrollment Eligibility Reporting System (D-E-E-R-S).',
   SERVICE_INFORMATION_INCORRECT_BODY_LABEL_2:
@@ -37,7 +44,7 @@ export async function verifyMilitaryInfo(militaryBranch: string) {
     await expect(element(by.text(militaryBranch))).toExist()
     await openMilitaryInformation()
     await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
-    await expect(element(by.text(MilitaryInformationE2eIdConstants.MILITARY_DATE_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
   })
 }
 
@@ -50,12 +57,7 @@ describe('Military Info Screen', () => {
   verifyMilitaryInfo('United States Space Force')
 
   it('should open new screen if military service information is incorrect', async () => {
-    await openProfile()
-    await openMilitaryInformation()
-    await element(by.text(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_TITLE_TEXT)).tap()
-    await expect(
-      element(by.text(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_TITLE_TEXT)).atIndex(1),
-    ).toExist()
+    await element(by.id(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_ID)).tap()
     await expect(
       element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_1)),
     ).toExist()
@@ -65,11 +67,11 @@ describe('Military Info Screen', () => {
     await expect(
       element(by.label(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_BODY_LABEL_3)),
     ).toExist()
-    await expect(element(by.id('CallVATestID'))).toExist()
-    await element(by.id('IncorrectServiceTestID')).swipe('up')
+    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
+    await element(by.id(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_SWIPE)).swipe('up')
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.id('CallVATestID')).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.enableSynchronization()
       await device.launchApp({ newInstance: false })

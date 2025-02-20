@@ -93,8 +93,9 @@ platform :android do
   end
 
   lane :demo do
-     slack_build_success("buildNum", "version", "buildType", "message", "os", ENV['SLACK_THREAD_TS'])
-  end
+    slack_build_success("buildNum", "version", "buildType", "message", "os", ENV['SLACK_THREAD_TS'])
+ end
+
   desc "add a tester to Firebase Distribution. options.emails is a comma-separated string of emails to add to testers. Once added, they will need to be added to the QA team in Firebase Distribution console."
   lane :firebase_app_dist_add_testers do |options|
     firebase_app_distribution_add_testers(
@@ -111,6 +112,11 @@ platform :android do
         project_number: ENV["FIREBASE_PROJECT_NUMBER"],
         emails: options[:emails]
     )
+  end
+
+  desc "Makes a test build to ensure changes to native directories did not break build process. DOES NOT DISTRIBUTE"
+  lane :test_build_only do |options|
+    bundle("Release")
   end
 
   after_all do |lane, options|
@@ -191,7 +197,7 @@ platform :android do
   def upload(track, skip_meta = true)
     puts "Skip meta: " + skip_meta.to_s
     supply(
-      track: track, 
+      track: track,
       package_name: "gov.va.mobileapp",
       skip_upload_metadata: skip_meta,
       skip_upload_changelogs: skip_meta,
@@ -202,17 +208,28 @@ platform :android do
 
   def promote_pre_prod
     begin
-      prod = google_play_track_version_codes(track:"production")
-      stash =  google_play_track_version_codes(track:"Pre-Prod Stash")
-      # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
+      prod = google_play_track_version_codes(track: "production")
+      stash = google_play_track_version_codes(track: "Pre-Prod Stash")
+      # Check if promotion is allowed based on version codes
       if stash.max > prod.max
+        # Promote the version from Pre-Prod Stash to production
         supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
-        version = google_play_track_release_names(track:"production")
-        slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
+        # Delay briefly for 5 min to allow Google Play to process the update (optional, tweak as needed)
+        sleep 300
+        # Check if the promoted version is live on production
+        live_version = google_play_track_version_codes(track: "production").max
+        if live_version == stash.max
+           # Get the release names and verify the promotion
+          promoted_version = google_play_track_release_names(track: "production").max_by { |s| Gem::Version.new(s) }
+          slack_release_success(promoted_version, "Android")
+        else
+          raise "Version promotion was successful, but the latest release version is not live yet."
+        end
       end
     rescue => e
-      version = google_play_track_release_names(track:"production")
-      slack_release_error(version.max_by{ |s| Gem::Version.new(s) }, "Android", e)
+      # Send an error notification if promotion fails or the live version check fails
+      latest_version = google_play_track_release_names(track: "production").max_by { |s| Gem::Version.new(s) }
+      slack_release_error(latest_version, "Android", e)
     end
   end
 

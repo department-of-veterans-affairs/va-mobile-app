@@ -1,9 +1,14 @@
+/*
+Description:
+Detox script that follows the prescriptions test case found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in prescriptions or if anything is changed in src/store/api/demo/mocks/prescriptions.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  changeMockData,
   checkImages,
   loginToDemoMode,
   openHealth,
@@ -33,7 +38,6 @@ export const PrescriptionsE2eIdConstants = {
     "This list shows refill requests you've submitted. It also shows refills the  V-A  pharmacy is processing.",
   PRESCRIPTION_TRACKING_GET_TRACKING_ID: 'getPrescriptionTrackingTestID',
   PRESCRIPTION_REFILL_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
-  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT: 'We got your refill requests',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT: 'Refill request summary',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT: 'AMLODIPINE BESYLATE 10MG TAB',
@@ -43,7 +47,6 @@ export const PrescriptionsE2eIdConstants = {
     'If you have questions about the status of your refill, contact your provider or local  V-A  pharmacy.',
   PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT: 'Go to all pending refills',
   PRESCRIPTION_BACK_ID: 'prescriptionsBackTestID',
-  PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
   FILTER_PRESCRIPTIONS_TEST_ID: 'filterSortWrapperBoxTestID',
   PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID: 'goToMyVAHealthPrescriptionHistoryID',
   PRESCRIPTION_DETAILS_BACK_ID: 'prescriptionsDetailsBackTestID',
@@ -63,6 +66,13 @@ beforeAll(async () => {
   await openPrescriptions()
 })
 
+/*
+Validates and tests the sort prescription options
+param name: String name of the sort option
+param first Prescription: String name of the first prescription that appears in the list once the sort option is selected
+param last Prescription: String name of the last prescription that appears in the list once the sort option is selected
+param first Instance: Boolean value that tells the test to scroll to the top so the filter and sort button is displayed
+*/
 export async function validateSort(
   name: string,
   firstPrescription: string,
@@ -71,23 +81,23 @@ export async function validateSort(
 ) {
   it('should sort prescription data by ' + name, async () => {
     if (firstInstance) {
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
       await element(by.text('All (31)')).atIndex(0).tap()
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     } else {
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
-      await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
     }
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_MODAL_ID)).scrollTo('bottom')
@@ -101,22 +111,28 @@ export async function validateSort(
     await element(by.text(name)).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     await expect(element(by.text(firstPrescription)).atIndex(0)).toBeVisible()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     await expect(element(by.text(lastPrescription))).toBeVisible()
   })
 }
 
+/*
+Validates and tests the filter prescription options
+param name: String name of the filter option
+param quantity: Number of prescriptions expected for a specific filter option
+param helperText: Optional string name of the helper text for the filter option
+*/
 export async function validateFilter(name: string, quantity: number, helperText?: string) {
   const filterDescription =
     name === 'Pending' ? 'Pending refills' : name === 'Tracking' ? 'Refills with tracking' : `${name} prescriptions`
@@ -143,7 +159,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
     await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down')
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_STATUS_LABEL_HEADER_TEXT)).atIndex(0),
@@ -156,7 +172,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify prescription refill warning label information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID)).tap()
     await expect(element(by.text("We can't refill some of your prescriptions in the app"))).toExist()
     await expect(element(by.label('Some  V-A  health facilities use a new electronic health record system.'))).toExist()
@@ -188,7 +204,7 @@ describe('Prescriptions Screen', () => {
   it('verify prescription details information', async () => {
     await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down')
     await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
     await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
@@ -259,7 +275,7 @@ describe('Prescriptions Screen', () => {
   it('verify prescription tracking item specific info', async () => {
     await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
     await expect(element(by.label('Prescription number 3 6 3 6 8 5 6'))).toExist()
@@ -298,7 +314,7 @@ describe('Prescriptions Screen', () => {
   it('verify tracking link for FEDEX works', async () => {
     await waitFor(element(by.label('LAMIVUDINE 100MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(1).tap()
     await expect(element(by.text('Delivery service: FEDEX'))).toExist()
@@ -313,7 +329,7 @@ describe('Prescriptions Screen', () => {
   it('verify tracking info for multiple packages', async () => {
     await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(2).tap()
     await expect(element(by.text('Package 1 of 2'))).toExist()
@@ -333,7 +349,7 @@ describe('Prescriptions Screen', () => {
     await openPrescriptions()
     await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(2).tap()
   })
@@ -370,7 +386,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify refill request screen information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID)).tap()
     await expect(element(by.text('Refill request'))).toExist()
     await expect(element(by.text('Request refills at least 15 days before you need more medication.'))).toExist()
@@ -405,7 +421,7 @@ describe('Prescriptions Screen', () => {
 
   it('verify refill request summary screen information', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
@@ -438,11 +454,11 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
       .toBeVisible()
-      .whileElement(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
+      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down')
     await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),

@@ -4,10 +4,12 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, BoxProps, DescriptiveBackButton, TextView, TextViewProps, VAIconProps, VAIconWithText } from 'components'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
+import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import colors from 'styles/themes/VAColors'
-import { useAccessibilityFocus, useIsScreenReaderEnabled, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -45,7 +47,7 @@ export type HeaderRightButtonProps = {
   a11yLabel?: string
   accessibilityRole?: AccessibilityRole
   onPress: () => void
-  icon?: VAIconProps
+  icon?: IconProps
   testID?: string
 }
 
@@ -80,9 +82,9 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
-  const screenReaderEnabled = useIsScreenReaderEnabled(true)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
-  const TEXT_CONSTRAINT_THRESHOLD = 30
+  const TEXT_CONSTRAINT_THRESHOLD = 26
 
   const transition = title?.type === 'Transition'
 
@@ -168,7 +170,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
     mb: !dividerMarginBypass && bannerDivider ? theme.dimensions.standardMarginBetween : 0,
     style: bannerShadow
       ? {
-          shadowColor: colors.black,
+          shadowColor: 'black',
           ...Platform.select({
             ios: {
               shadowOffset: { width: 0, height: 6 },
@@ -199,7 +201,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const constrainTitle = totalTextLength > TEXT_CONSTRAINT_THRESHOLD
   if (leftButton) {
     leftTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: leftButton.a11yLabel,
       allowFontScaling: false,
@@ -226,7 +228,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
   if (rightButton) {
     rightTextViewProps = {
-      color: 'footerButton',
+      color: 'link',
       variant: 'MobileBody',
       accessibilityLabel: rightButton.a11yLabel,
       allowFontScaling: false,
@@ -275,6 +277,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton
                   label={leftButton.text}
+                  labelA11y={leftButton.a11yLabel}
                   onPress={leftButton.onPress}
                   focusOnButton={focus === 'Left'}
                   backButtonTestID={leftButton.testID}
@@ -315,7 +318,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   accessibilityRole={rightButton.accessibilityRole || 'button'}>
                   <Box {...commonBoxProps}>
                     {rightButton.icon ? (
-                      <VAIconWithText
+                      <IconWithText
                         testID={rightButton.testID}
                         label={rightButton.text}
                         labelA11y={rightButton.a11yLabel}

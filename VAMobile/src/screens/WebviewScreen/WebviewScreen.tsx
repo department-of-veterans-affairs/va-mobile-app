@@ -7,9 +7,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, BoxProps, LoadingComponent } from 'components'
 import { BackButton } from 'components/BackButton'
+import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { fetchSSOCookies } from 'utils/auth'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
@@ -120,7 +122,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           onPress={props.onPress}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.done}
-          showCarat={false}
         />
       ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
@@ -195,8 +196,11 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
         onMessage={(): void => {
           // no op
         }}
-        onError={() => {
+        onError={(syntheticEvent) => {
           setWebviewLoadFailed(true)
+          const { nativeEvent } = syntheticEvent
+          nativeEvent.url = currentUrl
+          logAnalyticsEvent(Events.vama_webview_fail(JSON.stringify(nativeEvent)))
         }}
         onNavigationStateChange={(navState): void => {
           setCanGoBack(navState.canGoBack)

@@ -12,7 +12,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getErrorKeys } from 'utils/errors'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { directDepositKeys } from './queryKeys'
 
@@ -28,6 +28,7 @@ const updateBankInfo = (paymentAccountData: PaymentAccountData) => {
  * Returns a mutation for updating direct deposit information
  */
 export const useUpdateBankInfo = () => {
+  const registerReviewEvent = useReviewEvent()
   const queryClient = useQueryClient()
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 

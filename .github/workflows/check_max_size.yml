@@ -1,0 +1,25 @@
+on:
+  workflow_call:
+    inputs:
+      working_dir:
+        required: true
+        type: string
+      max_size:
+        required: true
+        type: string
+      counting_function:
+        required: true
+        type: string
+
+jobs:
+  check_max_files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          if [[ $(${{ inputs.counting_function }}) -gt ${{ inputs.max_size }} ]]
+          then
+            echo "PR exceeds app store limits of ${{ inputs.max_size }} for this check"
+            exit 1
+          fi
+        working-directory: ${{ inputs.working_dir }}

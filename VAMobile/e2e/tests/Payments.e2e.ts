@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the VA Payment History test case found in testRail (VA Mobile App > RC Regression Test > Manual > Payments Page - Elements)
+When to update:
+This script should be updated whenever new things are added/changed in payments or if anything is changed in src/store/api/demo/mocks/payments.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 
 import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHistory } from './utils'
@@ -50,7 +56,7 @@ describe('Payments Screen', () => {
 
   it('payment details: verify the payment details for paper check', async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
-    await expect(element(by.text('June 1, 2017'))).toExist()
+    await expect(element(by.text('June 1, 2024'))).toExist()
     await expect(element(by.text('Regular Chapter 31'))).toExist()
     await expect(element(by.text('$603.33'))).toExist()
     await expect(element(by.text('Paper Check'))).toExist()
@@ -90,14 +96,14 @@ describe('Payments Screen', () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
     await expect(element(by.text('Select a year'))).toExist()
     await element(by.id(PaymentsE2eIDConstants.SELECT_A_YEAR_CANCEL_ID)).tap()
-    await expect(element(by.text('2017')).atIndex(0)).toExist()
+    await expect(element(by.text('2024')).atIndex(0)).toExist()
   })
 
-  it('should tap on and select 2016 from the select a year picker', async () => {
+  it('should tap on and select 2023 from the select a year picker', async () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID)).tap()
-    await element(by.text('2016')).tap()
+    await element(by.text('2023')).tap()
     await element(by.id(PaymentsE2eIDConstants.SELECT_A_YEAR_CONFIRM_ID)).tap()
-    await expect(element(by.text('2016')).atIndex(0)).toExist()
+    await expect(element(by.text('2023')).atIndex(0)).toExist()
   })
 
   it('should verify the next and back page arrows work', async () => {

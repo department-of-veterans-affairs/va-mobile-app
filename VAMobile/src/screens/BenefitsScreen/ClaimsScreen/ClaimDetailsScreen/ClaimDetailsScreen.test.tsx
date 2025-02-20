@@ -40,6 +40,10 @@ context('ClaimDetailsScreen', () => {
             ...claim,
           },
         },
+        {
+          queryKey: [claimsAndAppealsKeys.eFolderDocs],
+          data: [],
+        },
       ]
     }
 
@@ -59,11 +63,16 @@ context('ClaimDetailsScreen', () => {
 
   beforeEach(() => {
     when(api.get as jest.Mock)
-      .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+      .calledWith(`/v0/claim/600156928`, {})
       .mockResolvedValue({
         data: {
           ...claimData,
         },
+      })
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/efolder/documents`, {})
+      .mockResolvedValue({
+        data: [],
       })
   })
 
@@ -183,7 +192,7 @@ context('ClaimDetailsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       when(api.get as jest.Mock)
-        .calledWith(`/v0/claim/600156928`, {}, expect.anything())
+        .calledWith(`/v0/claim/600156928`, {})
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData()

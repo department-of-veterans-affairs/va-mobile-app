@@ -1,7 +1,7 @@
 name: VAHB Mobile App Change Request Form
 description: Use this template to formally request a new feature, enhancement to a feature, discovery, research, analytics request or other ask/change for the VA Mobile App team to evaluate.
 title: "Change Request: [name of change]"
-labels: [ "Epic", "Leads team" ]
+labels: [ "Epic", "Leads team", "needs-review" ]
 projects: ["department-of-veterans-affairs/823"]
 assignees: [ DonMcCaugheyUSDS, rtwell, Hallm13, kellylein ]
 body:
@@ -92,9 +92,9 @@ body:
 - type: input
   id: duedate
   attributes:
-    label: 12.) What is your ideal due date for this change request? 
+    label: 12.) Is there a hard deadline associated with this request? 
     description: 
-    placeholder: MM/DD/YYYY or Quarter 
+    placeholder: MM/DD/YYYY 
   validations:
     required: true    
 

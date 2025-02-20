@@ -25,15 +25,7 @@ const AFNavigationForIndividual = [
     'How to update or fix an error in your legal name',
   ],
   ['PersonalInformationScreen.e2e', 'WG_PreferredName', 'Profile', 'Personal information', 'Preferred name'],
-  ['PersonalInformationScreen.e2e', 'WG_GenderIdentity', 'Profile', 'Personal information', 'Gender identity'],
-  [
-    'PersonalInformationScreen.e2e',
-    'WG_WhatToKnow',
-    'Profile',
-    'Personal information',
-    'Gender identity',
-    'What to know before you decide to share your gender identity',
-  ],
+  ['PersonalInformationScreen.e2e', 'WG_WhatToKnow', 'Profile', 'Personal information'],
   ['ContactInformation.e2e', 'WG_ContactInformation', 'Profile', 'Contact information'],
   ['ContactInformation.e2e', 'WG_HowWillYou', 'Profile', 'Contact information', 'How we use your contact information'],
   ['ContactInformation.e2e', 'WG_EditAddress', 'Profile', 'Contact information', 'Mailing address'],
@@ -131,13 +123,13 @@ const AFNavigationForIndividual = [
   ['BenefitLetters.e2e', 'WG_ClaimLettersScreen', 'Benefits', 'Claims', 'Claim letters'],
   ['Claims.e2e', 'WG_ClaimDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received December 05, 2021'],
   // [
-    // 'Claims.e2e',
-    // 'WG_SubmitEvidence',
-    // 'Benefits',
-    // 'Claims',
-    // 'Claims history',
-    // 'Received December 05, 2021',
-    // 'Submit evidence',
+  // 'Claims.e2e',
+  // 'WG_SubmitEvidence',
+  // 'Benefits',
+  // 'Claims',
+  // 'Claims history',
+  // 'Received December 05, 2021',
+  // 'Submit evidence',
   // ],
   ['Appeals.e2e', 'WG_AppealDetailsScreen', 'Benefits', 'Claims', 'Claims history', 'Received July 17, 2008'],
   [
@@ -173,8 +165,10 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 
   it('should verify AF use case 2 Update available for: ' + testRun, async () => {
-    await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
-    await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    if (testRun != 'WG_StartNewMessage' && testRun != 'WG_ReplyMessage') {
+      await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
+      await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    }
   })
 }
 

@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the Appeals test case found in testRail (VA Mobile App > RC Regression Test > Manual > Benefits Page Elements)
+When to update:
+This script should be updated whenever new things are added/changed in appeals details or if anything appeal wise is changed in src/store/api/demo/mocks/claims.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -8,7 +14,6 @@ export const AppealsIdConstants = {
   REVIEW_PAST_EVENTS_ID: 'reviewPastEventsTestID',
   ISSUES_TAB_ID: 'appealIssues',
   STATUS_TAB_ID: 'appealStatus',
-  APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   APPEAL_DETAILS_TEXT: 'Appeal details',
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
   APPEAL_SUBMITTED_TEXT: 'Received June 12, 2008',
@@ -80,7 +85,7 @@ describe('Appeals', () => {
   })
 
   it('should scroll to the bottom of the appeals screen', async () => {
-    await element(by.id(AppealsIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
   })
 
   it('should tap on the links in the need help section', async () => {

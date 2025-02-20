@@ -58,8 +58,7 @@ context('VASelector', () => {
   describe('when selected is true', () => {
     it('should display the filled checkbox and update accessibility state', () => {
       initializeTestInstance(true)
-      expect(screen.getByTestId('CheckBoxFilled')).toBeTruthy()
-      expect(screen.getByLabelText('CheckBoxFilled')).toBeTruthy()
+      expect(screen.getByTestId('CheckBox')).toBeTruthy()
       expect(
         screen.getByAccessibilityState({
           checked: true,
@@ -70,8 +69,7 @@ context('VASelector', () => {
 
   describe('when selected is false', () => {
     it('should display the empty checkbox', () => {
-      expect(screen.getByTestId('CheckBoxEmpty')).toBeTruthy()
-      expect(screen.getByLabelText('CheckBoxEmpty')).toBeTruthy()
+      expect(screen.getByTestId('CheckBoxOutlineBlank')).toBeTruthy()
       expect(
         screen.getByAccessibilityState({
           checked: false,
@@ -93,15 +91,13 @@ context('VASelector', () => {
     it('should display the RadioEmpty', () => {
       initializeTestInstance(false, true, '', SelectorType.Radio)
       expect(screen.getByTestId('RadioEmpty')).toBeTruthy()
-      expect(screen.getByLabelText('RadioEmpty')).toBeTruthy()
     })
   })
 
   describe('when there is an error and the selector type is checkbox', () => {
-    it('should display the CheckBoxError and the error message', () => {
+    it('should display the Error and the error message', () => {
       initializeTestInstance(false, false, 'ERROR MESSAGE')
-      expect(screen.getByTestId('CheckBoxError')).toBeTruthy()
-      expect(screen.getByLabelText('CheckBoxError')).toBeTruthy()
+      expect(screen.getByTestId('Error')).toBeTruthy()
       expect(screen.getByText('ERROR MESSAGE')).toBeTruthy()
     })
   })

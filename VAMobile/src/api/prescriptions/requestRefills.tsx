@@ -5,7 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { prescriptionKeys } from './queryKeys'
 
@@ -30,6 +30,7 @@ const requestRefills = async (prescriptions: PrescriptionsList): Promise<RefillR
  * Returns a mutation for requesting refills for a users prescriptions
  */
 export const useRequestRefills = () => {
+  const registerReviewEvent = useReviewEvent(false, 'refillRequest')
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: requestRefills,

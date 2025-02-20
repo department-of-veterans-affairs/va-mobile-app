@@ -31,8 +31,6 @@ export type WaygateToggleType =
   | 'WG_PersonalInformation'
   | 'WG_HowDoIUpdate'
   | 'WG_PreferredName'
-  | 'WG_GenderIdentity'
-  | 'WG_WhatToKnow'
   | 'WG_ContactInformation'
   | 'WG_HowWillYou'
   | 'WG_EditAddress'
@@ -113,8 +111,6 @@ type WaygateToggleValues = {
   WG_PersonalInformation: Waygate
   WG_HowDoIUpdate: Waygate
   WG_PreferredName: Waygate
-  WG_GenderIdentity: Waygate
-  WG_WhatToKnow: Waygate
   WG_ContactInformation: Waygate
   WG_HowWillYou: Waygate
   WG_EditAddress: Waygate
@@ -204,8 +200,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_PersonalInformation: { ...waygateDefault },
   WG_HowDoIUpdate: { ...waygateDefault },
   WG_PreferredName: { ...waygateDefault },
-  WG_GenderIdentity: { ...waygateDefault },
-  WG_WhatToKnow: { ...waygateDefault },
   WG_ContactInformation: { ...waygateDefault },
   WG_HowWillYou: { ...waygateDefault },
   WG_EditAddress: { ...waygateDefault },
