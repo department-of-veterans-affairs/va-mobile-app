@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { completeFirstTimeLogin } from 'store/slices'
@@ -52,35 +53,31 @@ context('OnboardingCarousel', () => {
 
   it('renders correctly through out each screen and calls completeFirstTimeLogin once you get to the end', () => {
     expect(screen.getByRole('header', { name: 'Welcome, Gary' })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.',
-      ),
-    ).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Next' }))
-    expect(screen.getByRole('header', { name: 'Manage your health care' })).toBeTruthy()
-    expect(screen.getByText('Use our health care tools to manage tasks like these:')).toBeTruthy()
-    expect(screen.getByText('Refill your prescriptions')).toBeTruthy()
-    expect(screen.getByText('Communicate with your health care team')).toBeTruthy()
-    expect(screen.getByText('Review your appointments')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Next' }))
-    expect(screen.getByRole('header', { name: 'Manage your benefits' })).toBeTruthy()
-    expect(screen.getByText('Use our benefits tools to manage tasks like these:')).toBeTruthy()
-    expect(screen.getByText('Review your disability rating')).toBeTruthy()
-    expect(screen.getByText('Check the status of your claims and appeals')).toBeTruthy()
-    expect(screen.getByText('Download common VA letters')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Next' }))
-    expect(screen.getByRole('header', { name: 'Manage your payments' })).toBeTruthy()
-    expect(screen.getByText('Use our payments tools to manage tasks like these:')).toBeTruthy()
-    expect(screen.getByText('Update your direct deposit information')).toBeTruthy()
-    expect(screen.getByText('Review the history of payments we’ve sent to you')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Done' }))
+    expect(screen.getByText(t('onboarding.allInformationYouNeed'))).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: t('next') }))
+    expect(screen.getByRole('header', { name: t('onboarding.health.header') })).toBeTruthy()
+    expect(screen.getByText(t('onboarding.health.details'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.health.details.prescriptions.bullet'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.health.details.communicate.bullet'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.health.details.appointments.bullet'))).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: t('next') }))
+    expect(screen.getByRole('header', { name: t('onboarding.benefits.header') })).toBeTruthy()
+    expect(screen.getByText(t('onboarding.benefits.details'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.benefits.disability.bullet'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.benefits.claimsAndAppeals.bullet'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.benefits.commonLetters.bullet'))).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: t('next') }))
+    expect(screen.getByRole('header', { name: t('onboarding.payments.header') })).toBeTruthy()
+    expect(screen.getByText(t('onboarding.payments.details'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.payments.directDeposit.bullet'))).toBeTruthy()
+    expect(screen.getByText(t('onboarding.payments.paymentHistory.bullet'))).toBeTruthy()
+    fireEvent.press(screen.getByRole('link', { name: t('done') }))
     expect(completeFirstTimeLogin).toHaveBeenCalled()
   })
 
   describe('at the end of the carousel', () => {
     it('should call completeFirstTimeLogin when you skip', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Skip' }))
+      fireEvent.press(screen.getByRole('link', { name: t('skip') }))
       expect(completeFirstTimeLogin).toHaveBeenCalled()
     })
   })

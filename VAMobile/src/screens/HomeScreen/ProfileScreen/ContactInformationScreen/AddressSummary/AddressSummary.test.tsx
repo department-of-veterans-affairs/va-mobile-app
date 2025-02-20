@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { AddressData, UserContactInformation } from 'api/types'
@@ -76,7 +77,11 @@ describe('AddressSummary', () => {
 
   describe('when there is no mailing address', () => {
     it('displays the message for adding a mailing address', () => {
-      expect(screen.getByText('Add your mailing address')).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('contactInformation.addYour', { field: t(`contactInformation.mailingAddress`).toLowerCase() }),
+        ),
+      ).toBeTruthy()
     })
   })
 
@@ -91,7 +96,11 @@ describe('AddressSummary', () => {
   describe('when there is no residential address', () => {
     it('displays the message for adding a home address', () => {
       renderWithData()
-      expect(screen.getByText('Add your home address')).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('contactInformation.addYour', { field: t(`contactInformation.residentialAddress`).toLowerCase() }),
+        ),
+      ).toBeTruthy()
     })
   })
 
@@ -209,7 +218,11 @@ describe('AddressSummary', () => {
         }
 
         renderWithData({ mailingAddress: noCountryCodeAddress })
-        expect(screen.getByText('Add your mailing address')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('contactInformation.addYour', { field: t(`contactInformation.mailingAddress`).toLowerCase() }),
+          ),
+        ).toBeTruthy()
       })
     })
 
@@ -237,9 +250,9 @@ describe('AddressSummary', () => {
 
   describe('when the address summary is clicked', () => {
     it('calls onPress', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Mailing address' }))
+      fireEvent.press(screen.getByRole('link', { name: t('contactInformation.mailingAddress') }))
       expect(mailingAddressOnPressSpy).toBeCalled()
-      fireEvent.press(screen.getByRole('link', { name: 'Home address' }))
+      fireEvent.press(screen.getByRole('link', { name: t('contactInformation.residentialAddress') }))
       expect(residentialAddressOnPressSpy).toBeCalled()
     })
   })

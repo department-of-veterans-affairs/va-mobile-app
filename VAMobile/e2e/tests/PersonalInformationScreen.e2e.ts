@@ -1,3 +1,9 @@
+/*
+Description:
+Detox script that follows the Personal Information, Personal Info - Personal Info - Preferred Name test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Profile Page - Elements)
+When to update:
+This script should be updated whenever new things are added/changed in personal information, preferred name or if anything is changed in src/store/api/demo/mocks/personalInformation.json or src/store/api/demo/mocks/demographics.json.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -23,15 +29,15 @@ export const PersonalInfoConstants = {
   PREFERRED_NAME_ROW_ID: 'preferredNameRowID',
   PREFERRED_NAME_ID: 'preferredNameTestID',
   PREFERRED_NAME_BACK_ID: 'preferredNameBackID',
-  GENDER_IDENTITY_HEADER_TEXT: 'Gender identity',
-  GENDER_IDENTITY_ROW_ID: 'genderIdentityRowID',
-  GENDER_IDENTITY_WHAT_TO_KNOW_ID: 'whatToKnowTestID',
-  GENDER_IDENTITY_SCROLL: 'genderIdentityID',
-  GENDER_IDENTITY_BACK_ID: 'genderIdentityBackID',
   PREFER_NOT_TEXT: 'Prefer not to answer',
   PERSONAL_INFO_SCROLL_ID: 'PersonalInformationTestID',
 }
 
+/** This function will scroll to and tap the link.
+ * @param text: String text of either the text of the link (if id is false) or the testID of the link (if id is true)
+ * @param scrollID: String text of the testID of the page with the scrollView
+ * @param id: Boolean value for whether the link is searching by.text or by.id
+ * */
 const scrollToThenTap = async (text: string, scrollID?: string, id?: boolean) => {
   if (scrollID != undefined) {
     await element(by.id(scrollID)).atIndex(0).scrollTo('bottom')
@@ -47,6 +53,9 @@ const scrollToThenTap = async (text: string, scrollID?: string, id?: boolean) =>
   }
 }
 
+/** This function will check the nearest VA center and call links. This script is only run on the Android simulator because the iOS simulator does not have phone capabilities
+ * @param scrollID: String text of the testID of the page with the scrollView
+ * */
 const checkLocatorAndContactLinks = async (scrollID?: string) => {
   await device.disableSynchronization()
   await scrollToThenTap(PersonalInfoConstants.NEAREST_CENTER_LINK_ID, scrollID, true)
@@ -67,29 +76,6 @@ const checkLocatorAndContactLinks = async (scrollID?: string) => {
   await device.enableSynchronization()
 }
 
-export async function updateGenderIdentify(genderIdentityOption) {
-  it('should update gender identity for ' + genderIdentityOption, async () => {
-    await element(by.id(PersonalInfoConstants.PERSONAL_INFO_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_ROW_ID)).tap()
-    await expect(element(by.text(PersonalInfoConstants.GENDER_IDENTITY_HEADER_TEXT)).atIndex(0)).toExist()
-    await scrollToThenTap(genderIdentityOption, PersonalInfoConstants.GENDER_IDENTITY_SCROLL)
-    await element(by.text(genderIdentityOption)).tap()
-    await element(by.id('genderIdentitySaveID')).tap()
-    await expect(element(by.text(genderIdentityOption))).toExist()
-
-    await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT))).toExist()
-    await expect(element(by.text('Gender identity saved'))).toExist()
-    await expect(element(by.text(genderIdentityOption))).toExist()
-    await element(by.text('Dismiss')).tap()
-
-    await element(by.id(PersonalInfoConstants.PERSONAL_INFO_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_ROW_ID)).tap()
-    await expect(element(by.text('Gender identity saved'))).not.toExist()
-    await expect(element(by.label(genderIdentityOption + ' ').withDescendant(by.id('RadioFilled')))).toExist()
-    await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_BACK_ID)).tap()
-  })
-}
-
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
@@ -102,11 +88,8 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Date of birth'))).toExist()
     await expect(element(by.text('January 01, 1950'))).toExist()
 
-    await expect(element(by.text('Preferred name'))).toExist()
+    await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT))).toExist()
     await expect(element(by.text('Sharing your preferred name is optional.'))).toExist()
-
-    await expect(element(by.text('Gender identity'))).toExist()
-    await expect(element(by.text('Woman'))).toExist()
   })
 
   it('should tap links in "How to update" large panel', async () => {
@@ -143,7 +126,7 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text(PersonalInfoConstants.PREFERRED_NAME_HEADER_TEXT)).atIndex(0)).toExist()
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).replaceText('Kimberlee')
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_ID)).tapReturnKey()
-    await element(by.text('Save')).tap()
+    await element(by.text(CommonE2eIdConstants.SAVE_TEXT)).tap()
 
     await expect(element(by.text(PersonalInfoConstants.PERSONAL_INFORMATION_TEXT)).atIndex(0)).toExist()
     await expect(element(by.text('Preferred name saved'))).toExist()
@@ -153,25 +136,5 @@ describe('Personal Info Screen', () => {
     await expect(element(by.text('Preferred name saved'))).not.toExist()
     await expect(element(by.text('Kimberlee')).atIndex(0)).toExist()
     await element(by.id(PersonalInfoConstants.PREFERRED_NAME_BACK_ID)).tap()
-  })
-
-  updateGenderIdentify(PersonalInfoConstants.PREFER_NOT_TEXT)
-  updateGenderIdentify('Man')
-  updateGenderIdentify('Non-Binary')
-  updateGenderIdentify('Transgender Man')
-  updateGenderIdentify('Transgender Woman')
-  updateGenderIdentify('A gender not listed here')
-
-  it('should show "What to know" large panel in gender identity section', async () => {
-    await element(by.id(PersonalInfoConstants.PERSONAL_INFO_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_ROW_ID)).tap()
-    await scrollToThenTap(
-      PersonalInfoConstants.GENDER_IDENTITY_WHAT_TO_KNOW_ID,
-      PersonalInfoConstants.GENDER_IDENTITY_SCROLL,
-      true,
-    )
-    await expect(element(by.id(PersonalInfoConstants.WHAT_TO_KNOW_ID))).toExist()
-    await element(by.id(PersonalInfoConstants.WHAT_TO_KNOW_CLOSE_ID)).tap()
-    await element(by.id(PersonalInfoConstants.GENDER_IDENTITY_BACK_ID)).tap()
   })
 })

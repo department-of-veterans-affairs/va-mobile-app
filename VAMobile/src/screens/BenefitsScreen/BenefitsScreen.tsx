@@ -9,12 +9,10 @@ import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
-import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
@@ -26,7 +24,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import SubmitEvidence from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -84,9 +81,14 @@ export function BenefitsScreen({}: BenefitsScreenProps) {
           subText={showClaimsCount ? t('claims.activityButton.subText', { count: activeClaimsCount }) : undefined}
           showLoading={loadingClaimsAndAppeals}
           onPress={onClaims}
+          testID="toClaimsLandingID"
         />
-        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} />
-        <LargeNavButton title={t('disabilityRating.title')} onPress={onDisabilityRatings} />
+        <LargeNavButton title={t('lettersAndDocs.title')} onPress={onLetters} testID="toLettersLandingID" />
+        <LargeNavButton
+          title={t('disabilityRating.title')}
+          onPress={onDisabilityRatings}
+          testID="toDisabilityRatingID"
+        />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={claimsAndAppealsError || !!nonFatalErrors} />}
       </Box>
     </CategoryLanding>
@@ -146,17 +148,6 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen
         name="DisabilityRatings"
         component={DisabilityRatingsScreen}
-        options={{ headerShown: false }}
-      />
-      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={FULLSCREEN_SUBTASK_OPTIONS} />
-      <BenefitsScreenStack.Screen
-        name="SubmitEvidence"
-        component={SubmitEvidence}
-        options={FULLSCREEN_SUBTASK_OPTIONS}
-      />
-      <BenefitsScreenStack.Screen
-        name="FileRequestDetails"
-        component={FileRequestDetails}
         options={{ headerShown: false }}
       />
       <BenefitsScreenStack.Screen

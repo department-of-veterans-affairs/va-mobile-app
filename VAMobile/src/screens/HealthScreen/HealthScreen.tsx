@@ -131,6 +131,7 @@ export function HealthScreen({}: HealthScreenProps) {
                 })
               : undefined
           }
+          testID="toAppointmentsID"
         />
         <LargeNavButton
           title={t('secureMessaging.title')}
@@ -139,6 +140,7 @@ export function HealthScreen({}: HealthScreenProps) {
           subText={
             unreadMessageCount ? t('secureMessaging.activityButton.subText', { count: unreadMessageCount }) : undefined
           }
+          testID="toMessageInboxID"
         />
         {featureEnabled('prescriptions') && (
           <LargeNavButton
@@ -152,9 +154,14 @@ export function HealthScreen({}: HealthScreenProps) {
                   })
                 : undefined
             }
+            testID="toPrescriptionsID"
           />
         )}
-        <LargeNavButton title={t('vaVaccines.buttonTitle')} onPress={() => navigateTo('VaccineList')} />
+        <LargeNavButton
+          title={t('vaVaccines.buttonTitle')}
+          onPress={() => navigateTo('VaccineList')}
+          testID="toVaccineListID"
+        />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {cernerExist && (

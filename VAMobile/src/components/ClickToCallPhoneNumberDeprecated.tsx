@@ -19,6 +19,8 @@ type ClickToCallPhoneNumberDeprecatedProps = {
   ttyBypass?: boolean
   /** color bypass */
   colorOverride?: string
+  /** icon color bypass */
+  iconColorOverride?: string
   /** optional function to fire analytic events when the link is clicked */
   fireAnalytic?: () => void
 }
@@ -33,6 +35,7 @@ const ClickToCallPhoneNumberDeprecated: FC<ClickToCallPhoneNumberDeprecatedProps
   a11yLabel,
   ttyBypass,
   colorOverride,
+  iconColorOverride,
   fireAnalytic,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -49,6 +52,7 @@ const ClickToCallPhoneNumberDeprecated: FC<ClickToCallPhoneNumberDeprecatedProps
     numberOrUrlLink: getNumbersFromString(phoneNumber),
     a11yLabel: a11yLabel || getNumberAccessibilityLabelFromString(phoneNumber),
     colorOverride: colorOverride,
+    iconColorOverride: iconColorOverride,
   }
 
   const ttyProps: LinkButtonProps = {
@@ -57,6 +61,7 @@ const ClickToCallPhoneNumberDeprecated: FC<ClickToCallPhoneNumberDeprecatedProps
     numberOrUrlLink: t('contactVA.tty.number'),
     a11yLabel: t('contactVA.tty.number.a11yLabel'),
     colorOverride: colorOverride,
+    iconColorOverride: iconColorOverride,
   }
 
   return (

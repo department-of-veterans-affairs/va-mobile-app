@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -13,11 +14,7 @@ context('AccountSecurity', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Sign-in information')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('accountSecurity.signIn'))).toBeTruthy()
+    expect(screen.getByText(t('accountSecurity.description'))).toBeTruthy()
   })
 })

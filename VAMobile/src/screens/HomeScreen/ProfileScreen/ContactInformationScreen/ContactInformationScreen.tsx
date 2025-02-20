@@ -30,7 +30,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const getTextForPhoneData = (
@@ -134,6 +134,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     refetch: refetchContactInformation,
     failureCount,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
+  const registerReviewEvent = useReviewEvent(true)
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
   const [retried, setRetried] = useState(false)

@@ -7,10 +7,10 @@ Menus provide temporary access to functionality that's directly related to the o
 ## Examples
 
 ### Master component
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18269&mode=design&t=kmODZY3bkhNgpYY1-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18269&mode=design&t=kmODZY3bkhNgpYY1-4" title="Image of master component in Figma showing light and dark mode" allowfullscreen></iframe>
 
 ### Examples
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18268&mode=design&t=kmODZY3bkhNgpYY1-4" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=16025-18268&mode=design&t=kmODZY3bkhNgpYY1-4" allowfullscreen></iframe>
 
 ## Usage
 

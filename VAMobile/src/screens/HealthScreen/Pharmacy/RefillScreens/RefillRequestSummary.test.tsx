@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { RefillRequestSummaryItems } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
 
 import RefillRequestSummary from './RefillRequestSummary'
@@ -31,22 +33,19 @@ context('RefillRequestSummary', () => {
         },
       ] as RefillRequestSummaryItems)
 
-      expect(screen.getByText('We got your refill requests')).toBeTruthy()
-      expect(screen.getByText('Refill request summary')).toBeTruthy()
-      expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy()
-      expect(screen.getByText('Rx #: 3636691')).toBeTruthy()
-      expect(screen.getByText('What’s next')).toBeTruthy()
+      expect(screen.getByRole('heading', { name: t('prescriptions.refillRequestSummary.success') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescriptions.refillRequestSummary') })).toBeTruthy()
       expect(
-        screen.getByText(
-          "We're reviewing your refill request. Once approved, the VA pharmacy will process your refill.",
-        ),
+        screen.getByLabelText('ALLOPURINOL 100MG TAB. Prescription number 3 6 3 6 6 9 1. Request submitted'),
+      ).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('prescriptions.refillRequestSummary.whatsNext') })).toBeTruthy()
+      expect(
+        screen.getByLabelText(a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))),
       ).toBeTruthy()
       expect(
-        screen.getByText(
-          'If you have questions about the status of your refill, contact your provider or local VA pharmacy.',
-        ),
+        screen.getByLabelText(a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))),
       ).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Go to all pending refills' })).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('prescriptions.refillRequestSummary.pendingRefills') })).toBeTruthy()
     })
   })
 

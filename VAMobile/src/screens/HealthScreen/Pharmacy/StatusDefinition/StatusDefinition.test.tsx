@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { RefillStatus, RefillStatusConstants } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 
 import StatusDefinition from './StatusDefinition'
 
@@ -27,11 +29,7 @@ context('StatusDefinition', () => {
       display: 'Active',
       value: RefillStatusConstants.ACTIVE,
     })
-    expect(screen.getByText('Active')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'A prescription that can be filled at the local VA pharmacy. If this prescription is refillable, you may request a refill of this VA prescription.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByRole('header', { name: 'Active' })).toBeTruthy()
+    expect(screen.getByLabelText(a11yLabelVA(t('statusDefinition.active')))).toBeTruthy()
   })
 })

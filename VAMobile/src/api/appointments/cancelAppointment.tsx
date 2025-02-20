@@ -6,7 +6,7 @@ import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/a
 import { put } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { appointmentsKeys } from './queryKeys'
 
@@ -30,7 +30,7 @@ const cancelAppointment = (cancelID: string) => {
  */
 export const useCancelAppointment = () => {
   const queryClient = useQueryClient()
-
+  const registerReviewEvent = useReviewEvent()
   return useMutation({
     mutationFn: cancelAppointment,
     onSuccess(_, variables) {

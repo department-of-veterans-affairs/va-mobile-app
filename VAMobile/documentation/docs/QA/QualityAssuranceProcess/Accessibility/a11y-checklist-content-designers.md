@@ -4,7 +4,9 @@ title: Checklist for content designers
 
 # Accessibility checklist for content designers
 
-*Last update: April 23, 2024*
+*Last update: October 28, 2024*
+
+The following accessibility guidelines include guidance from both [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/) and [Mobile Content Accessibility Guidelines (MCAG)](https://getevinced.github.io/mcag/). Since the majority of the list is made up of WCAG guidance, we have included an indicator of "(MCAG)" whenever the guidance comes from MCAG.
 
 ## **Code quality**
 Good quality code is resilient which makes it compatible with a wider range of browsers and assistive technologies.
@@ -26,7 +28,7 @@ Structuring content helps people group information and work out what's important
 ### **Headings should communicate content hierarchy.**
 - Introduce each content section with a heading.
 - Use heading levels to reflect a logical content hierarchy.
-- Begin the main body content with a heading level 1 that describes the page. Only one H1 should be used per screen and should make it clear to a user what information will be found on that screen.
+- Begin the main body content with a heading that describes the page. Only one primary (web equivalant to an H1) should be used per screen and should make it clear to a user what information will be found on that screen.
 - Communicate the heading structure to developers, if it’s unclear.
 
 ### **Group related items as lists.**
@@ -40,12 +42,28 @@ Clear instructions for entering or fixing information will help a user complete 
 - Check that all required fields are visually identified.
 - Check that each label makes the field’s purpose clear.
 - Offer clear help text to help people enter information correctly.
+- Within a process that requires the user to enter the exact information more than one time after the user provides the data once, at least one of the following should be true:
+   - The fields are auto-populated, or
+   - The user can choose to auto-populate the fields
+   - Except when:
+      - The information is required to ensure the security of the content, or
+      - The previously entered information is no longer valid.
 
 ### **Messages should tell you what and how to fix an error.**
 - Identify where mistakes are and describe the issue in language people will understand.
-- Offer suggestions for fixing an input error, where you can.
+- When there is an option for it, error messages include suggestions for revision, except when:
+   - The information may jeopardize the security or privacy of the user. (MCAG)
 - Write error messages to be as specific as you can, rather than using generic messages.
 - Avoid putting links inside error message text.
+- If a user input results in an error, the item in error should be clearly marked. (MCAG)
+- If a user input results in an error, the error is described by text. (MCAG)
+- Error messages should be located next to the item in error.
+
+### **Sensitive Transcations Error Prevention (MCAG)**
+- When users submit any action involving financial transactions, legal commitments, or authorization to access or change data owned by users, at least one of the following should be true:
+   - There is a mechanism that validates the user inputs and provides an option to correct errors, or 
+   - The user can check and confirm the data before executing the transaction, or
+   - The submission is reversible.
 <br />
 
 ## **Images**
@@ -95,7 +113,14 @@ Multimedia content can offer users an alternative to text. Everyone can watch or
 ## **Navigation**
 Users want to navigate around the app easily. A user’s confidence in an app will build when they know where they are and that layouts are applied consistently.
 - Provide a descriptive title for each page or view.
+   - The screen title should describe its' context. (MCAG)
+- Each screen title should be unique. (MCAG)
 - Provide a unique name for common page regions that are used more than once on a page.
+- The order of elements on the screen should make sense and reflect the content hierarchy of the screen. (MCAG)
+
+### **Logical Content Grouping (MCAG)**
+Elements forming a single context unit should be grouped together so they are announced by assistive technologies as a single element.
+- When browsing through the screen with a screen reader or a similar assistive technology, ensure that elements that assemble a single context (i.e. a button, its' text, and its' icon **or** an image and its' caption) are announced as one unit and that each of its parts is not announced separately.
 <br />
 
 ## **Sensory**
@@ -125,7 +150,34 @@ Text on web pages must be easy to read, see and scan. Accessible text makes the 
 ### **Text should be easy to scan and read.**
 - Avoid overusing text formatting, like underline, bold, italic and all caps.
 - Left-align text. Avoid using right-align, center, or justified text.
+<br />
 
+## **Unique Labels (MCAG)**
+- Interactive elements' labels and accessible names should be unique, except when elements have the exact functionality.
+<br />
+
+## **Scaled Text Legibility (MCAG)**
+- Text blocks should not be written in all capital letters
+- Text blocks should not be written entirely in italics
+- Text blocks should not be written in lighter or thinner font weights. A minimum font weight of 400 is recommended.
+- Text blocks should not be set to have a justified alignment. All inter-word spacing should be even and consistent.
+- Text line lengths should not exceed 70 characters per row, including spaces, using the default font size / zoom settings.
+<br />
+
+## **Predictability (MCAG)**
+- Users should remain in the same context (i.e. screen, modal, alerts) when they enter or update values in controls and form elements, except when:
+   - Users are informed about the context change up front.
+- No significant content or structure changes should occur when users enter or update values in controls and form elements, except when: 
+   - The changes are due to filtering or sorting actions, and
+   - Users can predict the changes, and
+   - The location of the focus and assistive technologies in the UI is kept
+- Users should remain in the same context (i.e. screen, modal, alerts) when they shift the focus to any control or form element
+- No significant content or structure changes should occur when users shift the focus to any control or form element
+
+## **Consistent Help (MCAG)**
+- Help mechanisms and help center links should be visually located consistently across all screens.
+- Help mechanisms and help center links should be programmatically located consistently across all screens.
+- Help mechanisms and help center links should have the exact same identifying names across all screens.
 
 ---
 

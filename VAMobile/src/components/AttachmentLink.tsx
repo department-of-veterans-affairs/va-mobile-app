@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -8,7 +10,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import Box from './Box'
 import LinkWithAnalytics from './LinkWithAnalytics'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
 
 export type AttachmentLinkProps = {
   /** Name of link/attachment */
@@ -57,7 +58,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({
       <Pressable {...a11yProps} {...pressableProps}>
         <Box flexDirection={'row'} mr={theme.dimensions.gutter}>
           <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
-            <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
+            <Icon name="AttachFile" width={20} height={20} fill={theme.colors.icon.link} />
           </Box>
           <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'}>
             {text}

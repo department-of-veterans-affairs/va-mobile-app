@@ -7,7 +7,6 @@ import {
   AlertButton,
   AppState,
   Dimensions,
-  EmitterSubscription,
   Keyboard,
   Linking,
   PixelRatio,
@@ -23,6 +22,7 @@ import { CommonActions, EventArg, useNavigation } from '@react-navigation/native
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
@@ -188,46 +188,6 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
 }
 
 /**
- * Hook to check if the screen reader is enabled
- *
- * withListener - True to add a listener to live update screen reader status, default false
- * @returns boolean if the screen reader is on
- */
-export function useIsScreenReaderEnabled(withListener = false): boolean {
-  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false)
-
-  useEffect(() => {
-    let isMounted = true
-    let screenReaderChangedSubscription: EmitterSubscription
-
-    if (withListener) {
-      screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
-        'screenReaderChanged',
-        (isScreenReaderEnabled) => {
-          if (isMounted) {
-            setScreenReaderEnabled(isScreenReaderEnabled)
-          }
-        },
-      )
-    }
-    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
-      if (isMounted) {
-        setScreenReaderEnabled(isScreenReaderEnabled)
-      }
-    })
-
-    return () => {
-      isMounted = false
-      if (withListener) {
-        screenReaderChangedSubscription?.remove()
-      }
-    }
-  }, [screenReaderEnabled, withListener])
-
-  return screenReaderEnabled
-}
-
-/**
  * Hook to display a warning that the user is leaving the app when tapping an external link
  *
  * @returns an alert showing user they are leaving the app
@@ -254,6 +214,31 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     } else {
       Linking.openURL(url)
     }
+  }
+}
+
+export function useGiveFeedback(): (task: string) => void {
+  const navigateTo = useRouteNavigation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+
+  return (task: string) => {
+    const onOKPress = () => {
+      logAnalyticsEvent(Events.vama_feedback_ask(task, true))
+      navigateTo('InAppFeedback', { task })
+    }
+
+    const onCancelPress = () => {
+      logAnalyticsEvent(Events.vama_feedback_ask(task, false))
+    }
+
+    Alert.alert(t('inAppFeedback.popup.title'), t('inAppFeedback.popup.body'), [
+      {
+        text: t('inAppFeedback.popup.notNow'),
+        style: 'cancel',
+        onPress: onCancelPress,
+      },
+      { text: t('giveFeedback'), onPress: onOKPress, style: 'default' },
+    ])
   }
 }
 

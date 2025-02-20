@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { Vaccine } from 'api/types'
 import * as api from 'store/api'
@@ -59,6 +60,24 @@ context('VaccineDetailsScreen', () => {
     },
   }
 
+  const missingDataVaccine = {
+    id: 'HASLOCATION',
+    type: 'immunization',
+    attributes: {
+      cvxCode: 207,
+      date: '',
+      doseNumber: null,
+      doseSeries: null,
+      groupName: null,
+      manufacturer: null,
+      note: null,
+      shortDescription: 'COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose',
+    },
+    relationships: {
+      location: location,
+    },
+  }
+
   const initializeTestInstance = (vaccine: Vaccine = defaultVaccine) => {
     const props = mockNavProps(undefined, undefined, { params: { vaccine: vaccine } })
     render(<VaccineDetailsScreen {...props} />)
@@ -80,11 +99,7 @@ context('VaccineDetailsScreen', () => {
     expect(
       screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),
     ).toBeTruthy()
-    expect(
-      screen.getByText(
-        'We base this information on your current VA health records. If you have any questions, contact your health care team.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('vaccines.details.weBaseThis'))).toBeTruthy()
     expect(screen.queryByText('facility 1')).toBeFalsy()
     expect(screen.queryByText('123 abc street')).toBeFalsy()
     expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
@@ -98,5 +113,25 @@ context('VaccineDetailsScreen', () => {
     await waitFor(() => expect(screen.getByText('facility 1')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('123 abc street')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Tiburon, CA 94920')).toBeTruthy())
+  })
+
+  it('should show alert that vaccine has missing information', async () => {
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/health/locations/location1`)
+      .mockResolvedValue({ ...location })
+    initializeTestInstance(missingDataVaccine)
+
+    await waitFor(() => expect(screen.getByText(t('vaccines.missingDetails.header'))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('vaccines.missingDetails.description'))).toBeTruthy())
+  })
+
+  it('should show vaccine with missing name and date', async () => {
+    when(api.get as jest.Mock)
+      .calledWith(`/v0/health/locations/location1`)
+      .mockResolvedValue({ ...location })
+    initializeTestInstance(missingDataVaccine)
+
+    await waitFor(() => expect(screen.getByText(t('vaccine'))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('vaccines.noDate'))).toBeTruthy())
   })
 })

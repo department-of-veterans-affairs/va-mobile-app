@@ -7,10 +7,10 @@ The list header provides an overview of what the list is about and allows you to
 ## Examples
 
 ### Default
-<iframe width="800" height="450" alt="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9055-13606&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Image of master component in Figma showing light and dark mode" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9055-13606&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
 
 ### Variations
-<iframe width="800" height="450" alt="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9055-29977&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
+<iframe width="800" height="450" title="Image of component examples in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/file/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-DesignLibrary2.0---VAMobile?type=design&node-id=9055-29977&mode=design&t=GYfUoRF9YkczEweR-4" allowfullscreen></iframe>
 
 ## Usage
 

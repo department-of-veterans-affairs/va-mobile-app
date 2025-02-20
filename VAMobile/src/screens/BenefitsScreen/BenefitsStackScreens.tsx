@@ -1,16 +1,10 @@
 import React, { ReactNode } from 'react'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { ClaimData, ClaimEventData, LetterTypes } from 'api/types'
+import { LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
-import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
-import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
-import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
-import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
-import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 import { ScreenIDTypes } from 'store/api/types'
@@ -42,7 +36,6 @@ export type BenefitsStackParamList = {
   ClaimDetailsScreen: {
     claimID: string
     claimType: ClaimType
-    focusOnSnackbar?: boolean
   }
   ClaimsHistoryScreen: undefined
   ClaimLettersScreen: undefined
@@ -54,41 +47,6 @@ export type BenefitsStackParamList = {
   }
   AppealDetailsScreen: {
     appealID: string
-  }
-  FileRequest: {
-    claimID: string
-    claim: ClaimData | undefined
-  }
-  FileRequestDetails: {
-    claimID: string
-    request: ClaimEventData
-  }
-  AskForClaimDecision: {
-    claimID: string
-  }
-  TakePhotos: {
-    claimID: string
-    request?: ClaimEventData
-    focusOnSnackbar?: boolean
-  }
-  SelectFile: {
-    claimID: string
-    request?: ClaimEventData
-    focusOnSnackbar?: boolean
-  }
-  SubmitEvidence: {
-    claimID: string
-  }
-  UploadOrAddPhotos: {
-    claimID: string
-    firstImageResponse: ImagePickerResponse
-    request?: ClaimEventData
-  }
-  UploadFile: {
-    claimID: string
-    fileUploaded: DocumentPickerResponse
-    imageUploaded: ImagePickerResponse
-    request?: ClaimEventData
   }
 }
 
@@ -107,36 +65,6 @@ export const getBenefitsScreens = (): Array<ReactNode> => {
       name="WhatDoIDoIfDisagreement"
       component={WhatDoIDoIfDisagreement}
       options={LARGE_PANEL_OPTIONS}
-    />,
-    <BenefitsStack.Screen
-      key={'AskForClaimDecision'}
-      name="AskForClaimDecision"
-      component={AskForClaimDecision}
-      options={{ headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'TakePhotos'}
-      name="TakePhotos"
-      component={TakePhotos}
-      options={{ headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'SelectFile'}
-      name="SelectFile"
-      component={SelectFile}
-      options={{ headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'UploadOrAddPhotos'}
-      name="UploadOrAddPhotos"
-      component={UploadOrAddPhotos}
-      options={{ headerShown: false }}
-    />,
-    <BenefitsStack.Screen
-      key={'UploadFile'}
-      name="UploadFile"
-      component={UploadFile}
-      options={{ headerShown: false }}
     />,
   ]
 }

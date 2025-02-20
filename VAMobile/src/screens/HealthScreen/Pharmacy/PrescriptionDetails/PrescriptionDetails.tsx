@@ -18,7 +18,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 import DetailsTextSections from './DetailsTextSections'
@@ -34,6 +34,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const launchExternalLink = useExternalLink()
   const submitRefillAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
+  const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const noneNoted = t('noneNoted')
@@ -61,7 +62,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     React.useCallback(() => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
       registerReviewEvent()
-    }, []),
+    }, [registerReviewEvent]),
   )
 
   const redirectLink = (): void => {
@@ -154,7 +155,9 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
           {getRefillVAHealthButton()}
           <Box mb={contentMarginBottom}>
             <TextArea>
-              <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
+              <TextView variant="MobileBodyBold" accessibilityRole="header">
+                {prescriptionName}
+              </TextView>
               <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
                 {rxNumber}
               </TextView>

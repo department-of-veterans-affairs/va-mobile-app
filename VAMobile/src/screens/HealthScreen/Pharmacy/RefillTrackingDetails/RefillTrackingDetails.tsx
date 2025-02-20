@@ -27,7 +27,7 @@ import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -57,6 +57,7 @@ const getTrackingLink = (deliveryService: string): string => {
 function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps) {
   const { prescription } = route.params
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
+  const registerReviewEvent = useReviewEvent(true)
   const {
     data: trackingInfo,
     isFetching: loadingTrackingInfo,
@@ -77,7 +78,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
   useFocusEffect(
     React.useCallback(() => {
       registerReviewEvent()
-    }, []),
+    }, [registerReviewEvent]),
   )
 
   const renderOtherPrescription = (otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>) => {
@@ -128,7 +129,9 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
       const mainContent = (
         <>
-          <TextView variant="MobileBodyBold">{t('prescriptions.refillTracking.trackingNumber')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('prescriptions.refillTracking.trackingNumber')}
+          </TextView>
           {trackingLink && trackingNumber ? (
             <LinkWithAnalytics
               type="url"
@@ -161,9 +164,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           {trackingInfo?.length > 1 ? (
             <Box mb={condensedMarginBetween}>
               <TextView
-                variant={
-                  'MobileBodyBold'
-                }>{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
+                variant="MobileBodyBold"
+                accessibilityRole="header">{`${t('package')} ${t('listPosition', { position: index + 1, total: totalTracking })}`}</TextView>
             </Box>
           ) : (
             <></>
@@ -180,7 +182,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
 
     return (
       <>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.condensedMarginBetween}>
           {prescriptionName}
         </TextView>
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>

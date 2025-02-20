@@ -25,4 +25,3 @@ sidebar_position: 1
 		- Notes:
 			- If scrolling is required for detox to click on something add an else if (featureNavigationArray[j] === 'string of navigation value') statement to the navigateToFeature function in utils.ts
 			- If you are running into issues with inAppReview add your waygate to the if statement found in enableAF
-		- Ex: Gender identity waygate (Home \> Profile \> Personal information \> Gender identity) array: ['PersonalInformationScreen.e2e', 'WG_GenderIdentity', 'Profile', 'Personal information', 'Gender identity’]

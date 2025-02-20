@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { Pressable, PressableStateCallbackType, ViewStyle } from 'react-native'
 
-import { TextView, VAIcon } from 'components'
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { TextView } from 'components'
 import { useTheme } from 'utils/hooks'
 
 type LinkRowProps = {
@@ -17,12 +19,13 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
 
   const pressableStyle = ({ pressed }: PressableStateCallbackType): ViewStyle => ({
     borderRadius: 8,
-    padding: theme.dimensions.buttonPadding,
+    paddingLeft: theme.dimensions.buttonPadding,
+    paddingRight: theme.dimensions.tinyMarginBetween,
+    paddingVertical: theme.dimensions.buttonPadding,
     backgroundColor: pressed ? theme.colors.background.listActive : theme.colors.background.linkRow,
     marginBottom: theme.dimensions.condensedMarginBetween,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: theme.dimensions.linkRowChevronPaddingRight,
   })
 
   return (
@@ -30,7 +33,7 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
       <TextView flex={1} width={'100%'} variant={'HomeScreen'} accessibilityLabel={titleA11yLabel}>
         {title}
       </TextView>
-      <VAIcon width={14} height={14} preventScaling={true} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
+      <Icon width={26} height={26} preventScaling={true} name={'ChevronRight'} fill={theme.colors.icon.linkRow} />
     </Pressable>
   )
 }

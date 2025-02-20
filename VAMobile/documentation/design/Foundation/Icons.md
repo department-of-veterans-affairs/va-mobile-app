@@ -12,40 +12,40 @@ Use icons to communicate meaning, action, status, or feedback.
 [Refer to the VA Design System for additional guidance](https://design.va.gov/foundation/icons)
 
 ### Appointments
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5923&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5923&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Communication
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5859&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5859&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Feedback
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5837&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5837&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Form fields
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5836&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5836&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Health
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5857&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5857&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Interaction
-<iframe width="800" height="350" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5927&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="350" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5927&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Messaging
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5900&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5900&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Navigation
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5926&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5926&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Payments
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5922&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5922&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Prescriptions
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5924&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5924&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Social media
-<iframe width="800" height="300" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5807&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="300" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5807&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 ### Other
-<iframe width="800" height="350" alt="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5989&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
+<iframe width="800" height="350" title="Image of icons in Figma" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com/design/X8gXRl1MaRAE7lKcwgr5Rj/%F0%9F%93%90-Icon-Library---Design-System---VA-Mobile?node-id=431-5989&t=pC5hKIXUcOjEc3W8-4" allowfullscreen></iframe>
 
 **Note**: The VA Mobile App icon library includes several icons that are not included in the VA Design System. These include:
 - check_box — used for form fields

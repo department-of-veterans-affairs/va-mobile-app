@@ -58,7 +58,7 @@ Once designs are ready to be handed off to the engineering team, you can review 
 ### IA/Flows
 
 1. Document the IA of your feature & where it lives in the app 
-   - See: [Determining Navigation & Information Architecture Placement for New VA Mobile App Features](https://docs.google.com/document/d/1XQcYxnCifloaBFNKL2C9JNS7KIj6wEhb4VokPGxBZU8/edit) and [VA Mobile app: Detailed sitemap (future state 9-30-22](https://app.mural.co/invitation/mural/adhoccorporateworkspace2583/1655989910332?sender=u28718b63c8993f515e0b2240&key=6f96be43-72c9-4ae6-b529-a2941eb14ba9) 
+   - See: [VA Mobile app - IA documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/Foundations/Information-Architecture#ia-documentation) for the app's sitemap and guidance on adding new features
 2. Update category screens, if needed
 3. Document intended flow
 4. Defined back labels and screen title
@@ -102,7 +102,7 @@ Once designs are ready to be handed off to the engineering team, you can review 
 - If you notice that QA engineering is not finding bugs that should have been caught in earlier tickets, let QA know, so they can improve their work.
 
 ### Launching
-- For major features, team members should expect to work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) and the Product team to prepare the [app store content](https://didactic-robot-p9wpqpp4wwh99w-3000.app.github.dev/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores).
+- For major features, team members should expect to work with the [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/design-librarian) and the Product team to prepare the [app store content](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20App%20Stores).
 
 
 ## Moving/Publishing Work

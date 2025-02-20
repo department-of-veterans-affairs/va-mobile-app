@@ -9,7 +9,7 @@ import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 
@@ -20,11 +20,12 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const registerReviewEvent = useReviewEvent(true)
 
   useFocusEffect(
     React.useCallback(() => {
       registerReviewEvent()
-    }, []),
+    }, [registerReviewEvent]),
   )
 
   const placeHolder = t('noneNoted')

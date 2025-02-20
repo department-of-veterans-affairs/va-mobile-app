@@ -15,8 +15,8 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useTheme } from 'utils/hooks'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import NeedHelpData from '../NeedHelpData/NeedHelpData'
@@ -28,6 +28,7 @@ type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'Appeal
 function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const registerReviewEvent = useReviewEvent(true)
 
   const controlLabels = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const segmentedControlTestIDs = ['appealStatus', 'appealIssues']
@@ -37,31 +38,22 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
     t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
   ]
-  const abortController = new AbortController()
-  const abortSignal = abortController.signal
   const { appealID } = route.params
   const {
     data: appeal,
     error: appealError,
     refetch: refetchAppeals,
     isFetching: loadingAppeal,
-  } = useAppeal(appealID, abortSignal, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
+  } = useAppeal(appealID, { enabled: screenContentAllowed('WG_AppealDetailsScreen') })
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } =
     attributes || ({} as AppealAttributesData)
-
-  useBeforeNavBackListener(navigation, () => {
-    // if appeals is still loading cancel it
-    if (loadingAppeal) {
-      abortController.abort()
-    }
-  })
 
   useEffect(() => {
     if (appeal && !loadingAppeal && !appealError) {
       registerReviewEvent()
     }
-  }, [appeal, loadingAppeal, appealError])
+  }, [appeal, loadingAppeal, appealError, registerReviewEvent])
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)

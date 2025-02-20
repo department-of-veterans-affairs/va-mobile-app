@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
 
@@ -37,8 +38,6 @@ import {
   LoadingComponent,
   Nametag,
   TextView,
-  VAIcon,
-  VAIconProps,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -49,7 +48,6 @@ import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
-import colors from 'styles/themes/VAColors'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
@@ -66,6 +64,7 @@ import ProfileScreen from './ProfileScreen/ProfileScreen'
 import SettingsScreen from './ProfileScreen/SettingsScreen'
 import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
@@ -290,14 +289,16 @@ export function HomeScreen({}: HomeScreenProps) {
     label: t('profile.title'),
     accessibilityRole: 'link',
     icon: {
-      name: 'ProfileSelected',
-    } as VAIconProps,
+      name: 'AccountCircle',
+      fill: theme.colors.icon.active,
+    } as IconProps,
     onPress: () => navigateTo('Profile'),
+    testID: 'toProfileScreenID',
   }
 
   const boxProps: BoxProps = {
     style: {
-      shadowColor: colors.black,
+      shadowColor: 'black',
       ...Platform.select({
         ios: {
           shadowOffset: { width: 0, height: 6 },
@@ -343,11 +344,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   alignItems="center"
                   accessible={true}
                   accessibilityLabel={`${t('icon.success')} ${t('noActivity')}`}>
-                  <VAIcon
-                    name={'CircleCheckMark'}
-                    fill={DSColors.vadsColorSuccessDark}
-                    fill2={theme.colors.icon.transparent}
-                  />
+                  <Icon name={'CheckCircle'} fill={DSColors.vadsColorSuccessDark} width={30} height={30} />
                   <TextView
                     importantForAccessibility={'no'}
                     ml={theme.dimensions.condensedMarginBetween}
@@ -587,6 +584,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="OverrideAPI"
+        component={OverrideAPIScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}

@@ -11,8 +11,9 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
-import { VAIconProps } from 'components/VAIcon'
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -38,7 +39,7 @@ export type PickerItem = {
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
   /** icon to show */
-  icon?: VAIconProps
+  icon?: IconProps
 }
 
 export type VAModalPickerProps = {
@@ -179,7 +180,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const parentProps: AccessibilityProps = {
     ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
-    accessibilityRole: 'button',
+    accessibilityRole: 'spinbutton',
   }
 
   const renderSelectionBox = (): ReactElement => {
@@ -191,8 +192,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
-          <Box mr={8} ml={16} my={16}>
-            <VAIcon name="Sort" fill="pickerIcon" width={16} height={16} />
+          <Box ml={16} my={12}>
+            <Icon name="UnfoldMore" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
           </Box>
         </Box>
       </Box>

@@ -6,9 +6,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TFunction } from 'i18next'
 
 import { useDemographics } from 'api/demographics/getDemographics'
-import { useGenderIdentityOptions } from 'api/demographics/getGenderIdentityOptions'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { GenderIdentityOptions, UserDemographics } from 'api/types/DemographicsData'
+import { UserDemographics } from 'api/types/DemographicsData'
 import {
   Box,
   DefaultList,
@@ -25,7 +24,7 @@ import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -39,20 +38,6 @@ const getPreferredName = (demographics: UserDemographics | undefined, t: TFuncti
   }
 }
 
-const getGenderIdentity = (
-  demographics: UserDemographics | undefined,
-  t: TFunction,
-  genderIdentityOptions: GenderIdentityOptions,
-): string => {
-  if (demographics?.genderIdentity) {
-    return genderIdentityOptions[demographics.genderIdentity]
-  } else {
-    return t('personalInformation.genericBody', {
-      informationType: t('personalInformation.genderIdentity.title').toLowerCase(),
-    })
-  }
-}
-
 type PersonalInformationScreenProps = StackScreenProps<HomeStackParamList, 'PersonalInformation'>
 
 function PersonalInformationScreen({ navigation }: PersonalInformationScreenProps) {
@@ -62,6 +47,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
+  const registerReviewEvent = useReviewEvent(true)
   const {
     data: personalInfo,
     isFetching: loadingPersonalInfo,
@@ -76,12 +62,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     error: getDemographicsError,
     refetch: refetchDemographics,
   } = useDemographics({ enabled: isScreenContentAllowed })
-  const {
-    data: genderIdentityOptions,
-    isFetching: loadingGenderIdentityOptions,
-    error: getGenderIdentityOptionsError,
-    refetch: refetchGenderIdentityOptions,
-  } = useGenderIdentityOptions({ enabled: isScreenContentAllowed })
 
   /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
   const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
@@ -102,16 +82,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       },
     ]
 
-    if (genderIdentityOptions) {
-      items.push({
-        textLines: [
-          { text: t('personalInformation.genderIdentity.title'), variant: 'MobileBodyBold' },
-          { text: getGenderIdentity(demographics, t, genderIdentityOptions) },
-        ],
-        onPress: () => navigateTo('GenderIdentity'),
-        detoxTestID: 'genderIdentityRowID',
-      })
-    }
     return items
   }
 
@@ -131,17 +101,14 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     if (getDemographicsError) {
       refetchDemographics()
     }
-    if (getGenderIdentityOptionsError) {
-      refetchGenderIdentityOptions()
-    }
     if (personalInfoError) {
       refetchPersonalInfo()
     }
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError || getGenderIdentityOptionsError
-  const loadingCheck = loadingPersonalInfo || loadingGenderIdentityOptions || loadingDemographics
+  const errorCheck = personalInformationInDowntime || getDemographicsError
+  const loadingCheck = loadingPersonalInfo || loadingDemographics
 
   return (
     <FeatureLandingTemplate
@@ -156,7 +123,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
-          error={getDemographicsError || getGenderIdentityOptionsError}
+          error={getDemographicsError}
         />
       ) : (
         <>

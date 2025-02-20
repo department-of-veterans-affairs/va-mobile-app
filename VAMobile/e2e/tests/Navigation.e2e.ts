@@ -1,3 +1,12 @@
+/*
+Description:
+Detox script that runs dark mode, landscape, and font size accessibility tests.
+The script can run either as a full suite or a subset:
+* Full suite: The script will check every page outlined in navigationDic.  A full suite run occurs either on the nightly dev build or when you check "run full e2e test" in the workflow options (if running manually).
+* Subset: The script will only check the pages where the test name given in the array matches the test name typed into the "List tests to test in" workflow option.
+When to update:
+This script should be updated whenever a new feature/new page that has the bottom nav bar is added to the app. See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -37,18 +46,6 @@ const navigationDic = {
     ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
     //['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received January 01, 2021', 'Review file requests'], 'File requests'],
-    [
-      'Claims.e2e',
-      [
-        'Claims',
-        'Claims history',
-        'Received January 01, 2021',
-        'Review file requests',
-        'Dental disability - More information needed',
-      ],
-      'Dental disability - More information needed',
-    ],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'JESSE_GRAY_600246732_526.pdf'],
     [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
@@ -96,8 +93,6 @@ const featureID = {
   'Received July 20, 2021': 'claimsHistoryID',
   'Received January 01, 2021': 'claimsHistoryID',
   'Received July 17, 2008': 'claimsHistoryID',
-  'Review file requests': 'claimStatusDetailsID',
-  'Dental disability - More information needed': 'fileRequestPageTestID',
   'Review letters': 'lettersPageID',
   Health: 'healthCategoryTestID',
   Appointments: 'appointmentsTestID',
@@ -110,6 +105,8 @@ const featureID = {
 let scrollID
 let textResized
 
+/*Constants for accessibility related command line options.  
+Any new accessibility related command line options should be added here. */
 export const NavigationE2eConstants = {
   DARK_MODE_OPTIONS:
     device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
@@ -127,6 +124,12 @@ export const NavigationE2eConstants = {
   DISPLAY_RESIZING_RESET: 'adb shell wm density reset',
 }
 
+/*
+Takes a screenshot for each accessibility option and compares it to a known screenshot (when done locally).
+param key: Dictionary key from navigationDic. Corresponds to the sections given on the lower nav bar (Home, Health, Benefits, Payments)
+param navigationDicValue: Dictionary value from navigationDic. Corresponds to the feature in the section that has a lower nav bar
+param accessibilityFeatureType: String value that tells the test what accessability test to run or null value that verifies that a feature is in the right place navigation wise
+*/
 const accessibilityOption = async (key, navigationDicValue, accessibilityFeatureType: string | null) => {
   const navigationArray = navigationDicValue
   if (accessibilityFeatureType === 'landscape') {
@@ -215,18 +218,13 @@ const navigateToPage = async (key, navigationDicValue) => {
   } else {
     const subNavigationArray = navigationArray[1]
     for (let k = 0; k < subNavigationArray.length - 1; k++) {
-      if (subNavigationArray[k] === 'Review file requests') {
-        await waitFor(element(by.text('Review file requests')))
-          .toBeVisible()
-          .whileElement(by.id('ClaimDetailsScreen'))
-          .scroll(100, 'up')
-      } else if (subNavigationArray[k] === 'Received July 17, 2008') {
+      if (subNavigationArray[k] === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
-          .whileElement(by.id('claimsHistoryID'))
+          .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
           .scroll(100, 'down')
       } else if (subNavigationArray[k] === 'Files') {
-        await element(by.id('ClaimsDetailsScreen')).scrollTo('top')
+        await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
       }
 
       if (k == 0 && key in featureID) {
@@ -247,23 +245,18 @@ const navigateToPage = async (key, navigationDicValue) => {
       await element(by.text(subNavigationArray[k])).tap()
     }
 
-    if (subNavigationArray.slice(-1)[0] === 'Review file requests') {
-      await waitFor(element(by.text('Review file requests')))
-        .toBeVisible()
-        .whileElement(by.id('ClaimDetailsScreen'))
-        .scroll(100, 'up')
-    } else if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
+    if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
-        .whileElement(by.id('PrescriptionHistory'))
+        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
-        .whileElement(by.id('claimsHistoryID'))
+        .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(100, 'down')
     } else if (subNavigationArray.slice(-1)[0] === 'Files' || subNavigationArray.slice(-1)[0] === 'Submit evidence') {
-      await element(by.id('ClaimDetailsScreen')).scrollTo('top')
+      await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     }
 
     if (subNavigationArray.slice(-1)[0] in featureID) {

@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 import _ from 'underscore'
 
-import { ClaimData } from 'api/types'
+import { ClaimData, ClaimEFolderDocuments } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -13,9 +13,13 @@ import { useTheme } from 'utils/hooks'
 
 type ClaimFilesProps = {
   claim: ClaimData
+  eFolderDocuments?: Array<ClaimEFolderDocuments>
+  setDownloadFile: React.Dispatch<React.SetStateAction<boolean>>
+  setDocumentID: React.Dispatch<React.SetStateAction<string>>
+  setFileName: React.Dispatch<React.SetStateAction<string>>
 }
 
-function ClaimFiles({ claim }: ClaimFilesProps) {
+function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, setFileName }: ClaimFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isFocused = useIsFocused()
@@ -38,7 +42,19 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
         if (event.uploadDate) {
           textLines.push({ text: t('appointmentList.received', { date: formatDateMMMMDDYYYY(event.uploadDate) }) })
         }
-        items.push({ textLines: textLines })
+        items.push({
+          textLines: textLines,
+          onPress:
+            event.documentId &&
+            eFolderDocuments &&
+            eFolderDocuments.filter((doc) => doc.id === event.documentId).length > 0
+              ? () => {
+                  setDocumentID(event?.documentId || '')
+                  setFileName(event?.filename || '')
+                  setDownloadFile(true)
+                }
+              : undefined,
+        })
       } else {
         _.forEach(event.documents || [], (document) => {
           if (document.filename) {
@@ -54,7 +70,19 @@ function ClaimFiles({ claim }: ClaimFilesProps) {
                 text: t('appointmentList.received', { date: formatDateMMMMDDYYYY(document.uploadDate) }),
               })
             }
-            items.push({ textLines: textLines })
+            items.push({
+              textLines: textLines,
+              onPress:
+                document.documentId &&
+                eFolderDocuments &&
+                eFolderDocuments.filter((doc) => doc.id === document.documentId).length > 0
+                  ? () => {
+                      setDocumentID(document?.documentId || '')
+                      setFileName(document?.filename || '')
+                      setDownloadFile(true)
+                    }
+                  : undefined,
+            })
           }
         })
       }

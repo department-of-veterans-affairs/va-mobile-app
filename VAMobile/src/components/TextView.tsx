@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { RootState } from 'store'
 import { AccessibilityState } from 'store/slices/accessibilitySlice'
-import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
+import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
@@ -14,7 +14,7 @@ import { BoxProps, createBoxStyles } from './Box'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants
-export type ColorVariant = keyof VATextColors | keyof VAButtonTextColors
+export type ColorVariant = keyof VATextColors
 
 /**
  * Props for textView
@@ -22,7 +22,7 @@ export type ColorVariant = keyof VATextColors | keyof VAButtonTextColors
 export type TextViewProps = AccessibilityProps &
   BoxProps & {
     /** Defaults to primary text */
-    color?: ColorVariant
+    color?: string
 
     /** Defaults to regular */
     variant?: FontVariant
@@ -34,7 +34,7 @@ export type TextViewProps = AccessibilityProps &
     textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
 
     /** text decoration color */
-    textDecorationColor?: ColorVariant
+    textDecorationColor?: string
 
     /** onPress callback */
     onPress?: () => void
@@ -59,11 +59,7 @@ export type TextViewProps = AccessibilityProps &
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-  return (
-    theme.colors.text[props.color as keyof VATextColors] ||
-    theme.colors.buttonText[props.color as keyof VAButtonTextColors] ||
-    ''
-  )
+  return theme.colors.text[props.color as keyof VATextColors] || ''
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
@@ -85,11 +81,7 @@ const getFontSize = (variant: string) => {
 }
 
 const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
-  return (
-    theme.colors.text[props.textDecorationColor as keyof VATextColors] ||
-    theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] ||
-    ''
-  )
+  return theme.colors.text[props.textDecorationColor as keyof VATextColors] || ''
 }
 
 const StyledText = styled(Text)`

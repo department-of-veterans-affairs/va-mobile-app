@@ -31,7 +31,6 @@ context('LettersOverviewScreen', () => {
             directDepositBenefits: true,
             directDepositBenefitsUpdate: true,
             disabilityRating: true,
-            genderIdentity: true,
             lettersAndDocuments: isAuthorized,
             militaryServiceHistory: true,
             paymentHistory: true,

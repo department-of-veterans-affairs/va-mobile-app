@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useTheme } from 'utils/hooks'
 
 import Box from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 import { InlineText } from './types'
 
 export type InlineTextWithIconsProps = {
@@ -12,10 +13,10 @@ export type InlineTextWithIconsProps = {
   inlineIcon?: boolean
 
   /** Props for icon you want to display in this line of text */
-  leftIconProps?: VAIconProps
+  leftIconProps?: IconProps
 
   /** Props for icon you want to display in this line of text */
-  rightIconProps?: VAIconProps
+  rightIconProps?: IconProps
 } & InlineText
 
 /**Common component to show an icon with a line of text*/
@@ -27,27 +28,42 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
   rightTextProps,
 }) => {
   const theme = useTheme()
+
   return (
-    <Box flexDirection={'row'} flexGrow={1}>
+    <Box flexDirection={'row'} flexGrow={1} alignItems="center">
       {!inlineIcon && leftIconProps && (
-        <Box mt={7} mr={theme.dimensions.condensedMarginBetween}>
-          <VAIcon
-            name={leftIconProps.name}
-            width={leftIconProps.width}
-            height={leftIconProps.height}
-            fill={leftIconProps.fill}
-            testID={leftIconProps.testID}
-          />
+        <Box mr={theme.dimensions.condensedMarginBetween}>
+          {leftIconProps?.svg ? (
+            <Icon
+              svg={leftIconProps.svg}
+              width={leftIconProps.width ?? 24}
+              height={leftIconProps.height ?? 24}
+              fill={leftIconProps.fill}
+              testID={leftIconProps.testID}
+            />
+          ) : leftIconProps?.name ? (
+            <Icon
+              name={leftIconProps.name}
+              width={leftIconProps.width ?? 24}
+              height={leftIconProps.height ?? 24}
+              fill={leftIconProps.fill}
+              testID={leftIconProps.testID}
+            />
+          ) : null}
         </Box>
       )}
       {inlineIcon && leftIconProps ? (
-        <VAIcon
-          name={leftIconProps.name}
-          width={leftIconProps.width}
-          height={leftIconProps.height}
-          fill={leftIconProps.fill}
-          testID={leftIconProps.testID}
-        />
+        leftIconProps.svg ? (
+          <Icon svg={leftIconProps.svg} fill={leftIconProps.fill} testID={leftIconProps.testID} />
+        ) : leftIconProps.name ? (
+          <Icon
+            name={leftIconProps.name}
+            width={leftIconProps.width ?? 24}
+            height={leftIconProps.height ?? 24}
+            fill={leftIconProps.fill}
+            testID={leftIconProps.testID}
+          />
+        ) : null
       ) : (
         <TextView
           mr={theme.dimensions.condensedMarginBetween}
@@ -69,10 +85,10 @@ export const InlineTextWithIcons: FC<InlineTextWithIconsProps> = ({
       )}
       {rightIconProps && (
         <Box mt={7}>
-          <VAIcon
-            name={rightIconProps.name}
-            width={rightIconProps.width}
-            height={rightIconProps.height}
+          <Icon
+            name={rightIconProps.name ?? 'Close'}
+            width={rightIconProps.width ?? 24}
+            height={rightIconProps.height ?? 24}
             fill={rightIconProps.fill}
             testID={rightIconProps.testID}
           />

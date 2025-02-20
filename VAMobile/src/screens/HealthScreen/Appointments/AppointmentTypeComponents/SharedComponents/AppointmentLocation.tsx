@@ -205,7 +205,7 @@ const getClinicInfo = (
         </Box>
       )
     default:
-      return Spacer({ size: theme.dimensions.standardMarginBetween })
+      return Spacer({ size: 'lg' })
   }
 }
 

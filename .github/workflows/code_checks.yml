@@ -53,3 +53,31 @@ jobs:
         # jest with the specified files.  The number at the end is the # of chunks we're splitting the tests into.
         # This should match the numbers of items in the matrix chunk array above
         run: bash ${GITHUB_WORKSPACE}/.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 5
+  bundle_android:
+    runs-on: ubuntu-4-cores-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+      - run: yarn bundle:android
+  bundle_ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+      - run: yarn pods && yarn bundle:ios

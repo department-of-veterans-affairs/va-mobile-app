@@ -5,7 +5,7 @@ sidebar_position: 1
 
 # Setting up to update the VA Mobile doc site
 
-_These instructions are for people who are comfortable with maintaining and troubleshooting setup on their local machine. If that's not you, please reach out to the QART tech lead for assistance._
+_These instructions are for people who are comfortable with maintaining and troubleshooting setup on their local machine. If that's not you, skip straight to instructions for [how to update the doc site with codespaces.](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Updating%20the%20doc%20site/how%20to%20update#updating-the-site-using-codespaces)_
 
 Before you can update the [VA Mobile documentation website](https://department-of-veterans-affairs.github.io/va-mobile-app/), you first need to download and set up a few different tools. You only need to do this once. Feel free to buddy up with someone for help with the initial setup!
 

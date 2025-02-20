@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import {
   AppointmentAttributes,
@@ -107,6 +108,11 @@ context('ClaimExamAppointment', () => {
       expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
       expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet1'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet2'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.claimExam.webLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(
         screen.getByText('Call the compensation and pension office at VA Long Beach Healthcare System.'),
@@ -161,6 +167,11 @@ context('ClaimExamAppointment', () => {
 
       expect(screen.getByText('Clinic: Not available')).toBeTruthy()
       expect(screen.getByText('Location: Not available')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet1'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet2'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.claimExam.webLink') })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
       expect(screen.getByText('Call the compensation and pension office at VA facility.')).toBeTruthy()
@@ -268,6 +279,11 @@ context('ClaimExamAppointment', () => {
       expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
       expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
 
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet1'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet2'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.claimExam.webLink') })).toBeTruthy()
+
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(
         screen.getByLabelText('Call the compensation and pension office at V-A Long Beach Healthcare System.'),
@@ -317,6 +333,11 @@ context('ClaimExamAppointment', () => {
 
       expect(screen.getByText('Clinic: Not available')).toBeTruthy()
       expect(screen.getByText('Location: Not available')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet1'))).toBeTruthy()
+      expect(screen.getByText(t('appointmentsTab.medicationWording.claimExam.bullet2'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.claimExam.webLink') })).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
       expect(screen.getByText('Call the compensation and pension office at VA facility.')).toBeTruthy()

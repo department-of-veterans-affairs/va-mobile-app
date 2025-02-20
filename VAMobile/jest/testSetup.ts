@@ -133,6 +133,14 @@ jest.mock('react-native-keychain', () => {
       SECURE_HARDWARE: 'SECURE_HARDWARE',
       ANY: 'ANY',
     },
+    STORAGE_TYPE: {
+      FB: 'MOCK_FacebookConceal',
+      AES: 'MOCK_KeystoreAESGCM',
+      AES_GCM: 'MOCK_KeystoreAESCBC',
+      AES_GCM_NO_AUTH: 'MOCK_KeystoreAESGCMNoAuth',
+      RSA: 'MOCK_KeystoreRSAECB',
+      KC: 'MOCK_keychain',
+    },
     SECURITY_LEVEL_ANY: 'MOCK_SECURITY_LEVEL_ANY',
     SECURITY_LEVEL_SECURE_SOFTWARE: 'MOCK_SECURITY_LEVEL_SECURE_SOFTWARE',
     SECURITY_LEVEL_SECURE_HARDWARE: 'MOCK_SECURITY_LEVEL_SECURE_HARDWARE',
@@ -315,3 +323,7 @@ jest.mock('react-native-webview', () => {
     WebView: View,
   }
 })
+
+jest.mock('react-native-haptic-feedback', () => ({
+  HapticFeedbackTypes: {},
+}))

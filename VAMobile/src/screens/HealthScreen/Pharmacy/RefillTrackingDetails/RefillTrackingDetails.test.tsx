@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 
 import { PrescriptionData } from 'api/types'
@@ -35,21 +36,29 @@ context('RefillTrackingDetails', () => {
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockResolvedValue({ data: emptyTrackingMockData })
       initializeTestInstance(emptyMockData[0] as PrescriptionData)
-      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} ${t('noneNoted')}`)).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText(t('prescriptions.refillTracking.upTo15Days'))).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('prescriptions.refillTracking.trackingNumber') })).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText(t('noneNoted'))).toBeTruthy())
       await waitFor(() =>
         expect(
-          screen.getByText(
-            "We share tracking information here for up to 15 days, even if you've received your prescription.",
-          ),
+          screen.getByText(`${t('prescriptions.refillTracking.deliveryService')}: ${t('noneNoted')}`),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByText('Tracking number')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('None noted')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Delivery service: None noted')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Date shipped: None noted')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Other prescriptions in this package:')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('There are no other prescriptions in this package.')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(`${t('prescriptions.refillTracking.dateShipped')}: ${t('noneNoted')}`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getByText(`${t('prescriptions.refillTracking.otherPrescription')}:`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getByText(t('prescriptions.refillTracking.otherPrescription.none'))).toBeTruthy(),
+      )
     })
   })
 
@@ -59,24 +68,26 @@ context('RefillTrackingDetails', () => {
         .calledWith(`/v0/health/rx/prescriptions/20004342/tracking`)
         .mockResolvedValue({ data: [multipleTrackingInfoData[0]] })
       initializeTestInstance(mockData[0] as PrescriptionData)
-      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 3636691')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1`)).toBeTruthy()
+      await waitFor(() => expect(screen.getByText(t('prescriptions.refillTracking.upTo15Days'))).toBeTruthy())
       await waitFor(() =>
-        expect(
-          screen.getByText(
-            "We share tracking information here for up to 15 days, even if you've received your prescription.",
-          ),
-        ).toBeTruthy(),
+        expect(screen.getByRole('header', { name: t('prescriptions.refillTracking.trackingNumber') })).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByText('Tracking number')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('7534533636856')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Delivery service: DHL')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Date shipped: 06/14/2022')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Other prescriptions in this package:')).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText('7 5 3 4 5 3 3 6 3 6 8 5 6')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(`${t('prescriptions.refillTracking.deliveryService')}: DHL`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescriptions.refillTracking.dateShipped')}: June 14, 2022`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getAllByText(`${t('prescriptions.refillTracking.otherPrescription')}:`)).toBeTruthy(),
+      )
       await waitFor(() => expect(screen.getByText('LAMIVUDINE 10MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 2336800')).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 2 3 3 6 8 0 0`)).toBeTruthy()
       await waitFor(() => expect(screen.getByText('ZIDOVUDINE 1MG CAP')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} ${t('noneNoted')}`)).toBeTruthy()
     })
   })
 
@@ -87,32 +98,50 @@ context('RefillTrackingDetails', () => {
         .mockResolvedValue({ data: multipleTrackingInfoData })
       initializeTestInstance(mockData[0] as PrescriptionData)
 
-      await waitFor(() => expect(screen.getByText('ALLOPURINOL 100MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 3636691')).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1`)).toBeTruthy()
+      await waitFor(() => expect(screen.getByText(t('prescriptions.refillTracking.upTo15Days'))).toBeTruthy())
       await waitFor(() =>
         expect(
-          screen.getByText(
-            "We share tracking information here for up to 15 days, even if you've received your prescription.",
-          ),
+          screen.getByRole('header', {
+            name: `${t('package')} ${t('listPosition', { position: 1, total: 2 })}`,
+          }),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByText('Package 1 of 2')).toBeTruthy())
-      await waitFor(() => expect(screen.getAllByText('Tracking number')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('7534533636856')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Delivery service: DHL')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Date shipped: 06/14/2022')).toBeTruthy())
-      await waitFor(() => expect(screen.getAllByText('Other prescriptions in this package:')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getAllByRole('header', { name: t('prescriptions.refillTracking.trackingNumber') })).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByLabelText('7 5 3 4 5 3 3 6 3 6 8 5 6')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(`${t('prescriptions.refillTracking.deliveryService')}: DHL`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescriptions.refillTracking.dateShipped')}: June 14, 2022`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getAllByText(`${t('prescriptions.refillTracking.otherPrescription')}:`)).toBeTruthy(),
+      )
       await waitFor(() => expect(screen.getByText('LAMIVUDINE 10MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 2336800')).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 2 3 3 6 8 0 0`)).toBeTruthy()
       await waitFor(() => expect(screen.getAllByText('ZIDOVUDINE 1MG CAP')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: None noted')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Package 2 of 2')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('5634533636812')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Delivery service: USPS')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Date shipped: 06/28/2022')).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} None noted`)).toBeTruthy()
+      await waitFor(() =>
+        expect(
+          screen.getByRole('header', {
+            name: `${t('package')} ${t('listPosition', { position: 2, total: 2 })}`,
+          }),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByLabelText('5 6 3 4 5 3 3 6 3 6 8 1 2')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(`${t('prescriptions.refillTracking.deliveryService')}: USPS`)).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescriptions.refillTracking.dateShipped')}: June 28, 2022`)).toBeTruthy(),
+      )
       await waitFor(() => expect(screen.getByText('AMLODIPINE BESYLATE 10MG TAB')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 3636711A')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Rx #: 4636722C')).toBeTruthy())
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 7 1 1 A`)).toBeTruthy()
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 4 6 3 6 7 2 2 C`)).toBeTruthy()
     })
   })
 
@@ -123,7 +152,9 @@ context('RefillTrackingDetails', () => {
         .mockRejectedValue({ networkError: 500 })
 
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
     })
   })
 })

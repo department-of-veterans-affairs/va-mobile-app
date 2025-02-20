@@ -18,7 +18,7 @@ import {
   getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import {
@@ -37,6 +37,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDetailsProps) {
   const { appointment, vetextID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const registerReviewEvent = useReviewEvent(true)
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -74,7 +75,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       )
       registerReviewEvent()
     }
-  }, [trueAppointment, pendingAppointment, attributes])
+  }, [trueAppointment, pendingAppointment, attributes, registerReviewEvent])
 
   useEffect(() => {
     if (!getApptError && appointmentNotFound) {

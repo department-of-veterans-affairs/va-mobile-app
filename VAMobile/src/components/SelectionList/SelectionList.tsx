@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { mapObject, values } from 'underscore'
 
 import { Events } from 'constants/analytics'
@@ -11,7 +12,6 @@ import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from '../Box'
 import TextView from '../TextView'
-import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
 import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 
 export type SelectionListProps = {
@@ -82,29 +82,19 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   }
 
   const getSelectAllIcon = () => {
-    let name: keyof typeof VA_ICON_MAP
-    let fill = 'checkboxEnabledPrimary'
-    let stroke
-    if (numSelected === items.length) {
-      name = 'CheckBoxFilled'
-    } else if (numSelected > 0) {
-      name = 'CheckBoxIntermediate'
-    } else {
-      name = 'CheckBoxEmpty'
-      fill = 'checkboxDisabledContrast'
-      stroke = 'checkboxDisabled'
-    }
+    const fill = numSelected > 0 ? theme.colors.icon.checkboxEnabledPrimary : theme.colors.icon.checkboxDisabled
 
-    const iconProps: VAIconProps = {
+    const name =
+      numSelected === items.length ? 'CheckBox' : numSelected > 0 ? 'IndeterminateCheckBox' : 'CheckBoxOutlineBlank'
+
+    const iconProps: IconProps = {
       name,
       width: 20,
       height: 20,
-      stroke,
       fill,
-      ml: 20,
     }
 
-    return <VAIcon {...iconProps} />
+    return <Icon {...iconProps} />
   }
 
   const headerWrapperProps: BoxProps = {

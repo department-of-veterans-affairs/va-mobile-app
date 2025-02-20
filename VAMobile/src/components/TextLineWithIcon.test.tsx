@@ -1,22 +1,23 @@
 import React from 'react'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { screen } from '@testing-library/react-native'
 
 import { Box } from 'components'
 import { context, render } from 'testUtils'
 
 import TextLineWithIcon from './TextLineWithIcon'
-import { VAIconProps } from './VAIcon'
+import Unread from './VAIcon/svgs/Unread.svg'
 
 context('TextLineWithIcon', () => {
   beforeEach(() => {
     const testLine1 = {
       text: 'line1',
-      iconProps: { name: 'PaperClip', width: 16, height: 16, testID: 'PaperClip' } as VAIconProps,
+      iconProps: { name: 'Delete', width: 16, height: 16, testID: 'Delete' } as IconProps,
     }
     const testLine2 = {
       text: 'another line2',
-      iconProps: { name: 'Unread', width: 16, height: 16, testID: 'Unread', isOwnLine: true } as VAIconProps,
+      iconProps: { svg: Unread, width: 16, height: 16, testID: 'Unread', isOwnLine: true } as IconProps,
     }
     const testLine3 = { text: 'line3 no iconProps' }
 
@@ -29,8 +30,8 @@ context('TextLineWithIcon', () => {
     )
   })
 
-  it('renders correct VAIcons', () => {
-    expect(screen.getByTestId('PaperClip')).toBeTruthy()
+  it('renders correct Icons', () => {
+    expect(screen.getByTestId('Delete')).toBeTruthy()
     expect(screen.getByTestId('Unread')).toBeTruthy()
   })
 

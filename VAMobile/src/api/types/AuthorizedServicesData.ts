@@ -11,7 +11,6 @@ export type AuthorizedServicesPayload = {
         directDepositBenefits: boolean
         directDepositBenefitsUpdate: boolean
         disabilityRating: boolean
-        genderIdentity: boolean
         lettersAndDocuments: boolean
         militaryServiceHistory: boolean
         paymentHistory: boolean
@@ -33,7 +32,6 @@ export type UserAuthorizedServicesData = {
   directDepositBenefits: boolean
   directDepositBenefitsUpdate: boolean
   disabilityRating: boolean
-  genderIdentity: boolean
   lettersAndDocuments: boolean
   militaryServiceHistory: boolean
   paymentHistory: boolean

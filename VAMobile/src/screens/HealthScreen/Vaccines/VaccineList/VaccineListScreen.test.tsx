@@ -2,6 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
@@ -40,6 +41,23 @@ context('VaccineListScreen', () => {
     },
   ]
 
+  const vaccineMissingData = [
+    {
+      id: 'I2-A7XD2XUPAZQ5H4Y5D6HJ352GEQ000000',
+      type: 'immunization',
+      attributes: {
+        cvxCode: 140,
+        date: '',
+        doseNumber: 'Booster',
+        doseSeries: 1,
+        groupName: null,
+        manufacturer: null,
+        note: 'Dose #45 of 101 of Influenza  seasonal  injectable  preservative free vaccine administered.',
+        shortDescription: 'Influenza  seasonal  injectable  preservative free',
+      },
+    },
+  ]
+
   const initializeTestInstance = () => {
     render(<VaccineListScreen {...mockNavProps()} />)
   }
@@ -70,27 +88,23 @@ context('VaccineListScreen', () => {
         .mockResolvedValue({ data: [] })
 
       initializeTestInstance()
-      await waitFor(() =>
-        expect(
-          screen.getByRole('heading', { name: "We couldn't find information about your VA vaccines" }),
-        ).toBeTruthy(),
-      )
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",
-          ),
-        ).toBeTruthy(),
-      )
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            "If you think your vaccine records should be here, call our MyVA411 main information line. We're here 24/7.",
-          ),
-        ).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByRole('heading', { name: t('noVaccineRecords.alert.title') })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noVaccineRecords.alert.text.1'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noVaccineRecords.alert.text.2'))).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy())
-      await waitFor(() => expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy())
+    })
+  })
+
+  describe('when vaccines have missing data', () => {
+    it('should show vaccine with missing name and date', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/immunizations', expect.anything())
+        .mockResolvedValue({ data: vaccineMissingData })
+      initializeTestInstance()
+
+      await waitFor(() => expect(screen.getByText(t('vaccine'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('vaccines.noDate'))).toBeTruthy())
     })
   })
 })

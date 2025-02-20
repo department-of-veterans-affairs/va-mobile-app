@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { VAIconProps } from 'components/VAIcon'
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
+
 import { context, fireEvent, render, screen } from 'testUtils'
 
 import FullScreenSubtask from './FullScreenSubtask'
@@ -12,7 +13,7 @@ context('FullScreenSubtask', () => {
     titleText?: string,
     leftButtonText?: string,
     rightButtonText?: string,
-    rightVAIconProps?: VAIconProps,
+    rightIconProps?: IconProps,
     primaryContentButtonText?: string,
     onPrimaryButtonPress?: () => void,
     secondaryContentButtonText?: string,
@@ -23,7 +24,7 @@ context('FullScreenSubtask', () => {
         title={titleText}
         leftButtonText={leftButtonText}
         rightButtonText={rightButtonText}
-        rightVAIconProps={rightVAIconProps}
+        rightIconProps={rightIconProps}
         primaryContentButtonText={primaryContentButtonText}
         onPrimaryContentButtonPress={onPrimaryButtonPress}
         secondaryContentButtonText={secondaryContentButtonText}

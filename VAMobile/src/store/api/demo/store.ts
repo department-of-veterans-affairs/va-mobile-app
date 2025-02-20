@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 
 import {
   AddressData,
-  GenderIdentityUpdatePayload,
   PaymentAccountData,
   PreferredNameUpdatePayload,
   SecureMessagingSystemFolderIdConstants,
@@ -13,12 +12,7 @@ import { Params } from '../api'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import {
-  DemographicsDemoApiReturnTypes,
-  DemographicsDemoStore,
-  updateGenderIdentity,
-  updatePreferredName,
-} from './demographics'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
@@ -296,9 +290,6 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     /**
      * Demographics
      */
-    case '/v0/user/gender_identity': {
-      return updateGenderIdentity(store, params as GenderIdentityUpdatePayload)
-    }
     case '/v0/user/preferred_name': {
       return updatePreferredName(store, params as PreferredNameUpdatePayload)
     }

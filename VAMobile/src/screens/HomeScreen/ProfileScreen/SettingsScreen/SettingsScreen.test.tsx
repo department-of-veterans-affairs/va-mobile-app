@@ -3,6 +3,7 @@ import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { InitialState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
@@ -73,34 +74,36 @@ context('SettingsScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('link', { name: 'Account security' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Notifications' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Share the app' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Privacy policy' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Developer Screen' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Sign out' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('accountSecurity') })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('notifications.title') })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('shareApp.title') })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('privacyPolicy.title') })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('debug.title') })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('logout.title') })).toBeTruthy()
   })
 
   describe('when privacy policy is clicked', () => {
     it('should launch external link', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Privacy policy' }))
+      fireEvent.press(screen.getByRole('link', { name: t('privacyPolicy.title') }))
       expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
   describe('when "Share the app" is clicked', () => {
     it('should call Share.share', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Share the app' }))
+      fireEvent.press(screen.getByRole('link', { name: t('shareApp.title') }))
       expect(Share.share).toBeCalledWith({
-        message:
-          'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
+        message: t('shareApp.text', {
+          appleStoreLink: defaultEnvVars.APPLE_STORE_LINK,
+          googlePlayLink: defaultEnvVars.GOOGLE_PLAY_LINK,
+        }),
       })
     })
   })
 
   describe('on account security click', () => {
     it('should call useRouteNavigation', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Account security' }))
+      fireEvent.press(screen.getByRole('link', { name: t('accountSecurity') }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('AccountSecurity')
     })
   })

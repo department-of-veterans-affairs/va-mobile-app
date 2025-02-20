@@ -14,6 +14,7 @@ import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
 import { Events } from 'constants/analytics'
+import { EMAIL_REGEX_EXP_PII, MAIL_TO_REGEX_EXP_PII, PHONE_REGEX_EXP_PII, SSN_REGEX_EXP_PII } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
@@ -64,10 +65,11 @@ export const generateTestIDForInlineTextIconList = (
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
+    // NOTE: The Unread icon is a local svg file
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.leftTextProps.text)
@@ -87,10 +89,10 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'Unread') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.text)
@@ -421,4 +423,37 @@ export function fullPanelCardStyleInterpolator({
     },
     overlayStyle: { opacity: overlayOpacity },
   }
+}
+
+/**
+ * When passed a string of text this function will identify if it has any PII
+ * that will need to be replaced within it
+ * Checks for:
+ * Phone Number
+ * SSN
+ * email/mailto
+ * @param body - String to check for PII
+ * @returns either a boolean or the edited string
+ */
+export function checkStringForPII(body: string): { found: boolean; newText: string } {
+  let found = false
+  let newText = body
+
+  if (PHONE_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(PHONE_REGEX_EXP_PII, '###-###-####')
+  }
+  if (SSN_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(SSN_REGEX_EXP_PII, '###-##-####')
+  }
+  if (EMAIL_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(EMAIL_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
+  if (MAIL_TO_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(MAIL_TO_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
+  return { found, newText }
 }

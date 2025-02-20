@@ -1,3 +1,10 @@
+/*
+Description:
+Detox script that tests for all appeal status types and verifies that the appeal appears in the claim list and that the appeal details page opens when clicked.
+As a note: most of the current status wording is checked in our unit tests so there this test does not check that.
+When to update:
+This script should be updated whenever a new appeal status types is created, if anything appeal wise is changed in src/store/api/demo/mocks/claims.json or if any new content changes are made to appeals. 
+*/
 import { by, device, element, expect, waitFor } from 'detox'
 
 import {
@@ -160,6 +167,7 @@ describe('AppealsExpanded', () => {
       const appealInfo = expectedInformation[i]
       await expect(element(by.text('Appeal for ' + appealInfo[0]))).toExist()
       await expect(element(by.text(appealInfo[1]))).toExist()
+      //This if statement tests the wording in the review past events dropdown.  If appealInfo[2] is true but appealInfo[3] is undefined then the wording matches what we are checking for in appealInfo[1]. Otherwise the wording matches what is given in appealInfo[3].
       if (appealInfo[2] !== undefined && appealInfo[2] === 'true') {
         await element(by.text('Review past events')).tap()
         if (appealInfo[3] === undefined) {
@@ -172,7 +180,7 @@ describe('AppealsExpanded', () => {
         if (appealInfo[2] === 'Opt in to the new decision review process') {
           await waitFor(element(by.text(appealInfo[2])))
             .toBeVisible()
-            .whileElement(by.id('appealsDetailsTestID'))
+            .whileElement(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID))
             .scroll(300, 'down')
           await element(by.text(appealInfo[2])).tap()
           await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()

@@ -34,7 +34,7 @@ context('Pagination', () => {
 
   it('calls onPrev when previous arrow is pressed', () => {
     renderWithProps({ page: 2 })
-    fireEvent.press(screen.getByA11yHint('Previous page'))
+    fireEvent.press(screen.getByTestId('previous-page'))
     expect(prevSpy).toHaveBeenCalled()
   })
 
@@ -45,7 +45,7 @@ context('Pagination', () => {
 
   it('calls onNext when next arrow is pressed', () => {
     renderWithProps()
-    fireEvent.press(screen.getByA11yHint('Next page'))
+    fireEvent.press(screen.getByTestId('next-page'))
     expect(nextSpy).toHaveBeenCalled()
   })
 

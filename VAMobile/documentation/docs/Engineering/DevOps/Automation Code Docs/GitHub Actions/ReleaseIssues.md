@@ -49,3 +49,20 @@ Because the release is tied into a commit and not the current state of the branc
 5. Run `git pull` to ensure you have the latest changes
 6. Tag the branch with the version we're trying to release: `git tag -a RC-vX.XX.0-XXXXXX-XXXX -m RC-vX.XX.0-XXXXXX-XXXX`
 7. Push the tag `git push origin RC-vX.XX.0-XXXXXX-XXXX`
+
+## Release Ticket Failure
+
+Outlined below are the steps to follow when the automation to create a release ticket and Slack coordination thread fails due to issues like incorrect GitHub username assignment.
+
+1. Update the [release_ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/ISSUE_TEMPLATE/release_ticket.md) template with the correct GitHub username and push to Github
+2. Determine the version number of the build (vX.X.X) and RC tag RC-vX.XX.0-XXXXXX-XXXX you want to delete
+3. Delete the local release candidate tag: `git tag --delete RC-vX.XX.0-XXXXXX-XXXX`
+4. Delete the remote tag: `git push --delete origin <RC-vX.XX.0-XXXXXX-XXXX>`
+5. Delete the local release branch : `git branch -d <release/vX.X.X>`
+6. Delete the remote release branch: `git push origin --delete <release/vX.X.X>`
+7. Manually ran the [new_release_branch](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/.github/workflows/new_release_branch.yml) workflow using workflow_dispatch. 
+8. Confirm that:
+     1. New RC tag.
+     2. New release branch.
+     3. release ticket has been created.
+     4. Slack thread coordination has been triggered on va-mobile-app channel.

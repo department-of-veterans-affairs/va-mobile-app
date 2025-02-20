@@ -1,6 +1,6 @@
 {
   "/v0/payment-history": {
-    "2017": {
+    "2024": {
       "1": {
         "data": [
           {
@@ -10,7 +10,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2017-06-01T00:00:00.000-05:00",
+              "date": "2024-06-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -22,7 +22,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2017-05-01T00:00:00.000-05:00",
+              "date": "2024-05-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -34,7 +34,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2017-03-31T00:00:00.000-05:00",
+              "date": "2024-03-31T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -46,7 +46,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2017-03-01T00:00:00.000-06:00",
+              "date": "2024-03-01T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -58,7 +58,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2017-02-01T00:00:00.000-06:00",
+              "date": "2024-02-01T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -70,7 +70,7 @@
               "account": "********0567",
               "amount": "$3,746.20",
               "bank": "BANK OF AMERICA, N.A.",
-              "date": "2017-02-01T00:00:00.000-06:00",
+              "date": "2024-02-01T00:00:00.000-06:00",
               "paymentMethod": "Direct Deposit",
               "paymentType": "Compensation & Pension - Recurring"
             }
@@ -82,7 +82,7 @@
               "account": "********0567",
               "amount": "$1,172.60",
               "bank": "BANK OF AMERICA, N.A.",
-              "date": "2017-03-01T00:00:00.000-06:00",
+              "date": "2024-03-01T00:00:00.000-06:00",
               "paymentMethod": "Direct Deposit",
               "paymentType": "Post-9/11 GI Bill"
             }
@@ -95,7 +95,7 @@
             "totalPages": 1,
             "totalEntries": 7
           },
-          "availableYears": [2017, 2016]
+          "availableYears": [2024, 2023]
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1",
@@ -106,7 +106,7 @@
         }
       }
     },
-    "2016": {
+    "2023": {
       "1": {
         "data": [
           {
@@ -116,7 +116,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-12-30T00:00:00.000-06:00",
+              "date": "2023-12-30T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -128,7 +128,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-12-01T00:00:00.000-06:00",
+              "date": "2023-12-01T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -140,7 +140,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-11-01T00:00:00.000-05:00",
+              "date": "2023-11-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -152,7 +152,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-09-30T00:00:00.000-05:00",
+              "date": "2023-09-30T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -164,7 +164,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-09-01T00:00:00.000-05:00",
+              "date": "2023-09-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -176,7 +176,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-08-01T00:00:00.000-05:00",
+              "date": "2023-08-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -188,7 +188,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-07-01T00:00:00.000-05:00",
+              "date": "2023-07-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -200,7 +200,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-06-01T00:00:00.000-05:00",
+              "date": "2023-06-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -212,7 +212,7 @@
               "account": null,
               "amount": "$685.91",
               "bank": null,
-              "date": "2016-05-13T00:00:00.000-05:00",
+              "date": "2023-05-13T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Retro/One Time - CH31"
             }
@@ -224,7 +224,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-04-29T00:00:00.000-05:00",
+              "date": "2023-04-29T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -237,14 +237,14 @@
             "totalPages": 2,
             "totalEntries": 13
           },
-          "availableYears": [2017, 2016]
+          "availableYears": [2024, 2023]
         },
         "links": {
-          "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
-          "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+          "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+          "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
           "prev": null,
-          "next": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
-          "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
+          "next": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
+          "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
         }
       },
       "2": {
@@ -256,7 +256,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-04-01T00:00:00.000-05:00",
+              "date": "2023-04-01T00:00:00.000-05:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -268,7 +268,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-03-01T00:00:00.000-06:00",
+              "date": "2023-03-01T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -280,7 +280,7 @@
               "account": null,
               "amount": "$603.33",
               "bank": null,
-              "date": "2016-02-01T00:00:00.000-06:00",
+              "date": "2023-02-01T00:00:00.000-06:00",
               "paymentMethod": "Paper Check",
               "paymentType": "Regular Chapter 31"
             }
@@ -293,14 +293,14 @@
             "totalPages": 2,
             "totalEntries": 13
           },
-          "availableYears": [2017, 2016]
+          "availableYears": [2024, 2023]
         },
         "links": {
-          "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
-          "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
-          "prev": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+          "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=2",
+          "first": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
+          "prev": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=1",
           "next": null,
-          "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2016-01-01T00:00:00-05:00&endDate=2016-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
+          "last": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=2023-01-01T00:00:00-05:00&endDate=2023-12-31T23:59:59-05:00&page[size]=10&page[number]=2"
         }
       }
     }
