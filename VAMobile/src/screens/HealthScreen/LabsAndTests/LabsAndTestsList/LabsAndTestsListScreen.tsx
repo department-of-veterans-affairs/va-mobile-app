@@ -237,12 +237,15 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('labsAndTests.title')}
       titleA11y={a11yLabelVA(t('labsAndTests.title'))}
+      testID="labs-and-tests-list-screen"
       scrollViewProps={scrollViewProps}>
       <Box mx={theme.dimensions.gutter}>
         {/* Surely there is a better way to insert bold text into a display string... */}
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('labsAndTests.availability.start')}
-          <TextView variant="MobileBodyBold">{t('labsAndTests.availability.timing.bold')}</TextView>
+          <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
+            {t('labsAndTests.availability.timing.bold')}
+          </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('labsAndTests.availability.end')}
           </TextView>
@@ -273,7 +276,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       ) : (
         <>
           <Box mt={theme.dimensions.contentMarginTop}>
-            <Box mb={theme.dimensions.contentMarginBottom}>
+            <Box testID="LabsAndTestsButtonsListTestID" mb={theme.dimensions.contentMarginBottom}>
               <DefaultList items={labsAndTestsButtons} />
             </Box>
             {renderPagination()}

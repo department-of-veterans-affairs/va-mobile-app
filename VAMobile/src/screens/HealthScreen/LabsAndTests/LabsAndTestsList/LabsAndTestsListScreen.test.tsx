@@ -1,160 +1,92 @@
-// import React from 'react'
+import React from 'react'
 
-// import { screen } from '@testing-library/react-native'
-// import { waitFor } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 
-// import * as api from 'store/api'
-// import { context, mockNavProps, render, when } from 'testUtils'
+import { LabsAndTests } from 'api/types'
+import * as api from 'store/api'
+import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-// import AllergyListScreen from './AllergyListScreen'
+import LabsAndTestsListScreen from './LabsAndTestsListScreen'
 
-// context('AllergyListScreen', () => {
-//   const allergyData = [
-//     {
-//       id: '4-1abLZzsevfVnWK',
-//       type: 'allergy_intolerance',
-//       attributes: {
-//         resourceType: 'AllergyIntolerance',
-//         type: 'allergy',
-//         clinicalStatus: {
-//           coding: [
-//             {
-//               system: 'http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical',
-//               code: 'active',
-//             },
-//           ],
-//         },
-//         category: ['medication'],
-//         code: {
-//           coding: [
-//             {
-//               system: 'http://hl7.org/fhir/ndfrt',
-//               code: 'N0000008048',
-//               display: 'Sulfonamides',
-//             },
-//           ],
-//           text: 'Sulfonamides',
-//         },
-//         recordedDate: '2019-03-12T16:30:00Z',
-//         patient: {
-//           reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908',
-//           display: 'DAMASO SUPNICK',
-//         },
-//         notes: [
-//           {
-//             authorReference: {
-//               reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-//               display: 'Dr. Alicia629 Ureña88 MD',
-//             },
-//             time: '2019-03-12T16:30:00Z',
-//             text: 'Sulfonamides',
-//           },
-//         ],
-//         recorder: {
-//           reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-//           display: 'Dr. Alicia629 Ureña88 MD',
-//         },
-//         reactions: [],
-//       },
-//     },
-//     {
-//       id: '4-1wYbwqxtod74iS',
-//       type: 'allergy_intolerance',
-//       attributes: {
-//         resourceType: 'AllergyIntolerance',
-//         type: 'allergy',
-//         clinicalStatus: {
-//           coding: [
-//             {
-//               system: 'http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical',
-//               code: 'active',
-//             },
-//           ],
-//         },
-//         category: ['medication'],
-//         code: {
-//           coding: [],
-//           text: 'penicillins',
-//         },
-//         recordedDate: '2023-01-10T18:26:28Z',
-//         patient: {
-//           reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908',
-//           display: 'SUPNICK, DAMASO',
-//         },
-//         notes: [],
-//         recorder: {
-//           reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-X3BWnhAtrFa0Ko0R',
-//           display: 'Nurse2, VA-HBPC',
-//         },
-//         reactions: [
-//           {
-//             substance: {
-//               coding: [],
-//               text: null,
-//             },
-//             manifestation: [
-//               {
-//                 coding: [],
-//                 text: 'Urticaria (Hives)',
-//               },
-//             ],
-//           },
-//         ],
-//       },
-//     },
-//   ]
+context('LabsAndTestsListScreen', () => {
+  const defaultLabsAndTests = [
+    {
+      id: 'I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000',
+      type: 'diagnostic_report',
+      attributes: {
+        display: 'Surgical Pathology',
+        testCode: 'SP',
+        dateCompleted: '2025-02-06T18:53:14.000-01:00',
+        encodedData:
+          'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
+        sampleSite: 'TESTING BONE MARROW',
+        location: 'VA TEST LAB',
+      },
+    },
+  ]
 
-//   const initializeTestInstance = () => {
-//     render(<AllergyListScreen {...mockNavProps()} />)
-//   }
+  const initializeTestInstance = (labAndTest: Array<LabsAndTests> = defaultLabsAndTests) => {
+    const props = mockNavProps(undefined, undefined, { params: { labOrTest: labAndTest } })
+    return render(<LabsAndTestsListScreen {...props} />)
+  }
 
-//   it('initializes correctly', async () => {
-//     when(api.get as jest.Mock)
-//       .calledWith('/v0/health/allergy-intolerances', expect.anything())
-//       .mockResolvedValue({ data: allergyData })
-//     initializeTestInstance()
-//     await waitFor(() => expect(screen.getByText('Sulfonamides allergy')).toBeTruthy())
-//     await waitFor(() => expect(screen.getByText('penicillins allergy')).toBeTruthy())
-//   })
+  it('renders the LabsAndTestsListScreen', () => {
+    const { getByTestId } = initializeTestInstance()
+    expect(getByTestId('labs-and-tests-list-screen')).toBeTruthy()
+  })
 
-//   describe('when loading is set to true', () => {
-//     it('should show loading screen', () => {
-//       when(api.get as jest.Mock)
-//         .calledWith('/v0/health/allergy-intolerances', expect.anything())
-//         .mockResolvedValue({ data: allergyData })
-//       initializeTestInstance()
-//       expect(screen.getByText('Loading your allergy record...')).toBeTruthy()
-//     })
-//   })
+  it('defaults to 3 months in date picker', async () => {
+    const { getByTestId } = initializeTestInstance()
+    expect(getByTestId('labsAndTestDataRangeTestID')).toBeTruthy()
+    expect(getByTestId('labsAndTestDataRangeTestID').children[0]).toEqual('Past 3 months')
+  })
 
-//   describe('when there are no allergies', () => {
-//     it('should show no Allergy Records', async () => {
-//       when(api.get as jest.Mock)
-//         .calledWith('/v0/health/allergy-intolerances', expect.anything())
-//         .mockResolvedValue({ data: [] })
+  it('renders the correct availability timing', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'))
+  })
 
-//       initializeTestInstance()
-//       await waitFor(() =>
-//         expect(
-//           screen.getByRole('heading', { name: "We couldn't find information about your VA allergies" }),
-//         ).toBeTruthy(),
-//       )
-//       await waitFor(() =>
-//         expect(
-//           screen.getByText(
-//             "We're sorry. We update your allergy records every 24 hours, but new records can take up to 36 hours to appear.",
-//           ),
-//         ).toBeTruthy(),
-//       )
-//       await waitFor(() =>
-//         expect(
-//           screen.getByText(
-//             "If you think your allergy records should be here, call our MyVA411 main information line. We're here 24/7.",
-//           ),
-//         ).toBeTruthy(),
-//       )
-//       await waitFor(() => expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy())
-//       await waitFor(() => expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
-//     })
-//   })
-// })
+  it('renders the expected data in the list of Labs and Tests', async () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .mockResolvedValue({ data: defaultLabsAndTests })
+    initializeTestInstance()
+    await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
+  })
+
+  it('renders the expected number of Labs and Tests', async () => {
+    const sampleData: Array<LabsAndTests> = [
+      {
+        id: 'I2-2BCP5BAI4R7NQSAPSVIJ9WNQ4A000000',
+        type: 'diagnostic_report',
+        attributes: {
+          display: 'Surgical Pathology',
+          testCode: 'SP',
+          dateCompleted: '2025-01-16T18:53:14.000-01:00',
+          encodedData:
+            'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
+          sampleSite: 'Brain',
+          location: 'VA TEST LAB',
+        },
+      },
+    ]
+    const combinedData = [...sampleData, ...defaultLabsAndTests]
+    when(api.get as jest.Mock)
+      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .mockResolvedValue({ data: combinedData })
+    initializeTestInstance()
+    await waitFor(() => expect(screen.queryAllByText('Surgical Pathology')).toHaveLength(2))
+  })
+
+  // test when there are no labs and tests
+  it('renders the placeholder for labs and tests if no labs and tests are present', async () => {
+    const sampleData: Array<LabsAndTests> = []
+    when(api.get as jest.Mock)
+      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .mockResolvedValue({ data: sampleData })
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('NoLabsAndTestsRecords')).toBeTruthy()).then(() => {
+      expect(screen.queryAllByText('Sugical Pathology')).toHaveLength(0)
+    })
+  })
+})
