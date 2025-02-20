@@ -1,10 +1,11 @@
 import React, { FC } from 'react'
 import { Pressable } from 'react-native'
 
+import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from '../Box'
-import VAIcon, { VAIconProps, VA_ICON_MAP } from '../VAIcon'
 
 export type SelectionListItemObj = {
   /** Display content for the list item */
@@ -31,29 +32,20 @@ const SelectionListItem: FC<SelectionListItemProps> = ({ content, setSelectedFn,
   }
 
   const getIcon = () => {
-    let name: keyof typeof VA_ICON_MAP
-    let fill = 'checkboxEnabledPrimary'
-    let stroke
+    let fill = theme.colors.icon.checkboxEnabledPrimary
 
-    if (isSelected) {
-      name = 'CheckBoxFilled'
-    } else {
-      name = 'CheckBoxEmpty'
-      fill = 'checkboxDisabledContrast'
-      stroke = 'checkboxDisabled'
+    if (!isSelected) {
+      fill = theme.colors.icon.checkboxDisabled
     }
 
-    const iconProps: VAIconProps = {
-      name,
+    const iconProps: IconProps = {
+      name: isSelected ? 'CheckBox' : 'CheckBoxOutlineBlank',
       width: 20,
       height: 20,
-      stroke,
       fill,
-      ml: 20,
-      pt: 5,
     }
 
-    return <VAIcon {...iconProps} />
+    return <Icon {...iconProps} />
   }
 
   return (

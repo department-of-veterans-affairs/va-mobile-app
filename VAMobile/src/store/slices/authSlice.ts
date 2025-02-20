@@ -318,6 +318,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
       securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+      storage: Keychain.STORAGE_TYPE.AES_GCM,
     }
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
@@ -650,6 +651,7 @@ export const debugResetFirstTimeLogin = (): AppThunk => async (dispatch) => {
   await dispatch(logout())
   await dispatch(setBiometricsPreference(false))
   await dispatch(dispatchSetFirstLogin(true))
+  await dispatch(setNotificationsPreferenceScreen(true))
 }
 
 export const startBiometricsLogin = (): AppThunk => async (dispatch, getState) => {
