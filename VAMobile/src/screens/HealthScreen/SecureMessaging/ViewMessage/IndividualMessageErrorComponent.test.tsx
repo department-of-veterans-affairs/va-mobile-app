@@ -2,6 +2,7 @@ import React from 'react'
 import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
 
@@ -14,9 +15,7 @@ context('IndividualMessageErrorComponent', () => {
 
   it('initializes correctly', () => {
     expect(screen.getByText('Message could not be found')).toBeTruthy()
-    expect(
-      screen.getByText("We're sorry. Something went wrong on our end. Refresh this screen or try again later."),
-    ).toBeTruthy()
+    expect(screen.getByText(t('errors.callHelpCenter.sorryWithRefresh'))).toBeTruthy()
     expect(
       screen.getByText(
         "If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",

@@ -1274,6 +1274,7 @@
   "secureMessaging.draft.saved": "Draft saved",
   "secureMessaging.draft.saved.error": "Draft not saved",
   "secureMessaging.folders": "Folders",
+  "secureMessaging.folders.messageDownError.title": "Your folders aren't working right now",
   "secureMessaging.folders.count.a11yHint": "You have {{ count }} messages in your {{ folderName }} folder. Open your {{ folderName }} messages",
   "secureMessaging.folders.loading": "Loading your folders...",
   "secureMessaging.folders.messageMoved": "Message moved",
