@@ -6,12 +6,12 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { every } from 'underscore'
 
 import { useAllergies } from 'api/allergies/getAllergies'
-import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -48,7 +48,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
     : placeHolder
 
   const displayName = allergy.attributes?.code?.text
-    ? t('allergies.allergyName', { name: allergy.attributes?.code?.text })
+    ? t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) })
     : placeHolder
 
   const optionalFields = [
@@ -64,7 +64,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
       backLabel={t('vaAllergies')}
       backLabelA11y={a11yLabelVA(t('vaAllergies'))}
       backLabelOnPress={navigation.goBack}
-      title={t('details')}
+      title={t('allergies.details.heading')}
       backLabelTestID="allergiesDetailsBackID">
       {detailsLoading ? (
         <LoadingComponent text={t('allergies.details.loading')} />
@@ -80,18 +80,16 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
 
             <Box>
               <TextView variant="MobileBodyBold" selectable={true}>
-                {'Type'}
+                {t('health.details.types.header')}
               </TextView>
               {allergy.attributes?.category?.length ? (
-                allergy.attributes?.category?.map((category, index) => (
-                  <TextView
-                    variant="MobileBody"
-                    selectable={true}
-                    testID={'Type ' + category || placeHolder}
-                    key={index}>
-                    {category || placeHolder}
-                  </TextView>
-                ))
+                <VABulletList
+                  listOfText={
+                    allergy.attributes?.category?.map((category) => {
+                      return capitalizeFirstLetter(category || placeHolder)
+                    }) as string[]
+                  }
+                />
               ) : (
                 <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
                   {placeHolder}{' '}
@@ -105,46 +103,39 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 variant="MobileBody"
                 selectable={true}
                 testID={'Provider ' + allergy.attributes?.recorder?.display || placeHolder}>
-                {allergy.attributes?.recorder?.display || placeHolder}
+                {capitalizeFirstLetter(allergy.attributes?.recorder?.display as string) || placeHolder}
               </TextView>
             </Box>
 
             <Box mt={theme.dimensions.standardMarginBetween}>
               <Box>
-                <TextView variant="MobileBodyBold">{t('health.details.reaction')}</TextView>
+                <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
-                  allergy.attributes?.reactions?.map((reaction) => {
-                    return reaction.manifestation?.map((manifestation, i) => (
-                      <TextView
-                        key={i}
-                        variant="MobileBody"
-                        selectable={true}
-                        testID={'Reaction ' + manifestation.text || placeHolder}>
-                        {manifestation.text || placeHolder}
-                      </TextView>
-                    ))
-                  })
+                  <VABulletList
+                    listOfText={
+                      allergy.attributes?.reactions?.flatMap((reaction) => {
+                        return reaction.manifestation?.map((manifestation) => {
+                          return capitalizeFirstLetter(manifestation.text || placeHolder)
+                        })
+                      }) as string[]
+                    }
+                  />
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
                     {placeHolder}{' '}
                   </TextView>
                 )}
               </Box>
-
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 {allergy?.attributes?.notes?.length ? (
-                  allergy.attributes?.notes?.map((note, index) => {
-                    return (
-                      <TextView
-                        key={index}
-                        variant="MobileBody"
-                        selectable={true}
-                        testID={'Note ' + note.text || placeHolder}>
-                        {note.text || placeHolder}
-                      </TextView>
-                    )
-                  })
+                  <VABulletList
+                    listOfText={
+                      allergy.attributes?.notes?.map((note) => {
+                        return capitalizeFirstLetter(note.text || placeHolder)
+                      }) as string[]
+                    }
+                  />
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
                     {placeHolder}{' '}

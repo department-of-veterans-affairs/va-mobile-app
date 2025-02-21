@@ -27,7 +27,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -71,7 +71,10 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
 
   const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
-      { text: t('allergies.allergyName', { name: allergy.attributes?.code?.text }), variant: 'MobileBodyBold' },
+      {
+        text: t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) }),
+        variant: 'MobileBodyBold',
+      },
       { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
     ]
 
