@@ -15,7 +15,7 @@ context('LabsAndTestsDetailsScreen', () => {
     attributes: {
       display: 'Surgical Pathology',
       testCode: 'SP',
-      dateCompleted: '{{now - 1 month}}',
+      dateCompleted: '2018-11-01T15:49:14.000-01:00',
       encodedData:
         'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
       sampleSite: 'TESTING BONE MARROW',
@@ -50,5 +50,20 @@ context('LabsAndTestsDetailsScreen', () => {
     }
     const { getByTestId } = initializeTestInstance({ ...sampleData })
     await waitFor(() => expect(getByTestId('decoded-report').children[0]).toEqual('None noted'))
+  })
+
+  it('renders the site sampled correctly', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('siteSampled').children[0]).toEqual('TESTING BONE MARROW'))
+  })
+
+  it('renders the location correctly', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('location').children[0]).toEqual('VA TEST LAB'))
+  })
+
+  it('renders the date correctly', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('dateCompleted').children[0]).toEqual('November 01, 2018'))
   })
 })

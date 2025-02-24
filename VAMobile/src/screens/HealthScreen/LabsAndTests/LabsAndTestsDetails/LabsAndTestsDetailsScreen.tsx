@@ -84,7 +84,9 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
             {keys.map((key) => (
               <Box key={key} mb={standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{t(`labsAndTests.details.${key}`)}</TextView>
-                <TextView variant="MobileBody">{data[key]}</TextView>
+                <TextView testID={key} variant="MobileBody">
+                  {data[key]}
+                </TextView>
               </Box>
             ))}
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>

@@ -160,7 +160,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     data: labsAndTests,
     isFetching: loading,
     error: labsAndTestsError,
-    refetch: refetchAllergies,
+    refetch: refetchLabs,
   } = useLabsAndTests(
     {
       dateRange: {
@@ -267,9 +267,9 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         <LoadingComponent text={t('labsAndTests.loading')} />
       ) : labsAndTestsError || labsAndTestsInDowntime ? (
         <ErrorComponent
-          screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
+          screenID={ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID}
           error={labsAndTestsError}
-          onTryAgain={refetchAllergies}
+          onTryAgain={refetchLabs}
         />
       ) : labsAndTests?.data?.length === 0 ? (
         <NoLabsAndTestsRecords />
