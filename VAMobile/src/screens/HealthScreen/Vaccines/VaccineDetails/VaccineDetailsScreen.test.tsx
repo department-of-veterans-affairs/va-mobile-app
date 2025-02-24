@@ -94,7 +94,7 @@ context('VaccineDetailsScreen', () => {
     expect(screen.getByText('Series 1 of 1')).toBeTruthy()
     expect(screen.getByText('Provider')).toBeTruthy()
     expect(screen.getByText('None noted')).toBeTruthy()
-    expect(screen.getByText('Reaction')).toBeTruthy()
+    expect(screen.getByText('Reactions')).toBeTruthy()
     expect(screen.getByText('Notes')).toBeTruthy()
     expect(
       screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),

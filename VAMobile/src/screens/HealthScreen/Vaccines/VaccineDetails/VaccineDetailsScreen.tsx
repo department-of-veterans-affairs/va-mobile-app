@@ -145,7 +145,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
               </Box>
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <Box>
-                  <TextView variant="MobileBodyBold">{t('health.details.reaction')}</TextView>
+                  <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                   <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
                     {vaccine.attributes?.reaction || placeHolder}
                   </TextView>
