@@ -27,7 +27,7 @@ beforeAll(async () => {
 })
 
 describe('Allergies Screen', () => {
-  it.skip('should show allergy list content', async () => {
+  it('should show allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
     const defaultAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).takeScreenshot(
@@ -61,11 +61,11 @@ describe('Allergies Screen', () => {
     ).toExist()
   })
 
-  it.skip('should tap on VA allergies and navigate back to the allergies list', async () => {
+  it('should tap on VA allergies and navigate back to the allergies list', async () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
 
-  it.skip('verify no disclaimer is displayed when all fields are populated', async () => {
+  it('verify no disclaimer is displayed when all fields are populated', async () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID)).tap()
     await expect(element(by.text('None noted '))).not.toExist()
     await expect(
@@ -78,7 +78,7 @@ describe('Allergies Screen', () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
 
-  it.skip('multi-line note for dust allergy', async () => {
+  it('multi-line note for dust allergy', async () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
     await expect(element(by.text('Even More Dust'))).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
