@@ -162,7 +162,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
             {isPartialData && (
               <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
                 <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-                  {t('vaccines.details.weBaseThis')}
+                  {t('health.details.weBaseThis')}
                 </TextView>
               </Box>
             )}
