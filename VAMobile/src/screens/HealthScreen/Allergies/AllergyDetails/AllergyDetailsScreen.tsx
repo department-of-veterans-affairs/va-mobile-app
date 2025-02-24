@@ -92,7 +92,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 />
               ) : (
                 <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
-                  {placeHolder}{' '}
+                  {placeHolder}
                 </TextView>
               )}
             </Box>
@@ -122,7 +122,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                   />
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
-                    {placeHolder}{' '}
+                    {placeHolder}
                   </TextView>
                 )}
               </Box>
@@ -138,7 +138,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                   />
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
-                    {placeHolder}{' '}
+                    {placeHolder}
                   </TextView>
                 )}
               </Box>
