@@ -99,7 +99,7 @@ context('VaccineDetailsScreen', () => {
     expect(
       screen.getByText('Dose #1 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.'),
     ).toBeTruthy()
-    expect(screen.getByText(t('vaccines.details.weBaseThis'))).toBeTruthy()
+    expect(screen.getByText(t('health.details.weBaseThis'))).toBeTruthy()
     expect(screen.queryByText('facility 1')).toBeFalsy()
     expect(screen.queryByText('123 abc street')).toBeFalsy()
     expect(screen.queryByText('Tiburon, CA 94920')).toBeFalsy()
