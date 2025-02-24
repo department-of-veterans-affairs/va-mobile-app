@@ -83,13 +83,15 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 {t('health.details.types.header')}
               </TextView>
               {allergy.attributes?.category?.length ? (
-                <VABulletList
-                  listOfText={
-                    allergy.attributes?.category?.map((category) => {
-                      return capitalizeFirstLetter(category || placeHolder)
-                    }) as string[]
-                  }
-                />
+                <Box ml={theme.dimensions.standardMarginBetween}>
+                  <VABulletList
+                    listOfText={
+                      allergy.attributes?.category?.map((category) => {
+                        return capitalizeFirstLetter(category || placeHolder)
+                      }) as string[]
+                    }
+                  />
+                </Box>
               ) : (
                 <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
                   {placeHolder}
@@ -111,15 +113,17 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               <Box>
                 <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
-                  <VABulletList
-                    listOfText={
-                      allergy.attributes?.reactions?.flatMap((reaction) => {
-                        return reaction.manifestation?.map((manifestation) => {
-                          return capitalizeFirstLetter(manifestation.text || placeHolder)
-                        })
-                      }) as string[]
-                    }
-                  />
+                  <Box ml={theme.dimensions.standardMarginBetween}>
+                    <VABulletList
+                      listOfText={
+                        allergy.attributes?.reactions?.flatMap((reaction) => {
+                          return reaction.manifestation?.map((manifestation) => {
+                            return capitalizeFirstLetter(manifestation.text || placeHolder)
+                          })
+                        }) as string[]
+                      }
+                    />
+                  </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
                     {placeHolder}
@@ -129,13 +133,15 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 {allergy?.attributes?.notes?.length ? (
-                  <VABulletList
-                    listOfText={
-                      allergy.attributes?.notes?.map((note) => {
-                        return capitalizeFirstLetter(note.text || placeHolder)
-                      }) as string[]
-                    }
-                  />
+                  <Box ml={theme.dimensions.standardMarginBetween}>
+                    <VABulletList
+                      listOfText={
+                        allergy.attributes?.notes?.map((note) => {
+                          return capitalizeFirstLetter(note.text || placeHolder)
+                        }) as string[]
+                      }
+                    />
+                  </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
                     {placeHolder}
