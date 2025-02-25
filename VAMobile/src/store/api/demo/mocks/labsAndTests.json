@@ -1,5 +1,5 @@
 {
-  "/v0/health/labs-and-tests": {
+  "/v1/health/labs-and-tests": {
     "PAST_THREE_MONTHS": {
       "data": [
         {

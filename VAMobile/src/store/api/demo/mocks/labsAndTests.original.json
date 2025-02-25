@@ -1,5 +1,5 @@
 {
-  "/v0/health/labs-and-tests": {
+  "/v1/health/labs-and-tests": {
     "1": {
       "data": [
         {

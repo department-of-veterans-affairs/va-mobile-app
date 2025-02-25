@@ -19,17 +19,17 @@ function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoS
   const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
 
   if (endDate >= threeMonthsEarlier.toJSDate()) {
-    return store['/v0/health/labs-and-tests'].PAST_THREE_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_THREE_MONTHS
   } else if (endDate >= fiveMonthsEarlier.toJSDate() && endDate < threeMonthsEarlier.toJSDate()) {
-    return store['/v0/health/labs-and-tests'].PAST_FOUR_TO_SIX_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_FOUR_TO_SIX_MONTHS
   } else if (endDate >= eightMonthsEarlier.toJSDate() && endDate < fiveMonthsEarlier.toJSDate()) {
-    return store['/v0/health/labs-and-tests'].PAST_SEVEN_TO_NINE_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_SEVEN_TO_NINE_MONTHS
   } else if (endDate >= elevenMonthsEarlier.toJSDate() && endDate < eightMonthsEarlier.toJSDate()) {
-    return store['/v0/health/labs-and-tests'].PAST_TEN_TO_TWELVE_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_TEN_TO_TWELVE_MONTHS
   } else if (endDate >= fourteenMonthsEarlier.toJSDate() && endDate < elevenMonthsEarlier.toJSDate()) {
-    return store['/v0/health/labs-and-tests'].PAST_THIRTEEN_TO_FIFTEEN_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_THIRTEEN_TO_FIFTEEN_MONTHS
   } else {
-    return store['/v0/health/labs-and-tests'].PAST_THREE_MONTHS
+    return store['/v1/health/labs-and-tests'].PAST_THREE_MONTHS
   }
 }
 
@@ -37,7 +37,7 @@ function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoS
  * Type denoting the demo data store
  */
 export type LabsAndTestsList = {
-  '/v0/health/labs-and-tests': {
+  '/v1/health/labs-and-tests': {
     PAST_THREE_MONTHS: LabsAndTestsListPayload
     PAST_FOUR_TO_SIX_MONTHS: LabsAndTestsListPayload
     PAST_SEVEN_TO_NINE_MONTHS: LabsAndTestsListPayload

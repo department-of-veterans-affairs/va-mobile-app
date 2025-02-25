@@ -9,7 +9,7 @@ type AllergyPageNumber = '1'
  * Type denoting the demo data store
  */
 export type AllergyList = {
-  '/v0/health/allergy-intolerances': {
+  '/v1/health/allergy-intolerances': {
     '1': AllergyListPayload
   }
 }

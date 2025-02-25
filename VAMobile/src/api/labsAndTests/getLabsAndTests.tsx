@@ -19,7 +19,7 @@ export type LabsAndTestQuery = {
  * Fetch user Labs and Tests
  */
 const getLabsAndTests = ({ dateRange, page = '1' }: LabsAndTestQuery): Promise<LabsAndTestsListPayload | undefined> => {
-  return get<LabsAndTestsListPayload>(`/v0/health/labs-and-tests`, {
+  return get<LabsAndTestsListPayload>(`/v1/health/labs-and-tests`, {
     startDate: dateRange.start,
     endDate: dateRange.end,
     page,

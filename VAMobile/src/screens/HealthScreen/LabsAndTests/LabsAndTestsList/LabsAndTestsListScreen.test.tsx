@@ -48,7 +48,7 @@ context('LabsAndTestsListScreen', () => {
 
   it('renders the expected data in the list of Labs and Tests', async () => {
     when(api.get as jest.Mock)
-      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: defaultLabsAndTests })
     initializeTestInstance()
     await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
@@ -85,7 +85,7 @@ context('LabsAndTestsListScreen', () => {
     ]
     const combinedData = [...sampleData, ...defaultLabsAndTests]
     when(api.get as jest.Mock)
-      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: combinedData })
     initializeTestInstance()
     await waitFor(() => expect(screen.queryAllByText('Surgical Pathology')).toHaveLength(3))
@@ -94,7 +94,7 @@ context('LabsAndTestsListScreen', () => {
   it('renders the placeholder for labs and tests if no labs and tests are present', async () => {
     const sampleData: Array<LabsAndTests> = []
     when(api.get as jest.Mock)
-      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: sampleData })
     const { getByTestId } = initializeTestInstance()
     await waitFor(() => expect(getByTestId('NoLabsAndTestsRecords')).toBeTruthy()).then(() => {
@@ -107,7 +107,7 @@ context('LabsAndTestsListScreen', () => {
 
   it('shows an error message when there is an error fetching Labs and Tests', async () => {
     when(api.get as jest.Mock)
-      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockRejectedValue({ networkError: true } as api.APIError)
 
     initializeTestInstance()
@@ -250,7 +250,7 @@ context('LabsAndTestsListScreen', () => {
     ]
     const combinedData = [...sampleDataOfTen, ...defaultLabsAndTests]
     when(api.get as jest.Mock)
-      .calledWith('/v0/health/labs-and-tests', expect.anything())
+      .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: combinedData })
     const { getByTestId } = initializeTestInstance()
     await waitFor(() => expect(screen.queryAllByText('Surgical Pathology')).toHaveLength(10))
