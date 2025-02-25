@@ -38,7 +38,6 @@ import {
   LoadingComponent,
   PickerItem,
   TextView,
-  VAIconProps,
   VAModalPicker,
 } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
@@ -236,14 +235,14 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       const label = folder.attributes.name
 
       const icon = {
-        fill: 'defaultMenuItem',
+        fill: 'base',
         height: theme.fontSizes.MobileBody.fontSize,
         width: theme.fontSizes.MobileBody.fontSize,
         name: 'Folder',
-      } as VAIconProps
+      } as IconProps
 
       if (label === FolderNameTypeConstants.inbox) {
-        icon.fill = 'defaultMenuItem'
+        icon.fill = 'base'
         icon.name = 'Inbox'
       }
 

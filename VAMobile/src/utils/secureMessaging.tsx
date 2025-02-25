@@ -4,20 +4,14 @@ import DocumentPicker from 'react-native-document-picker'
 import { Asset, launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
-import {
-  Box,
-  InlineTextWithIconsProps,
-  LinkWithAnalytics,
-  MessageListItemObj,
-  PickerItem,
-  TextView,
-  VAIconProps,
-} from 'components'
+import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
@@ -37,6 +31,7 @@ import {
   stringToTitleCase,
 } from 'utils/formattingUtils'
 
+import Unread from '../components/VAIcon/svgs/Unread.svg'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
@@ -56,14 +51,21 @@ export const getMessagesListItems = (
     const isSentFolder = folderName === FolderNameTypeConstants.sent
     const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
-
+    const attachFileIconColor =
+      theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
     const unreadIconProps =
       readReceipt !== READ && !isOutbound
-        ? ({ name: 'Unread', width: 16, height: 16, fill: theme.colors.icon.unreadMessage } as VAIconProps)
+        ? ({ svg: Unread, height: 16, width: 16, testID: 'Unread' } as IconProps)
         : undefined
     const paperClipProps =
       hasAttachments || attachment
-        ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps)
+        ? ({
+            name: 'AttachFile',
+            width: 21,
+            height: 21,
+            fill: attachFileIconColor,
+            testID: 'AttachFile',
+          } as IconProps)
         : undefined
 
     const textLines: Array<InlineTextWithIconsProps> = [

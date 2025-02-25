@@ -11,7 +11,7 @@ import _ from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
@@ -123,6 +123,14 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
   }
 
+  const handleRefresh = () => {
+    if (inboxError) {
+      refetchInbox()
+    } else if (foldersError) {
+      refetchFolder()
+    }
+  }
+
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
@@ -148,12 +156,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <NotEnrolledSM />
       ) : termsAndConditionError ? (
         <TermsAndConditions />
-      ) : otherError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
-          error={foldersError || inboxError}
-          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
-        />
       ) : (
         <>
           <Box mx={theme.dimensions.buttonPadding}>
@@ -179,7 +181,19 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
             </Box>
             <CernerAlertSM />
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-              {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
+              {secureMessagingTab === SegmentedControlIndexes.INBOX &&
+                (otherError ? (
+                  <Box mt={20} mb={theme.dimensions.buttonPadding}>
+                    <AlertWithHaptics
+                      variant="warning"
+                      header={t('secureMessaging.inbox.messageDownError.title')}
+                      description={t('secureMessaging.inbox.messageDownError.body')}
+                      secondaryButton={{ label: t('refresh'), onPress: handleRefresh }}
+                    />
+                  </Box>
+                ) : (
+                  <Inbox setScrollPage={setScrollPage} />
+                ))}
               {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
             </Box>
           </Box>

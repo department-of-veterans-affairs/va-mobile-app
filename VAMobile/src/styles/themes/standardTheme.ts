@@ -275,7 +275,7 @@ let theme: VATheme = {
     paginationTopPadding: 40,
     snackBarBottomOffset: 20,
     chevronListItemWidth: 30,
-    chevronListItemHeight: 45,
+    chevronListItemHeight: 30,
     linkRowChevronPaddingRight: 18,
     headerButtonSpacing: 10,
     headerLeftButtonFromTextPadding: 14,
