@@ -3,7 +3,6 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { Allergy } from 'api/types'
-// import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 
 import AllergyDetailsScreen from './AllergyDetailsScreen'
@@ -43,7 +42,7 @@ context('AllergyDetailsScreen', () => {
         {
           authorReference: {
             reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-            display: 'Dr. Alicia629 Ureña88 MD',
+            display: 'Dr. Alicia',
           },
           time: '2019-03-12T16:30:00Z',
           text: 'Sulfonamides',
@@ -51,7 +50,7 @@ context('AllergyDetailsScreen', () => {
       ],
       recorder: {
         reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-        display: 'Dr. Alicia629 Ureña88 MD',
+        display: 'Dr. Alicia',
       },
       reactions: [],
     },
@@ -88,7 +87,7 @@ context('AllergyDetailsScreen', () => {
     {
       authorReference: {
         reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-        display: 'Dr. Alicia629 Ureña88 MD',
+        display: 'Dr. Alicia',
       },
       time: '2019-03-12T16:30:00Z',
       text: 'Sulfonamides',
@@ -96,7 +95,7 @@ context('AllergyDetailsScreen', () => {
     {
       authorReference: {
         reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-        display: 'Dr. Alicia629 Ureña88 MD',
+        display: 'Dr. Alicia',
       },
       time: '2019-03-13T12:30:00Z',
       text: 'Patient has a family history of sulfa allergy',
@@ -104,7 +103,7 @@ context('AllergyDetailsScreen', () => {
     {
       authorReference: {
         reference: 'https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV',
-        display: 'Dr. Alicia629 Ureña88 MD',
+        display: 'Dr. Alicia',
       },
       time: '2020-03-15T16:30:00Z',
       text: 'Additional episode of hives',
@@ -119,11 +118,11 @@ context('AllergyDetailsScreen', () => {
   it('initializes correctly for default allergy', async () => {
     initializeTestInstance()
     await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Types')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Medication')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reactions')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('None noted')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
@@ -147,11 +146,11 @@ context('AllergyDetailsScreen', () => {
 
     initializeTestInstance(allergyWithReactions)
     await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Types')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Medication')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reactions')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
@@ -175,12 +174,12 @@ context('AllergyDetailsScreen', () => {
 
     initializeTestInstance(allergyWithCategories)
     await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('food')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Types')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Food')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reactions')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())
@@ -205,12 +204,12 @@ context('AllergyDetailsScreen', () => {
 
     initializeTestInstance(allergyWithNotes)
     await waitFor(() => expect(screen.getByText('March 12, 2019')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Type')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('medication')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('food')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Types')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Medication')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Food')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Provider')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Dr. Alicia629 Ureña88 MD')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Reaction')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Dr. Alicia')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Reactions')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Urticaria (Hives)')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Notes')).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Sulfonamides')).toBeTruthy())

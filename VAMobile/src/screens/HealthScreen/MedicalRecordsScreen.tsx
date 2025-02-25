@@ -13,7 +13,7 @@ import { HealthStackParamList } from './HealthStackScreens'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
-const { LINK_URL_VA_MEDICAL_RECORDS } = getEnv()
+const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
 
 const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -44,12 +44,12 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         />
       </Box>
       <Box mx={theme.dimensions.gutter}>
-        <TextView variant={'HelperText'}>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
+        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
       </Box>
       <Box mx={gutter}>
         <LinkWithAnalytics
           type="url"
-          url={LINK_URL_VA_MEDICAL_RECORDS}
+          url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
           text={t('vaMedicalRecords.viewCompleteRecord.link')}
           a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}
           testID="viewMedicalRecordsLinkID"

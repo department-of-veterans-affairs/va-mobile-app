@@ -114,7 +114,7 @@ context('AllergyListScreen', () => {
       .mockResolvedValue({ data: allergyData })
     initializeTestInstance()
     await waitFor(() => expect(screen.getByText('Sulfonamides allergy')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('penicillins allergy')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Penicillins allergy')).toBeTruthy())
   })
 
   describe('when loading is set to true', () => {

@@ -10,7 +10,7 @@ import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedic
 
 export const AllergiesE2eIdConstants = {
   ALLERGY_1_ID: 'Sulfonamides allergy March 12, 2019',
-  ALLERGY_2_ID: 'penicillins allergy January 10, 2023',
+  ALLERGY_2_ID: 'Penicillins allergy January 10, 2023',
   ALLERGY_3_ID: 'Peanuts allergy May 15, 2022',
   ALLERGY_4_ID: 'Pollen allergy April 10, 2021',
   ALLERGY_5_ID: 'Latex allergy August 20, 2020',
@@ -45,18 +45,17 @@ describe('Allergies Screen', () => {
 
   it('verify details screen fields', async () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).tap()
-    await expect(element(by.text('Details'))).toExist()
-    const detailsText = await element(by.text('Details')).getAttributes()
+    await expect(element(by.text('Allergy details'))).toExist()
     await expect(element(by.text('March 12, 2019'))).toExist()
     await expect(element(by.text('Sulfonamides allergy'))).toExist()
-    await expect(element(by.text('medication'))).toExist()
-    await expect(element(by.text('Dr. Alicia629 Ureña88 MD'))).toExist()
-    await expect(element(by.text('None noted '))).toExist()
+    await expect(element(by.text('Medication'))).toExist()
+    await expect(element(by.text('Dr. Alicia'))).toExist()
+    await expect(element(by.text('None noted'))).toExist()
     await expect(element(by.text('Sulfonamides'))).toExist()
     await expect(
       element(
-        by.label(
-          'We base this information on your current  V-A  health records. If you have any questions, contact your health care team.',
+        by.text(
+          'We base this information on your current VA health records. If you have any questions, contact your health care team.',
         ),
       ),
     ).toExist()

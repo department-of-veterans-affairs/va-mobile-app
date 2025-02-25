@@ -1,464 +1,462 @@
 {
   "/v0/health/allergy-intolerances": {
-    "1": {
-      "data": [
-        {
-          "id": "4-1abLZzsevfVnWK",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
-                }
-              ]
-            },
-            "category": ["medication"],
-            "code": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008048",
-                  "display": "Sulfonamides"
-                }
-              ],
-              "text": "Sulfonamides"
-            },
-            "recordedDate": "2019-03-12T16:30:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "notes": [
+    "data": [
+      {
+        "id": "4-1abLZzsevfVnWK",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
               {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV",
-                  "display": "Dr. Alicia629 Ureña88 MD"
-                },
-                "time": "2019-03-12T16:30:00Z",
-                "text": "Sulfonamides"
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["medication"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008048",
+                "display": "Sulfonamides"
               }
             ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV",
-              "display": "Dr. Alicia629 Ureña88 MD"
-            },
-            "reactions": []
-          }
-        },
-        {
-          "id": "4-1wYbwqxtod74iS",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
-                }
-              ]
-            },
-            "category": ["medication", "biologic"],
-            "code": {
-              "coding": [],
-              "text": "penicillins"
-            },
-            "recordedDate": "2023-01-10T18:26:28Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "SUPNICK, DAMASO"
-            },
-            "notes": [],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-X3BWnhAtrFa0Ko0R",
-              "display": "Nurse2, VA-HBPC"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [],
-                  "text": "penicillins"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Urticaria (Hives)"
-                  }
-                ]
+            "text": "Sulfonamides"
+          },
+          "recordedDate": "2019-03-12T16:30:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV",
+                "display": "Dr. Alicia"
               },
+              "time": "2019-03-12T16:30:00Z",
+              "text": "Sulfonamides"
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Nn79MgdlF9vV",
+            "display": "Dr. Alicia"
+          },
+          "reactions": []
+        }
+      },
+      {
+        "id": "4-1wYbwqxtod74iS",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
               {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008049",
-                      "display": "penicillins"
-                    }
-                  ],
-                  "text": "penicillins"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Anaphylaxis"
-                  }
-                ]
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
               }
             ]
-          }
-        },
-        {
-          "id": "4-2cD3F4G5H6I7J8K",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
+          },
+          "category": ["medication", "biologic"],
+          "code": {
+            "coding": [],
+            "text": "penicillins"
+          },
+          "recordedDate": "2023-01-10T18:26:28Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "SUPNICK, DAMASO"
+          },
+          "notes": [],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-X3BWnhAtrFa0Ko0R",
+            "display": "Nurse2, VA-HBPC"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [],
+                "text": "penicillins"
+              },
+              "manifestation": [
                 {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
+                  "coding": [],
+                  "text": "Urticaria (Hives)"
                 }
               ]
             },
-            "category": ["food"],
-            "code": {
-              "coding": [
+            {
+              "substance": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008049",
+                    "display": "penicillins"
+                  }
+                ],
+                "text": "penicillins"
+              },
+              "manifestation": [
                 {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008049",
-                  "display": "Peanuts"
+                  "coding": [],
+                  "text": "Anaphylaxis"
                 }
-              ],
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "4-2cD3F4G5H6I7J8K",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["food"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008049",
+                "display": "Peanuts"
+              }
+            ],
+            "text": "Peanuts"
+          },
+          "recordedDate": "2022-05-15T10:00:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Y7Z8X9W0V1U2T3S",
+                "display": "Dr. John Doe MD"
+              },
+              "time": "2022-05-15T10:00:00Z",
               "text": "Peanuts"
-            },
-            "recordedDate": "2022-05-15T10:00:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "notes": [
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Y7Z8X9W0V1U2T3S",
-                  "display": "Dr. John Doe MD"
-                },
-                "time": "2022-05-15T10:00:00Z",
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Y7Z8X9W0V1U2T3S",
+            "display": "Dr. John Doe MD"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008049",
+                    "display": "Peanuts"
+                  }
+                ],
                 "text": "Peanuts"
-              }
-            ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Y7Z8X9W0V1U2T3S",
-              "display": "Dr. John Doe MD"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008049",
-                      "display": "Peanuts"
-                    }
-                  ],
-                  "text": "Peanuts"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Anaphylaxis"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "4-3eF5G6H7I8J9K0L",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
+              },
+              "manifestation": [
                 {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
+                  "coding": [],
+                  "text": "Anaphylaxis"
                 }
               ]
-            },
-            "category": ["environment"],
-            "code": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008050",
-                  "display": "Pollen"
-                }
-              ],
+            }
+          ]
+        }
+      },
+      {
+        "id": "4-3eF5G6H7I8J9K0L",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["environment"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008050",
+                "display": "Pollen"
+              }
+            ],
+            "text": "Pollen"
+          },
+          "recordedDate": "2021-04-10T09:00:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Z1X2C3V4B5N6M7L",
+                "display": "Dr. Jane Smith MD"
+              },
+              "time": "2021-04-10T09:00:00Z",
               "text": "Pollen"
-            },
-            "recordedDate": "2021-04-10T09:00:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "notes": [
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Z1X2C3V4B5N6M7L",
-                  "display": "Dr. Jane Smith MD"
-                },
-                "time": "2021-04-10T09:00:00Z",
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Z1X2C3V4B5N6M7L",
+            "display": "Dr. Jane Smith MD"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008050",
+                    "display": "Pollen"
+                  }
+                ],
                 "text": "Pollen"
-              }
-            ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-Z1X2C3V4B5N6M7L",
-              "display": "Dr. Jane Smith MD"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008050",
-                      "display": "Pollen"
-                    }
-                  ],
-                  "text": "Pollen"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Sneezing"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "4-4gH7I8J9K0L1M2N",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
+              },
+              "manifestation": [
                 {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
+                  "coding": [],
+                  "text": "Sneezing"
                 }
               ]
-            },
-            "category": ["biologic"],
-            "code": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008051",
-                  "display": "Latex"
-                }
-              ],
+            }
+          ]
+        }
+      },
+      {
+        "id": "4-4gH7I8J9K0L1M2N",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["biologic"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008051",
+                "display": "Latex"
+              }
+            ],
+            "text": "Latex"
+          },
+          "recordedDate": "2020-08-20T14:30:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-A1B2C3D4E5F6G7H",
+                "display": "Dr. Emily Johnson MD"
+              },
+              "time": "2020-08-20T14:30:00Z",
               "text": "Latex"
-            },
-            "recordedDate": "2020-08-20T14:30:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "notes": [
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-A1B2C3D4E5F6G7H",
-                  "display": "Dr. Emily Johnson MD"
-                },
-                "time": "2020-08-20T14:30:00Z",
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-A1B2C3D4E5F6G7H",
+            "display": "Dr. Emily Johnson MD"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008051",
+                    "display": "Latex"
+                  }
+                ],
                 "text": "Latex"
-              }
-            ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-A1B2C3D4E5F6G7H",
-              "display": "Dr. Emily Johnson MD"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008051",
-                      "display": "Latex"
-                    }
-                  ],
-                  "text": "Latex"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Rash"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "4-5iJ9K0L1M2N3O4P",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
+              },
+              "manifestation": [
                 {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
+                  "coding": [],
+                  "text": "Rash"
                 }
               ]
-            },
-            "category": ["food"],
-            "code": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008052",
-                  "display": "Shellfish"
-                }
-              ],
+            }
+          ]
+        }
+      },
+      {
+        "id": "4-5iJ9K0L1M2N3O4P",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["food"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008052",
+                "display": "Shellfish"
+              }
+            ],
+            "text": "Shellfish"
+          },
+          "recordedDate": "2021-11-05T11:15:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-I1J2K3L4M5N6O7P",
+                "display": "Dr. Michael Brown MD"
+              },
+              "time": "2021-11-05T11:15:00Z",
               "text": "Shellfish"
-            },
-            "recordedDate": "2021-11-05T11:15:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
-            },
-            "notes": [
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-I1J2K3L4M5N6O7P",
-                  "display": "Dr. Michael Brown MD"
-                },
-                "time": "2021-11-05T11:15:00Z",
-                "text": "Shellfish"
-              }
-            ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-I1J2K3L4M5N6O7P",
-              "display": "Dr. Michael Brown MD"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008052",
-                      "display": "Shellfish"
-                    }
-                  ],
-                  "text": "Shellfish"
-                },
-                "manifestation": [
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-I1J2K3L4M5N6O7P",
+            "display": "Dr. Michael Brown MD"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [
                   {
-                    "coding": [],
-                    "text": "Swelling"
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008052",
+                    "display": "Shellfish"
                   }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "id": "4-6kL1M2N3O4P5Q6R",
-          "type": "allergy_intolerance",
-          "attributes": {
-            "resourceType": "AllergyIntolerance",
-            "type": "allergy",
-            "clinicalStatus": {
-              "coding": [
+                ],
+                "text": "Shellfish"
+              },
+              "manifestation": [
                 {
-                  "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
-                  "code": "active"
+                  "coding": [],
+                  "text": "Swelling"
                 }
               ]
-            },
-            "category": ["environment"],
-            "code": {
-              "coding": [
-                {
-                  "system": "http://hl7.org/fhir/ndfrt",
-                  "code": "N0000008053",
-                  "display": "Dust"
-                }
-              ],
+            }
+          ]
+        }
+      },
+      {
+        "id": "4-6kL1M2N3O4P5Q6R",
+        "type": "allergy_intolerance",
+        "attributes": {
+          "resourceType": "AllergyIntolerance",
+          "type": "allergy",
+          "clinicalStatus": {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+                "code": "active"
+              }
+            ]
+          },
+          "category": ["environment"],
+          "code": {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/ndfrt",
+                "code": "N0000008053",
+                "display": "Dust"
+              }
+            ],
+            "text": "Dust"
+          },
+          "recordedDate": "2020-12-12T08:45:00Z",
+          "patient": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
+            "display": "DAMASO SUPNICK"
+          },
+          "notes": [
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
+                "display": "Dr. Sarah Lee MD"
+              },
+              "time": "2020-12-12T08:45:00Z",
               "text": "Dust"
             },
-            "recordedDate": "2020-12-12T08:45:00Z",
-            "patient": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
-              "display": "DAMASO SUPNICK"
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
+                "display": "Dr. Sarah Lee MD"
+              },
+              "time": "2020-12-12T08:45:00Z",
+              "text": "More Dust"
             },
-            "notes": [
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-                  "display": "Dr. Sarah Lee MD"
-                },
-                "time": "2020-12-12T08:45:00Z",
+            {
+              "authorReference": {
+                "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
+                "display": "Dr. Sarah Lee MD"
+              },
+              "time": "2020-12-12T08:45:00Z",
+              "text": "Even More Dust"
+            }
+          ],
+          "recorder": {
+            "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
+            "display": "Dr. Sarah Lee MD"
+          },
+          "reactions": [
+            {
+              "substance": {
+                "coding": [
+                  {
+                    "system": "http://hl7.org/fhir/ndfrt",
+                    "code": "N0000008053",
+                    "display": "Dust"
+                  }
+                ],
                 "text": "Dust"
               },
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-                  "display": "Dr. Sarah Lee MD"
-                },
-                "time": "2020-12-12T08:45:00Z",
-                "text": "More Dust"
-              },
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-                  "display": "Dr. Sarah Lee MD"
-                },
-                "time": "2020-12-12T08:45:00Z",
-                "text": "Even More Dust"
-              }
-            ],
-            "recorder": {
-              "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-              "display": "Dr. Sarah Lee MD"
-            },
-            "reactions": [
-              {
-                "substance": {
-                  "coding": [
-                    {
-                      "system": "http://hl7.org/fhir/ndfrt",
-                      "code": "N0000008053",
-                      "display": "Dust"
-                    }
-                  ],
-                  "text": "Dust"
-                },
-                "manifestation": [
-                  {
-                    "coding": [],
-                    "text": "Coughing"
-                  }
-                ]
-              }
-            ]
-          }
+              "manifestation": [
+                {
+                  "coding": [],
+                  "text": "Coughing"
+                }
+              ]
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   }
 }

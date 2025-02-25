@@ -53,7 +53,6 @@ echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
 # set website URLs
 echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://${WEBSITE_PREFIX}va.gov/health-care/schedule-view-va-appointments" >> .env
-echo "LINK_URL_VA_MEDICAL_RECORDS=https://${WEBSITE_PREFIX}va.gov/my-health/medical-records/" >> .env
 
 # Get all vars that are the same across environments
 while read p; do
