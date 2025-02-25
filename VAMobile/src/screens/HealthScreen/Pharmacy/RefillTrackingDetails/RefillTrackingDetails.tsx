@@ -138,6 +138,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
               url={trackingLink + trackingNumber}
               text={trackingNumber}
               a11yLabel={trackingNumberA11yLabel}
+              testID="trackingLink"
             />
           ) : (
             <TextView variant={'MobileBody'} accessibilityLabel={trackingNumberA11yLabel || noneNoted}>

@@ -304,8 +304,10 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify tracking link for DHL works', async () => {
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await element(by.id('trackingLink')).tap()
+    await element(
+      by.label(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT).and(by.type('_UIAlertControllerActionView')),
+    ).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteDHL')
     await device.launchApp({ newInstance: false })
@@ -319,8 +321,10 @@ describe('Prescriptions Screen', () => {
       .scroll(500, 'down')
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(1).tap()
     await expect(element(by.text('Delivery service: FEDEX'))).toExist()
-    await element(by.label('7 5 3 4 5 3 3 6 3 6 8 5 6')).atIndex(trackingIndex).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await element(by.id('trackingLink')).tap()
+    await element(
+      by.label(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT).and(by.type('_UIAlertControllerActionView')),
+    ).tap()
     await setTimeout(5000)
     await device.takeScreenshot('PrescriptionTrackingWebsiteFedex')
     await device.launchApp({ newInstance: false })
