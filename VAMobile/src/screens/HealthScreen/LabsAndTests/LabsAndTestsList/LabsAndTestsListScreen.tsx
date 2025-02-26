@@ -23,10 +23,12 @@ import {
   VAModalPicker,
 } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getFormattedDate } from 'utils/formattingUtils'
@@ -171,6 +173,17 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     },
     { enabled: screenContentAllowed('WG_LabsAndTestsList') && !labsAndTestsInDowntime },
   )
+
+  // Analytics
+  useEffect(() => {
+    const { timeFrame } = datePickerOption
+    const count = labsAndTests?.data.length
+    // if count is a number
+    if (typeof count !== 'number') {
+      return
+    }
+    logAnalyticsEvent(Events.vama_lab_or_test_list({ timeFrame, count }))
+  }, [datePickerOption, labsAndTests])
 
   useEffect(() => {
     const filteredLabsAndTests = labsAndTests?.data.sort((a, b) => {

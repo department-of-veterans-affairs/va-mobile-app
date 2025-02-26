@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
-
 import { LabsAndTests } from 'api/types'
 // import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
