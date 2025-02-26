@@ -36,6 +36,7 @@ import {
   MessageAlert,
   PickerItem,
   TextArea,
+  TextView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
@@ -380,6 +381,21 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
     return (
       <Box>
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="info"
+            header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
+            scrollViewRef={scrollViewRef}>
+            <TextView variant="MobileBody">
+              {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
+              <TextView variant="MobileBodyBold">
+                {t('secureMessaging.startNewMessage.nonurgent.threeDays')}
+              </TextView>{' '}
+              {t('secureMessaging.startNewMessage.nonurgent.reply')}
+            </TextView>
+          </AlertWithHaptics>
+        </Box>
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}

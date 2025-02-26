@@ -232,4 +232,16 @@ context('StartNewMessage', () => {
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
     })
   })
+
+  describe('when displaying the form', () => {
+    it('should display an alert about urgent messages', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/messaging/health/recipients')
+        .mockResolvedValue(recipients)
+        .calledWith('/v0/messaging/health/messages/signature')
+        .mockResolvedValue(signature)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getAllByText('Only use messages for non-urgent needs')).toBeTruthy())
+    })
+  })
 })
