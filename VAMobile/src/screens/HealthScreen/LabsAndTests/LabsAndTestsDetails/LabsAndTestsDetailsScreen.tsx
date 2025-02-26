@@ -96,6 +96,11 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
               </TextView>
             </Box>
           </TextArea>
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+              {t('health.details.weBaseThis')}
+            </TextView>
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>
