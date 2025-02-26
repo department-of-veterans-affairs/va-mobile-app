@@ -32,7 +32,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   const detailsLoading = false
 
-  // analtyics
+  // analytics
   useEffect(() => {
     logAnalyticsEvent(Events.vama_lab_or_test_details())
   }, [dispatch, labOrTest])
