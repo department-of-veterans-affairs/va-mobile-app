@@ -102,10 +102,10 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     const mutateOptions = {
       onSuccess: () => {
         setSubmittedDecision(true)
-        snackbar.show('Request sent')
+        snackbar.show(t('askForClaimDecision.requestSent'))
       },
       onError: () =>
-        snackbar.show('Request could not be sent', {
+        snackbar.show(t('askForClaimDecision.requestNotSent'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: () => onSubmit,
