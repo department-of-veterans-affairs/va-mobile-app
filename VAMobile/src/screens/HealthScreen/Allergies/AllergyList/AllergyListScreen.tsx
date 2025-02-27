@@ -6,8 +6,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
 
-import { Vaccine } from 'api/types'
-import { useVaccines } from 'api/vaccines/getVaccines'
+import { useAllergies } from 'api/allergies/getAllergies'
+import { Allergy } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -20,38 +20,40 @@ import {
   TextLine,
 } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
-import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
+import NoAllergyRecords from '../NoAllergyRecords/NoAllergyRecords'
 
-type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
+type AllergyListScreenProps = StackScreenProps<HealthStackParamList, 'AllergyList'>
 
 /**
- * Screen containing a list of vaccines on record and a link to their details view
+ * Screen containing a list of allergies on record and a link to their details view
  */
-function VaccineListScreen({ navigation }: VaccineListScreenProps) {
+function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const [page, setPage] = useState(1)
   // checks for downtime, immunizations downtime constant is having an issue with unit test
-  const vaccinesInDowntime = useError(ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID)
+  const allergiesInDowntime = useError(ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID)
   const {
-    data: vaccines,
+    data: allergies,
     isFetching: loading,
-    error: vaccineError,
-    refetch: refetchVaccines,
-  } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+    error: allergyError,
+    refetch: refetchAllergies,
+  } = useAllergies({ enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const [vaccinesToShow, setVaccinesToShow] = useState<Array<Vaccine>>([])
+  const [AllergiesToShow, setAllergiesToShow] = useState<Array<Allergy>>([])
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -59,38 +61,38 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   }
 
   useEffect(() => {
-    const vaccineList = vaccines?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
-    setVaccinesToShow(vaccineList || [])
-  }, [vaccines?.data, page])
+    logAnalyticsEvent(Events.vama_allergy_list())
+  }, [allergies])
 
-  const vaccineButtons: Array<DefaultListItemObj> = map(vaccinesToShow, (vaccine, index) => {
-    const vaccineTitle = vaccine.attributes?.groupName
-      ? t('vaccines.vaccineName', { name: vaccine.attributes?.groupName })
-      : t('vaccine')
-    const vaccineDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes?.date) : t('vaccines.noDate')
+  useEffect(() => {
+    const allergyList = allergies?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    setAllergiesToShow(allergyList || [])
+  }, [allergies?.data, page])
 
+  const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
       {
-        text: vaccineTitle,
+        text: t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) }),
         variant: 'MobileBodyBold',
       },
-      { text: vaccineDate },
+      { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
     ]
 
-    const vaccineButton: DefaultListItemObj = {
+    const allergyButton: DefaultListItemObj = {
       textLines,
       onPress: () => {
-        navigateTo('VaccineDetails', { vaccine: vaccine })
+        navigateTo('AllergyDetails', { allergy: allergy })
       },
-      a11yHintText: t('vaccines.list.a11yHint'),
-      a11yValue: t('listPosition', { position: index + 1, total: vaccines?.data.length }),
+      a11yHintText: t('allergies.list.a11yHint'),
+      a11yValue: t('listPosition', { position: index + 1, total: allergies?.data.length }),
       testId: getA11yLabelText(textLines),
     }
 
-    return vaccineButton
+    return allergyButton
   })
 
   // Render pagination for sent and drafts folderMessages only
+  // TODO: DRY for this and vaccines.
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -101,7 +103,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
         setPage(page - 1)
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
       },
-      totalEntries: vaccines?.meta?.pagination?.totalEntries || 0,
+      totalEntries: allergies?.meta?.pagination?.totalEntries || 0,
       pageSize: DEFAULT_PAGE_SIZE,
       page,
     }
@@ -121,23 +123,23 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     <FeatureLandingTemplate
       backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('vaVaccines')}
-      titleA11y={a11yLabelVA(t('vaVaccines'))}
+      title="Allergies"
+      titleA11y={a11yLabelVA(t('vaAllergies'))}
       scrollViewProps={scrollViewProps}>
       {loading ? (
-        <LoadingComponent text={t('vaccines.loading')} />
-      ) : vaccineError || vaccinesInDowntime ? (
+        <LoadingComponent text={t('allergies.loading')} />
+      ) : allergyError || allergiesInDowntime ? (
         <ErrorComponent
-          screenID={ScreenIDTypesConstants.VACCINE_LIST_SCREEN_ID}
-          error={vaccineError}
-          onTryAgain={refetchVaccines}
+          screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
+          error={allergyError}
+          onTryAgain={refetchAllergies}
         />
-      ) : vaccines?.data?.length === 0 ? (
-        <NoVaccineRecords />
+      ) : allergies?.data?.length === 0 ? (
+        <NoAllergyRecords />
       ) : (
         <>
           <Box mb={theme.dimensions.contentMarginBottom}>
-            <DefaultList items={vaccineButtons} />
+            <DefaultList items={allergyButtons} />
           </Box>
           {renderPagination()}
         </>
@@ -146,4 +148,4 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   )
 }
 
-export default VaccineListScreen
+export default AllergyListScreen
