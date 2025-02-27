@@ -60,9 +60,6 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
       })
     : placeHolder
 
-  const optionalFields = [hasSeries, vaccine.attributes?.note, location?.data, vaccine.attributes?.reaction]
-  const isPartialData = !every(optionalFields)
-
   // Only show the manufacturer label if the vaccine is COVID-19, any other type should not be displayed
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
 
@@ -159,13 +156,11 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
                 </TextView>
               </Box>
             </TextArea>
-            {isPartialData && (
-              <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-                <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-                  {t('health.details.weBaseThis')}
-                </TextView>
-              </Box>
-            )}
+            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+                {t('health.details.weBaseThis')}
+              </TextView>
+            </Box>
           </Box>
         </>
       )}
