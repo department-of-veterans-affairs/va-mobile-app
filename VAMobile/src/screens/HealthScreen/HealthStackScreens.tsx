@@ -4,7 +4,9 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import {
+  Allergy,
   AppointmentData,
+  LabsAndTests,
   PrescriptionData,
   RefillRequestSummaryItems,
   RefillStatus,
@@ -32,6 +34,7 @@ import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
+  MedicalRecordsList: undefined
   Appointments: undefined
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
@@ -102,6 +105,14 @@ export type HealthStackParamList = WebviewStackParams & {
   VaccineList: undefined
   VaccineDetails: {
     vaccine: Vaccine
+  }
+  AllergyList: undefined
+  AllergyDetails: {
+    allergy: Allergy
+  }
+  LabsAndTestsList: undefined
+  LabsAndTestsDetailsScreen: {
+    labOrTest: LabsAndTests
   }
   GeneralHelpScreen: {
     title: string

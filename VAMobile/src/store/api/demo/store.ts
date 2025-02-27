@@ -9,11 +9,13 @@ import {
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { Params } from '../api'
+import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from './allergies'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
 import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
+import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from './labsAndTests'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
@@ -47,7 +49,9 @@ export type DemoStore = AppointmentsDemoStore &
   PaymenDemoStore &
   PrescriptionsDemoStore &
   NotificationDemoStore &
-  DemographicsDemoStore
+  DemographicsDemoStore &
+  AllergyDemoStore &
+  LabsAndTestsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -65,6 +69,8 @@ type DemoApiReturns =
   | PrescriptionsDemoReturnTypes
   | NotificationDemoApiReturnTypes
   | DemographicsDemoApiReturnTypes
+  | AllergyDemoReturnTypes
+  | LabsAndTestsDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -133,6 +139,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/vaccine.json'),
     import('./mocks/disablityRating.json'),
     import('./mocks/decisionLetters.json'),
+    import('./mocks/labsAndTests.json'),
     import('./mocks/letters.json'),
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
@@ -144,8 +151,10 @@ export const initDemoStore = async (): Promise<void> => {
       : import('./mocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),
     import('./mocks/personalInformation.json'),
+    import('./mocks/allergies.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
+  // console.log ( JSON.stringify(transformedData, null, 2))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
@@ -217,6 +226,12 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
+    }
+    case '/v1/health/labs-and-tests': {
+      return getLabsAndTestsList(store, params, endpoint)
+    }
+    case '/v0/health/allergy-intolerances': {
+      return getAllergyList(store, params, endpoint)
     }
     case '/v0/payment-history': {
       return getPaymentsHistory(store, params, endpoint)

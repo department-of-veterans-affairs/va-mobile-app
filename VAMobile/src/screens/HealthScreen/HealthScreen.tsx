@@ -25,10 +25,15 @@ import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import AllergyDetailsScreen from './Allergies/AllergyDetails/AllergyDetailsScreen'
+import AllergyListScreen from './Allergies/AllergyList/AllergyListScreen'
 import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import { HealthStackParamList } from './HealthStackScreens'
+import LabsAndTestsDetailsScreen from './LabsAndTests/LabsAndTestsDetails/LabsAndTestsDetailsScreen'
+import LabsAndTestsListScreen from './LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
+import MedicalRecordsScreen from './MedicalRecordsScreen'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import SecureMessaging from './SecureMessaging'
@@ -37,10 +42,13 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
+// import LabsAndTestsDetailScreen from './LabsAndTests/LabsAndTestsDetail/LabsAndTestsDetailScreen'
+
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
+// TODO: consider re-factoring this component for brevity.
 export function HealthScreen({}: HealthScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -158,9 +166,9 @@ export function HealthScreen({}: HealthScreenProps) {
           />
         )}
         <LargeNavButton
-          title={t('vaVaccines.buttonTitle')}
-          onPress={() => navigateTo('VaccineList')}
-          testID="toVaccineListID"
+          title={t('vaMedicalRecords.buttonTitle')}
+          onPress={() => navigateTo('MedicalRecordsList')}
+          testID="toMedicalRecordsListID"
         />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
@@ -257,6 +265,31 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="VaccineList"
         component={VaccineListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="AllergyDetails"
+        component={AllergyDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="AllergyList"
+        component={AllergyListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="MedicalRecordsList"
+        component={MedicalRecordsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="LabsAndTestsList"
+        component={LabsAndTestsListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="LabsAndTestsDetailsScreen"
+        component={LabsAndTestsDetailsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />
