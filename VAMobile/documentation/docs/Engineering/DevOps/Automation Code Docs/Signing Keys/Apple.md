@@ -28,7 +28,11 @@ In the remote repository, you will need to delete the following files:
 - `/certs/distribution/<filename>.cer`
 - `/certs/distribution/<filename>.p12`
 
-You will need to delete the expiring profile and revoke the certificates from the Developer Console.
+:::info
+You may need to delete additional certs from other paths (e.g., `/certs/developer/...`) if you run into a `decrpyt error` when running the `fastlane match` command below.
+:::
+
+You will need to revoke the certificates from the Apple Developer console.
 
 ### [Certificate](https://developer.apple.com/account/resources/certificates/list)
 
@@ -50,7 +54,7 @@ Apple Push Service certificates need to be refreshed yearly in August and sent t
 Once the certificates have been deleted from both locations you can [run match in your terminal](https://docs.fastlane.tools/actions/match/#run) to renew the certs
 navigate to `~/VAMobile/ios/fastlane` and then run `fastlane match appstore`. You should be able to follow the prompt to create a new Distribution Certificate and Provisioning Profile that will be uploaded to the private repository and can then be used for signing apps. If you run into issues, review the following:
  - Try using `brew install fastlane` if your build is erroring out
- - Does the Apple ID in the Matchfile belong to you?
+ - Does the Apple ID in the ../ios/fastlane/Appfile belong to you?
  - The Apple ID is case sensitive. If your Apple ID password is getting rejected, this might be the issue. - 
 
 After generating the new certs, make sure the `MATCH_PASSWORD` secret in the `va-mobile-app` repository is updated so GH Actions can use it.
