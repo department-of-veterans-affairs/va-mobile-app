@@ -27,7 +27,7 @@ beforeAll(async () => {
   await openLabsAndTestRecords()
 })
 
-describe.skip('Labs And Test Screen date picker', () => {
+describe('Labs And Test Screen date picker', () => {
   it('past labs: three months - five months earlier verification', async () => {
     await element(by.id('labsAndTestDataRangeTestID')).tap()
     await element(
