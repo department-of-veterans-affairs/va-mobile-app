@@ -39,18 +39,18 @@ assignees:
 <summary>Contact List</summary>
  
 **VA:**
-- **Mobile OCTO Product Leads:** Rachel Han, Ryan Thurlwell or Don McCaughey
+- **Mobile OCTO Product Leads:** Ryan Thurlwell
 - **VA OCTO Product Leads:** 
 - **External Team 1 & Role:**
 - **External Team 1 & Role:**
 - 
-**Ad Hoc:** 
-- **Mobile Team**: Global, Health and Benefits, Design System, QA, API 
-- **Mobile Team Lead:** 
-- **FE Engineering:**
-- **BE Engineering:** 
-- **Design:**
-- **Content**
-- **QA:**
-- **Mobile Teams that are involved:** Global, Health and Benefits, Design System, QA, API 
+**Mobile Core Team:** 
+- **Engineering Lead:** Tim Wright
+- **Product Lead:** Becca Tupaj
+- **Product Manager:** Brenda Rocha
+- **FE Engineering:** Chris Troiano, John Marchi, Jon Binbeutel, Ken Li, and Tony Doan
+- **BE Engineering:** Ryan Mcneil
+- **Design:** Jonathan Post and Kira Evsanaa
+- **QA:** Ken Harrison
+- **DevOps:** Josh Bergman
 </details>
