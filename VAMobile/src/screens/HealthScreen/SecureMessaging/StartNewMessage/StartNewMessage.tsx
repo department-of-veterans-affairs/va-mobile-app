@@ -36,6 +36,7 @@ import {
   MessageAlert,
   PickerItem,
   TextArea,
+  TextView,
 } from 'components'
 import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
@@ -373,13 +374,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       )
     }
 
-    const navigateToReplyHelp = () => {
-      logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigateTo('ReplyHelp')
-    }
-
     return (
       <Box>
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="info"
+            header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            scrollViewRef={scrollViewRef}>
+            <TextView variant="MobileBody">
+              {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
+              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.nonurgent.threeDays')}</TextView>
+              {t('secureMessaging.startNewMessage.nonurgent.reply')}
+            </TextView>
+          </AlertWithHaptics>
+        </Box>
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
@@ -399,14 +407,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             setResetErrors={setResetErrors}
             setErrorList={setErrorList}
           />
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
-              onPress={navigateToReplyHelp}
-              testID="startNewMessageOnlyUseMessagesTestID"
-            />
-          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
               label={t('secureMessaging.formMessage.send')}
