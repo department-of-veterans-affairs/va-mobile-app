@@ -35,7 +35,7 @@ beforeAll(async () => {
 
 describe('Vaccine Records Screen', () => {
   it('should show vaccine records list content', async () => {
-    await expect(element(by.text('VA vaccines'))).toExist()
+    await expect(element(by.text('vaccines'))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID))).toExist()
     const defaultVaccineTemplate = await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).takeScreenshot(
       'defaultVaccineTemplate',
@@ -70,7 +70,7 @@ describe('Vaccine Records Screen', () => {
     ).toExist()
   })
 
-  it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
+  it('should tap on vaccines and navigate back to the vaccines list', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
