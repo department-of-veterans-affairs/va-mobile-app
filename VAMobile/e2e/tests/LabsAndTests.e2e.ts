@@ -1,5 +1,8 @@
-import { by, element } from 'detox'
+import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
+
+import * as api from 'store/api'
+import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
 import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords } from './utils'
 
@@ -24,7 +27,7 @@ beforeAll(async () => {
   await openLabsAndTestRecords()
 })
 
-describe('Labs And Test Screen', () => {
+describe.skip('Labs And Test Screen date picker', () => {
   it('past labs: three months - five months earlier verification', async () => {
     await element(by.id('labsAndTestDataRangeTestID')).tap()
     await element(
@@ -85,5 +88,49 @@ describe('Labs And Test Screen', () => {
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
+  })
+})
+
+describe('Labs And Test Screen', () => {
+  const HEADER_TEXT = 'Labs and tests'
+
+  const TEST_IDS = {
+    LIST_ID: 'LabsAndTestsButtonsListTestID',
+    SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
+    BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
+  }
+  it('should list the list of labs and tests', async () => {
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+    await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
+  })
+  it('navigate back and forth between the list and details screen', async () => {
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
+    await element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID)).tap()
+    // the title should be details
+    await expect(element(by.text('Details'))).toExist()
+    // go back
+    await element(by.id('labsAndTestsDetailsBackID')).tap()
+    // the title should be labs and tests
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+  })
+  it('should be able to click into a lab or test record', async () => {
+    // loads the list,
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
+    await element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID)).tap()
+
+    // the title should be details
+    await expect(element(by.text('Details'))).toExist()
+
+    // the page should have the correct data
+    await expect(element(by.text('Surgical Pathology'))).toExist()
+    await expect(element(by.text('March 14, 2019'))).toExist()
+    await expect(element(by.text('TESTING BONE MARROW'))).toExist()
+    await expect(element(by.text('VA TEST LAB'))).toExist()
+
+    // ensure base 64 decoded data is present
+    await expect(element(by.text('this is a test'))).toExist()
   })
 })

@@ -211,6 +211,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       a11yValue: t('listPosition', { position: index + 1, total: labsAndTests?.data.length }),
       testId: getA11yLabelText(textLines),
     }
+    console.log(labsAndTestsButton.testId)
 
     return labsAndTestsButton
   })

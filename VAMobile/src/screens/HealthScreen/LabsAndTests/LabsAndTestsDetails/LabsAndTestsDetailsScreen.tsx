@@ -69,7 +69,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       backLabelA11y={a11yLabelVA(t('labsAndTests.details.backButton'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
-      backLabelTestID="allergiesDetailsBackID">
+      backLabelTestID="labsAndTestsDetailsBackID">
       {detailsLoading ? (
         <LoadingComponent text={t('labsAndTests.details.loading')} />
       ) : (
