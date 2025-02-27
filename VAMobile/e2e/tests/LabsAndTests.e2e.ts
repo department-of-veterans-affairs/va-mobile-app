@@ -27,7 +27,7 @@ beforeAll(async () => {
   await openLabsAndTestRecords()
 })
 
-describe('Labs And Test Screen date picker', () => {
+describe('Labs And Test Screen - Date Picker', () => {
   it('past labs: three months - five months earlier verification', async () => {
     await element(by.id('labsAndTestDataRangeTestID')).tap()
     await element(
@@ -99,12 +99,22 @@ describe('Labs And Test Screen', () => {
     SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
     BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
   }
+
+  const resetDateRangeToDefault = async () => {
+    await element(by.id('labsAndTestDataRangeTestID')).tap()
+    await element(by.text('Past 3 months')).tap()
+    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
+  }
+
   it('should list the list of labs and tests', async () => {
+    await resetDateRangeToDefault()
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
   })
   it('navigate back and forth between the list and details screen', async () => {
+    await resetDateRangeToDefault()
+
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
     await element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID)).tap()
@@ -116,6 +126,8 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
   })
   it('should be able to click into a lab or test record', async () => {
+    await resetDateRangeToDefault()
+
     // loads the list,
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
