@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every } from 'underscore'
-
 import { useVaccineLocation } from 'api/vaccines/getVaccineLocation'
 import { AlertWithHaptics, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'

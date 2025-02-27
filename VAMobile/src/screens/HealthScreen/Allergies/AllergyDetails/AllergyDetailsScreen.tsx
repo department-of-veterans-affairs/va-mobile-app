@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every } from 'underscore'
-
 import { useAllergies } from 'api/allergies/getAllergies'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'

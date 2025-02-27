@@ -19,7 +19,6 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { gutter } = theme.dimensions
 
   return (
     <FeatureLandingTemplate
