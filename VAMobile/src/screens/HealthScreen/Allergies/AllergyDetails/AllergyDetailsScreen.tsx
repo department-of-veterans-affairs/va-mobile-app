@@ -51,14 +51,6 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
     ? t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) })
     : placeHolder
 
-  const optionalFields = [
-    allergy.attributes?.category?.length,
-    allergy.attributes?.notes?.length,
-    allergy.attributes?.reactions?.length,
-    allergy.attributes?.recorder,
-  ]
-  const isPartialData = !every(optionalFields)
-
   return (
     <FeatureLandingTemplate
       backLabel={t('vaAllergies')}
@@ -150,13 +142,12 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               </Box>
             </Box>
           </TextArea>
-          {isPartialData && (
-            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-                {t('health.details.weBaseThis')}
-              </TextView>
-            </Box>
-          )}
+
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+              {t('health.details.weBaseThis')}
+            </TextView>
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>
