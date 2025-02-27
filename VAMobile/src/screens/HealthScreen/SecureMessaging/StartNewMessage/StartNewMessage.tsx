@@ -385,13 +385,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           <AlertWithHaptics
             variant="info"
             header={t('secureMessaging.startNewMessage.nonurgent.title')}
-            headerA11yLabel={a11yLabelVA(t('appointments.appointmentsStatusSomeUnavailable'))}
             scrollViewRef={scrollViewRef}>
             <TextView variant="MobileBody">
               {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
-              <TextView variant="MobileBodyBold">
-                {t('secureMessaging.startNewMessage.nonurgent.threeDays')}
-              </TextView>{' '}
+              <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.nonurgent.threeDays')}</TextView>
               {t('secureMessaging.startNewMessage.nonurgent.reply')}
             </TextView>
           </AlertWithHaptics>
@@ -415,14 +412,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             setResetErrors={setResetErrors}
             setErrorList={setErrorList}
           />
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <LinkWithAnalytics
-              type="custom"
-              text={t('secureMessaging.replyHelp.onlyUseMessages')}
-              onPress={navigateToReplyHelp}
-              testID="startNewMessageOnlyUseMessagesTestID"
-            />
-          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
               label={t('secureMessaging.formMessage.send')}

@@ -1332,7 +1332,7 @@
   "secureMessaging.startNewMessage.nonurgent.title": "Only use messages for non-urgent needs",
   "secureMessaging.startNewMessage.nonurgent.careTeam": "Your care team may take up to ",
   "secureMessaging.startNewMessage.nonurgent.threeDays": "3 business days",
-  "secureMessaging.startNewMessage.nonurgent.reply": "to reply",
+  "secureMessaging.startNewMessage.nonurgent.reply": " to reply.",
   "secureMessaging.startNewMessage.attach": "Attach",
   "secureMessaging.startNewMessage.attachments.title": "Attach file",
   "secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled": "We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
