@@ -374,11 +374,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       )
     }
 
-    const navigateToReplyHelp = () => {
-      logAnalyticsEvent(Events.vama_sm_nonurgent())
-      navigateTo('ReplyHelp')
-    }
-
     return (
       <Box>
         <Box mb={theme.dimensions.standardMarginBetween}>
