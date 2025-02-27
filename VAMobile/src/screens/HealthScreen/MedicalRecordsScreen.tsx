@@ -39,16 +39,16 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         />
       </Box>
       <Box mx={theme.dimensions.gutter}>
-        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
-      </Box>
-      <Box mx={gutter}>
-        <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
-          text={t('vaMedicalRecords.viewCompleteRecord.link')}
-          a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}
-          testID="viewMedicalRecordsLinkID"
-        />
+        <TextView>
+          <LinkWithAnalytics
+            type="url"
+            icon="no icon"
+            url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
+            text={t('vaMedicalRecords.viewCompleteRecord.link')}
+            a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord.link'))}
+            testID="viewMedicalRecordsLinkID"
+          />
+        </TextView>
       </Box>
     </FeatureLandingTemplate>
   )
