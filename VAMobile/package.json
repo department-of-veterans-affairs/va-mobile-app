@@ -10,6 +10,7 @@
     "test:watch": "jest --coverage --colors --watchAll",
     "test:debug": "yarn run env:test && jest --colors",
     "test": "yarn run env:test && jest --coverage --colors --silent",
+    "test:local": "yarn run env:test && jest",
     "clean": "yarn run clean:android && yarn run clean:ios",
     "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
