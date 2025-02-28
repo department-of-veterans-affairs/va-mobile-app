@@ -44,7 +44,6 @@ context('SyncScreen', () => {
               directDepositBenefits: true,
               directDepositBenefitsUpdate: true,
               disabilityRating: true,
-              genderIdentity: true,
               lettersAndDocuments: true,
               militaryServiceHistory: true,
               paymentHistory: true,

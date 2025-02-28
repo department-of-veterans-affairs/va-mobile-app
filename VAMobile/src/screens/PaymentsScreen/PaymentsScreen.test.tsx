@@ -30,7 +30,6 @@ context('PaymentsScreen', () => {
             directDepositBenefits: true,
             directDepositBenefitsUpdate: authorized,
             disabilityRating: true,
-            genderIdentity: true,
             lettersAndDocuments: true,
             militaryServiceHistory: true,
             paymentHistory: true,
