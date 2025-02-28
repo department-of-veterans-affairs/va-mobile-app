@@ -216,7 +216,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         snackbar.show(t('contactInformation.residentialAddress.removed.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
-          onActionPressed: () => deleteAddress,
+          onActionPressed: () => deleteAddress(currentAddressData, mutateOptions),
         }),
     }
     deleteAddress(currentAddressData, mutateOptions)
