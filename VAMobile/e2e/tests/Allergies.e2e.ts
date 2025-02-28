@@ -8,7 +8,7 @@ import { by, element, expect } from 'detox'
 
 import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
 
-export const AllergiesE2eIdConstants = {
+export const AllergiesE2eIdConstants1 = {
   ALLERGY_1_ID: 'Sulfonamides allergy March 12, 2019',
   ALLERGY_2_ID: 'Penicillins allergy January 10, 2023',
   ALLERGY_3_ID: 'Peanuts allergy May 15, 2022',
@@ -16,6 +16,17 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_5_ID: 'Latex allergy August 20, 2020',
   ALLERGY_6_ID: 'Shellfish allergy November 05, 2021',
   ALLERGY_7_ID: 'Dust allergy December 12, 2020',
+  ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
+}
+
+export const AllergiesE2eIdConstants = {
+  ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
+  ALLERGY_2_ID: 'Peanuts allergy May 15, 2022',
+  ALLERGY_3_ID: 'Shellfish allergy November 05, 2021',
+  ALLERGY_4_ID: 'Pollen allergy April 10, 2021',
+  ALLERGY_5_ID: 'Dust allergy December 12, 2020',
+  ALLERGY_6_ID: 'Latex allergy August 20, 2020',
+  ALLERGY_7_ID: 'Sulfonamides allergy March 12, 2019',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
 }
 
@@ -29,23 +40,23 @@ beforeAll(async () => {
 describe('Allergies Screen', () => {
   it('should show allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
-    await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
-    const defaultAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).takeScreenshot(
+    await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()
+    const defaultAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).takeScreenshot(
       'defaultAllergyTemplate',
     )
     checkImages(defaultAllergyTemplate)
-    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).getAttributes()
+    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).getAttributes()
+    await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_4_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_5_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID))).toExist()
-    await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()
   })
 
   it('verify details screen fields', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).tap()
-    await expect(element(by.text('Allergy details'))).toExist()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
+    await expect(element(by.text('Details'))).toExist()
     await expect(element(by.text('March 12, 2019'))).toExist()
     await expect(element(by.text('Sulfonamides allergy'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
@@ -65,8 +76,8 @@ describe('Allergies Screen', () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
 
-  it('verify no disclaimer is displayed when all fields are populated', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID)).tap()
+  it('verify disclaimer is displayed even when all fields are populated', async () => {
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID)).tap()
     await expect(element(by.text('None noted '))).not.toExist()
     await expect(
       element(
@@ -74,12 +85,12 @@ describe('Allergies Screen', () => {
           'We base this information on your current  V-A  health records. If you have any questions, contact your health care team.',
         ),
       ),
-    ).not.toExist()
+    ).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
 
   it('multi-line note for dust allergy', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_5_ID)).tap()
     await expect(element(by.text('Even More Dust'))).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
