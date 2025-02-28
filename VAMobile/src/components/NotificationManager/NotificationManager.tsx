@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Linking, View } from 'react-native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { useSelector } from 'react-redux'
@@ -31,6 +31,7 @@ const NotificationContext = createContext<NotificationContextType>({
  */
 const NotificationManager: FC = ({ children }) => {
   const { loggedIn, firstTimeLogin, requestNotifications } = useSelector<RootState, AuthState>((state) => state.auth)
+  const loggedInRef = useRef(loggedIn)
   const { data: personalInformation } = usePersonalInformation({ enabled: loggedIn })
   const { mutate: registerDevice } = useRegisterDevice()
   const [tappedForegroundNotification, setTappedForegroundNotification] = useState(false)
@@ -38,6 +39,8 @@ const NotificationManager: FC = ({ children }) => {
   const [eventsRegistered, setEventsRegistered] = useState(false)
 
   useEffect(() => {
+    loggedInRef.current = loggedIn
+
     const register = () => {
       const registeredNotifications = Notifications.events().registerRemoteNotificationsRegistered((event) => {
         const registerParams = {
@@ -88,7 +91,7 @@ const NotificationManager: FC = ({ children }) => {
       // Open deep link from the notification when present. If the user is
       // not logged in, store the link so it can be opened after authentication.
       if (notification.payload.url) {
-        if (loggedIn) {
+        if (loggedInRef.current) {
           Linking.openURL(notification.payload.url)
         } else {
           setInitialUrl(notification.payload.url)
