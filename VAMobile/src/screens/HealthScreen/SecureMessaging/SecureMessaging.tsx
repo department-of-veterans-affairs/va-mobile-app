@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -35,6 +35,7 @@ import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
 function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -113,10 +114,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
           }
         })
       }
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('SecureMessaging tab change'))
-      }
-      snackBar?.hideAll()
+      snackbar.hide()
       setSecureMessagingTab(index)
     }
   }

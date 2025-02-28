@@ -3,6 +3,8 @@ import React, { createContext, useCallback, useContext, useState } from 'react'
 import { ParamListBase, useFocusEffect } from '@react-navigation/native'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { FullScreenSubtask, FullScreenSubtaskProps } from 'components'
 
 /**
@@ -38,13 +40,27 @@ type MultiStepSubtaskProps<T extends ParamListBase> = FullScreenSubtaskProps & {
 }
 
 function MultiStepSubtask<T extends ParamListBase>({ ...props }: MultiStepSubtaskProps<T>) {
+  const snackbar = useSnackbar()
   const { children, stackNavigator } = props
   const [subtaskProps, setSubtaskProps] = useState<FullScreenSubtaskProps>({})
 
   return (
     <FullScreenSubtask {...subtaskProps}>
       <SubtaskContext.Provider value={{ setSubtaskProps }}>
-        <stackNavigator.Navigator screenOptions={subtaskScreenOptions}>{children}</stackNavigator.Navigator>
+        <stackNavigator.Navigator
+          screenOptions={subtaskScreenOptions}
+          screenListeners={{
+            transitionStart: (e) => {
+              if (e.data.closing) {
+                snackbar.hide()
+              }
+            },
+            blur: () => {
+              snackbar.hide()
+            },
+          }}>
+          {children}
+        </stackNavigator.Navigator>
       </SubtaskContext.Provider>
     </FullScreenSubtask>
   )

@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native/types'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
@@ -22,7 +22,6 @@ import {
   VAScrollView,
 } from 'components'
 import FileList from 'components/FileList'
-import { SnackbarMessages } from 'components/SnackBar'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -32,9 +31,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import { showSnackBar } from 'utils/common'
 import {
-  useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useRouteNavigation,
@@ -48,11 +45,11 @@ import { FileRequestStackParams } from '../../FileRequestSubtask'
 type UploadFileProps = StackScreenProps<FileRequestStackParams, 'UploadFile'>
 
 function UploadFile({ navigation, route }: UploadFileProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimID, request: originalRequest, fileUploaded } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
@@ -62,10 +59,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   )
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('fileUpload.submitted'),
-    errorMsg: t('fileUpload.submitted.error'),
-  }
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
@@ -150,9 +143,14 @@ function UploadFile({ navigation, route }: UploadFileProps) {
             'file',
           ),
         )
-        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
+        snackbar.show(t('fileUpload.submitted'))
       },
-      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
+      onError: () =>
+        snackbar.show(t('fileUpload.submitted.error'), {
+          isError: true,
+          offset: theme.dimensions.snackBarBottomOffset,
+          onActionPressed: onUploadConfirmed,
+        }),
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)

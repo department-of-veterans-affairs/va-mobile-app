@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
@@ -41,7 +42,6 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
@@ -534,6 +534,7 @@ const HomeScreenStack = createStackNavigator<HomeStackParamList>()
  * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 function HomeStackScreen({}: HomeStackScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const screenOptions = {
     headerShown: false,
@@ -547,11 +548,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
-            CloseSnackbarOnNavigation(e.target)
+            snackbar.hide()
           }
         },
-        blur: (e) => {
-          CloseSnackbarOnNavigation(e.target)
+        blur: () => {
+          snackbar.hide()
         },
       }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />

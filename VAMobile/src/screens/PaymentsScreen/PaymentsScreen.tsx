@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, CategoryLanding, LargeNavButton } from 'components'
-import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -57,6 +58,7 @@ const PaymentsScreenStack = createStackNavigator<PaymentsStackParamList>()
  * Stack screen for the Payments tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 function PaymentsStackScreen({}: PaymentsStackScreenProps) {
+  const snackbar = useSnackbar()
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -67,11 +69,11 @@ function PaymentsStackScreen({}: PaymentsStackScreenProps) {
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
-            CloseSnackbarOnNavigation(e.target)
+            snackbar.hide()
           }
         },
-        blur: (e) => {
-          CloseSnackbarOnNavigation(e.target)
+        blur: () => {
+          snackbar.hide()
         },
       }}>
       <PaymentsScreenStack.Screen name="Payments" component={PaymentsScreen} options={{ headerShown: false }} />

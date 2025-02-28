@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -27,7 +28,6 @@ import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { showSnackBar } from 'utils/common'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -43,6 +43,7 @@ import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppRev
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
 function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -152,9 +153,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     try {
       await resetReviewActionCount()
       getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
-      showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
+      snackbar.show('In app review actions reset')
     } catch {
-      showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
+      snackbar.show('Failed to reset in app review actions', { isError: true, onActionPressed: resetInAppReview })
     }
   }
 

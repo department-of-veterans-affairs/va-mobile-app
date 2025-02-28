@@ -6,7 +6,6 @@ import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
-import snackbarReducer from 'store/slices/snackBarSlice'
 
 // Creates the store
 const store = configureStore({
@@ -16,7 +15,6 @@ const store = configureStore({
     demo: demoReducer,
     errors: errorReducer,
     analytics: analyticsReducer,
-    snackBar: snackbarReducer,
     settings: settingsReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),

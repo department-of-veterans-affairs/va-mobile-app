@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
@@ -102,6 +102,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   cancelTestID,
   confirmTestID,
 }) => {
+  const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const { t } = useTranslation()
@@ -120,12 +121,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('VAModalPicker'))
-      }
-      snackBar?.hideAll()
+      snackbar.hide()
     }
-  }, [disabled, labelKey, testID, t])
+  }, [disabled, labelKey, snackbar, testID, t])
 
   useEffect(() => {
     showModalByDefault && showModal()

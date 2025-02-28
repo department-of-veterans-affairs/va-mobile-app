@@ -4,9 +4,9 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AddressData, ValidateAddressData } from 'api/types'
-import { SnackbarMessages } from 'components/SnackBar'
 import { render } from 'testUtils'
 
+import { profileAddressOptions } from '../AddressSummary'
 import AddressValidation from './AddressValidation'
 
 const mockAddress: AddressData = {
@@ -18,11 +18,6 @@ const mockAddress: AddressData = {
   countryCodeIso3: 'USA',
   stateCode: 'CA',
   zipCode: '95403',
-}
-
-const snackbarMessages: SnackbarMessages = {
-  successMsg: 'Address saved',
-  errorMsg: 'Address could not be saved',
 }
 
 const validationData: ValidateAddressData = {
@@ -76,7 +71,7 @@ describe('AddressValidation', () => {
       <AddressValidation
         addressEntered={mockAddress}
         addressId={12345}
-        snackbarMessages={snackbarMessages}
+        addressType={profileAddressOptions.MAILING_ADDRESS}
         validationData={validationData}
         saveAddress={saveAddressSpy}
         setShowAddressValidation={setShowAddressValidationSpy}
