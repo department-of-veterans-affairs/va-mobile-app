@@ -33,7 +33,11 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   // analytics
   useEffect(() => {
-    logAnalyticsEvent(Events.vama_lab_or_test_details())
+    logAnalyticsEvent(
+      Events.vama_lab_or_test_details({
+        labType: labOrTest.attributes?.display || 'unknown',
+      }),
+    )
   }, [dispatch, labOrTest])
 
   const theme = useTheme()
