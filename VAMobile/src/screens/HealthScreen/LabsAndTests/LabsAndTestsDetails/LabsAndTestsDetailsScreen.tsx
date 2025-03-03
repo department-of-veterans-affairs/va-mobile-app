@@ -11,7 +11,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 
