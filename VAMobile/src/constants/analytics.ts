@@ -48,9 +48,12 @@ export const Events = {
       },
     }
   },
-  vama_lab_or_test_details: (): Event => {
+  vama_lab_or_test_details: ({ labType }: { labType: string }): Event => {
     return {
       name: 'vama_lab_or_test_details',
+      params: {
+        labType,
+      },
     }
   },
   vama_appt_cancel: (
