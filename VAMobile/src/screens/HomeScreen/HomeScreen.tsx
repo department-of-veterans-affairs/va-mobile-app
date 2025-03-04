@@ -39,6 +39,7 @@ import {
   Nametag,
   TextView,
 } from 'components'
+import { DatePicker } from 'components'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { CloseSnackbarOnNavigation } from 'constants/common'
@@ -512,6 +513,50 @@ export function HomeScreen({}: HomeScreenProps) {
               titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
               onPress={onFacilityLocator}
             />
+          </Box>
+          <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+            <Box display={'flex'} alignItems={'flex-start'}>
+              <TextView
+                mx={theme.dimensions.gutter}
+                variant={'HelperText'}
+                accessibilityLabel={'From Date'}
+                accessibilityRole="header">
+                {'From'}
+              </TextView>
+              <DatePicker />
+            </Box>
+            <Box display={'flex'} alignItems={'flex-start'}>
+              <TextView
+                mx={theme.dimensions.gutter}
+                variant={'HelperText'}
+                accessibilityLabel={'To Date'}
+                accessibilityRole="header">
+                {'To'}
+              </TextView>
+              <DatePicker />
+            </Box>
+          </Box>
+          <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+            <Box display={'flex'} alignItems={'flex-start'}>
+              <TextView
+                mx={theme.dimensions.gutter}
+                variant={'HelperText'}
+                accessibilityLabel={'From Date'}
+                accessibilityRole="header">
+                {'From'}
+              </TextView>
+              <DatePicker displayMode={'spinner'} />
+            </Box>
+            <Box display={'flex'} alignItems={'flex-start'}>
+              <TextView
+                mx={theme.dimensions.gutter}
+                variant={'HelperText'}
+                accessibilityLabel={'To Date'}
+                accessibilityRole="header">
+                {'To'}
+              </TextView>
+              <DatePicker displayMode={'spinner'} />
+            </Box>
           </Box>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
