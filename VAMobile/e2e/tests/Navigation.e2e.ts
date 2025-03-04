@@ -12,7 +12,7 @@ import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
-var navigationValue = process.argv[7]
+let navigationValue = process.argv[7]
 
 if (navigationValue === undefined) {
   navigationValue = process.argv[6]
@@ -70,8 +70,10 @@ const navigationDic = {
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-    ['VaccineRecords.e2e', 'V\ufeffA vaccine records', 'VA vaccines'],
-    ['VaccineRecords.e2e', ['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
+    ['VaccineRecords.e2e', ['Medical records', 'V\ufeffA vaccine records'], 'VA vaccines'],
+    ['VaccineRecords.e2e', ['Medical records', 'V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
+    ['Allergies.e2e', ['Medical records', 'V\ufeffA allergy records'], 'Allergies'],
+    ['Allergies.e2e', ['Medical records', 'V\ufeffA allergy records', 'January 10, 2023'], 'Penicillins allergy'],
   ],
   Payments: [
     ['Payments.e2e', 'VA payment history', 'History'],
