@@ -11,7 +11,6 @@ export type CommonErrorTypes =
   | 'appLevelErrorDisabilityRating'
   | 'downtimeError'
   | 'appLevelErrorVaccine'
-  | 'appLevelErrorAllergy'
   | 'appLevelErrorAppointments'
   | 'customError'
   | 'customErrorWithRefresh'
@@ -24,7 +23,6 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_DISABILITY_RATING: CommonErrorTypes
   DOWNTIME_ERROR: CommonErrorTypes
   APP_LEVEL_ERROR_VACCINE: CommonErrorTypes
-  APP_LEVEL_ERROR_ALLERGY: CommonErrorTypes
   APP_LEVEL_ERROR_APPOINTMENTS: CommonErrorTypes
   CUSTOM_ERROR: CommonErrorTypes
   CUSTOM_ERROR_WITH_REFRESH: CommonErrorTypes
@@ -36,7 +34,6 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_DISABILITY_RATING: 'appLevelErrorDisabilityRating',
   DOWNTIME_ERROR: 'downtimeError',
   APP_LEVEL_ERROR_VACCINE: 'appLevelErrorVaccine',
-  APP_LEVEL_ERROR_ALLERGY: 'appLevelErrorAllergy',
   APP_LEVEL_ERROR_APPOINTMENTS: 'appLevelErrorAppointments',
   CUSTOM_ERROR: 'customError',
   CUSTOM_ERROR_WITH_REFRESH: 'customErrorWithRefresh',

@@ -1,6 +1,5 @@
 {
   "directory": {
-    "allergies": ["Allergies"],
     "appointments": ["Appointments", "AppointmentsExpanded"],
     "authorizedServices": [
       "Appeals",
@@ -43,7 +42,6 @@
       "PushNotifications",
       "SettingsScreen",
       "SignIn",
-      "Allergies",
       "VaccineRecords",
       "Claims",
       "Appeals",
@@ -85,7 +83,6 @@
       "Prescriptions",
       "ProfileScreen",
       "SettingsScreen",
-      "Allergies",
       "VaccineRecords",
       "VALetters",
       "VeteransCrisisLine",
@@ -134,7 +131,6 @@
     "SettingsScreen": ["SettingsScreen"],
     "PaymentsScreen": ["Payments", "DirectDeposit"],
     "slices": [
-      "Allergies",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -163,7 +159,6 @@
       "VeteranStatusCard"
     ],
     "translations": [
-      "Allergies",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -192,7 +187,6 @@
       "VeteranStatusCard"
     ],
     "utils": [
-      "Allergies",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -227,12 +221,10 @@
     "styles": []
   },
   "files": {
-    "allergies.ts": ["Allergies"],
     "accounts.ts": ["DirectDeposit"],
     "appointments.ts": ["Appointments", "AppointmentsExpanded"],
     "claims.ts": ["Claims", "Appeals", "AppealsExpanded"],
     "common.ts": [
-      "Allergies",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
