@@ -8,17 +8,6 @@ import { by, element, expect } from 'detox'
 
 import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
 
-export const AllergiesE2eIdConstants1 = {
-  ALLERGY_1_ID: 'Sulfonamides allergy March 12, 2019',
-  ALLERGY_2_ID: 'Penicillins allergy January 10, 2023',
-  ALLERGY_3_ID: 'Peanuts allergy May 15, 2022',
-  ALLERGY_4_ID: 'Pollen allergy April 10, 2021',
-  ALLERGY_5_ID: 'Latex allergy August 20, 2020',
-  ALLERGY_6_ID: 'Shellfish allergy November 05, 2021',
-  ALLERGY_7_ID: 'Dust allergy December 12, 2020',
-  ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-}
-
 export const AllergiesE2eIdConstants = {
   ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
   ALLERGY_2_ID: 'Peanuts allergy May 15, 2022',
