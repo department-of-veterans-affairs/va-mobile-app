@@ -77,6 +77,14 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
               callPhone={displayedTextPhoneNumber(t('8006982411'))}
             />
           )
+        case CommonErrorTypesConstants.APP_LEVEL_ERROR_ALLERGY:
+          return (
+            <CallHelpCenter
+              onTryAgain={tryAgain}
+              titleText={t('errors.callHelpCenter.vaAppNotWorking')}
+              callPhone={displayedTextPhoneNumber(t('8006982411'))}
+            />
+          )
         case CommonErrorTypesConstants.CUSTOM_ERROR:
           custom = error.json?.errors[0]
           return (
@@ -123,6 +131,14 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_APPOINTMENTS:
         return <ErrorAlert text={t('appointments.errorText')} onTryAgain={tryAgain} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_VACCINE:
+        return (
+          <CallHelpCenter
+            onTryAgain={tryAgain}
+            titleText={t('errors.callHelpCenter.vaAppNotWorking')}
+            callPhone={displayedTextPhoneNumber(t('8006982411'))}
+          />
+        )
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_ALLERGY:
         return (
           <CallHelpCenter
             onTryAgain={tryAgain}
