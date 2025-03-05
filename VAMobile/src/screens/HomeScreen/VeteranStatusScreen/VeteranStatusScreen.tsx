@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { map } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -173,6 +174,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             phone={t('8008271000')}
             displayedText={displayedTextPhoneNumber(t('8008271000'))}
             colorOverride={'veteranStatus'}
+            iconColorOverride={colors.vadsColorWhite}
           />
           <TextView variant="MobileBody" color="primaryContrast" my={theme.dimensions.condensedMarginBetween}>
             {t('veteranStatus.fixAnError.3')}
@@ -181,6 +183,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             phone={t('8005389552')}
             displayedText={displayedTextPhoneNumber(t('8005389552'))}
             colorOverride={'veteranStatus'}
+            iconColorOverride={colors.vadsColorWhite}
             ttyBypass={true}
           />
         </Box>

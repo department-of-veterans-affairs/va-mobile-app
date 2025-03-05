@@ -1,2 +1,1 @@
-Removed "Gender Identity" from Profile Personal Information to comply with Executive Order 14168.
-Added general improvements and fixed a few bugs.
+We added general improvements and fixed a few bugs.

@@ -53,6 +53,7 @@ class VAPushNotifications(
     private fun getCompatNotificationBuilder(intent: PendingIntent?): NotificationCompat.Builder {
         return NotificationCompat.Builder(mContext, defaultChannelId).also {
             it.priority = NotificationCompat.PRIORITY_HIGH
+            it.setAutoCancel(true)
             it.setContentIntent(intent)
             it.setContentTitle(mNotificationProps.title)
             it.setContentText(mNotificationProps.body)
