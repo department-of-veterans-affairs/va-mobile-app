@@ -11,7 +11,6 @@ export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
   'https://www.va.gov/resources/how-to-change-your-legal-name-on-file-with-va/'
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
-export const LINK_URL_MHV_VA_MEDICAL_RECORDS = 'https://www.va.gov/my-health/medical-records/'
 export const LINK_URL_VA_NOTIFICATIONS = 'https://www.va.gov/profile/notifications/'
 export const LINK_URL_VA_SCHEDULING = 'https://www.va.gov/health-care/schedule-view-va-appointments/'
 export const LINK_URL_IN_APP_RECRUITMENT =

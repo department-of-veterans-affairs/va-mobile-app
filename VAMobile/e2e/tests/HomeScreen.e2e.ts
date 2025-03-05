@@ -84,7 +84,7 @@ describe('Home Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {
