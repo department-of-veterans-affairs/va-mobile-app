@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { getWaygateToggles } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
@@ -20,6 +21,9 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
+  const { WG_AllergyList } = getWaygateToggles()
+  const isAllergiesEnabled = WG_AllergyList?.enabled
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -31,11 +35,13 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        <LargeNavButton
-          title={t('vaAllergies.buttonTitle')}
-          onPress={() => navigateTo('AllergyList')}
-          testID="toAllergyListID"
-        />
+        {isAllergiesEnabled && (
+          <LargeNavButton
+            title={t('vaAllergies.buttonTitle')}
+            onPress={() => navigateTo('AllergyList')}
+            testID="toAllergyListID"
+          />
+        )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
         <TextView>
