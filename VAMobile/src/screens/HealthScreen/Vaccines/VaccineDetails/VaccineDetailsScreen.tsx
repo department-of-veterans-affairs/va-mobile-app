@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every } from 'underscore'
-
 import { useVaccineLocation } from 'api/vaccines/getVaccineLocation'
 import { AlertWithHaptics, Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -59,9 +57,6 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
         seriesDoses: vaccine.attributes?.doseSeries,
       })
     : placeHolder
-
-  const optionalFields = [hasSeries, vaccine.attributes?.note, location?.data, vaccine.attributes?.reaction]
-  const isPartialData = !every(optionalFields)
 
   // Only show the manufacturer label if the vaccine is COVID-19, any other type should not be displayed
   const isCovidVaccine = vaccine.attributes?.groupName?.toUpperCase()?.includes(COVID19)
@@ -119,7 +114,7 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
                 {displaySeries}
               </TextView>
               <Box mt={theme.dimensions.standardMarginBetween}>
-                <TextView variant="MobileBodyBold">{t('vaccines.details.provider')}</TextView>
+                <TextView variant="MobileBodyBold">{t('health.details.provider')}</TextView>
                 {location && (
                   <>
                     <TextView variant="MobileBody" selectable={true}>
@@ -145,12 +140,12 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
               </Box>
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <Box>
-                  <TextView variant="MobileBodyBold">{t('vaccines.details.reaction')}</TextView>
+                  <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                   <TextView variant="MobileBody" selectable={true} mb={standardMarginBetween}>
                     {vaccine.attributes?.reaction || placeHolder}
                   </TextView>
                 </Box>
-                <TextView variant="MobileBodyBold">{t('vaccines.details.notes')}</TextView>
+                <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 <TextView
                   variant="MobileBody"
                   selectable={true}
@@ -159,13 +154,11 @@ function VaccineDetailsScreen({ route, navigation }: VaccineDetailsScreenProps) 
                 </TextView>
               </Box>
             </TextArea>
-            {isPartialData && (
-              <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-                <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('vaccines.details.weBaseThis'))}>
-                  {t('vaccines.details.weBaseThis')}
-                </TextView>
-              </Box>
-            )}
+            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+                {t('health.details.weBaseThis')}
+              </TextView>
+            </Box>
           </Box>
         </>
       )}
