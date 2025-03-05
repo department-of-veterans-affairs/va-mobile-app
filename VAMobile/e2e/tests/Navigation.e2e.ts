@@ -323,7 +323,6 @@ describe('Navigation', () => {
       let runTest = false
       if (nameArray[0] instanceof Array) {
         for (let z = 0; z < value.length; z++) {
-          console.log('Comparing: ', navigationValue, nameArray[0][z])
           if (navigationValue === nameArray[0][z]) {
             runTest = true
           }
