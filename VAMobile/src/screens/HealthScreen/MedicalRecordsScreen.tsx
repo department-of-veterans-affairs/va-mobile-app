@@ -20,6 +20,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const { gutter } = theme.dimensions
 
   // This will hide the allergies button if the toggle is enabled
   // Yes its backwards, but its so we can roll this back once we release
@@ -47,16 +48,16 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
-        <TextView>
-          <LinkWithAnalytics
-            type="url"
-            icon="no icon"
-            url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
-            text={t('vaMedicalRecords.viewCompleteRecord.link')}
-            a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord.link'))}
-            testID="viewMedicalRecordsLinkID"
-          />
-        </TextView>
+        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}`}</TextView>
+      </Box>
+      <Box mx={gutter}>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
+          text={t('vaMedicalRecords.viewCompleteRecord.link')}
+          a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}
+          testID="viewMedicalRecordsLinkID"
+        />
       </Box>
     </FeatureLandingTemplate>
   )
