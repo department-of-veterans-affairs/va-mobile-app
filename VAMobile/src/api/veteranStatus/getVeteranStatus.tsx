@@ -7,7 +7,7 @@ import { get } from 'store/api'
 import { veteranStatusKeys } from './queryKeys'
 
 /**
- * Fetch user veteran verification status
+ * Fetch veteran verification status
  */
 const getVeteranStatus = async (): Promise<VeteranVerificationStatusData | undefined> => {
   const response = await get<VeteranVerificationStatusData>('/v0/vet_verification_status')
@@ -19,7 +19,7 @@ const getVeteranStatus = async (): Promise<VeteranVerificationStatusData | undef
 }
 
 /**
- * Returns a query for a users veteran verification status
+ * Returns a query for a veterans verification status
  */
 export const useVeteranStatus = (options?: { enabled?: boolean }) => {
   return useQuery({
