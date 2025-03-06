@@ -21,8 +21,11 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { WG_AllergyList } = getWaygateToggles()
-  const isAllergiesEnabled = WG_AllergyList?.enabled
+  // This will hide the allergies button if the toggle is enabled
+  // Yes its backwards, but its so we can roll this back once we release
+  // This toggle should be removed once the feature is stable
+  const { WG_AllergyListDisabled } = getWaygateToggles()
+  const hideAllergies = WG_AllergyListDisabled?.enabled
 
   return (
     <FeatureLandingTemplate
@@ -35,7 +38,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        {isAllergiesEnabled && (
+        {!hideAllergies && (
           <LargeNavButton
             title={t('vaAllergies.buttonTitle')}
             onPress={() => navigateTo('AllergyList')}
