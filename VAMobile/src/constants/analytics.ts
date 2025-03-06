@@ -1142,14 +1142,6 @@ export const Events = {
       name: 'vama_sm_start',
     }
   },
-  vama_snackbar_null: (location: string): Event => {
-    return {
-      name: 'vama_snackbar_null',
-      params: {
-        location,
-      },
-    }
-  },
   vama_sso_cookie_received: (received: boolean): Event => {
     return {
       name: 'vama_sso_cookie_received',
