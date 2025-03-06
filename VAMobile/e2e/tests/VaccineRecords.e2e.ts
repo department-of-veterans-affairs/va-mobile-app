@@ -1,13 +1,21 @@
 /*
 Description:
-Detox script that follows the vaccines - view list of all immunization records and vaccines - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+Detox script that follows the vaccines 
+  - view list of all immunization records and vaccines 
+  - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
 When to update:
 This script should be updated whenever new things are added/changed in vaccines or if anything is changed in src/store/api/demo/mocks/vaccine.json.
 */
-import { combineReducers } from '@reduxjs/toolkit'
 import { by, element, expect } from 'detox'
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openMedicalRecords,
+  openVaccineRecords,
+} from './utils'
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
@@ -21,6 +29,7 @@ export const VaccinesE2eIdConstants = {
 beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
+  await openMedicalRecords()
   await openVaccineRecords()
 })
 
