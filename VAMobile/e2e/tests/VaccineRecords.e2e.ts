@@ -47,6 +47,7 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('verify COVID-19 record information', async () => {
+    await expect(element(by.text('VA vaccines'))).toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
@@ -56,7 +57,7 @@ describe('Vaccine Records Screen', () => {
     await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.text('2360 East Pershing Boulevard'))).toExist()
     await expect(element(by.text('Cheyenne, WY 82001-5356'))).toExist()
-    await expect(element(by.text('Reaction'))).toExist()
+    await expect(element(by.text('Reactions'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
     await expect(
       element(by.id('Notes Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')),

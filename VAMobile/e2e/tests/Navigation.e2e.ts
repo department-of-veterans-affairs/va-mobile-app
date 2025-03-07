@@ -45,7 +45,7 @@ const navigationDic = {
     ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
-    //['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
+    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
     ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'JESSE_GRAY_600246732_526.pdf'],
     [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
     [
@@ -70,10 +70,10 @@ const navigationDic = {
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-    ['VaccineRecords.e2e', ['Medical records', 'V\ufeffA vaccine records'], 'VA vaccines'],
-    ['VaccineRecords.e2e', ['Medical records', 'V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
-    ['Allergies.e2e', ['Medical records', 'V\ufeffA allergy records'], 'Allergies'],
-    ['Allergies.e2e', ['Medical records', 'V\ufeffA allergy records', 'January 10, 2023'], 'Penicillins allergy'],
+    ['VaccineRecords.e2e', ['Medical records', 'Vaccines'], 'VA vaccines'],
+    ['VaccineRecords.e2e', ['Medical records', 'Vaccines', 'January 14, 2021'], 'COVID-19 vaccine'],
+    ['Allergies.e2e', ['Medical records', 'Allergies and reactions'], 'Allergies'],
+    ['Allergies.e2e', ['Medical records', 'Allergies and reactions', 'January 10, 2023'], 'Penicillins allergy'],
   ],
   Payments: [
     ['Payments.e2e', 'VA payment history', 'History'],
