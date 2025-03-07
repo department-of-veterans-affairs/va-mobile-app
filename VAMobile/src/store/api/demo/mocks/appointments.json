@@ -187,7 +187,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -321,7 +328,14 @@
             "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -776,7 +790,14 @@
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
             "friendlyLocationName": "Fort Collins VA Clinic",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
+            "typeOfCare": "Audiology and speech (including hearing aid support)",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -836,7 +857,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1614,7 +1642,14 @@
             "patientPhoneNumber": null,
             "patientEmail": null,
             "bestTimeToCall": null,
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
