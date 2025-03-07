@@ -19,7 +19,7 @@ import { TravelPayHelp } from './components'
 
 type AddressScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'AddressScreen'>
 
-function AddressScreen({ navigation, route }: AddressScreenProps) {
+function AddressScreen({}: AddressScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 

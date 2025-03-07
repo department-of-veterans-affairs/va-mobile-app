@@ -48,14 +48,14 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
 type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'>
 
 function SubmitMileageTravelPayScreen({ navigation, route }: SubmitMileageTravelPayScreenProps) {
-  const { appointmentDateTime } = route.params
+  const {} = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
 
   const [screenListIndex, setScreenListIndex] = useState(2)
   const [notEligibleBackIndex, setNotEligibleBackIndex] = useState(2)
-  const [error, setError] = useState<string | undefined>()
+  const [error] = useState<string | undefined>()
 
   useBeforeNavBackListener(navigation, (e) => {
     if (screenList[screenListIndex].primaryButtonText === t('close')) {

@@ -11,7 +11,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 
 type VehicleScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'VehicleScreen'>
 
-function VehicleScreen({ navigation, route }: VehicleScreenProps) {
+function VehicleScreen({}: VehicleScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()

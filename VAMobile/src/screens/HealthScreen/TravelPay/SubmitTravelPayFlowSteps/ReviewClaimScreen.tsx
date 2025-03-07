@@ -13,7 +13,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ navigation, route }: ReviewClaimScreenProps) {
+function ReviewClaimScreen({}: ReviewClaimScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()
