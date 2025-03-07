@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { VeteranVerificationStatusData } from 'api/types'
+import { VeteranVerificationStatusPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 
@@ -9,12 +9,10 @@ import { veteranStatusKeys } from './queryKeys'
 /**
  * Fetch veteran verification status
  */
-const getVeteranStatus = async (): Promise<VeteranVerificationStatusData | undefined> => {
-  const response = await get<VeteranVerificationStatusData>('/v0/vet_verification_status')
+const getVeteranStatus = async (): Promise<VeteranVerificationStatusPayload | undefined> => {
+  const response = await get<VeteranVerificationStatusPayload>('/v0/vet_verification_status')
   if (response) {
-    return {
-      ...response,
-    }
+    return response
   }
 }
 

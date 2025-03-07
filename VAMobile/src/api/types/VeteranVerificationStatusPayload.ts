@@ -5,7 +5,7 @@ export type VeteranVerificationStatusDataAttributes = {
   notConfirmedReason?: string
 }
 
-export type VeteranVerificationStatusData = {
+export type VeteranVerificationStatusPayload = {
   data: {
     id: string
     type: string
