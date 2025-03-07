@@ -12,7 +12,7 @@ import { FileOnlineComponent, TravelPayHelp } from './components'
 
 type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
 
-function ErrorScreen({ navigation, route }: ErrorScreenProps) {
+function ErrorScreen({}: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()
