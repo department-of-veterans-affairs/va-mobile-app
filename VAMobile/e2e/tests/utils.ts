@@ -97,6 +97,8 @@ export const CommonE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
+  ALLERGIES_BUTTON_ID: 'toAllergyListID',
+  MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
@@ -430,6 +432,13 @@ export async function openDisabilityRating() {
 
 export async function openVaccineRecords() {
   await element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID)).tap()
+}
+export async function openAllergyRecords() {
+  await element(by.id(CommonE2eIdConstants.ALLERGIES_BUTTON_ID)).tap()
+}
+
+export async function openMedicalRecords() {
+  await element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID)).tap()
 }
 
 export async function openMessages() {
