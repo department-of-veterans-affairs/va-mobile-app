@@ -8,7 +8,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { getWaygateToggles } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
@@ -22,12 +21,6 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
 
-  // This will hide the allergies button if the toggle is enabled
-  // Yes its backwards, but its so we can roll this back once we release
-  // This toggle should be removed once the feature is stable
-  const { WG_AllergyListDisabled } = getWaygateToggles()
-  const hideAllergies = WG_AllergyListDisabled?.enabled
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -39,13 +32,11 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        {!hideAllergies && (
-          <LargeNavButton
-            title={t('vaAllergies.buttonTitle')}
-            onPress={() => navigateTo('AllergyList')}
-            testID="toAllergyListID"
-          />
-        )}
+        <LargeNavButton
+          title={t('vaAllergies.buttonTitle')}
+          onPress={() => navigateTo('AllergyList')}
+          testID="toAllergyListID"
+        />
       </Box>
       <Box mx={theme.dimensions.gutter}>
         <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}`}</TextView>
