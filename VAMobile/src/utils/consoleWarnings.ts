@@ -3,7 +3,7 @@ import { LogBox } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const STORAGE_HIDE_WARNINGS_KEY = '@hide_warnings'
-export const HIDE_WARNINGS_DEFAULT = false
+export const HIDE_WARNINGS_DEFAULT = true
 
 /**
  * Initializes the hide-warnings preference at app startup.
