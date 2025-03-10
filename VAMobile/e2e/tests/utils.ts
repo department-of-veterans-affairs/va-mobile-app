@@ -99,6 +99,7 @@ export const CommonE2eIdConstants = {
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
+  LABS_AND_TESTS_TOGGLE_NAME: 'WG_LabsAndTestsEnabled',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
@@ -734,6 +735,9 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
  * @param flagName - name of flag to toggle
  * */
 export async function toggleRemoteConfigFlag(flagName: string) {
+  console.log('***********************\nflagName: ', flagName)
+  console.log('CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID: ', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  console.log('CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT: ', CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openSettings()

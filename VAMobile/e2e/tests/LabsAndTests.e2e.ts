@@ -4,7 +4,14 @@ import { DateTime } from 'luxon'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
-import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openHealth,
+  openLabsAndTestRecords,
+  openMedicalRecords,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const todaysDate = DateTime.local()
 
@@ -21,6 +28,8 @@ const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').
 const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
 
 beforeAll(async () => {
+  // await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TESTS_TOGGLE_NAME)
+
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
@@ -101,20 +110,17 @@ describe('Labs And Test Screen', () => {
   }
 
   const resetDateRangeToDefault = async () => {
+    console.log('resetting date range to default')
     await element(by.id('labsAndTestDataRangeTestID')).tap()
     await element(by.text('Past 3 months')).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
   }
 
-  it('should list the list of labs and tests', async () => {
+  beforeAll(async () => {
     await resetDateRangeToDefault()
-    await expect(element(by.text(HEADER_TEXT))).toExist()
-    await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
-    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
   })
-  it('navigate back and forth between the list and details screen', async () => {
-    await resetDateRangeToDefault()
 
+  it('navigate back and forth between the list and details screen', async () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
     await element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID)).tap()
@@ -126,8 +132,6 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
   })
   it('should be able to click into a lab or test record', async () => {
-    await resetDateRangeToDefault()
-
     // loads the list,
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
@@ -144,5 +148,16 @@ describe('Labs And Test Screen', () => {
 
     // ensure base 64 decoded data is present
     await expect(element(by.text('this is a test'))).toExist()
+
+    // Navigate back to the list
+    await element(by.id('labsAndTestsDetailsBackID')).tap()
+    // the title should be labs and tests
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+  })
+
+  it('should list the list of labs and tests', async () => {
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+    await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
   })
 })
