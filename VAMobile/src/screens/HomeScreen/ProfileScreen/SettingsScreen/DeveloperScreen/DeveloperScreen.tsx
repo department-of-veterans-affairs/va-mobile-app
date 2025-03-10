@@ -28,6 +28,7 @@ import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
+import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -110,6 +111,16 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
     }, []),
   )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadHideWarnings = async () => {
+        const currentVal = await getHideWarningsPreference()
+        setHideWarnings(currentVal)
+      }
+      loadHideWarnings()
+    }, []),
+  )
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
@@ -118,6 +129,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
   getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
@@ -176,6 +188,20 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     },
   ]
 
+  const consoleWarningsList: Array<SimpleListItemObj> = [
+    {
+      text: 'Hide warnings',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: hideWarnings,
+      },
+      onPress: async () => {
+        await toggleHideWarnings()
+        setHideWarnings(!hideWarnings)
+      },
+    },
+  ]
+
   const onFeedback = () => {
     inAppFeedback('Developer')
   }
@@ -221,6 +247,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Firebase
         </TextView>
         <SimpleList items={firebaseList} />
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Console Warnings
+        </TextView>
+        {<SimpleList items={consoleWarningsList} />}
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
