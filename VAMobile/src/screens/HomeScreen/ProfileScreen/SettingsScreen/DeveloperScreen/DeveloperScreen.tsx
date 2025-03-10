@@ -129,7 +129,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
-  const [hideWarnings, setHideWarnings] = useState<boolean>(true)
+  const [hideWarnings, setHideWarnings] = useState<boolean>(false)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
   getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
