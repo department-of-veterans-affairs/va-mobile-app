@@ -4,15 +4,34 @@ import { atob } from 'react-native-quick-base64'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView } from 'components'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  FeatureLandingTemplate,
+  LoadingComponent,
+  TextArea,
+  TextLine,
+  TextView,
+  TextViewProps,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATypographyThemeVariants } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
+
+type Observation = {
+  testCode: string | null
+  valueQuantity: string | null
+  referenceRange: string | null
+  status: string | null
+  comment: string | null
+}
 
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
 
@@ -42,7 +61,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { contentMarginBottom, standardMarginBetween } = theme.dimensions
+  const { standardMarginBetween, condensedMarginBetween, tinyMarginBetween } = theme.dimensions
 
   const placeHolder = t('noneNoted')
 
@@ -62,9 +81,73 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
   const displayName = labOrTest.attributes?.display
 
   const decodedReport = labOrTest.attributes?.encodedData ? atob(labOrTest.attributes?.encodedData) : placeHolder
-  // const displayDate = labOrTest.attributes?.dateCompleted
-  //   ? formatDateMMMMDDYYYY(labOrTest.attributes.dateCompleted)
-  //   : placeHolder
+
+  const observationsPresent = (labOrTest.attributes?.observations?.length ?? 0) > 0
+
+  // string, marginBottom, marginTop, variant
+  const getTextLine = (
+    text: string | null,
+    mb: number,
+    mt: number,
+    variant: keyof VATypographyThemeVariants = 'MobileBody',
+  ): TextLine | undefined => {
+    return text ? { text, variant, mt, mb } : undefined
+  }
+
+  const getTextLinesForLabResults = (observation: Observation): Array<TextLine> => {
+    return [
+      getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(t('labsAndTests.details.valueQuantity'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.valueQuantity, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(t('labsAndTests.details.referenceRange'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.referenceRange, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(t('labsAndTests.details.status'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.status, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(t('labsAndTests.details.comment'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.comment, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+    ]
+  }
+
+  const getListItemsForLabResults = (listOfResults: Array<Observation>): Array<DefaultListItemObj> => {
+    const listItems: Array<DefaultListItemObj> = []
+
+    listOfResults.map((result, index) => {
+      const textLines = getTextLinesForLabResults(result)
+      // const a11yValue = t('listPosition', { position: index + 1, total: listOfResults.length })
+
+      listItems.push({
+        textLines,
+        a11yValue: t('listPosition', { position: index + 1, total: listOfResults.length }),
+        a11yHintText: t('labsAndTests.details.results.accessibilityHint'),
+        testId: getTestIDFromTextLines(textLines),
+      })
+    })
+    return listItems
+  }
+
+  // Setting this testId also sets the ally label for the list item
+  const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
+    return textLines.map((line) => line.text).join(' ')
+  }
+
+  // style `Results` as a title to match `Details`
+  const titleProps: TextViewProps = {
+    variant: 'BitterHeading',
+    mx: 6,
+    mb: standardMarginBetween,
+    mt: standardMarginBetween,
+    accessibilityRole: 'header',
+  }
 
   return (
     <FeatureLandingTemplate
@@ -76,11 +159,8 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       {detailsLoading ? (
         <LoadingComponent text={t('labsAndTests.details.loading')} />
       ) : (
-        <Box mb={contentMarginBottom}>
+        <Box mb={standardMarginBetween}>
           <TextArea>
-            {/* <TextView variant="MobileBody" mb={standardMarginBetween}>
-             {displayDate}
-            </TextView> */}
             <Box accessibilityRole="header" accessible={true} mb={standardMarginBetween}>
               <TextView variant="MobileBodyBold">{displayName}</TextView>
             </Box>
@@ -99,13 +179,25 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
               </TextView>
             </Box>
           </TextArea>
-          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-              {t('health.details.weBaseThis')}
+        </Box>
+      )}
+      {observationsPresent && (
+        <Box>
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.tinyMarginBetween}>
+            <TextView {...titleProps} accessibilityLabel={a11yLabelVA(t('labsAndTests.details.results'))}>
+              {t('labsAndTests.details.results')}
             </TextView>
+          </Box>
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <DefaultList items={getListItemsForLabResults(labOrTest.attributes?.observations || [])} />
           </Box>
         </Box>
       )}
+      <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+          {t('health.details.weBaseThis')}
+        </TextView>
+      </Box>
     </FeatureLandingTemplate>
   )
 }
