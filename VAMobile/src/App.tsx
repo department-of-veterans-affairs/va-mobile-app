@@ -62,6 +62,7 @@ import {
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
@@ -279,6 +280,10 @@ export function AuthGuard() {
       dispatch(fetchAndActivateRemoteConfig())
     }
   }, [dispatch, remoteConfigActivated])
+
+  useEffect(() => {
+    initHideWarnings()
+  }, [])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
