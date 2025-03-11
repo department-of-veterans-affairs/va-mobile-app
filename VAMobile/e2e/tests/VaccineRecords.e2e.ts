@@ -47,7 +47,7 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('verify COVID-19 record information', async () => {
-    await expect(element(by.text('VA vaccines'))).toExist()
+    await expect(element(by.text('Vaccines'))).toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
