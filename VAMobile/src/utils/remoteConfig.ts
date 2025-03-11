@@ -59,6 +59,7 @@ type FeatureToggleValues = {
 }
 
 export const defaults: FeatureToggleValues = {
+  allergies: true,
   appointmentRequests: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
@@ -77,7 +78,6 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
-  allergies: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults
