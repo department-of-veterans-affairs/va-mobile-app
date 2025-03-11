@@ -3,7 +3,7 @@ description: Use this template to formally request a new feature, enhancement to
 title: "Change Request: [name of change]"
 labels: [ "Epic", "Leads team", "needs-review" ]
 projects: ["department-of-veterans-affairs/823"]
-assignees: [ DonMcCaugheyUSDS, rtwell, Hallm13, kellylein ]
+assignees: [ rtwell, BeccaTupaj ]
 body:
 - type: input
   id: fullname
