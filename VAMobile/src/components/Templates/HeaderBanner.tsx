@@ -283,7 +283,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
-                <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+                <Box ml={theme.dimensions.buttonPadding}>
                   <TouchableWithoutFeedback
                     ref={focus === 'Left' ? focusRef : () => {}}
                     onPress={leftButton.onPress}
@@ -299,18 +299,14 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
             </Box>
 
             {title && (
-              <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
+              <Box flex={constrainTitle ? 5 : undefined}>
                 <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
                   <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
                 </View>
               </Box>
             )}
 
-            <Box
-              mr={theme.dimensions.buttonPadding}
-              mt={theme.dimensions.buttonPadding}
-              flex={4}
-              alignItems={'flex-end'}>
+            <Box mr={theme.dimensions.buttonPadding} flex={4} alignItems={'flex-end'}>
               {rightButton && (
                 <TouchableWithoutFeedback
                   ref={focus === 'Right' ? focusRef : () => {}}
