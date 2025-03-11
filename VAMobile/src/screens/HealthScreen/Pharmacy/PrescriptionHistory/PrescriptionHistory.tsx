@@ -230,7 +230,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               alignItems={'center'}
               minHeight={theme.dimensions.touchableMinHeight}
               pt={5}>
-              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+              <TextView flex={1} variant={'HelperTextBold'} color={'link'} testID={'prescriptionDetailsID'}>
                 {t('prescription.history.getDetails')}
               </TextView>
               <Icon

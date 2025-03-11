@@ -8,9 +8,9 @@ import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
-const fetchRemote = !__DEV__ && !IS_TEST
+const fetchRemote = !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
-const RC_CACHE_TIME = 1800 // 30 min
+const RC_CACHE_TIME = 0 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 export let overrideRemote = false
 
@@ -84,6 +84,7 @@ export let devConfig: FeatureToggleValues = defaults
  * @returns Promise<void>
  */
 export const activateRemoteConfig = async (): Promise<void> => {
+  console.log('hererer', __DEV__, IS_TEST)
   try {
     // Sets timeout for remote config fetch
     await remoteConfig().setConfigSettings({ fetchTimeMillis: RC_FETCH_TIMEOUT })
@@ -99,6 +100,8 @@ export const activateRemoteConfig = async (): Promise<void> => {
       console.debug('Remote Config: Fetching and activating')
       await remoteConfig().fetch(RC_CACHE_TIME)
       await remoteConfig().activate()
+      const tmp = await remoteConfig().getAll()
+      console.log('LOOK HERE: ', tmp)
       console.debug('Remote Config: Activated config')
     }
 

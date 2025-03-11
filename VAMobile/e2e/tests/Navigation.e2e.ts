@@ -1,12 +1,3 @@
-/*
-Description:
-Detox script that runs dark mode, landscape, and font size accessibility tests.
-The script can run either as a full suite or a subset:
-* Full suite: The script will check every page outlined in navigationDic.  A full suite run occurs either on the nightly dev build or when you check "run full e2e test" in the workflow options (if running manually).
-* Subset: The script will only check the pages where the test name given in the array matches the test name typed into the "List tests to test in" workflow option.
-When to update:
-This script should be updated whenever a new feature/new page that has the bottom nav bar is added to the app. See https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/AddingNewFeatures for more information.
-*/
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
@@ -17,70 +8,29 @@ var navigationValue = process.argv[7]
 if (navigationValue === undefined) {
   navigationValue = process.argv[6]
 }
-const { exec } = require('child_process')
+const util = require('util')
+const exec = util.promisify(require('child_process').exec)
+
 const appTabs = ['Home', 'Benefits', 'Health', 'Payments']
 
-const navigationDic = {
-  Home: [
-    ['HomeScreen.e2e', 'Contact us', 'Contact VA'],
-    [
-      ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
-      ['Profile', 'Personal information'],
-      'Personal information',
-    ],
-    [['ProfileScreen.e2e', 'ContactInformation.e2e'], ['Profile', 'Contact information'], 'Contact information'],
-    [['ProfileScreen.e2e', 'MilitaryInformation.e2e'], ['Profile', 'Military information'], 'Military information'],
-    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings'], 'Settings'],
-    [
-      ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
-      ['Profile', 'Settings', 'Account security'],
-      'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
-    ],
-    [['ProfileScreen.e2e', 'SettingsScreen.e2e'], ['Profile', 'Settings', 'Notifications'], 'Notifications'],
-  ],
-  Benefits: [
-    ['DisabilityRatings.e2e', 'Disability rating', 'Disability rating'],
-    ['Claims.e2e', 'Claims', 'Claims'],
-    ['Claims.e2e', ['Claims', 'Claims history'], 'Claims history'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Closed'], 'Your closed claims, decision reviews, and appeals'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Active'], 'Your active claims, decision reviews, and appeals'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021'], 'Claim details'],
-    //['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
-    ['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'], 'JESSE_GRAY_600246732_526.pdf'],
-    [['Appeals.e2e', 'AppealsExpanded.e2e'], ['Claims', 'Claims history', 'Received July 17, 2008'], 'Appeal details'],
-    [
-      ['Appeals.e2e', 'AppealsExpanded.e2e'],
-      ['Claims', 'Claims history', 'Received July 17, 2008', 'Issues'],
-      'Currently on appeal',
-    ],
-    ['DecisionLetters.e2e', ['Claims', 'Claim letters'], 'Claim letters'],
-    ['VALetters.e2e', 'VA letters and documents', 'Letters'],
-    ['VALetters.e2e', ['VA letters and documents', 'Review letters'], 'Review letters'],
-    [
-      'VALetters.e2e',
-      ['VA letters and documents', 'Review letters', 'Benefit summary and service verification letter'],
-      'Letter details',
-    ],
-  ],
-  Health: [
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Vilanisi Reddy'], 'Details'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
-    ['Messages.e2e', 'Messages', 'Messages'],
-    ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
-    ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
-    ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
-    ['VaccineRecords.e2e', 'V\ufeffA vaccine records', 'VA vaccines'],
-    ['VaccineRecords.e2e', ['V\ufeffA vaccine records', 'January 14, 2021'], 'COVID-19 vaccine'],
-  ],
-  Payments: [
-    ['Payments.e2e', 'VA payment history', 'History'],
-    ['Payments.e2e', ['VA payment history', 'Regular Chapter 31'], 'Regular Chapter 31'],
-    ['DirectDeposit.e2e', 'Direct deposit information', 'Direct deposit'],
-  ],
+export const SimulatorE2ESettings = {
+  DARK_MODE_OPTIONS:
+    device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
+  LIGHT_MODE_OPTIONS:
+    device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance light' : 'adb shell "cmd uimode night no"',
+  FONT_RESIZING_LARGEST:
+    device.getPlatform() === 'ios'
+      ? 'xcrun simctl ui booted content_size extra-extra-extra-large'
+      : 'adb shell settings put system font_scale 1.30',
+  DISPLAY_RESIZING_LARGEST: device.getPlatform() === 'android' ? 'adb shell wm density 728' : '',
+  FONT_RESIZING_RESET:
+    device.getPlatform() === 'ios'
+      ? 'xcrun simctl ui booted content_size medium'
+      : 'adb shell settings put system font_scale 1.00',
+  DISPLAY_RESIZING_RESET: 'adb shell wm density reset',
 }
 
-const featureID = {
+const textToScrollViewTestID: { [k: string]: string } = {
   Home: 'homeScreenID',
   'Contact VA': 'homeScreenID',
   'Personal information': 'profileID',
@@ -102,173 +52,175 @@ const featureID = {
   'Drafts (3)': 'messagesTestID',
 }
 
-let scrollID
-let textResized
+let scrollID: string
+let textResized: boolean
 
-/*Constants for accessibility related command line options.  
-Any new accessibility related command line options should be added here. */
-export const NavigationE2eConstants = {
-  DARK_MODE_OPTIONS:
-    device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance dark' : 'adb shell "cmd uimode night yes"',
-  LIGHT_MODE_OPTIONS:
-    device.getPlatform() === 'ios' ? 'xcrun simctl ui booted appearance light' : 'adb shell "cmd uimode night no"',
-  FONT_RESIZING_LARGEST:
-    device.getPlatform() === 'ios'
-      ? 'xcrun simctl ui booted content_size extra-extra-extra-large'
-      : 'adb shell settings put system font_scale 1.30',
-  DISPLAY_RESIZING_LARGEST: device.getPlatform() === 'android' ? 'adb shell wm density 728' : '',
-  FONT_RESIZING_RESET:
-    device.getPlatform() === 'ios'
-      ? 'xcrun simctl ui booted content_size medium'
-      : 'adb shell settings put system font_scale 1.00',
-  DISPLAY_RESIZING_RESET: 'adb shell wm density reset',
+type AccessibilityOptionArgs = {
+  tab: string
+  expectText: string
+  textToTap: string[]
+  simulatorSetting?: string | null
 }
 
-/*
-Takes a screenshot for each accessibility option and compares it to a known screenshot (when done locally).
-param key: Dictionary key from navigationDic. Corresponds to the sections given on the lower nav bar (Home, Health, Benefits, Payments)
-param navigationDicValue: Dictionary value from navigationDic. Corresponds to the feature in the section that has a lower nav bar
-param accessibilityFeatureType: String value that tells the test what accessability test to run or null value that verifies that a feature is in the right place navigation wise
-*/
-const accessibilityOption = async (key, navigationDicValue, accessibilityFeatureType: string | null) => {
-  const navigationArray = navigationDicValue
-  if (accessibilityFeatureType === 'landscape') {
+const configureSimulatorAndRunTests = async ({
+  tab,
+  expectText,
+  textToTap,
+  simulatorSetting = null,
+}: AccessibilityOptionArgs) => {
+  if (simulatorSetting === 'landscape') {
     await device.setOrientation('landscape')
-    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[2])
-    checkImages(feature)
-    await device.setOrientation('portrait')
-  } else if (accessibilityFeatureType == 'darkMode') {
-    exec(NavigationE2eConstants.DARK_MODE_OPTIONS, (error) => {
-      if (error) {
-        console.error(`exec error: ${error}`)
-        return
-      }
-    })
-    await setTimeout(2000)
-    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[2])
-    checkImages(feature)
-  } else if (accessibilityFeatureType === 'textResizing') {
-    exec(NavigationE2eConstants.FONT_RESIZING_LARGEST, (error) => {
-      if (error) {
-        console.error(`exec error: ${error}`)
-        return
-      }
-    })
-    if (device.getPlatform() === 'android') {
-      textResized = true
-      exec(NavigationE2eConstants.DISPLAY_RESIZING_LARGEST, (error) => {
-        if (error) {
-          console.error(`exec error: ${error}`)
-          return
-        }
-      })
-      await setTimeout(2000)
-      await loginToDemoMode()
-      await navigateToPage(key, navigationDicValue)
+    await expect(element(by.text(expectText)).atIndex(0)).toExist()
+    const feature = await device.takeScreenshot(expectText)
+    await checkImages(feature)
+  } else if (simulatorSetting == 'darkMode') {
+    try {
+      await exec(SimulatorE2ESettings.DARK_MODE_OPTIONS)
+    } catch (e) {
+      console.error(`exec error: ${e}`)
     }
 
-    await expect(element(by.text(navigationDicValue[2])).atIndex(0)).toExist()
-    var feature = await device.takeScreenshot(navigationDicValue[2])
-    checkImages(feature)
+    await setTimeout(2000)
+    await expect(element(by.text(expectText)).atIndex(0)).toExist()
+    const feature = await device.takeScreenshot(expectText)
+    await checkImages(feature)
+  } else if (simulatorSetting === 'textResizing') {
+    try {
+      await exec(SimulatorE2ESettings.FONT_RESIZING_LARGEST)
+    } catch (e) {
+      console.error(`exec error: ${e}`)
+    }
+
+    if (device.getPlatform() === 'android') {
+      textResized = true
+      try {
+        await exec(SimulatorE2ESettings.DISPLAY_RESIZING_LARGEST)
+      } catch (e) {
+        console.error(`exec error: ${e}`)
+      }
+
+      await setTimeout(2000)
+      await loginToDemoMode()
+      await navigateToPage({ tab, textToTap })
+    }
+
+    await expect(element(by.text(expectText)).atIndex(0)).toExist()
+    const feature = await device.takeScreenshot(expectText)
+    await checkImages(feature)
 
     if (device.getPlatform() === 'ios') {
       try {
-        await element(by.id(key)).tap()
+        await element(by.id(tab)).tap()
       } catch (ex) {
-        await element(by.text(key)).atIndex(0).tap()
+        await element(by.text(tab)).atIndex(0).tap()
       }
     }
   } else {
-    await navigateToPage(key, navigationDicValue)
-    await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
+    await navigateToPage({ tab, textToTap })
+    await expect(element(by.text(expectText)).atIndex(0)).toExist()
     for (let i = 0; i < appTabs.length; i++) {
-      if (appTabs[i] != key) {
+      if (appTabs[i] !== tab) {
         await element(by.text(appTabs[i])).tap()
-        await element(by.text(key)).tap()
-        await expect(element(by.text(navigationArray[2])).atIndex(0)).toExist()
+        await element(by.text(tab)).tap()
+        await expect(element(by.text(expectText)).atIndex(0)).toExist()
       }
     }
   }
 }
 
-const navigateToPage = async (key, navigationDicValue) => {
+type NavigateToPageArgs = {
+  tab: string
+  textToTap: string[]
+}
+
+const navigateToPage = async ({ tab, textToTap }: NavigateToPageArgs) => {
   try {
-    await element(by.id(key)).tap()
+    await element(by.id(tab)).tap()
   } catch (ex) {
-    await element(by.text(key)).atIndex(0).tap()
+    await element(by.text(tab)).atIndex(0).tap()
   }
-  const navigationArray = navigationDicValue
-  if (typeof navigationArray[1] === 'string') {
-    if (navigationArray[1] in featureID) {
-      scrollID = featureID[navigationArray[1]]
-      await waitFor(element(by.text(navigationArray[1])))
+
+  if (textToTap.length === 1) {
+    if (textToTap[0] in textToScrollViewTestID) {
+      scrollID = textToScrollViewTestID[textToTap[0]]
+      await waitFor(element(by.text(textToTap[0])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
-    } else if (key in featureID) {
-      scrollID = featureID[key]
-      await waitFor(element(by.text(navigationArray[1])))
+    } else if (tab in textToScrollViewTestID) {
+      scrollID = textToScrollViewTestID[tab]
+      await waitFor(element(by.text(textToTap[0])))
         .toBeVisible()
         .whileElement(by.id(scrollID))
         .scroll(50, 'down')
     }
-    await element(by.text(navigationArray[1])).atIndex(0).tap()
+    await element(by.text(textToTap[0])).atIndex(0).tap()
   } else {
-    const subNavigationArray = navigationArray[1]
-    for (let k = 0; k < subNavigationArray.length - 1; k++) {
-      if (subNavigationArray[k] === 'Received July 17, 2008') {
+    for (const curTextToTap of textToTap) {
+      // multiple instances of text are present on screen
+      if (curTextToTap === 'Get prescription details' || curTextToTap === 'Regular Chapter 31') {
+        continue
+      }
+      if (curTextToTap === 'Received July 17, 2008') {
         await waitFor(element(by.text('Received July 17, 2008')))
           .toBeVisible()
           .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
           .scroll(100, 'down')
-      } else if (subNavigationArray[k] === 'Files') {
+      } else if (curTextToTap === 'Files') {
+        // wait for scroll to claim step animation to finish before scrolling to the top
+        await setTimeout(1000)
         await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
       }
 
-      if (k == 0 && key in featureID) {
-        scrollID = featureID[key]
-        await waitFor(element(by.text(subNavigationArray[k])))
+      if (curTextToTap === textToTap[0] && tab in textToScrollViewTestID) {
+        scrollID = textToScrollViewTestID[tab]
+        await waitFor(element(by.text(curTextToTap)))
           .toBeVisible()
           .whileElement(by.id(scrollID))
           .scroll(50, 'down')
       }
 
-      if (subNavigationArray[k] in featureID) {
-        scrollID = featureID[subNavigationArray[k]]
-        await waitFor(element(by.text(subNavigationArray[k])))
+      if (curTextToTap in textToScrollViewTestID) {
+        scrollID = textToScrollViewTestID[curTextToTap]
+        await waitFor(element(by.text(curTextToTap)))
           .toBeVisible()
           .whileElement(by.id(scrollID))
           .scroll(50, 'down')
       }
-      await element(by.text(subNavigationArray[k])).tap()
+      await element(by.text(curTextToTap)).tap()
     }
 
-    if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
+    const lastTextToTap = textToTap.at(-1)
+    if (lastTextToTap === 'Get prescription details') {
       await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down')
-    } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
+    } else if (lastTextToTap === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
         .scroll(100, 'down')
-    } else if (subNavigationArray.slice(-1)[0] === 'Files' || subNavigationArray.slice(-1)[0] === 'Submit evidence') {
+    } else if (
+      lastTextToTap === 'Files' ||
+      lastTextToTap === 'Submit evidence' ||
+      lastTextToTap === 'Received July 20, 2021'
+    ) {
+      // wait for scroll to claim step animation to finish before scrolling to the top
+      await setTimeout(1000)
       await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     }
 
-    if (subNavigationArray.slice(-1)[0] in featureID) {
-      scrollID = featureID[subNavigationArray.slice(-1)[0]]
-      await waitFor(element(by.text(subNavigationArray.slice(-1)[0])))
-        .toBeVisible()
-        .whileElement(by.id(scrollID))
-        .scroll(50, 'down')
+    if (lastTextToTap !== 'Received July 17, 2008') {
+      if (lastTextToTap in textToScrollViewTestID) {
+        scrollID = textToScrollViewTestID[lastTextToTap]
+        await waitFor(element(by.text(lastTextToTap)))
+          .toBeVisible()
+          .whileElement(by.id(scrollID))
+          .scroll(50, 'down')
+      }
+      await element(by.text(lastTextToTap)).atIndex(0).tap()
     }
-    await element(by.text(subNavigationArray.slice(-1)[0]))
-      .atIndex(0)
-      .tap()
   }
 }
 
@@ -279,79 +231,254 @@ beforeAll(async () => {
 })
 
 afterEach(async () => {
-  exec(NavigationE2eConstants.LIGHT_MODE_OPTIONS, (error) => {
-    if (error) {
-      console.error(`exec error: ${error}`)
-      return
-    }
-  })
+  try {
+    await device.setOrientation('portrait')
+  } catch (e) {
+    console.error('failed to set orientation to portrait mode', e)
+  }
 
-  exec(NavigationE2eConstants.FONT_RESIZING_RESET, (error) => {
-    if (error) {
-      console.error(`exec error: ${error}`)
-      return
-    }
-  })
-  if (device.getPlatform() === 'android') {
-    exec(NavigationE2eConstants.DISPLAY_RESIZING_RESET, (error) => {
-      if (error) {
-        console.error(`exec error: ${error}`)
-        return
+  try {
+    await exec(SimulatorE2ESettings.LIGHT_MODE_OPTIONS)
+    await exec(SimulatorE2ESettings.FONT_RESIZING_RESET)
+    if (device.getPlatform() === 'android') {
+      await exec(SimulatorE2ESettings.DISPLAY_RESIZING_RESET)
+      if (textResized) {
+        textResized = false
+        await loginToDemoMode()
       }
-    })
-    if (textResized) {
-      textResized = false
-      await loginToDemoMode()
     }
+  } catch (e) {
+    console.error(`exec error: ${e}`)
   }
 })
 
-describe('Navigation', () => {
-  let testsRun = false
-  for (const [key, value] of Object.entries(navigationDic)) {
-    for (let j = 0; j < value.length; j++) {
-      const nameArray = value[j]
-      let testName = nameArray[2]
-      if (
-        nameArray[2] ===
-        'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.'
-      ) {
-        testName = 'Account security'
-      }
-      let runTest = false
-      if (nameArray[0] instanceof Array) {
-        for (let z = 0; z < value.length; z++) {
-          if (navigationValue === nameArray[0][z]) {
-            runTest = true
-          }
-        }
-      } else if (navigationValue === nameArray[0]) {
-        runTest = true
-      }
-      if (runTest === true || navigationValue === undefined) {
-        testsRun = true
-        it('verify navigation for: ' + testName, async () => {
-          await accessibilityOption(key, value[j], null)
-        })
+type NavigationTestCase = {
+  tab: string
+  testFiles: string[]
+  textToTap: string[]
+  expectText: string
+  alternateTestName?: string
+}
 
-        if (testName !== 'Community care' && testName !== 'Claim exam') {
-          it('verify navigation landscape mode for: ' + testName, async () => {
-            await accessibilityOption(key, value[j], 'landscape')
-          })
+const navigationTestCases: NavigationTestCase[] = [
+  {
+    tab: 'Home',
+    testFiles: ['HomeScreen.e2e'],
+    textToTap: ['Contact us'],
+    expectText: 'Contact VA',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'PersonalInformationScreen.e2e'],
+    textToTap: ['Profile', 'Personal information'],
+    expectText: 'Personal information',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'ContactInformation.e2e'],
+    textToTap: ['Profile', 'Contact information'],
+    expectText: 'Contact information',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'MilitaryInformation.e2e'],
+    textToTap: ['Profile', 'Military information'],
+    expectText: 'Military information',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
+    textToTap: ['Profile', 'Settings'],
+    expectText: 'Settings',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
+    textToTap: ['Profile', 'Settings', 'Account security'],
+    expectText:
+      'To access or update your sign-in information, go to the website where you manage your account information. Any updates you make there will automatically update on the mobile app.',
+    alternateTestName: 'Account security',
+  },
+  {
+    tab: 'Home',
+    testFiles: ['ProfileScreen.e2e', 'SettingsScreen.e2e'],
+    textToTap: ['Profile', 'Settings', 'Notifications'],
+    expectText: 'Notifications',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['DisabilityRatings.e2e'],
+    textToTap: ['Disability rating'],
+    expectText: 'Disability rating',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims'],
+    expectText: 'Claims',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims', 'Claims history'],
+    expectText: 'Claims history',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Closed'],
+    expectText: 'Your closed claims, decision reviews, and appeals',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Active'],
+    expectText: 'Your active claims, decision reviews, and appeals',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Received July 20, 2021'],
+    expectText: 'Claim details',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Claims.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Received July 20, 2021', 'Files'],
+    expectText: 'JESSE_GRAY_600246732_526.pdf',
+  },
+  //['Claims.e2e', ['Claims', 'Claims history', 'Received July 20, 2021', 'Submit evidence'], 'Submit evidence'],
+  {
+    tab: 'Benefits',
+    testFiles: ['Appeals.e2e', 'AppealsExpanded.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Received July 17, 2008'],
+    expectText: 'Appeal details',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['Appeals.e2e', 'AppealsExpanded.e2e'],
+    textToTap: ['Claims', 'Claims history', 'Received July 17, 2008', 'Issues'],
+    expectText: 'Currently on appeal',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['DecisionLetters.e2e'],
+    textToTap: ['Claims', 'Claim letters'],
+    expectText: 'Claim letters',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['VALetters.e2e'],
+    textToTap: ['VA letters and documents'],
+    expectText: 'Letters',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['VALetters.e2e'],
+    textToTap: ['VA letters and documents', 'Review letters'],
+    expectText: 'Review letters',
+  },
+  {
+    tab: 'Benefits',
+    testFiles: ['VALetters.e2e'],
+    textToTap: ['VA letters and documents', 'Review letters', 'Benefit summary and service verification letter'],
+    expectText: 'Letter details',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
+    textToTap: ['Appointments'],
+    expectText: 'Appointments',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
+    textToTap: ['Appointments', 'Vilanisi Reddy'],
+    expectText: 'Details',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Appointments.e2e', 'AppointmentsExpanded.e2e'],
+    textToTap: ['Appointments', 'Past'],
+    expectText: 'Past 3 months',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Messages.e2e'],
+    textToTap: ['Messages'],
+    expectText: 'Messages',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Messages.e2e'],
+    textToTap: ['Messages', 'Medication: Naproxen side effects'],
+    expectText: 'Review message',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Prescriptions.e2e'],
+    textToTap: ['Prescriptions'],
+    expectText: 'Prescriptions',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['Prescriptions.e2e'],
+    textToTap: ['Prescriptions', 'Get prescription details'],
+    expectText: 'AMLODIPINE BESYLATE 10MG TAB',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['VaccineRecords.e2e'],
+    textToTap: ['V\ufeffA vaccine records'],
+    expectText: 'VA vaccines',
+  },
+  {
+    tab: 'Health',
+    testFiles: ['VaccineRecords.e2e'],
+    textToTap: ['V\ufeffA vaccine records', 'January 14, 2021'],
+    expectText: 'COVID-19 vaccine',
+  },
+  {
+    tab: 'Payments',
+    testFiles: ['Payments.e2e'],
+    textToTap: ['VA payment history'],
+    expectText: 'History',
+  },
 
-          it('verify navigation dark mode for: ' + testName, async () => {
-            await accessibilityOption(key, value[j], 'darkMode')
-          })
-          it('verify navigation text resizing for: ' + testName, async () => {
-            if (device.getPlatform() === 'ios') {
-              await accessibilityOption(key, value[j], 'textResizing')
-            }
-          })
-        }
-      }
+  {
+    tab: 'Payments',
+    testFiles: ['Payments.e2e'],
+    textToTap: ['VA payment history', 'Regular Chapter 31'],
+    expectText: 'Regular Chapter 31',
+  },
+
+  {
+    tab: 'Payments',
+    testFiles: ['DirectDeposit.e2e'],
+    textToTap: ['Direct deposit information'],
+    expectText: 'Direct deposit',
+  },
+]
+
+describe.each(navigationTestCases)('Navigation', ({ tab, testFiles, textToTap, expectText, alternateTestName }) => {
+  const testName = alternateTestName || expectText
+
+  it('verify navigation for: ' + testName, async () => {
+    await configureSimulatorAndRunTests({ tab, expectText, textToTap })
+  })
+
+  it('verify navigation landscape mode for: ' + testName, async () => {
+    // key prop warning on screen shot
+    await configureSimulatorAndRunTests({ tab, expectText, textToTap, simulatorSetting: 'landscape' })
+  })
+
+  it('verify navigation dark mode for: ' + testName, async () => {
+    await configureSimulatorAndRunTests({ tab, expectText, textToTap, simulatorSetting: 'darkMode' })
+  })
+
+  it('verify navigation text resizing for: ' + testName, async () => {
+    if (device.getPlatform() === 'ios') {
+      await configureSimulatorAndRunTests({ tab, expectText, textToTap, simulatorSetting: 'textResizing' })
     }
-  }
-  if (testsRun == false) {
-    it('no Nav changes', async () => {})
-  }
+  })
 })

@@ -1,6 +1,6 @@
 /*
 Description:
-Detox script for functions/constants that effect multiple other scripts.  
+Detox script for functions/constants that effect multiple other scripts.
 When to update:
 New functions/constants should be added when anything is created that might effect multiple scripts.
 */
@@ -351,7 +351,7 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
  */
 export async function checkImages(screenshotPath) {
   const image = fs.readFileSync(screenshotPath)
-  await (jestExpect(image) as any).toMatchImageSnapshot({
+  return await (jestExpect(image) as any).toMatchImageSnapshot({
     comparisonMethod: 'ssim',
     failureThreshold: 0.01,
     failureThresholdType: 'percent',

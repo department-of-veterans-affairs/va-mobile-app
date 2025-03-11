@@ -96,8 +96,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             accessible: boolean
           }
 
-          const props: TouchableProps = {
-            key: route.name,
+          const props: Omit<TouchableProps, 'key'> = {
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
             accessibilityRole: 'link',
@@ -137,6 +136,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             <TouchableWithoutFeedback
               accessibilityLabel={translatedName}
               testID={translatedName}
+              key={route.name}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={7}>

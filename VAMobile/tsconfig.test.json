@@ -6,7 +6,7 @@
     "allowJs": true,
     "checkJs": false,
     "moduleResolution": "node",
-    "sourceMap": false,
+    "sourceMap": true,
     "noImplicitAny": false,
     "target": "es6",
     "module": "commonjs",

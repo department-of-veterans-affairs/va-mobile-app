@@ -167,8 +167,8 @@ export const completeFirstTimeLogin = (): AppThunk => async (dispatch) => {
  * Clears auth credentials
  */
 const clearStoredAuthCreds = async (): Promise<void> => {
-  await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
-  await Keychain.resetInternetCredentials(KEYCHAIN_DEVICE_SECRET_KEY)
+  await Keychain.resetInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
+  await Keychain.resetInternetCredentials({ server: KEYCHAIN_DEVICE_SECRET_KEY })
   await AsyncStorage.removeItem(REFRESH_TOKEN_TYPE)
   inMemoryRefreshToken = undefined
 }
@@ -311,7 +311,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
   // no matter what reset first, otherwise might hit an exception if changing access types from previously saved
-  await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  await Keychain.resetInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
   if (saveWithBiometrics) {
     // user opted to store with biometrics
     const options: Keychain.SetOptions = {
@@ -344,7 +344,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       console.error(err)
     }
   } else {
-    await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
+    await Keychain.resetInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
     // NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
     await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
     console.debug('saveRefreshToken: not saving refresh token')
@@ -516,7 +516,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
 
 export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | undefined> => {
   try {
-    const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+    const hasStoredCredentials = await Keychain.hasInternetCredentials({ server: KEYCHAIN_STORAGE_KEY })
 
     if (!hasStoredCredentials) {
       console.debug('getAuthLoginPromptType: no stored credentials')
