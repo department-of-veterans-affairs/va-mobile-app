@@ -268,7 +268,7 @@ let theme: VATheme = {
     navBarHeight: 56,
     touchableMinHeight: 44,
     textAndButtonLargeMargin: 40,
-    headerHeight: 50,
+    headerHeight: 64,
     formMarginBetween: 30,
     tagMinWidth: 29,
     maxNumMessageAttachments: 4,

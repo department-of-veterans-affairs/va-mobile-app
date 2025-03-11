@@ -11,6 +11,7 @@ import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchOfService, ServiceData, ServiceHistoryData } from 'api/types'
+import { useVeteranStatus } from 'api/veteranStatus'
 import {
   BackgroundVariant,
   BorderColorVariant,
@@ -28,6 +29,7 @@ import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
+import VeteranStatusError from './VeteranStatusError/VeteranStatusError'
 
 // import PhotoUpload from 'components/PhotoUpload'
 
@@ -40,8 +42,10 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
+  const { data: veteranStatus } = useVeteranStatus()
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
+  const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -90,7 +94,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     borderStyle: 'solid',
   }
 
-  return (
+  return veteranStatusConfirmed ? (
     <LargePanel
       title={t('veteranStatus.title')}
       rightButtonText={t('close')}
@@ -189,6 +193,8 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         </Box>
       </Box>
     </LargePanel>
+  ) : (
+    <VeteranStatusError />
   )
 }
 
