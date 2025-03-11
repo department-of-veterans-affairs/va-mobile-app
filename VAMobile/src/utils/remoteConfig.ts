@@ -16,6 +16,7 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
+  | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'decisionLettersWaygate'
@@ -34,9 +35,9 @@ export type FeatureToggleType =
   | 'testFeature'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
-  | 'allergies'
 
 type FeatureToggleValues = {
+  allergies: boolean
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
@@ -55,7 +56,6 @@ type FeatureToggleValues = {
   testFeature: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
-  allergies: boolean
 }
 
 export const defaults: FeatureToggleValues = {
