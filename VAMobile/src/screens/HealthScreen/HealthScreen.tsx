@@ -6,6 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
@@ -13,7 +15,6 @@ import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
-import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -204,6 +205,7 @@ const HealthScreenStack = createStackNavigator<HealthStackParamList>()
  * Stack screen for the Health tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 function HealthStackScreen({}: HealthStackScreenProps) {
+  const snackbar = useSnackbar()
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -214,11 +216,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
-            CloseSnackbarOnNavigation(e.target)
+            snackbar.hide()
           }
         },
-        blur: (e) => {
-          CloseSnackbarOnNavigation(e.target)
+        blur: () => {
+          snackbar.hide()
         },
       }}>
       <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ headerShown: false }} />

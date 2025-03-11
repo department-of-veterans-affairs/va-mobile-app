@@ -5,26 +5,27 @@ import { Alert, Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
 import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { checkStringForPII, showSnackBar } from 'utils/common'
+import { checkStringForPII } from 'utils/common'
 import getEnv from 'utils/env'
-import { useAppDispatch, useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
 function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
-  const dispatch = useAppDispatch()
   const { screen } = route.params
   let submittedCheck = false
   const launchExternalLink = useExternalLink()
@@ -50,7 +51,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
             logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
             submittedCheck = true
             navigation.goBack()
-            showSnackBar(t('inAppFeedback.snackbar.success'), dispatch, undefined, true, false, false)
+            snackbar.show(t('inAppFeedback.snackbar.success'))
           },
           style: 'default',
         },
@@ -59,7 +60,7 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
       logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
       submittedCheck = true
       navigation.goBack()
-      showSnackBar(t('inAppFeedback.snackbar.success'), dispatch, undefined, true, false, false)
+      snackbar.show(t('inAppFeedback.snackbar.success'))
     }
   }
 

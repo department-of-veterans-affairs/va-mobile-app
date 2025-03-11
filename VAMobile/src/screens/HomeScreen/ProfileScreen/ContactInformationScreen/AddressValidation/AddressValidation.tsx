@@ -4,19 +4,20 @@ import { ViewStyle } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
 import { map, pick } from 'underscore'
 
 import { useContactInformation } from 'api/contactInformation'
 import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
 import { AlertWithHaptics, Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { NAMESPACE } from 'constants/namespaces'
 import { EditResponseData } from 'store/api'
-import { showSnackBar } from 'utils/common'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { GenerateAddressMessage } from 'translations/en/functions'
+import { useTheme } from 'utils/hooks'
 import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils/personalInformation'
+
+import { profileAddressType } from '../AddressSummary'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -24,7 +25,7 @@ import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils
 export type AddressValidationProps = {
   addressEntered: AddressData
   addressId: number
-  snackbarMessages: SnackbarMessages
+  addressType: profileAddressType
   validationData: ValidateAddressData
   saveAddress: UseMutateFunction<EditResponseData | undefined, unknown, SaveAddressParameters, unknown>
   setShowAddressValidation: (shouldShow: boolean) => void
@@ -33,12 +34,12 @@ export type AddressValidationProps = {
 function AddressValidation({
   addressEntered,
   addressId,
-  snackbarMessages,
+  addressType,
   validationData,
   saveAddress,
   setShowAddressValidation,
 }: AddressValidationProps) {
-  const dispatch = useAppDispatch()
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigation = useNavigation()
   const theme = useTheme()
@@ -109,8 +110,13 @@ function AddressValidation({
 
     const save = () => {
       const mutateOptions = {
-        onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
-        onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
+        onSuccess: () => snackbar.show(GenerateAddressMessage(t, addressType, false)),
+        onError: () =>
+          snackbar.show(GenerateAddressMessage(t, addressType, true), {
+            isError: true,
+            offset: theme.dimensions.snackBarBottomOffset,
+            onActionPressed: () => save,
+          }),
       }
       saveAddress({ addressData, revalidate }, mutateOptions)
     }
