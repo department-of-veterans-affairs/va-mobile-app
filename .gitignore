@@ -122,7 +122,6 @@ coverage
 **/ios/vendor
 **/ios/Pods
 **/ios/main.jsbundle.map
-/VAMobile/ios/.xcode.env
 
 # Xcode
 #
