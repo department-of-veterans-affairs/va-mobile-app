@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { SecureMessagingSystemFolderIdConstants } from 'api/types'
@@ -36,7 +37,6 @@ context('SecureMessaging', () => {
               directDepositBenefits: true,
               directDepositBenefitsUpdate: true,
               disabilityRating: true,
-              genderIdentity: true,
               lettersAndDocuments: true,
               militaryServiceHistory: true,
               paymentHistory: true,
@@ -69,7 +69,7 @@ context('SecureMessaging', () => {
         .calledWith(`/v0/messaging/health/folders`)
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('secureMessaging.inbox.messageDownError.title'))).toBeTruthy())
     })
   })
 
