@@ -23,6 +23,7 @@ const mockOverrides = {
   decisionLettersWaygate: false,
   haptics: false,
   homeScreenPrefetch: false,
+  inAppFeedback: false,
   inAppRecruitment: false,
   inAppReview: true,
   inAppUpdates: false,
@@ -35,6 +36,7 @@ const mockOverrides = {
   testFeature: false,
   useOldLinkComponent: false,
   whatsNewUI: false,
+  allergies: true,
 }
 
 describe('activate', () => {

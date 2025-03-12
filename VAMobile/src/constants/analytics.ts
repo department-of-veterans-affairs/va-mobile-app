@@ -29,6 +29,16 @@ export const Events = {
       name: 'vama_af_updated',
     }
   },
+  vama_allergy_details: (): Event => {
+    return {
+      name: 'vama_allergy_details',
+    }
+  },
+  vama_allergy_list: (): Event => {
+    return {
+      name: 'vama_allergy_list',
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
@@ -620,40 +630,33 @@ export const Events = {
       name: 'vama_find_location',
     }
   },
-  vama_gender_id_fail: (): Event => {
+  vama_feedback_ask: (screen: string, response: boolean): Event => {
     return {
-      name: 'vama_gender_id_fail',
+      name: 'vama_feedback_ask',
+      params: {
+        screen,
+        response,
+      },
     }
   },
-  vama_gender_id_help: (): Event => {
+  vama_feedback_closed: (screen: string): Event => {
     return {
-      name: 'vama_gender_id_help',
+      name: 'vama_feedback_closed',
+      params: {
+        screen,
+      },
     }
   },
-  vama_gender_id_success: (): Event => {
+  vama_feedback_submitted: (screen: string, taskCompleted: string, satisfaction: string): Event => {
     return {
-      name: 'vama_gender_id_success',
+      name: 'vama_feedback_submitted',
+      params: {
+        screen,
+        taskCompleted,
+        satisfaction,
+      },
     }
   },
-  // vama_feedback_page_entered: (): Event => {
-  //   return {
-  //     name: 'vama_feedback_page_entered',
-  //   }
-  // },
-  // vama_feedback_page_closed: (): Event => {
-  //   return {
-  //     name: 'vama_feedback_page_closed',
-  //   }
-  // },
-  // vama_feedback_submitted: (taskCompleted: string, satisfaction: string): Event => {
-  //   return {
-  //     name: 'vama_feedback_submitted',
-  //     params: {
-  //       taskCompleted,
-  //       satisfaction,
-  //     },
-  //   }
-  // },
   vama_givefb_close: (screenName: string): Event => {
     return {
       name: 'vama_givefb_close',
@@ -1147,14 +1150,6 @@ export const Events = {
   vama_sm_start: (): Event => {
     return {
       name: 'vama_sm_start',
-    }
-  },
-  vama_snackbar_null: (location: string): Event => {
-    return {
-      name: 'vama_snackbar_null',
-      params: {
-        location,
-      },
     }
   },
   vama_sso_cookie_received: (received: boolean): Event => {

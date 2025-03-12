@@ -5,32 +5,40 @@ import { Alert, Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
 import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { checkStringForPII } from 'utils/common'
 import getEnv from 'utils/env'
-import { useExternalLink, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
 type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
 
-function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
+function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
   const [task, setTaskOverride] = useState('')
+  const { screen } = route.params
+  let submittedCheck = false
   const launchExternalLink = useExternalLink()
 
-  // useBeforeNavBackListener(navigation, () => {
-  // logAnalyticsEvent(Events.vama_feedback_page_closed())
-  // })
+  useBeforeNavBackListener(navigation, () => {
+    if (submittedCheck === true) {
+      return
+    }
+    logAnalyticsEvent(Events.vama_feedback_closed(screen))
+  })
 
   const onSubmit = (): void => {
     const { found, newText } = checkStringForPII(task)
-    // logAnalyticsEvent(Events.vama_feedback_submitted(taskCompleted, satisfaction))
     if (found) {
       Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
         {
@@ -40,14 +48,19 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         {
           text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
-            setTaskOverride(newText)
+            logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
+            submittedCheck = true
             navigation.goBack()
+            snackbar.show(t('inAppFeedback.snackbar.success'))
           },
           style: 'default',
         },
       ])
     } else {
+      logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
+      submittedCheck = true
       navigation.goBack()
+      snackbar.show(t('inAppFeedback.snackbar.success'))
     }
   }
 

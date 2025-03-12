@@ -8,7 +8,7 @@ import { FeatureLandingTemplate } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { registerReviewEvent } from 'utils/inAppReviews'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 import {
   AppointmentDetailsSubTypeConstants,
@@ -33,6 +33,7 @@ type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastA
 function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsProps) {
   const { appointment } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const registerReviewEvent = useReviewEvent(true)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
@@ -51,9 +52,9 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
           getAppointmentAnalyticsDays(attributes),
         ),
       )
-      registerReviewEvent(true)
+      registerReviewEvent()
     }
-  }, [appointment, pendingAppointment, attributes])
+  }, [appointment, pendingAppointment, attributes, registerReviewEvent])
 
   const isInPersonVAAppointment =
     appointmentType === AppointmentTypeConstants.VA && serviceCategoryName !== 'COMPENSATION & PENSION'

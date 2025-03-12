@@ -88,7 +88,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
@@ -141,7 +141,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-xl
+    runs-on: macos-13
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -204,7 +204,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -219,7 +219,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -234,7 +234,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -249,7 +249,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: VAMobile
-          api-level: 33
+          api-level: 28
           profile: pixel_6_pro
           force-avd-creation: false
           disable-animations: true
@@ -279,7 +279,7 @@ jobs:
   output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-android, start_slack_thread]
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
