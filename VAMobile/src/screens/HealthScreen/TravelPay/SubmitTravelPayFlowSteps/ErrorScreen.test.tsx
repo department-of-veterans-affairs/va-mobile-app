@@ -17,5 +17,7 @@ context('ErrorScreen', () => {
     initializeTestInstance()
     expect(screen.getByText(t('travelPay.error.title'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.error.text'))).toBeTruthy()
+    expect(screen.getByTestId('fileOnlineComponent')).toBeTruthy()
+    expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
   })
 })

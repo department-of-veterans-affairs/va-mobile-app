@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
 
 import { Box, List, ListItemObj, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -21,14 +22,14 @@ function FileOnlineComponent() {
   ]
 
   return (
-    <>
+    <View testID="fileOnlineComponent">
       <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
         {t('travelPay.youCanStillFile')}
       </TextView>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <List items={bullets} />
       </Box>
-    </>
+    </View>
   )
 }
 

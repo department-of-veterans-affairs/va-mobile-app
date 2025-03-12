@@ -16,5 +16,7 @@ context('NotEligibleTypeScreen', () => {
   it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText(t('travelPay.cannotSubmitThisType'))).toBeTruthy()
+    expect(screen.getByTestId('fileOnlineComponent')).toBeTruthy()
+    expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
   })
 })
