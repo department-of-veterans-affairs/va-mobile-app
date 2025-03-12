@@ -522,7 +522,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       } else {
         await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
       }
-      await element(by.text('All of 2023')).tap()
+      await element(by.text(`All of ${new Date().getFullYear() - 1}`)).tap()
       await element(by.text('Done')).tap()
     }
     await scrollToThenTap('Sami Alsahhar - Onsite - Pending', pastAppointmentString)
