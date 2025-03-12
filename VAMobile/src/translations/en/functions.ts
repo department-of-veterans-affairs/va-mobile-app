@@ -1,7 +1,6 @@
 import { TFunction } from 'i18next'
 
 import { SecureMessagingFolderList } from 'api/types'
-import { SnackbarMessages } from 'components/SnackBar'
 import {
   profileAddressOptions,
   profileAddressType,
@@ -32,15 +31,12 @@ export const GenerateFolderMessage = (
   return t('secureMessaging.folders.moveTo', { messageString: messageString, folderString: folderName })
 }
 
-export const GenerateAddressMessages = (t: TFunction, addressType: profileAddressType): SnackbarMessages => {
-  let success, error
+export const GenerateAddressMessage = (t: TFunction, addressType: profileAddressType, isError: boolean): string => {
   if (addressType === profileAddressOptions.MAILING_ADDRESS) {
-    success = t('contactInformation.mailingAddress.saved')
-    error = t('contactInformation.mailingAddress.saved.error')
+    return isError ? t('contactInformation.mailingAddress.saved.error') : t('contactInformation.mailingAddress.saved')
   } else {
-    success = t('contactInformation.residentialAddress.saved')
-    error = t('contactInformation.residentialAddress.saved.error')
+    return isError
+      ? t('contactInformation.residentialAddress.saved.error')
+      : t('contactInformation.residentialAddress.saved')
   }
-  const messages: SnackbarMessages = { successMsg: success, errorMsg: error }
-  return messages
 }
