@@ -2,10 +2,9 @@ import React from 'react'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
-import { DateTime } from 'luxon/src/datetime'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea } from 'components'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
