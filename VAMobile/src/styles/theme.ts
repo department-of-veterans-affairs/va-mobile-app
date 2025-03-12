@@ -94,6 +94,7 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LabResultHeader: string
   LargeNavButton: string
   LargeNavSubtext: string
   MobileBody: string
