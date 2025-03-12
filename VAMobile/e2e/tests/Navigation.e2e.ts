@@ -3,7 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants, checkImages, loginToDemoMode, toggleRemoteConfigFlag } from './utils'
 
-var navigationValue = process.argv[7]
+let navigationValue = process.argv[7]
 
 if (navigationValue === undefined) {
   navigationValue = process.argv[6]
