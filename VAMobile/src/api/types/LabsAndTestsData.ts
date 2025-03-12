@@ -22,6 +22,7 @@ export type LabsAndTests = {
     testCode: string
     dateCompleted?: string | null
     sampleSite?: string | null
+    orderedBy?: string | null
     encodedData?: string | null
     location?: string | null
     observations?: Array<Observation> | null

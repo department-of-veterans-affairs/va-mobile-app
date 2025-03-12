@@ -17,6 +17,7 @@ context('LabsAndTestsDetailsScreen', () => {
         'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
       sampleSite: 'TESTING BONE MARROW',
       location: 'VA TEST LAB',
+      orderedBy: 'Provider Name',
     },
   }
   const chemHemLabsAndTests = {
@@ -94,6 +95,11 @@ context('LabsAndTestsDetailsScreen', () => {
   it('renders the site sampled correctly', async () => {
     const { getByTestId } = initializeTestInstance()
     await waitFor(() => expect(getByTestId('siteSampled').children[0]).toEqual('TESTING BONE MARROW'))
+  })
+
+  it('renders Ordered By correctly', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('orderedBy').children[0]).toEqual('Provider Name'))
   })
 
   it('renders the location correctly', async () => {

@@ -39,6 +39,7 @@ type LabDisplayData = {
   location: string
   siteSampled: string
   dateCompleted: string
+  orderedBy: string
 }
 
 /**
@@ -75,6 +76,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
     dateCompleted: labOrTest.attributes?.dateCompleted
       ? formatDateMMMMDDYYYY(labOrTest.attributes.dateCompleted)
       : placeHolder,
+    orderedBy: labOrTest.attributes?.orderedBy || placeHolder,
   }
 
   const keys = Object.keys(data) as (keyof LabDisplayData)[]
