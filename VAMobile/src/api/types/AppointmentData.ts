@@ -105,9 +105,30 @@ export type AppointmentLocation = {
   code?: string
 }
 
+export type ClaimStatus =
+  | 'In Process'
+  | 'Claim Submitted'
+  | 'Saved'
+  | 'Incomplete'
+  | 'Appealed'
+  | 'In Manual Review'
+  | 'Closed'
+  | 'On Hold'
+  | 'Denied'
+
+export type TravelPayClaim = {
+  id: string
+  claimNumber: string
+  claimStatus: 'In Process'
+  appointmentDateTime: string
+  facilityName: string
+  createdOn: string
+  modifiedOn: string
+}
+
 export type AppointmentTravelPayClaim = {
   metadata: { status: number; success: boolean; message: string }
-  claim?: Record<string, unknown>
+  claim?: TravelPayClaim
 }
 
 export type AppointmentTimeZone =
