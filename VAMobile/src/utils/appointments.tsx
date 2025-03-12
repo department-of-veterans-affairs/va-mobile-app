@@ -368,7 +368,7 @@ export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
 export const getDaysLeftToFileTravelPay = (startDateUtc: string) => {
   const daysToFile = 30 // 30 days to file travel pay
   const lastFileDate = DateTime.fromISO(startDateUtc).plus({ days: daysToFile })
-  return Math.floor(lastFileDate.diff(DateTime.now(), 'days').days)
+  return Math.floor(lastFileDate.diff(DateTime.now().toUTC(), 'days').days)
 }
 
 const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: number) => {

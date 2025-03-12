@@ -209,12 +209,13 @@ context('AppointmentFileTravelPayAlert', () => {
     const attributes = createTestAppointmentAttributes({
       status: AppointmentStatusConstants.BOOKED,
       appointmentType: AppointmentTypeConstants.VA,
-      startDateUtc: DateTime.utc().minus({ days: 30 }).toISO(),
+      startDateUtc: DateTime.now().minus({ days: 30 }).toUTC().toISO(),
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
     })
     initializeTestInstance(attributes)
+    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
     expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
   })
 
@@ -266,5 +267,28 @@ context('AppointmentFileTravelPayAlert', () => {
     expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
       appointmentDateTime: attributes.startDateUtc,
     })
+  })
+
+  it('should not render if a claim has already been filed', async () => {
+    const attributes = createTestAppointmentAttributes({
+      status: AppointmentStatusConstants.BOOKED,
+      appointmentType: AppointmentTypeConstants.VA,
+      isPending: false,
+      phoneOnly: false,
+      travelPayClaim: {
+        ...travelPayClaimData,
+        claim: {
+          id: '1234',
+          claimNumber: 'string',
+          claimStatus: 'In Process',
+          appointmentDateTime: '2024-01-01T16:45:34.465Z',
+          facilityName: 'Cheyenne VA Medical Center',
+          createdOn: '2024-03-22T21:22:34.465Z',
+          modifiedOn: '2024-01-01T16:44:34.465Z',
+        },
+      },
+    })
+    initializeTestInstance(attributes)
+    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
   })
 })
