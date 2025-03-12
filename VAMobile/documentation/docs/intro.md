@@ -3,10 +3,6 @@ title: Intro to the VA Mobile App
 sidebar_position: 1
 ---
 
-:::info Release Freeze Information
-The VA: Health and Benefits mobile app will be participating in a release freeze from December 17, 2024 until January 28, 2025, to accommodate the availability of team members around the winter holiday. This freeze effectively skips two normal release cycles, as the app is published on a bi-weekly basis. While releases will be frozen, code is not. Normal work and merging into the `develop` branch can continue as planned, but the code will be held back from the app stores until the freeze is lifted.
-:::
-
 <img width="125" height="125" alt="Dark blue square with white letters V and A in the middle" src="https://mobile.va.gov/sites/default/files/image/icons/va-health-and-benefits-app-icon.png" />
 
 ## Background

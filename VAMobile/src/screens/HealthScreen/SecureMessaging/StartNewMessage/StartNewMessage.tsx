@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
@@ -37,7 +37,6 @@ import {
   PickerItem,
   TextArea,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -46,10 +45,9 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { isErrorObject, showSnackBar } from 'utils/common'
+import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import {
-  useAppDispatch,
   useAttachments,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
@@ -70,23 +68,12 @@ import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCanc
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
 function StartNewMessage({ navigation, route }: StartNewMessageProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const draftAttachmentAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.draft.saved'),
-    errorMsg: t('secureMessaging.draft.saved.error'),
-  }
-
-  const snackbarSentMessages: SnackbarMessages = {
-    successMsg: t('secureMessaging.startNewMessage.sent'),
-    errorMsg: t('secureMessaging.startNewMessage.sent.error'),
-  }
-
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -304,7 +291,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         const params: SaveDraftParameters = { messageData: messageData }
         const mutateOptions = {
           onSuccess: () => {
-            showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+            snackbar.show(t('secureMessaging.draft.saved'))
             logAnalyticsEvent(Events.vama_sm_save_draft(messageData.category))
             queryClient.invalidateQueries({
               queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
@@ -317,14 +304,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             })
           },
           onError: () => {
-            showSnackBar(
-              snackbarMessages.errorMsg,
-              dispatch,
-              // passing messageDataRef to ensure we have the latest messageData
-              () => saveDraft({ messageData: messageDataRef.current }, mutateOptions),
-              false,
-              true,
-            )
+            snackbar.show(t('secureMessaging.draft.saved.error'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => {
+                // passing messageDataRef to ensure we have the latest messageData
+                saveDraft({ messageData: messageDataRef.current }, mutateOptions)
+              },
+            })
           },
         }
         saveDraft(params, mutateOptions)
@@ -332,7 +319,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     } else {
       const mutateOptions = {
         onSuccess: () => {
-          showSnackBar(snackbarSentMessages.successMsg, dispatch, undefined, true, false, true)
+          snackbar.show(t('secureMessaging.startNewMessage.sent'))
           logAnalyticsEvent(Events.vama_sm_send_message(messageData.category, undefined))
           navigateTo('SecureMessaging', { activeTab: 0 })
         },
@@ -344,14 +331,14 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           ) {
             setReplyTriageError(true)
           } else {
-            showSnackBar(
-              snackbarSentMessages.errorMsg,
-              dispatch,
-              // passing messageDataRef to ensure we have the latest messageData
-              () => sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions),
-              false,
-              true,
-            )
+            snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => {
+                // passing messageDataRef to ensure we have the latest messageData
+                sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions)
+              },
+            })
           }
         },
       }
