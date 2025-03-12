@@ -24,6 +24,7 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { ServiceHistoryData } from 'api/types'
+import { useVeteranStatus } from 'api/veteranStatus'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -108,6 +109,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const letterBeneficiaryQuery = useLetterBeneficiaryData()
   const personalInformationQuery = usePersonalInformation()
+  const veteranStatusQuery = useVeteranStatus()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -251,13 +253,15 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouFeatureActive &&
     !serviceHistoryQuery.isFetched &&
     !disabilityRatingQuery.isFetched &&
-    !letterBeneficiaryQuery.isFetched
+    !letterBeneficiaryQuery.isFetched &&
+    !veteranStatusQuery.isFetched
 
   const loadingAboutYou =
     aboutYouNotFetched ||
     serviceHistoryQuery.isLoading ||
     disabilityRatingQuery.isLoading ||
-    letterBeneficiaryQuery.isLoading
+    letterBeneficiaryQuery.isLoading ||
+    veteranStatusQuery.isLoading
 
   const hasAboutYouInfo =
     !!disabilityRatingQuery.data?.combinedDisabilityRating ||
