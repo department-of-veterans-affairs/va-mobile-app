@@ -96,7 +96,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   const getTextLinesForLabResults = (observation: Observation): Array<TextLine> => {
     return [
-      getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'MobileBodyBold') || {
+      getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'LabResultHeader') || {
         text: placeHolder,
       },
       getTextLine(t('labsAndTests.details.valueQuantity'), 0, condensedMarginBetween, 'MobileBodyBold') || {
