@@ -45,6 +45,11 @@ context('ReviewClaimScreen', () => {
     initializeTestInstance({ residentialAddress })
     expect(screen.getByText(t('travelPay.reviewTitle'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.reviewText'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.what'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.how'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.vehicle'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.where'))).toBeTruthy()
     expect(screen.getByText(residentialAddress.addressLine1)).toBeTruthy()
     const cityStateZipAddressLine = `${residentialAddress.city}, ${residentialAddress.stateCode}, ${residentialAddress.zipCode}`
     expect(screen.getByText(cityStateZipAddressLine)).toBeTruthy()
