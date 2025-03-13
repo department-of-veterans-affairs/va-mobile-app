@@ -70,6 +70,8 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
       return <TextView>ERROR: Type "attachment" not supported with useOldLinkComponent enabled</TextView>
     } else if (props.type === 'call TTY') {
       linkType = 'callTTY'
+    } else if (props.type === 'url') {
+      linkType = 'externalLink'
     } else {
       linkType = props.type
     }
@@ -85,7 +87,7 @@ const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, .
         displayedText={props.text}
         linkType={LinkTypeOptionsConstants[linkType as keyof typeof LinkTypeOptionsConstants]}
         numberOrUrlLink={props.url || props.phoneNumber || props.TTYnumber || props.textNumber || directionsURL}
-        linkUrlIconType={LinkUrlIconType.Arrow}
+        linkUrlIconType={LinkUrlIconType.External}
         a11yLabel={props.a11yLabel || props.text}
         fireAnalytic={() => {
           props.analytics?.onPress?.()

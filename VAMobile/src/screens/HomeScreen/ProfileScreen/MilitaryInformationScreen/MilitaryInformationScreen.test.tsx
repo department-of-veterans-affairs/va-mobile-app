@@ -56,7 +56,6 @@ context('MilitaryInformationScreen', () => {
           directDepositBenefits: true,
           directDepositBenefitsUpdate: true,
           disabilityRating: true,
-          genderIdentity: true,
           lettersAndDocuments: true,
           militaryServiceHistory: authorized,
           paymentHistory: true,
