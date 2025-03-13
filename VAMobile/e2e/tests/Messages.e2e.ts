@@ -50,7 +50,6 @@ export const MessagesE2eIdConstants = {
   MOVE_PICKER_CANCEL_ID: 'pickerMoveMessageCancelID',
   MOVE_PICKER_CONFIRM_ID: 'pickerMoveMessageConfirmID',
   ATTACHMENTS_PAGE_CANCEL_ID: 'attachmentsCancelID',
-  MESSAGES_HELP_CLOSE_ID: 'messagesHelpCloseTestID',
   MESSAGE_PICKER_CONFIRM_ID: 'messagePickerConfirmID',
   FOLDERS_BACK_ID: 'foldersBackToMessagesID',
 }
