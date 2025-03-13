@@ -342,10 +342,6 @@ describe('Messages Screen', () => {
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
   })
 
-  it(':ios: should close the messages help panel', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGES_HELP_CLOSE_ID)).tap()
-  })
-
   it(':ios: verify the correct errors displayed on save', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_SAVE_ID)).tap()
     await expect(element(by.text('We need more information'))).toExist()
