@@ -105,21 +105,10 @@ export type AppointmentLocation = {
   code?: string
 }
 
-export type ClaimStatus =
-  | 'In Process'
-  | 'Claim Submitted'
-  | 'Saved'
-  | 'Incomplete'
-  | 'Appealed'
-  | 'In Manual Review'
-  | 'Closed'
-  | 'On Hold'
-  | 'Denied'
-
 export type TravelPayClaim = {
   id: string
   claimNumber: string
-  claimStatus: 'In Process'
+  claimStatus: string
   appointmentDateTime: string
   facilityName: string
   createdOn: string
