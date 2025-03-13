@@ -15,8 +15,8 @@ context('SubmitSuccessScreen', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByText(t('travelPay.success.title', { claimId: '12345' }))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.success.text'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.success.title'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.success.text', { claimId: '12345' }))).toBeTruthy()
     expect(screen.getByText(t('travelPay.success.nextTitle'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.success.nextText'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.success.nextText2'))).toBeTruthy()
