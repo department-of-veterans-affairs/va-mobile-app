@@ -7,9 +7,24 @@ assignees:
 ---
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 
-# Project Status Overview
-### Project Objective:
-- High level description of the project and what we are trying to solve
+# Epic Status Overview
+### Problem Statement:
+High level description of the epic and the problem we are trying to solve
+
+### Why is this Important?:
+
+- 
+
+### Definition of Done:
+What set of criteria must be met for this epic to be considered complete?
+
+- 
+
+### Success Criteria:
+What measurable outcomes will be used to indicate that this epic has successfully delivered value (i.e. - what is the impact)?
+
+- 
+
 ### Product Brief:
 - [link to GitHub Product Brief]
 
@@ -24,33 +39,11 @@ assignees:
 |MM/DD/YY|
 |MM/DD/YY|
 
-### Current Dependencies / Blockers
-<details>
-<summary>Blockers</summary>
- 
-|Blocker | Team / Owner | Est to Resolution |
-|-------|---------|-------| 
-| Internal dependency ? |   |
-| External dependency ?  |   |
-</details>
+### VA Stakeholders
 
-### Team Members
-<details>
-<summary>Contact List</summary>
- 
-**VA:**
-- **Mobile OCTO Product Leads:** Rachel Han, Ryan Thurlwell or Don McCaughey
-- **VA OCTO Product Leads:** 
-- **External Team 1 & Role:**
-- **External Team 1 & Role:**
 - 
-**Ad Hoc:** 
-- **Mobile Team**: Global, Health and Benefits, Design System, QA, API 
-- **Mobile Team Lead:** 
-- **FE Engineering:**
-- **BE Engineering:** 
-- **Design:**
-- **Content**
-- **QA:**
-- **Mobile Teams that are involved:** Global, Health and Benefits, Design System, QA, API 
-</details>
+ 
+### Reference Links
+List links related to epics, pitch deck, one pager, product folder, etc.
+
+- 

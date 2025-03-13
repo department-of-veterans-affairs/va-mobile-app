@@ -119,10 +119,6 @@ const fontSizes = {
     fontSize: 36,
     lineHeight: 43,
   },
-  SnackBarBtnText: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -232,7 +228,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
     MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
     NametagNumber: buildFont('Bitter-Regular', fontSizes.NametagNumbers, scheme.text.veteranStatusBranch),
-    SnackBarBtnText: buildFont('SourceSansPro-Bold', fontSizes.SnackBarBtnText, scheme.text.snackBarBtn),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
@@ -279,8 +274,7 @@ let theme: VATheme = {
     tagMinWidth: 29,
     maxNumMessageAttachments: 4,
     paginationTopPadding: 40,
-    snackBarBottomOffset: isIOS() ? 25 : 0, // this is done due to in android the spacing is higher for the offset
-    snackBarBottomOffsetWithNav: isIOS() ? 94 : 66, // this is done due to in android the spacing is higher for the offset
+    snackBarBottomOffset: 20,
     chevronListItemWidth: 30,
     chevronListItemHeight: 30,
     linkRowChevronPaddingRight: 18,

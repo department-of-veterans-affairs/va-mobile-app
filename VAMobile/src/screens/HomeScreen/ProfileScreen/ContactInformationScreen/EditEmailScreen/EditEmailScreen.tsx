@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useContactInformation, useDeleteEmail, useSaveEmail } from 'api/contactInformation'
 import { SaveEmailData } from 'api/types'
@@ -17,12 +17,11 @@ import {
   FullScreenSubtask,
   LoadingComponent,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { isErrorObject, showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { isErrorObject } from 'utils/common'
+import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -30,7 +29,7 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
  * Screen for editing a users email in the personal info section
  */
 function EditEmailScreen({ navigation }: EditEmailScreenProps) {
-  const dispatch = useAppDispatch()
+  const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: contactInformation } = useContactInformation()
@@ -55,11 +54,6 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   useEffect(() => {
     setSaveDisabled(formContainsError)
   }, [formContainsError])
-
-  const saveSnackbarMessages: SnackbarMessages = {
-    successMsg: t('contactInformation.emailAddress.saved'),
-    errorMsg: t('contactInformation.emailAddress.not.saved'),
-  }
 
   useBeforeNavBackListener(navigation, (e) => {
     if (noPageChanges()) {
@@ -100,30 +94,26 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
 
     const mutateOptions = {
       onSuccess: () => {
-        showSnackBar(saveSnackbarMessages.successMsg, dispatch, undefined, true, false, true)
+        snackbar.show(t('contactInformation.emailAddress.saved'))
       },
       onError: (error: unknown) => {
         if (isErrorObject(error)) {
           if (error.status === 400) {
-            showSnackBar(saveSnackbarMessages.errorMsg, dispatch, undefined, true, true)
+            snackbar.show(t('contactInformation.emailAddress.not.saved'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+            })
           } else {
-            showSnackBar(
-              saveSnackbarMessages.errorMsg,
-              dispatch,
-              () => saveEmail(emailData, mutateOptions),
-              false,
-              true,
-            )
+            snackbar.show(t('contactInformation.emailAddress.not.saved'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => saveEmail(emailData, mutateOptions),
+            })
           }
         }
       },
     }
     saveEmail(emailData, mutateOptions)
-  }
-
-  const removeSnackbarMessages: SnackbarMessages = {
-    successMsg: t('contactInformation.emailAddress.removed'),
-    errorMsg: t('contactInformation.emailAddress.not.removed'),
   }
 
   const onDelete = (): void => {
@@ -140,15 +130,13 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
     }
 
     const mutateOptions = {
-      onSuccess: () => showSnackBar(removeSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+      onSuccess: () => snackbar.show(t('contactInformation.emailAddress.removed')),
       onError: () =>
-        showSnackBar(
-          removeSnackbarMessages.errorMsg,
-          dispatch,
-          () => deleteEmail(emailData, mutateOptions),
-          false,
-          true,
-        ),
+        snackbar.show(t('contactInformation.emailAddress.not.removed'), {
+          isError: true,
+          offset: theme.dimensions.snackBarBottomOffset,
+          onActionPressed: () => deleteEmail(emailData, mutateOptions),
+        }),
     }
     deleteEmail(emailData, mutateOptions)
   }

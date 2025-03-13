@@ -104,7 +104,6 @@ jobs:
         id: map_slack_ids
         run: |
           declare -A GITHUB_TO_SLACK_MAP
-          GITHUB_TO_SLACK_MAP["DonMcCaugheyUSDS"]="U06PCD1R0EL"
           GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
           # Example: Convert mapping to environment variables
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
@@ -113,7 +112,6 @@ jobs:
       - name: Notify Slack for release coordination
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_DonMcCaugheyUSDS: $DonMcCaugheyUSDS
           SLACK_rtwell: $rtwell
         run: |
           SLACK_MESSAGE=$(cat <<EOF
@@ -128,7 +126,7 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-          - *VA PO for awareness:* CC: <@${SLACK_DonMcCaugheyUSDS}>, <@${SLACK_rtwell}>.",
+          - *VA PO for awareness:* CC: <@${SLACK_rtwell}>.",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
             "unfurl_media": false

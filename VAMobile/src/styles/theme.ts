@@ -21,8 +21,6 @@ export type VATextColors = {
   checkboxDisabled: string
   input: string
   inputFocused: string
-  snackBarBtn: string
-  snackBar: string
   actionBar: string
   actionBarDisabled: string
   bodyText: string
@@ -62,7 +60,6 @@ export type VAIconColors = {
   chevronListItem: string
   webviewReload: string
   unreadMessage: string
-  snackBarIcon: string
   defaultMenuItem: string
   radioDisabled: string
   tagInfoIcon: string
@@ -103,7 +100,6 @@ export type VATypographyThemeVariants = {
   MobileBodyTight: string
   NametagNumber: string
   ProfileScreenHeader: string
-  SnackBarBtnText: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -137,7 +133,6 @@ export type VABackgroundColors = {
   navButton: string
   carouselTab: string
   contentBox: string
-  snackbar: string
   webviewControls: string
   pickerControls: string
   menu: string
@@ -226,7 +221,6 @@ export type VATheme = {
     navBarHeight: number
     paginationTopPadding: number
     snackBarBottomOffset: number
-    snackBarBottomOffsetWithNav: number
     chevronListItemWidth: number
     chevronListItemHeight: number
     linkRowChevronPaddingRight: number

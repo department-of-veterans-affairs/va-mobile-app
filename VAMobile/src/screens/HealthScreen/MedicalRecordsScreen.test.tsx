@@ -3,7 +3,8 @@ import { Alert } from 'react-native'
 
 import { screen, waitFor } from '@testing-library/react-native'
 
-import { context, fireEvent, mockNavProps, render } from 'testUtils'
+import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import MedicalRecordsScreen from './MedicalRecordsScreen'
 
@@ -16,8 +17,11 @@ jest.mock('utils/hooks', () => ({
   useRouteNavigation: () => mockNavigationSpy,
 }))
 
+jest.mock('utils/remoteConfig')
+
 context('MedicalRecordsScreen', () => {
   const initializeTestInstance = () => {
+    when(featureEnabled).calledWith('allergies').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />)
   }
 
