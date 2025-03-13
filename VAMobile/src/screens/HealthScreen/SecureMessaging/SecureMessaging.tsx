@@ -5,13 +5,13 @@ import { ScrollView } from 'react-native'
 import { useFocusEffect, useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, SegmentedControl, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFolderMessages, useFolders } from 'api/secureMessaging'
 import { SecureMessagingFolderList, SecureMessagingSystemFolderIdConstants } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
@@ -35,6 +35,7 @@ import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
 function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -113,16 +114,21 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
           }
         })
       }
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('SecureMessaging tab change'))
-      }
-      snackBar?.hideAll()
+      snackbar.hide()
       setSecureMessagingTab(index)
     }
   }
   const onPress = () => {
     logAnalyticsEvent(Events.vama_sm_start())
     navigateTo('StartNewMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  }
+
+  const handleRefresh = () => {
+    if (inboxError) {
+      refetchInbox()
+    } else if (foldersError) {
+      refetchFolder()
+    }
   }
 
   const scrollViewProps: VAScrollViewProps = {
@@ -150,12 +156,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
         <NotEnrolledSM />
       ) : termsAndConditionError ? (
         <TermsAndConditions />
-      ) : otherError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}
-          error={foldersError || inboxError}
-          onTryAgain={foldersError ? refetchFolder : inboxError ? refetchInbox : undefined}
-        />
       ) : (
         <>
           <Box mx={theme.dimensions.buttonPadding}>
@@ -181,7 +181,19 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
             </Box>
             <CernerAlertSM />
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-              {secureMessagingTab === SegmentedControlIndexes.INBOX && <Inbox setScrollPage={setScrollPage} />}
+              {secureMessagingTab === SegmentedControlIndexes.INBOX &&
+                (otherError ? (
+                  <Box mt={20} mb={theme.dimensions.buttonPadding}>
+                    <AlertWithHaptics
+                      variant="warning"
+                      header={t('secureMessaging.inbox.messageDownError.title')}
+                      description={t('secureMessaging.inbox.messageDownError.body')}
+                      secondaryButton={{ label: t('refresh'), onPress: handleRefresh }}
+                    />
+                  </Box>
+                ) : (
+                  <Inbox setScrollPage={setScrollPage} />
+                ))}
               {secureMessagingTab === SegmentedControlIndexes.FOLDERS && <Folders />}
             </Box>
           </Box>

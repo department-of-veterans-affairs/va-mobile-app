@@ -31,8 +31,6 @@ export type WaygateToggleType =
   | 'WG_PersonalInformation'
   | 'WG_HowDoIUpdate'
   | 'WG_PreferredName'
-  | 'WG_GenderIdentity'
-  | 'WG_WhatToKnow'
   | 'WG_ContactInformation'
   | 'WG_HowWillYou'
   | 'WG_EditAddress'
@@ -60,6 +58,8 @@ export type WaygateToggleType =
   | 'WG_UpcomingAppointmentDetails'
   | 'WG_VaccineDetails'
   | 'WG_VaccineList'
+  | 'WG_AllergyDetails'
+  | 'WG_AllergyList'
   | 'WG_ViewMessage'
   | 'WG_PrepareForVideoVisit'
   | 'WG_StartNewMessage'
@@ -113,8 +113,6 @@ type WaygateToggleValues = {
   WG_PersonalInformation: Waygate
   WG_HowDoIUpdate: Waygate
   WG_PreferredName: Waygate
-  WG_GenderIdentity: Waygate
-  WG_WhatToKnow: Waygate
   WG_ContactInformation: Waygate
   WG_HowWillYou: Waygate
   WG_EditAddress: Waygate
@@ -142,6 +140,8 @@ type WaygateToggleValues = {
   WG_UpcomingAppointmentDetails: Waygate
   WG_VaccineDetails: Waygate
   WG_VaccineList: Waygate
+  WG_AllergyDetails: Waygate
+  WG_AllergyList: Waygate
   WG_ViewMessage: Waygate
   WG_PrepareForVideoVisit: Waygate
   WG_SubmitEvidence: Waygate
@@ -204,8 +204,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_PersonalInformation: { ...waygateDefault },
   WG_HowDoIUpdate: { ...waygateDefault },
   WG_PreferredName: { ...waygateDefault },
-  WG_GenderIdentity: { ...waygateDefault },
-  WG_WhatToKnow: { ...waygateDefault },
   WG_ContactInformation: { ...waygateDefault },
   WG_HowWillYou: { ...waygateDefault },
   WG_EditAddress: { ...waygateDefault },
@@ -233,6 +231,8 @@ export let waygateConfig: WaygateToggleValues = {
   WG_UpcomingAppointmentDetails: { ...waygateDefault },
   WG_VaccineDetails: { ...waygateDefault },
   WG_VaccineList: { ...waygateDefault },
+  WG_AllergyDetails: { ...waygateDefault },
+  WG_AllergyList: { ...waygateDefault },
   WG_ViewMessage: { ...waygateDefault },
   WG_PrepareForVideoVisit: { ...waygateDefault },
   WG_StartNewMessage: { ...waygateDefault },

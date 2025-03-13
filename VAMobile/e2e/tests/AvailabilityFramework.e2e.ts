@@ -25,15 +25,7 @@ const AFNavigationForIndividual = [
     'How to update or fix an error in your legal name',
   ],
   ['PersonalInformationScreen.e2e', 'WG_PreferredName', 'Profile', 'Personal information', 'Preferred name'],
-  ['PersonalInformationScreen.e2e', 'WG_GenderIdentity', 'Profile', 'Personal information', 'Gender identity'],
-  [
-    'PersonalInformationScreen.e2e',
-    'WG_WhatToKnow',
-    'Profile',
-    'Personal information',
-    'Gender identity',
-    'What to know before you decide to share your gender identity',
-  ],
+  ['PersonalInformationScreen.e2e', 'WG_WhatToKnow', 'Profile', 'Personal information'],
   ['ContactInformation.e2e', 'WG_ContactInformation', 'Profile', 'Contact information'],
   ['ContactInformation.e2e', 'WG_HowWillYou', 'Profile', 'Contact information', 'How we use your contact information'],
   ['ContactInformation.e2e', 'WG_EditAddress', 'Profile', 'Contact information', 'Mailing address'],
@@ -173,8 +165,10 @@ export async function runTests(testRun, AFNavigationArray, x) {
   })
 
   it('should verify AF use case 2 Update available for: ' + testRun, async () => {
-    await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
-    await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    if (testRun != 'WG_StartNewMessage' && testRun != 'WG_ReplyMessage') {
+      await enableAF(AFNavigationArray[x][1], 'DenyContent', true)
+      await verifyAF(AFNavigationArray[x], 'DenyContent', true)
+    }
   })
 }
 

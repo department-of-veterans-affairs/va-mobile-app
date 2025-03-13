@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 
 import {
   AddressData,
-  GenderIdentityUpdatePayload,
   PaymentAccountData,
   PreferredNameUpdatePayload,
   SecureMessagingSystemFolderIdConstants,
@@ -10,15 +9,11 @@ import {
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { Params } from '../api'
+import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from './allergies'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import {
-  DemographicsDemoApiReturnTypes,
-  DemographicsDemoStore,
-  updateGenderIdentity,
-  updatePreferredName,
-} from './demographics'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
@@ -53,7 +48,8 @@ export type DemoStore = AppointmentsDemoStore &
   PaymenDemoStore &
   PrescriptionsDemoStore &
   NotificationDemoStore &
-  DemographicsDemoStore
+  DemographicsDemoStore &
+  AllergyDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -71,6 +67,7 @@ type DemoApiReturns =
   | PrescriptionsDemoReturnTypes
   | NotificationDemoApiReturnTypes
   | DemographicsDemoApiReturnTypes
+  | AllergyDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -150,6 +147,7 @@ export const initDemoStore = async (): Promise<void> => {
       : import('./mocks/getFacilitiesInfo.json'),
     import('./mocks/demographics.json'),
     import('./mocks/personalInformation.json'),
+    import('./mocks/allergies.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
@@ -224,6 +222,9 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
     }
+    case '/v1/health/allergy-intolerances': {
+      return getAllergyList(store, params, endpoint)
+    }
     case '/v0/payment-history': {
       return getPaymentsHistory(store, params, endpoint)
     }
@@ -296,9 +297,6 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     /**
      * Demographics
      */
-    case '/v0/user/gender_identity': {
-      return updateGenderIdentity(store, params as GenderIdentityUpdatePayload)
-    }
     case '/v0/user/preferred_name': {
       return updatePreferredName(store, params as PreferredNameUpdatePayload)
     }

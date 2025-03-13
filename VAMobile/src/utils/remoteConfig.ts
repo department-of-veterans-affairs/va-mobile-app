@@ -16,12 +16,14 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
+  | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
   | 'inAppRecruitment'
+  | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
   | 'patientCheckIn'
@@ -35,12 +37,14 @@ export type FeatureToggleType =
   | 'whatsNewUI'
 
 type FeatureToggleValues = {
+  allergies: boolean
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
   inAppRecruitment: boolean
+  inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
   patientCheckIn: boolean
@@ -55,12 +59,14 @@ type FeatureToggleValues = {
 }
 
 export const defaults: FeatureToggleValues = {
+  allergies: true,
   appointmentRequests: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
   inAppRecruitment: false,
+  inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
   patientCheckIn: false,
@@ -70,7 +76,7 @@ export const defaults: FeatureToggleValues = {
   submitEvidenceExpansion: false,
   sso: false,
   testFeature: false,
-  useOldLinkComponent: false,
+  useOldLinkComponent: true,
   whatsNewUI: true,
 }
 

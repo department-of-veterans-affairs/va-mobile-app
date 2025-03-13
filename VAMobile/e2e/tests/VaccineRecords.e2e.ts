@@ -1,12 +1,21 @@
 /*
 Description:
-Detox script that follows the vaccines - view list of all immunization records and vaccines - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
+Detox script that follows the vaccines 
+  - view list of all immunization records and vaccines 
+  - vaccine details screen test cases found in testRail (VA Mobile App > RC Regression Test > Manual > Health Page Elements)
 When to update:
 This script should be updated whenever new things are added/changed in vaccines or if anything is changed in src/store/api/demo/mocks/vaccine.json.
 */
 import { by, element, expect } from 'detox'
 
-import { checkImages, loginToDemoMode, openHealth, openVaccineRecords } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  loginToDemoMode,
+  openHealth,
+  openMedicalRecords,
+  openVaccineRecords,
+} from './utils'
 
 export const VaccinesE2eIdConstants = {
   VACCINE_1_ID: 'COVID-19 vaccine January 14, 2021',
@@ -20,6 +29,7 @@ export const VaccinesE2eIdConstants = {
 beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
+  await openMedicalRecords()
   await openVaccineRecords()
 })
 
@@ -37,16 +47,17 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('verify COVID-19 record information', async () => {
+    await expect(element(by.text('VA vaccines'))).toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
     await expect(element(by.id('Type And Dosage COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose'))).toExist()
     await expect(element(by.id('Manufacturer Moderna US, Inc.'))).toExist()
     await expect(element(by.id('Series status None noted')))
-    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.text('2360 East Pershing Boulevard'))).toExist()
     await expect(element(by.text('Cheyenne, WY 82001-5356'))).toExist()
-    await expect(element(by.text('Reaction'))).toExist()
+    await expect(element(by.text('Reactions'))).toExist()
     await expect(element(by.text('None noted')).atIndex(1)).toExist()
     await expect(
       element(by.id('Notes Dose #2 of 2 of COVID-19, mRNA, LNP-S, PF, 100 mcg/ 0.5 mL dose vaccine administered.')),

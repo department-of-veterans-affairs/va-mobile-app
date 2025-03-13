@@ -79,7 +79,7 @@ jobs:
     uses: ./.github/workflows/e2e_detox_mapping.yml
   
   output_detox_tests_to_run:
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     needs: find_detox_tests_to_run
     outputs: 
       output1: ${{ steps.matrix_value.outputs.matrix }}
@@ -169,7 +169,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: latest-stable
+          xcode-version: 15.2
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
@@ -248,7 +248,7 @@ jobs:
   output-slack-results-and-update-detox-failure-ticket:
     if: (!cancelled()) && github.event_name == 'schedule'
     needs: [matrix-e2e-ios, start_slack_thread]
-    runs-on: macos-latest-xl
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:

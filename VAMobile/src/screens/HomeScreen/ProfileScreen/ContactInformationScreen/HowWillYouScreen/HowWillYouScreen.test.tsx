@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -13,16 +14,8 @@ context('HowWillYouScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('How we use your contact information')).toBeTruthy()
-    expect(
-      screen.getByText(
-        'We’ll use this information to contact you about certain benefits and services, like disability compensation, pension benefits, and claims and appeals.',
-      ),
-    ).toBeTruthy()
-    expect(
-      screen.getByText(
-        'If you’re enrolled in VA health care, we’ll send your prescriptions to your mailing address. Your health care team may also use this information to contact you.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('contactInformation.howWillYouUseContactInfo'))).toBeTruthy()
+    expect(screen.getByText(t('howWillYou.useInfo.1'))).toBeTruthy()
+    expect(screen.getByText(t('howWillYou.useInfo.2'))).toBeTruthy()
   })
 })
