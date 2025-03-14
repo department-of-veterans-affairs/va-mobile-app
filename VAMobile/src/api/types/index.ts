@@ -1,4 +1,5 @@
 export * from './AddressData'
+export * from './AllergyData'
 export * from './AppointmentData'
 export * from './AuthorizedServicesData'
 export * from './ClaimsAndAppealsData'
