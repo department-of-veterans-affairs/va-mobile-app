@@ -1,1 +1,2 @@
-We added general improvements and fixed a few bugs.
+We added a new Medical Records section, which now lists your VA-recorded Allergies information. You can now also find your Vaccine Data in the Medical Records section.
+We also fixed bugs, and removed two letter types due to outdated information.
