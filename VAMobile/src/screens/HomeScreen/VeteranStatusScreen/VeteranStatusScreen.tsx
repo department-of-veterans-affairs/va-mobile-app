@@ -46,6 +46,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
+  const showError = !veteranStatusConfirmed || (veteranStatusConfirmed && !serviceHistory.length)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -94,7 +95,9 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     borderStyle: 'solid',
   }
 
-  return veteranStatusConfirmed ? (
+  return showError ? (
+    <VeteranStatusError />
+  ) : (
     <LargePanel
       title={t('veteranStatus.title')}
       rightButtonText={t('close')}
@@ -193,8 +196,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         </Box>
       </Box>
     </LargePanel>
-  ) : (
-    <VeteranStatusError />
   )
 }
 
