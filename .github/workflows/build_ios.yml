@@ -53,6 +53,8 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  #
+  IOS_GS_PLIST_BASE64: ${{ inputs.environment == 'staging' && secrets.IOS_GS_PLIST_BASE64_STAGING || secrets.IOS_GS_PLIST_BASE64 }}
 
 jobs:
   build_ios:
@@ -70,7 +72,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    steps:	
+    steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -82,7 +84,7 @@ jobs:
         run: |
           echo "Notes: ${{ inputs.notes }}"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+          echo $IOS_GS_PLIST_BASE64 | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:

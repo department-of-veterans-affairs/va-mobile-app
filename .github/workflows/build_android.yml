@@ -64,6 +64,8 @@ env:
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  #
+  GOOGLE_SERVICES_JSON: ${{ inputs.environment == 'staging' && secrets.GOOGLE_SERVICES_JSON_STAGING || secrets.GOOGLE_SERVICES_JSON }}
 
 jobs:
   build_android:
@@ -86,7 +88,7 @@ jobs:
           echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
           echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
           cd ../app
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > google-services.json
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -120,7 +122,7 @@ jobs:
           bundle exec fastlane update_plugins
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV 
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
