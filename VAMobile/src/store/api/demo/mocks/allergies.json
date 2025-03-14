@@ -396,10 +396,10 @@
                 {
                   "system": "http://hl7.org/fhir/ndfrt",
                   "code": "N0000008053",
-                  "display": "Dander"
+                  "display": "Dust"
                 }
               ],
-              "text": "Dander"
+              "text": "Dust"
             },
             "recordedDate": "2020-12-22T08:45:00Z",
             "patient": {
@@ -421,7 +421,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "More Dander"
+                "text": "More Dust"
               },
               {
                 "authorReference": {
@@ -429,7 +429,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-22T08:45:00Z",
-                "text": "Even More Dander"
+                "text": "Even More Dust"
               }
             ],
             "recorder": {
@@ -443,10 +443,10 @@
                     {
                       "system": "http://hl7.org/fhir/ndfrt",
                       "code": "N0000008053",
-                      "display": "Dander"
+                      "display": "Dust"
                     }
                   ],
-                  "text": "Dander"
+                  "text": "Dust"
                 },
                 "manifestation": [
                   {
@@ -478,10 +478,10 @@
                 {
                   "system": "http://hl7.org/fhir/ndfrt",
                   "code": "N0000008053",
-                  "display": "Dust"
+                  "display": "Dander"
                 }
               ],
-              "text": "Dust"
+              "text": "Dander"
             },
             "recordedDate": "2020-12-12T08:45:00Z",
             "patient": {
@@ -495,7 +495,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "Dust"
+                "text": "Dander"
               },
               {
                 "authorReference": {
@@ -503,7 +503,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "More Dust"
+                "text": "More Dander"
               },
               {
                 "authorReference": {
@@ -511,7 +511,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "Even More Dust"
+                "text": "Even More Dander"
               }
             ],
             "recorder": {
@@ -525,15 +525,15 @@
                     {
                       "system": "http://hl7.org/fhir/ndfrt",
                       "code": "N0000008053",
-                      "display": "Dust"
+                      "display": "Dander"
                     }
                   ],
-                  "text": "Dust"
+                  "text": "Dander"
                 },
                 "manifestation": [
                   {
                     "coding": [],
-                    "text": "Coughing"
+                    "text": "Sneezing"
                   }
                 ]
               }
@@ -554,16 +554,16 @@
                 }
               ]
             },
-            "category": ["food"],
+            "category": ["medication"],
             "code": {
               "coding": [
                 {
                   "system": "http://hl7.org/fhir/ndfrt",
                   "code": "N0000008052",
-                  "display": "Shellfish"
+                  "display": "Tylenol"
                 }
               ],
-              "text": "Shellfish"
+              "text": "Tylenol"
             },
             "recordedDate": "2021-11-05T11:15:00Z",
             "patient": {
@@ -577,7 +577,7 @@
                   "display": "Dr. Michael Brown MD"
                 },
                 "time": "2021-11-05T11:15:00Z",
-                "text": "Shellfish"
+                "text": "Tylenol"
               }
             ],
             "recorder": {
@@ -591,10 +591,10 @@
                     {
                       "system": "http://hl7.org/fhir/ndfrt",
                       "code": "N0000008052",
-                      "display": "Shellfish"
+                      "display": "Tylenol"
                     }
                   ],
-                  "text": "Shellfish"
+                  "text": "Tylenol"
                 },
                 "manifestation": [
                   {
@@ -626,12 +626,12 @@
                 {
                   "system": "http://hl7.org/fhir/ndfrt",
                   "code": "N0000008053",
-                  "display": "Dander"
+                  "display": "Pine"
                 }
               ],
-              "text": "Dander"
+              "text": "Pine"
             },
-            "recordedDate": "2020-12-22T08:45:00Z",
+            "recordedDate": "2019-10-25T08:45:00Z",
             "patient": {
               "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
               "display": "DAMASO SUPNICK"
@@ -643,7 +643,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-22T08:45:00Z",
-                "text": "Dust"
+                "text": "Pine"
               },
               {
                 "authorReference": {
@@ -651,7 +651,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "More Dander"
+                "text": "More Pine"
               },
               {
                 "authorReference": {
@@ -659,7 +659,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-22T08:45:00Z",
-                "text": "Even More Dander"
+                "text": "Even More Pine"
               }
             ],
             "recorder": {
@@ -673,15 +673,15 @@
                     {
                       "system": "http://hl7.org/fhir/ndfrt",
                       "code": "N0000008053",
-                      "display": "Dander"
+                      "display": "Pine"
                     }
                   ],
-                  "text": "Dander"
+                  "text": "Pine"
                 },
                 "manifestation": [
                   {
                     "coding": [],
-                    "text": "Wheezing"
+                    "text": "Hives"
                   }
                 ]
               }
@@ -708,10 +708,10 @@
                 {
                   "system": "http://hl7.org/fhir/ndfrt",
                   "code": "N0000008053",
-                  "display": "Dust"
+                  "display": "Seaweed"
                 }
               ],
-              "text": "Dust"
+              "text": "Seaweed"
             },
             "recordedDate": "2020-12-12T08:45:00Z",
             "patient": {
@@ -725,23 +725,7 @@
                   "display": "Dr. Sarah Lee MD"
                 },
                 "time": "2020-12-12T08:45:00Z",
-                "text": "Dust"
-              },
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-                  "display": "Dr. Sarah Lee MD"
-                },
-                "time": "2020-12-12T08:45:00Z",
-                "text": "More Dust"
-              },
-              {
-                "authorReference": {
-                  "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-K1L2M3N4O5P6Q7R",
-                  "display": "Dr. Sarah Lee MD"
-                },
-                "time": "2020-12-12T08:45:00Z",
-                "text": "Even More Dust"
+                "text": "Seaweed"
               }
             ],
             "recorder": {
@@ -755,15 +739,15 @@
                     {
                       "system": "http://hl7.org/fhir/ndfrt",
                       "code": "N0000008053",
-                      "display": "Dust"
+                      "display": "Seaweed"
                     }
                   ],
-                  "text": "Dust"
+                  "text": "Seaweed"
                 },
                 "manifestation": [
                   {
                     "coding": [],
-                    "text": "Coughing"
+                    "text": "Rash"
                   }
                 ]
               }

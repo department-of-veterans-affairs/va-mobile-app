@@ -2,16 +2,8 @@ import { by, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 
 import * as api from 'store/api'
-import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openHealth,
-  openLabsAndTestRecords,
-  openMedicalRecords,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords } from './utils'
 
 const todaysDate = DateTime.local()
 
@@ -41,17 +33,14 @@ const TEST_IDS = {
 }
 const HEADER_TEXT = 'Labs and tests'
 
-async function scrollToThenCheck(text: string, containerID: string) {
+async function scrollToElement(text: string, containerID: string) {
   await waitFor(element(by.text(text)))
     .toBeVisible()
     .whileElement(by.id(containerID))
     .scroll(200, 'down')
-  // await expect (element(by.text(text))).toExist()
 }
 
 beforeAll(async () => {
-  // await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TESTS_TOGGLE_NAME)
-
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
@@ -123,21 +112,6 @@ describe('Labs And Test Screen - Date Picker', () => {
 })
 
 describe('Labs And Test Screen', () => {
-  // const HEADER_TEXT = 'Labs and tests'
-
-  // const TEST_IDS = {
-  //   LIST_ID: 'LabsAndTestsButtonsListTestID',
-  //   SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
-  //   BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
-  // }
-
-  // const resetDateRangeToDefault = async () => {
-  //   console.log('resetting date range to default')
-  //   await element(by.id('labsAndTestDataRangeTestID')).tap()
-  //   await element(by.text('Past 3 months')).tap()
-  //   await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
-  // }
-
   beforeAll(async () => {
     await resetDateRangeToDefault()
   })
@@ -185,25 +159,32 @@ describe('Labs And Test Screen', () => {
 })
 
 describe('Labs And Test Details Screen with Observations', () => {
-  // beforeAll(async () => {
-  //   await resetDateRangeToDefault()
-  // })
+  const noneNoted = 'None noted'
 
   it('navigate to detail screen and show results', async () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).toExist()
     await element(by.id(TEST_IDS.CHEM_HEM_TEST_ID)).tap()
-    // the title should be details
+    // the title should be Details
     await expect(element(by.text('Details'))).toExist()
 
     await expect(element(by.text('CH'))).toExist()
     await expect(element(by.text('January 23, 2025'))).toExist()
     await expect(element(by.text('SERUM'))).toExist()
     await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
-    await expect(element(by.text('None noted'))).toExist()
+
+    // ensure default value is displayed for all empty strings in data fields
+    // getAttributes will return an object with a key 'elements' if multiple elements are matched
+    const multipleMatchedElements = await element(by.text(noneNoted)).getAttributes()
+    if (!('elements' in multipleMatchedElements)) {
+      expect(element(by.text(noneNoted))).toExist()
+    } else {
+      await expect(element(by.text(noneNoted)).atIndex(0)).toExist()
+    }
+
     await expect(element(by.text('ZZGeorge Washington'))).toExist()
 
-    await scrollToThenCheck('CREATININE', 'labsAndTestsDetailsScreen')
+    await scrollToElement('CREATININE', 'labsAndTestsDetailsScreen')
     await expect(element(by.text('CREATININE'))).toExist()
 
     // go back
