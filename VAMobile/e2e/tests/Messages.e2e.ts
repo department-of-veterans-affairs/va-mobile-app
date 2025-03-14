@@ -36,7 +36,6 @@ export const MessagesE2eIdConstants = {
   START_NEW_MESSAGE_SUBJECT_ID: 'startNewMessageSubjectTestID',
   START_NEW_MESSAGE_MESSAGE_FIELD_ID: 'message field',
   START_NEW_MESSAGE_ADD_FILES_TEXT: 'Add Files',
-  START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID: 'startNewMessageOnlyUseMessagesTestID',
   START_NEW_MESSAGE_ID: 'startNewMessageTestID',
   START_NEW_MESSAGE_SAVE_ID: 'startNewMessageSaveTestID',
   START_NEW_MESSAGE_CANCEL_ID: 'startNewMessageCancelTestID',
@@ -51,7 +50,6 @@ export const MessagesE2eIdConstants = {
   MOVE_PICKER_CANCEL_ID: 'pickerMoveMessageCancelID',
   MOVE_PICKER_CONFIRM_ID: 'pickerMoveMessageConfirmID',
   ATTACHMENTS_PAGE_CANCEL_ID: 'attachmentsCancelID',
-  MESSAGES_HELP_CLOSE_ID: 'messagesHelpCloseTestID',
   MESSAGE_PICKER_CONFIRM_ID: 'messagePickerConfirmID',
   FOLDERS_BACK_ID: 'foldersBackToMessagesID',
 }
@@ -335,58 +333,12 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID))).toExist()
   })
 
   it(':ios: new message: verify talk to the veterans crisis line now', async () => {
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BTN_ID)).tap()
     await expect(element(by.text(CommonE2eIdConstants.VETERAN_CRISIS_LINE_HEADING_TEXT))).toExist()
     await element(by.id(CommonE2eIdConstants.VETERAN_CRISIS_LINE_BACK_ID)).tap()
-  })
-
-  it(':ios: verify only use messages for non-urgent needs information', async () => {
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ID)).scroll(300, 'down', NaN, 0.8)
-    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_ONLY_USE_MESSAGES_ID)).tap()
-    await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT)))
-    await expect(element(by.text('Your care team may take up to 3 business days to reply.'))).toExist()
-    await expect(element(by.text('If you need help sooner, use one of these urgent communication options:'))).toExist()
-    await device.disableSynchronization()
-    if (device.getPlatform() === 'android') {
-      await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_CALL_ID)).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLinePhone')
-      await device.launchApp({ newInstance: false })
-
-      await element(by.id('messageHelpTestID')).scrollTo('bottom')
-
-      await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_TTY_ID)).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLineTTY')
-      await device.launchApp({ newInstance: false })
-
-      await element(by.text('Call 911')).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('messagesHelpCrisisLineTTY')
-      await device.launchApp({ newInstance: false })
-
-      await element(by.id('messageHelpTestID')).scrollTo('top')
-    }
-
-    await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_TEXT_ID)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('messagesHelpText')
-    await device.launchApp({ newInstance: false })
-
-    await element(by.id(CommonE2eIdConstants.VETERANS_CRISIS_LINE_CHAT_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('messagesHelpChat')
-    await device.launchApp({ newInstance: false })
-    await device.enableSynchronization()
-  })
-
-  it(':ios: should close the messages help panel', async () => {
-    await element(by.id(MessagesE2eIdConstants.MESSAGES_HELP_CLOSE_ID)).tap()
   })
 
   it(':ios: verify the correct errors displayed on save', async () => {
