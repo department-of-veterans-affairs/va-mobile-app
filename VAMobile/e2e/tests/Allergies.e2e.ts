@@ -34,7 +34,6 @@ describe('Allergies Screen', () => {
       'defaultAllergyTemplate',
     )
     checkImages(defaultAllergyTemplate)
-    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).getAttributes()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_4_ID))).toExist()
@@ -44,6 +43,7 @@ describe('Allergies Screen', () => {
   })
 
   it('verify details screen fields', async () => {
+    await expect(element(by.text('Allergies'))).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).tap()
     await expect(element(by.text('Allergy details'))).toExist()
     await expect(element(by.text('March 12, 2019'))).toExist()
