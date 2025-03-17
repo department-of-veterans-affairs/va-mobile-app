@@ -42,7 +42,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
-        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}`}</TextView>
+        <TextView>{t('vaMedicalRecords.viewCompleteRecord')}</TextView>
       </Box>
       <Box mx={gutter}>
         <LinkWithAnalytics
