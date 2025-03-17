@@ -565,7 +565,7 @@
               ],
               "text": "Shellfish"
             },
-            "recordedDate": "2021-11-05T11:15:00Z",
+            "recordedDate": "2021-11-06T11:15:00Z",
             "patient": {
               "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Patient/1013956965V299908",
               "display": "DAMASO SUPNICK"
@@ -576,7 +576,7 @@
                   "reference": "https://sandbox-api.va.gov/services/fhir/v0/r4/Practitioner/4-I1J2K3L4M5N6O7P",
                   "display": "Dr. Michael Brown MD"
                 },
-                "time": "2021-11-05T11:15:00Z",
+                "time": "2021-11-06T11:15:00Z",
                 "text": "Shellfish"
               }
             ],
