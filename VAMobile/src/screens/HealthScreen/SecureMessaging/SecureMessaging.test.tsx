@@ -53,11 +53,9 @@ context('SecureMessaging', () => {
   }
 
   describe('when user is not authorized for secure messaging', () => {
-    it('should display NotEnrolledSM component', async () => {
+    it('should display NoAccessSM component', async () => {
       initializeTestInstance(false)
-      await waitFor(() =>
-        expect(screen.getByText("You're not currently enrolled to use Secure Messaging")).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText("You can't access messages right now")).toBeTruthy())
     })
   })
 

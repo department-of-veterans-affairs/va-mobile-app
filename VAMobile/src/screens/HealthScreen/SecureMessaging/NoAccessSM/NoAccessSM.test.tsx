@@ -3,16 +3,16 @@ import { Alert } from 'react-native'
 
 import { context, fireEvent, render, screen } from 'testUtils'
 
-import NotEnrolledSM from './NotEnrolledSM'
+import NoAccessSM from './NoAccessSM'
 
-context('NotEnrolledSM', () => {
+context('NoAccessSM', () => {
   beforeEach(() => {
-    render(<NotEnrolledSM />)
+    render(<NoAccessSM />)
   })
 
   describe('when Learn how to upgrade link is clicked', () => {
     it('should launch external link', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Learn how to upgrade to a My HealtheVet Premium account' }))
+      fireEvent.press(screen.getByRole('link', { name: 'Find out how to apply for VA health care' }))
       expect(Alert.alert).toBeCalled()
     })
   })
