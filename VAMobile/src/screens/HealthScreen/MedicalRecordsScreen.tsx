@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
@@ -32,11 +33,13 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        <LargeNavButton
-          title={t('vaAllergies.buttonTitle')}
-          onPress={() => navigateTo('AllergyList')}
-          testID="toAllergyListID"
-        />
+        {featureEnabled('allergies') && (
+          <LargeNavButton
+            title={t('vaAllergies.buttonTitle')}
+            onPress={() => navigateTo('AllergyList')}
+            testID="toAllergyListID"
+          />
+        )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
         <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
