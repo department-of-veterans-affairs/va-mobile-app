@@ -27,6 +27,7 @@ import {
   VideoHomeAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
+import AppointmentFileTravelPayAlert from '../AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
@@ -81,6 +82,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}>
+      <AppointmentFileTravelPayAlert attributes={attributes} />
       {isPhoneAppointment ? (
         <PhoneAppointment
           appointmentID={appointment.id}

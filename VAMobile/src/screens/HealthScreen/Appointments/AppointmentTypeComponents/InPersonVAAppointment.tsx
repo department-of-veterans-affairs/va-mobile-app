@@ -1,16 +1,10 @@
 import React from 'react'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
-import {
-  AppointmentDetailsSubType,
-  AppointmentDetailsSubTypeConstants,
-  AppointmentDetailsTypeConstants,
-} from 'utils/appointments'
-import { useRouteNavigation } from 'utils/hooks'
+import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import {
@@ -44,22 +38,12 @@ function InPersonVAAppointment({
   cancelAppointment,
 }: InPersonVAAppointmentProps) {
   const type = AppointmentDetailsTypeConstants.InPersonVA
-  const navigateTo = useRouteNavigation()
 
   return (
     <Box>
       <TextArea>
         <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
-        {subType === AppointmentDetailsSubTypeConstants.Past && (
-          <Box>
-            <Button
-              onPress={() => navigateTo('SubmitTravelPayClaimScreen', { appointmentDateTime: attributes.startDateUtc })}
-              label="Submit travel claim"
-              a11yLabel="Submit travel claim"
-            />
-          </Box>
-        )}
         {featureEnabled('useOldLinkComponent') ? (
           <DEPRECATED_AppointmentCalendarButton
             appointmentID={appointmentID}

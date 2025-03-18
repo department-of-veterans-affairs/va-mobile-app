@@ -300,6 +300,90 @@ const getListItemsForAppointments = (
   return listItems
 }
 
+const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
+  const { appointmentType } = attributes
+  return (
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
+  )
+}
+
+/**
+ * Determines if an appointment is community care.
+ *
+ * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
+ * @returns boolean - true if the appointment is community care appointment.
+ */
+const getIsCommunityCare = (attributes: AppointmentAttributes) => {
+  return attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+}
+
+/**
+ * Determines if an appointment is phone only.
+ *
+ * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
+ * @returns boolean - true if the appointment is phone only.
+ */
+const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
+  return attributes.phoneOnly
+}
+
+/**
+ * Determines if an appointment is a video appointment.
+ *
+ * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
+ * @returns boolean - true if the appointment is a video appointment.
+ */
+const getIsVideo = (attributes: AppointmentAttributes) => {
+  const { appointmentType } = attributes
+  return (
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+  )
+}
+
+/**
+ * Returns true or false if the appointment is eligible for travel pay
+ * @param attributes - type AppointmentAttributes, data attributes of an appointment
+ * @returns boolean, true if the appointment is eligible for travel pay
+ */
+export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
+  const { status, travelPayClaim } = attributes
+  const isPast = !isAPendingAppointment(attributes)
+  const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
+  const isClinicVideo = isClinicVideoAppointment(attributes)
+  const isBooked = status === AppointmentStatusConstants.BOOKED
+  // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
+  const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
+  return isPast && isBooked && (isInPerson || isClinicVideo) && hasNoClaim
+}
+
+/**
+ * Returns the number of days left to file travel pay
+ * @param startDateUtc - string, the start date of the appointment in UTC
+ * @returns number, the number of days left to file travel pay
+ */
+export const getDaysLeftToFileTravelPay = (startDateUtc: string) => {
+  const daysToFile = 30 // 30 days to file travel pay
+  const lastFileDate = DateTime.fromISO(startDateUtc).plus({ days: daysToFile })
+  return Math.floor(lastFileDate.diff(DateTime.now().toUTC(), 'days').days)
+}
+
+const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: number) => {
+  const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
+  if (isEligibleForTravelPay(attributes) && daysLeftToFile >= 0) {
+    return {
+      text: t('travelPay.daysToFile', { count: daysLeftToFile, days: daysLeftToFile }),
+      textTag: { labelType: LabelTagTypeConstants.tagBlue },
+      mb,
+    }
+  } else {
+    return undefined
+  }
+}
+
 const getStatus = (
   isPending: boolean,
   status: AppointmentStatus,
@@ -407,6 +491,7 @@ export const getTextLinesForAppointmentListItem = (
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
+      getTravelPay(attributes, t, condensedMarginBetween),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
