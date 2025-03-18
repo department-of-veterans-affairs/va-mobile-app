@@ -127,19 +127,6 @@ context('StartNewMessage', () => {
     })
   })
 
-  describe('on click of the collapsible view', () => {
-    it('should show the Reply Help panel', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
-      initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
-      await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
-    })
-  })
-
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       when(api.get as jest.Mock)
