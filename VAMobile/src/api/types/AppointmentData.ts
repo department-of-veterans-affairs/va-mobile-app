@@ -105,6 +105,21 @@ export type AppointmentLocation = {
   code?: string
 }
 
+export type TravelPayClaim = {
+  id: string
+  claimNumber: string
+  claimStatus: string
+  appointmentDateTime: string
+  facilityName: string
+  createdOn: string
+  modifiedOn: string
+}
+
+export type AppointmentTravelPayClaim = {
+  metadata: { status: number; success: boolean; message: string }
+  claim?: TravelPayClaim
+}
+
 export type AppointmentTimeZone =
   | 'Pacific/Honolulu'
   | 'America/Anchorage'
@@ -176,6 +191,7 @@ export type AppointmentAttributes = {
   bestTimeToCall?: Array<string>
   vetextId: string
   physicalLocation?: string
+  travelPayClaim?: AppointmentTravelPayClaim
 }
 
 export type AppointmentData = {
