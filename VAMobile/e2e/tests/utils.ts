@@ -735,9 +735,6 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
  * @param flagName - name of flag to toggle
  * */
 export async function toggleRemoteConfigFlag(flagName: string) {
-  console.log('***********************\nflagName: ', flagName)
-  console.log('CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID: ', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  console.log('CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT: ', CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)
   await loginToDemoMode()
   await openProfile()
   await openSettings()

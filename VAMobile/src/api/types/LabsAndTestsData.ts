@@ -6,6 +6,14 @@ export type LabsAndTestsListPayload = {
   }
 }
 
+export type Observation = {
+  testCode: string | null
+  valueQuantity: string | null
+  referenceRange: string | null
+  status: string | null
+  comment: string | null
+}
+
 export type LabsAndTests = {
   id?: string | null
   type?: string | null
@@ -14,7 +22,9 @@ export type LabsAndTests = {
     testCode: string
     dateCompleted?: string | null
     sampleSite?: string | null
+    orderedBy?: string | null
     encodedData?: string | null
     location?: string | null
+    observations?: Array<Observation> | null
   }
 }

@@ -1,17 +1,9 @@
-import { by, element, expect } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 
 import * as api from 'store/api'
-import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openHealth,
-  openLabsAndTestRecords,
-  openMedicalRecords,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords } from './utils'
 
 const todaysDate = DateTime.local()
 
@@ -27,9 +19,28 @@ const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('
 const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
 const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
 
-beforeAll(async () => {
-  // await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TESTS_TOGGLE_NAME)
+const resetDateRangeToDefault = async () => {
+  console.log('resetting date range to default')
+  await element(by.id('labsAndTestDataRangeTestID')).tap()
+  await element(by.text('Past 3 months')).tap()
+  await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
+}
+const TEST_IDS = {
+  LIST_ID: 'LabsAndTestsButtonsListTestID',
+  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
+  CHEM_HEM_TEST_ID: 'CH January 23, 2025',
+  BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
+}
+const HEADER_TEXT = 'Labs and tests'
 
+async function scrollToElement(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+}
+
+beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
@@ -101,21 +112,6 @@ describe('Labs And Test Screen - Date Picker', () => {
 })
 
 describe('Labs And Test Screen', () => {
-  const HEADER_TEXT = 'Labs and tests'
-
-  const TEST_IDS = {
-    LIST_ID: 'LabsAndTestsButtonsListTestID',
-    SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
-    BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
-  }
-
-  const resetDateRangeToDefault = async () => {
-    console.log('resetting date range to default')
-    await element(by.id('labsAndTestDataRangeTestID')).tap()
-    await element(by.text('Past 3 months')).tap()
-    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
-  }
-
   beforeAll(async () => {
     await resetDateRangeToDefault()
   })
@@ -159,5 +155,41 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
+  })
+})
+
+describe('Labs And Test Details Screen with Observations', () => {
+  const noneNoted = 'None noted'
+
+  it('navigate to detail screen and show results', async () => {
+    await expect(element(by.text(HEADER_TEXT))).toExist()
+    await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).toExist()
+    await element(by.id(TEST_IDS.CHEM_HEM_TEST_ID)).tap()
+    // the title should be Details
+    await expect(element(by.text('Details'))).toExist()
+
+    await expect(element(by.text('CH'))).toExist()
+    await expect(element(by.text('January 23, 2025'))).toExist()
+    await expect(element(by.text('SERUM'))).toExist()
+    await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
+
+    // ensure default value is displayed for all empty strings in data fields
+    // getAttributes will return an object with a key 'elements' if multiple elements are matched
+    const multipleMatchedElements = await element(by.text(noneNoted)).getAttributes()
+    if (!('elements' in multipleMatchedElements)) {
+      expect(element(by.text(noneNoted))).toExist()
+    } else {
+      await expect(element(by.text(noneNoted)).atIndex(0)).toExist()
+    }
+
+    await expect(element(by.text('ZZGeorge Washington'))).toExist()
+
+    await scrollToElement('CREATININE', 'labsAndTestsDetailsScreen')
+    await expect(element(by.text('CREATININE'))).toExist()
+
+    // go back
+    await element(by.id('labsAndTestsDetailsBackID')).tap()
+    // the title should be labs and tests
+    await expect(element(by.text(HEADER_TEXT))).toExist()
   })
 })
