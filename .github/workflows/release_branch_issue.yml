@@ -1,4 +1,4 @@
-name: '[Release] New Release Issue'
+name: "[Release] New Release Issue"
 
 on:
   create:
@@ -54,7 +54,7 @@ jobs:
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
           gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}  
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket
@@ -93,7 +93,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app
-      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:'
+      message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
   release_coordination:
     name: release coordination
     if: ${{ success() }}
@@ -138,3 +138,30 @@ jobs:
                -H 'Content-type: application/json' \
                -d @- \
                https://slack.com/api/chat.postMessage
+  # New release approval process 10541
+  get_environment:
+    name: Get environment for release
+    if: ${{ success() }}
+    # needs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Environment
+        outputs:
+          environment_name: ${{ steps.check-environment.outputs.env_name }}
+        run: |
+          # if triggered manually or branch contains `release`
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[${{ github.ref }}" =~ release]]; then
+            echo "env_name=release" >> $GITHUB_OUTPUT
+          else
+            echo "env_name" >> $GITHUB_OUTPUT
+          fi
+  wait:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for release window
+        run: sleep 60s # Setting to 60s for testing.  Will be 1 week for final implementation
+  approval:
+    name: Run release approval
+    needs: [wait, get_environment]
+    environment: ${{ needs.get_environment.outputs.environment_name }}
+    runs-on: ubuntu-latest
