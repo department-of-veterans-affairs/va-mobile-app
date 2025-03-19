@@ -33,20 +33,11 @@ export const Nametag = () => {
     }
   }, [personalInfo])
 
-  const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
-    (service) => service.honorableServiceIndicator === 'Y',
-  )
-
-  let accLabel
-  if (!accessToMilitaryInfo) {
-    accLabel = undefined
-  } else {
-    accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
-  }
+  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.proofOf')}` : branch
 
   const pressableProps: PressableProps = {
-    onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
+    onPress: () => navigateTo('VeteranStatus'),
+    accessibilityRole: 'link',
     accessibilityLabel: accLabel,
     style: ({ pressed }) => [
       {
@@ -54,7 +45,7 @@ export const Nametag = () => {
           ? theme.colors.background.listActive
           : (theme.colors.background.veteranStatusHome as BackgroundVariant),
         justifyContent: 'center',
-        minHeight: accessToMilitaryInfo ? 82 : undefined,
+        minHeight: 82,
         paddingLeft: theme.dimensions.buttonPadding,
         borderRadius: 8,
         marginBottom: theme.dimensions.standardMarginBetween,
@@ -85,25 +76,21 @@ export const Nametag = () => {
               <TextView variant={'VeteranStatusBranch'} pb={4}>
                 {branch}
               </TextView>
-              {showVeteranStatus && (
-                <Box flexDirection={'row'} alignItems={'center'}>
-                  <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
-                    {t('veteranStatus.proofOf')}
-                  </TextView>
-                </Box>
-              )}
-            </Box>
-            {showVeteranStatus && (
-              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
-                <Icon
-                  name={'ChevronRight'}
-                  fill={theme.colors.icon.linkRow}
-                  width={theme.dimensions.chevronListItemWidth}
-                  height={theme.dimensions.chevronListItemHeight}
-                  preventScaling={true}
-                />
+              <Box flexDirection={'row'} alignItems={'center'}>
+                <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
+                  {t('veteranStatus.proofOf')}
+                </TextView>
               </Box>
-            )}
+            </Box>
+            <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+              <Icon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.linkRow}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+                preventScaling={true}
+              />
+            </Box>
           </Box>
         </Pressable>
       )}
