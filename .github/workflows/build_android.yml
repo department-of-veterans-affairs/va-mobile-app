@@ -58,14 +58,18 @@ env:
   ANDROID_KS_KEY_PW: ${{ secrets.ANDROID_KS_KEY_PW }}
   # Android Key Store Key Password
   ANDROID_KS_PW: ${{ secrets.ANDROID_KS_PW }}
-  # App ID for Android project in Firebase
-  FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
   # Filepath for firebase distribution key. Also used by fastlane
   FIREBASE_DIST_KEY_FILEPATH: ${{ secrets.FIREBASE_DIST_KEY_FILEPATH }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # App ID for Android project in Firebase
+  FIREBASE_ANDROID_APP_ID: ${{ inputs.environment == 'staging' && secrets.FIREBASE_ANDROID_APP_ID_STAGING || secrets.FIREBASE_ANDROID_APP_ID }}
   #
   GOOGLE_SERVICES_JSON: ${{ inputs.environment == 'staging' && secrets.GOOGLE_SERVICES_JSON_STAGING || secrets.GOOGLE_SERVICES_JSON }}
+  #
+  GOOGLE_SA_JSON: ${{ inputs.environment == 'staging' && secrets.GOOGLE_SA_JSON_STAGING || secrets.GOOGLE_SA_JSON }}
+  #
+  FIREBASE_DIST_FILE_BASE64: ${{ inputs.environment == 'staging' && secrets.FIREBASE_DIST_FILE_BASE64_STAGING || secrets.FIREBASE_DIST_FILE_BASE64 }}
 
 jobs:
   build_android:
@@ -85,8 +89,8 @@ jobs:
           mkdir keys
           cd keys
           echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
-          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
-          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          echo $GOOGLE_SA_JSON | base64 --decode > service-account.json
+          echo $FIREBASE_DIST_FILE_BASE64 | base64 --decode > firebase-dist.json
           cd ../app
           echo $GOOGLE_SERVICES_JSON | base64 --decode > google-services.json
       - name: Set up JDK
