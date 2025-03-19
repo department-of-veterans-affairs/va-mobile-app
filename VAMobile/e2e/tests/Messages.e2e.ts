@@ -336,7 +336,6 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: verify only use messages for non-urgent needs information', async () => {
-    // await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
   })
 
