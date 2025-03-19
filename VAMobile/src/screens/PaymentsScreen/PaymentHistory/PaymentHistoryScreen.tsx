@@ -112,7 +112,7 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
 
     return (
       <Box
-        flex={2}
+        flex={1}
         mt={theme.dimensions.paginationTopPadding}
         mb={theme.dimensions.contentMarginBottom}
         mx={theme.dimensions.gutter}>
