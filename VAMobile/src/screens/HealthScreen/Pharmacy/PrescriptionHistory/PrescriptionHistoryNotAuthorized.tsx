@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import {
+  AlertWithHaptics,
   Box,
+  BoxProps,
   ClickToCallPhoneNumber,
   LinkWithAnalytics,
   TextArea,
@@ -31,6 +33,10 @@ function PrescriptionHistoryNotAuthorized() {
     logAnalyticsEvent(Events.vama_rx_noauth())
   }, [])
 
+  const alertWrapperProps: BoxProps = {
+    mb: standardMarginBetween,
+  }
+
   const bulletOne = {
     text: t('prescriptions.notAuthorized.enrolled'),
     boldedText: ' ' + t('and'),
@@ -52,14 +58,13 @@ function PrescriptionHistoryNotAuthorized() {
 
   return (
     <VAScrollView>
-      <TextView
-        variant="MobileBodyBold"
-        accessibilityRole="header"
-        accessible={true}
-        mx={theme.dimensions.gutter}
-        mb={standardMarginBetween}>
-        {t('prescriptions.notAuthorized.warning')}
-      </TextView>
+      <Box {...alertWrapperProps}>
+        <AlertWithHaptics
+          variant="warning"
+          header={t('prescriptions.notAuthorized.warning')}
+          headerA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
+        />
+      </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.systemProblem')}</TextView>

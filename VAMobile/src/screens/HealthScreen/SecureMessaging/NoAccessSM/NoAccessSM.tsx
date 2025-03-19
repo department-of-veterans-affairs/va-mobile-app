@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
 import {
+  AlertWithHaptics,
   Box,
+  BoxProps,
   ClickToCallPhoneNumber,
   LinkWithAnalytics,
   TextArea,
@@ -30,6 +32,10 @@ function NoAccessSM() {
   const theme = useTheme()
   const { contentMarginBottom, standardMarginBetween } = theme.dimensions
 
+  const alertWrapperProps: BoxProps = {
+    mb: standardMarginBetween,
+  }
+
   const bulletOne = {
     text: t('noAccessSM.youAreEnrolled'),
     boldedText: ' ' + t('and'),
@@ -51,14 +57,13 @@ function NoAccessSM() {
   return (
     <VAScrollView>
       <Box mb={contentMarginBottom}>
-        <TextView
-          variant="MobileBodyBold"
-          accessibilityRole="header"
-          accessible={true}
-          mx={theme.dimensions.gutter}
-          mb={standardMarginBetween}>
-          {t('noAccessSM.cantAccess')}
-        </TextView>
+        <Box {...alertWrapperProps}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('noAccessSM.cantAccess')}
+            headerA11yLabel={a11yLabelVA(t('noAccessSM.cantAccess'))}
+          />
+        </Box>
         <Box>
           <TextArea>
             <TextView variant="MobileBody" paragraphSpacing={true}>
