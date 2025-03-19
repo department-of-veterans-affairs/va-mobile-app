@@ -13,7 +13,7 @@ This ticket is to control for all the requirements for the upcoming release befo
 This ticket should be complete by {{ env.vaDueDate }}
 ## Release Checklist
 
-- [ ] What's new content (App Store) - *required*
+- [ ] What's new content (App Store) - *required, add link to commit*
 - [ ] What's new content (In app/Alert Box) - *optional*
 - [ ] Content updates
 
