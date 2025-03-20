@@ -8,8 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { getWaygateToggles } from 'utils/waygateConfig'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getWaygateToggles } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
@@ -53,7 +53,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
-        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
+        <TextView>{t('vaMedicalRecords.viewCompleteRecord')}</TextView>
       </Box>
       <Box mx={gutter}>
         <LinkWithAnalytics
