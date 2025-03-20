@@ -33,7 +33,7 @@ export const Nametag = () => {
     }
   }, [personalInfo])
 
-  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.proofOf')}` : branch
+  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.proofOf')}` : undefined
 
   const pressableProps: PressableProps = {
     onPress: () => navigateTo('VeteranStatus'),
