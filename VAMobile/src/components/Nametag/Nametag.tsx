@@ -8,6 +8,8 @@ import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
+import { BranchOfService } from 'api/types'
+import { useVeteranStatus } from 'api/veteranStatus'
 import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -18,12 +20,15 @@ export const Nametag = () => {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const { data: serviceHistory } = useServiceHistory({ enabled: false })
-  const accessToMilitaryInfo =
-    userAuthorizedServices?.militaryServiceHistory && !!serviceHistory?.serviceHistory?.length
+  const { data: veteranStatus } = useVeteranStatus()
+  const hasServiceHistory = !!serviceHistory?.serviceHistory?.length
+  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && hasServiceHistory
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const branch = serviceHistory?.mostRecentBranch || ''
+  const isVetConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
+  const canShowNametag = (accessToMilitaryInfo && branch !== '') || (isVetConfirmed && !hasServiceHistory)
 
   useEffect(() => {
     if (personalInfo) {
@@ -33,20 +38,11 @@ export const Nametag = () => {
     }
   }, [personalInfo])
 
-  const showVeteranStatus = !!serviceHistory?.serviceHistory?.find(
-    (service) => service.honorableServiceIndicator === 'Y',
-  )
-
-  let accLabel
-  if (!accessToMilitaryInfo) {
-    accLabel = undefined
-  } else {
-    accLabel = showVeteranStatus ? `${branch} ${t('veteranStatus.proofOf')}` : branch
-  }
+  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.proofOf')}` : undefined
 
   const pressableProps: PressableProps = {
-    onPress: () => (accessToMilitaryInfo && showVeteranStatus ? navigateTo('VeteranStatus') : undefined),
-    accessibilityRole: accessToMilitaryInfo && showVeteranStatus ? 'link' : 'text',
+    onPress: () => navigateTo('VeteranStatus'),
+    accessibilityRole: 'link',
     accessibilityLabel: accLabel,
     style: ({ pressed }) => [
       {
@@ -54,7 +50,7 @@ export const Nametag = () => {
           ? theme.colors.background.listActive
           : (theme.colors.background.veteranStatusHome as BackgroundVariant),
         justifyContent: 'center',
-        minHeight: accessToMilitaryInfo ? 82 : undefined,
+        minHeight: 82,
         paddingLeft: theme.dimensions.buttonPadding,
         borderRadius: 8,
         marginBottom: theme.dimensions.standardMarginBetween,
@@ -77,33 +73,39 @@ export const Nametag = () => {
 
   return (
     <Box>
-      {accessToMilitaryInfo && branch !== '' && (
+      {canShowNametag && (
         <Pressable {...pressableProps} testID="veteranStatusButtonID">
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            <MilitaryBranchEmblem branch={branch} width={40} height={40} />
-            <Box ml={theme.dimensions.buttonPadding} flex={1}>
-              <TextView variant={'VeteranStatusBranch'} pb={4}>
-                {branch}
-              </TextView>
-              {showVeteranStatus && (
-                <Box flexDirection={'row'} alignItems={'center'}>
-                  <TextView variant={'VeteranStatusProof'} mr={theme.dimensions.textIconMargin}>
-                    {t('veteranStatus.proofOf')}
+            {branch ? (
+              <>
+                <MilitaryBranchEmblem branch={branch as BranchOfService} width={40} height={40} />
+                <Box ml={theme.dimensions.buttonPadding} flex={1}>
+                  <TextView variant="VeteranStatusBranch" pb={4}>
+                    {branch}
                   </TextView>
+                  <Box flexDirection="row" alignItems="center">
+                    <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
+                      {t('veteranStatus.proofOf')}
+                    </TextView>
+                  </Box>
                 </Box>
-              )}
-            </Box>
-            {showVeteranStatus && (
-              <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
-                <Icon
-                  name={'ChevronRight'}
-                  fill={theme.colors.icon.linkRow}
-                  width={theme.dimensions.chevronListItemWidth}
-                  height={theme.dimensions.chevronListItemHeight}
-                  preventScaling={true}
-                />
+              </>
+            ) : (
+              <Box ml={theme.dimensions.buttonPadding} flex={1} flexDirection="row" alignItems="center">
+                <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
+                  {t('veteranStatus.proofOf')}
+                </TextView>
               </Box>
             )}
+            <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+              <Icon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.linkRow}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+                preventScaling={true}
+              />
+            </Box>
           </Box>
         </Pressable>
       )}
