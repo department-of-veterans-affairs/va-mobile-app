@@ -22,7 +22,7 @@ import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
+const { LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 function PrescriptionHistoryNotAuthorized() {
   const theme = useTheme()
@@ -50,7 +50,7 @@ function PrescriptionHistoryNotAuthorized() {
 
   const linkProps: LinkProps = {
     type: 'url',
-    url: LINK_URL_APPLY_FOR_HEALTH_CARE,
+    url: LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE,
     text: t('prescriptions.notAuthorized.findVACare'),
     a11yLabel: t('prescriptions.notAuthorized.findVACare'),
     a11yHint: t('prescriptions.notAuthorized.findVACare.a11yHint'),

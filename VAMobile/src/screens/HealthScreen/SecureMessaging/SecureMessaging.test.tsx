@@ -55,7 +55,7 @@ context('SecureMessaging', () => {
   describe('when user is not authorized for secure messaging', () => {
     it('should display NoAccessSM component', async () => {
       initializeTestInstance(false)
-      await waitFor(() => expect(screen.getByText("You can't access messages right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noAccessSM.cantAccess'))).toBeTruthy())
     })
   })
 
