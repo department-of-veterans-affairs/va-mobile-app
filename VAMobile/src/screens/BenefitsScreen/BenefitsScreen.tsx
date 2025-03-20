@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
-import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
@@ -101,6 +102,7 @@ const BenefitsScreenStack = createStackNavigator<BenefitsStackParamList>()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 function BenefitsStackScreen() {
+  const snackbar = useSnackbar()
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -111,11 +113,11 @@ function BenefitsStackScreen() {
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
-            CloseSnackbarOnNavigation(e.target)
+            snackbar.hide()
           }
         },
-        blur: (e) => {
-          CloseSnackbarOnNavigation(e.target)
+        blur: () => {
+          snackbar.hide()
         },
       }}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />

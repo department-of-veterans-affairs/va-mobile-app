@@ -1348,22 +1348,21 @@
   resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.14.0.tgz#d035e01d646d5d3a596f52612dad6e443abbd669"
   integrity sha512-yz3UK4TrmZJePII/MZEpOY1L8dDYGgtrGB6nk4omXE8DX4mJGWXn7D3D05qHNI7EtkjPUjnWHuQlrcIIp40vyQ==
 
-"@department-of-veterans-affairs/mobile-component-library@0.27.1":
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.27.1.tgz#6268fd17cfbb53af020c4583eb1dd8cb845e99da"
-  integrity sha512-XymbsVcOTsNn++KoqjSe1GHcfOpaY4ounj6Ig4We4hZf76msVdprKuBYoAXxRzEu1hcGyVohIGFQNVP7XXi2ZA==
+"@department-of-veterans-affairs/mobile-component-library@0.30.3":
+  version "0.30.3"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-component-library/-/mobile-component-library-0.30.3.tgz#cd07d532fe924a08677df87b86620b12a54bdc44"
+  integrity sha512-8N5GL6+CivOMe7O2guJ2V7I94aBsvfryN1BifP3Epdh/Bt83YEWq7CDIevMrNZZYH5MGguPgPEw+jKiRc84dxQ==
   dependencies:
-    "@os-team/i18next-react-native-language-detector" "^1.0.34"
     i18next "^23.12.2"
     react-i18next "^15.0.0"
-    react-native-svg "15.2.0"
+    react-native-svg "15.8.0"
     react-native-toast-notifications "^3.4.0"
     styled-components "^6.1.12"
 
-"@department-of-veterans-affairs/mobile-tokens@0.20.0":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.20.0.tgz#a159eed07f335abf129a69cb2a096e9427b7b3fc"
-  integrity sha512-BvrzlvZNO4pYVaJU1+qXW6L9EEnLK/t+zG7ueQNu/6B9zCcIPvN16hYziTJxau/SBkZcHQdnPALzEh99lbjVSA==
+"@department-of-veterans-affairs/mobile-tokens@0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-tokens/-/mobile-tokens-0.23.0.tgz#84b8c00de1f22b0f663cf922f83412c9c998fc81"
+  integrity sha512-Pn09BLfPps4t+0amUN7aBLSo8LO/V2YwrC5EsJPfDwPxe2ta+JfhEg3h8CdJobbE+52jmGXCbY0LHdAtxinLtQ==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
@@ -1870,11 +1869,6 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
-
-"@os-team/i18next-react-native-language-detector@^1.0.34":
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/@os-team/i18next-react-native-language-detector/-/i18next-react-native-language-detector-1.0.34.tgz#fd7a44eebccf8ca621cbe6535066a51366778cad"
-  integrity sha512-3i4KhddewzlLnCoYxNnovfk1CyagFOOy5gQ7ML5RruqfSFovCBl94GUVW1W6Bku9nZqK4vVKOy76VHDik4wrLQ==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
@@ -9222,10 +9216,10 @@ react-freeze@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-freeze/-/react-freeze-1.0.0.tgz#b21c65fe1783743007c8c9a2952b1c8879a77354"
   integrity sha512-yQaiOqDmoKqks56LN9MTgY06O0qQHgV4FUrikH357DydArSZHQhl0BJFqGKIZoTqi8JizF9Dxhuk1FIZD6qCaw==
 
-react-i18next@^14.1.2:
-  version "14.1.2"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.2.tgz#cd57a755f25a32a5fcc3dbe546cf3cc62b4f3ebd"
-  integrity sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==
+react-i18next@^14.1.3:
+  version "14.1.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.1.3.tgz#85525c4294ef870ddd3f5d184e793cae362f47cb"
+  integrity sha512-wZnpfunU6UIAiJ+bxwOiTmBOAaB14ha97MjOEnLGac2RJ+h/maIYXZuTHlmyqQVX1UVHmU1YDTQ5vxLmwfXTjw==
   dependencies:
     "@babel/runtime" "^7.23.9"
     html-parse-stringify "^3.0.1"
@@ -9310,10 +9304,10 @@ react-native-keyboard-manager@^6.5.11-2:
   resolved "https://registry.yarnpkg.com/react-native-keyboard-manager/-/react-native-keyboard-manager-6.5.11-2.tgz#3d8cc8abb70ff4afe330dc83318dcbd30724fc18"
   integrity sha512-YpU7Ek7CZZbT06x8X6G/wwUjL915AOwWho/vxxlj7Dm3CljzmSHAJu4TwR7oCTihoD82W+fA1mUmozmYJYrDGg==
 
-react-native-keychain@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-9.1.0.tgz#c31a5e0e23268682bc0823b1805d29b9054528fd"
-  integrity sha512-txBVnhO/AVg+j6lrKe9cL/HPpb5BNHYYBRg/6lzbxKe8AsNqp639wq0nN8/IdkUCPjSezN8Pgp142HNomgqk4Q==
+react-native-keychain@^9.2.0:
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-9.2.1.tgz#64967dfd39497fa5392740cf0126d4afad1e9574"
+  integrity sha512-8tABv6o/XyicIBzpbfhknhPvx4PlctANUopN/UR09yq/onpIKAH5AhUGrMXw7/cXOnMuorxqBGjUtsQFDCdWJg==
 
 react-native-localize@^3.3.0:
   version "3.3.0"
@@ -9345,10 +9339,10 @@ react-native-screens@^3.34.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-shadow-2@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.1.0.tgz#c0457c905c6db3c46b6ce7c14106cbdd9703c64e"
-  integrity sha512-Ph7/E8XuM7QQJ0fNTPC0Xp+8ezntVnCF0XnOQBvmQIDTrYLq/fzQSOdqTC4dzs+pXtZ7Yis2ewjVaDc5URUCAg==
+react-native-shadow-2@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.1.1.tgz#3ef760f629bd3678eab68de5ef352a1b79302c49"
+  integrity sha512-zmzcVFzys+jMe1UJUKaNsMEpFa2/1o9SoUjweapolcgxq0h935VCSAqxkUwkYpOpxFhK9BmcmYy5xZLO9dnkIw==
   dependencies:
     colord "2.9.2"
 
@@ -9362,21 +9356,14 @@ react-native-svg-transformer@^1.5.0:
     "@svgr/plugin-svgo" "^8.1.0"
     path-dirname "^1.0.2"
 
-react-native-svg@15.2.0:
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-15.2.0.tgz#9561a6b3bd6b44689f437ba13182afee33bd5557"
-  integrity sha512-R0E6IhcJfVLsL0lRmnUSm72QO+mTqcAOM5Jb8FVGxJqX3NfJMlMP0YyvcajZiaRR8CqQUpEoqrY25eyZb006kw==
+react-native-svg@15.8.0:
+  version "15.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-15.8.0.tgz#9b5fd4f5cf5675197b3f4cbfcc77c215de2b9502"
+  integrity sha512-KHJzKpgOjwj1qeZzsBjxNdoIgv2zNCO9fVcoq2TEhTRsVV5DGTZ9JzUZwybd7q4giT/H3RdtqC3u44dWdO0Ffw==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"
-
-react-native-svg@^14.2.0:
-  version "14.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-14.2.0.tgz#20ef9447c623b3f9a6d9e1c03746ac74f55ea55d"
-  integrity sha512-8Rha6zdDwPxxSXsUVyyqYZcuwRb/J4xiD9GPbYm94FBOqs7JjTnHVSO08Hi4tbUh1kVrnAP0V/7bpi3aeUvnrg==
-  dependencies:
-    css-select "^5.1.0"
-    css-tree "^1.1.3"
+    warn-once "0.1.1"
 
 react-native-toast-notifications@^3.4.0:
   version "3.4.0"
@@ -11244,6 +11231,11 @@ walker@^1.0.7, walker@^1.0.8:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
+
+warn-once@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/warn-once/-/warn-once-0.1.1.tgz#952088f4fb56896e73fd4e6a3767272a3fccce43"
+  integrity sha512-VkQZJbO8zVImzYFteBXvBOZEl1qL175WH8VmZcxF2fZAoudNhNDvHi+doCaAEdU2l2vtcIwa2zn0QK5+I1HQ3Q==
 
 warn-once@^0.1.0:
   version "0.1.0"

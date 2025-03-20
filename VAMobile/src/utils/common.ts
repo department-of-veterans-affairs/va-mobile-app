@@ -8,21 +8,15 @@ import { StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import { contains, isEmpty, map } from 'underscore'
-import _ from 'underscore'
 
 import { PhoneData } from 'api/types/PhoneData'
 import { TextLineWithIconProps } from 'components'
 import { InlineTextWithIconsProps } from 'components/InlineTextWithIcons'
 import { TextLine } from 'components/types'
-import { Events } from 'constants/analytics'
-import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, SSN_REGEX_EXP } from 'constants/common'
+import { EMAIL_REGEX_EXP_PII, MAIL_TO_REGEX_EXP_PII, PHONE_REGEX_EXP_PII, SSN_REGEX_EXP_PII } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { AppDispatch } from 'store'
 import { ErrorObject } from 'store/api'
-import { updatBottomOffset } from 'store/slices/snackBarSlice'
-import theme from 'styles/themes/standardTheme'
 
-import { logAnalyticsEvent } from './analytics'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -66,10 +60,11 @@ export const generateTestIDForInlineTextIconList = (
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: InlineTextWithIconsProps) => {
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'Unread') {
+    // NOTE: The Unread icon is a local svg file
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'PaperClip') {
+    if (listOfTextItem.leftIconProps && listOfTextItem.leftIconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.leftTextProps.text)
@@ -89,10 +84,10 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
   const listOfTextID: Array<string> = []
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'Unread') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.svg) {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
-    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'AttachFile') {
       listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
     }
     listOfTextID.push(listOfTextItem.text)
@@ -316,47 +311,6 @@ export const deepCopyObject = <T>(item: Record<string, unknown>): T => {
 }
 
 /**
- * Function to show snackbar
- * @param message - snackbar message
- * @param dispatch - dispatch function to change the bottom offset
- * @param actionPressed - action to perform on undo
- * @param isUndo - if user pressed undo it will not show undo again
- * @param isError - if it is an error will show the error icon
- * @param withNavBar - offset snackbar to be over the bottom nav
- * @returns snackbar
- */
-export function showSnackBar(
-  message: string,
-  dispatch: AppDispatch,
-  actionPressed?: () => void,
-  isUndo?: boolean,
-  isError?: boolean,
-  withNavBar = false,
-): void {
-  if (!snackBar) {
-    logAnalyticsEvent(Events.vama_snackbar_null('showSnackBar'))
-  }
-  snackBar?.hideAll()
-  dispatch(
-    updatBottomOffset(
-      withNavBar ? theme.dimensions.snackBarBottomOffsetWithNav : theme.dimensions.snackBarBottomOffset,
-    ),
-  )
-  snackBar?.show(message, {
-    type: 'custom_snackbar',
-    data: {
-      onActionPressed: () => {
-        if (actionPressed) {
-          actionPressed()
-        }
-      },
-      isUndo,
-      isError,
-    },
-  })
-}
-
-/**
  * Returns a string of the textlines concatenated
  *
  * @param itemTexts - array of textline to concatenate
@@ -437,31 +391,23 @@ export function fullPanelCardStyleInterpolator({
  */
 export function checkStringForPII(body: string): { found: boolean; newText: string } {
   let found = false
-  let newText = ''
-  let phoneMatch, ssnMatch, emailMatch, mailToMatch
-  const whiteSpace = body
-    .trim()
-    .split(/\S/)
-    .reverse()
-    .filter((value) => value !== '')
-  const bodySplit = body.split(/\s/).filter((value) => value !== '')
-  _.forEach(bodySplit, (text) => {
-    phoneMatch = PHONE_REGEX_EXP.exec(text)
-    ssnMatch = SSN_REGEX_EXP.exec(text)
-    emailMatch = EMAIL_REGEX_EXP.exec(text)
-    mailToMatch = MAIL_TO_REGEX_EXP.exec(text)
-    if (phoneMatch) {
-      found = true
-      text = '###-###-####'
-    } else if (ssnMatch) {
-      found = true
-      text = '###-##-####'
-    } else if (emailMatch || mailToMatch) {
-      found = true
-      text = 'xxxxxxx@xxx.xxx'
-    }
-    newText = newText.concat(text)
-    newText = newText.concat(whiteSpace.pop() || '')
-  })
+  let newText = body
+
+  if (PHONE_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(PHONE_REGEX_EXP_PII, '###-###-####')
+  }
+  if (SSN_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(SSN_REGEX_EXP_PII, '###-##-####')
+  }
+  if (EMAIL_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(EMAIL_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
+  if (MAIL_TO_REGEX_EXP_PII.test(newText)) {
+    found = true
+    newText = newText.replace(MAIL_TO_REGEX_EXP_PII, 'xxxxxxx@xxx.xxx')
+  }
   return { found, newText }
 }

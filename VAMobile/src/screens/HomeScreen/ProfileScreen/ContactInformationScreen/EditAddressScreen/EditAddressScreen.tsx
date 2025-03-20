@@ -4,7 +4,7 @@ import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
 import { useContactInformation } from 'api/contactInformation'
@@ -22,15 +22,13 @@ import {
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { States } from 'constants/states'
-import { GenerateAddressMessages } from 'translations/en/functions'
-import { showSnackBar } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { GenerateAddressMessage } from 'translations/en/functions'
+import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
 import { profileAddressOptions } from '../AddressSummary'
@@ -79,9 +77,9 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
   const { displayTitle, addressType } = route.params
   const { data: contactInformation } = useContactInformation()
   const { mutate: deleteAddress, isPending: deletingAddress, isSuccess: addressDeleted } = useDeleteAddress()
@@ -96,13 +94,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const addressLine3Ref = useRef<TextInput>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
-
-  const snackbarMessages: SnackbarMessages = GenerateAddressMessages(t, addressType)
-
-  const removalSnackbarMessages: SnackbarMessages = {
-    successMsg: t('contactInformation.residentialAddress.removed'),
-    errorMsg: t('contactInformation.residentialAddress.removed.error'),
-  }
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = contactInformation?.[addressType]?.[itemToGet]
@@ -220,15 +211,13 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
     }
 
     const mutateOptions = {
-      onSuccess: () => showSnackBar(removalSnackbarMessages.successMsg, dispatch, undefined, true, false, true),
+      onSuccess: () => snackbar.show(t('contactInformation.residentialAddress.removed')),
       onError: () =>
-        showSnackBar(
-          removalSnackbarMessages.errorMsg,
-          dispatch,
-          () => deleteAddress(currentAddressData, mutateOptions),
-          false,
-          true,
-        ),
+        snackbar.show(t('contactInformation.residentialAddress.removed.error'), {
+          isError: true,
+          offset: theme.dimensions.snackBarBottomOffset,
+          onActionPressed: () => deleteAddress(currentAddressData, mutateOptions),
+        }),
     }
     deleteAddress(currentAddressData, mutateOptions)
   }
@@ -282,10 +271,15 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
               setShowAddressValidation(true)
             } else {
               setAddressValidated(true)
-              showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true)
+              snackbar.show(GenerateAddressMessage(t, addressType, false))
             }
           },
-          onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, () => save, false, true),
+          onError: () =>
+            snackbar.show(GenerateAddressMessage(t, addressType, true), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => save,
+            }),
         },
       )
     }
@@ -578,7 +572,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         <AddressValidation
           addressEntered={getAddressDataPayload(addressValues, contactInformation)}
           addressId={contactInformation?.[addressType]?.id || 0}
-          snackbarMessages={snackbarMessages}
+          addressType={addressType}
           validationData={validationData}
           saveAddress={saveAddress}
           setShowAddressValidation={setShowAddressValidation}
