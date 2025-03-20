@@ -35,7 +35,7 @@ beforeAll(async () => {
 
 describe('Vaccine Records Screen', () => {
   it('should show vaccine records list content', async () => {
-    await expect(element(by.text('VA vaccines'))).toExist()
+    await expect(element(by.text('Vaccines'))).toExist()
     await expect(element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID))).toExist()
     const defaultVaccineTemplate = await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).takeScreenshot(
       'defaultVaccineTemplate',
@@ -47,7 +47,7 @@ describe('Vaccine Records Screen', () => {
   })
 
   it('verify COVID-19 record information', async () => {
-    await expect(element(by.text('VA vaccines'))).toExist()
+    await expect(element(by.text('Vaccines'))).toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_1_ID)).tap()
     await expect(element(by.text('January 14, 2021'))).toExist()
     await expect(element(by.text('COVID-19 vaccine'))).toExist()
@@ -71,11 +71,11 @@ describe('Vaccine Records Screen', () => {
     ).toExist()
   })
 
-  it('should tap on VA vaccines and navigate back to the vaccines list', async () => {
+  it('should tap on vaccines and navigate back to the vaccines list', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 
-  it('verify no disclaimer is displayed when all fields are populated', async () => {
+  it('verify disclaimer is displayed even when all fields are populated', async () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_2_ID)).tap()
     await expect(element(by.text('None noted'))).not.toExist()
     await expect(
@@ -84,7 +84,7 @@ describe('Vaccine Records Screen', () => {
           'We base this information on your current  V-A  health records. If you have any questions, contact your health care team.',
         ),
       ),
-    ).not.toExist()
+    ).toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
   })
 

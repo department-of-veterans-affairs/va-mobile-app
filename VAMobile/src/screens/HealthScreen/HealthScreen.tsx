@@ -32,6 +32,8 @@ import Appointments from './Appointments'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import { HealthStackParamList } from './HealthStackScreens'
+import LabsAndTestsDetailsScreen from './LabsAndTests/LabsAndTestsDetails/LabsAndTestsDetailsScreen'
+import LabsAndTestsListScreen from './LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import MedicalRecordsScreen from './MedicalRecordsScreen'
 import PrescriptionDetails from './Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import PrescriptionHistory from './Pharmacy/PrescriptionHistory/PrescriptionHistory'
@@ -40,6 +42,8 @@ import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
+
+// import LabsAndTestsDetailScreen from './LabsAndTests/LabsAndTestsDetail/LabsAndTestsDetailScreen'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
@@ -278,6 +282,16 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="MedicalRecordsList"
         component={MedicalRecordsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="LabsAndTestsList"
+        component={LabsAndTestsListScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="LabsAndTestsDetailsScreen"
+        component={LabsAndTestsDetailsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen name="ViewMessage" component={ViewMessageScreen} options={{ headerShown: false }} />

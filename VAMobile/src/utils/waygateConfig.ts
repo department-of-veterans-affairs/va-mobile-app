@@ -60,6 +60,9 @@ export type WaygateToggleType =
   | 'WG_VaccineList'
   | 'WG_AllergyDetails'
   | 'WG_AllergyList'
+  | 'WG_LabsAndTestsDetails'
+  | 'WG_LabsAndTestsList'
+  | 'WG_LabsAndTestsEnabled'
   | 'WG_ViewMessage'
   | 'WG_PrepareForVideoVisit'
   | 'WG_StartNewMessage'
@@ -142,6 +145,9 @@ type WaygateToggleValues = {
   WG_VaccineList: Waygate
   WG_AllergyDetails: Waygate
   WG_AllergyList: Waygate
+  WG_LabsAndTestsDetails: Waygate
+  WG_LabsAndTestsList: Waygate
+  WG_LabsAndTestsEnabled: Waygate
   WG_ViewMessage: Waygate
   WG_PrepareForVideoVisit: Waygate
   WG_SubmitEvidence: Waygate
@@ -233,6 +239,9 @@ export let waygateConfig: WaygateToggleValues = {
   WG_VaccineList: { ...waygateDefault },
   WG_AllergyDetails: { ...waygateDefault },
   WG_AllergyList: { ...waygateDefault },
+  WG_LabsAndTestsDetails: { ...waygateDefault },
+  WG_LabsAndTestsList: { ...waygateDefault },
+  WG_LabsAndTestsEnabled: { ...waygateDefault },
   WG_ViewMessage: { ...waygateDefault },
   WG_PrepareForVideoVisit: { ...waygateDefault },
   WG_StartNewMessage: { ...waygateDefault },
@@ -331,6 +340,11 @@ export const setWaygateDebugConfig = async (config: WaygateToggleValues): Promis
 
   // Store overrides in AsyncStorage so they persist with app quits
   AsyncStorage.setItem(WAYGATE_OVERRIDES_KEY, JSON.stringify(config))
+}
+
+export const resetLocalWaygateConfig = async () => {
+  console.log('clearing.....')
+  await AsyncStorage.clear()
 }
 
 export const getWaygateToggles = (): WaygateToggleValues => {
