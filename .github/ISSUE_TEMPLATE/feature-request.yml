@@ -3,7 +3,9 @@ description: Use this template to formally request a new feature, enhancement to
 title: "Change Request: [name of change]"
 labels: [ "Epic", "Leads team", "needs-review" ]
 projects: ["department-of-veterans-affairs/1616"]
-assignees: [ rtwell, beccatupaj ]
+assignees: 
+  - rtwell
+  - beccatupaj
 body:
 - type: input
   id: requestor_name_and_email
@@ -92,7 +94,7 @@ body:
 - type: input
   id: duedate
   attributes:
-    label: 12.) Is there a hard deadline associated with this request? 
+    label: 12.) Is there a hard deadline associated with this request? If so, can you please explain why this deadline is selected and potential impacts to the app or other services if this deadline is not met?
     description: 
     placeholder: MM/DD/YYYY 
   validations:
