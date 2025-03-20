@@ -4,6 +4,7 @@ import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
 import { checkIfRoutingNumberIsInvalid, useUpdateBankInfo } from 'api/directDeposit'
@@ -21,12 +22,11 @@ import {
   TextView,
   VAImage,
 } from 'components'
-import { SnackbarMessages } from 'components/SnackBar'
 import { AccountOptions } from 'constants/accounts'
 import { NAMESPACE } from 'constants/namespaces'
-import { isErrorObject, showSnackBar } from 'utils/common'
+import { isErrorObject } from 'utils/common'
 import { getTranslation } from 'utils/formattingUtils'
-import { useAppDispatch, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -37,7 +37,7 @@ type EditDirectDepositProps = StackScreenProps<RootNavStackParamList, 'EditDirec
  * Screen for displaying editing direct deposit information
  */
 function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) {
-  const dispatch = useAppDispatch()
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
@@ -55,11 +55,6 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   const [confirmed, setConfirmed] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
-
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('directDeposit.saved'),
-    errorMsg: t('directDeposit.saved.error'),
-  }
 
   useBeforeNavBackListener(navigation, (e) => {
     if (noPageChanges() || bankInfoUpdated) {
@@ -119,21 +114,17 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
       financialInstitutionRoutingNumber: routingNumber,
     }
     const mutateOptions = {
-      onSuccess: () => showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true, false, true),
+      onSuccess: () => snackbar.show(t('directDeposit.saved')),
       onError: (error: unknown) => {
         if (isErrorObject(error)) {
           const routingNumberError = checkIfRoutingNumberIsInvalid(error)
           setIsInvalidRoutingNumberError(routingNumberError)
           if (!routingNumberError) {
-            showSnackBar(
-              snackbarMessages.errorMsg,
-              dispatch,
-              () => {
-                updateBankInfo(updateBankData, mutateOptions)
-              },
-              false,
-              true,
-            )
+            snackbar.show(t('directDeposit.saved.error'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => updateBankInfo(updateBankData, mutateOptions),
+            })
           }
         }
       },
