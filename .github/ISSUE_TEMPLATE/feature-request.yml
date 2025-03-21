@@ -63,15 +63,15 @@ body:
 - type: textarea
   id: existing_documentation
   attributes:
-    label: 8.) Please include all relevant documentation links for this change request.  
-    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow Mobile to research and review existing materials.  
+    label: 8.) Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? Please include all relevant documentation links.  
+    description: Giving us access to documentation (product brief, APIs, research, web experience, flows, Github folder, etc) will allow the Mobile App Team to review and accurately assess this request. Missing information could result in your request being blocked or delayed.  
   validations:
     required: true
 - type: input
   id: mobile_readiness
   attributes:
-    label: 9.) Does your team have all the necessary materials (documents, designs, processes, analytics, APIs, etc) in place for Mobile to make these changes right now? 
-    description: Mobile wants to understand if the necessary integrations and project pre-requesistes are completed now or if Mobile will be blocked until future work is completed in order to better asses planning, scoping, and prioritization. 
+    label: 9.) Does this request require backend work? If so, has the backend work for this been completed, or will backend support be needed from Mobile team?  
+    description: Mobile wants to understand how to assess the effort needed to implement this request. 
     placeholder: Yes / No
   validations:
     required: true
