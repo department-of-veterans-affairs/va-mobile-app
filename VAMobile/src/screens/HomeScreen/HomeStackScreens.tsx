@@ -2,7 +2,7 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { PhoneData, PhoneType } from 'api/types'
+import { Gravesite, PhoneData, PhoneType } from 'api/types'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { Waygate } from 'utils/waygateConfig'
@@ -22,6 +22,8 @@ export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
   Profile: undefined
   ContactVA: undefined
+  GravesiteLocator: undefined
+  GravesiteDetails: { gravesite: Gravesite }
   VeteranStatus: undefined
   VeteransCrisisLine: undefined
   Developer: undefined

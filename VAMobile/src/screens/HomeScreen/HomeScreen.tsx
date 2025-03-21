@@ -56,6 +56,8 @@ import { roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import GravesiteDetailsScreen from './GravesiteLocatorScreen/GravesiteDetailsScreen/GravesiteDetailsScreen'
+import GravesiteLocatorScreen from './GravesiteLocatorScreen/GravesiteLocatorScreen'
 import { HomeStackParamList } from './HomeStackScreens'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
@@ -512,6 +514,17 @@ export function HomeScreen({}: HomeScreenProps) {
               titleA11yLabel={a11yLabelVA(t('findLocation.title'))}
               onPress={onFacilityLocator}
             />
+            <LinkRow title="Locate a Gravesite" onPress={() => navigateTo('GravesiteLocator')} />
+            {/* <LinkRow
+              title="Find Your Veteran"
+              onPress={() =>
+                navigateTo('Webview', {
+                  url: 'https://www.va.gov/remember/',
+                  displayTitle: t('webview.vagov'),
+                  loadingMessage: 'Loading...',
+                })
+              }
+            /> */}
           </Box>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
@@ -557,6 +570,8 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       }}>
       <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
       <HomeScreenStack.Screen name="ContactVA" component={ContactVAScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen name="GravesiteLocator" component={GravesiteLocatorScreen} />
+      <HomeScreenStack.Screen name="GravesiteDetails" component={GravesiteDetailsScreen} />
       <HomeScreenStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       <HomeScreenStack.Screen
         name="PersonalInformation"
