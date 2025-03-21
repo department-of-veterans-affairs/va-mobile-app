@@ -322,7 +322,7 @@ export function HomeScreen({}: HomeScreenProps) {
             mb={theme.dimensions.standardMarginBetween}
             variant={'HomeScreenHeader'}
             accessibilityRole="header">
-            {t('activity')}
+            {t('activity')} testing
           </TextView>
           {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
