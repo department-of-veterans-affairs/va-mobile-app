@@ -29,7 +29,7 @@ import { HealthStackParamList } from '../HealthStackScreens'
 import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
-import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
+import NoAccessSM from './NoAccessSM/NoAccessSM'
 import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
@@ -153,7 +153,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
           onTryAgain={refetchAuthServices}
         />
       ) : !userAuthorizedServices?.secureMessaging ? (
-        <NotEnrolledSM />
+        <NoAccessSM />
       ) : termsAndConditionError ? (
         <TermsAndConditions />
       ) : (
