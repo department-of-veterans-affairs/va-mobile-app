@@ -43,8 +43,6 @@ import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 import VaccineDetailsScreen from './Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from './Vaccines/VaccineList/VaccineListScreen'
 
-// import LabsAndTestsDetailScreen from './LabsAndTests/LabsAndTestsDetail/LabsAndTestsDetailScreen'
-
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
