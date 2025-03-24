@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { LabsAndTestsListPayload } from 'api/types'
-// import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 
 import { labsAndTestsKeys } from './queryKeys'
