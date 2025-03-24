@@ -95,7 +95,11 @@
             "totalPages": 1,
             "totalEntries": 7
           },
-          "availableYears": [2024, 2023]
+          "availableYears": [2024, 2023],
+          "recurringPayment": {
+            "amount": "$3,084.74",
+            "date": "2025-03-21T00:00:00.000-06:00"
+          }
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/payment-history?startDate=&endDate=&page[size]=10&page[number]=1",
