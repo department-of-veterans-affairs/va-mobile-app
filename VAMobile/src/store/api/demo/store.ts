@@ -154,7 +154,6 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/allergies.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
-  // console.log ( JSON.stringify(transformedData, null, 2))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
 
