@@ -1,7 +1,6 @@
 export * from './AddressData'
 export * from './AllergyData'
 export * from './AppointmentData'
-export * from './AllergyData'
 export * from './AuthorizedServicesData'
 export * from './ClaimsAndAppealsData'
 export * from './ContactInformation'
