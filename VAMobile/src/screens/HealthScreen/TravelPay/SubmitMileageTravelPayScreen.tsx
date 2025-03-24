@@ -27,7 +27,9 @@ type ScreenListObj = {
   name: string
   backButtonOnPress: (() => void) | undefined
   leftButtonText: string
+  leftButtonTestID: string
   primaryButtonOnPress: (() => void) | undefined
+  primaryButtonTestId: string
   primaryButtonText: string | undefined
   secondaryButtonText: string | undefined
   secondaryButtonOnPress: (() => void) | undefined
@@ -135,7 +137,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'NotEligibleTypeScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
+      leftButtonTestID: 'leftCancelTestID',
       primaryButtonText: t('close'),
+      primaryButtonTestId: 'closeTestID',
       primaryButtonOnPress: notEligibleCloseOnPress,
       secondaryButtonText: undefined,
       secondaryButtonOnPress: undefined,
@@ -144,7 +148,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'ErrorScreen',
       backButtonOnPress: navigation.goBack,
       leftButtonText: t('close'),
+      leftButtonTestID: 'leftCloseTestID',
       primaryButtonText: t('close'),
+      primaryButtonTestId: 'closeTestID',
       primaryButtonOnPress: navigation.goBack,
       secondaryButtonText: undefined,
       secondaryButtonOnPress: undefined,
@@ -153,7 +159,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'MileageScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
+      leftButtonTestID: 'leftCancelTestID',
       primaryButtonText: t('yes'),
+      primaryButtonTestId: 'yesTestID',
       primaryButtonOnPress: navigateToNextScreen,
       secondaryButtonText: t('no'),
       secondaryButtonOnPress: navigateToNoScreen,
@@ -162,7 +170,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'VehicleScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
+      leftButtonTestID: 'leftCancelTestID',
       primaryButtonText: t('yes'),
+      primaryButtonTestId: 'yesTestID',
       primaryButtonOnPress: navigateToNextScreen,
       secondaryButtonText: t('no'),
       secondaryButtonOnPress: navigateToNoScreen,
@@ -171,7 +181,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'AddressScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
+      leftButtonTestID: 'leftCancelTestID',
       primaryButtonText: contactInformationQuery.data && address ? t('yes') : t('cancel'),
+      primaryButtonTestId: contactInformationQuery.data && address ? 'yesTestID' : 'cancelTestID',
       primaryButtonOnPress: contactInformationQuery.data && address ? navigateToNextScreen : navigation.goBack,
       secondaryButtonText: contactInformationQuery.data && address ? t('no') : undefined,
       secondaryButtonOnPress: navigateToNoScreen,
@@ -180,7 +192,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'ReviewClaimScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('cancel'),
+      leftButtonTestID: 'leftCancelTestID',
       primaryButtonText: t('submit'),
+      primaryButtonTestId: 'submitTestID',
       primaryButtonOnPress: submitTravelClaim,
       secondaryButtonText: undefined,
       secondaryButtonOnPress: undefined,
@@ -189,7 +203,9 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       name: 'SubmitSuccessScreen',
       backButtonOnPress: navigation.goBack,
       leftButtonText: t('close'),
+      leftButtonTestID: 'leftCloseTestID',
       primaryButtonText: t('close'),
+      primaryButtonTestId: 'closeTestID',
       primaryButtonOnPress: navigation.goBack,
       secondaryButtonText: undefined,
       secondaryButtonOnPress: undefined,
@@ -206,7 +222,7 @@ function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScre
       // menuViewActions
       primaryContentButtonText={screenList[screenListIndex].primaryButtonText}
       onPrimaryContentButtonPress={screenList[screenListIndex].primaryButtonOnPress}
-      primaryButtonTestID={screenList[screenListIndex].primaryButtonText}
+      primaryButtonTestID={screenList[screenListIndex].primaryButtonTestId}
       secondaryContentButtonText={screenList[screenListIndex].secondaryButtonText}
       onSecondaryContentButtonPress={screenList[screenListIndex].secondaryButtonOnPress}
       // navigationMultiStepCancelScreen={} // TODO maybe?

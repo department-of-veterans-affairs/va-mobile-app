@@ -59,29 +59,29 @@ function AddressScreen({}: AddressScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="addressQuestionID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.addressQuestion')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
           {address ? (
             <>
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              <TextView testID="addressQualifierID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.addressQualifier')}
               </TextView>
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              <TextView testID="referToPortalID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.referToPortal')}
               </TextView>
               <Box mt={theme.dimensions.standardMarginBetween}>
                 <AddressSummary addressData={addressData} />
               </Box>
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              <TextView testID="addressPOBoxID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.addressPOBox')}
               </TextView>
             </>
           ) : (
             <>
               <AddressSummary addressData={addressData} />
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              <TextView testID="noAddressTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                 {t('travelPay.noAddressText')}
               </TextView>
               <TravelPayHelp />

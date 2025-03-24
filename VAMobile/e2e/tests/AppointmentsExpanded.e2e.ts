@@ -9,6 +9,23 @@ export const AppointmentsExpandede2eConstants = {
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
 }
 
+const checkTravelClaimAvailability = async (
+  appointmentType: string,
+  appointmentStatus: string,
+  pastAppointment: boolean,
+) => {
+  const isAllowed =
+    appointmentType === 'ATLAS' ||
+    appointmentType === 'Onsite' ||
+    appointmentType === 'Claim' ||
+    appointmentType === 'VA'
+  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed') {
+    await expect(element(by.id('appointmentFileTravelPayAlert'))).toExist()
+  } else {
+    await expect(element(by.id('appointmentFileTravelPayAlert'))).not.toExist()
+  }
+}
+
 const checkMedicationWording = async ({
   appointmentType,
   appointmentStatus,
@@ -338,6 +355,7 @@ const checkUpcomingApptDetails = async (
     }
   }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
+  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment)
 
   await element(by.text('Appointments')).tap()
 }
@@ -755,7 +773,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     }
     await checkUpcomingApptDetails(
       'Claim',
-      'Upcoming',
+      'Confirmed',
       pastAppointment,
       undefined,
       undefined,

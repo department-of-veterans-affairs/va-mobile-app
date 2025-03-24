@@ -22,13 +22,13 @@ function VehicleScreen({}: VehicleScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="vehicleQuestionID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.vehicleQuestion')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="vehicleQualifierID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.vehicleQualifier')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="referToPortalID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.referToPortal')}
         </TextView>
       </Box>
