@@ -17,6 +17,10 @@ jest.mock('utils/hooks', () => ({
   useRouteNavigation: () => mockNavigationSpy,
 }))
 
+jest.mock('utils/platform', () => ({
+  isIOS: jest.fn(() => false),
+}))
+
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
@@ -28,7 +32,7 @@ context('MedicalRecordsScreen', () => {
   it('initializes correctly', async () => {
     initializeTestInstance()
     await waitFor(() => expect(screen.getByRole('header')).toBeTruthy())
-    await waitFor(() => expect(screen.getAllByRole('link')).toHaveLength(3))
+    await waitFor(() => expect(screen.getAllByRole('link')).toHaveLength(4))
   })
 
   it('should navigate to VaccineList on button press', () => {
@@ -46,6 +50,12 @@ context('MedicalRecordsScreen', () => {
   it('should open the VA medical records link', () => {
     initializeTestInstance()
     fireEvent.press(screen.getByTestId('viewMedicalRecordsLinkID'))
+    expect(Alert.alert).toHaveBeenCalled()
+  })
+
+  it('should open the Share My Health Data link', () => {
+    initializeTestInstance()
+    fireEvent.press(screen.getByTestId('shareMyHealthDataLinkID'))
     expect(Alert.alert).toHaveBeenCalled()
   })
 })

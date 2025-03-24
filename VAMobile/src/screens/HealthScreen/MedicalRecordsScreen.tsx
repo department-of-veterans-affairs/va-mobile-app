@@ -8,13 +8,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
-const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
+const { LINK_URL_MHV_VA_MEDICAL_RECORDS, SMHD_APPLE_STORE_LINK, SMHD_GOOGLE_PLAY_LINK } = getEnv()
 
 const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -41,16 +42,28 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           />
         )}
       </Box>
-      <Box mx={theme.dimensions.gutter}>
+      <Box mx={gutter}>
         <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
       </Box>
-      <Box mx={gutter}>
+      <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
           text={t('vaMedicalRecords.viewCompleteRecord.link')}
           a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}
           testID="viewMedicalRecordsLinkID"
+        />
+      </Box>
+      <Box mx={gutter}>
+        <TextView>{`${t('vaMedicalRecords.shareMyHealthDataApp')}`}</TextView>
+      </Box>
+      <Box mx={gutter}>
+        <LinkWithAnalytics
+          type="url"
+          url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
+          text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+          a11yLabel={a11yLabelVA(t('vaMedicalRecords.shareMyHealthDataApp'))}
+          testID="shareMyHealthDataLinkID"
         />
       </Box>
     </FeatureLandingTemplate>

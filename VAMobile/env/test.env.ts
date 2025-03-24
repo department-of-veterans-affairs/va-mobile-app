@@ -43,3 +43,5 @@ export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/tra
 export const CARRIER_TRACKING_URL_FEDEX = 'https://www.fedex.com/apps/fedextrack/?tracknumbers='
 export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking.html?AWB='
 export const DEMO_PASSWORD = ''
+export const SMHD_APPLE_STORE_LINK = 'https://apps.apple.com/us/app/share-my-health-data/id1031651418'
+export const SMHD_GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.smhd'
