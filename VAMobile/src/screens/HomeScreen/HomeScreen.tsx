@@ -195,8 +195,12 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
-  const hasRecurringPaymentInfo =
-    !!paymentHistoryQuery.data?.meta.recurringPayment.amount && !!paymentHistoryQuery.data?.meta.recurringPayment.date
+  const recurringPayment = {
+    amount: paymentHistoryQuery.data?.meta.recurringPayment.amount,
+    date: paymentHistoryQuery.data?.meta.recurringPayment.date,
+  }
+
+  const hasRecurringPaymentInfo = !!recurringPayment.amount && !!recurringPayment.date
 
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
@@ -475,16 +479,16 @@ export function HomeScreen({}: HomeScreenProps) {
                     pl={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${paymentHistoryQuery.data?.meta.recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data?.meta.recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                       variant={'VeteranStatusBranch'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
                     <TextView
                       accessible={false}
                       importantForAccessibility={'no'}
-                      variant={'NametagNumber'}>{`${paymentHistoryQuery.data?.meta.recurringPayment.amount}`}</TextView>
+                      variant={'NametagNumber'}>{`${recurringPayment.amount}`}</TextView>
                     <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data?.meta.recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                     </TextView>
                   </Box>
                 )}
