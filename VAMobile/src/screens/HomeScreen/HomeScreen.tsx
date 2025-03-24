@@ -195,6 +195,9 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
+  const hasRecurringPaymentInfo =
+    !!paymentHistoryQuery.data?.meta.recurringPayment.amount && !!paymentHistoryQuery.data?.meta.recurringPayment.date
+
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
     (authorizedServicesQuery.data?.appeals && appealsInDowntime) ||
@@ -261,7 +264,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const hasAboutYouInfo =
     !!disabilityRatingQuery.data?.combinedDisabilityRating ||
-    !!paymentHistoryQuery.data?.meta.recurringPayment.amount ||
+    hasRecurringPaymentInfo ||
     !!serviceHistoryQuery.data?.mostRecentBranch
 
   const aboutYouFeatureInDowntime = !!(
@@ -438,12 +441,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
-                    pb={
-                      paymentHistoryQuery.data?.meta.recurringPayment.amount &&
-                      !!paymentHistoryQuery.data?.meta.recurringPayment.date
-                        ? 0
-                        : theme.dimensions.standardMarginBetween
-                    }
+                    pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
                     pl={theme.dimensions.standardMarginBetween}>
                     <TextView
                       accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
@@ -461,42 +459,35 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                   </Box>
                 )}
-                {!!paymentHistoryQuery.data?.meta.recurringPayment.amount &&
-                  !!paymentHistoryQuery.data?.meta.recurringPayment.date &&
-                  !!disabilityRatingQuery.data?.combinedDisabilityRating && (
-                    <Box
-                      mx={theme.dimensions.standardMarginBetween}
-                      my={theme.dimensions.condensedMarginBetween}
-                      borderBottomWidth={1}
-                      borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                    />
-                  )}
-                {!!paymentHistoryQuery.data?.meta.recurringPayment.amount &&
-                  !!paymentHistoryQuery.data?.meta.recurringPayment.date && (
-                    <Box
-                      pt={
-                        disabilityRatingQuery.data?.combinedDisabilityRating
-                          ? 0
-                          : theme.dimensions.standardMarginBetween
-                      }
-                      pl={theme.dimensions.standardMarginBetween}
-                      pb={theme.dimensions.standardMarginBetween}>
-                      <TextView
-                        accessibilityLabel={`${t('monthlyCompensationPayment')} ${paymentHistoryQuery.data?.meta.recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data.meta.recurringPayment.date, 'MMMM d, yyyy')}`}
-                        variant={'VeteranStatusBranch'}>
-                        {t('monthlyCompensationPayment')}
-                      </TextView>
-                      <TextView
-                        accessible={false}
-                        importantForAccessibility={'no'}
-                        variant={
-                          'NametagNumber'
-                        }>{`${paymentHistoryQuery.data?.meta.recurringPayment.amount}`}</TextView>
-                      <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                        {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data.meta.recurringPayment.date, 'MMMM d, yyyy')}`}
-                      </TextView>
-                    </Box>
-                  )}
+                {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                  <Box
+                    mx={theme.dimensions.standardMarginBetween}
+                    my={theme.dimensions.condensedMarginBetween}
+                    borderBottomWidth={1}
+                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+                  />
+                )}
+                {hasRecurringPaymentInfo && (
+                  <Box
+                    pt={
+                      disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
+                    }
+                    pl={theme.dimensions.standardMarginBetween}
+                    pb={theme.dimensions.standardMarginBetween}>
+                    <TextView
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${paymentHistoryQuery.data?.meta.recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data?.meta.recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                      variant={'VeteranStatusBranch'}>
+                      {t('monthlyCompensationPayment')}
+                    </TextView>
+                    <TextView
+                      accessible={false}
+                      importantForAccessibility={'no'}
+                      variant={'NametagNumber'}>{`${paymentHistoryQuery.data?.meta.recurringPayment.amount}`}</TextView>
+                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
+                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(paymentHistoryQuery.data?.meta.recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                    </TextView>
+                  </Box>
+                )}
               </Box>
               {(hasAboutYouError || aboutYouFeatureInDowntime) && (
                 <CategoryLandingAlert text={t('aboutYou.error.cantShowAllInfo')} isError={hasAboutYouError} />
