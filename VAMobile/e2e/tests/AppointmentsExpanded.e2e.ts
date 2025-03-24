@@ -7,6 +7,7 @@ export const AppointmentsExpandede2eConstants = {
   VIDEO_VISIT_PREP_LINK_ID: 'prepareForVideoVisitTestID',
   APPT_DIRECTIONS_ID: 'directionsTestID',
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
+  TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
 }
 
 const checkTravelClaimAvailability = async (
@@ -20,9 +21,9 @@ const checkTravelClaimAvailability = async (
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
   if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed') {
-    await expect(element(by.id('appointmentFileTravelPayAlert'))).toExist()
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
   } else {
-    await expect(element(by.id('appointmentFileTravelPayAlert'))).not.toExist()
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
   }
 }
 
