@@ -20,7 +20,6 @@ const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').
 const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
 
 const resetDateRangeToDefault = async () => {
-  console.log('resetting date range to default')
   await element(by.id('labsAndTestDataRangeTestID')).tap()
   await element(by.text('Past 3 months')).tap()
   await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
