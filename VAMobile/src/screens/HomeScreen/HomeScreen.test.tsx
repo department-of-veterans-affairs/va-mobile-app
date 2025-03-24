@@ -8,15 +8,15 @@ import { DateTime } from 'luxon'
 import {
   DisabilityRatingData,
   FacilitiesPayload,
-  LetterBeneficiaryDataPayload,
   MilitaryServiceHistoryData,
+  PaymentsGetData,
   ServiceHistoryAttributes,
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
-import { roundToHundredthsPlace } from 'utils/formattingUtils'
+import { getFormattedDate } from 'utils/formattingUtils'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -66,19 +66,22 @@ const getDisabilityRatingPayload = (combinedDisabilityRating: number): Disabilit
   },
 })
 
-const getLetterBeneficiaryPayload = (monthlyAwardAmount: number): LetterBeneficiaryDataPayload => ({
-  data: {
-    id: '0',
-    type: '',
-    attributes: {
-      benefitInformation: {
-        awardEffectiveDate: '',
-        hasChapter35Eligibility: null,
-        monthlyAwardAmount,
-        serviceConnectedPercentage: null,
-      },
-      militaryService: [],
+const getPaymentHistoryPayload = (monthlyAwardAmount: string, monthlyAwardDate: string): PaymentsGetData => ({
+  data: [],
+  paymentsByDate: undefined,
+  meta: {
+    availableYears: null,
+    recurringPayment: {
+      amount: monthlyAwardAmount,
+      date: monthlyAwardDate,
     },
+  },
+  links: {
+    self: null,
+    first: null,
+    prev: null,
+    next: null,
+    last: null,
   },
 })
 
@@ -520,8 +523,8 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockRejectedValue('fail')
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(3084.75))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('$3084.74', '2025-03-21T00:00:00.000-06:00'))
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance()
@@ -531,22 +534,25 @@ context('HomeScreen', () => {
     })
 
     it('displays monthly payment amount when veteran has monthly compensation payment', async () => {
-      const monthlyAwardAmount = 3084.75
       when(get as jest.Mock)
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(monthlyAwardAmount))
+        .calledWith('/v0/disability-rating')
+        .mockResolvedValue(getDisabilityRatingPayload(100))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('$3084.74', '2025-03-21T00:00:00.000-06:00'))
       initializeTestInstance()
       await waitFor(() =>
         expect(
-          screen.getByLabelText(`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(monthlyAwardAmount)}`),
+          screen.getByLabelText(
+            `${t('monthlyCompensationPayment')} ${'$3084.74'} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate('2025-03-21T00:00:00.000-06:00', 'MMMM d, yyyy')}`,
+          ),
         ).toBeTruthy(),
       )
     })
 
     it('does not display monthly payment amount when veteran does not have monthly compensation payment', async () => {
       when(get as jest.Mock)
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('', ''))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByText(t('monthlyCompensationPayment'))).toBeFalsy())
@@ -556,7 +562,7 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(100))
-        .calledWith('/v0/letters/beneficiary')
+        .calledWith('/v0/payment-history', {})
         .mockRejectedValue('fail')
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
@@ -570,8 +576,8 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(0))
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('', ''))
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
 
@@ -584,15 +590,15 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(100))
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(3000))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('$3000', '2025-03-21T00:00:00.000-06:00'))
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance({
         preloadedState: {
           errors: {
             downtimeWindowsByFeature: {
-              letters_and_documents: {
+              payment_history: {
                 startTime: DateTime.now(),
                 endTime: DateTime.now().plus({ minutes: 1 }),
               },
@@ -608,8 +614,8 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(0))
-        .calledWith('/v0/letters/beneficiary')
-        .mockResolvedValue(getLetterBeneficiaryPayload(0))
+        .calledWith('/v0/payment-history', {})
+        .mockResolvedValue(getPaymentHistoryPayload('', ''))
         .calledWith('/v0/military-service-history')
         .mockRejectedValue('fail')
 
