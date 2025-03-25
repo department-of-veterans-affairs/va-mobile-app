@@ -50,7 +50,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           type="url"
           url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
           text={t('vaMedicalRecords.viewCompleteRecord.link')}
-          a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}
+          a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord.link'))}
           testID="viewMedicalRecordsLinkID"
         />
       </Box>
@@ -62,7 +62,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           type="url"
           url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
           text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-          a11yLabel={a11yLabelVA(t('vaMedicalRecords.shareMyHealthDataApp'))}
+          a11yLabel={a11yLabelVA(t('vaMedicalRecords.shareMyHealthDataApp.link'))}
           testID="shareMyHealthDataLinkID"
         />
       </Box>
