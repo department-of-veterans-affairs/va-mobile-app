@@ -36,19 +36,19 @@ function ReviewClaimScreen({}: ReviewClaimScreenProps) {
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t("What you're claiming")}</TextView>
-            <TextView variant="MobileBody">{t('Mileage only')}</TextView>
+            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.what')}</TextView>
+            <TextView variant="MobileBody">{t('travelPay.reviewDetails.milageOnly')}</TextView>
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('How you traveled')}</TextView>
-            <TextView variant="MobileBody">{t('Your own vehicle')}</TextView>
+            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.how')}</TextView>
+            <TextView variant="MobileBody">{t('travelPay.reviewDetails.vehicle')}</TextView>
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('Where you traveled from')}</TextView>
+            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.where')}</TextView>
             {address.map((line: TextLine) => (
               <>
                 <TextView key={line.text} variant="MobileBody">
