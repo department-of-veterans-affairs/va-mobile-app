@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
 
 import { ClickToCallPhoneNumber, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -10,7 +11,7 @@ function TravelPayHelp() {
   const theme = useTheme()
 
   return (
-    <>
+    <View testID="travelPayHelp">
       <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
         {t('travelPay.helpTitle')}
       </TextView>
@@ -18,7 +19,7 @@ function TravelPayHelp() {
         {t('travelPay.helpText')}
       </TextView>
       <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={'travelPay.phone.a11yHint'} />
-    </>
+    </View>
   )
 }
 
