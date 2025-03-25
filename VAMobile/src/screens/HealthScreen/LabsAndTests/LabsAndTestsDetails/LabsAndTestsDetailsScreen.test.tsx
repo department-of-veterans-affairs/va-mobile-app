@@ -17,8 +17,8 @@ context('LabsAndTestsDetailsScreen', () => {
         'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
       location: 'VA TEST LAB',
       orderedBy: 'Provider Name',
-      sampleTested: "Bone Marrow",
-      bodySite: "Right leg",
+      sampleTested: 'Bone Marrow',
+      bodySite: 'Right leg',
     },
   }
   const chemHemLabsAndTests = {
@@ -30,56 +30,56 @@ context('LabsAndTestsDetailsScreen', () => {
       dateCompleted: '2018-11-01T15:49:14.000-01:00',
       encodedData: '',
       location: 'VA TEST LAB',
-      sampleTested: "Bloog",
-      bodySite: "Right arm",
+      sampleTested: 'Bloog',
+      bodySite: 'Right arm',
       observations: [
         {
           testCode: 'GLUCOSE',
           value: {
-            text: "100",
-            type: "Quantity"
+            text: '100',
+            type: 'Quantity',
           },
           referenceRange: '70-100',
           status: 'final',
           comment: 'this is a test',
-          sampleTested: "Bloog",
-          bodySite: "Right arm",
+          sampleTested: 'Bloog',
+          bodySite: 'Right arm',
         },
         {
           testCode: 'UREA NITROGEN',
           value: {
-            text: "200 mg/dL",
-            type: "Quantity"
+            text: '200 mg/dL',
+            type: 'Quantity',
           },
           referenceRange: '7 - 18',
           status: 'pending',
           comment: '',
-          sampleTested: "Bloog",
-          bodySite: "Right arm",
+          sampleTested: 'Bloog',
+          bodySite: 'Right arm',
         },
         {
           testCode: 'CREATININE',
           value: {
-            text: "5 mg/dL",
-            type: "Quantity"
+            text: '5 mg/dL',
+            type: 'Quantity',
           },
           referenceRange: '0.6 - 1.3',
           status: 'pending',
           comment: '',
-          sampleTested: "Bloog",
-          bodySite: "Right arm",
+          sampleTested: 'Bloog',
+          bodySite: 'Right arm',
         },
         {
           testCode: 'SODIUM',
           value: {
-            text: "8 meq/L",
-            type: "Quantity"
+            text: '8 meq/L',
+            type: 'Quantity',
           },
           referenceRange: '136 - 145',
           status: 'pending',
           comment: '',
-          sampleTested: "Bloog",
-          bodySite: "Right arm",
+          sampleTested: 'Bloog',
+          bodySite: 'Right arm',
         },
       ],
     },

@@ -52,12 +52,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         fiveMonthsEarlier.monthShort +
-        ' ' +
-        fiveMonthsEarlier.year +
-        ' - ' +
-        threeMonthsEarlier.monthShort +
-        ' ' +
-        threeMonthsEarlier.year,
+          ' ' +
+          fiveMonthsEarlier.year +
+          ' - ' +
+          threeMonthsEarlier.monthShort +
+          ' ' +
+          threeMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -67,12 +67,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         eightMonthsEarlier.monthShort +
-        ' ' +
-        eightMonthsEarlier.year +
-        ' - ' +
-        sixMonthsEarlier.monthShort +
-        ' ' +
-        sixMonthsEarlier.year,
+          ' ' +
+          eightMonthsEarlier.year +
+          ' - ' +
+          sixMonthsEarlier.monthShort +
+          ' ' +
+          sixMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -83,12 +83,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         elevenMonthsEarlier.monthShort +
-        ' ' +
-        elevenMonthsEarlier.year +
-        ' - ' +
-        nineMonthsEarlier.monthShort +
-        ' ' +
-        nineMonthsEarlier.year,
+          ' ' +
+          elevenMonthsEarlier.year +
+          ' - ' +
+          nineMonthsEarlier.monthShort +
+          ' ' +
+          nineMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -98,12 +98,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         fourteenMonthsEarlier.monthShort +
-        ' ' +
-        fourteenMonthsEarlier.year +
-        ' - ' +
-        twelveMonthsEarlier.monthShort +
-        ' ' +
-        twelveMonthsEarlier.year,
+          ' ' +
+          fourteenMonthsEarlier.year +
+          ' - ' +
+          twelveMonthsEarlier.monthShort +
+          ' ' +
+          twelveMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
