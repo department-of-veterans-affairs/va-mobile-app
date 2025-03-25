@@ -342,11 +342,6 @@ export const setWaygateDebugConfig = async (config: WaygateToggleValues): Promis
   AsyncStorage.setItem(WAYGATE_OVERRIDES_KEY, JSON.stringify(config))
 }
 
-export const resetLocalWaygateConfig = async () => {
-  console.log('clearing.....')
-  await AsyncStorage.clear()
-}
-
 export const getWaygateToggles = (): WaygateToggleValues => {
   if (overrideRemote) {
     return waygateConfig
