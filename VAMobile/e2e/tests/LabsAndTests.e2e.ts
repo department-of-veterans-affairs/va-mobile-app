@@ -1,9 +1,14 @@
-import { by, element, expect, waitFor } from 'detox'
+import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
 
-import * as api from 'store/api'
-
-import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords, scrollToElement } from './utils'
+import {
+  loginToDemoMode,
+  openHealth,
+  openLabsAndTestRecords,
+  openMedicalRecords,
+  scrollToElement,
+  testForOneOrManyOccurancesOf,
+} from './utils'
 
 const todaysDate = DateTime.local()
 
@@ -152,8 +157,6 @@ describe('Labs And Test Screen', () => {
 })
 
 describe('Labs And Test Details Screen with Observations', () => {
-  const noneNoted = 'None noted'
-
   it('navigate to detail screen and show results', async () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).toExist()
@@ -163,18 +166,11 @@ describe('Labs And Test Details Screen with Observations', () => {
 
     await expect(element(by.text('CH'))).toExist()
     await expect(element(by.text('January 23, 2025'))).toExist()
-    await expect(element(by.text('Blood'))).toExist()
-    await expect(element(by.text('Left arm'))).toExist()
     await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
 
-    // ensure default value is displayed for all empty strings in data fields
-    // getAttributes will return an object with a key 'elements' if multiple elements are matched
-    const multipleMatchedElements = await element(by.text(noneNoted)).getAttributes()
-    if (!('elements' in multipleMatchedElements)) {
-      await expect(element(by.text(noneNoted))).toExist()
-    } else {
-      await expect(element(by.text(noneNoted)).atIndex(0)).toExist()
-    }
+    await testForOneOrManyOccurancesOf('None noted')
+    await testForOneOrManyOccurancesOf('Blood')
+    await testForOneOrManyOccurancesOf('Left arm')
 
     await expect(element(by.text('ZZGeorge Washington'))).toExist()
 

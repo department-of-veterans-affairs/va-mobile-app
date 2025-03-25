@@ -287,6 +287,19 @@ export async function scrollToElement(text: string, containerID: string) {
     .scroll(200, 'down')
 }
 
+/** Test for the presence of text 1 or more times
+ *
+ * @param text - string of the text to match
+ */
+export const testForOneOrManyOccurancesOf = async (text: string) => {
+  const multipleMatchedElements = await element(by.text(text)).getAttributes()
+  if (!('elements' in multipleMatchedElements)) {
+    await expect(element(by.text(text))).toExist()
+  } else {
+    await expect(element(by.text(text)).atIndex(0)).toExist()
+  }
+}
+
 /** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
