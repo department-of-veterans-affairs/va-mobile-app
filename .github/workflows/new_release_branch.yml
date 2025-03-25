@@ -18,8 +18,8 @@ jobs:
       - name: Check environment
         id: check-environment
         run: |
-          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
-            echo ::set-output name=env_name::'manual-release'
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[${{ github.ref }}" =~ 10541]]; then
+            echo ::set-output name=env_name::'release'
           else
             echo ::set-output name=env_name::''
           fi
@@ -28,9 +28,9 @@ jobs:
     needs: [get-workflow-environment]
     environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: VAMobile
+    # defaults:
+    #   run:
+    #     working-directory: VAMobile
     steps:
       - name: Echoing it works
         run: echo "It Works!!"

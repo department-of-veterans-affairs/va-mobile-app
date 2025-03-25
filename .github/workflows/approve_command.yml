@@ -1,57 +1,80 @@
-name: '[Release] Approve Slash Command'
+name: "[Release] Approval"
+# name: "[Release] Approve Slash Command"
 
 on:
-  repository_dispatch:
-    types: [ approve-command ]
+  workflow_call:
+  # repository_dispatch:
+  #   types: [approve-command]
 
 jobs:
-  indicate_start:
+  get-workflow-environment:
     runs-on: ubuntu-latest
+    # Hard coding env and dynamic would not work. This is fine as we only want to target these branches for protections.
+    environment: release
+    outputs:
+      environment_name: ${{ steps.check-environment.outputs.env_name }}
     steps:
-      - name: Dump the client payload context
-        env:
-          PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+      - name: Check environment
+        id: check-environment
+        # Run this only if it was manually run or the branch contains release.
+        if: ${{ github.event_name == 'workflow_dispatch' || contains(github.ref, '10541') }}
+        # if: ${{ github.event_name == 'workflow_dispatch' || contains(github.ref, 'release/') }}
         run: |
-          echo "$PAYLOAD_CONTEXT"
-          echo ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      - name: 'Add reaction to approve command'
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          token: ${{ secrets.GH_ACTIONS_PAT }}
-          repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
-          comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-          reaction-type: rocket
-  run_prs:
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
-    with:
-      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-    secrets:
-      GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
-  comment_complete:
-    runs-on: ubuntu-latest
-    needs: run_prs
-    steps:
-      - name: 'Checkout repo'
-        uses: actions/checkout@v3
-      - name: 'Set up GH CLI secret'
-        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - name: 'Log into GH CLI'
-        run: gh auth login --with-token < token.txt
-      - name: 'Comment on original issue with PR info'
-        run: |
-          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
-          [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
-          Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
-      - name: 'Close original issue'
-        run: |
-          gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
-          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
-  start_slack_thread:
-    name: Start Slack thread
-    if: ${{ failure() }}
-    needs: [indicate_start, comment_complete]
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: 'The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+          echo "env_name=test-release" >> $GITHUB_OUTPUT
+    test_approval:
+      name: Testing the approval
+      runs_on: ubuntu-latest
+      steps:
+        - name: Echo some things
+          run: |
+            echo "This is working.  Approval was successful."
+  # indicate_start:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Dump the client payload context
+  #       env:
+  #         PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
+  #       run: |
+  #         echo "$PAYLOAD_CONTEXT"
+  #         echo ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+  #     - name: "Add reaction to approve command"
+  #       uses: peter-evans/create-or-update-comment@v1
+  #       with:
+  #         token: ${{ secrets.GH_ACTIONS_PAT }}
+  #         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
+  #         comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
+  #         reaction-type: rocket
+  # run_prs:
+  #   uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
+  #   with:
+  #     version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+  #   secrets:
+  #     GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
+  # comment_complete:
+  #   runs-on: ubuntu-latest
+  #   needs: run_prs
+  #   steps:
+  #     - name: "Checkout repo"
+  #       uses: actions/checkout@v3
+  #     - name: "Set up GH CLI secret"
+  #       run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+  #     - name: "Log into GH CLI"
+  #       run: gh auth login --with-token < token.txt
+  #     - name: "Comment on original issue with PR info"
+  #       run: |
+  #         gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
+  #         [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
+  #         Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
+  #     - name: "Close original issue"
+  #       run: |
+  #         gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
+  #         gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
+  # start_slack_thread:
+  #   name: Start Slack thread
+  #   if: ${{ failure() }}
+  #   needs: [indicate_start, comment_complete]
+  #   uses: ./.github/workflows/start_slack_thread.yml
+  #   secrets: inherit
+  #   with:
+  #     channel_name: va-mobile-build-alerts
+  #     message: "The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."

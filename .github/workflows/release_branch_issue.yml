@@ -10,13 +10,13 @@ jobs:
   release_ticket:
     # if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
-    outputs:
-      ticketNumber: ${{steps.create_issue.outputs.number}}
-      versionNumber: ${{env.VERSION}}
-      releaseDate: ${{env.RELEASE_DATE}}
-      qaDueDate: ${{env.QA_DUE_DATE}}
-      prodDueDate: ${{env.PROD_DUE_DATE}}
-      vaDueDate: ${{env.VA_DUE_DATE}}
+    # outputs:
+    #   ticketNumber: ${{steps.create_issue.outputs.number}}
+    #   versionNumber: ${{env.VERSION}}
+    #   releaseDate: ${{env.RELEASE_DATE}}
+    #   qaDueDate: ${{env.QA_DUE_DATE}}
+    #   prodDueDate: ${{env.PROD_DUE_DATE}}
+    #   vaDueDate: ${{env.VA_DUE_DATE}}
     steps:
       - run: echo "This is working"
       # - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -143,31 +143,8 @@ jobs:
   #        -H 'Content-type: application/json' \
   #        -d @- \
   #        https://slack.com/api/chat.postMessage
-  # New release approval process 10541
-  get_environment:
-    name: Get environment for release
-    if: ${{ success() }}
-    # needs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Environment
-        outputs:
-          environment_name: ${{ steps.check-environment.outputs.env_name }}
-        run: |
-          # if triggered manually or branch contains `release`
-          # default is release
-          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[${{ github.ref }}" =~ 10541]]; then 
-            echo "env_name=release" >> $GITHUB_OUTPUT
-          else
-            echo "env_name" >> $GITHUB_OUTPUT
-          fi
-  wait:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for release window
-        run: sleep 60s # Setting to 60s for testing.  Will be 1 week for final implementation
   approval:
     name: Run release approval
-    needs: [wait, get_environment]
-    environment: ${{ needs.get_environment.outputs.environment_name }}
+    needs: [get_environment]
     runs-on: ubuntu-latest
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@develop
