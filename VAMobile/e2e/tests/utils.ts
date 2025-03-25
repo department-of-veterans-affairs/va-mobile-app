@@ -275,6 +275,18 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
+/** Scroll down inside container until specified text is found
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToElement(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+}
+
 /** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match

@@ -23,20 +23,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
+import { Observation } from '../../../../api/types/LabsAndTestsData'
 import { HealthStackParamList } from '../../HealthStackScreens'
-
-type Observation = {
-  testCode: string | null
-  value: {
-    text: string | null
-    type: string | null
-  } | null
-  referenceRange: string | null
-  status: string | null
-  comment: string | null
-  sampleTested: string | null
-  bodySite: string | null
-}
 
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
 
@@ -109,6 +97,15 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'LabResultHeader') || {
         text: placeHolder,
       },
+      getTextLine(t('labsAndTests.details.sampleTested'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.sampleTested, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(t('labsAndTests.details.bodySite'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+        text: placeHolder,
+      },
+      getTextLine(observation?.bodySite, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+
       getTextLine(t('labsAndTests.details.result'), 0, condensedMarginBetween, 'MobileBodyBold') || {
         text: placeHolder,
       },

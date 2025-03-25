@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 
 import * as api from 'store/api'
 
-import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords } from './utils'
+import { loginToDemoMode, openHealth, openLabsAndTestRecords, openMedicalRecords, scrollToElement } from './utils'
 
 const todaysDate = DateTime.local()
 
@@ -31,13 +31,6 @@ const TEST_IDS = {
   BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
 }
 const HEADER_TEXT = 'Labs and tests'
-
-async function scrollToElement(text: string, containerID: string) {
-  await waitFor(element(by.text(text)))
-    .toBeVisible()
-    .whileElement(by.id(containerID))
-    .scroll(200, 'down')
-}
 
 beforeAll(async () => {
   await loginToDemoMode()
@@ -137,8 +130,9 @@ describe('Labs And Test Screen', () => {
 
     // the page should have the correct data
     await expect(element(by.text('Surgical Pathology'))).toExist()
-    await expect(element(by.text('March 14, 2019'))).toExist()
-    await expect(element(by.text('TESTING BONE MARROW'))).toExist()
+    await expect(element(by.text('March 14, 2025'))).toExist()
+    await expect(element(by.text('Bone Marrow'))).toExist()
+    await expect(element(by.text('Left leg'))).toExist()
     await expect(element(by.text('VA TEST LAB'))).toExist()
 
     // ensure base 64 decoded data is present
@@ -169,14 +163,15 @@ describe('Labs And Test Details Screen with Observations', () => {
 
     await expect(element(by.text('CH'))).toExist()
     await expect(element(by.text('January 23, 2025'))).toExist()
-    await expect(element(by.text('SERUM'))).toExist()
+    await expect(element(by.text('Blood'))).toExist()
+    await expect(element(by.text('Left arm'))).toExist()
     await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
 
     // ensure default value is displayed for all empty strings in data fields
     // getAttributes will return an object with a key 'elements' if multiple elements are matched
     const multipleMatchedElements = await element(by.text(noneNoted)).getAttributes()
     if (!('elements' in multipleMatchedElements)) {
-      expect(element(by.text(noneNoted))).toExist()
+      await expect(element(by.text(noneNoted))).toExist()
     } else {
       await expect(element(by.text(noneNoted)).atIndex(0)).toExist()
     }

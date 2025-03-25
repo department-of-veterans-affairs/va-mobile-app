@@ -112,31 +112,32 @@ context('LabsAndTestsDetailsScreen', () => {
     }
     const { getByTestId } = initializeTestInstance({ ...sampleData })
     await waitFor(() => expect(getByTestId('decoded-report').children[0]).toEqual('None noted'))
+    await waitFor(() => expect(getByTestId('decoded-report').props.children).toEqual('None noted'))
   })
 
   it('renders the body site sampled correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('bodySite').children[0]).toEqual('Right leg'))
+    await waitFor(() => expect(getByTestId('bodySite').props.children).toEqual('Right leg'))
   })
 
   it('renders the sample tested correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('sampleTested').children[0]).toEqual('Bone Marrow'))
+    await waitFor(() => expect(getByTestId('sampleTested').props.children).toEqual('Bone Marrow'))
   })
 
   it('renders Ordered By correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('orderedBy').children[0]).toEqual('Provider Name'))
+    await waitFor(() => expect(getByTestId('orderedBy').props.children).toEqual('Provider Name'))
   })
 
   it('renders the location correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('location').children[0]).toEqual('VA TEST LAB'))
+    await waitFor(() => expect(getByTestId('location').props.children).toEqual('VA TEST LAB'))
   })
 
   it('renders the date correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('dateCompleted').children[0]).toEqual('November 01, 2018'))
+    await waitFor(() => expect(getByTestId('dateCompleted').props.children).toEqual('November 01, 2018'))
   })
 
   it('renders the observations correctly when present', async () => {
