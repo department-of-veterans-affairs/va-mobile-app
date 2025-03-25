@@ -45,14 +45,16 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   }
 }
 
-type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'>
+type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'> & {
+  initialRouteIndex?: number
+}
 
-function SubmitMileageTravelPayScreen({ navigation }: SubmitMileageTravelPayScreenProps) {
+function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 2 }: SubmitMileageTravelPayScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
 
-  const [screenListIndex, setScreenListIndex] = useState(2)
+  const [screenListIndex, setScreenListIndex] = useState(initialRouteIndex)
   const [notEligibleBackIndex, setNotEligibleBackIndex] = useState(2)
   const [error] = useState<string | undefined>()
 
