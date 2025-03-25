@@ -1,18 +1,20 @@
 import React from 'react'
 import { Alert } from 'react-native'
 
+import { t } from 'i18next'
+
 import { context, fireEvent, render, screen } from 'testUtils'
 
-import NotEnrolledSM from './NotEnrolledSM'
+import NoAccessSM from './NoAccessSM'
 
-context('NotEnrolledSM', () => {
+context('NoAccessSM', () => {
   beforeEach(() => {
-    render(<NotEnrolledSM />)
+    render(<NoAccessSM />)
   })
 
   describe('when Learn how to upgrade link is clicked', () => {
     it('should launch external link', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'Learn how to upgrade to a My HealtheVet Premium account' }))
+      fireEvent.press(screen.getByRole('link', { name: t('noAccessSM.findVACare') }))
       expect(Alert.alert).toBeCalled()
     })
   })
