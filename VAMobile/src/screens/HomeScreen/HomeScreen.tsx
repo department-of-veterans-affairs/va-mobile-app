@@ -18,8 +18,8 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
+import { usePayments } from 'api/payments'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
@@ -52,7 +52,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { roundToHundredthsPlace } from 'utils/formattingUtils'
+import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -87,7 +87,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const smInDowntime = useDowntime(DowntimeFeatureTypeConstants.secureMessaging)
   const serviceHistoryInDowntime = useDowntime(DowntimeFeatureTypeConstants.militaryServiceHistory)
   const disabilityRatingInDowntime = useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
-  const lettersInDowntime = useDowntime(DowntimeFeatureTypeConstants.letters)
+  const paymentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.payments)
 
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const appointmentsQuery = useAppointments(
@@ -106,7 +106,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const disabilityRatingQuery = useDisabilityRating()
   const serviceHistoryQuery = useServiceHistory()
-  const letterBeneficiaryQuery = useLetterBeneficiaryData()
+  const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
@@ -195,6 +195,13 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
+  const recurringPayment = {
+    amount: paymentHistoryQuery.data?.meta.recurringPayment.amount,
+    date: paymentHistoryQuery.data?.meta.recurringPayment.date,
+  }
+
+  const hasRecurringPaymentInfo = !!recurringPayment.amount && !!recurringPayment.date
+
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
     (authorizedServicesQuery.data?.appeals && appealsInDowntime) ||
@@ -243,7 +250,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const aboutYouFeatureActive = !!(
     (authorizedServicesQuery.data?.militaryServiceHistory && !serviceHistoryInDowntime) ||
     (authorizedServicesQuery.data?.disabilityRating && !disabilityRatingInDowntime) ||
-    (authorizedServicesQuery.data?.lettersAndDocuments && !lettersInDowntime)
+    (authorizedServicesQuery.data?.paymentHistory && !paymentsInDowntime)
   )
 
   // Ensures loading component is still rendered while waiting for queries to start fetching on first mount
@@ -251,28 +258,28 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouFeatureActive &&
     !serviceHistoryQuery.isFetched &&
     !disabilityRatingQuery.isFetched &&
-    !letterBeneficiaryQuery.isFetched
+    !paymentHistoryQuery.isFetched
 
   const loadingAboutYou =
     aboutYouNotFetched ||
     serviceHistoryQuery.isLoading ||
     disabilityRatingQuery.isLoading ||
-    letterBeneficiaryQuery.isLoading
+    paymentHistoryQuery.isLoading
 
   const hasAboutYouInfo =
     !!disabilityRatingQuery.data?.combinedDisabilityRating ||
-    !!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount ||
+    hasRecurringPaymentInfo ||
     !!serviceHistoryQuery.data?.mostRecentBranch
 
   const aboutYouFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
     (authorizedServicesQuery.data?.disabilityRating && disabilityRatingInDowntime) ||
-    (authorizedServicesQuery.data?.lettersAndDocuments && lettersInDowntime)
+    (authorizedServicesQuery.data?.paymentHistory && paymentsInDowntime)
   )
 
   const hasAboutYouError = !!(
     disabilityRatingQuery.isError ||
-    letterBeneficiaryQuery.isError ||
+    paymentHistoryQuery.isError ||
     serviceHistoryQuery.isError
   )
 
@@ -438,11 +445,7 @@ export function HomeScreen({}: HomeScreenProps) {
                 {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
-                    pb={
-                      letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount
-                        ? 0
-                        : theme.dimensions.standardMarginBetween
-                    }
+                    pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
                     pl={theme.dimensions.standardMarginBetween}>
                     <TextView
                       accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
@@ -460,16 +463,15 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                   </Box>
                 )}
-                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount &&
-                  !!disabilityRatingQuery.data?.combinedDisabilityRating && (
-                    <Box
-                      mx={theme.dimensions.standardMarginBetween}
-                      my={theme.dimensions.condensedMarginBetween}
-                      borderBottomWidth={1}
-                      borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                    />
-                  )}
-                {!!letterBeneficiaryQuery.data?.benefitInformation.monthlyAwardAmount && (
+                {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                  <Box
+                    mx={theme.dimensions.standardMarginBetween}
+                    my={theme.dimensions.condensedMarginBetween}
+                    borderBottomWidth={1}
+                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
+                  />
+                )}
+                {hasRecurringPaymentInfo && (
                   <Box
                     pt={
                       disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
@@ -477,16 +479,17 @@ export function HomeScreen({}: HomeScreenProps) {
                     pl={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} $${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}
+                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                       variant={'VeteranStatusBranch'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
                     <TextView
                       accessible={false}
                       importantForAccessibility={'no'}
-                      variant={
-                        'NametagNumber'
-                      }>{`$${roundToHundredthsPlace(letterBeneficiaryQuery.data.benefitInformation.monthlyAwardAmount)}`}</TextView>
+                      variant={'NametagNumber'}>{`${recurringPayment.amount}`}</TextView>
+                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
+                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                    </TextView>
                   </Box>
                 )}
               </Box>
