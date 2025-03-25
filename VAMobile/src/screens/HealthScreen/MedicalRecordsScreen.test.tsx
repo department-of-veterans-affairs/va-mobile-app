@@ -55,7 +55,7 @@ context('MedicalRecordsScreen', () => {
 
   it('should open the Share My Health Data link', () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByTestId('shareMyHealthDataLinkID'))
+    fireEvent.press(screen.getByRole('link', { name: 'Go to the Share My Health Data app' }))
     expect(Alert.alert).toHaveBeenCalled()
   })
 })
