@@ -27,17 +27,23 @@ import { HealthStackParamList } from '../../HealthStackScreens'
 
 type Observation = {
   testCode: string | null
-  valueQuantity: string | null
+  value: {
+    text: string | null
+    type: string | null
+  } | null
   referenceRange: string | null
   status: string | null
   comment: string | null
+  sampleTested: string | null
+  bodySite: string | null
 }
 
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
 
 type LabDisplayData = {
+  sampleTested: string
+  bodySite: string
   location: string
-  siteSampled: string
   dateCompleted: string
   orderedBy: string
 }
@@ -71,7 +77,8 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
   }
 
   const data: LabDisplayData = {
-    siteSampled: labOrTest.attributes?.sampleSite || placeHolder,
+    sampleTested: labOrTest.attributes?.sampleTested || placeHolder,
+    bodySite: labOrTest.attributes?.bodySite || placeHolder,
     location: labOrTest.attributes?.location || placeHolder,
     dateCompleted: labOrTest.attributes?.dateCompleted
       ? formatDateMMMMDDYYYY(labOrTest.attributes.dateCompleted)
@@ -97,14 +104,15 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
   }
 
   const getTextLinesForLabResults = (observation: Observation): Array<TextLine> => {
+    const value = observation?.value?.text || null
     return [
       getTextLine(observation?.testCode, condensedMarginBetween, tinyMarginBetween, 'LabResultHeader') || {
         text: placeHolder,
       },
-      getTextLine(t('labsAndTests.details.valueQuantity'), 0, condensedMarginBetween, 'MobileBodyBold') || {
+      getTextLine(t('labsAndTests.details.result'), 0, condensedMarginBetween, 'MobileBodyBold') || {
         text: placeHolder,
       },
-      getTextLine(observation?.valueQuantity, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(value, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
       getTextLine(t('labsAndTests.details.referenceRange'), 0, condensedMarginBetween, 'MobileBodyBold') || {
         text: placeHolder,
       },
@@ -125,7 +133,6 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
     listOfResults.map((result, index) => {
       const textLines = getTextLinesForLabResults(result)
-      // const a11yValue = t('listPosition', { position: index + 1, total: listOfResults.length })
 
       listItems.push({
         textLines,
@@ -186,7 +193,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       )}
       {observationsPresent && (
         <Box>
-          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.tinyMarginBetween}>
+          <Box mx={theme.dimensions.tinyMarginBetween}>
             <TextView {...titleProps} accessibilityLabel={a11yLabelVA(t('labsAndTests.details.results'))}>
               {t('labsAndTests.details.results')}
             </TextView>

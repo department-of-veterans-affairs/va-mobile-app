@@ -26,7 +26,7 @@ const resetDateRangeToDefault = async () => {
 }
 const TEST_IDS = {
   LIST_ID: 'LabsAndTestsButtonsListTestID',
-  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2019',
+  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2025',
   CHEM_HEM_TEST_ID: 'CH January 23, 2025',
   BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
 }
@@ -52,12 +52,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         fiveMonthsEarlier.monthShort +
-          ' ' +
-          fiveMonthsEarlier.year +
-          ' - ' +
-          threeMonthsEarlier.monthShort +
-          ' ' +
-          threeMonthsEarlier.year,
+        ' ' +
+        fiveMonthsEarlier.year +
+        ' - ' +
+        threeMonthsEarlier.monthShort +
+        ' ' +
+        threeMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -67,12 +67,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         eightMonthsEarlier.monthShort +
-          ' ' +
-          eightMonthsEarlier.year +
-          ' - ' +
-          sixMonthsEarlier.monthShort +
-          ' ' +
-          sixMonthsEarlier.year,
+        ' ' +
+        eightMonthsEarlier.year +
+        ' - ' +
+        sixMonthsEarlier.monthShort +
+        ' ' +
+        sixMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -83,12 +83,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         elevenMonthsEarlier.monthShort +
-          ' ' +
-          elevenMonthsEarlier.year +
-          ' - ' +
-          nineMonthsEarlier.monthShort +
-          ' ' +
-          nineMonthsEarlier.year,
+        ' ' +
+        elevenMonthsEarlier.year +
+        ' - ' +
+        nineMonthsEarlier.monthShort +
+        ' ' +
+        nineMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
@@ -98,12 +98,12 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(
       by.text(
         fourteenMonthsEarlier.monthShort +
-          ' ' +
-          fourteenMonthsEarlier.year +
-          ' - ' +
-          twelveMonthsEarlier.monthShort +
-          ' ' +
-          twelveMonthsEarlier.year,
+        ' ' +
+        fourteenMonthsEarlier.year +
+        ' - ' +
+        twelveMonthsEarlier.monthShort +
+        ' ' +
+        twelveMonthsEarlier.year,
       ),
     ).tap()
     await element(by.id('labsAndTestsDateRangeConfirmID')).tap()

@@ -8,10 +8,11 @@
           "attributes": {
             "display": "Surgical Pathology",
             "testCode": "SP",
-            "dateCompleted": "2019-03-12T16:30:00Z",
-            "sampleSite": "TESTING BONE MARROW",
+            "dateCompleted": "2025-01-12T16:30:00Z",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA TEST LAB"
+            "location": "VA TEST LAB",
+            "sampleTested": "Bone Marrow",
+            "bodySite": "Right leg"
           }
         },
         {
@@ -21,59 +22,95 @@
             "display": "CH",
             "testCode": "CH",
             "dateCompleted": "2025-01-23T22:06:02Z",
-            "sampleSite": "SERUM",
             "encodedData": "",
             "location": "CHYSHR TEST LAB",
             "orderedBy": "ZZGeorge Washington",
+            "sampleTested": "Blood",
+            "bodySite": "Left arm",
             "observations": [
               {
                 "testCode": "GLUCOSE",
-                "valueQuantity": "99 mg/dL",
+                "value": {
+                  "text": "99 mg/dL",
+                  "type": "Quantity"
+                },
                 "referenceRange": "70 - 110",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Blood",
+                "bodySite": "Left arm"
               },
               {
                 "testCode": "UREA NITROGEN",
-                "valueQuantity": "200 mg/dL",
+                "value": {
+                  "text": "200 mg/dL",
+                  "type": "Quantity"
+                },
                 "referenceRange": "7 - 18",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Urine",
+                "bodySite": "Urine"
               },
               {
                 "testCode": "CREATININE",
-                "valueQuantity": "5 mg/dL",
+                "value": {
+                  "text": "5 mg/dL",
+                  "type": "Quantity"
+                },
                 "referenceRange": "0.6 - 1.3",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Urine",
+                "bodySite": "Urine"
               },
               {
                 "testCode": "SODIUM",
-                "valueQuantity": "8 meq/L",
+                "value": {
+                  "text": "8 meq/L",
+                  "type": "Quantity"
+                },
                 "referenceRange": "136 - 145",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Blood",
+                "bodySite": "Left arm"
               },
               {
                 "testCode": "POTASSIUM",
-                "valueQuantity": "24 meq/L",
+                "value": {
+                  "text": "24 meq/L",
+                  "type": "Quantity"
+                },
                 "referenceRange": "3.5 - 5.1",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Blood",
+                "bodySite": "Left arm"
               },
               {
                 "testCode": "CHLORIDE",
-                "valueQuantity": "2 meq/L",
+                "value": {
+                  "text": "2 meq/L",
+                  "type": "Quantity"
+                },
                 "referenceRange": "98 - 107",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Blood",
+                "bodySite": "Left arm"
               },
               {
                 "testCode": "CO2",
-                "valueQuantity": "2 meq/L",
+                "value": {
+                  "text": "2 meq/L",
+                  "type": "Quantity"
+                },
                 "referenceRange": "22 - 29",
                 "status": "final",
-                "comments": ""
+                "comments": "",
+                "sampleTested": "Blood",
+                "bodySite": "Left arm"
               }
             ]
           }
@@ -84,10 +121,11 @@
           "attributes": {
             "display": "Surgical Pathology",
             "testCode": "SP",
-            "dateCompleted": "2019-03-14T16:30:00Z",
-            "sampleSite": "TESTING BONE MARROW",
+            "dateCompleted": "2025-03-14T16:30:00Z",
             "encodedData": "dGhpcyBpcyBhIHRlc3Q=",
-            "location": "VA TEST LAB"
+            "location": "VA TEST LAB",
+            "sampleTested": "Bone Marrow",
+            "bodySite": "Left leg"
           }
         },
         {
@@ -97,9 +135,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 42 days}}",
-            "sampleSite": "Inner Ear",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA Home TEST"
+            "location": "VA Home TEST",
+            "sampleTested": "Tissue",
+            "bodySite": "Right ear"
           }
         },
         {
@@ -109,9 +148,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 65 days}}",
-            "sampleSite": "Brain",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA Home TEST"
+            "location": "VA Home TEST",
+            "sampleTested": "Brain tissue",
+            "bodySite": "Left cranium"
           }
         }
       ]
@@ -125,9 +165,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 5 months}}",
-            "sampleSite": "Skin Culture, left leg",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA TEST LAB"
+            "location": "VA TEST LAB",
+            "sampleTested": "tissue",
+            "bodySite": "Left leg"
           }
         },
         {
@@ -137,9 +178,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 156 days}}",
-            "sampleSite": "Hair",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA Hair Clinic 42"
+            "location": "VA Hair Clinic 42",
+            "sampleTested": "Follicle",
+            "bodySite": "Head"
           }
         },
         {
@@ -149,9 +191,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 131 days}}",
-            "sampleSite": "Tear Duct - right eye",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "VA Eye Clinic"
+            "location": "VA Eye Clinic",
+            "sampleTested": "Body fluids",
+            "bodySite": "Right eye"
           }
         },
         {
@@ -161,9 +204,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 100 days}}",
-            "sampleSite": "BONE MARROW",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Bone Marrow",
+            "bodySite": "Left arm"
           }
         },
         {
@@ -173,9 +217,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 91 days}}",
-            "sampleSite": "Arm",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Blood",
+            "bodySite": "Left arm"
           }
         },
         {
@@ -185,9 +230,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 105 days}}",
-            "sampleSite": "Vein - left arm",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBEZWMgMDEsIDIwMjQgMTA6MzAgIEJsb29kIFRlc3QgUmVzdWx0czogTm9ybWFs",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Blood",
+            "bodySite": "Left arm"
           }
         },
         {
@@ -197,9 +243,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 119 days}}",
-            "sampleSite": "Kidney",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBEZWMgMTUsIDIwMjQgMTQ6MDAgIFVyaW5lIFRlc3QgUmVzdWx0czogTm9ybWFs",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Tissue",
+            "bodySite": "Kidney"
           }
         },
         {
@@ -209,9 +256,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 161 days}}",
-            "sampleSite": "Nasal Swab",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKYW4gMDUsIDIwMjUgMDk6MDAgIFgtUmF5IFJlc3VsdHM6IE5vcm1hbA==",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Mucus",
+            "bodySite": "Left nostril"
           }
         },
         {
@@ -221,9 +269,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 155 days}}",
-            "sampleSite": "Brain",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBGZWIgMTAsIDIwMjUgMTE6MDAgIE1SSSBSZXN1bHRzOiBOb3JtYWw=",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Tissue",
+            "bodySite": "Left cranium"
           }
         },
         {
@@ -233,9 +282,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 111 days}}",
-            "sampleSite": "Abdomen",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBNYXIgMTUsIDIwMjUgMTM6MDAgIENTY2FuIFJlc3VsdHM6IE5vcm1hbA==",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Skin",
+            "bodySite": "Stomach"
           }
         },
         {
@@ -245,9 +295,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 151 days}}",
-            "sampleSite": "Pelvis",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBBcHIgMjAsIDIwMjUgMTU6MDAgIFVsdHJhc291bmQgUmVzdWx0czogTm9ybWFs",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Skin",
+            "bodySite": "Right hip"
           }
         },
         {
@@ -257,9 +308,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 140 days}}",
-            "sampleSite": "Heart",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBNYXkgMjUsIDIwMjUgMTA6MDAgIEVLRyBSZXN1bHRzOiBOb3JtYWw=",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Tissue",
+            "bodySite": "Left Atrial Appendage"
           }
         },
         {
@@ -269,9 +321,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 130 days}}",
-            "sampleSite": "Breast",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdW4gMzAsIDIwMjUgMDk6MDAgIE1hbW1vZ3JhbSBSZXN1bHRzOiBOb3JtYWw=",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Tissue",
+            "bodySite": "Left breast"
           }
         },
         {
@@ -281,9 +334,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 120 days}}",
-            "sampleSite": "Colon",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdWwgMTUsIDIwMjUgMTQ6MDAgIENvbG9ub3Njb3B5IFJlc3VsdHM6IE5vcm1hbA==",
-            "location": "CHYSHR TEST LAB"
+            "location": "CHYSHR TEST LAB",
+            "sampleTested": "Feces",
+            "bodySite": "Colon"
           }
         },
         {
@@ -293,9 +347,10 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 109 days}}",
-            "sampleSite": "Throat",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBKdWwgMTUsIDIwMjUgMTQ6MDAgIENvbG9ub3Njb3B5IFJlc3VsdHM6IE5vcm1hbA==",
-            "location": "DAYSHR TEST LAB"
+            "location": "DAYSHR TEST LAB",
+            "sampleTested": "Throat swab",
+            "bodySite": "Throat"
           }
         }
       ]
@@ -309,8 +364,9 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 8 months}}",
-            "sampleSite": "Skin Culture, left leg",
-            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ",
+            "sampleTested": "Skin",
+            "bodySite": "Left leg"
           }
         }
       ]
@@ -324,8 +380,9 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 11 months}}",
-            "sampleSite": "Skin Culture, left leg",
-            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ",
+            "sampleTested": "Skin",
+            "bodySite": "Left leg"
           }
         },
         {
@@ -335,8 +392,9 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 10 months}}",
-            "sampleSite": "Skin Culture, left leg",
-            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
+            "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ",
+            "sampleTested": "Skin",
+            "bodySite": "Left leg"
           }
         }
       ]
@@ -350,7 +408,6 @@
             "display": "Surgical Pathology",
             "testCode": "SP",
             "dateCompleted": "{{now - 14 months}}",
-            "sampleSite": "throat swab",
             "encodedData": "RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJ"
           }
         }

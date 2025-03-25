@@ -15,9 +15,10 @@ context('LabsAndTestsDetailsScreen', () => {
       dateCompleted: '2018-11-01T15:49:14.000-01:00',
       encodedData:
         'RGF0ZSBTcGVjIHRha2VuOiBOb3YgMDEsIDIwMTggMTU6NDkgIFBhdGhvbG9naXN0Ok1VUlRVWkEgTE9LSEFORFdBTEFEYXRlIFNwZWMgcmVjJ2Q6IE5vdiAwMSwgMjAxOCAxNTo1MSAgUmVzaWRlbnQ6IERhdGUgIGNvbXBsZXRlZDogTm92IDAxLCAyMDE4ICAgICAgICBBY2Nlc3Npb24gIzogU1AgMTggNVN1Ym1pdHRlZCBieTogS0FMQUhBU1RJLCBWRU5LQVRBIFMgICBQcmFjdGl0aW9uZXI6UEFETUEgQk9ERFVMVVJJLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVNwZWNpbWVuOiBCT05FIE1BUlJPVz0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLT0tLVBlcmZvcm1pbmcgTGFib3JhdG9yeTpTdXJnaWNhbCBQYXRob2xvZ3kgUmVwb3J0IFBlcmZvcm1lZCBCeTogQ0hZU0hSIFRFU1QgTEFCMjM2MCBFIFBFUlNISU5HIEJMVkQgQ0hFWUVOTkUsIEZMIDgyMDAxLTUzNTZudWxs',
-      sampleSite: 'TESTING BONE MARROW',
       location: 'VA TEST LAB',
       orderedBy: 'Provider Name',
+      sampleTested: "Bone Marrow",
+      bodySite: "Right leg",
     },
   }
   const chemHemLabsAndTests = {
@@ -28,36 +29,57 @@ context('LabsAndTestsDetailsScreen', () => {
       testCode: 'CH',
       dateCompleted: '2018-11-01T15:49:14.000-01:00',
       encodedData: '',
-      sampleSite: 'TESTING BONE MARROW',
       location: 'VA TEST LAB',
+      sampleTested: "Bloog",
+      bodySite: "Right arm",
       observations: [
         {
           testCode: 'GLUCOSE',
-          valueQuantity: '100',
+          value: {
+            text: "100",
+            type: "Quantity"
+          },
           referenceRange: '70-100',
           status: 'final',
           comment: 'this is a test',
+          sampleTested: "Bloog",
+          bodySite: "Right arm",
         },
         {
           testCode: 'UREA NITROGEN',
-          valueQuantity: '200 mg/dL',
+          value: {
+            text: "200 mg/dL",
+            type: "Quantity"
+          },
           referenceRange: '7 - 18',
           status: 'pending',
           comment: '',
+          sampleTested: "Bloog",
+          bodySite: "Right arm",
         },
         {
           testCode: 'CREATININE',
-          valueQuantity: '5 mg/dL',
+          value: {
+            text: "5 mg/dL",
+            type: "Quantity"
+          },
           referenceRange: '0.6 - 1.3',
           status: 'pending',
           comment: '',
+          sampleTested: "Bloog",
+          bodySite: "Right arm",
         },
         {
           testCode: 'SODIUM',
-          valueQuantity: '8 meq/L',
+          value: {
+            text: "8 meq/L",
+            type: "Quantity"
+          },
           referenceRange: '136 - 145',
           status: 'pending',
           comment: '',
+          sampleTested: "Bloog",
+          bodySite: "Right arm",
         },
       ],
     },
@@ -92,9 +114,14 @@ context('LabsAndTestsDetailsScreen', () => {
     await waitFor(() => expect(getByTestId('decoded-report').children[0]).toEqual('None noted'))
   })
 
-  it('renders the site sampled correctly', async () => {
+  it('renders the body site sampled correctly', async () => {
     const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('siteSampled').children[0]).toEqual('TESTING BONE MARROW'))
+    await waitFor(() => expect(getByTestId('bodySite').children[0]).toEqual('Right leg'))
+  })
+
+  it('renders the sample tested correctly', async () => {
+    const { getByTestId } = initializeTestInstance()
+    await waitFor(() => expect(getByTestId('sampleTested').children[0]).toEqual('Bone Marrow'))
   })
 
   it('renders Ordered By correctly', async () => {
