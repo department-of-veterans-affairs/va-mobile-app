@@ -2,6 +2,7 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -55,7 +56,7 @@ context('MedicalRecordsScreen', () => {
 
   it('should open the Share My Health Data link', () => {
     initializeTestInstance()
-    fireEvent.press(screen.getByRole('link', { name: 'Go to the Share My Health Data app' }))
+    fireEvent.press(screen.getByRole('link', { name: t('vaMedicalRecords.shareMyHealthDataApp.link') }))
     expect(Alert.alert).toHaveBeenCalled()
   })
 })
