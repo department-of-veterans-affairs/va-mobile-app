@@ -214,7 +214,7 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   }
 
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_INPUT_ID)).tapReturnKey()
-  await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(1)
+  await element(by.id(CommonE2eIdConstants.DEMO_BTN_ID)).multiTap(2)
 
   await waitFor(element(by.id(CommonE2eIdConstants.SIGN_IN_BTN_ID)))
     .toBeVisible()
