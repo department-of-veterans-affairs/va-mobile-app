@@ -145,6 +145,5 @@ jobs:
   #        https://slack.com/api/chat.postMessage
   approval:
     name: Run release approval
-    needs: [get_environment]
-    runs-on: ubuntu-latest
+    needs: [release_ticket]
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@chore/10541-releaseApprovalProcess

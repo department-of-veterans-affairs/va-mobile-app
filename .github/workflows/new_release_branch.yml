@@ -18,7 +18,7 @@ jobs:
       - name: Check environment
         id: check-environment
         run: |
-          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[${{ github.ref }}" =~ 10541]]; then
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' ]] || [[${{ github.ref }} =~ 10541]]; then
             echo ::set-output name=env_name::'release'
           else
             echo ::set-output name=env_name::''
