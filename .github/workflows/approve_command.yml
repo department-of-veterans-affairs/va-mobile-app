@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "env_name=test-release" >> $GITHUB_OUTPUT
   test_approval:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Echo some things
         run: |
