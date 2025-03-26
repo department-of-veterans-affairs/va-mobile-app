@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Echo some things
         run: |
-          echo "This is working.  Approval was successful."
+          echo "This is working.  Approval was successful. Adding something"
   # indicate_start:
   #   runs-on: ubuntu-latest
   #   steps:
