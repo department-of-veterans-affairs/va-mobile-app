@@ -28,7 +28,7 @@
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 15 Pro Max",
-        "os": "iOS 18.2"
+        "os": "iOS 17.2"
       }
     },
     "emulator": {
