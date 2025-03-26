@@ -21,13 +21,13 @@ jobs:
         # if: ${{ github.event_name == 'workflow_dispatch' || contains(github.ref, 'release/') }}
         run: |
           echo "env_name=test-release" >> $GITHUB_OUTPUT
-    test_approval:
-      name: Testing the approval
-      runs_on: ubuntu-latest
-      steps:
-        - name: Echo some things
-          run: |
-            echo "This is working.  Approval was successful."
+  test_approval:
+    name: Testing the approval
+    runs_on: ubuntu-latest
+    steps:
+      - name: Echo some things
+        run: |
+          echo "This is working.  Approval was successful."
   # indicate_start:
   #   runs-on: ubuntu-latest
   #   steps:
