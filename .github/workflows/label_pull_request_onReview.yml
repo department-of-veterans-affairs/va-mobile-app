@@ -56,7 +56,7 @@ jobs:
 
           if [[ $(jq '. | length' <<< "$approvals") -ge 1 ]]
             then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "rbontrager", "DJUltraTom", "TKDickson"))] | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "digitalken"))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has QA approval and one other'
                 gh pr edit ${{ github.event.pull_request.number }}  --remove-label "FE-With QA" --add-label "FE-Ready to Merge"
