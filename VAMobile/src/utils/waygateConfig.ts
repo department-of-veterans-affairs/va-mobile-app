@@ -52,6 +52,7 @@ export type WaygateToggleType =
   | 'WG_Appointments'
   | 'WG_FolderMessages'
   | 'WG_PastAppointmentDetails'
+  | 'WG_TravelPay'
   | 'WG_PrescriptionDetails'
   | 'WG_PrescriptionHistory'
   | 'WG_SecureMessaging'
@@ -134,6 +135,7 @@ type WaygateToggleValues = {
   WG_Appointments: Waygate
   WG_FolderMessages: Waygate
   WG_PastAppointmentDetails: Waygate
+  WG_TravelPay: Waygate
   WG_PrescriptionDetails: Waygate
   WG_PrescriptionHistory: Waygate
   WG_SecureMessaging: Waygate
@@ -225,6 +227,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_Appointments: { ...waygateDefault },
   WG_FolderMessages: { ...waygateDefault },
   WG_PastAppointmentDetails: { ...waygateDefault },
+  WG_TravelPay: { ...waygateDefault },
   WG_PrescriptionDetails: { ...waygateDefault },
   WG_PrescriptionHistory: { ...waygateDefault },
   WG_SecureMessaging: { ...waygateDefault },

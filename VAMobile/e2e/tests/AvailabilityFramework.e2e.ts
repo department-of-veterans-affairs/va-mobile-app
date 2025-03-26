@@ -56,6 +56,7 @@ const AFNavigationForIndividual = [
   ['Messages.e2e', 'WG_SecureMessaging', 'Health', 'Messages'],
   ['Appointments.e2e', 'WG_UpcomingAppointmentDetails', 'Health', 'Appointments', 'Podiatry'],
   ['Appointments.e2e', 'WG_PastAppointmentDetails', 'Health', 'Appointments', 'Past', 'Podiatry'],
+  ['TravelPay.e2e', 'WG_TravelPay', 'Health', 'Appointments', 'Past'],
   ['VaccineRecords.e2e', 'WG_VaccineDetails', 'Health', 'V\ufeffA vaccine records', 'January 14, 2021'],
   ['VaccineRecords.e2e', 'WG_VaccineList', 'Health', 'V\ufeffA vaccine records'],
   ['Messages.e2e', 'WG_StartNewMessage', 'Health', 'Messages', 'Start new message'],
