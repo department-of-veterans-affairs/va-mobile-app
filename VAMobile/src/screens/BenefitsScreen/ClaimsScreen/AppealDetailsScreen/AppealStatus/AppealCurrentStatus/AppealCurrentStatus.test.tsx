@@ -434,14 +434,14 @@ context('AppealStatus', () => {
           "Your appeal was merged with another appeal. The Board of Veterans'  Appeals merges appeals so that you can receive a single decision on as many appealed issues as possible. This appeal was merged with an older appeal that was closest to receiving a Board decision.",
         ),
       ).toBeTruthy()
-      expect(screen.getByText('Check')).toBeTruthy()
-      expect(screen.getByText('Your claims and appeals')).toBeTruthy()
+      expect(screen.getByText('Check your ')).toBeTruthy()
+      expect(screen.getByText('claims and appeals')).toBeTruthy()
       expect(screen.getByText('for the appeal that contains the issues merged from this appeal.')).toBeTruthy()
     })
 
     describe('on click of the link text view', () => {
       it('should launch external link', () => {
-        fireEvent.press(screen.getByText('Check'))
+        fireEvent.press(screen.getByText('Check your '))
         expect(mockExternalLinkSpy).toHaveBeenCalled()
       })
     })
@@ -459,12 +459,12 @@ context('AppealStatus', () => {
           'A new law, the Veterans Appeals Improvement and Modernization Act, took effect on February 19, 2019. Although your appeal started before the new law took effect, you asked for it to be converted into one of the new decision review options.',
         ),
       ).toBeTruthy()
-      expect(screen.getByText('Check')).toBeTruthy()
-      expect(screen.getByText('Your claims and appeals')).toBeTruthy()
-      expect(
-        screen.getByText('for the decision review that contains the issues from this appeal, or learn more about'),
-      ).toBeTruthy()
-      expect(screen.getByText('decision reviews under the Appeals Modernization Act.')).toBeTruthy()
+      expect(screen.getByText('Check your ')).toBeTruthy()
+      expect(screen.getByText('claims and appeals')).toBeTruthy()
+      expect(screen.getByText(' for the decision review that contains the issues from this appeal.')).toBeTruthy()
+      expect(screen.getByText('Learn more about decision reviews under the ')).toBeTruthy()
+      expect(screen.getByText('Appeals Modernization Act')).toBeTruthy()
+      expect(screen.getByText('.')).toBeTruthy()
     })
   })
 
