@@ -55,7 +55,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         />
       </Box>
       <Box mx={gutter}>
-        <TextView>{`${t('vaMedicalRecords.shareMyHealthDataApp')}`}</TextView>
+        <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
       </Box>
       <Box mx={gutter}>
         <LinkWithAnalytics
