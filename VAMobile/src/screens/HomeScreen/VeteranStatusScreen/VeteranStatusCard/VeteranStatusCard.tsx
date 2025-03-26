@@ -73,23 +73,8 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   const VASealProps = { svg: VASeal, height: emblemSize, width: emblemSize, testID: 'VASeal' } as IconProps
 
   return (
-    <Box
-      position="relative"
-      width="100%"
-      px={horizontalPadding}
-      pt={20}
-      borderRadius={15}
-      style={{
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 3.75 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.75,
-        // ...Platform.select({
-        //   android: { elevation: 4 },
-        // }),
-      }}>
+    <Box position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
       <Box
-        accessibilityRole="header"
         alignItems="flex-start"
         justifyContent="center"
         backgroundColor={theme.colors.background.carousel as BackgroundVariant}
@@ -101,7 +86,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           paddingBottom: 8,
           paddingRight: 64,
         }}>
-        <TextView color="primaryContrast" variant={titleVariant}>
+        <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant}>
           {t('veteranStatus.title')}
         </TextView>
       </Box>
@@ -110,7 +95,15 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
         borderRadiusBottom={15}
         px={isPortrait ? 18 : 0}
-        pl={isPortrait ? 0 : 18}>
+        pl={isPortrait ? 0 : 18}
+        style={{
+          backgroundColor: theme.colors.background.veteranStatus,
+          shadowColor: '#000000',
+          shadowOffset: { width: 0, height: 3.75 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.75,
+          elevation: 3.75,
+        }}>
         <Box pt={8}>
           <TextView color="primaryContrast" variant={headerVariant}>
             {t('veteranStatus.name')}
@@ -149,7 +142,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           </Box>
         </Box>
 
-        <Box mt={16} pb={16}>
+        <Box mt={8} pb={16}>
           <TextView color="primaryContrast" variant={helperVariant}>
             {t('veteranStatus.noBenefitsEntitled')}
           </TextView>
@@ -157,6 +150,9 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
       </Box>
 
       <Box
+        accessible={true}
+        accessibilityRole="image"
+        accessibilityLabel={t('veteranStatus.imageDescription')}
         position="absolute"
         top={emblemTopOffset}
         right={clampedEmblemRight}

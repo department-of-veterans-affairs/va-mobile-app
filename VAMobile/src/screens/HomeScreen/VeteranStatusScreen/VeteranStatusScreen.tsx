@@ -171,7 +171,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           displayedText={displayedTextPhoneNumber(t('8005389552'))}
           colorOverride={'link'}
           iconColorOverride={theme.colors.icon.link}
-          ttyBypass={true}
         />
       </Box>
     </LargePanel>
