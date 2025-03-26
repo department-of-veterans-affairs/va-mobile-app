@@ -43,7 +43,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={gutter}>
-        <TextView>{`${t('vaMedicalRecords.viewCompleteRecord')}:`}</TextView>
+        <TextView>{t('vaMedicalRecords.viewCompleteRecord')}</TextView>
       </Box>
       <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
@@ -62,7 +62,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           type="url"
           url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
           text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-          a11yLabel={a11yLabelVA(t('vaMedicalRecords.shareMyHealthDataApp.link'))}
+          a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
           testID="shareMyHealthDataLinkID"
         />
       </Box>
