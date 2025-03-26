@@ -43,7 +43,9 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={gutter}>
-        <TextView>{t('vaMedicalRecords.viewCompleteRecord')}</TextView>
+        <TextView accessibilityLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}>
+          {t('vaMedicalRecords.viewCompleteRecord')}
+        </TextView>
       </Box>
       <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
