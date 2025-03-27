@@ -212,6 +212,7 @@ const getStatusHeadingAndTitle = (
         t('appealDetails.statutoryOptInDescription4'),
         t('appealDetails.statutoryOptInDescription5'),
         t('appealDetails.statutoryOptInDescription6'),
+        t('appealDetails.statutoryOptInDescription7'),
       ]
       break
     case AppealStatusTypesConstants.evidentiary_period:
@@ -418,7 +419,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
                 <TextView>
                   <TextView variant="MobileBody">{details[4]}</TextView>
                   <TextView variant="MobileBodyLink">{details[5]}</TextView>
-                  <TextView variant="MobileBody">.</TextView>
+                  <TextView variant="MobileBody">{details[6]}</TextView>
                 </TextView>
               </Pressable>
             </Box>

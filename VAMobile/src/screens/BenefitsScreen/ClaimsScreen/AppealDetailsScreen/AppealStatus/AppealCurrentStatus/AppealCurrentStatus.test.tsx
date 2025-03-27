@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AppealAOJTypes, AppealStatusData, AppealTypes } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -169,21 +170,15 @@ context('AppealStatus', () => {
     it('should display the pending_form9 data', () => {
       status.type = 'pending_form9'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: 'Please review your Statement of the Case' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appealDetails.pendingForm9Title') })).toBeTruthy()
       expect(
         screen.getByText(
-          "The Veterans Benefits Administration sent you a Statement of the Case on . The Statement of the Case explains the reasons why they couldn't fully grant your appeal.",
+          t('appealDetails.pendingForm9Description1', { aojDesc: 'Veterans Benefits Administration', date: '' }),
         ),
       ).toBeTruthy()
-      expect(
-        screen.getByText(
-          'You’ll have to take one of these actions within 60 days from the date on the Statement of the Case:',
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByText("Submit VA Form 9 to continue your appeal to the Board of Veterans' Appeals, or"),
-      ).toBeTruthy()
-      expect(screen.getByText('Opt in to the new decision review process')).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingForm9Description2'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingForm9Description3') + t('appealDetails.or'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.pendingForm9Description4'))).toBeTruthy()
     })
   })
 
@@ -428,15 +423,11 @@ context('AppealStatus', () => {
     })
 
     it('should display the merged data', () => {
-      expect(screen.getByRole('header', { name: 'Your appeal was merged' })).toBeTruthy()
-      expect(
-        screen.getByText(
-          "Your appeal was merged with another appeal. The Board of Veterans'  Appeals merges appeals so that you can receive a single decision on as many appealed issues as possible. This appeal was merged with an older appeal that was closest to receiving a Board decision.",
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('Check your ')).toBeTruthy()
-      expect(screen.getByText('claims and appeals')).toBeTruthy()
-      expect(screen.getByText('for the appeal that contains the issues merged from this appeal.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appealDetails.mergedTitle') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.mergedDescription1'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.mergedDescription2'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.mergedDescription3'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.mergedDescription4'))).toBeTruthy()
     })
 
     describe('on click of the link text view', () => {
@@ -451,20 +442,14 @@ context('AppealStatus', () => {
     it('should display the statutory_opt_in data', () => {
       status.type = 'statutory_opt_in'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(
-        screen.getByRole('header', { name: 'You requested a decision review under the Appeals Modernization Act' }),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(
-          'A new law, the Veterans Appeals Improvement and Modernization Act, took effect on February 19, 2019. Although your appeal started before the new law took effect, you asked for it to be converted into one of the new decision review options.',
-        ),
-      ).toBeTruthy()
-      expect(screen.getByText('Check your ')).toBeTruthy()
-      expect(screen.getByText('claims and appeals')).toBeTruthy()
-      expect(screen.getByText(' for the decision review that contains the issues from this appeal.')).toBeTruthy()
-      expect(screen.getByText('Learn more about decision reviews under the ')).toBeTruthy()
-      expect(screen.getByText('Appeals Modernization Act')).toBeTruthy()
-      expect(screen.getByText('.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appealDetails.statutoryOptIn') })).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription1'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription2'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription3'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription4'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription5'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription6'))).toBeTruthy()
+      expect(screen.getByText(t('appealDetails.statutoryOptInDescription7'))).toBeTruthy()
     })
   })
 
