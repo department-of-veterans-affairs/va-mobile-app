@@ -432,7 +432,7 @@ context('AppealStatus', () => {
 
     describe('on click of the link text view', () => {
       it('should launch external link', () => {
-        fireEvent.press(screen.getByText('Check your '))
+        fireEvent.press(screen.getByText(t('appealDetails.mergedDescription2')))
         expect(mockExternalLinkSpy).toHaveBeenCalled()
       })
     })
