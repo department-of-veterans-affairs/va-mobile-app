@@ -86,7 +86,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 15.2
+          xcode-version: 16.2
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
