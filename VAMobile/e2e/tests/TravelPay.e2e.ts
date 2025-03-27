@@ -72,6 +72,9 @@ const fillHomeAddressFields = async () => {
   // Set the city
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.STATE_ID)))
+    .toBeVisible()
+    .withTimeout(2000)
   // Set the state
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await waitFor(element(by.text(TravelPayE2eIdConstants.STATE_TEXT)))
