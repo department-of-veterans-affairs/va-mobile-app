@@ -1,15 +1,15 @@
-name: '[Release] Merge to main and Create PR to develop'
+name: "[Release] Merge to main and Create PR to develop"
 
 on:
   workflow_call:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: "Version Number (eg. v1.1.0)"
         type: string
         required: true
     secrets:
       GH_ACTIONS_PAT:
-        description: 'PAT token from composite parent workflow'
+        description: "PAT token from composite parent workflow"
         required: true
     outputs:
       devPrUrl:
@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: "Version Number (eg. v1.1.0)"
         required: true
         type: string
 
@@ -30,16 +30,16 @@ jobs:
       devPrUrl: ${{steps.urls.outputs.dev}}
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
-      - name: 'Checkout repo'
+      - name: "Checkout repo"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_ACTIONS_PAT }}
-      - name: 'Set up GH CLI secret'
+      - name: "Set up GH CLI secret"
         run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
-      - name: 'Log into GH CLI'
+      - name: "Log into GH CLI"
         run: gh auth login --with-token < token.txt
-      - name: 'Create PR to merge changes back to develop'
+      - name: "Create PR to merge changes back to develop"
         run: |
           MERGE_TO_DEV_BRANCH=release-${{inputs.version}}-to-develop
           git config --global user.name 'VA Automation Bot'
@@ -48,7 +48,7 @@ jobs:
           git checkout -b $MERGE_TO_DEV_BRANCH
           git push -u origin $MERGE_TO_DEV_BRANCH
           echo "DEV_PR=$(gh pr create -B develop -t "Merge ${{inputs.version}} to develop" -b "PR to merge ${{inputs.version}} release branch changes into develop")" >> $GITHUB_ENV
-      - name: 'Merge changes to main and tag for release build'
+      - name: "Merge changes to main and tag for release build"
         run: |
           MERGE_TO_MAIN_BRANCH=merge-${{inputs.version}}-to-main
           git config --global user.name 'VA Automation Bot'
@@ -64,8 +64,8 @@ jobs:
           git tag -a ${{inputs.version}} -m ${{inputs.version}}
           git push origin ${{inputs.version}}
           echo "RELEASE_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-      - name: 'Set Outputs'
+      - name: "Set Outputs"
         id: urls
         run: |
-          echo "::set-output name=dev::${{env.DEV_PR}}"
-          echo "::set-output name=release::${{env.RELEASE_HASH}}"
+          echo "dev=${{env.DEV_PR}}" >> $GITHUB_OUTPUT
+          echo "release=${{env.RELEASE_HASH}}" >> $GITHUB_OUTPUT
