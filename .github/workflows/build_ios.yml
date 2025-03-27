@@ -56,7 +56,7 @@ env:
 
 jobs:
   build_ios:
-    runs-on: macos-14-xlarge
+    runs-on: macos-15-xlarge
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
