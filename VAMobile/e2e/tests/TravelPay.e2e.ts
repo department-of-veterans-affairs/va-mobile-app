@@ -44,7 +44,7 @@ const TravelPayE2eIdConstants = {
   SUCCESS_NEXT_TEXT2_ID: 'successNextText2ID',
   COUNTRY_TEXT: 'United States',
   STATE_TEXT: 'Arizona',
-  FULL_ADDRESS_TEXT: 'Home address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
+  FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
 }
 
 const fillHomeAddressFields = async () => {
@@ -176,7 +176,7 @@ const checkAddressScreen = async (existingAddress: boolean) => {
   if (existingAddress) {
     await expect(element(by.id(TravelPayE2eIdConstants.ADDRESS_QUALIFIER_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.REFER_TO_PORTAL_ID))).toExist()
-    await expect(element(by.text(TravelPayE2eIdConstants.FULL_ADDRESS_TEXT))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.FULL_ADDRESS_TEXT_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.ADDRESS_PO_BOX_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID))).toExist()
