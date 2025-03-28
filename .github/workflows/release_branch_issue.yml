@@ -1,149 +1,144 @@
 name: "[Release] New Release Issue"
 
 on:
-  push:
-    branches:
-      - chore/10541-releaseApprovalProcess
-
-  # create:
+  create:
 jobs:
   release_ticket:
-    # if: ${{ contains(github.ref, 'refs/heads/release/') }}
+    if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
-    # outputs:
-    #   ticketNumber: ${{steps.create_issue.outputs.number}}
-    #   versionNumber: ${{env.VERSION}}
-    #   releaseDate: ${{env.RELEASE_DATE}}
-    #   qaDueDate: ${{env.QA_DUE_DATE}}
-    #   prodDueDate: ${{env.PROD_DUE_DATE}}
-    #   vaDueDate: ${{env.VA_DUE_DATE}}
+    outputs:
+      ticketNumber: ${{steps.create_issue.outputs.number}}
+      versionNumber: ${{env.VERSION}}
+      releaseDate: ${{env.RELEASE_DATE}}
+      qaDueDate: ${{env.QA_DUE_DATE}}
+      prodDueDate: ${{env.PROD_DUE_DATE}}
+      vaDueDate: ${{env.VA_DUE_DATE}}
     steps:
-      - run: echo "This is working"
-      # - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
-      # - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      # - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      # - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      # - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
-      # - uses: actions/checkout@v3
-      # - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
-      # - run: gh auth login --with-token < token.txt
-      # - run: |
-      #     sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-      #     sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
-      #     header='| Issue | Title | Notes |
-      #     |-------|-------|-------|
-      #     '
-      #     table="${header}${sev1}${sev2}"
-      #     echo 'TABLE<<EOF' >> $GITHUB_ENV
-      #     echo "${table}" >> $GITHUB_ENV
-      #     echo 'EOF' >> $GITHUB_ENV
-      # - name: Create Release Ticket
-      #   uses: JasonEtco/create-an-issue@v2
-      #   with:
-      #     filename: .github/ISSUE_TEMPLATE/release_ticket.md
-      #   env:
-      #     versionNumber: ${{ env.VERSION }}
-      #     qaDueDate: ${{env.QA_DUE_DATE}}
-      #     prodDueDate: ${{env.PROD_DUE_DATE}}
-      #     vaDueDate: ${{env.VA_DUE_DATE}}
-      #     releaseDate: ${{ env.RELEASE_DATE }}
-      #     issues: ${{ env.TABLE }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   id: create_issue
-      # - name: Assign Users to Release Ticket
-      #   if: ${{ success() }}
-      #   run: |
-      #     # Fetch GitHub Group Members
-      #     TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
-      #     ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
-      #     ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
-      #     gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
-  # create_testrail_milestone:
-  #   uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
-  #   needs: release_ticket
-  #   secrets:
-  #     TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
-  #     TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
-  # start_testrail_run:
-  #   uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
-  #   needs: [release_ticket, create_testrail_milestone]
-  #   with:
-  #     version: ${{ needs.release_ticket.outputs.versionNumber }}
-  #     releaseDate: ${{ needs.release_ticket.outputs.releaseDate }}
-  #     ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
-  #     milestoneId: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
-  #   secrets:
-  #     TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
-  #     TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
-  # update_ticket:
-  #   runs-on: ubuntu-latest
-  #   needs: [release_ticket, create_testrail_milestone, start_testrail_run]
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-  #     - run: gh auth login --with-token < token.txt
-  #     - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
-  #     - run: |
-  #         TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
-  #         RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-  #         OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
-  #         NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
-  #         gh issue edit $TICKET_NUM -b $NEW_BODY
-  # start_slack_thread:
-  #   name: Start Slack thread
-  #   needs: release_ticket
-  #   uses: ./.github/workflows/start_slack_thread.yml
-  #   secrets: inherit
-  #   with:
-  #     channel_name: va-mobile-app
-  #     message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
-  # release_coordination:
-  #   name: release coordination
-  #   if: ${{ success() }}
-  #   needs: [start_slack_thread, release_ticket]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Map GitHub usernames to Slack IDs
-  #       id: map_slack_ids
-  #       run: |
-  #         declare -A GITHUB_TO_SLACK_MAP
-  #         GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
-  #         # Example: Convert mapping to environment variables
-  #         for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
-  #           echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
-  #         done
-  #     - name: Notify Slack for release coordination
-  # env:
-  #   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-  #   SLACK_rtwell: $rtwell
-  # run: |
-  #   SLACK_MESSAGE=$(cat <<EOF
-  #   {
-  #     "channel": "va-mobile-app",
-  #     "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
-  #   *Release Report:* Github Report Link to be provided\n\
-  #   *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
-  #   *Approval Timing:*\n\
-  #   - *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\
-  #   - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n\
-  #   - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
-  #   - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
-  #   *Contacts:*\n\
-  #   - *VA PO for awareness:* CC: <@${SLACK_rtwell}>.",
-  #     "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
-  #     "unfurl_links": false,
-  #     "unfurl_media": false
-  #   }
-  #   EOF
-  #   )
-  #   echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
-  #        -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-  #        -H 'Content-type: application/json' \
-  #        -d @- \
-  #        https://slack.com/api/chat.postMessage
+      - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+      - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - uses: actions/checkout@v3
+      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
+      - run: gh auth login --with-token < token.txt
+      - run: |
+          sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
+          sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
+          header='| Issue | Title | Notes |
+          |-------|-------|-------|
+          '
+          table="${header}${sev1}${sev2}"
+          echo 'TABLE<<EOF' >> $GITHUB_ENV
+          echo "${table}" >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Create Release Ticket
+        uses: JasonEtco/create-an-issue@v2
+        with:
+          filename: .github/ISSUE_TEMPLATE/release_ticket.md
+        env:
+          versionNumber: ${{ env.VERSION }}
+          qaDueDate: ${{env.QA_DUE_DATE}}
+          prodDueDate: ${{env.PROD_DUE_DATE}}
+          vaDueDate: ${{env.VA_DUE_DATE}}
+          releaseDate: ${{ env.RELEASE_DATE }}
+          issues: ${{ env.TABLE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create_issue
+      - name: Assign Users to Release Ticket
+        if: ${{ success() }}
+        run: |
+          # Fetch GitHub Group Members
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-release-approvers/members --jq 'map(.login) | join(",")')
+          ASSIGNEES=$(echo $TEAM_MEMBERS | paste -sd "," -)
+          ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
+          gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+  create_testrail_milestone:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
+    needs: release_ticket
+    secrets:
+      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
+      TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
+  start_testrail_run:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/start_test_rail_run.yml@develop
+    needs: [release_ticket, create_testrail_milestone]
+    with:
+      version: ${{ needs.release_ticket.outputs.versionNumber }}
+      releaseDate: ${{ needs.release_ticket.outputs.releaseDate }}
+      ticketNumber: ${{ needs.release_ticket.outputs.ticketNumber }}
+      milestoneId: ${{ needs.create_testrail_milestone.outputs.milestoneId }}
+    secrets:
+      TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
+      TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
+  update_ticket:
+    runs-on: ubuntu-latest
+    needs: [release_ticket, create_testrail_milestone, start_testrail_run]
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+      - run: gh auth login --with-token < token.txt
+      - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
+      - run: |
+          TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
+          RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
+          OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
+          NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
+          gh issue edit $TICKET_NUM -b $NEW_BODY
+  start_slack_thread:
+    name: Start Slack thread
+    needs: release_ticket
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app
+      message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
+  release_coordination:
+    name: release coordination
+    if: ${{ success() }}
+    needs: [start_slack_thread, release_ticket]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["rtwell"]="UEY4D750B"
+          # Example: Convert mapping to environment variables
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
+      - name: Notify Slack for release coordination
+  env:
+    SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+    SLACK_rtwell: $rtwell
+  run: |
+    SLACK_MESSAGE=$(cat <<EOF
+    {
+      "channel": "va-mobile-app",
+      "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
+    *Release Report:* Github Report Link to be provided\n\
+    *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
+    *Approval Timing:*\n\
+    - *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\
+    - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n\
+    - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
+    - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
+    *Contacts:*\n\
+    - *VA PO for awareness:* CC: <@${SLACK_rtwell}>.",
+      "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
+      "unfurl_links": false,
+      "unfurl_media": false
+    }
+    EOF
+    )
+    echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
+         -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+         -H 'Content-type: application/json' \
+         -d @- \
+         https://slack.com/api/chat.postMessage
   approval:
     name: Run release approval
     needs: [release_ticket]
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@chore/10541-releaseApprovalProcess
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@develop
