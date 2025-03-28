@@ -2,13 +2,10 @@ name: "[Release] New Release Branch"
 
 on:
   workflow_dispatch:
-  # Testing release process.  Will revert.
-  # schedule:
-  #   # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
-  #   - cron: '00 6 * * 3'
-  push:
-    branches:
-      - chore/10541-releaseApprovalProcess
+  Testing release process.  Will revert.
+  schedule:
+    # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
+    - cron: '00 6 * * 3'
 jobs:
   get-workflow-environment:
     runs-on: ubuntu-latest
@@ -28,27 +25,25 @@ jobs:
     needs: [get-workflow-environment]
     environment: ${{ needs.get-workflow-environment.outputs.environment_name }}
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: VAMobile
+    defaults:
+      run:
+        working-directory: VAMobile
     steps:
-      - name: Echoing it works
-        run: echo "It Works!!"
-      # - name: Checkout
-      #   uses: actions/checkout@v3
-      #   with:
-      #     fetch-depth: 0
-      #     token: ${{ secrets.GH_ACTIONS_PAT }}
-      # - name: Set username and email
-      #   run: |
-      #     git config --global user.name 'VA Automation Bot'
-      #     git config --global user.email 'va-mobileapp@adhocteam.us'
-      # - name: Cut release branch
-      #   env:
-      #     GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
-      #   run: |
-      #     if [[ "${{ needs.get-workflow-environment.outputs.environment_name }}" == "manual-release" ]]; then
-      #       ./release_branch.sh --bypass-date-check
-      #     else
-      #       ./release_branch.sh
-      #     fi
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_ACTIONS_PAT }}
+      - name: Set username and email
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+      - name: Cut release branch
+        env:
+          GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
+        run: |
+          if [[ "${{ needs.get-workflow-environment.outputs.environment_name }}" == "manual-release" ]]; then
+            ./release_branch.sh --bypass-date-check
+          else
+            ./release_branch.sh
+          fi
