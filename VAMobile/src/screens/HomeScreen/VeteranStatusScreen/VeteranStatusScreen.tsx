@@ -59,17 +59,17 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (!serviceHistory || serviceHistory.length === 0) {
       return null
     }
-    const service = serviceHistory[0]
+    const service = serviceHistory[serviceHistory.length - 1]
     const branchOfService = t('militaryInformation.branch', {
       branch: service.branchOfService,
     })
 
-    const beginYear = service.beginDate ? new Date(service.beginDate).getFullYear() : ''
-    const endYear = service.endDate ? new Date(service.endDate).getFullYear() : ''
+    const beginYear = service.beginDate.slice(0, 4)
+    const endYear = service.endDate.slice(0, 4)
 
     return (
       <Box>
-        <TextView variant="MobileBody" color="primaryContrast">
+        <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusMilitaryServiceTestID">
           {branchOfService} • {beginYear}-{endYear}
         </TextView>
       </Box>

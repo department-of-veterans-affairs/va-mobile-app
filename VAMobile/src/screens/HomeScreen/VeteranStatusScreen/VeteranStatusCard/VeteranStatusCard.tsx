@@ -5,10 +5,9 @@ import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-componen
 
 import { BranchOfService } from 'api/types'
 import { BackgroundVariant, Box, TextView } from 'components'
+import VASeal from 'components/VAIcon/svgs/VASeal.svg'
 import { NAMESPACE } from 'constants/namespaces'
 import { useOrientation, useTheme } from 'utils/hooks'
-
-import VASeal from '../../../../components/VAIcon/svgs/VASeal.svg'
 
 // Constants for layout/orientation
 const LANDSCAPE_PADDING = 144
@@ -70,7 +69,12 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   const helperVariant = isPortrait ? 'HelperText' : 'VeteranStatusProof'
 
   // VASeal SVG
-  const VASealProps = { svg: VASeal, height: emblemSize, width: emblemSize, testID: 'VASeal' } as IconProps
+  const VASealProps = {
+    svg: VASeal,
+    height: emblemSize,
+    width: emblemSize,
+    testID: 'VeteranStatusCardVAIcon',
+  } as IconProps
 
   return (
     <Box position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
@@ -108,7 +112,11 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           <TextView color="primaryContrast" variant={headerVariant}>
             {t('veteranStatus.name')}
           </TextView>
-          <TextView color="primaryContrast" variant="MobileBody" textTransform="capitalize">
+          <TextView
+            color="primaryContrast"
+            variant="MobileBody"
+            textTransform="capitalize"
+            testID="veteranStatusFullNameTestID">
             {fullName?.toLowerCase()}
           </TextView>
         </Box>
@@ -117,7 +125,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           <TextView color="primaryContrast" variant={headerVariant}>
             {t('veteranStatus.latestPeriodOfService')}
           </TextView>
-          <TextView color="primaryContrast" variant="MobileBody">
+          <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusMilitaryServiceTestID">
             {getLatestPeriodOfService()}
           </TextView>
         </Box>
@@ -127,7 +135,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             <TextView color="primaryContrast" variant={headerVariant}>
               {t('veteranStatus.dodIdNumber')}
             </TextView>
-            <TextView color="primaryContrast" variant="MobileBody">
+            <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDODTestID">
               {edipi}
             </TextView>
           </Box>
@@ -136,7 +144,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             <TextView color="primaryContrast" variant={headerVariant}>
               {t('veteranStatus.disabilityRating')}
             </TextView>
-            <TextView color="primaryContrast" variant="MobileBody">
+            <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDisabilityRatingTestID">
               {percentText}
             </TextView>
           </Box>
