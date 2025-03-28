@@ -51,9 +51,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const percentText = ratingIsDefined ? t('disabilityRating.percent', { combinedPercent: ratingPercent }) : undefined
   const branch = mostRecentBranch || ('' as BranchOfService)
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
-  const containerStyle = !isPortrait
-    ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH, width: '100%' as unknown as number }
-    : {}
+  const containerStyle = !isPortrait ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH } : {}
 
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
@@ -148,7 +146,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           getLatestPeriodOfService={getLatestPeriodOfService}
         />
       )}
-      <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding}>
+      <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding} width="100%">
         <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
           {t('veteranStatus.about')}
         </TextView>
