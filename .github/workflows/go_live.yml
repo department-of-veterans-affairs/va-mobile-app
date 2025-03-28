@@ -1,12 +1,12 @@
 # Promotes builds in App Store and Google Play to production
 
-name: '[Release] Go Live'
+name: "[Release] Go Live"
 
 on:
   workflow_dispatch:
   # Tuesdays 12:00 UTC, 8AM ET, 5AM PT
   schedule:
-    - cron: '0 12 * * 2'
+    - cron: "0 12 * * 2"
 
 jobs:
   get_workflow_environment:
@@ -18,9 +18,10 @@ jobs:
         id: check-environment
         run: |
           if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
-            echo ::set-output name=env_name::'manual-release'
+            echo env_name='manual-release' >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=env_name::''
+            echo env_name='' >> $GITHUB_OUTPUT
+
           fi
 
   # This is a separate job because the build_ios & build_android workflows are already reserving "environment"
