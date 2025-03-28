@@ -1,6 +1,6 @@
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
-export const primaryTextColor = colors.vadsColorBaseDarker
+export const primaryTextColor = colors.vadsColorBase
 
 export const lightTheme = {
   background: {
