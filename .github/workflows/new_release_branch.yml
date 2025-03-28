@@ -2,7 +2,7 @@ name: "[Release] New Release Branch"
 
 on:
   workflow_dispatch:
-  Testing release process.  Will revert.
+  # Testing release process.  Will revert.
   schedule:
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
     - cron: "00 6 * * 3"
