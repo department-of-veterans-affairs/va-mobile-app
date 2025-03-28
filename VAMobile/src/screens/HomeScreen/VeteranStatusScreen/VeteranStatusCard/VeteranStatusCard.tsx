@@ -10,8 +10,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useOrientation, useTheme } from 'utils/hooks'
 
 // Constants for layout/orientation
-const LANDSCAPE_PADDING = 144
+const LANDSCAPE_PADDING = 44
 const PORTRAIT_PADDING = 18
+
+const MAX_WIDTH = 672
 
 const EMBLEM_SIZE_LANDSCAPE = 82
 const EMBLEM_SIZE_PORTRAIT = 50
@@ -59,6 +61,9 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   const topStripHeight = isPortrait ? TOP_STRIP_HEIGHT_PORTRAIT : TOP_STRIP_HEIGHT_LANDSCAPE
   const emblemTopOffset = isPortrait ? EMBLEM_TOP_PORTRAIT : EMBLEM_TOP_LANDSCAPE
 
+  // If landscape, we add MAX_WIDTH & center the box
+  const containerStyle = isLandscape ? { maxWidth: MAX_WIDTH, alignSelf: 'center' as const } : {}
+
   // Compute where the emblem sits horizontally
   const emblemRightOffset = horizontalPadding + EMBLEM_OFFSET_FROM_CARD_RIGHT
   const clampedEmblemRight = emblemRightOffset < 0 ? 16 : emblemRightOffset
@@ -77,7 +82,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   } as IconProps
 
   return (
-    <Box position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
+    <Box style={containerStyle} position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
       <Box
         alignItems="flex-start"
         justifyContent="center"
@@ -90,7 +95,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           paddingBottom: 8,
           paddingRight: 64,
         }}>
-        <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant}>
+        <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant} maxFontSizeMultiplier={1.3}>
           {t('veteranStatus.title')}
         </TextView>
       </Box>
@@ -168,7 +173,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         height={emblemSize}
         borderRadius={emblemSize / 2}
         overflow="hidden">
-        <Icon {...VASealProps} />
+        <Icon {...VASealProps} preventScaling={true} />
       </Box>
     </Box>
   )

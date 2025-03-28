@@ -27,8 +27,9 @@ import VeteranStatusCard from './VeteranStatusCard/VeteranStatusCard'
 
 // import PhotoUpload from 'components/PhotoUpload'
 
-const LANDSCAPE_PADDING = 144
+const LANDSCAPE_PADDING = 44
 const PORTRAIT_PADDING = 18
+const MAX_WIDTH = 672
 
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
@@ -50,6 +51,9 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const percentText = ratingIsDefined ? t('disabilityRating.percent', { combinedPercent: ratingPercent }) : undefined
   const branch = mostRecentBranch || ('' as BranchOfService)
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
+  const containerStyle = !isPortrait
+    ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH, width: '100%' as unknown as number }
+    : {}
 
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
@@ -144,7 +148,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           getLatestPeriodOfService={getLatestPeriodOfService}
         />
       )}
-      <Box my={theme.dimensions.formMarginBetween} px={horizontalPadding}>
+      <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding}>
         <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
           {t('veteranStatus.about')}
         </TextView>
