@@ -28,27 +28,37 @@ function ReviewClaimScreen({}: ReviewClaimScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="reviewTitleID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.reviewTitle')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="reviewTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.reviewText')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.what')}</TextView>
-            <TextView variant="MobileBody">{t('travelPay.reviewDetails.milageOnly')}</TextView>
+            <TextView testID="whatID" variant="MobileBodyBold">
+              {t('travelPay.reviewDetails.what')}
+            </TextView>
+            <TextView testID="milageOnlyID" variant="MobileBody">
+              {t('travelPay.reviewDetails.milageOnly')}
+            </TextView>
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.how')}</TextView>
-            <TextView variant="MobileBody">{t('travelPay.reviewDetails.vehicle')}</TextView>
+            <TextView testID="howID" variant="MobileBodyBold">
+              {t('travelPay.reviewDetails.how')}
+            </TextView>
+            <TextView testID="vehicleID" variant="MobileBody">
+              {t('travelPay.reviewDetails.vehicle')}
+            </TextView>
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextArea>
-            <TextView variant="MobileBodyBold">{t('travelPay.reviewDetails.where')}</TextView>
+            <TextView testID="whereID" variant="MobileBodyBold">
+              {t('travelPay.reviewDetails.where')}
+            </TextView>
             {address.map((line: TextLine) => (
               <>
                 <TextView key={line.text} variant="MobileBody">
