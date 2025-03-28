@@ -15,10 +15,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.4.1",
-    "@docusaurus/plugin-content-docs": "^2.4.1",
-    "@docusaurus/preset-classic": "2.4.1",
-    "@docusaurus/theme-mermaid": "^3.7.0",
+    "@docusaurus/core": "^2.4.3",
+    "@docusaurus/plugin-content-docs": "^2.4.3",
+    "@docusaurus/preset-classic": "^2.4.3",
+    "@docusaurus/theme-mermaid": "^2.4.3",
     "@mdx-js/react": "^1.6.21",
     "@svgr/webpack": "^6.1.2",
     "babel-loader": "^9.1.3",
