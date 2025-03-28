@@ -110,34 +110,34 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
       - name: Notify Slack for release coordination
-  env:
-    SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-    SLACK_rtwell: $rtwell
-  run: |
-    SLACK_MESSAGE=$(cat <<EOF
-    {
-      "channel": "va-mobile-app",
-      "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
-    *Release Report:* Github Report Link to be provided\n\
-    *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
-    *Approval Timing:*\n\
-    - *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\
-    - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n\
-    - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
-    - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
-    *Contacts:*\n\
-    - *VA PO for awareness:* CC: <@${SLACK_rtwell}>.",
-      "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
-      "unfurl_links": false,
-      "unfurl_media": false
-    }
-    EOF
-    )
-    echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
-         -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-         -H 'Content-type: application/json' \
-         -d @- \
-         https://slack.com/api/chat.postMessage
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          SLACK_rtwell: $rtwell
+        run: |
+          SLACK_MESSAGE=$(cat <<EOF
+          {
+            "channel": "va-mobile-app",
+            "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
+          *Release Report:* Github Report Link to be provided\n\
+          *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
+          *Approval Timing:*\n\
+          - *QA Approval Due:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\
+          - *Product Approval Due:* ${{ needs.release_ticket.outputs.prodDueDate }}\n\
+          - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
+          - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
+          *Contacts:*\n\
+          - *VA PO for awareness:* CC: <@${SLACK_rtwell}>.",
+            "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
+            "unfurl_links": false,
+            "unfurl_media": false
+          }
+          EOF
+          )
+          echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
+               -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+               -H 'Content-type: application/json' \
+               -d @- \
+               https://slack.com/api/chat.postMessage
   approval:
     name: Run release approval
     needs: [release_ticket]
