@@ -1,7 +1,7 @@
 {
   "directory": {
     "allergies": ["Allergies"],
-    "appointments": ["Appointments", "AppointmentsExpanded"],
+    "appointments": ["Appointments", "AppointmentsExpanded", "TravelPay"],
     "authorizedServices": [
       "Appeals",
       "AppealsExpanded",
@@ -224,12 +224,13 @@
     "BiometricsPreferenceScreen": [],
     "SyncScreen": [],
     "WebviewScreen": [],
-    "styles": []
+    "styles": [],
+    "TravelPay": ["TravelPay"]
   },
   "files": {
     "allergies.ts": ["Allergies"],
     "accounts.ts": ["DirectDeposit"],
-    "appointments.ts": ["Appointments", "AppointmentsExpanded"],
+    "appointments.ts": ["Appointments", "AppointmentsExpanded", "TravelPay"],
     "claims.ts": ["Claims", "Appeals", "AppealsExpanded"],
     "common.ts": [
       "Allergies",
@@ -399,6 +400,7 @@
       "Prescriptions",
       "ProfileScreen",
       "SettingsScreen",
+      "TravelPay",
       "VaccineRecords",
       "VALetters",
       "VeteransCrisisLine",

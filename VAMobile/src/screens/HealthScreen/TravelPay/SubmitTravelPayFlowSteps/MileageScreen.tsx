@@ -22,13 +22,13 @@ function MileageScreen({ navigation, route }: MileageScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="milageQuestionID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.mileageQuestion')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="milageQualifierID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.mileageQualifier')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="referToPortalID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.referToPortal')}
         </TextView>
       </Box>

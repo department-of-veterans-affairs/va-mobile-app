@@ -16,19 +16,19 @@ function SubmitSuccessScreen() {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="successTitleID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.success.title')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="successTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.success.text', { claimId: '12345' })}
         </TextView>
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="successNextTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.success.nextTitle')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="successNextTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.success.nextText')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.success.nextText2')}
         </TextView>
       </Box>
