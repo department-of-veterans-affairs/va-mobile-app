@@ -81,6 +81,22 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
     testID: 'VeteranStatusCardVAIcon',
   } as IconProps
 
+  const titleStyle = {
+    paddingTop: 16,
+    paddingLeft: 16,
+    paddingBottom: 8,
+    paddingRight: 64,
+  }
+
+  const dropShadowStyle = {
+    backgroundColor: theme.colors.background.veteranStatus,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3.75 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.75,
+    elevation: 3.75,
+  }
+
   return (
     <Box style={containerStyle} position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
       <Box
@@ -89,12 +105,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         backgroundColor={theme.colors.background.carousel as BackgroundVariant}
         height={topStripHeight}
         borderRadiusTop={15}
-        style={{
-          paddingTop: 16,
-          paddingLeft: 16,
-          paddingBottom: 8,
-          paddingRight: 64,
-        }}>
+        style={titleStyle}>
         <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant} maxFontSizeMultiplier={1.3}>
           {t('veteranStatus.title')}
         </TextView>
@@ -105,14 +116,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         borderRadiusBottom={15}
         px={isPortrait ? 18 : 0}
         pl={isPortrait ? 0 : 18}
-        style={{
-          backgroundColor: theme.colors.background.veteranStatus,
-          shadowColor: '#000000',
-          shadowOffset: { width: 0, height: 3.75 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.75,
-          elevation: 3.75,
-        }}>
+        style={dropShadowStyle}>
         <Box pt={8}>
           <TextView color="primaryContrast" variant={headerVariant}>
             {t('veteranStatus.name')}
