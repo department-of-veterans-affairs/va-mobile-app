@@ -6,7 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
-import { BranchOfService, ServiceData, ServiceHistoryData } from 'api/types'
+import { BranchOfService, ServiceHistoryData } from 'api/types'
 import { useVeteranStatus } from 'api/veteranStatus'
 import {
   AlertWithHaptics,
