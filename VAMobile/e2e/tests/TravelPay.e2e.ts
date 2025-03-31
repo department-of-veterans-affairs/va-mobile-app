@@ -312,7 +312,7 @@ describe('Travel Pay', () => {
         await expect(element(by.text('Continue Claim '))).toExist()
       } else {
         await expect(element(by.text('Cancel Claim')).atIndex(0)).toExist()
-        await expect(element(by.text('Continue Claim '))).toExist()
+        await expect(element(by.text('Continue Claim'))).toExist()
       }
     })
     it('exits the flow when tapping the cancel button', async () => {
