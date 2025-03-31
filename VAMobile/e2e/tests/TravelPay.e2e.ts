@@ -309,10 +309,11 @@ describe('Travel Pay', () => {
       if (device.getPlatform() === 'android') {
         // Android has a different text for the cancel button
         await expect(element(by.text('Cancel Claim '))).toExist()
+        await expect(element(by.text('Continue Claim '))).toExist()
       } else {
         await expect(element(by.text('Cancel Claim')).atIndex(0)).toExist()
+        await expect(element(by.text('Continue Claim '))).toExist()
       }
-      await expect(element(by.text('Continue Claim '))).toExist()
     })
     it('exits the flow when tapping the cancel button', async () => {
       await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
