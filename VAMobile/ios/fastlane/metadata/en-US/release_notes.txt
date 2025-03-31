@@ -1,1 +1,1 @@
-On the home screen, we have updated the Disability Compensation label from 'Monthly Compensation Payment' to 'Compensation & Pension - Recurring' to provide Veterans with a more cohesive view of their payments on web and mobile.
+On the home screen, we have updated the compensation displayed from 'Monthly Compensation Payment' to 'Compensation & Pension - Recurring' to provide Veterans with a more cohesive view of their payments on web and mobile.
