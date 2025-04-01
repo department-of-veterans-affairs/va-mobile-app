@@ -3,7 +3,7 @@ title: How we work
 ---
 # How we work
 
-The role of QA within a software delivery team is to provide enough details about the software we're delivering, so that stakeholders can make informed decisions (about whether to release, how to prioritize a given bug, etc). 
+?The role of QA within a software delivery team is to provide enough details about the software we're delivering, so that stakeholders can make informed decisions (about whether to release, how to prioritize a given bug, etc). 
 
 We typically provide that information by signing off that we've tested the software in question to our satisfaction. Saying "QA approves merging to develop" or "QA approves release" means we believe we've tested the software well.
 
