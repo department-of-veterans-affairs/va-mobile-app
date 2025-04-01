@@ -4,6 +4,8 @@ sidebar_position: 1
 
 # Dashboards
 
+[View monthly app metrics in their temporary location](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/analytics/README.md) while we work to get the dashboard back up and running.
+
 ## Feature specific boards
 
 <b>Note:</b> These dashboards are not currently working as intended; VA/OCTO POs on individual Veteran-facing experiences will decide if/how best to refresh them. If you are in need of up-to-date information about the mobile app, please contact the team via #va-mobile-app-analytics on DSVA Slack.

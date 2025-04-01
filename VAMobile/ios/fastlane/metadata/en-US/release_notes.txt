@@ -1,2 +1,1 @@
-We added a new Medical Records section, which now lists your VA-recorded Allergies information. You can now also find your Vaccine Data in the Medical Records section.
-We also fixed bugs, and removed two letter types due to outdated information.
+On the home screen, we have updated the compensation displayed from 'Monthly Compensation Payment' to 'Compensation & Pension - Recurring' to provide Veterans with a more cohesive view of their payments on web and mobile.

@@ -132,7 +132,7 @@ jobs:
 
   matrix-e2e-ios:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-14-xlarge
+    runs-on: macos-latest-xlarge
     needs: [start_slack_thread, output_detox_tests_to_run]
     env:
       # Path to write secret key to. Also used by fastlane
