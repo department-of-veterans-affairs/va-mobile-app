@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
 import { TFunction } from 'i18next'
 import _ from 'underscore'
@@ -14,7 +15,7 @@ import {
   AppealTypes,
   AppealTypesConstants,
 } from 'api/types'
-import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
+import { Box, LinkWithAnalytics, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import getEnv from 'utils/env'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -210,6 +211,8 @@ const getStatusHeadingAndTitle = (
         t('appealDetails.statutoryOptInDescription3'),
         t('appealDetails.statutoryOptInDescription4'),
         t('appealDetails.statutoryOptInDescription5'),
+        t('appealDetails.statutoryOptInDescription6'),
+        t('appealDetails.statutoryOptInDescription7'),
       ]
       break
     case AppealStatusTypesConstants.evidentiary_period:
@@ -316,6 +319,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
   const { data: personalInfo } = usePersonalInformation()
   const fullName = personalInfo?.fullName || ''
   const marginTop = theme.dimensions.condensedMarginBetween
+  const largeMarginTop = theme.dimensions.standardMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(
     status,
     aoj,
@@ -363,11 +367,6 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             text: details[2],
             boldedText: details[3],
           },
-          {
-            text: details[4],
-            linkToRedirect: LINK_URL_DECISION_REVIEWS,
-            variant: 'MobileBodyLink',
-          },
         ]
         return (
           <Box>
@@ -379,6 +378,7 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             </TextView>
             <Box mt={marginTop}>
               <VABulletList listOfText={bulletList} paragraphSpacing={true} />
+              <LinkWithAnalytics type="url" text={details[4]} url={LINK_URL_DECISION_REVIEWS} a11yLabel={details[4]} />
             </Box>
           </Box>
         )
@@ -388,28 +388,41 @@ function AppealCurrentStatus({ status, aoj, appealType, docketName, programArea 
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
-              <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink">{details[2]}</TextView>
-              <TextView variant="MobileBody">{details[3]}</TextView>
-            </TextView>
+            <Box mt={marginTop}>
+              <Pressable accessibilityRole={'link'} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+                <TextView>
+                  <TextView variant="MobileBody">{details[1]}</TextView>
+                  <TextView variant="MobileBodyLink">{details[2]}</TextView>
+                  <TextView variant="MobileBody">{details[3]}</TextView>
+                </TextView>
+              </Pressable>
+            </Box>
           </Box>
         )
       case AppealStatusTypesConstants.statutory_opt_in:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={marginTop}>
+            <TextView variant="MobileBody" mt={largeMarginTop}>
               {details[0]}
             </TextView>
-            <TextView mt={marginTop} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
-              <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink">{details[2]}</TextView>
-              <TextView variant="MobileBody">{details[3]}</TextView>
-            </TextView>
-            <TextView variant="MobileBodyLink" onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
-              {details[4]}
-              <TextView variant="MobileBody">.</TextView>
-            </TextView>
+            <Box mt={largeMarginTop}>
+              <Pressable accessibilityRole={'link'} onPress={(): void => launchExternalLink(LINK_URL_YOUR_CLAIMS)}>
+                <TextView>
+                  <TextView variant="MobileBody">{details[1]}</TextView>
+                  <TextView variant="MobileBodyLink">{details[2]}</TextView>
+                  <TextView variant="MobileBody">{details[3]}</TextView>
+                </TextView>
+              </Pressable>
+            </Box>
+            <Box mt={largeMarginTop}>
+              <Pressable accessibilityRole={'link'} onPress={(): void => launchExternalLink(LINK_URL_DECISION_REVIEWS)}>
+                <TextView>
+                  <TextView variant="MobileBody">{details[4]}</TextView>
+                  <TextView variant="MobileBodyLink">{details[5]}</TextView>
+                  <TextView variant="MobileBody">{details[6]}</TextView>
+                </TextView>
+              </Pressable>
+            </Box>
           </Box>
         )
       case AppealStatusTypesConstants.remand:
