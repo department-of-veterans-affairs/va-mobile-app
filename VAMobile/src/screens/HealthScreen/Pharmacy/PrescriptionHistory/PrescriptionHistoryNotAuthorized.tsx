@@ -61,8 +61,8 @@ function PrescriptionHistoryNotAuthorized() {
       <Box {...alertWrapperProps}>
         <AlertWithHaptics
           variant="warning"
-          header={t('prescriptions.notAuthorized.warning')}
-          headerA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
+          description={t('prescriptions.notAuthorized.warning')}
+          descriptionA11yLabel={a11yLabelVA(t('prescriptions.notAuthorized.warning'))}
         />
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
