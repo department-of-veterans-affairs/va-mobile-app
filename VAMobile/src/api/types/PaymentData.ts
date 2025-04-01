@@ -4,6 +4,7 @@ export type PaymentsGetData = {
   meta: {
     pagination?: PaymentsMetaPagination
     availableYears: Array<number> | null
+    recurringPayment: RecurringPaymentData
   }
   links: {
     self: string | null
@@ -12,6 +13,11 @@ export type PaymentsGetData = {
     next: string | null
     last: string | null
   }
+}
+
+export type RecurringPaymentData = {
+  amount: string
+  date: string
 }
 
 export type PaymentsData = {

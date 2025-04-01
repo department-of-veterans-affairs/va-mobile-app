@@ -47,6 +47,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     error: vaccineError,
     refetch: refetchVaccines,
   } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -118,7 +119,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}

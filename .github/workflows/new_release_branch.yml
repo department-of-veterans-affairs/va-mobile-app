@@ -1,10 +1,10 @@
-name: '[Release] New Release Branch'
+name: "[Release] New Release Branch"
 
 on:
   workflow_dispatch:
   schedule:
     # 06:00 UTC, 2:00AM ET, 11:00PM (Tues) PT every Wednesday
-    - cron: '00 6 * * 3'
+    - cron: "00 6 * * 3"
 
 jobs:
   get-workflow-environment:
@@ -16,9 +16,9 @@ jobs:
         id: check-environment
         run: |
           if [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
-            echo ::set-output name=env_name::'manual-release'
+            echo env_name='manual-release' >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=env_name::''
+            echo env_name='' >> $GITHUB_OUTPUT
           fi
   cut_release_branch:
     name: Cut Release Branch
@@ -40,7 +40,7 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
       - name: Cut release branch
         env:
-          GITHUB_TOKEN:  ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           if [[ "${{ needs.get-workflow-environment.outputs.environment_name }}" == "manual-release" ]]; then
             ./release_branch.sh --bypass-date-check
