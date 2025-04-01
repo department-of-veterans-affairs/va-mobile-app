@@ -51,6 +51,12 @@ const TravelPayE2eIdConstants = {
   FILE_ONLINE_TITLE_ID: 'fileOnlineTitle',
   FILE_ONLINE_BULLET_ONE_ID: 'fileOnlineBulletOne',
   FILE_ONLINE_BULLET_TWO_ID: 'fileOnlineBulletTwo',
+  CANCEL_CLAIM_TEXT: 'Cancel Claim',
+  CONTINUE_CLAIM_TEXT: 'Continue Claim',
+  CANCEL_CLAIM_TEXT_ANDROID: 'Cancel Claim ',
+  CONTINUE_CLAIM_TEXT_ANDROID: 'Continue Claim ',
+  CANCEL_TRAVEL_CLAIM_TEXT: 'Cancel travel claim?',
+  FILE_TRAVEL_CLAIM_TEXT: 'File travel claim',
 }
 
 const fillHomeAddressFields = async () => {
@@ -303,50 +309,50 @@ describe('Travel Pay', () => {
     it('is visible when the cancel button is tapped', async () => {
       await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
       await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text('Cancel travel claim?')))
+      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
         .toBeVisible()
         .withTimeout(2000)
       if (device.getPlatform() === 'android') {
         // Android has a different text for the cancel button
-        await expect(element(by.text('Cancel Claim '))).toExist()
-        await expect(element(by.text('Continue Claim '))).toExist()
+        await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID))).toExist()
+        await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID))).toExist()
       } else {
-        await expect(element(by.text('Cancel Claim')).atIndex(0)).toExist()
-        await expect(element(by.text('Continue Claim'))).toExist()
+        await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0)).toExist()
+        await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT))).toExist()
       }
     })
     it('exits the flow when tapping the cancel button', async () => {
       await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
       await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text('Cancel travel claim?')))
+      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
         .toBeVisible()
         .withTimeout(2000)
       if (device.getPlatform() === 'android') {
-        await element(by.text('Cancel Claim ')).tap()
+        await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID)).tap()
       } else {
-        await element(by.label('Cancel Claim')).atIndex(0).tap()
+        await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0).tap()
       }
-      await waitFor(element(by.text('File travel claim')))
+      await waitFor(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT)))
         .toBeVisible()
         .withTimeout(2000)
-      await expect(element(by.text('File travel claim'))).toExist()
+      await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
     })
     it('countinues the flow when tapping the continue button', async () => {
       await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
       await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text('Cancel travel claim?')))
+      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
         .toBeVisible()
         .withTimeout(2000)
       if (device.getPlatform() === 'android') {
-        await element(by.text('Continue Claim ')).tap()
+        await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID)).tap()
       } else {
-        await element(by.label('Continue Claim')).atIndex(0).tap()
+        await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT)).atIndex(0).tap()
       }
       await waitFor(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)))
         .toBeVisible()
         .withTimeout(2000)
       await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toBeVisible()
-      await expect(element(by.text('Cancel travel claim?'))).not.toExist()
+      await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT))).not.toExist()
     })
   })
 })
