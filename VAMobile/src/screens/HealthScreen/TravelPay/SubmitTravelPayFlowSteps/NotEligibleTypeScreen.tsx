@@ -18,7 +18,7 @@ function NotEligibleTypeScreen() {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="cannotSubmitThisTypeID" variant="BitterBoldHeading" accessibilityRole="header">
           {t('travelPay.cannotSubmitThisType')}
         </TextView>
         <FileOnlineComponent />
