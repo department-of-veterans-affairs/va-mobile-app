@@ -1,11 +1,15 @@
 name: "[Admin] Add PR to Project Board"
 on:
-    pull_request_review:
-        types: [submitted, edited]
+    pull_request:
+        types:
+          - opened
+          - reopened
+          - synchronize
+          - ready_for_review
 jobs:
     add-to-project:
         name: Add pull request to project
-        if: ${{ github.event.pull_request.base.ref == 'develop' }}
+        if: ${{ github.event.pull_request.base.ref == 'develop' && !github.event.pull_request.draft }}
         runs-on: ubuntu-latest
         steps:
         - uses: actions/add-to-project
