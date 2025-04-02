@@ -1,15 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openAppointments,
-  openContactInfo,
-  openHealth,
-  openProfile,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
 
 const TravelPayE2eIdConstants = {
   CLOSE_BUTTON_ID: 'closeTestID',
@@ -109,14 +101,6 @@ const fillHomeAddressFields = async () => {
   } catch (ex) {}
 }
 
-const setHomeAddress = async () => {
-  await openProfile()
-  await openContactInfo()
-  await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
-
-  await fillHomeAddressFields()
-}
-
 const openPastAppointments = async () => {
   await openHealth()
   await openAppointments()
@@ -131,11 +115,8 @@ const startTravelPayFlow = async () => {
   await element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT)).tap()
 }
 
-const openTravelPayFlow = async (text: string, existingAddress: boolean) => {
+const openTravelPayFlow = async (text: string) => {
   await loginToDemoMode()
-  if (existingAddress) {
-    await setHomeAddress()
-  }
   await openPastAppointments()
   try {
     await waitFor(element(by.text(text)))
@@ -264,10 +245,12 @@ describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   })
+
   it('verifies travel pay flow up to the address screen', async () => {
-    await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
+    await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed')
     await checkTravelPayFlow(false)
   })
+
   it('is correctly displays the cancel and continue buttons when the top left cancel button is tapped', async () => {
     await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
     await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
@@ -282,6 +265,7 @@ describe('Travel Pay', () => {
       await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT))).toExist()
     }
   })
+
   it('countinues the flow when tapping the continue confirmation button', async () => {
     if (device.getPlatform() === 'android') {
       await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID)).tap()
@@ -294,6 +278,7 @@ describe('Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toBeVisible()
     await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT))).not.toExist()
   })
+
   it('exits the flow when tapping the cancel confirmation button', async () => {
     await element(by.id(TravelPayE2eIdConstants.CANCEL_BUTTON_ID)).tap()
     await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
@@ -312,9 +297,11 @@ describe('Travel Pay', () => {
 
   it('submits a travel claim when the home address is entered', async () => {
     await startTravelPayFlow()
+    await checkMilageScreen()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await checkVehicleScreen()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
-
+    await checkAddressScreen(false)
     await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
     await fillHomeAddressFields()
     await checkAddressScreen(true)
