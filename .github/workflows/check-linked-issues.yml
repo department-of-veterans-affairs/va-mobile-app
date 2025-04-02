@@ -15,7 +15,7 @@ jobs:
               id: check-linked-issues
               with:
                 exclude-branches: "release/**, dependabot/**, main, release-v**"
-                custom-body-comment: "@${{ github.event.pull_request.user.login }} Please link this pull request to an issue in the description or sidebar and rerun the failed workflow. Alternatively you can add the no-issue label."
+                custom-body-comment: "@${{ github.event.pull_request.user.login }} Please [link this pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) (you may need to rerun the failed workflow). Alternatively, you can add the no-issue label to skip this requirement."
 
             - name: Get issue count
               run: echo "${{ steps.check-linked-issues.outputs.linked_issues_count }} linked issue(s) to this pull request"
