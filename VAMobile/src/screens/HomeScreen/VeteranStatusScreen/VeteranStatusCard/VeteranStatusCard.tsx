@@ -18,9 +18,6 @@ const MAX_WIDTH = 672
 const EMBLEM_SIZE_LANDSCAPE = 82
 const EMBLEM_SIZE_PORTRAIT = 50
 
-const TOP_STRIP_HEIGHT_LANDSCAPE = 70
-const TOP_STRIP_HEIGHT_PORTRAIT = 50
-
 const EMBLEM_TOP_LANDSCAPE = 40
 const EMBLEM_TOP_PORTRAIT = 42
 
@@ -58,7 +55,6 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   // Compute layout values based on orientation
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
   const emblemSize = isPortrait ? EMBLEM_SIZE_PORTRAIT : EMBLEM_SIZE_LANDSCAPE
-  const topStripHeight = isPortrait ? TOP_STRIP_HEIGHT_PORTRAIT : TOP_STRIP_HEIGHT_LANDSCAPE
   const emblemTopOffset = isPortrait ? EMBLEM_TOP_PORTRAIT : EMBLEM_TOP_LANDSCAPE
 
   // If landscape, we add MAX_WIDTH & center the box
@@ -98,12 +94,11 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   }
 
   return (
-    <Box style={containerStyle} position="relative" width="100%" px={horizontalPadding} pt={20} borderRadius={15}>
+    <Box style={containerStyle} position="relative" width="100%" px={horizontalPadding} pt={theme.dimensions.contentMarginTop} borderRadius={15}>
       <Box
         alignItems="flex-start"
         justifyContent="center"
         backgroundColor={theme.colors.background.carousel as BackgroundVariant}
-        height={topStripHeight}
         borderRadiusTop={15}
         style={titleStyle}>
         <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant} maxFontSizeMultiplier={1.3}>
@@ -114,8 +109,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
       <Box
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
         borderRadiusBottom={15}
-        px={isPortrait ? 18 : 0}
-        pl={isPortrait ? 0 : 18}
+        px={16}
         style={dropShadowStyle}>
         <Box pt={8}>
           <TextView color="primaryContrast" variant={headerVariant}>
@@ -140,7 +134,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         </Box>
 
         <Box flexDirection={isLandscape ? 'row' : 'column'}>
-          <Box flex={isLandscape ? 1 : undefined} mr={isLandscape ? 8 : 0}>
+          <Box flex={isLandscape ? 1 : undefined}>
             <TextView color="primaryContrast" variant={headerVariant}>
               {t('veteranStatus.dodIdNumber')}
             </TextView>
@@ -149,14 +143,16 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             </TextView>
           </Box>
 
-          <Box flex={isLandscape ? 1 : undefined} mt={isLandscape ? 0 : 8}>
-            <TextView color="primaryContrast" variant={headerVariant}>
-              {t('veteranStatus.disabilityRating')}
-            </TextView>
-            <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDisabilityRatingTestID">
-              {percentText}
-            </TextView>
-          </Box>
+          {(percentText && percentText !== '0%') && (
+            <Box flex={isLandscape ? 1 : undefined}>
+              <TextView color="primaryContrast" variant={headerVariant}>
+                {t('veteranStatus.disabilityRating')}
+              </TextView>
+              <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDisabilityRatingTestID">
+                {percentText}
+              </TextView>
+            </Box>
+          )}
         </Box>
 
         <Box mt={8} pb={16}>
