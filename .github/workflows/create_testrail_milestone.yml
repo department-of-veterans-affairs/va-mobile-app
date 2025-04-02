@@ -19,7 +19,7 @@ jobs:
       milestoneId: ${{ steps.add_milestone.outputs.milestone }}
     runs-on: ubuntu-latest
     steps:
-      - name: 'Add new sprint milestone in TestRail'
+      - name: "Add new sprint milestone in TestRail"
         id: add_milestone
         run: |
           dateRange="$(date '+%B %-d') - $(date -d '+13 days' '+%B %-d')"
@@ -34,4 +34,4 @@ jobs:
             "https://dsvavsp.testrail.io//index.php?/api/v2/update_milestone/${id}" \
             -d '{"is_started":1}'
           echo ""
-          echo "::set-output name=milestone::${id}"
+          echo "milestone=${id}" >> $GITHUB_OUTPUT
