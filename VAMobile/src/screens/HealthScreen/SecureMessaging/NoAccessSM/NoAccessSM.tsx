@@ -50,7 +50,7 @@ function NoAccessSM() {
     type: 'url',
     url: LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE,
     text: t('noAccessSM.findVACare'),
-    a11yLabel: t('noAccessSM.findVACare'),
+    a11yLabel: a11yLabelVA(t('noAccessSM.findVACare')),
     a11yHint: t('noAccessSM.findVACare.a11yHint'),
   }
 
@@ -73,11 +73,17 @@ function NoAccessSM() {
               {t('noAccessSM.toAccess')}
             </TextView>
             <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
-            <TextView variant="MobileBody" my={theme.dimensions.contentMarginTop}>
+            <TextView
+              variant="MobileBody"
+              my={theme.dimensions.contentMarginTop}
+              accessibilityLabel={a11yLabelVA(t('noAccessSM.pleaseCall'))}>
               {t('noAccessSM.pleaseCall')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
-            <TextView variant="MobileBody" my={theme.dimensions.contentMarginTop}>
+            <TextView
+              variant="MobileBody"
+              my={theme.dimensions.contentMarginTop}
+              accessibilityLabel={a11yLabelVA(t('noAccessSM.notEnrolled'))}>
               {t('noAccessSM.notEnrolled')}
             </TextView>
             <LinkWithAnalytics {...linkProps} />

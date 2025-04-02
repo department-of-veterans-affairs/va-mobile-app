@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { every } from 'underscore'
-
 import { useAllergies } from 'api/allergies/getAllergies'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
@@ -50,14 +48,6 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
   const displayName = allergy.attributes?.code?.text
     ? t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) })
     : placeHolder
-
-  const optionalFields = [
-    allergy.attributes?.category?.length,
-    allergy.attributes?.notes?.length,
-    allergy.attributes?.reactions?.length,
-    allergy.attributes?.recorder,
-  ]
-  const isPartialData = !every(optionalFields)
 
   return (
     <FeatureLandingTemplate
@@ -150,13 +140,12 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               </Box>
             </Box>
           </TextArea>
-          {isPartialData && (
-            <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-              <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
-                {t('health.details.weBaseThis')}
-              </TextView>
-            </Box>
-          )}
+
+          <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+              {t('health.details.weBaseThis')}
+            </TextView>
+          </Box>
         </Box>
       )}
     </FeatureLandingTemplate>
