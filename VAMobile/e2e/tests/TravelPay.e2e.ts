@@ -134,9 +134,9 @@ const openPastAppointments = async () => {
   await element(by.text('Past')).tap()
 }
 
-beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-})
+const startTravelPayFlow = async () => {
+  await element(by.text('File travel claim')).tap()
+}
 
 const openTravelPayFlow = async (text: string, existingAddress: boolean) => {
   await loginToDemoMode()
@@ -157,7 +157,7 @@ const openTravelPayFlow = async (text: string, existingAddress: boolean) => {
   }
   await element(by.text(text)).tap()
 
-  await element(by.text('File travel claim')).tap()
+  await startTravelPayFlow()
 }
 
 const checkMilageScreen = async () => {
@@ -268,91 +268,87 @@ const checkTravelPayFlow = async (existingAddress: boolean) => {
 }
 
 describe('Travel Pay', () => {
-  describe('when the veteran does NOT have a home address', () => {
-    it('verifies travel pay flow up to the address screen', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
-      await checkTravelPayFlow(false)
-      await device.launchApp({ newInstance: false })
-    })
-    it('allows entering a home address', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
-      await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
-      await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+  beforeAll(async () => {
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  })
+  it('verifies travel pay flow up to the address screen', async () => {
+    await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
+    await checkTravelPayFlow(false)
+  })
+  it('is correctly displays the cancel and continue buttons when the top left cancel button is tapped', async () => {
+    await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
+    await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
+      .toBeVisible()
+      .withTimeout(2000)
+    if (device.getPlatform() === 'android') {
+      // Android has a different text for the cancel button
+      await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID))).toExist()
+      await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID))).toExist()
+    } else {
+      await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0)).toExist()
+      await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT))).toExist()
+    }
+  })
+  it('countinues the flow when tapping the continue confirmation button', async () => {
+    if (device.getPlatform() === 'android') {
+      await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID)).tap()
+    } else {
+      await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT)).atIndex(0).tap()
+    }
+    await waitFor(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)))
+      .toBeVisible()
+      .withTimeout(2000)
+    await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toBeVisible()
+    await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT))).not.toExist()
+  })
+  it('exits the flow when tapping the cancel confirmation button', async () => {
+    await element(by.id(TravelPayE2eIdConstants.CANCEL_BUTTON_ID)).tap()
+    await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
+      .toBeVisible()
+      .withTimeout(2000)
+    if (device.getPlatform() === 'android') {
+      await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID)).tap()
+    } else {
+      await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0).tap()
+    }
+    await waitFor(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT)))
+      .toBeVisible()
+      .withTimeout(2000)
+    await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
+  })
 
-      await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
-      await fillHomeAddressFields()
-      await checkAddressScreen(true)
-    })
+  it('submits a travel claim when the home address is entered', async () => {
+    await startTravelPayFlow()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+
+    await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
+    await fillHomeAddressFields()
+    await checkAddressScreen(true)
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await checkReviewClaimScreen()
+    await element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID)).tap()
+    await checkSubmitSuccessScreen()
+    await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
   })
-  describe('when the veteran has a home address', () => {
-    it('verifies travel pay flow', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', true)
-      await checkTravelPayFlow(true)
-    })
-    describe('when the answer is no to any of the questions', () => {
-      it('navigates to the not eligible screen', async () => {
-        await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', true)
-        await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
-        await checkNotEligibleScreen()
-        await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
-        await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
-        await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
-        await checkNotEligibleScreen()
-        await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
-        await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
-        await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
-        await checkNotEligibleScreen()
-      })
-    })
+
+  it('navigates to the not eligible screen when the answer is no to any of the questions', async () => {
+    await startTravelPayFlow()
+    await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
+    await checkNotEligibleScreen()
+    await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
+    await checkNotEligibleScreen()
+    await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.NO_BUTTON)).tap()
+    await checkNotEligibleScreen()
+    await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
   })
-  describe('Confirm Cancel Action Sheet', () => {
-    it('is visible when the cancel button is tapped', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
-      await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
-        .toBeVisible()
-        .withTimeout(2000)
-      if (device.getPlatform() === 'android') {
-        // Android has a different text for the cancel button
-        await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID))).toExist()
-        await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID))).toExist()
-      } else {
-        await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0)).toExist()
-        await expect(element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT))).toExist()
-      }
-    })
-    it('exits the flow when tapping the cancel button', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
-      await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
-        .toBeVisible()
-        .withTimeout(2000)
-      if (device.getPlatform() === 'android') {
-        await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT_ANDROID)).tap()
-      } else {
-        await element(by.text(TravelPayE2eIdConstants.CANCEL_CLAIM_TEXT)).atIndex(0).tap()
-      }
-      await waitFor(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT)))
-        .toBeVisible()
-        .withTimeout(2000)
-      await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
-    })
-    it('countinues the flow when tapping the continue button', async () => {
-      await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed', false)
-      await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
-      await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
-        .toBeVisible()
-        .withTimeout(2000)
-      if (device.getPlatform() === 'android') {
-        await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT_ANDROID)).tap()
-      } else {
-        await element(by.text(TravelPayE2eIdConstants.CONTINUE_CLAIM_TEXT)).atIndex(0).tap()
-      }
-      await waitFor(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)))
-        .toBeVisible()
-        .withTimeout(2000)
-      await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toBeVisible()
-      await expect(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT))).not.toExist()
-    })
+
+  it('verifies travel pay flow when the veteran has a home address', async () => {
+    await startTravelPayFlow()
+    await checkTravelPayFlow(true)
   })
 })
