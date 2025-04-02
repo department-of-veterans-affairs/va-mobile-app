@@ -5,11 +5,9 @@ import { Platform, Pressable, PressableProps } from 'react-native'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchOfService } from 'api/types'
-import { useVeteranStatus } from 'api/veteranStatus'
 import { BackgroundVariant, Box, MilitaryBranchEmblem, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -17,18 +15,13 @@ import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const Nametag = () => {
-  const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
   const { data: serviceHistory } = useServiceHistory({ enabled: false })
-  const { data: veteranStatus } = useVeteranStatus()
-  const hasServiceHistory = !!serviceHistory?.serviceHistory?.length
-  const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && hasServiceHistory
+  const hasServiceHistory = serviceHistory?.serviceHistory != null
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const branch = serviceHistory?.mostRecentBranch || ''
-  const isVetConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
-  const canShowNametag = (accessToMilitaryInfo && branch !== '') || (isVetConfirmed && !hasServiceHistory)
 
   useEffect(() => {
     if (personalInfo) {
@@ -73,30 +66,22 @@ export const Nametag = () => {
 
   return (
     <Box>
-      {canShowNametag && (
+      {hasServiceHistory && (
         <Pressable {...pressableProps} testID="veteranStatusButtonID">
           <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            {branch ? (
-              <>
-                <MilitaryBranchEmblem branch={branch as BranchOfService} width={40} height={40} />
-                <Box ml={theme.dimensions.buttonPadding} flex={1}>
-                  <TextView variant="VeteranStatusBranch" pb={4}>
-                    {branch}
-                  </TextView>
-                  <Box flexDirection="row" alignItems="center">
-                    <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
-                      {t('veteranStatus.proofOf')}
-                    </TextView>
-                  </Box>
-                </Box>
-              </>
-            ) : (
-              <Box ml={theme.dimensions.buttonPadding} flex={1} flexDirection="row" alignItems="center">
+            <MilitaryBranchEmblem branch={branch as BranchOfService} width={40} height={40} />
+            <Box ml={theme.dimensions.buttonPadding} flex={1}>
+              {branch && (
+                <TextView variant="VeteranStatusBranch" pb={4}>
+                  {branch}
+                </TextView>
+              )}
+              <Box flexDirection="row" alignItems="center">
                 <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
                   {t('veteranStatus.proofOf')}
                 </TextView>
               </Box>
-            )}
+            </Box>
             <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
               <Icon
                 name={'ChevronRight'}
