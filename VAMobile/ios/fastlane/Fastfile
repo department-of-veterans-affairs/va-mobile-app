@@ -32,7 +32,7 @@ platform :ios do
   desc "Push a new internal QA build to TestFlight"
   lane :qa do |options|
     puts('Begin QA lane' )
-    ensure_xcode_version(version: "15.2", strict: false)
+    ensure_xcode_version(version: "16.2", strict: false)
     notes = options[:notes]
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
@@ -48,7 +48,7 @@ platform :ios do
   desc "Lane for non-automated build calls. Should only run from a local machine and requires signing certs"
   lane :on_demand do |options|
     puts "on demand run"
-    ensure_xcode_version(version: "15.2", strict: false)
+    ensure_xcode_version(version: "16.2", strict: false)
     notes = options[:notes]
     datetime = Time.new.strftime("%m-%d-%Y %I:%M %p %Z")
     update_version(options[:version])
@@ -72,7 +72,7 @@ platform :ios do
   desc "Deploy a RC new version to TestFlight"
   lane :rc do |options|
     puts('Begin RC lane' )
-    ensure_xcode_version(version: "15.2", strict: false)
+    ensure_xcode_version(version: "16.2", strict: false)
     update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-RC")
     sign
@@ -88,7 +88,7 @@ platform :ios do
   desc "Build new Production build and upload to App Store for review"
   lane :review do |options|
     puts("Begin Review Lane")
-    ensure_xcode_version(version: "15.2", strict: false)
+    ensure_xcode_version(version: "16.2", strict: false)
     update_version(options[:version])
     sign
     build
@@ -116,6 +116,14 @@ platform :ios do
   desc "Push new demo version to TestFlight"
   lane :demo do
     puts('Begin Demo lane')
+  end
+
+  desc "makes a test build to ensure changes to native directories did not break build process. DOES NOT DISTRIBUTE"
+  lane :test_build_only do |options|
+    ensure_xcode_version(version: "16.2", strict: false)
+    update_version(options[:version])
+    sign
+    build
   end
 
   after_all do |lane, options|

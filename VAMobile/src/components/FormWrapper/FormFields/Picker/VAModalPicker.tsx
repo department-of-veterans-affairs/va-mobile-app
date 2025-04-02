@@ -11,10 +11,9 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
-import { VAIconProps } from 'components/VAIcon'
 import { Events } from 'constants/analytics'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -40,7 +39,7 @@ export type PickerItem = {
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
   /** icon to show */
-  icon?: VAIconProps
+  icon?: IconProps
 }
 
 export type VAModalPickerProps = {
@@ -103,6 +102,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   cancelTestID,
   confirmTestID,
 }) => {
+  const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const { t } = useTranslation()
@@ -121,12 +121,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
-      if (!snackBar) {
-        logAnalyticsEvent(Events.vama_snackbar_null('VAModalPicker'))
-      }
-      snackBar?.hideAll()
+      snackbar.hide()
     }
-  }, [disabled, labelKey, testID, t])
+  }, [disabled, labelKey, snackbar, testID, t])
 
   useEffect(() => {
     showModalByDefault && showModal()

@@ -8,18 +8,17 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 
 ## Design
 ### Figma
-#### [VA Mobile Team](https://www.figma.com/files/team/1114266503868297401)
+#### [VA Mobile Team](https://www.figma.com/files/project/301450677)
 * Current features, resources, libraries, and design explorations.
-#### [Design Library](https://www.figma.com/files/827597988283174959/project/60961499/%F0%9F%93%90-Design-Library?fuid=1114240858371616544)
+#### [Design Library](https://www.figma.com/design/QVLPB3eOunmKrgQOuOt0SU/%F0%9F%93%90-Flagship-Library---Resource---VA-Mobile?m=auto)
 * Finalized components, text styles, and color styles.
 
 #### 🚢 Shipped files 
 * Example screens that are in production.
-	* [Global](https://www.figma.com/file/PpHk9Yyw8dC9xj38AeR9pL/%F0%9F%9A%A2-Global-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
-	* [Home](https://www.figma.com/file/ddMWiCQCfmUKFhMcYG9fYv/%F0%9F%9A%A2-Home-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1) & [Profile](https://www.figma.com/file/O6sdr5N7xV6GOZhTPcgY5x/%F0%9F%9A%A2-Profile-2.0---Shipped---VA-Mobile)
-	* [Benefits](https://www.figma.com/file/p0vlRz38TKIOwWDfI2bGc7/%F0%9F%9A%A2-Benefits-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
-	* [Health](https://www.figma.com/file/JQAoUBxvSWCzKvu2ifRRE7/%F0%9F%9A%A2-Health-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
-	* [Payments](https://www.figma.com/file/yhGsaPc2px6eCVzXhuOwm4/%F0%9F%9A%A2-Payments-2.0---Shipped---VA-Mobile?t=i6c9U7y2iqNodqgF-1)
+	* [Home](https://www.figma.com/design/ddMWiCQCfmUKFhMcYG9fYv/Home-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&t=2n0WqYtVYQ75swD8-6) & [Profile](https://www.figma.com/design/O6sdr5N7xV6GOZhTPcgY5x/Profile-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&t=2n0WqYtVYQ75swD8-6)
+	* [Benefits](https://www.figma.com/design/p0vlRz38TKIOwWDfI2bGc7/Benefits-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&t=2n0WqYtVYQ75swD8-6)
+	* [Health](https://www.figma.com/design/JQAoUBxvSWCzKvu2ifRRE7/Health-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&t=2n0WqYtVYQ75swD8-6)
+	* [Payments](https://www.figma.com/design/yhGsaPc2px6eCVzXhuOwm4/Payments-2.0---%F0%9F%9A%A2-Shipped---VA-Mobile?m=auto&t=2n0WqYtVYQ75swD8-6)
 
 ### Balsamiq
 * [UX brainstorm & work](https://balsamiq.cloud/s4uw4la/pnnwuqv) 
@@ -32,7 +31,7 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 
     
 ## Research
-* [UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-research)
+* [UX research on Github](https://github.com/department-of-veterans-affairs/va.gov-team/tree/4b1fcf3124f72b518e91c0af83723bd270ff793f/products/va-mobile-app/research/ux)
   * Research folders for all VA Mobile app studies.
 
 ## VA Design System
@@ -56,6 +55,8 @@ VA Mobile app [UX resources on github](https://github.com/department-of-veterans
 	* This shows all the MVP components laid out as a library visible and inspectable in Invision. Deprecated July 2021.
 * [Library style sheets (deprecated)](https://adhoc.invisionapp.com/share/AX108RJZPB6E#/screens/445194518) 
 Shows the components from the design library. Deprecated July 2021.
+### Figma 1.0 (before 2022)
+* [Figma files](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/ux-design/figma-files-1.0) that represent MVP feature work, prior to restructuring the IA & Navigation. Deprecated Q1 2022.
 
 ### Components
 * [MVP Mobile App UI Styles on Google Docs (deprecated)](https://docs.google.com/document/d/1VC-CLWnhevB8HLBBHPwkSJvECn8EBie8HOkJylKE1lo/edit?usp=sharing)

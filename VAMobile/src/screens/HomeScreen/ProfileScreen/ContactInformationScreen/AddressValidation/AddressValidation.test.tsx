@@ -1,11 +1,12 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AddressData, ValidateAddressData } from 'api/types'
-import { SnackbarMessages } from 'components/SnackBar'
 import { render } from 'testUtils'
 
+import { profileAddressOptions } from '../AddressSummary'
 import AddressValidation from './AddressValidation'
 
 const mockAddress: AddressData = {
@@ -17,11 +18,6 @@ const mockAddress: AddressData = {
   countryCodeIso3: 'USA',
   stateCode: 'CA',
   zipCode: '95403',
-}
-
-const snackbarMessages: SnackbarMessages = {
-  successMsg: 'Address saved',
-  errorMsg: 'Address could not be saved',
 }
 
 const validationData: ValidateAddressData = {
@@ -75,7 +71,7 @@ describe('AddressValidation', () => {
       <AddressValidation
         addressEntered={mockAddress}
         addressId={12345}
-        snackbarMessages={snackbarMessages}
+        addressType={profileAddressOptions.MAILING_ADDRESS}
         validationData={validationData}
         saveAddress={saveAddressSpy}
         setShowAddressValidation={setShowAddressValidationSpy}
@@ -89,18 +85,18 @@ describe('AddressValidation', () => {
 
   describe('when the address validation scenario type is SHOW_SUGGESTIONS_OVERRIDE', () => {
     it('displays the alert texts', () => {
-      const collapsibleAlert = screen.getByText('Verify your address')
+      const collapsibleAlert = screen.getByText(t('editAddress.validation.verifyAddress.title'))
 
       expect(collapsibleAlert).toBeTruthy()
       fireEvent.press(collapsibleAlert)
-      expect(screen.getByText("We can't confirm the address you entered with the U.S. Postal Service.")).toBeTruthy()
+      expect(screen.getByText(t('editAddress.validation.verifyAddress.body.1'))).toBeTruthy()
     })
   })
 
   describe('when use this address button is pressed', () => {
     it('calls updateAddress', () => {
       fireEvent.press(screen.getByTestId('youEnteredTestID'))
-      fireEvent.press(screen.getByRole('button', { name: 'Use this address' }))
+      fireEvent.press(screen.getByRole('button', { name: t('editAddress.validation.useThisAddress') }))
       expect(saveAddressSpy).toBeCalled()
     })
   })

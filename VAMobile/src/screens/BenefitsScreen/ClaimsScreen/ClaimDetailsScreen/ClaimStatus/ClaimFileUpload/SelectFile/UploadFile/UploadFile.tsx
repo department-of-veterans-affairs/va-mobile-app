@@ -7,24 +7,31 @@ import { ScrollView } from 'react-native/types'
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
-import { AlertWithHaptics, Box, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  TextView,
+  VAScrollView,
+} from 'components'
 import FileList from 'components/FileList'
-import { SnackbarMessages } from 'components/SnackBar'
-import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
-import { BenefitsStackParamList, DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import { showSnackBar } from 'utils/common'
 import {
-  useAppDispatch,
   useBeforeNavBackListener,
   useDestructiveActionSheet,
   useRouteNavigation,
@@ -33,14 +40,16 @@ import {
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
-type UploadFileProps = StackScreenProps<BenefitsStackParamList, 'UploadFile'>
+import { FileRequestStackParams } from '../../FileRequestSubtask'
+
+type UploadFileProps = StackScreenProps<FileRequestStackParams, 'UploadFile'>
 
 function UploadFile({ navigation, route }: UploadFileProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { claimID, request: originalRequest, fileUploaded } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
-  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const [filesList, setFilesList] = useState<DocumentPickerResponse[]>([fileUploaded])
   const { mutate: uploadFileToClaim, isPending: loadingFileUpload } = useUploadFileToClaim(
@@ -50,15 +59,16 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   )
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
-  const snackbarMessages: SnackbarMessages = {
-    successMsg: t('fileUpload.submitted'),
-    errorMsg: t('fileUpload.submitted.error'),
-  }
   const [error, setError] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
   const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
+
+  useSubtaskProps({
+    leftButtonText: t('cancel'),
+    onLeftButtonPress: () => onCancel(),
+  })
 
   const waygate = getWaygateToggles().WG_UploadFile
   useBeforeNavBackListener(navigation, (e) => {
@@ -82,13 +92,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         },
         {
           text: t('fileUpload.cancelUpload'),
-          onPress: () => {
-            if (request) {
-              navigateTo('FileRequestDetails', { claimID, request })
-            } else {
-              navigateTo('SubmitEvidence', { claimID })
-            }
-          },
+          onPress: () => navigation.dispatch(e.data.action),
         },
       ],
     })
@@ -139,9 +143,14 @@ function UploadFile({ navigation, route }: UploadFileProps) {
             'file',
           ),
         )
-        showSnackBar(snackbarMessages.successMsg, dispatch, undefined, true)
+        snackbar.show(t('fileUpload.submitted'))
       },
-      onError: () => showSnackBar(snackbarMessages.errorMsg, dispatch, onUploadConfirmed, false, true),
+      onError: () =>
+        snackbar.show(t('fileUpload.submitted.error'), {
+          isError: true,
+          offset: theme.dimensions.snackBarBottomOffset,
+          onActionPressed: onUploadConfirmed,
+        }),
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)
@@ -287,21 +296,22 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     },
   ]
 
+  const onCancel = () => {
+    logAnalyticsEvent(
+      Events.vama_evidence_cancel_2(
+        claimID,
+        request?.trackedItemId || null,
+        request?.type || 'Submit Evidence',
+        'file',
+      ),
+    )
+    navigation.dispatch(StackActions.pop(2))
+  }
+
   return (
-    <FullScreenSubtask
-      leftButtonText={t('cancel')}
-      title={t('fileUpload.uploadFiles')}
-      onLeftButtonPress={() => {
-        logAnalyticsEvent(
-          Events.vama_evidence_cancel_2(
-            claimID,
-            request?.trackedItemId || null,
-            request?.type || 'Submit Evidence',
-            'file',
-          ),
-        )
-        navigation.dispatch(StackActions.pop(2))
-      }}>
+    <VAScrollView scrollViewRef={scrollViewRef}>
+      <SubtaskTitle title={t('fileUpload.uploadFiles')} />
+
       {loadingFileUpload ? (
         <LoadingComponent text={t('fileUpload.loading')} />
       ) : (
@@ -363,7 +373,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
           </Box>
         </>
       )}
-    </FullScreenSubtask>
+    </VAScrollView>
   )
 }
 

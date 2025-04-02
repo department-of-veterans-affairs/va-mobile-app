@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ParamListBase } from '@react-navigation/native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
@@ -11,7 +12,6 @@ import { AppointmentAttributes, AppointmentLocation } from 'api/types'
 import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { AppDispatch } from 'store'
 import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -23,11 +23,9 @@ import {
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
 } from 'utils/appointments'
-import { showSnackBar } from 'utils/common'
 import getEnv from 'utils/env'
 import {
   RouteNavigationFunction,
-  useAppDispatch,
   useDestructiveActionSheet,
   useDestructiveActionSheetProps,
   useRouteNavigation,
@@ -66,7 +64,7 @@ const cancelButton = (
   goBack: () => void,
   t: TFunction,
   theme: VATheme,
-  dispatch: AppDispatch,
+  snackbar: ReturnType<typeof useSnackbar>,
   confirmAlert: (props: useDestructiveActionSheetProps) => void,
   cancelId?: string,
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>,
@@ -85,14 +83,7 @@ const cancelButton = (
       const mutateOptions = {
         onSuccess: () => {
           goBack()
-          showSnackBar(
-            pendingAppointment ? t('appointments.requestCanceled') : t('appointments.appointmentCanceled'),
-            dispatch,
-            undefined,
-            true,
-            false,
-            true,
-          )
+          snackbar.show(pendingAppointment ? t('appointments.requestCanceled') : t('appointments.appointmentCanceled'))
           logAnalyticsEvent(
             Events.vama_appt_cancel(
               pendingAppointment,
@@ -104,15 +95,9 @@ const cancelButton = (
           )
         },
         onError: () => {
-          showSnackBar(
+          snackbar.show(
             pendingAppointment ? t('appointments.requestNotCanceled') : t('appointments.appointmentNotCanceled'),
-            dispatch,
-            () => {
-              cancelAppointment(cancelId, mutateOptions)
-            },
-            false,
-            true,
-            true,
+            { isError: true, onActionPressed: () => cancelAppointment(cancelId, mutateOptions) },
           )
         },
       }
@@ -313,9 +298,9 @@ function AppointmentCancelReschedule({
   goBack,
   cancelAppointment,
 }: AppointmentCancelRescheduleProps) {
+  const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const dispatch = useAppDispatch()
   const confirmAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
   const { location, cancelId } = attributes || ({} as AppointmentAttributes)
@@ -338,7 +323,7 @@ function AppointmentCancelReschedule({
           goBack,
           t,
           theme,
-          dispatch,
+          snackbar,
           confirmAlert,
           cancelId,
           cancelAppointment,
@@ -391,7 +376,7 @@ function AppointmentCancelReschedule({
           goBack,
           t,
           theme,
-          dispatch,
+          snackbar,
           confirmAlert,
           cancelId,
           cancelAppointment,

@@ -47,6 +47,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     error: vaccineError,
     refetch: refetchVaccines,
   } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
+
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -58,14 +59,27 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   }
 
   useEffect(() => {
-    const vaccineList = vaccines?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    const filteredVaccines = vaccines?.data.sort((a, b) => {
+      const dateA = b.attributes?.date ? new Date(b.attributes.date) : new Date(0)
+      const dateB = a.attributes?.date ? new Date(a.attributes.date) : new Date(0)
+      return dateA.getTime() - dateB.getTime()
+    })
+    const vaccineList = filteredVaccines?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setVaccinesToShow(vaccineList || [])
   }, [vaccines?.data, page])
 
   const vaccineButtons: Array<DefaultListItemObj> = map(vaccinesToShow, (vaccine, index) => {
+    const vaccineTitle = vaccine.attributes?.groupName
+      ? t('vaccines.vaccineName', { name: vaccine.attributes?.groupName })
+      : t('vaccine')
+    const vaccineDate = vaccine.attributes?.date ? formatDateMMMMDDYYYY(vaccine.attributes?.date) : t('vaccines.noDate')
+
     const textLines: Array<TextLine> = [
-      { text: t('vaccines.vaccineName', { name: vaccine.attributes?.groupName }), variant: 'MobileBodyBold' },
-      { text: formatDateMMMMDDYYYY(vaccine.attributes?.date || '') },
+      {
+        text: vaccineTitle,
+        variant: 'MobileBodyBold',
+      },
+      { text: vaccineDate },
     ]
 
     const vaccineButton: DefaultListItemObj = {
@@ -110,7 +124,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}

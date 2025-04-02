@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
 
@@ -12,18 +13,16 @@ context('LoaGate', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Sign in' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('loaGate.signInWithVerifiedAccount') })).toBeTruthy()
+    expect(screen.getByText(t('loaGate.p1'))).toBeTruthy()
     expect(
       screen.getByText(
-        'Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.',
+        'Don’t yet have a verified account? Continue to the sign-in page. Follow the instructions to create a Login.gov or ID.me account. Then come back here and sign in. We’ll help you verify your identity for your account.',
       ),
     ).toBeTruthy()
     expect(
-      screen.getByText(
-        'If you haven’t yet verified your identity, we’ll help you complete the process when you sign in.',
-      ),
+      screen.getByText('Not sure if your account is verified? Sign in now. We’ll tell you if you need to verify.'),
     ).toBeTruthy()
-    expect(screen.getByRole('tab', { name: "Read more if you haven't yet verified" })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Continue to sign in' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('continueToSignin') })).toBeTruthy()
   })
 })

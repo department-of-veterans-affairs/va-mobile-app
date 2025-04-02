@@ -10,9 +10,9 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { useFolderMessages } from 'api/secureMessaging'
 import { SecureMessagingMessageData, SecureMessagingMessageList } from 'api/types'
 import {
+  AlertWithHaptics,
   Box,
   ChildTemplate,
-  ErrorComponent,
   LoadingComponent,
   MessageList,
   Pagination,
@@ -23,7 +23,6 @@ import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
@@ -124,11 +123,14 @@ function FolderMessages({ route }: FolderMessagesProps) {
       {loadingFolderMessages ? (
         <LoadingComponent text={t('secureMessaging.messages.loading')} />
       ) : folderMessagesError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID}
-          error={folderMessagesError}
-          onTryAgain={refetchFolderMessages}
-        />
+        <Box mt={20} mb={theme.dimensions.buttonPadding}>
+          <AlertWithHaptics
+            variant="error"
+            header={t('secureMessaging.folders.messageDownError.title')}
+            description={t('secureMessaging.inbox.messageDownError.body')}
+            primaryButton={{ label: t('refresh'), onPress: refetchFolderMessages }}
+          />
+        </Box>
       ) : messages.length === 0 ? (
         <NoFolderMessages />
       ) : (

@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { put } from 'store/api'
@@ -51,7 +52,7 @@ describe('EditEmailScreen', () => {
   describe('when the email is saved', () => {
     it('navigates back to the previous screen', async () => {
       fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), 'my@email.com')
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
       await waitFor(() => expect(onBackSpy).toHaveBeenCalled())
     })
   })
@@ -59,17 +60,17 @@ describe('EditEmailScreen', () => {
   describe('when the email does not have an @ followed by text on save', () => {
     it('displays an AlertBox and field error', () => {
       fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), 'myemail')
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Check your email address')).toBeTruthy()
-      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editEmail.alertError'))).toBeTruthy()
+      expect(screen.getByText(t('editEmail.fieldError'))).toBeTruthy()
     })
   })
 
   describe('when the email input is empty on save', () => {
     it('displays an AlertBox and field error', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
-      expect(screen.getByText('Check your email address')).toBeTruthy()
-      expect(screen.getByText('Enter your email address again using this format: X@X.com')).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
+      expect(screen.getByText(t('editEmail.alertError'))).toBeTruthy()
+      expect(screen.getByText(t('editEmail.fieldError'))).toBeTruthy()
     })
   })
 
@@ -94,7 +95,7 @@ describe('EditEmailScreen', () => {
         .mockResolvedValue({})
 
       fireEvent.changeText(screen.getByTestId('emailAddressEditTestID'), updatedEmail)
-      fireEvent.press(screen.getByRole('button', { name: 'Save' }))
+      fireEvent.press(screen.getByRole('button', { name: t('save') }))
       await waitFor(() => expect(put as jest.Mock).toBeCalledWith('/v0/user/emails', payload))
     })
   })

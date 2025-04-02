@@ -4,17 +4,16 @@ import { useTranslation } from 'react-i18next'
 import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
-import { CloseSnackbarOnNavigation } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
-import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
-import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
@@ -26,7 +25,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { BenefitsStackParamList } from './BenefitsStackScreens'
-import SubmitEvidence from './ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
@@ -104,6 +102,7 @@ const BenefitsScreenStack = createStackNavigator<BenefitsStackParamList>()
  * Stack screen for the Benefits tab. Screens placed within this stack will appear in the context of the app level tab navigator
  */
 function BenefitsStackScreen() {
+  const snackbar = useSnackbar()
   const screenOptions = {
     headerShown: false,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -114,11 +113,11 @@ function BenefitsStackScreen() {
       screenListeners={{
         transitionStart: (e) => {
           if (e.data.closing) {
-            CloseSnackbarOnNavigation(e.target)
+            snackbar.hide()
           }
         },
-        blur: (e) => {
-          CloseSnackbarOnNavigation(e.target)
+        blur: () => {
+          snackbar.hide()
         },
       }}>
       <BenefitsScreenStack.Screen name="Benefits" component={BenefitsScreen} options={{ headerShown: false }} />
@@ -151,17 +150,6 @@ function BenefitsStackScreen() {
       <BenefitsScreenStack.Screen
         name="DisabilityRatings"
         component={DisabilityRatingsScreen}
-        options={{ headerShown: false }}
-      />
-      <BenefitsScreenStack.Screen name="FileRequest" component={FileRequest} options={FULLSCREEN_SUBTASK_OPTIONS} />
-      <BenefitsScreenStack.Screen
-        name="SubmitEvidence"
-        component={SubmitEvidence}
-        options={FULLSCREEN_SUBTASK_OPTIONS}
-      />
-      <BenefitsScreenStack.Screen
-        name="FileRequestDetails"
-        component={FileRequestDetails}
         options={{ headerShown: false }}
       />
       <BenefitsScreenStack.Screen

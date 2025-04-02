@@ -4,11 +4,7 @@ sidebar_position: 1
 
 # Dashboards
 
-## Monthly overview
-
-[Monthly overview dashboard](https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c)
-
-<iframe width="1200" height="900" title="Flagship monthly overview dashboard" src="https://lookerstudio.google.com/embed/reporting/e28cd59a-b2e5-4f29-8ae4-a4eea6d23f9c/page/p_6ji09oht5c" frameborder="0" allowfullscreen></iframe>
+[View monthly app metrics in their temporary location](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/analytics/README.md) while we work to get the dashboard back up and running.
 
 ## Feature specific boards
 

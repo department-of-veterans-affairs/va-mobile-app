@@ -56,7 +56,7 @@ env:
 
 jobs:
   build_ios:
-    runs-on: macos-14-xlarge
+    runs-on: macos-15-xlarge
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -86,7 +86,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 15.2
+          xcode-version: 16.2
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:

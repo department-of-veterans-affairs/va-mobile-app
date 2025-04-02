@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -27,7 +28,7 @@ import { RootState } from 'store'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin } from 'store/slices/authSlice'
-import { showSnackBar } from 'utils/common'
+import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
 import getEnv, { EnvVars } from 'utils/env'
 import {
   FeatureConstants,
@@ -43,6 +44,7 @@ import { STORAGE_REVIEW_EVENT_KEY, resetReviewActionCount } from 'utils/inAppRev
 type DeveloperScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'Developer'>
 
 function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { authCredentials } = useSelector<RootState, AuthState>((state) => state.auth)
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -109,6 +111,16 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
     }, []),
   )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadHideWarnings = async () => {
+        const currentVal = await getHideWarningsPreference()
+        setHideWarnings(currentVal)
+      }
+      loadHideWarnings()
+    }, []),
+  )
   // helper function for anything saved in AsyncStorage
   const getAsyncStoredData = async (key: string, setStateFun: (val: string) => void) => {
     const asyncVal = (await AsyncStorage.getItem(key)) || ''
@@ -117,6 +129,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
   getAsyncStoredData(DEVICE_TOKEN_KEY, setDeviceToken)
@@ -152,9 +165,9 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     try {
       await resetReviewActionCount()
       getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
-      showSnackBar('In app review actions reset', dispatch, undefined, true, false, true)
+      snackbar.show('In app review actions reset')
     } catch {
-      showSnackBar('Failed to reset in app review actions', dispatch, resetInAppReview, false, true)
+      snackbar.show('Failed to reset in app review actions', { isError: true, onActionPressed: resetInAppReview })
     }
   }
 
@@ -175,8 +188,21 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     },
   ]
 
+  const consoleWarningsList: Array<SimpleListItemObj> = [
+    {
+      text: 'Hide warnings',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: hideWarnings,
+      },
+      onPress: async () => {
+        await toggleHideWarnings()
+        setHideWarnings(!hideWarnings)
+      },
+    },
+  ]
+
   const onFeedback = () => {
-    //logAnalyticsEvent(Events.vama_feedback_page_entered())
     inAppFeedback('Developer')
   }
 
@@ -221,6 +247,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Firebase
         </TextView>
         <SimpleList items={firebaseList} />
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Console Warnings
+        </TextView>
+        {<SimpleList items={consoleWarningsList} />}
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
