@@ -1,0 +1,24 @@
+name: "[Admin] Check for linked issues in PRs"
+on:
+    pull_request:
+      types: [opened, edited, reopened, synchronize, labeled, unlabeled]
+
+jobs:
+    check_pull_requests:
+        runs-on: ubuntu-latest
+        name: Check linked issues
+        permissions:
+            issues: read
+            pull-requests: write
+        steps:
+            - uses: nearform-actions/github-action-check-linked-issues@v1
+              id: check-linked-issues
+              with:
+                exclude-branches: "release/**, dependabot/**, main, release-v**"
+                custom-body-comment: "@${{ github.event.pull_request.user.login }} Please link this pull request to an issue in the description or sidebar and rerun the failed workflow. Alternatively you can add the no-issue label."
+
+            - name: Get issue count
+              run: echo "${{ steps.check-linked-issues.outputs.linked_issues_count }} linked issue(s) to this pull request"
+
+            - name: List connected issues
+              run: echo ${{ steps.check-linked-issues.outputs.issues }}
