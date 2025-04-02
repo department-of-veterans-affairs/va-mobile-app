@@ -56,18 +56,18 @@ const fillHomeAddressFields = async () => {
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
   await waitFor(element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)))
     .toBeVisible()
-    .withTimeout(2_000)
+    .withTimeout(2000)
   await element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)).tap()
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
-    .withTimeout(4_000)
+    .withTimeout(4000)
   // Set the street address
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
-    .withTimeout(4_000)
+    .withTimeout(4000)
   // Scroll the page to make the state and zip code fields visible
   await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
 
@@ -81,7 +81,7 @@ const fillHomeAddressFields = async () => {
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
     .toBeVisible()
-    .withTimeout(4_000)
+    .withTimeout(4000)
   // Set the zip code
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
@@ -90,13 +90,13 @@ const fillHomeAddressFields = async () => {
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
   await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)))
     .toBeVisible()
-    .withTimeout(4_000)
+    .withTimeout(4000)
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SUGGESTED_ADDRESS_ID)).tap()
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_USE_THIS_ADDRESS_ID)).tap()
 
   // Dismiss the address suggestion modal
   try {
-    await setTimeout(2_000)
+    await setTimeout(2000)
     await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   } catch (ex) {}
 }
