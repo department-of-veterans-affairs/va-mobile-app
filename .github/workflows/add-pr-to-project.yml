@@ -8,7 +8,7 @@ on:
           - ready_for_review
 jobs:
     add-to-project:
-        name: Add pull request to project
+        name: Add PR to project board
         if: ${{ github.event.pull_request.base.ref == 'develop' && !github.event.pull_request.draft }}
         runs-on: ubuntu-latest
         steps:
