@@ -64,7 +64,7 @@ const fillHomeAddressFields = async () => {
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
   await waitFor(element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)))
     .toBeVisible()
-    .withTimeout(2000)
+    .withTimeout(2_000)
   await element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)).tap()
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
@@ -77,21 +77,14 @@ const fillHomeAddressFields = async () => {
     .toBeVisible()
     .withTimeout(4_000)
   // Scroll the page to make the state and zip code fields visible
-  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
-    .toBeVisible()
-    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
-    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
+
   // Set the city
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-  await waitFor(element(by.id(CommonE2eIdConstants.STATE_ID)))
-    .toBeVisible()
-    .withTimeout(4_000)
+
   // Set the state
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
-  await waitFor(element(by.text(TravelPayE2eIdConstants.STATE_TEXT)))
-    .toBeVisible()
-    .withTimeout(4_000)
   await element(by.text(TravelPayE2eIdConstants.STATE_TEXT)).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
