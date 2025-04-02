@@ -1,4 +1,4 @@
-name: "[Admin] Add pull request to project board"
+name: "[Admin] Add pull request to project board?"
 on:
     pull_request:
         types:
