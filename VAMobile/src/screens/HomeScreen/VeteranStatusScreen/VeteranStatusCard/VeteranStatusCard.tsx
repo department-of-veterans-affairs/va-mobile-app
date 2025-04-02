@@ -94,7 +94,13 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   }
 
   return (
-    <Box style={containerStyle} position="relative" width="100%" px={horizontalPadding} pt={theme.dimensions.contentMarginTop} borderRadius={15}>
+    <Box
+      style={containerStyle}
+      position="relative"
+      width="100%"
+      px={horizontalPadding}
+      pt={theme.dimensions.contentMarginTop}
+      borderRadius={15}>
       <Box
         alignItems="flex-start"
         justifyContent="center"
@@ -143,7 +149,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             </TextView>
           </Box>
 
-          {(percentText && percentText !== '0%') && (
+          {percentText && percentText !== '0%' && (
             <Box flex={isLandscape ? 1 : undefined}>
               <TextView color="primaryContrast" variant={headerVariant}>
                 {t('veteranStatus.disabilityRating')}
