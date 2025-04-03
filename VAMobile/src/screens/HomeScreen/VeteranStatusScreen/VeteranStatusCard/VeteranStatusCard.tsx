@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { View } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -17,11 +18,6 @@ const MAX_WIDTH = 672
 
 const EMBLEM_SIZE_LANDSCAPE = 82
 const EMBLEM_SIZE_PORTRAIT = 50
-
-const EMBLEM_TOP_LANDSCAPE = 40
-const EMBLEM_TOP_PORTRAIT = 42
-
-const EMBLEM_OFFSET_FROM_CARD_RIGHT = 26
 
 type VeteranStatusCardProps = {
   /** Displayed name of the Veteran */
@@ -55,19 +51,20 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
   // Compute layout values based on orientation
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
   const emblemSize = isPortrait ? EMBLEM_SIZE_PORTRAIT : EMBLEM_SIZE_LANDSCAPE
-  const emblemTopOffset = isPortrait ? EMBLEM_TOP_PORTRAIT : EMBLEM_TOP_LANDSCAPE
+
+  // For positioning emblem
+  const emblemOffset = -emblemSize / 2
 
   // If landscape, we add MAX_WIDTH & center the box
   const containerStyle = isLandscape ? { maxWidth: MAX_WIDTH, alignSelf: 'center' as const } : {}
-
-  // Compute where the emblem sits horizontally
-  const emblemRightOffset = horizontalPadding + EMBLEM_OFFSET_FROM_CARD_RIGHT
-  const clampedEmblemRight = emblemRightOffset < 0 ? 16 : emblemRightOffset
 
   // Orientation variants for fonts
   const titleVariant = isPortrait ? 'VeteranStatusCardHeaderPortraitBold' : 'VeteranStatusCardHeaderLandscapeBold'
   const headerVariant = isPortrait ? 'HelperTextBold' : 'MobileBodyBold'
   const helperVariant = isPortrait ? 'HelperText' : 'VeteranStatusProof'
+
+  // zIndex for VASeal icon
+  const VASealStyle = { zIndex: 2 }
 
   // VASeal SVG
   const VASealProps = {
@@ -75,6 +72,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
     height: emblemSize,
     width: emblemSize,
     testID: 'VeteranStatusCardVAIcon',
+    preventScaling: true,
   } as IconProps
 
   const titleStyle = {
@@ -112,9 +110,22 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         </TextView>
       </Box>
 
+      <View style={VASealStyle}>
+        <Box
+          accessible={true}
+          accessibilityRole="image"
+          accessibilityLabel={t('veteranStatus.imageDescription')}
+          right={theme.dimensions.standardMarginBetween}
+          alignSelf="flex-end"
+          mt={emblemOffset}>
+          <Icon {...VASealProps} />
+        </Box>
+      </View>
+
       <Box
         backgroundColor={theme.colors.background.veteranStatus as BackgroundVariant}
         borderRadiusBottom={15}
+        mt={emblemOffset}
         px={16}
         style={dropShadowStyle}>
         <Box pt={8}>
@@ -166,20 +177,6 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             {t('veteranStatus.noBenefitsEntitled')}
           </TextView>
         </Box>
-      </Box>
-
-      <Box
-        accessible={true}
-        accessibilityRole="image"
-        accessibilityLabel={t('veteranStatus.imageDescription')}
-        position="absolute"
-        top={emblemTopOffset}
-        right={clampedEmblemRight}
-        width={emblemSize}
-        height={emblemSize}
-        borderRadius={emblemSize / 2}
-        overflow="hidden">
-        <Icon {...VASealProps} preventScaling={true} />
       </Box>
     </Box>
   )
