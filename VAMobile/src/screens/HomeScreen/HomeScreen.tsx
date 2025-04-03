@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
@@ -110,6 +110,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const personalInformationQuery = usePersonalInformation()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+
+  const [showDisabilityRating, setShowDisabilityRating] = useState(false)
+  const [showCompensation, setShowCompensation] = useState(false)
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
@@ -446,21 +449,42 @@ export function HomeScreen({}: HomeScreenProps) {
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
                     pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
-                    pl={theme.dimensions.standardMarginBetween}>
+                    px={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
-                      variant={'VeteranStatusBranch'}>
+                      accessibilityLabel={
+                        showDisabilityRating
+                          ? `${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
+                          : `${t('disabilityRating.title')} ${t('disabilityRating.title.obfuscatedLabel')}`
+                      }
+                      variant={'HomeScreenHeader'}>
                       {t('disabilityRating.title')}
                     </TextView>
                     <TextView
                       accessible={false}
                       importantForAccessibility={'no'}
-                      variant={
-                        'NametagNumber'
-                      }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
-                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {t('disabilityRating.serviceConnected')}
+                      color={showDisabilityRating ? 'primary' : 'disabled'}
+                      variant={'NametagNumber'}>
+                      {showDisabilityRating
+                        ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`
+                        : t('disabilityRatingDetails.percentage.obfuscated')}
                     </TextView>
+                    <TextView
+                      accessible={false}
+                      importantForAccessibility={'no'}
+                      variant={'VeteranStatusProof'}
+                      color={showDisabilityRating ? 'primary' : 'disabled'}>
+                      {showDisabilityRating
+                        ? t('disabilityRating.serviceConnected')
+                        : t('disabilityRating.serviceConnected.obfuscated')}
+                    </TextView>
+                    <Box pt={theme.dimensions.standardMarginBetween}>
+                      <Button
+                        onPress={() => setShowDisabilityRating(!showDisabilityRating)}
+                        label={showDisabilityRating ? t('hide') : t('show')}
+                        testID={'showDisabilityTestID'}
+                        buttonType={ButtonVariants.Primary}
+                      />
+                    </Box>
                   </Box>
                 )}
                 {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
@@ -476,20 +500,41 @@ export function HomeScreen({}: HomeScreenProps) {
                     pt={
                       disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
                     }
-                    pl={theme.dimensions.standardMarginBetween}
+                    px={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
-                      variant={'VeteranStatusBranch'}>
+                      accessibilityLabel={
+                        showCompensation
+                          ? `${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          : `${t('monthlyCompensationPayment')} ${t('monthlyCompensationPayment.obfuscated')}`
+                      }
+                      variant={'HomeScreenHeader'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
                     <TextView
                       accessible={false}
+                      color={showCompensation ? 'primary' : 'disabled'}
                       importantForAccessibility={'no'}
-                      variant={'NametagNumber'}>{`${recurringPayment.amount}`}</TextView>
-                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                      variant={'NametagNumber'}>
+                      {showCompensation ? recurringPayment.amount : t('monthlyCompensationPayment.amount.obfuscated')}
                     </TextView>
+                    <TextView
+                      accessible={false}
+                      importantForAccessibility={'no'}
+                      variant={'VeteranStatusProof'}
+                      color={showCompensation ? 'primary' : 'disabled'}>
+                      {showCompensation
+                        ? `${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                        : t('monthlyCompensationPayment.depositedOn.obfuscated')}
+                    </TextView>
+                    <Box pt={theme.dimensions.standardMarginBetween}>
+                      <Button
+                        onPress={() => setShowCompensation(!showCompensation)}
+                        label={showCompensation ? t('hide') : t('show')}
+                        buttonType={ButtonVariants.Primary}
+                        testID={'showCompensationTestID'}
+                      />
+                    </Box>
                   </Box>
                 )}
               </Box>
