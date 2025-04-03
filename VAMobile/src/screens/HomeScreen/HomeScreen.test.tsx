@@ -501,6 +501,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(disabilityRating))
       initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByTestId('showDisabilityTestID')))
       await waitFor(() =>
         expect(
           screen.getByLabelText(
@@ -540,6 +541,7 @@ context('HomeScreen', () => {
         .calledWith('/v0/payment-history', {})
         .mockResolvedValue(getPaymentHistoryPayload('$3084.74', '2025-03-21T00:00:00.000-06:00'))
       initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByTestId('showCompensationTestID')))
       await waitFor(() =>
         expect(
           screen.getByLabelText(

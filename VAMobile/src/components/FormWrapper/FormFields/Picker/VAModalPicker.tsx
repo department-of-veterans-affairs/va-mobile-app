@@ -213,7 +213,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const renderButton = () => {
-    const color = disabled ? 'actionBarDisabled' : 'actionBar'
+    const color = disabled ? 'disabled' : 'actionBar'
 
     const props: TouchableWithoutFeedbackProps = {
       onPress: showModal,
