@@ -79,7 +79,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
     paddingTop: 16,
     paddingLeft: 16,
     paddingBottom: 8,
-    paddingRight: 64,
+    paddingRight: 80,
   }
 
   const dropShadowStyle = {
@@ -105,7 +105,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         backgroundColor={theme.colors.background.carousel as BackgroundVariant}
         borderRadiusTop={15}
         style={titleStyle}>
-        <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant} maxFontSizeMultiplier={1.3}>
+        <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant}>
           {t('veteranStatus.title')}
         </TextView>
       </Box>
