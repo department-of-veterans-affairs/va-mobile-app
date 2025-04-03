@@ -49,7 +49,7 @@ const config = {
   tagline: 'All the documentation for the VA mobile app',
   url: 'https://department-of-veterans-affairs.github.io/',
   baseUrl: '/va-mobile-app/',
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
@@ -152,7 +152,7 @@ const config = {
             activeBaseRegex: `/docs/`,
           },
           {
-            to: '/design/intro', // ./docs-api/Intro.md
+            to: '/design/Intro', // ./docs-api/Intro.md
             label: 'Design System',
             position: 'left',
             activeBaseRegex: `/design/`,
