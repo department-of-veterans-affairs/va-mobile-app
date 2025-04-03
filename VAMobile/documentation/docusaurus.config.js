@@ -172,11 +172,11 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: '/docs/intro',
+                to: '/docs/Intro',
               },
               {
                 label: 'Design System',
-                to: '/design/intro',
+                to: '/design/Intro',
               },
             ],
           },

@@ -167,7 +167,7 @@ Creates a Slack thread in the channel and updates the thread with the results of
 
 #### Triggers
 
-Tags matching the regular expression `/^RC-v.d+.d+.d+$/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/Automation%20Code%20Docs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
+Tags matching the regular expression `/^RC-v.d+.d+.d+$/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
 
 ```yaml
 on:
@@ -190,7 +190,7 @@ Creates a Slack thread in the channel and updates the thread with the results of
 
 #### Triggers
 
-Tags matching the regular expression `/^vd+.d+.d+/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/Automation%20Code%20Docs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
+Tags matching the regular expression `/^vd+.d+.d+/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
 
 ```yaml
 on:
@@ -227,7 +227,7 @@ These workflows are related to are release process which occurs every 2 weeks. C
 
 #### Description
 
-Runs our [`release_branch.sh`](/docs/Engineering/DevOps/Automation%20Code%20Docs/Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
+Runs our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
 
 #### Trigger
 
