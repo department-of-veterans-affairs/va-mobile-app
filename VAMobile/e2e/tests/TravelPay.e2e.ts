@@ -244,6 +244,7 @@ const checkTravelPayFlow = async (existingAddress: boolean) => {
 describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   })
 
   it('verifies travel pay flow up to the address screen', async () => {

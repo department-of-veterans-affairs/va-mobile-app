@@ -29,6 +29,7 @@ import {
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
 } from './formattingUtils'
+import { featureEnabled } from './remoteConfig'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -372,6 +373,10 @@ export const getDaysLeftToFileTravelPay = (startDateUtc: string) => {
 }
 
 const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: number) => {
+  if (!featureEnabled('travelPaySMOC')) {
+    return undefined
+  }
+
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
   if (isEligibleForTravelPay(attributes) && daysLeftToFile >= 0) {
     return {
