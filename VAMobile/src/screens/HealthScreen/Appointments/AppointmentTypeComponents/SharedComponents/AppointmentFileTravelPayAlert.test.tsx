@@ -12,7 +12,10 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
-import { context, fireEvent, render, screen } from 'testUtils'
+import { context, fireEvent, render, screen, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -169,126 +172,136 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
-  const initializeTestInstance = (attributes: AppointmentAttributes) => {
+  const initializeTestInstance = (attributes: AppointmentAttributes, featureFlag: boolean = true) => {
+    when(featureEnabled).calledWith('travelPaySMOC').mockReturnValue(featureFlag)
     render(<AppointmentFileTravelPayAlert attributes={attributes} />)
   }
 
-  it('should initialize correctly', async () => {
-    initializeTestInstance(inPersonVAAttributes)
-    expect(screen.getByText(t('travelPay.fileClaimAlert.header'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 29, days: 29 }))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.fileClaimAlert.button'))).toBeTruthy()
-  })
-
-  it('should NOT render if no more days left to file', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      startDateUtc: DateTime.utc().minus({ days: 45 }).toISO(),
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
+  describe('when the feature flag is enabled', () => {
+    it('should initialize correctly', async () => {
+      initializeTestInstance(inPersonVAAttributes)
+      expect(screen.getByText(t('travelPay.fileClaimAlert.header'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 29, days: 29 }))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.fileClaimAlert.button'))).toBeTruthy()
     })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
 
-  it('should NOT render if no travel pay claim', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      travelPayClaim: undefined,
-      isPending: false,
-      phoneOnly: false,
-    })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
-
-  it('should render if zero days left to file', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      startDateUtc: DateTime.now().minus({ days: 30 }).toUTC().toISO(),
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
-    })
-    initializeTestInstance(attributes)
-    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
-    expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
-  })
-
-  it('should NOT render if appointment is canceled', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.CANCELLED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
-    })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
-
-  it('should NOT render if appointment is pending', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.SUBMITTED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: true,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
-    })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
-
-  tests.forEach(({ attributes, expectedResult, testName }) => {
-    it(`should ${expectedResult ? '' : 'NOT '}render for ${testName}`, async () => {
+    it('should NOT render if no more days left to file', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.BOOKED,
+        appointmentType: AppointmentTypeConstants.VA,
+        startDateUtc: DateTime.utc().minus({ days: 45 }).toISO(),
+        isPending: false,
+        phoneOnly: false,
+        travelPayClaim: travelPayClaimData,
+      })
       initializeTestInstance(attributes)
-      if (expectedResult) {
-        expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
-      } else {
-        expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-      }
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
     })
-  })
 
-  it('should navigate to the travel pay flow when the "File claim" button is clicked', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
+    it('should NOT render if no travel pay claim', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.BOOKED,
+        appointmentType: AppointmentTypeConstants.VA,
+        travelPayClaim: undefined,
+        isPending: false,
+        phoneOnly: false,
+      })
+      initializeTestInstance(attributes)
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
     })
-    initializeTestInstance(attributes)
-    fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
-    expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
-      appointmentDateTime: attributes.startDateUtc,
-    })
-  })
 
-  it('should not render if a claim has already been filed', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: {
-        ...travelPayClaimData,
-        claim: {
-          id: '1234',
-          claimNumber: 'string',
-          claimStatus: 'In Process',
-          appointmentDateTime: '2024-01-01T16:45:34.465Z',
-          facilityName: 'Cheyenne VA Medical Center',
-          createdOn: '2024-03-22T21:22:34.465Z',
-          modifiedOn: '2024-01-01T16:44:34.465Z',
+    it('should render if zero days left to file', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.BOOKED,
+        appointmentType: AppointmentTypeConstants.VA,
+        startDateUtc: DateTime.now().minus({ days: 30 }).toUTC().toISO(),
+        isPending: false,
+        phoneOnly: false,
+        travelPayClaim: travelPayClaimData,
+      })
+      initializeTestInstance(attributes)
+      expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
+      expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
+    })
+
+    it('should NOT render if appointment is canceled', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.CANCELLED,
+        appointmentType: AppointmentTypeConstants.VA,
+        isPending: false,
+        phoneOnly: false,
+        travelPayClaim: travelPayClaimData,
+      })
+      initializeTestInstance(attributes)
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+    })
+
+    it('should NOT render if appointment is pending', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.SUBMITTED,
+        appointmentType: AppointmentTypeConstants.VA,
+        isPending: true,
+        phoneOnly: false,
+        travelPayClaim: travelPayClaimData,
+      })
+      initializeTestInstance(attributes)
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+    })
+
+    tests.forEach(({ attributes, expectedResult, testName }) => {
+      it(`should ${expectedResult ? '' : 'NOT '}render for ${testName}`, async () => {
+        initializeTestInstance(attributes)
+        if (expectedResult) {
+          expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
+        } else {
+          expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+        }
+      })
+    })
+
+    it('should navigate to the travel pay flow when the "File claim" button is clicked', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.BOOKED,
+        appointmentType: AppointmentTypeConstants.VA,
+        isPending: false,
+        phoneOnly: false,
+        travelPayClaim: travelPayClaimData,
+      })
+      initializeTestInstance(attributes)
+      fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
+        appointmentDateTime: attributes.startDateUtc,
+      })
+    })
+
+    it('should not render if a claim has already been filed', async () => {
+      const attributes = createTestAppointmentAttributes({
+        status: AppointmentStatusConstants.BOOKED,
+        appointmentType: AppointmentTypeConstants.VA,
+        isPending: false,
+        phoneOnly: false,
+        travelPayClaim: {
+          ...travelPayClaimData,
+          claim: {
+            id: '1234',
+            claimNumber: 'string',
+            claimStatus: 'In Process',
+            appointmentDateTime: '2024-01-01T16:45:34.465Z',
+            facilityName: 'Cheyenne VA Medical Center',
+            createdOn: '2024-03-22T21:22:34.465Z',
+            modifiedOn: '2024-01-01T16:44:34.465Z',
+          },
         },
-      },
+      })
+      initializeTestInstance(attributes)
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
     })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+  })
+
+  describe('when the feature flag is disabled', () => {
+    it('should not render', async () => {
+      initializeTestInstance(inPersonVAAttributes, false)
+      expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+    })
   })
 })
