@@ -14,16 +14,18 @@ function FileOnlineComponent() {
     {
       content: <TextView variant="MobileBody">{t('travelPay.youCanStillFile.bulletOne')}</TextView>,
       a11yHintText: t('travelPay.youCanStillFile.bulletOne'),
+      testId: 'fileOnlineBulletOne',
     },
     {
       content: <TextView variant="MobileBody">{t('travelPay.youCanStillFile.bulletTwo')}</TextView>,
       a11yHintText: t('travelPay.youCanStillFile.bulletTwo'),
+      testId: 'fileOnlineBulletTwo',
     },
   ]
 
   return (
     <View testID="fileOnlineComponent">
-      <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
+      <TextView testID="fileOnlineTitle" mt={theme.dimensions.standardMarginBetween} variant="MobileBody">
         {t('travelPay.youCanStillFile')}
       </TextView>
       <Box mt={theme.dimensions.standardMarginBetween}>
