@@ -52,10 +52,11 @@ function PrescriptionsDetailsBanner() {
         <Box>
           <VABulletList listOfText={bullets} paragraphSpacing={true} />
         </Box>
+        <TextView variant="MobileBody">{t('automatedPhoneSystem')}</TextView>
         <ClickToCallPhoneNumber
           phone={t('5418307563')}
-          displayedText={`${t('automatedPhoneSystem')} ${displayedTextPhoneNumber(t('5418307563'))}`}
-          a11yLabel={`${t('automatedPhoneSystem')} ${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
+          displayedText={`${displayedTextPhoneNumber(t('5418307563'))}`}
+          a11yLabel={`${getNumberAccessibilityLabelFromString(t('5418307563'))}`}
           variant={'base'}
         />
       </>
