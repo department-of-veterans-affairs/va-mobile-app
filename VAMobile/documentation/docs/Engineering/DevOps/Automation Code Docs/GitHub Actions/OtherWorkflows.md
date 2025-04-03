@@ -8,6 +8,17 @@ This is a list of all the reusable workflows in GitHub Actions and what they do.
 
 In an effort to reduce the page size, large workflow code will be linked instead of being provided here.
 
+## Check for linked issues in PRs (`check-linked-issues`)
+
+[View the check linked issues workflow file](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/check-linked-issues.yml)
+
+### Description
+
+This workflow checks most pull requests to make sure there is an issue connected. This helps us build out release reports and manage tasks as they pass through the system. [Read more about how to connect a pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue).
+
+## Trigger
+
+This workflow triggers inside a pull request, [excluding a few branch names](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/check-linked-issues.yml#L17)
 
 ## Add User to va-mobile-team repo (`add_new_user`)
 
