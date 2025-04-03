@@ -152,7 +152,7 @@ const config = {
             activeBaseRegex: `/docs/`,
           },
           {
-            to: '/design/Intro', // ./docs-api/Intro.md
+            to: '/design/intro', // ./docs-api/Intro.md
             label: 'Design System',
             position: 'left',
             activeBaseRegex: `/design/`,
