@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { VATextColors } from 'styles/theme'
-import { useExternalLink } from 'utils/hooks'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BackgroundVariant } from './Box'
@@ -15,9 +14,6 @@ import TextView, { FontVariant, TextViewProps } from './TextView'
 export type VABulletListText = {
   /** string to display */
   text: string
-
-  /** optional parameter that if exists, will make the text a link */
-  linkToRedirect?: string
 
   /** optional parameter to display given bolded text before main text */
   boldedTextPrefix?: string
@@ -53,7 +49,6 @@ export type VABulletListProps = {
  * Displays the list of text as a bulleted list
  */
 const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bulletColor }) => {
-  const launchExternalLink = useExternalLink()
   const theme = useTheme()
 
   const getUpdatedListOfText = (): Array<VABulletListText> => {
@@ -68,19 +63,14 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bul
     return listOfText as Array<VABulletListText>
   }
 
-  const onPress = async (linkToRedirect: string): Promise<void> => {
-    launchExternalLink(linkToRedirect)
-  }
-
   return (
     <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined}>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
-        const { variant, color, linkToRedirect, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
+        const { variant, color, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
 
         const textViewProps: TextViewProps = {
           variant: variant || 'MobileBody',
           color: color || 'bodyText',
-          onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
           flexWrap: 'wrap',
           flex: 1,
         }

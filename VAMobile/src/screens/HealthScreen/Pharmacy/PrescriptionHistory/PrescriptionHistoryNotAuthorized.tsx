@@ -52,7 +52,7 @@ function PrescriptionHistoryNotAuthorized() {
     type: 'url',
     url: LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE,
     text: t('prescriptions.notAuthorized.findVACare'),
-    a11yLabel: t('prescriptions.notAuthorized.findVACare'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.findVACare')),
     a11yHint: t('prescriptions.notAuthorized.findVACare.a11yHint'),
   }
 
@@ -72,12 +72,15 @@ function PrescriptionHistoryNotAuthorized() {
           <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
           <TextView
             mt={standardMarginBetween}
-            accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notAuthorized.pleaseCall.a11y'))}
             my={theme.dimensions.contentMarginTop}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
-          <TextView variant="MobileBody" my={theme.dimensions.contentMarginTop}>
+          <TextView
+            variant="MobileBody"
+            my={theme.dimensions.contentMarginTop}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notAuthorized.notEnrolled'))}>
             {t('prescriptions.notAuthorized.notEnrolled')}
           </TextView>
           <LinkWithAnalytics {...linkProps} />
