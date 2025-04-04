@@ -49,7 +49,7 @@ const config = {
   tagline: 'All the documentation for the VA mobile app',
   url: 'https://department-of-veterans-affairs.github.io/',
   baseUrl: '/va-mobile-app/',
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
