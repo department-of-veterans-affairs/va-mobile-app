@@ -75,12 +75,12 @@ jobs:
 
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              # if [[ $(jq --argjson check_value "${{fromJSON(steps).mobile.reviewers.output.mreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
-              if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
+              if [[ $(jq --arg check_value "${{steps.mobile.reviewers.output.mreview}}" '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+              # if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                # if [[ $(jq --argjson check_value "${{fromJSON(steps).qa.reviewers.output.qreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
-                if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
+                if [[ $(jq --arg check_value "${{steps.qa.reviewers.output.qreview}}" '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+                # if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
@@ -96,5 +96,5 @@ jobs:
               fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
-            exit 1
+            exit 1"
           fi
