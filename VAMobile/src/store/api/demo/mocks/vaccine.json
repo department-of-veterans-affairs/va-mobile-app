@@ -339,7 +339,7 @@
           "type": "immunization",
           "attributes": {
             "cvxCode": 140,
-            "date": "2010-03-25T12:24:55Z",
+            "date": "2014-03-25T12:24:55Z",
             "doseNumber": null,
             "doseSeries": null,
             "groupName": "FLU",

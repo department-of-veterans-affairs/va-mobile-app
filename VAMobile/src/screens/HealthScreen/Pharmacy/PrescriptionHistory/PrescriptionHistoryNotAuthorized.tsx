@@ -22,7 +22,7 @@ import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-const { LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT } = getEnv()
+const { LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 function PrescriptionHistoryNotAuthorized() {
   const theme = useTheme()
@@ -50,10 +50,10 @@ function PrescriptionHistoryNotAuthorized() {
 
   const linkProps: LinkProps = {
     type: 'url',
-    url: LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT,
-    text: t('notEnrolledSM.learnHowTo'),
-    a11yLabel: t('notEnrolledSM.learnHowTo'),
-    a11yHint: t('notEnrolledSM.learnHowTo.a11yHint'),
+    url: LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE,
+    text: t('prescriptions.notAuthorized.findVACare'),
+    a11yLabel: a11yLabelVA(t('prescriptions.notAuthorized.findVACare')),
+    a11yHint: t('prescriptions.notAuthorized.findVACare.a11yHint'),
   }
 
   return (
@@ -67,14 +67,23 @@ function PrescriptionHistoryNotAuthorized() {
       </Box>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
+          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.systemProblem')}</TextView>
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toAccess')}</TextView>
-          <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toUpgrade')}</TextView>
           <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
-          <LinkWithAnalytics {...linkProps} />
-          <TextView mt={standardMarginBetween} accessibilityLabel={t('prescriptions.notAuthorized.pleaseCall.a11y')}>
+          <TextView
+            mt={standardMarginBetween}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notAuthorized.pleaseCall.a11y'))}
+            my={theme.dimensions.contentMarginTop}>
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
+          <TextView
+            variant="MobileBody"
+            my={theme.dimensions.contentMarginTop}
+            accessibilityLabel={a11yLabelVA(t('prescriptions.notAuthorized.notEnrolled'))}>
+            {t('prescriptions.notAuthorized.notEnrolled')}
+          </TextView>
+          <LinkWithAnalytics {...linkProps} />
         </TextArea>
       </Box>
     </VAScrollView>
