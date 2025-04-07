@@ -43,8 +43,6 @@ jobs:
       - name: Check QA approval
         shell: bash
         run: |
-          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
-          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
             then
             echo "PR opened by Dependabot. Skipping QA approval check."
