@@ -158,7 +158,7 @@ context('AllergyDetailsScreen', () => {
       const textElement = screen.queryByText(
         'We base this information on your current VA health records. If you have any questions, contact your health care team.',
       )
-      expect(textElement).toBeNull()
+      expect(textElement).toBeTruthy()
     })
   })
 
@@ -187,7 +187,7 @@ context('AllergyDetailsScreen', () => {
       const textElement = screen.queryByText(
         'We base this information on your current VA health records. If you have any questions, contact your health care team.',
       )
-      expect(textElement).toBeNull()
+      expect(textElement).toBeTruthy()
     })
   })
 
@@ -219,7 +219,7 @@ context('AllergyDetailsScreen', () => {
       const textElement = screen.queryByText(
         'We base this information on your current VA health records. If you have any questions, contact your health care team.',
       )
-      expect(textElement).toBeNull()
+      expect(textElement).toBeTruthy()
     })
   })
 })
