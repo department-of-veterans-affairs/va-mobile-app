@@ -66,21 +66,19 @@ jobs:
           approvals=["jbergman-oddball","timwright12"]
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
-          # echo Mobile approvers ${{steps.mobile_reviewers.output.mreview}}
-          # echo QA approvers ${{steps.qa_reviewers.output.qreview}}
-          echo jq -r .
+
           echo before if
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
           echo after 1st if
             then
               echo before 2nd if
-              if [[ $(jq --arg check_value '${{steps.mobile_reviewers.output.mreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq --arg check_value '${{steps.mobile_reviewers.output.mreview}}' '. | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
               echo after second if
               # if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
                 then
                 echo before 3rd if
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq --arg check_value '${{steps.qa_reviewers.output.qreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(jq --arg check_value '${{steps.qa_reviewers.output.qreview}}' '. | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
                 echo after 3rd if
                 # if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
                   then
