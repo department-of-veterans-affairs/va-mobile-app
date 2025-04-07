@@ -5,6 +5,7 @@
 name: "[Utils] QA required approval"
 
 on:
+  push:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
@@ -27,6 +28,7 @@ jobs:
           # Fetch GitHub Mobile Reviewers
           MOBILE_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members --jq 'map(.login) | join(",")')
           echo mreview= $MOBILE_REVIEWERS >> $GITHUB_OUTPUT
+          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: mobile_reviewers
@@ -35,6 +37,7 @@ jobs:
           # Fetch GitHub QA Reviewers
           QA_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq 'map(.login) | join(",")')
           echo qreview= $QA_REVIEWERS >> $GITHUB_OUTPUT
+          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: qa_reviewers
@@ -47,11 +50,11 @@ jobs:
             echo "PR opened by Dependabot. Skipping QA approval check."
             exit 0
           fi
-          approvals=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
-          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' )
-          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          # approvals=$(curl --request GET \
+          # --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
+          # --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
+          # --header 'Content-Type: application/json' )
+          # jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
@@ -61,14 +64,14 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
-          # approvals=["jbergman-oddball","timwright12"]
+          approvals=["jbergman-oddball","timwright12"]
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
           # echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
           # echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
 
           echo before if
-          if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
+          if [[ $(jq '.[] | length' <<< "$approvals") -ge $required_approval_count ]]
           echo after 1st if
             then
               echo before 2nd if
