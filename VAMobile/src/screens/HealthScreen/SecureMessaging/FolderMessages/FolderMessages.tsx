@@ -52,8 +52,11 @@ function FolderMessages({ route }: FolderMessagesProps) {
 
   useEffect(() => {
     const messagesList = folderMessagesData?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    if (page > 1 && !loadingFolderMessages && !folderMessagesError && messagesList?.length === 0) {
+      setPage(page - 1) // avoid empty page if last message on page was moved
+    }
     setMessagesToShow(messagesList || [])
-  }, [folderMessagesData?.data, page])
+  }, [folderMessagesData?.data, folderMessagesError, loadingFolderMessages, page])
 
   const messages = folderMessagesData?.data || ([] as SecureMessagingMessageList)
   const paginationMetaData = folderMessagesData?.meta.pagination
