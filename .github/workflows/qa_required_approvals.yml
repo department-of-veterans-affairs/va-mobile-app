@@ -66,6 +66,8 @@ jobs:
           approvals=["jbergman-oddball","timwright12"]
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
+          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
+          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
 
           echo before if
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
