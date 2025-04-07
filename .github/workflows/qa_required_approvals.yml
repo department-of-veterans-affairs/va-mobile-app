@@ -29,6 +29,7 @@ jobs:
           # Fetch GitHub Mobile Reviewers
           MOBILE_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members --jq 'map(.login) | join(",")')
           echo mreview= $MOBILE_REVIEWERS >> $GITHUB_OUTPUT
+          echo "Reviews are $mreview"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: mobile_reviewers
@@ -37,6 +38,7 @@ jobs:
           # Fetch GitHub QA Reviewers
           QA_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq 'map(.login) | join(",")')
           echo qreview= $QA_REVIEWERS >> $GITHUB_OUTPUT
+          echo "Reviewers are $qreview"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: qa_reviewers
@@ -73,12 +75,12 @@ jobs:
 
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              if [[ $(jq --argjson check_value "${{fromJSON(steps).mobile.reviewers.output.mreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
-              # if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
+              # if [[ $(jq --argjson check_value "${{fromJSON(steps).mobile.reviewers.output.mreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
+              if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq --argjson check_value "${{fromJSON(steps).qa.reviewers.output.qreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
-                # if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
+                # if [[ $(jq --argjson check_value "${{fromJSON(steps).qa.reviewers.output.qreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
