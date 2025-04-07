@@ -28,7 +28,6 @@ jobs:
           # Fetch GitHub Mobile Reviewers
           MOBILE_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members --jq 'map(.login) | join(",")')
           echo mreview= $MOBILE_REVIEWERS >> $GITHUB_OUTPUT
-          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: mobile_reviewers
@@ -37,7 +36,6 @@ jobs:
           # Fetch GitHub QA Reviewers
           QA_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq 'map(.login) | join(",")')
           echo qreview= $QA_REVIEWERS >> $GITHUB_OUTPUT
-          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: qa_reviewers
@@ -45,6 +43,8 @@ jobs:
       - name: Check QA approval
         shell: bash
         run: |
+          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
+          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
             then
             echo "PR opened by Dependabot. Skipping QA approval check."
@@ -64,7 +64,7 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
-          approvals=["jbergman-oddball","timwright12"]
+          approvals=["jbergman-oddball", "timwright12"]
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
           # echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
