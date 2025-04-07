@@ -65,7 +65,12 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   }, [allergies])
 
   useEffect(() => {
-    const allergyList = allergies?.data.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    const filteredAllergies = allergies?.data.sort((a, b) => {
+      const dateA = b.attributes?.recordedDate ? new Date(b.attributes.recordedDate) : new Date(0)
+      const dateB = a.attributes?.recordedDate ? new Date(a.attributes.recordedDate) : new Date(0)
+      return dateA.getTime() - dateB.getTime()
+    })
+    const allergyList = filteredAllergies?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 
