@@ -53,7 +53,7 @@ jobs:
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
       - name: Get file difference by file name
         id: changed_files_file_name
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v46
         with:
           base_sha: "${{ steps.get-sha.outputs.sha }}"
           path: './VAMobile/src'
