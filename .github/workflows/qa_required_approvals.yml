@@ -66,14 +66,16 @@ jobs:
           approvals='jbergman-oddball,timwright12'
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
+          echo "Mobile approvers ${{steps.mobile_reviewers.output.mreview}}"
+          echo "QA approvers ${{steps.qa_reviewers.output.qreview}}"
 
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              if [[ $(jq --arg check_value '${{steps.mobile.reviewers.output.mreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq --arg check_value '${{steps.mobile_reviewers.output.mreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
               # if  [[ $(echo -n "${{ steps.mobile_reviewers.outputs.mreview }}" | wc -c) -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq --arg check_value '${{steps.qa.reviewers.output.qreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(jq --arg check_value '${{steps.qa_reviewers.output.qreview}}' '.[] | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
                 # if [[ $(echo -n "${{ steps.qa_reviewers.outputs.qreview }}" | wc -c) -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
