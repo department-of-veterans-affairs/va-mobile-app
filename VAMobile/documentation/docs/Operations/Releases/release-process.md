@@ -24,7 +24,7 @@ flowchart LR
         end
         subgraph Step5
             direction LR
-            H("Release branch is merged into <i>main</i><br><b>(release_pull_request.yml)</b>") --> I("Tag release build <i>v\*\.\*\.\*</i><br><b>(release_build.yml)</b>") --> J("Actions triggered by <i>/approve v\*\.\*\.\*</i><br><b>(approve_command.yml)</b>")
+            H("Release branch is merged into <i>main</i><br><b>(release_pull_request.yml)</b>") --> I("Tag release build <i>v\*\.\*\.\*</i><br><b>(release_build.yml)</b>") --> S("PR is opened to merge the release branch back into <i>develop</i><br><b>(release_pull_request.yml)</b>") --> J("Actions triggered by <i>/approve v\*\.\*\.\*</i><br><b>(approve_command.yml)</b>")
         end
         subgraph Step6
             direction LR
@@ -59,7 +59,7 @@ F:::blue
 G:::gray
 H:::blue
 I:::blue
-J:::blue
+J:::gray
 K:::blue
 L:::gray
 M:::blue
@@ -68,6 +68,7 @@ O:::blue
 P:::gray
 Q:::blue
 R:::gray
+S:::blue
 ReleaseProcess:::white
 ```
 
