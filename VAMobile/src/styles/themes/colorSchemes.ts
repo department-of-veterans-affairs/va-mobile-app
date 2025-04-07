@@ -243,7 +243,7 @@ export const darkTheme = {
     inputFocused: colors.vadsColorBaseLightest,
     actionBar: colors.uswdsSystemColorBlueVivid30,
     actionBarDisabled: colors.vadsColorBaseLight,
-    bodyText: colors.vadsColorBaseLighter,
+    bodyText: colors.vadsColorBaseLightest,
     showAll: colors.uswdsSystemColorBlueVivid30,
     labelTag: colors.vadsColorBase,
     textWithIconButtonInactive: colors.vadsColorBaseLight,
