@@ -63,7 +63,7 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
-          approvals = 0
+          approvals=0
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
 
