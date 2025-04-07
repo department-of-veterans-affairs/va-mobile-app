@@ -92,5 +92,5 @@ jobs:
               fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
-            exit 1"
+            exit 1
           fi
