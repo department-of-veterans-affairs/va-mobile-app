@@ -53,7 +53,8 @@ jobs:
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json' |
-          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          echo "These are the approvals: $approvals"
+          # jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
