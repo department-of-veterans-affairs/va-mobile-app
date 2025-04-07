@@ -5,8 +5,6 @@
 name: "[Utils] QA required approval"
 
 on:
-  push:
-  workflow_dispatch:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
@@ -53,8 +51,7 @@ jobs:
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
           --header 'Content-Type: application/json' )
-          echo "These are the approvals: $approvals"
-          # jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
@@ -67,8 +64,8 @@ jobs:
           # approvals=["jbergman-oddball","timwright12"]
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
-          echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
-          echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
+          # echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
+          # echo "QA Reviewers: ${{ steps.qa_reviewers.outputs.qreview }}"
 
           echo before if
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
