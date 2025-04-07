@@ -67,6 +67,10 @@ jobs:
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
 
+          echo "Printing jq results"
+          jq '.'
+
+
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
               if [[ $(jq --argjson check_value "${{fromJSON(steps).mobile.reviewers.output.mreview}}" '.[] | select(IN($check_value[])) | length' <<< "$approvals") -gt 0 ]]
