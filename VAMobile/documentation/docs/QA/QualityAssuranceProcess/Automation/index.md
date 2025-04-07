@@ -6,26 +6,31 @@ sidebar_position: 1
 # UI Automation Testing
 
 ## Background
+
 _For folks looking for a basic primer on "what is UI automation testing", reading one of the [many articles available via quick google search](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing) is the recommended method. This section instead covers the background of automated UI testing for the mobile team._
 
-Implementing robust UI automation for the mobile team supports several team goals - more efficiently using QA Engineer time, finding bugs sooner/reducing regressions, and improving FE efficiency (reducing the number of flaky unit tests that are written to accomplish what UI automation is better positioned to test). 
+Implementing robust UI automation for the mobile team supports several team goals - more efficiently using QA Engineer time, finding bugs sooner/reducing regressions, and improving FE efficiency (reducing the number of flaky unit tests that are written to accomplish what UI automation is better positioned to test).
 
 Phases include:
+
 - **Tool assessment & initial implementation**: Completed Q3 2022
 - **Release candidate script automation**: Slated for Q4 2023
 - **Key end-to-end test automation**: _Future_
 
 ## Detox: our UI automation tool
+
 Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), which we picked over other tools because it slotted in nicely with existing tools/tech for the team (react native, javascript, jest) while also having more robust functionality with lighter lift than some other tools (write a single script that executes cross-platform; active development, support & documentation updates from the detox team; etc).
 
 ### Prerequisites
+
 Follow instructions for FE [Development Setup Instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
 
 ### Local setup for detox
+
 1. Check for the [detox pre-reqs](https://wix.github.io/Detox/docs/introduction/getting-started#detox-prerequisites) on your local machine and install if needed using the `yarn` package manager.
-	- If needed find and delete the detoxrc.js file. This file is sometimes created when you initially install detox and is not needed because the VA Mobile App uses .detoxrc.json file. 
+   - If needed find and delete the detoxrc.js file. This file is sometimes created when you initially install detox and is not needed because the VA Mobile App uses .detoxrc.json file.
 2. Check that the emulators used by the script ([listed in .detoxrc.json](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/.detoxrc.json#L17)) are installed on your machine, and install them if not. [Helpful instructions from detox](https://wix.github.io/Detox/docs/introduction/project-setup#step-3-device-configs)
-    - If you need to create a new Android emulator, make sure to bump up the internal storage (default is 800, bumping to 8000 definitely works). If you don't do this, you'll get an out of storage error. One path that works for this: Shift-Shift > search "Virtual Device Manager" > {create new device or edit existing device} > Show Advanced Settings > scroll down to the "Memory and Storage" section to find the "Internal Storage" field
+   - If you need to create a new Android emulator, make sure to bump up the internal storage (default is 800, bumping to 8000 definitely works). If you don't do this, you'll get an out of storage error. One path that works for this: Shift-Shift > search "Virtual Device Manager" > `{create new device or edit existing device}` > Show Advanced Settings > scroll down to the "Memory and Storage" section to find the "Internal Storage" field
 3. Build and Run App
    1. Run `yarn install` to install the project dependencies
    2. Start Metro with `yarn start` and leave it running in its own separate terminal
@@ -37,17 +42,19 @@ Follow instructions for FE [Development Setup Instructions](https://department-o
    2. Run `yarn e2e:android-test` to run the Android tests
       - Android will open the emulator & show you the tests running, automatically.
       - If android tests hangs and you receive this error: _`Exceeded timeout of 300000ms while handling jest-circus "setup" event`_, you will need to downgrade API of AVD System Image to 28
-         - Open _Android Studio_
-         - Go to `Tools -> Device Manager -> (next to emulator used for tests) Edit this AVD -> (next to system image) Change`
-         - Change API Level to 28 (Release name: _Pie_)
+        - Open _Android Studio_
+        - Go to `Tools -> Device Manager -> (next to emulator used for tests) Edit this AVD -> (next to system image) Change`
+        - Change API Level to 28 (Release name: _Pie_)
       - Individual test runtime is ~30 seconds (we start all tests back from the login window). Total test runtime will change as we add more tests, but expect it to take a few minutes as well.
 
 ## UI Automation Testing Process
 
 ### Release Candidate Automation
+
 The RC regression script is split into two sections: testing covered manually, and [testing covered with automation.](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=9683).
 
 Each release, someone from the QA team is responsible for 'babysitting' the automated tests for the release candidate build. This person is responsible for confirming all automated cases have run against the correct build, and then signing off on automated testing by leaving a comment in the release sign-off ticket. There are three potential outcomes for this signoff, here's an example of what the comment would look like for each:
+
 1. All automated cases pass, signing off on that section
 2. Some automated cases failed: (list of which cases & why). These failures do not indicate a breaking change with the app, and I have written up automation maintenance ticket(s) for the necessary changes: (links to relevant tickets)
 3. Some automated cases failed: (list of which cases & why). These failures are breaking changes in the app, and I have written up bug ticket(s): (links to relevant tickets). These bugs SHOULD / SHOULD NOT prevent release of the app.
