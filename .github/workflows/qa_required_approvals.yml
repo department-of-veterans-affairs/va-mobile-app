@@ -29,7 +29,7 @@ jobs:
           # Fetch GitHub Mobile Reviewers
           MOBILE_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members --jq 'map(.login) | join(",")')
           echo mreview= $MOBILE_REVIEWERS >> $GITHUB_OUTPUT
-          echo "Reviews are $mreview"
+          echo Approvers are: ${{ steps.mobile_reviewers.outputs.mreview }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: mobile_reviewers
@@ -38,7 +38,7 @@ jobs:
           # Fetch GitHub QA Reviewers
           QA_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq 'map(.login) | join(",")')
           echo qreview= $QA_REVIEWERS >> $GITHUB_OUTPUT
-          echo "Reviewers are $qreview"
+          echo Approvers are: ${{ steps.qa_reviewers.outputs.qreview }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         id: qa_reviewers
@@ -65,7 +65,7 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
-          approvals="jbergman-oddball,timwright12"
+          approvals=jbergman-oddball,timwright12
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
 
