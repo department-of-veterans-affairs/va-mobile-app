@@ -1,20 +1,20 @@
-
 #
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
 #
 
-name: '[Utils] QA required approval'
+name: "[Utils] QA required approval"
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src'
-      - 'VAMobile/e2e'
-      - 'VAMobile/package.json'
-      - 'VAMobile/.detoxrc.json'
-      - '!VAMobile/src/*.test.tsx'
-      - '!.github/**'
+      - "VAMobile/src"
+      - "VAMobile/e2e"
+      - "VAMobile/package.json"
+      - "VAMobile/.detoxrc.json"
+      - "!VAMobile/src/*.test.tsx"
+      - "!.github/**"
   pull_request_review:
     types: [submitted, dismissed]
 
@@ -23,6 +23,23 @@ jobs:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
+      - name: Get Mobile reviewers
+        run: |
+          # Fetch GitHub Mobile Reviewers
+          MOBILE_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members --jq 'map(.login) | join(",")')
+          echo mreview= $MOBILE_REVIEWERS >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+        id: mobile_reviewers
+      - name: Get QA reviewers
+        run: |
+          # Fetch GitHub QA Reviewers
+          QA_REVIEWERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members --jq 'map(.login) | join(",")')
+          echo qreview= $QA_REVIEWERS >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+        id: qa_reviewers
+
       - name: Check QA approval
         shell: bash
         run: |
@@ -31,11 +48,11 @@ jobs:
             echo "PR opened by Dependabot. Skipping QA approval check."
             exit 0
           fi
-          approvals=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
-          --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' |
-          jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          # approvals=$(curl --request GET \
+          # --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
+          # --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
+          # --header 'Content-Type: application/json' |
+          # jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
@@ -45,27 +62,30 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
+          approvals = 0
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
- 
+
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "dumathane", "jmarchi", "keli13", "dftony", "df-troiano"))] | length' <<< "$approvals") -gt 0 ]]
+              if  [[ ${{ steps.mobile_reviewers.outputs.mreview }} | length <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq '[.[] | select(. | IN("timwright12", "digitalken"))] | length' <<< "$approvals") -gt 0 ]]
+                if [[ ${{ steps.qa_reviewers.outputs,qreview }} | length <<< "$approvals") -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
                 else 
                   echo 'This PR requires QA approval to merge'
+                  echo Approvers are: ${{ steps.qa_reviewers.outputs.qreview }}
                   exit 1
                 fi
               else
                 echo 'This PR requires Engineer approval before QA review'
+                echo Approvers are: ${{ steps.mobile_reviewers.outputs.mreview }}
                 exit 1
               fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
-          fi 
+          fi
