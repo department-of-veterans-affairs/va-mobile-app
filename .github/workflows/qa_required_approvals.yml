@@ -72,7 +72,7 @@ jobs:
               if  [[ ${{ steps.mobile_reviewers.outputs.mreview }} | length <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ ${{ steps.qa_reviewers.outputs,qreview }} | length <<< "$approvals") -gt 0 ]]
+                if [[ ${{ steps.qa_reviewers.outputs.qreview }} | length <<< "$approvals") -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
