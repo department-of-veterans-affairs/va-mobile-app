@@ -3,33 +3,70 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { TravelPayError } from 'constants/travelPay'
+import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
 type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
 
-function ErrorScreen({}: ErrorScreenProps) {
+function ErrorScreen({ route }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-
+  const { error } = route.params
   const theme = useTheme()
   const isPortrait = useOrientation()
+  const navigateTo = useRouteNavigation()
+
+  const getErrorContent = (error: TravelPayError) => {
+    switch (error) {
+      case 'noAddress':
+        return {
+          title: t('travelPay.error.noAddress.title'),
+          textLines: [t('travelPay.error.noAddress.text')],
+          content: (
+            <LinkWithAnalytics
+              type="custom"
+              text={t('travelPay.error.noAddress.link')}
+              testID="updateAddressLink"
+              onPress={() => {
+                navigateTo('ContactInformation')
+              }}
+            />
+          ),
+        }
+      case 'noEligibleType':
+        return {
+          title: t('travelPay.error.notEligible.title'),
+          textLines: [t('travelPay.error.notEligible.text')],
+        }
+      case 'error':
+      default:
+        return {
+          title: t('travelPay.error.error.title'),
+          textLines: [t('travelPay.error.error.text'), t('travelPay.error.error.text2')],
+        }
+    }
+  }
+
+  const { title, textLines, content } = getErrorContent(error)
 
   return (
     <VAScrollView>
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
-          {t('travelPay.error.title')}
+        <TextView variant="BitterHeading" accessibilityRole="header">
+          {title}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('travelPay.error.text')}
-        </TextView>
-        {/* <TextView>{route.params.error}</TextView> */}
+        {textLines.map((textLine, index) => (
+          <TextView key={index} variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+            {textLine}
+          </TextView>
+        ))}
+        {content}
         <FileOnlineComponent />
         <TravelPayHelp />
       </Box>

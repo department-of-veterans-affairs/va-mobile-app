@@ -12,10 +12,10 @@ function TravelPayHelp() {
 
   return (
     <View testID="travelPayHelp">
-      <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+      <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
         {t('travelPay.helpTitle')}
       </TextView>
-      <TextView testID="helpTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+      <TextView testID="helpTextID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
         {t('travelPay.helpText')}
       </TextView>
       <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={'travelPay.phone.a11yHint'} />
