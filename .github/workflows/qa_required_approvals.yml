@@ -49,7 +49,9 @@ jobs:
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header 'Authorization: ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'Content-Type: application/json' | jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          --header 'Content-Type: application/json') 
+
+          approved_reviewers=$(echo "$approvals" | jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
 
           echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
           gh auth login --with-token < token.txt
@@ -58,7 +60,7 @@ jobs:
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | jq -c '.required_pull_request_reviews.required_approving_review_count')
 
-          echo "Approvers: $approvals"  
+          echo "Approvers: $approved_reviewers"
           echo "required approval count: $required_approval_count"
 
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
