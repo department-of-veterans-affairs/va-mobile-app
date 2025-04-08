@@ -69,7 +69,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (showError) {
       logAnalyticsEvent(Events.vama_vsc_error_shown(veteranStatus!.data.attributes.notConfirmedReason))
     }
-  }, [showError])
+  }, [showError, veteranStatus])
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branchOfService = t('militaryInformation.branch', { branch: service.branchOfService })
