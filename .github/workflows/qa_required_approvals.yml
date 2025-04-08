@@ -75,12 +75,12 @@ jobs:
           echo after 1st if
             then
               echo before 2nd if
-              if [[ $(jq --arg check_value "${{steps.mobile_reviewers.output.mreview}}" '. | select(contains($check_value)) | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq --arg check_value "${{steps.mobile_reviewers.output.mreview}}" '. | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
               echo after second if
                 then
                 echo before 3rd if
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq --arg check_value "${{steps.qa_reviewers.output.qreview}}" '. | select(contains($check_value)) | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(jq --arg check_value "${{steps.qa_reviewers.output.qreview}}" '. | select(IN($check_value)) | length' <<< "$approvals") -gt 0 ]]
                 echo after 3rd if
                   then
                   echo before 4th
