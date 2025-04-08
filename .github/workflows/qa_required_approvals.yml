@@ -63,7 +63,8 @@ jobs:
           jq -c '.required_pull_request_reviews.required_approving_review_count')
 
           echo print outputs
-          approvals='["jbergman-oddball", "timwright12"]'
+          approvals='[]'
+          # approvals='["jbergman-oddball", "timwright12"]'
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
           echo "Mobile Reviewers: ${{ steps.mobile_reviewers.outputs.mreview }}"
