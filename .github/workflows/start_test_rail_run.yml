@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: "Version Number (eg. v1.1.0)"
         type: string
         required: true
       releaseDate:
@@ -32,7 +32,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version Number (eg. v1.1.0)'
+        description: "Version Number (eg. v1.1.0)"
         required: true
         type: string
       releaseDate:
@@ -53,7 +53,7 @@ jobs:
       testrailUrl: ${{steps.add_run.outputs.url}}
     runs-on: ubuntu-latest
     steps:
-      - name: 'Add RC run in testrail'
+      - name: "Add RC run in testrail"
         id: add_run
         run: |
           echo "TICKET_NUMBER: ${{inputs.ticketNumber}}"
@@ -84,5 +84,4 @@ jobs:
                   -d '{"suite_id": 92,"include_all": false,"name": "'"${name}"'","refs": "'"${{inputs.ticketNumber}}"'","description": "'"${desc}"'", "milestone_id": '${{inputs.milestoneId}}' , "case_ids": '$(jq --compact-output -s 'add' input.json)'}' \
                   "https://dsvavsp.testrail.io//index.php?/api/v2/add_run/29")
           echo ${response}
-          echo "::set-output name=url::$(echo ${response} |  jq '.url')"
-
+          echo "url=$(echo ${response} |  jq '.url')" >> $GITHUB_OUTPUT

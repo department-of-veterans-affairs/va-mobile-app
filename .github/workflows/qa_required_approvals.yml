@@ -50,10 +50,10 @@ jobs:
  
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "alexandec", "theodur", "dumathane", "cadibemma", "Sparowhawk", "narin"))] | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq '[.[] | select(. | IN("timwright12", "dumathane", "jmarchi", "keli13", "dftony", "df-troiano"))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq '[.[] | select(. | IN("timwright12", "IsraelleHub", "rbontrager", "DJUltraTom", "TKDickson", "brea11y", "narin"))] | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(jq '[.[] | select(. | IN("timwright12", "digitalken", "SKMOstudio"))] | length' <<< "$approvals") -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
