@@ -1,7 +1,10 @@
 import React, { FC } from 'react'
 import { Image, ImageStyle, StyleProp } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { BranchOfService, BranchesOfServiceConstants } from 'api/types'
+import VASeal from 'components/VAIcon/svgs/VASeal.svg'
 import { useTheme } from 'utils/hooks'
 
 export type MilitaryBranchEmblemProps = {
@@ -79,7 +82,7 @@ export const MilitaryBranchEmblem: FC<MilitaryBranchEmblemProps> = ({ branch, wi
         />
       )
     default:
-      return null
+      return <Icon svg={VASeal} width={width} height={height} testID="VASeal" preventScaling />
   }
 }
 

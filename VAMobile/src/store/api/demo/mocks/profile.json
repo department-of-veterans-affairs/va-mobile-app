@@ -86,5 +86,14 @@
         }
       }
     }
+  },
+  "/v0/vet_verification_status": {
+    "data": {
+      "id": "",
+      "type": "veteran_status_confirmations",
+      "attributes": {
+        "veteranStatus": "confirmed"
+      }
+    }
   }
 }
