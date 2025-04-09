@@ -34,6 +34,7 @@ export type FeatureToggleType =
   | 'testFeature'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
+  | 'veteranStatusCardRedesign'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -54,6 +55,7 @@ type FeatureToggleValues = {
   testFeature: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
+  veteranStatusCardRedesign: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -75,6 +77,7 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
+  veteranStatusCardRedesign: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults

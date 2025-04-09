@@ -599,6 +599,7 @@
   "directDeposit.viewAndEditText.a11yLabel": "Manage your direct deposit information for disability compensation, pension, and Post-9 11 G-I Bill benefits. Any updates you make here will also update on VA.gov .",
   "directions": "Get directions",
   "directions.a11yHint": "Opens the maps application to get directions",
+  "disabilityRating.combinePercent": "{{combinedPercent}}% service connected",
   "disabilityRating.percent": "{{combinedPercent}}%",
   "disabilityRating.errorTitle": "Disability rating isn't working right now",
   "disabilityRating.learnAbout": "Learn about VA disability ratings",

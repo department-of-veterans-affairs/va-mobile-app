@@ -36,6 +36,7 @@ const mockOverrides = {
   testFeature: false,
   useOldLinkComponent: false,
   whatsNewUI: false,
+  veteranStatusCardRedesign: true,
 }
 
 describe('activate', () => {
