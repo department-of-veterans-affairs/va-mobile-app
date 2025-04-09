@@ -85,7 +85,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
       case REQUEST_STATUS.SUCCESS:
         alertBoxProps = {
           variant: 'success',
-          header: t('prescriptions.refillRequestSummary.success'),
+          description: t('prescriptions.refillRequestSummary.success'),
         }
         break
       case REQUEST_STATUS.MIX:
