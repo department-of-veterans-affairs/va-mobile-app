@@ -60,8 +60,8 @@ function NoAccessSM() {
         <Box {...alertWrapperProps}>
           <AlertWithHaptics
             variant="warning"
-            header={t('noAccessSM.cantAccess')}
-            headerA11yLabel={a11yLabelVA(t('noAccessSM.cantAccess'))}
+            description={t('noAccessSM.cantAccess')}
+            descriptionA11yLabel={a11yLabelVA(t('noAccessSM.cantAccess'))}
           />
         </Box>
         <Box>
