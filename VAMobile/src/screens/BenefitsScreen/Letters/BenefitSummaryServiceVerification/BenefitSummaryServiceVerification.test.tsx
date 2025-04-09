@@ -1,10 +1,12 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { CharacterOfServiceConstants } from 'api/types'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { roundToHundredthsPlace } from 'utils/formattingUtils'
 
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 
@@ -55,70 +57,67 @@ context('BenefitSummaryServiceVerification', () => {
 
   it('initializes correctly', async () => {
     initializeTestInstance(123, date, 88)
+    await waitFor(() => expect(screen.getByRole('header', { name: t('letters.benefitService.title') })).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('letters.benefitService.summary'))).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getByRole('header', { name: 'Benefit summary and service verification letter' })).toBeTruthy(),
+      expect(screen.getByRole('header', { name: t('letters.benefitService.chooseIncludedInformation') })).toBeTruthy(),
     )
     await waitFor(() =>
       expect(
-        screen.getByText(
-          'This letter shows your service history and some benefit information. You can customize this letter and use it for many things, including to apply for housing assistance, civil service jobs, and state or local property and car tax relief.',
-        ),
+        screen.getAllByRole('header', { name: t('letters.benefitService.militaryServiceInformation') }),
       ).toBeTruthy(),
     )
-    await waitFor(() =>
-      expect(
-        screen.getByRole('header', { name: 'Choose what information you want to include in your letter.' }),
-      ).toBeTruthy(),
-    )
-    await waitFor(() => expect(screen.getAllByRole('header', { name: 'Military service information' })).toBeTruthy())
     await waitFor(() => expect(screen.getByTestId('branch-of-service-army')).toBeTruthy())
     await waitFor(() => expect(screen.getByTestId('discharge-type-honorable')).toBeTruthy())
     await waitFor(() => expect(screen.getByTestId('Active duty start January 01, 1990')).toBeTruthy())
     await waitFor(() => expect(screen.getByTestId('Separation date October 01, 1993')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('letters.benefitService.ourRecordsShow'))).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('switch', { name: t('letters.benefitService.includeMilitaryServiceInfo') })).toBeTruthy(),
+    )
     await waitFor(() =>
       expect(
-        screen.getByText(
-          "Our records list your 3 most recent service periods. You may have more service periods that aren't listed here.",
-        ),
+        screen.getAllByRole('header', { name: t('letters.benefitService.benefitAndDisabilityInfo') }),
       ).toBeTruthy(),
-    )
-    await waitFor(() =>
-      expect(screen.getByRole('switch', { name: 'Include military service information' })).toBeTruthy(),
-    )
-    await waitFor(() =>
-      expect(screen.getAllByRole('header', { name: 'VA disability rating and compensation information' })).toBeTruthy(),
     )
     await waitFor(() =>
       expect(
         screen.getByRole('switch', {
-          name: 'Your current monthly payment is $123.00. The effective date of the last change to your current payment was June 06, 2013.',
-        }),
-      ).toBeTruthy(),
-    )
-    await waitFor(() =>
-      expect(screen.getByRole('switch', { name: 'Your combined service-connected rating is 88%.' })).toBeTruthy(),
-    )
-    await waitFor(() =>
-      expect(
-        screen.getByRole('switch', {
-          name: "You aren't considered to be totally and permanently disabled solely due to your service-connected disabilities.",
+          name: t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+            monthlyAwardAmount: roundToHundredthsPlace(123),
+            date: 'June 06, 2013',
+          }),
         }),
       ).toBeTruthy(),
     )
     await waitFor(() =>
       expect(
-        screen.getByRole('switch', { name: "You don't have one or more service-connected disabilities." }),
+        screen.getByRole('switch', {
+          name: t('letters.benefitService.combinedServiceConnectingRating', { rating: 88 }),
+        }),
       ).toBeTruthy(),
     )
     await waitFor(() =>
       expect(
-        screen.getByText(
-          'If your service period or disability status information is incorrect, contact us online through Ask VA.',
-        ),
+        screen.getByRole('switch', {
+          name: t('letters.benefitService.disabledDueToService', { areOrNot: "aren't" }),
+        }),
       ).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Go to Ask VA' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByRole('switch', {
+          name: t('letters.benefitService.oneOrMoreServiceDisabilities', { haveOrNot: "don't have" }),
+        }),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText(t('letters.benefitService.sendMessageIfIncorrectInfo'))).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: t('letters.benefitService.sendMessage') })).toBeTruthy(),
+    )
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: t('letters.benefitService.viewLetter') })).toBeTruthy(),
+    )
   })
 
   describe('when the monthly award amount does not exist but the awardEffectiveDate does', () => {
@@ -127,7 +126,10 @@ context('BenefitSummaryServiceVerification', () => {
       await waitFor(() =>
         expect(
           screen.getByRole('switch', {
-            name: 'Your current monthly payment is $0.00. The effective date of the last change to your current payment was June 06, 2013.',
+            name: t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+              monthlyAwardAmount: roundToHundredthsPlace(0),
+              date: 'June 06, 2013',
+            }),
           }),
         ).toBeTruthy(),
       )
@@ -140,7 +142,10 @@ context('BenefitSummaryServiceVerification', () => {
       await waitFor(() =>
         expect(
           screen.getByRole('switch', {
-            name: 'Your current monthly payment is $123.00. The effective date of the last change to your current payment was an invalid date.',
+            name: t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+              monthlyAwardAmount: roundToHundredthsPlace(123),
+              date: t('letters.benefitService.effectiveDateInvalid'),
+            }),
           }),
         ).toBeTruthy(),
       )
@@ -153,7 +158,10 @@ context('BenefitSummaryServiceVerification', () => {
       await waitFor(() =>
         expect(
           screen.queryByRole('switch', {
-            name: 'Your current monthly payment is $0.00. The effective date of the last change to your current award was an invalid date.',
+            name: t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+              monthlyAwardAmount: roundToHundredthsPlace(0),
+              date: t('letters.benefitService.effectiveDateInvalid'),
+            }),
           }),
         ).toBeFalsy(),
       )
@@ -164,7 +172,11 @@ context('BenefitSummaryServiceVerification', () => {
     it('should not display that switch', async () => {
       initializeTestInstance(123, date)
       await waitFor(() =>
-        expect(screen.queryByRole('switch', { name: 'Your combined service-connected rating is 88%.' })).toBeFalsy(),
+        expect(
+          screen.queryByRole('switch', {
+            name: t('letters.benefitService.combinedServiceConnectingRating', { rating: 88 }),
+          }),
+        ).toBeFalsy(),
       )
     })
   })
