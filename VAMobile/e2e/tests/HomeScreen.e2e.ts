@@ -18,8 +18,8 @@ export const HomeE2eIdConstants = {
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'service connected',
-  MONTHLY_PAYMENT_TITLE_TEXT: 'Monthly compensation payment',
-  MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.75',
+  MONTHLY_PAYMENT_TITLE_TEXT: 'Compensation & Pension - Recurring',
+  MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.74',
 }
 
 beforeAll(async () => {
@@ -84,7 +84,7 @@ describe('Home Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.VACCINES_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
   })
 
   it('payments tab tap: verify the payments screen tab items', async () => {

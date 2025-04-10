@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
@@ -45,7 +46,7 @@ const lettersData: LettersList = [
     letterType: 'civil_service',
   },
   {
-    name: 'Benefit Summary Letter',
+    name: 'Benefit Summary and Service Verification Letter',
     letterType: 'benefit_summary',
   },
   {
@@ -99,14 +100,14 @@ context('LettersListScreen', () => {
   describe('when lettersAndDocuments is set to false', () => {
     it('should show noLettersScreen', async () => {
       initializeTestInstance(lettersData, false, false)
-      await waitFor(() => expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noLetters.header'))).toBeTruthy())
     })
   })
 
   it('should render correctly', async () => {
     initializeTestInstance(lettersData)
-    expect(screen.getByText('Loading your letters list...')).toBeTruthy()
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Benefit summary letter' })).toBeTruthy())
+    expect(screen.getByText(t('letters.list.loading'))).toBeTruthy()
+    await waitFor(() => expect(screen.getByRole('link', { name: t('letters.benefitService.title') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Benefit verification letter' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Civil service preference letter' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Commissary letter' })).toBeTruthy())
@@ -116,14 +117,14 @@ context('LettersListScreen', () => {
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'Proof of minimum essential coverage letter' })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link', { name: 'Proof of service card' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: t('letters.proofOfServiceCard') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Service verification letter' })).toBeTruthy())
   })
 
   describe('when a link is clicked', () => {
     it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
       initializeTestInstance(lettersData)
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Benefit summary letter' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('letters.benefitService.title') })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitSummaryServiceVerificationLetter'))
     })
 
@@ -132,8 +133,7 @@ context('LettersListScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Benefit verification letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'This letter shows the benefits you’re receiving from VA. The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.',
+          description: t('letters.benefitVerification.description'),
           descriptionA11yLabel:
             'This letter shows the benefits you’re receiving from  V-A . The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.',
           header: 'Benefit verification letter',
@@ -148,8 +148,7 @@ context('LettersListScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Civil service preference letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.',
+          description: t('letters.civilService.description'),
           header: 'Civil service preference letter',
           letterType: 'civil_service',
           screenID: 'CIVIL_SERVICE_LETTER_SCREEN',
@@ -162,8 +161,7 @@ context('LettersListScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Commissary letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'If you’re a Veteran with a 100% service-connected disability rating take this letter, a copy of your DD214 or other discharge papers, and your DD2765 to a local military ID and pass office. You can schedule an appointment to get a Retiree Military ID card at the office or use the Rapid Appointments Scheduler. The Retiree Military ID card gives you access to your local base facilities, including the commissary and post exchange.',
+          description: t('letters.commissary.description'),
           header: 'Commissary letter',
           letterType: 'commissary',
           screenID: 'COMMISSARY_LETTER_SCREEN',
@@ -178,8 +176,7 @@ context('LettersListScreen', () => {
       )
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'You will need this letter as proof that you qualify for Medicare Part D prescription drug coverage.',
+          description: t('letters.proofOfCrediblePrescription.description'),
           header: 'Proof of creditable prescription drug coverage letter',
           letterType: 'medicare_partd',
           screenID: 'PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN',
@@ -194,10 +191,8 @@ context('LettersListScreen', () => {
       )
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'This letter indicates that you have Minimum Essential Coverage (MEC) as provided by VA. MEC means that your health care plan meets the health insurance requirements under the Affordable Care Act (ACA). To prove that you’re enrolled in the VA health care system, you must have IRS Form 1095-B from VA to show what months you were covered by a VA health care plan.',
-          descriptionA11yLabel:
-            'This letter indicates that you have Minimum Essential Coverage (M-E-C) as provided by V-A . M-E-C means that your health care plan meets the health insurance requirements under the Affordable Care Act (A-C-A). To prove that you’re enrolled in the V-A health care system, you must have I-R-S Form 1095-B from V-A to show what months you were covered by a V-A health care plan.',
+          description: t('letters.minimumEssentialCoverage.description'),
+          descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
           header: 'Proof of minimum essential coverage letter',
           letterType: 'minimum_essential_coverage',
           screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN',
@@ -210,9 +205,8 @@ context('LettersListScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Proof of service card' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'This card shows that you served honorably in the Armed Forces. This card might be useful as proof of status to receive discounts at certain stores or restaurants.',
-          header: 'Proof of service card',
+          description: t('letters.proofOfService.description'),
+          header: t('letters.proofOfServiceCard'),
           letterType: 'proof_of_service',
           screenID: 'PROOF_OF_SERVICE_LETTER_SCREEN',
         }),
@@ -224,8 +218,7 @@ context('LettersListScreen', () => {
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Service verification letter' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
-          description:
-            'This letter shows your branch of service, the date you started active duty, and the date you were discharged from active duty.',
+          description: t('letters.serviceVerificationLetter.description'),
           header: 'Service verification letter',
           letterType: 'service_verification',
           screenID: 'SERVICE_VERIFICATION_LETTER_SCREEN',
@@ -237,21 +230,21 @@ context('LettersListScreen', () => {
   describe('when letters is falsy', () => {
     it('should show No Letters Screen', async () => {
       initializeTestInstance(null)
-      await waitFor(() => expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noLetters.header'))).toBeTruthy())
     })
   })
 
   describe('when there is no letters', () => {
     it('should show No Letters Screen', async () => {
       initializeTestInstance([])
-      await waitFor(() => expect(screen.getByText("We couldn't find information about your VA letters")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noLetters.header'))).toBeTruthy())
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
       initializeTestInstance([], true)
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('errors.networkConnection.header'))).toBeTruthy())
     })
   })
 })

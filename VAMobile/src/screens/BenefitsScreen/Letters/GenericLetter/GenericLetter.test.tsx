@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { LetterTypeConstants, LetterTypes } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -25,15 +26,13 @@ context('GenericLetter', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('button', { name: 'Review letter' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('letters.benefitService.viewLetter') })).toBeTruthy()
   })
 
   describe('when the letter type is service verification', () => {
     it('should display an alert box', () => {
       initializeTestInstance(LetterTypeConstants.serviceVerification)
-      expect(
-        screen.getByText('You can now use your Benefit Summary letter instead of this Service Verification letter.'),
-      ).toBeTruthy()
+      expect(screen.getByText(t('letters.serviceVerificationLetter.informational'))).toBeTruthy()
     })
   })
 })

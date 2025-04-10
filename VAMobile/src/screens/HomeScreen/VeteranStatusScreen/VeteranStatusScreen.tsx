@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -25,9 +25,11 @@ import {
   TextView,
   VALogo,
 } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -73,6 +75,12 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
   })
+
+  useEffect(() => {
+    if (showError) {
+      logAnalyticsEvent(Events.vama_vsc_error_shown(veteranStatus!.data.attributes.notConfirmedReason))
+    }
+  }, [showError, veteranStatus])
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {
     const branchOfService = t('militaryInformation.branch', { branch: service.branchOfService })

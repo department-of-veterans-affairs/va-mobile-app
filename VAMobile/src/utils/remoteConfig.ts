@@ -16,6 +16,7 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
+  | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'decisionLettersWaygate'
@@ -37,6 +38,7 @@ export type FeatureToggleType =
   | 'veteranStatusCardRedesign'
 
 type FeatureToggleValues = {
+  allergies: boolean
   appointmentRequests: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
@@ -59,6 +61,7 @@ type FeatureToggleValues = {
 }
 
 export const defaults: FeatureToggleValues = {
+  allergies: true,
   appointmentRequests: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
