@@ -198,7 +198,7 @@ context('AppointmentFileTravelPayAlert', () => {
       expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
     })
 
-    it('should NOT render if no travel pay claim', async () => {
+    it('should NOT render if unable to retrieve travel pay claim data', async () => {
       const attributes = createTestAppointmentAttributes({
         status: AppointmentStatusConstants.BOOKED,
         appointmentType: AppointmentTypeConstants.VA,
