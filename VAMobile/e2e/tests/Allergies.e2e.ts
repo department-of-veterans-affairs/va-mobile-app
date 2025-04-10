@@ -13,9 +13,9 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_2_ID: 'Peanuts allergy May 15, 2022',
   ALLERGY_3_ID: 'Shellfish allergy November 05, 2021',
   ALLERGY_4_ID: 'Pollen allergy April 10, 2021',
-  ALLERGY_5_ID: 'Dust allergy December 12, 2020',
+  ALLERGY_5_ID: 'Dust allergy December 22, 2020',
   ALLERGY_6_ID: 'Latex allergy August 20, 2020',
-  ALLERGY_7_ID: 'Sulfonamides allergy March 12, 2019',
+  ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
 }
 
@@ -46,7 +46,7 @@ describe('Allergies Screen', () => {
   it('verify details screen fields', async () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).tap()
     await expect(element(by.text('Details'))).toExist()
-    await expect(element(by.text('March 12, 2019'))).toExist()
+    await expect(element(by.text('July 12, 2020'))).toExist()
     await expect(element(by.text('Sulfonamides allergy'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
     await expect(element(by.text('Dr. Alicia'))).toExist()
