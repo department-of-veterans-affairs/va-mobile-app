@@ -52,6 +52,7 @@ fi
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
 # set website URLs
+echo "LINK_URL_CLAIM_APPEAL_STATUS=https://${WEBSITE_PREFIX}va.gov/claim-or-appeal-status" >> .env
 echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://${WEBSITE_PREFIX}va.gov/health-care/schedule-view-va-appointments" >> .env
 
 # Get all vars that are the same across environments
