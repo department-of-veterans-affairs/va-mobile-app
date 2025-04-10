@@ -50,7 +50,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { data: veteranStatus } = useVeteranStatus()
+  const { data: veteranStatus, isError } = useVeteranStatus()
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
@@ -68,7 +68,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const horizontalPadding = isPortrait ? PORTRAIT_PADDING : LANDSCAPE_PADDING
   const containerStyle = !isPortrait ? { alignSelf: 'center' as const, maxWidth: MAX_WIDTH } : {}
   const isVSCFeatureEnabled = featureEnabled('veteranStatusCardRedesign')
-  const shouldRemoveInsets = !isVSCFeatureEnabled
+  const shouldRemoveInsets = isVSCFeatureEnabled ? false : !showError
 
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
@@ -118,8 +118,19 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   }
 
   const getError = () => {
-    const notConfirmedReason = veteranStatus!.data.attributes.notConfirmedReason
+    const notConfirmedReason = veteranStatus?.data?.attributes?.notConfirmedReason
 
+    if (isError || notConfirmedReason === 'ERROR') {
+      return (
+        <AlertWithHaptics
+          variant="error"
+          header={t('errors.somethingWentWrong')}
+          headerA11yLabel={a11yLabelVA(t('errors.somethingWentWrong'))}
+          description={t('veteranStatus.error.generic')}
+          descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.generic'))}
+        />
+      )
+    }
     if (notConfirmedReason === 'NOT_TITLE_38') {
       return (
         <AlertWithHaptics
@@ -139,17 +150,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         </AlertWithHaptics>
       )
     }
-    if (notConfirmedReason === 'ERROR') {
-      return (
-        <AlertWithHaptics
-          variant="error"
-          header={t('errors.somethingWentWrong')}
-          headerA11yLabel={a11yLabelVA(t('errors.somethingWentWrong'))}
-          description={t('veteranStatus.error.generic')}
-          descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.generic'))}
-        />
-      )
-    }
     return (
       <AlertWithHaptics
         variant="warning"
@@ -163,6 +163,40 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           phone={t('8005389552')}
         />
       </AlertWithHaptics>
+    )
+  }
+
+  const getHelperText = () => {
+    return (
+      <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding} width="100%">
+        <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
+          {t('veteranStatus.about')}
+        </TextView>
+        <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
+          {t('veteranStatus.uniformedServices')}
+        </TextView>
+        <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
+          {t('veteranStatus.fixAnError')}
+        </TextView>
+        <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
+          {t('veteranStatus.fixAnError.2')}
+        </TextView>
+        <ClickToCallPhoneNumberDeprecated
+          phone={t('8008271000')}
+          displayedText={displayedTextPhoneNumber(t('8008271000'))}
+          colorOverride={'link'}
+          iconColorOverride={theme.colors.icon.link}
+        />
+        <TextView variant="MobileBody" color="bodyText" my={theme.dimensions.condensedMarginBetween}>
+          {t('veteranStatus.fixAnError.3')}
+        </TextView>
+        <ClickToCallPhoneNumberDeprecated
+          phone={t('8005389552')}
+          displayedText={displayedTextPhoneNumber(t('8005389552'))}
+          colorOverride={'link'}
+          iconColorOverride={theme.colors.icon.link}
+        />
+      </Box>
     )
   }
 
@@ -186,7 +220,10 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       testID="veteranStatusTestID"
       rightButtonTestID="veteranStatusCloseID">
       {showError ? (
-        getError()
+        <>
+          {getError()}
+          {isVSCFeatureEnabled && getHelperText()}
+        </>
       ) : isVSCFeatureEnabled ? (
         <>
           <VeteranStatusCard
@@ -196,36 +233,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             percentText={percentText}
             getLatestPeriodOfService={getLatestPeriodOfService}
           />
-
-          <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding} width="100%">
-            <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
-              {t('veteranStatus.about')}
-            </TextView>
-            <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
-              {t('veteranStatus.uniformedServices')}
-            </TextView>
-            <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
-              {t('veteranStatus.fixAnError')}
-            </TextView>
-            <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
-              {t('veteranStatus.fixAnError.2')}
-            </TextView>
-            <ClickToCallPhoneNumberDeprecated
-              phone={t('8008271000')}
-              displayedText={displayedTextPhoneNumber(t('8008271000'))}
-              colorOverride={'link'}
-              iconColorOverride={theme.colors.icon.link}
-            />
-            <TextView variant="MobileBody" color="bodyText" my={theme.dimensions.condensedMarginBetween}>
-              {t('veteranStatus.fixAnError.3')}
-            </TextView>
-            <ClickToCallPhoneNumberDeprecated
-              phone={t('8005389552')}
-              displayedText={displayedTextPhoneNumber(t('8005389552'))}
-              colorOverride={'link'}
-              iconColorOverride={theme.colors.icon.link}
-            />
-          </Box>
+          {getHelperText()}
         </>
       ) : (
         <>
