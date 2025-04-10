@@ -29,7 +29,6 @@ import {
   ActivityButton,
   AnnouncementBanner,
   BackgroundVariant,
-  BorderColorVariant,
   Box,
   BoxProps,
   CategoryLanding,
@@ -39,6 +38,7 @@ import {
   LinkRow,
   LoadingComponent,
   Nametag,
+  ObfuscatedTextView,
   TextView,
 } from 'components'
 import { Events } from 'constants/analytics'
@@ -455,6 +455,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
                     px={theme.dimensions.standardMarginBetween}>
                     <TextView
+                      pb={theme.dimensions.condensedMarginBetween}
                       accessibilityLabel={
                         showDisabilityRating
                           ? `${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
@@ -463,24 +464,28 @@ export function HomeScreen({}: HomeScreenProps) {
                       variant={'HomeScreenHeader'}>
                       {t('disabilityRating.title')}
                     </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      color={showDisabilityRating ? 'primary' : 'disabled'}
-                      variant={'NametagNumber'}>
-                      {showDisabilityRating
-                        ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`
-                        : t('disabilityRatingDetails.percentage.obfuscated')}
-                    </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={'VeteranStatusProof'}
-                      color={showDisabilityRating ? 'primary' : 'disabled'}>
-                      {showDisabilityRating
-                        ? t('disabilityRating.serviceConnected')
-                        : t('disabilityRating.serviceConnected.obfuscated')}
-                    </TextView>
+                    <ObfuscatedTextView
+                      showText={showDisabilityRating}
+                      obfuscatedText={t('disabilityRatingDetails.percentage.obfuscated')}
+                      revealedText={t('disabilityRatingDetails.percentage', {
+                        rate: disabilityRatingQuery.data.combinedDisabilityRating,
+                      })}
+                      obfuscatedTextProps={{
+                        variant: 'NametagNumber',
+                        color: 'disabled',
+                      }}
+                      revealedTextProps={{
+                        variant: 'NametagNumber',
+                        color: 'primary',
+                      }}
+                    />
+                    <ObfuscatedTextView
+                      showText={showDisabilityRating}
+                      obfuscatedText={t('disabilityRating.serviceConnected.obfuscated')}
+                      revealedText={t('disabilityRating.serviceConnected')}
+                      revealedTextProps={{ variant: 'VeteranStatusProof', color: 'primary' }}
+                      obfuscatedTextProps={{ variant: 'VeteranStatusProof', color: 'disabled' }}
+                    />
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
                         onPress={() => setShowDisabilityRating(!showDisabilityRating)}
@@ -492,12 +497,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   </Box>
                 )}
                 {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
-                  <Box
-                    mx={theme.dimensions.standardMarginBetween}
-                    my={theme.dimensions.condensedMarginBetween}
-                    borderBottomWidth={1}
-                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                  />
+                  <Box mx={theme.dimensions.standardMarginBetween} my={theme.dimensions.standardMarginBetween} />
                 )}
                 {hasRecurringPaymentInfo && (
                   <Box
@@ -507,6 +507,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     px={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
+                      pb={theme.dimensions.condensedMarginBetween}
                       accessibilityLabel={
                         showCompensation
                           ? `${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
@@ -515,22 +516,32 @@ export function HomeScreen({}: HomeScreenProps) {
                       variant={'HomeScreenHeader'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
-                    <TextView
-                      accessible={false}
-                      color={showCompensation ? 'primary' : 'disabled'}
-                      importantForAccessibility={'no'}
-                      variant={'NametagNumber'}>
-                      {showCompensation ? recurringPayment.amount : t('monthlyCompensationPayment.amount.obfuscated')}
-                    </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={'VeteranStatusProof'}
-                      color={showCompensation ? 'primary' : 'disabled'}>
-                      {showCompensation
-                        ? `${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
-                        : t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                    </TextView>
+                    <ObfuscatedTextView
+                      showText={showCompensation}
+                      obfuscatedText={t('monthlyCompensationPayment.amount.obfuscated')}
+                      revealedText={recurringPayment.amount || ''}
+                      revealedTextProps={{
+                        variant: 'NametagNumber',
+                        color: 'primary',
+                      }}
+                      obfuscatedTextProps={{
+                        variant: 'NametagNumber',
+                        color: 'disabled',
+                      }}
+                    />
+                    <ObfuscatedTextView
+                      showText={showCompensation}
+                      obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
+                      revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                      revealedTextProps={{
+                        variant: 'VeteranStatusProof',
+                        color: 'primary',
+                      }}
+                      obfuscatedTextProps={{
+                        variant: 'VeteranStatusProof',
+                        color: 'disabled',
+                      }}
+                    />
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
                         onPress={() => setShowCompensation(!showCompensation)}
