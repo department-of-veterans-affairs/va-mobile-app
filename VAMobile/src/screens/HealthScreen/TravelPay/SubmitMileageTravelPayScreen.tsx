@@ -132,12 +132,8 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
 
   const navigateToNextScreen = () => {
     const nextScreenIndex = screenListIndex + 1
-    if (screenList[nextScreenIndex].name === 'AddressScreen' && !address) {
-      navigateToErrorScreen('noAddress')
-    } else {
-      setScreenListIndex(nextScreenIndex)
-      navigateTo(screenList[nextScreenIndex].name, screenList[nextScreenIndex].params)
-    }
+    setScreenListIndex(nextScreenIndex)
+    navigateTo(screenList[nextScreenIndex].name, screenList[nextScreenIndex].params)
   }
 
   const navigateToPreviousScreen = () => {
@@ -181,6 +177,10 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
     navigateToErrorScreen('noEligibleType')
   }
 
+  const navigateToNoAddressScreen = () => {
+    navigateToErrorScreen('noAddress')
+  }
+
   const TravelPayStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
   const screenList: Array<ScreenListObj> = [
@@ -215,9 +215,10 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       name: 'MileageScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('back'),
-      leftButtonTestID: 'leftCancelTestID',
+      leftButtonTestID: 'leftBackTestID',
       leftButtonOnPress: navigateToPreviousScreen,
       rightButtonText: t('help'),
+      rightButtonTestID: 'rightHelpTestID',
       rightButtonOnPress: navigateToTravelClaimHelpScreen,
       rightIconProps: helpIconProps,
       primaryButtonText: t('yes'),
@@ -230,14 +231,15 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       name: 'VehicleScreen',
       backButtonOnPress: navigateToPreviousScreen,
       leftButtonText: t('back'),
-      leftButtonTestID: 'leftCancelTestID',
+      leftButtonTestID: 'leftBackTestID',
       leftButtonOnPress: navigateToPreviousScreen,
       rightButtonText: t('help'),
+      rightButtonTestID: 'rightHelpTestID',
       rightButtonOnPress: navigateToTravelClaimHelpScreen,
       rightIconProps: helpIconProps,
       primaryButtonText: t('yes'),
       primaryButtonTestID: 'yesTestID',
-      primaryButtonOnPress: navigateToNextScreen,
+      primaryButtonOnPress: address ? navigateToNextScreen : navigateToNoAddressScreen,
       secondaryButtonText: t('no'),
       secondaryButtonOnPress: navigateToNoEligibleTypeScreen,
     },
@@ -245,9 +247,10 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       name: 'AddressScreen',
       backButtonOnPress: navigateToPreviousScreen,
       leftButtonText: t('back'),
-      leftButtonTestID: 'leftCancelTestID',
+      leftButtonTestID: 'leftBackTestID',
       leftButtonOnPress: navigateToPreviousScreen,
       rightButtonText: t('help'),
+      rightButtonTestID: 'rightHelpTestID',
       rightButtonOnPress: navigateToTravelClaimHelpScreen,
       rightIconProps: helpIconProps,
       primaryButtonText: t('yes'),
@@ -260,9 +263,10 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       name: 'ReviewClaimScreen',
       backButtonOnPress: undefined,
       leftButtonText: t('back'),
-      leftButtonTestID: 'leftCancelTestID',
+      leftButtonTestID: 'leftBackTestID',
       leftButtonOnPress: navigateToPreviousScreen,
       rightButtonText: t('help'),
+      rightButtonTestID: 'rightHelpTestID',
       rightButtonOnPress: navigateToTravelClaimHelpScreen,
       rightIconProps: helpIconProps,
       primaryButtonText: undefined,

@@ -7,7 +7,7 @@ import { useTheme } from 'utils/hooks'
 
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
-function TravelClaimHelp() {
+function TravelClaimHelpScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -36,4 +36,4 @@ function TravelClaimHelp() {
   )
 }
 
-export default TravelClaimHelp
+export default TravelClaimHelpScreen

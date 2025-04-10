@@ -15,6 +15,7 @@ function InterstitialScreen() {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
+
   return (
     <VAScrollView>
       <Box
@@ -33,6 +34,7 @@ function InterstitialScreen() {
           type="url"
           url={LINK_URL_TRAVEL_PAY_ELIGIBILITY}
           text={t('travelPay.checkEligibility.link')}
+          testID="checkEligibilityLinkID"
         />
         <TextView testID="milageQualifierID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.setUpDirectDeposit')}
@@ -44,6 +46,7 @@ function InterstitialScreen() {
           type="url"
           url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
           text={t('travelPay.setUpDirectDeposit.link')}
+          testID="setUpDirectDepositLinkID"
         />
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
           {t('travelPay.burdenTime')}
@@ -61,6 +64,7 @@ function InterstitialScreen() {
           }}
           text={t('travelPay.reviewPrivacyStatement')}
           a11yLabel={a11yLabelVA(t('travelPay.reviewPrivacyStatement'))}
+          testID="reviewPrivacyStatementLinkID"
         />
       </Box>
     </VAScrollView>

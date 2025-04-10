@@ -18,7 +18,7 @@ function TravelPayHelp() {
       <TextView testID="helpTextID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
         {t('travelPay.helpText')}
       </TextView>
-      <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={'travelPay.phone.a11yHint'} />
+      <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={t('travelPay.phone.a11yHint')} />
     </View>
   )
 }

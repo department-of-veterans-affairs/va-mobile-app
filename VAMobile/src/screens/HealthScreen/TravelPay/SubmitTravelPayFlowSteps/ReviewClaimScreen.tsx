@@ -113,6 +113,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
             }}
             checked={isCheckboxChecked}
             error={error}
+            testID="checkboxTestID"
           />
         </Box>
         <Box my={theme.dimensions.textAndButtonLargeMargin}>
@@ -124,6 +125,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
                 setError(t('required'))
               }
             }}
+            testID="submitTestID"
             label={t('travelPay.submitClaim')}
           />
         </Box>

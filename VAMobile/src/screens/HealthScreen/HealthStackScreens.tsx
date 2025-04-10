@@ -32,8 +32,8 @@ import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachmen
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 import SubmitMileageTravelPayScreen from './TravelPay'
 import BeneficiaryTravelAgreement from './TravelPay/SubmitTravelPayFlowSteps/BeneficiaryTravelAgreement'
-import BurdernStatement from './TravelPay/SubmitTravelPayFlowSteps/BurdernStatement'
-import TravelClaimHelp from './TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelp'
+import BurdenStatement from './TravelPay/SubmitTravelPayFlowSteps/BurdenStatement'
+import TravelClaimHelp from './TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -238,7 +238,7 @@ export const getHealthScreens = () => {
     <HealthStack.Screen
       key={'BurdenStatementScreen'}
       name="BurdenStatementScreen"
-      component={BurdernStatement}
+      component={BurdenStatement}
       options={LARGE_PANEL_OPTIONS}
     />,
     <HealthStack.Screen

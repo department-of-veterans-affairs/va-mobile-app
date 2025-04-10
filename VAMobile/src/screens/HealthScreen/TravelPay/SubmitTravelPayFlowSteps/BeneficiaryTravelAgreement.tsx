@@ -8,6 +8,7 @@ import { useTheme } from 'utils/hooks'
 function BeneficiaryTravelAgreement() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
   return (
     <LargePanel
       title={t('travelPay.beneficiaryTravelAgreement.title')}

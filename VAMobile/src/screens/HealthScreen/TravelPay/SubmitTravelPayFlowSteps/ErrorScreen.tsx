@@ -15,13 +15,13 @@ type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList,
 
 function ErrorScreen({ route }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { error } = route.params
+  const { error = 'error' } = route.params
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
 
-  const getErrorContent = (error: TravelPayError) => {
-    switch (error) {
+  const getErrorContent = (travelPayError: TravelPayError) => {
+    switch (travelPayError) {
       case 'noAddress':
         return {
           title: t('travelPay.error.noAddress.title'),

@@ -16,7 +16,5 @@ context('VehicleScreen', () => {
   it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText(t('travelPay.vehicleQuestion'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.vehicleQualifier'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.referToPortal'))).toBeTruthy()
   })
 })

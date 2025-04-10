@@ -5,7 +5,7 @@ import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-function BurdernStatement() {
+function BurdenStatement() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -31,4 +31,4 @@ function BurdernStatement() {
   )
 }
 
-export default BurdernStatement
+export default BurdenStatement
