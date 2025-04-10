@@ -78,7 +78,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
   useEffect(() => {
     if (showError) {
-      logAnalyticsEvent(Events.vama_vsc_error_shown(veteranStatus!.data.attributes.notConfirmedReason))
+      logAnalyticsEvent(Events.vama_vsc_error_shown(veteranStatus?.data?.attributes?.notConfirmedReason))
     }
   }, [showError, veteranStatus])
 
