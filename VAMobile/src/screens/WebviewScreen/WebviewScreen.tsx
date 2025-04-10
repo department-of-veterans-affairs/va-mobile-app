@@ -152,7 +152,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }
 
   const css = `
-  header, footer, va-breadcrumbs, .mobile-nav { display: none; }
+  header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton { display: none; }
 `
 
   const INJECTED_JAVASCRIPT = `(function() {
