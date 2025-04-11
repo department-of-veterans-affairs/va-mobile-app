@@ -2,6 +2,7 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -14,14 +15,12 @@ context('WhatDoIDoIfDisagreement', () => {
   })
 
   it('Renders WhatDoIDoIfDisagreement', () => {
-    expect(screen.getByRole('header', { name: 'What to do if you disagree with our decision' })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'If you disagree with our decision, you can ask for a decision review. You have 3 decision review options to choose from.',
-      ),
-    ).toBeTruthy()
-    expect(screen.getByText('Learn more about decision reviews and appeals')).toBeTruthy()
-    fireEvent.press(screen.getByRole('link', { name: 'Learn more about decision reviews and appeals' }))
+    expect(screen.getByRole('header', { name: t('claimDetails.learnWhatToDoIfDisagreePanel') })).toBeTruthy()
+    expect(screen.getByText(t('claimsDetails.whatDoIDoIfDisagreement.content'))).toBeTruthy()
+    expect(screen.getByText(t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview'))).toBeTruthy()
+    fireEvent.press(
+      screen.getByRole('link', { name: t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview') }),
+    )
     expect(Alert.alert).toHaveBeenCalled()
   })
 })
