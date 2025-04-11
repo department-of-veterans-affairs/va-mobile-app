@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
 
@@ -14,27 +15,19 @@ const renderWithProps = (letterIsDownloadable = true) => {
 context('ClosedClaimStatusDetails', () => {
   it('renders headers', () => {
     renderWithProps()
-    expect(screen.getByRole('header', { name: 'Step 8 of 8: Claim decided' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: "What you've claimed" })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Payments' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('claimDetails.step8of8') })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('claimDetails.whatYouHaveClaimed') })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('payments.title') })).toBeTruthy()
   })
 
   it('renders text for downloadable letter', () => {
     renderWithProps()
-    expect(
-      screen.getByText(
-        'We decided your claim on January 31, 2019. You can download your decision letter. We also mailed you this letter.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('claimDetails.weDecidedDownload', { date: 'January 31, 2019' }))).toBeTruthy()
   })
 
   it('renders text for mailed letter', () => {
     renderWithProps(false)
-    expect(
-      screen.getByText(
-        'We decided your claim on January 31, 2019. We mailed you a decision letter. It should arrive within 10 days after the date we decided your claim. It can sometimes take longer.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByText(t('claimDetails.weDecidedMailed', { date: 'January 31, 2019' }))).toBeTruthy()
   })
 
   it('renders list of claimed items', () => {
