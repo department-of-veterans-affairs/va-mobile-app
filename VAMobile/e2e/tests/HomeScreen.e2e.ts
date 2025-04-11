@@ -152,7 +152,6 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    // await waitFor(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT)))
     await waitFor(element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
