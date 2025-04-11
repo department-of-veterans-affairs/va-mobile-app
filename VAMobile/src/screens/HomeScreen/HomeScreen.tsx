@@ -206,6 +206,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }
 
   const hasRecurringPaymentInfo = !!recurringPayment.amount && !!recurringPayment.date
+  const hasDisabilityRating = !!disabilityRatingQuery.data?.combinedDisabilityRating
 
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
@@ -273,10 +274,7 @@ export function HomeScreen({}: HomeScreenProps) {
     paymentHistoryQuery.isLoading ||
     veteranStatusQuery.isLoading
 
-  const hasAboutYouInfo =
-    !!disabilityRatingQuery.data?.combinedDisabilityRating ||
-    hasRecurringPaymentInfo ||
-    !!serviceHistoryQuery.data?.mostRecentBranch
+  const hasAboutYouInfo = hasDisabilityRating || hasRecurringPaymentInfo || !!serviceHistoryQuery.data?.mostRecentBranch
 
   const aboutYouFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
@@ -449,43 +447,47 @@ export function HomeScreen({}: HomeScreenProps) {
             <Box>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
-                {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                {hasDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
                     pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
                     px={theme.dimensions.standardMarginBetween}>
                     <TextView
+                      accessibilityRole="header"
                       pb={theme.dimensions.condensedMarginBetween}
-                      accessibilityLabel={
-                        showDisabilityRating
-                          ? `${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
-                          : `${t('disabilityRating.title')} ${t('disabilityRating.title.obfuscatedLabel')}`
-                      }
                       variant={'HomeScreenHeader'}>
                       {t('disabilityRating.title')}
                     </TextView>
-                    <ObfuscatedTextView
-                      showText={showDisabilityRating}
-                      obfuscatedText={t('disabilityRatingDetails.percentage.obfuscated')}
-                      revealedText={t('disabilityRatingDetails.percentage', {
-                        rate: disabilityRatingQuery.data.combinedDisabilityRating,
-                      })}
-                      obfuscatedTextProps={{
-                        variant: 'NametagNumber',
-                        color: 'disabled',
-                      }}
-                      revealedTextProps={{
-                        variant: 'NametagNumber',
-                        color: 'primary',
-                      }}
-                    />
-                    <ObfuscatedTextView
-                      showText={showDisabilityRating}
-                      obfuscatedText={t('disabilityRating.serviceConnected.obfuscated')}
-                      revealedText={t('disabilityRating.serviceConnected')}
-                      revealedTextProps={{ variant: 'VeteranStatusProof', color: 'primary' }}
-                      obfuscatedTextProps={{ variant: 'VeteranStatusProof', color: 'disabled' }}
-                    />
+                    <Box
+                      accessible={true}
+                      accessibilityLabel={
+                        showDisabilityRating
+                          ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data?.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
+                          : `${t('disabilityRating.title.obfuscatedLabel')}`
+                      }>
+                      <ObfuscatedTextView
+                        showText={showDisabilityRating}
+                        obfuscatedText={t('disabilityRatingDetails.percentage.obfuscated')}
+                        revealedText={t('disabilityRatingDetails.percentage', {
+                          rate: disabilityRatingQuery.data?.combinedDisabilityRating,
+                        })}
+                        obfuscatedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'disabled',
+                        }}
+                        revealedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'primary',
+                        }}
+                      />
+                      <ObfuscatedTextView
+                        showText={showDisabilityRating}
+                        obfuscatedText={t('disabilityRating.serviceConnected.obfuscated')}
+                        revealedText={t('disabilityRating.serviceConnected')}
+                        revealedTextProps={{ variant: 'VeteranStatusProof', color: 'primary' }}
+                        obfuscatedTextProps={{ variant: 'VeteranStatusProof', color: 'disabled' }}
+                      />
+                    </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
                         onPress={() => setShowDisabilityRating(!showDisabilityRating)}
@@ -496,14 +498,12 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                   </Box>
                 )}
-                {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                {hasRecurringPaymentInfo && hasDisabilityRating && (
                   <Box mx={theme.dimensions.standardMarginBetween} my={theme.dimensions.standardMarginBetween} />
                 )}
                 {hasRecurringPaymentInfo && (
                   <Box
-                    pt={
-                      disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
-                    }
+                    pt={hasDisabilityRating ? 0 : theme.dimensions.standardMarginBetween}
                     px={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
