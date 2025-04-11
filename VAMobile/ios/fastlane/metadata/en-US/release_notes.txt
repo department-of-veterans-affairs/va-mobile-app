@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+We have enhanced the Veteran Status Card with a new API and clearer error messages. Other changes include consistent alert styling, removal of an incorrect link on the RX screen, and accessibility fixes for screen reader support and UI colors.
