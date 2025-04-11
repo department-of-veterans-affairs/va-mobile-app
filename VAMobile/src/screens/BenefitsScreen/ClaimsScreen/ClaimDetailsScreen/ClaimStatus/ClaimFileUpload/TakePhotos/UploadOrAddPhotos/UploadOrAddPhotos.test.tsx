@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
@@ -53,12 +54,12 @@ context('UploadOrAddPhotos', () => {
 
   it('initializes correctly', () => {
     renderWithData()
-    expect(screen.getByRole('header', { name: 'Upload photos' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Add photo' })).toBeTruthy()
-    expect(screen.getByText('of 10 photos')).toBeTruthy()
-    expect(screen.getByText('0 Bytes of 50MB')).toBeTruthy()
-    expect(screen.getByRole('spinbutton', { name: 'Document type (Required)' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('fileUpload.uploadPhotos') })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('fileUpload.addPhoto') })).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.ofTenPhotos', { numOfPhotos: '' }))).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.ofFiftyMB', { sizeOfPhotos: `0 ${t('Bytes')}` }))).toBeTruthy()
+    expect(screen.getByRole('spinbutton', { name: `${t('fileUpload.documentType')} ${t('required')}` })).toBeTruthy()
     expect(screen.getByRole('checkbox')).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Submit file' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('fileUpload.submit') })).toBeTruthy()
   })
 })
