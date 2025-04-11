@@ -176,17 +176,17 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
   const getHelperText = () => {
     return (
-      <Box style={containerStyle} my={theme.dimensions.formMarginBetween} px={horizontalPadding} width="100%">
+      <Box style={containerStyle} my={24} px={horizontalPadding} width="100%">
         <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
           {t('veteranStatus.about')}
         </TextView>
-        <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBody" color="bodyText" mb={24}>
           {t('veteranStatus.uniformedServices')}
         </TextView>
         <TextView variant="MobileBodyTightBold" color="primary" accessibilityRole="header" mb={12}>
           {t('veteranStatus.fixAnError')}
         </TextView>
-        <TextView variant="MobileBody" color="bodyText" mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBody" color="bodyText" mb={16}>
           {t('veteranStatus.fixAnError.2')}
         </TextView>
         <ClickToCallPhoneNumberDeprecated
@@ -195,7 +195,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           colorOverride={'link'}
           iconColorOverride={theme.colors.icon.link}
         />
-        <TextView variant="MobileBody" color="bodyText" my={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBody" color="bodyText" mt={16} mb={16}>
           {t('veteranStatus.fixAnError.3')}
         </TextView>
         <ClickToCallPhoneNumberDeprecated
