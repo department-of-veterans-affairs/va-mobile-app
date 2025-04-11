@@ -20,7 +20,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
   const navigateTo = useRouteNavigation()
 
   function renderAppealData() {
-    if (isAppeal) {
+    if (!isAppeal) {
       return <></>
     }
 
@@ -34,7 +34,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
             type="custom"
             onPress={() => {
               navigateTo('Webview', {
-                url: 'https://www.staging.va.gov/track-claims/your-claims/600570771',
+                url: 'https://www.staging.va.gov/track-claims/appeals/A1113',
                 displayTitle: t('webview.vagov'),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
