@@ -463,7 +463,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       accessibilityLabel={
                         showDisabilityRating
                           ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data?.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
-                          : `${t('disabilityRating.title.obfuscatedLabel')}`
+                          : t('disabilityRating.title.obfuscatedLabel')
                       }>
                       <ObfuscatedTextView
                         showText={showDisabilityRating}
@@ -517,7 +517,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       accessibilityLabel={
                         showCompensation
                           ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
-                          : `${t('monthlyCompensationPayment.obfuscated')}`
+                          : t('monthlyCompensationPayment.obfuscated')
                       }>
                       <ObfuscatedTextView
                         showText={showCompensation}
