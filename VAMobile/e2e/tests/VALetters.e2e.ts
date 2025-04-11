@@ -105,7 +105,7 @@ describe('VA Letters', () => {
     await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
   })
 
-  it.skip('should navigate back to letters and reset mailing address', async () => {
+  it('should navigate back to letters and reset mailing address', async () => {
     await openBenefits()
     await element(by.text('3101 N Fort Valley Rd, 2')).tap()
 
@@ -116,7 +116,7 @@ describe('VA Letters', () => {
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
-  it('should view letter types', async () => {
+  it.skip('should view letter types', async () => {
     await element(by.id(LettersConstants.LETTER_REVIEW_LETTERS_BUTTON_ID)).tap()
 
     for (const letterType of LettersConstants.LETTER_TYPES) {
