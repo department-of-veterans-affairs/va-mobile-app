@@ -495,16 +495,18 @@ context('HomeScreen', () => {
   })
 
   describe('About you section', () => {
-    it('displays disability rating percentage when veteran has disability rating', async () => {
+    it('displays obfuscated disability rating percentage revealed on show when veteran has disability rating', async () => {
       const disabilityRating = 100
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(disabilityRating))
       initializeTestInstance()
+      await waitFor(() => expect(screen.getByLabelText(t('disabilityRating.title.obfuscatedLabel'))).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByTestId('showDisabilityTestID')))
       await waitFor(() =>
         expect(
           screen.getByLabelText(
-            `${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRating })} ${t('disabilityRating.serviceConnected')}`,
+            `${t('disabilityRatingDetails.percentage', { rate: disabilityRating })} ${t('disabilityRating.serviceConnected')}`,
           ),
         ).toBeTruthy(),
       )
@@ -533,17 +535,19 @@ context('HomeScreen', () => {
       await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
 
-    it('displays monthly payment amount when veteran has monthly compensation payment', async () => {
+    it('displays obfuscated monthly payment amount that is revealed on show when veteran has monthly compensation payment', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
         .mockResolvedValue(getDisabilityRatingPayload(100))
         .calledWith('/v0/payment-history', {})
         .mockResolvedValue(getPaymentHistoryPayload('$3084.74', '2025-03-21T00:00:00.000-06:00'))
       initializeTestInstance()
+      await waitFor(() => expect(screen.getByLabelText(t('monthlyCompensationPayment.obfuscated'))).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByTestId('showCompensationTestID')))
       await waitFor(() =>
         expect(
           screen.getByLabelText(
-            `${t('monthlyCompensationPayment')} ${'$3084.74'} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate('2025-03-21T00:00:00.000-06:00', 'MMMM d, yyyy')}`,
+            `${'$3084.74'} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate('2025-03-21T00:00:00.000-06:00', 'MMMM d, yyyy')}`,
           ),
         ).toBeTruthy(),
       )
