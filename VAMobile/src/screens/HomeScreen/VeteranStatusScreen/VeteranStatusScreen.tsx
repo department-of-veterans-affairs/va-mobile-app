@@ -52,7 +52,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { data: veteranStatus, isError } = useVeteranStatus()
+  const { data: veteranStatus, isError } = useVeteranStatus({ enabled: false })
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
