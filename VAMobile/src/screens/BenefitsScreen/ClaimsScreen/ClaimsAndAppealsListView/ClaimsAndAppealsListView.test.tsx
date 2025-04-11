@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsListPayload } from 'api/types'
@@ -114,28 +115,40 @@ context('ClaimsAndAppealsListView', () => {
         })
         .mockResolvedValue(mockPayload)
       initializeTestInstance('ACTIVE')
-      await waitFor(() => expect(screen.getByText('Your active claims, decision reviews, and appeals')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Your closed claims, decision reviews, and appeals')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('claims.yourClaims', { claimType: 'active' }))).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('claims.yourClaims', { claimType: 'closed' }))).toBeFalsy())
 
       await waitFor(() => expect(screen.getByText('Insurance on docket appeal')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Received December 22, 2020')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(t('claimDetails.receivedOn', { date: 'December 22, 2020' }))).toBeTruthy(),
+      )
 
       await waitFor(() => expect(screen.getByText('Dependency')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Received October 04, 2020')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Step 6 of 8: Preparing decision letter')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Moved to this step on November 18, 2020')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(t('claimDetails.receivedOn', { date: 'October 04, 2020' }))).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByText(`${t('stepXofY', { current: 6, total: 8 })}: ${t('claimPhase.8step.heading.phase6')}`),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText(t('movedToThisStepOn', { date: 'November 18, 2020' }))).toBeTruthy())
 
       await waitFor(() => expect(screen.getByText('Compensation')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('More information needed')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Received October 01, 2020')).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('claims.moreInfoNeeded'))).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByText('Step 3 of 5: Evidence gathering, review, and decision')).toBeTruthy(),
+        expect(screen.getByText(t('claimDetails.receivedOn', { date: 'October 01, 2020' }))).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByText('Moved to this step on October 05, 2020')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByText(`${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')}`),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByText(t('movedToThisStepOn', { date: 'October 05, 2020' }))).toBeTruthy())
 
       initializeTestInstance('CLOSED')
-      await waitFor(() => expect(screen.getByText('Your closed claims, decision reviews, and appeals')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Your active claims, decision reviews, and appeals')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('claims.yourClaims', { claimType: 'closed' }))).toBeTruthy())
+      await waitFor(() => expect(screen.queryByText(t('claims.yourClaims', { claimType: 'active' }))).toBeFalsy())
     })
   })
 
@@ -152,7 +165,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('link', {
-            name: 'Compensation More information needed Received October 01, 2020 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on October 05, 2020',
+            name: `Compensation ${t('claims.moreInfoNeeded')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
           }),
         ),
       )
@@ -175,7 +188,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('link', {
-            name: 'Insurance on docket appeal Received December 22, 2020 Moved to this step on December 28, 2020',
+            name: `Insurance on docket appeal ${t('claimDetails.receivedOn', { date: 'December 22, 2020' })} ${t('movedToThisStepOn', { date: 'December 28, 2020' })}`,
           }),
         ),
       )
@@ -194,14 +207,8 @@ context('ClaimsAndAppealsListView', () => {
         })
         .mockResolvedValue(emptyPayload)
       initializeTestInstance('ACTIVE', true)
-      await waitFor(() => expect(screen.getByText("You don't have any submitted claims or appeals")).toBeTruthy())
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
-          ),
-        ).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('noClaims.youDontHaveAnyClaimsOrAppeals'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('noClaims.appOnlyShowsCompletedClaimsAndAppeals'))).toBeTruthy())
     })
   })
 })
