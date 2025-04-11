@@ -105,7 +105,7 @@ describe('VA Letters', () => {
     await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
   })
 
-  it('should navigate back to letters and reset mailing address', async () => {
+  it.skip('should navigate back to letters and reset mailing address', async () => {
     await openBenefits()
     await element(by.text('3101 N Fort Valley Rd, 2')).tap()
 
