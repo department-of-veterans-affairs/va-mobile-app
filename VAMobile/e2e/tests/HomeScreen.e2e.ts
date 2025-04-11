@@ -17,9 +17,11 @@ export const HomeE2eIdConstants = {
   PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
-  DISABILITY_RATING_SUBTEXT_TEXT: 'service connected',
+  DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
+  DISABILITY_RATING_OBFUSCATED_SUBTEXT_TEXT: '•••••••••••••••••••••••••••',
   MONTHLY_PAYMENT_TITLE_TEXT: 'Compensation & Pension - Recurring',
   MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.74',
+  MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT: '$••••••••••',
 }
 
 beforeAll(async () => {
@@ -150,7 +152,8 @@ describe('Home Screen', () => {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
-    await waitFor(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT)))
+    // await waitFor(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT)))
+    await waitFor(element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
@@ -160,10 +163,26 @@ describe('Home Screen', () => {
       'MilitaryServiceBadgeHome',
     )
     checkImages(militaryBadge)
+  })
+
+  it('should reveal disability rating on pressing show', async () => {
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_TITLE_TEXT))).toExist()
+
+    await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_OBFUSCATED_PERCENT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_OBFUSCATED_SUBTEXT_TEXT))).toExist()
+
+    await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_DISABILITY_BUTTON_ID)).tap()
+
     await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_SUBTEXT_TEXT))).toExist()
+  })
+
+  it('should reveal compensation on pressing show', async () => {
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_TITLE_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT))).toExist()
+
+    await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID)).tap()
+
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT))).toExist()
   })
 
