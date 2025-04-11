@@ -508,40 +508,44 @@ export function HomeScreen({}: HomeScreenProps) {
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
                       pb={theme.dimensions.condensedMarginBetween}
-                      accessibilityLabel={
-                        showCompensation
-                          ? `${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
-                          : `${t('monthlyCompensationPayment')} ${t('monthlyCompensationPayment.obfuscated')}`
-                      }
+                      accessibilityRole={'header'}
                       variant={'HomeScreenHeader'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
-                    <ObfuscatedTextView
-                      showText={showCompensation}
-                      obfuscatedText={t('monthlyCompensationPayment.amount.obfuscated')}
-                      revealedText={recurringPayment.amount || ''}
-                      revealedTextProps={{
-                        variant: 'NametagNumber',
-                        color: 'primary',
-                      }}
-                      obfuscatedTextProps={{
-                        variant: 'NametagNumber',
-                        color: 'disabled',
-                      }}
-                    />
-                    <ObfuscatedTextView
-                      showText={showCompensation}
-                      obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                      revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
-                      revealedTextProps={{
-                        variant: 'VeteranStatusProof',
-                        color: 'primary',
-                      }}
-                      obfuscatedTextProps={{
-                        variant: 'VeteranStatusProof',
-                        color: 'disabled',
-                      }}
-                    />
+                    <Box
+                      accessible={true}
+                      accessibilityLabel={
+                        showCompensation
+                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          : `${t('monthlyCompensationPayment.obfuscated')}`
+                      }>
+                      <ObfuscatedTextView
+                        showText={showCompensation}
+                        obfuscatedText={t('monthlyCompensationPayment.amount.obfuscated')}
+                        revealedText={recurringPayment.amount || ''}
+                        revealedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'primary',
+                        }}
+                        obfuscatedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'disabled',
+                        }}
+                      />
+                      <ObfuscatedTextView
+                        showText={showCompensation}
+                        obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                        revealedTextProps={{
+                          variant: 'VeteranStatusProof',
+                          color: 'primary',
+                        }}
+                        obfuscatedTextProps={{
+                          variant: 'VeteranStatusProof',
+                          color: 'disabled',
+                        }}
+                      />
+                    </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
                         onPress={() => setShowCompensation(!showCompensation)}
