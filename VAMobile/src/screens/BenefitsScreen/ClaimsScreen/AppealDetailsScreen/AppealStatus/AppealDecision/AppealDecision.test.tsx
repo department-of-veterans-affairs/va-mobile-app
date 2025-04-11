@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -29,14 +30,14 @@ context('AppealDecision', () => {
   })
 
   it('should initialize', () => {
-    expect(screen.getByText('Granted')).toBeTruthy()
-    expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
+    expect(screen.getByText(t('appealDetails.granted'))).toBeTruthy()
     expect(
       screen.getByText(
-        'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+        t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'granted', pluralizedIssue: 'issue' }),
       ),
     ).toBeTruthy()
-    expect(screen.getByText('Please see your decision for more details.')).toBeTruthy()
+    expect(screen.getByText(t('appealDetails.ifThisChangesRating'))).toBeTruthy()
+    expect(screen.getByText(t('appealDetails.pleaseSeeYourDecision'))).toBeTruthy()
   })
 
   describe('when there are remandIssues', () => {
@@ -45,13 +46,15 @@ context('AppealDecision', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
         expect(
           screen.getByText(
-            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+            t('appealDetails.judgeSendingBack', {
+              pluralizedIssue: 'this issue',
+              aojDesc: t('appealDetails.vba'),
+              action: t('appealDetails.correctAnError'),
+            }),
           ),
         ).toBeTruthy()
         expect(
-          screen.getByText(
-            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
-          ),
+          screen.getByText(t('appealDetails.willMakeNewDecision', { aojDesc: t('appealDetails.vba') })),
         ).toBeTruthy()
       })
     })
@@ -61,12 +64,12 @@ context('AppealDecision', () => {
     describe('when boardDecision is true', () => {
       it('should display the text "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months."', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
-        expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
         expect(
           screen.getByText(
-            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+            t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'granted', pluralizedIssue: 'issue' }),
           ),
         ).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.ifThisChangesRating'))).toBeTruthy()
       })
     })
   })
@@ -83,12 +86,12 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(screen.getByText('The judge granted the following issues:')).toBeTruthy()
         expect(
           screen.getByText(
-            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+            t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'granted', pluralizedIssue: 'issues' }),
           ),
         ).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.ifThisChangesRating'))).toBeTruthy()
       })
     })
 
@@ -103,7 +106,15 @@ context('AppealDecision', () => {
           true,
           false,
         )
-        expect(screen.getByText('The reviewer granted the following issues:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', {
+              person: 'reviewer',
+              action: 'granted',
+              pluralizedIssue: 'issues',
+            }),
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -112,19 +123,27 @@ context('AppealDecision', () => {
     describe('when boardDecision is true', () => {
       it('should display "The judge granted the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, true)
-        expect(screen.getByText('The judge granted the following issue:')).toBeTruthy()
         expect(
           screen.getByText(
-            'If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.',
+            t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'granted', pluralizedIssue: 'issue' }),
           ),
         ).toBeTruthy()
+        expect(screen.getByText(t('appealDetails.ifThisChangesRating'))).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
       it('should display "The reviewer granted the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'allowed' }], 'vba', true, false)
-        expect(screen.getByText('The reviewer granted the following issue:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', {
+              person: 'reviewer',
+              action: 'granted',
+              pluralizedIssue: 'issue',
+            }),
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -141,7 +160,11 @@ context('AppealDecision', () => {
           true,
           true,
         )
-        expect(screen.getByText('The judge denied the following issues:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'denied', pluralizedIssue: 'issues' }),
+          ),
+        ).toBeTruthy()
       })
     })
 
@@ -156,7 +179,15 @@ context('AppealDecision', () => {
           true,
           false,
         )
-        expect(screen.getByText('The reviewer denied the following issues:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', {
+              person: 'reviewer',
+              action: 'denied',
+              pluralizedIssue: 'issues',
+            }),
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -165,14 +196,26 @@ context('AppealDecision', () => {
     describe('when boardDecision is true', () => {
       it('should display "The judge denied the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'denied' }], 'vba', true, true)
-        expect(screen.getByText('The judge denied the following issue:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', { person: 'judge', action: 'denied', pluralizedIssue: 'issue' }),
+          ),
+        ).toBeTruthy()
       })
     })
 
     describe('when boardDecision is false', () => {
       it('should display "The reviewer denied the following issue:"', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'denied' }], 'vba', true, false)
-        expect(screen.getByText('The reviewer denied the following issue:')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('appealDetails.personGrantedOrDenied', {
+              person: 'reviewer',
+              action: 'denied',
+              pluralizedIssue: 'issue',
+            }),
+          ),
+        ).toBeTruthy()
       })
     })
   })
@@ -191,13 +234,15 @@ context('AppealDecision', () => {
         )
         expect(
           screen.getByText(
-            'The judge is sending these issues back to the Veterans Benefits Administration to correct an error',
+            t('appealDetails.judgeSendingBack', {
+              pluralizedIssue: 'these issues',
+              aojDesc: t('appealDetails.vba'),
+              action: t('appealDetails.correctAnError'),
+            }),
           ),
         ).toBeTruthy()
         expect(
-          screen.getByText(
-            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
-          ),
+          screen.getByText(t('appealDetails.willMakeNewDecision', { aojDesc: t('appealDetails.vba') })),
         ).toBeTruthy()
       })
     })
@@ -215,7 +260,11 @@ context('AppealDecision', () => {
         )
         expect(
           screen.getByText(
-            'The judge is sending these issues back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+            t('appealDetails.judgeSendingBack', {
+              pluralizedIssue: 'these issues',
+              aojDesc: t('appealDetails.vba'),
+              action: t('appealDetails.gatherMoreEvidence'),
+            }),
           ),
         ).toBeTruthy()
       })
@@ -228,13 +277,15 @@ context('AppealDecision', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', true, true)
         expect(
           screen.getByText(
-            'The judge is sending this issue back to the Veterans Benefits Administration to correct an error',
+            t('appealDetails.judgeSendingBack', {
+              pluralizedIssue: 'this issue',
+              aojDesc: t('appealDetails.vba'),
+              action: t('appealDetails.correctAnError'),
+            }),
           ),
         ).toBeTruthy()
         expect(
-          screen.getByText(
-            'After the Veterans Benefits Administration has completed the judge’s instructions to correct the error, they will make a new decision.',
-          ),
+          screen.getByText(t('appealDetails.willMakeNewDecision', { aojDesc: t('appealDetails.vba') })),
         ).toBeTruthy()
       })
     })
@@ -244,7 +295,11 @@ context('AppealDecision', () => {
         initializeTestInstance([{ description: 'desc', disposition: 'remand' }], 'vba', false, false)
         expect(
           screen.getByText(
-            'The judge is sending this issue back to the Veterans Benefits Administration to gather more evidence or to fix a mistake before deciding whether to grant or deny',
+            t('appealDetails.judgeSendingBack', {
+              pluralizedIssue: 'this issue',
+              aojDesc: t('appealDetails.vba'),
+              action: t('appealDetails.gatherMoreEvidence'),
+            }),
           ),
         ).toBeTruthy()
       })
