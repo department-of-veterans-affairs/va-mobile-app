@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { t } from 'i18next'
+
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
@@ -83,7 +85,9 @@ context('FileRequest', () => {
         })
 
       renderWithData(updatedRequests)
-      await waitFor(() => expect(screen.getByText('You have 2 file requests from VA')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByText(t('claimPhase.youHaveFileRequestVA_plural', { count: 2 }))).toBeTruthy(),
+      )
     })
   })
 
@@ -103,22 +107,10 @@ context('FileRequest', () => {
           },
         })
       renderWithData(request)
-      await waitFor(() => expect(screen.getByText('You have 1 file request from VA')).toBeTruthy())
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            "We sent you a letter in the mail asking for more evidence to support your claim. We'll wait 30 days for your evidence before we begin evaluating your claim.",
-          ),
-        ).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('fileRequest.weSentYouALaterText'))).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy())
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            'Please review the evaluation details if you are ready for us to begin evaluating your claim',
-          ),
-        ).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText(t('fileRequest.askForYourClaimEvaluationBody'))).toBeTruthy())
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Request 1' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {
@@ -136,7 +128,9 @@ context('FileRequest', () => {
         .mockRejectedValue({ networkError: true } as api.APIError)
 
       renderWithData(request)
-      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
     })
   })
 
@@ -176,7 +170,7 @@ context('FileRequest', () => {
           })
 
         renderWithData(updatedRequests)
-        await waitFor(() => expect(screen.getByText('You have 1 file request from VA')).toBeTruthy())
+        await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
       })
     })
   })
