@@ -18,7 +18,6 @@ export const HomeE2eIdConstants = {
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
-  DISABILITY_RATING_OBFUSCATED_SUBTEXT_TEXT: '•••••••••••••••••••••••••••',
   MONTHLY_PAYMENT_TITLE_TEXT: 'Compensation & Pension - Recurring',
   MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.74',
   MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT: '$••••••••••',
