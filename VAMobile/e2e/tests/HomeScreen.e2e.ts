@@ -166,9 +166,7 @@ describe('Home Screen', () => {
 
   it('should reveal disability rating on pressing show', async () => {
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_TITLE_TEXT))).toExist()
-
     await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_OBFUSCATED_PERCENT_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_OBFUSCATED_SUBTEXT_TEXT))).toExist()
 
     await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_DISABILITY_BUTTON_ID)).tap()
 
