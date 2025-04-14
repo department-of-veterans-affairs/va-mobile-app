@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -44,25 +45,29 @@ context('SelectFile', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Select a file to upload for the request' })).toBeTruthy()
+    expect(
+      screen.getByRole('header', { name: t('fileUpload.selectAFileToUpload', { requestTitle: 'the request' }) }),
+    ).toBeTruthy()
     expect(
       screen.getByText(
-        "To submit evidence that supports this claim, please select a file from your phone's files. You can only submit 1 file with this request.",
+        t('fileUpload.pleaseRequestFromPhoneFiles') +
+          t('fileUpload.pleaseRequestFromPhoneFiles.bolded') +
+          t('fileUpload.pleaseRequestFromPhoneFiles.pt2'),
       ),
     ).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Maximum file size:' })).toBeTruthy()
-    expect(screen.getByText('50 MB')).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Accepted file types:' })).toBeTruthy()
-    expect(screen.getByText('PDF (unlocked), GIF, JPEG, JPG, BMP, TXT')).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Select a file' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('fileUpload.maxFileSize') })).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.50MB'))).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('fileUpload.acceptedFileTypes') })).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.acceptedFileTypeOptions'))).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
   })
 
   describe('on click of select a file', () => {
     it('should call showActionSheetWithOptions and display the action sheet', () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+      fireEvent.press(screen.getByRole('button', { name: t('fileUpload.selectAFile') }))
       expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
       const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0]
-      expect(actionSheetConfig.options).toEqual(['File Folder', 'Cancel'])
+      expect(actionSheetConfig.options).toEqual(['File Folder', t('cancel')])
     })
   })
 })
