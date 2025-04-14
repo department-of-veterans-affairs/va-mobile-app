@@ -2,6 +2,7 @@ import React, { RefObject } from 'react'
 import { ScrollView } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
 
@@ -33,28 +34,36 @@ context('ClaimPhase', () => {
 
   it('initializes 5-step claim correctly', () => {
     initializeTestInstance(1, 1, false)
-    expect(screen.getByLabelText('Step 1 of 5. Claim received. Current step.')).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 1, total: 5 })}. ${t('claimPhase.5step.heading.phase1')}. ${t('currentStep')}.`,
+      ),
+    ).toBeTruthy()
     expect(screen.getByRole('tab')).toBeTruthy()
   })
 
   describe('when phase is less than current', () => {
     it('renders correct label and text after press', () => {
       initializeTestInstance(1, 2, true)
-      expect(screen.getByLabelText('Step 1 of 8. Claim received. Complete.')).toBeTruthy()
+      expect(
+        screen.getByLabelText(
+          `${t('stepXofY', { current: 1, total: 8 })}. ${t('claimPhase.8step.heading.phase1')}. ${t('complete')}.`,
+        ),
+      ).toBeTruthy()
       fireEvent.press(screen.getAllByRole('tab')[0])
-      expect(screen.getByText('We received your claim in our system.')).toBeTruthy()
+      expect(screen.getByText(t('claimPhase.8step.details.phase1'))).toBeTruthy()
     })
   })
 
   describe('when phase is equal to current', () => {
     it('renders correct label and text without press', () => {
       initializeTestInstance(2, 2, true)
-      expect(screen.getByLabelText('Step 2 of 8. Initial review. Current step. Step 1 complete.')).toBeTruthy()
       expect(
-        screen.getByText(
-          "We'll check your claim for basic information we need, like your name and Social Security number.\n\nIf information is missing, we'll contact you.",
+        screen.getByLabelText(
+          `${t('stepXofY', { current: 2, total: 8 })}. ${t('claimPhase.5step.heading.phase2')}. ${t('currentStep')}. ${t('claimPhase.heading.a11y.step1Complete')}.`,
         ),
       ).toBeTruthy()
+      expect(screen.getByText(t('claimPhase.8step.details.phase2'))).toBeTruthy()
     })
   })
 
@@ -62,24 +71,24 @@ context('ClaimPhase', () => {
     it('renders correct label and text without press', () => {
       initializeTestInstance(6, 6, true)
       expect(
-        screen.getByLabelText('Step 6 of 8. Preparing decision letter. Current step. Step 1 through 5 complete.'),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(
-          'We’ll prepare your decision letter.\n\nIf we need more evidence or you submit more evidence, your claim will go back to Step 3.',
+        screen.getByLabelText(
+          `${t('stepXofY', { current: 6, total: 8 })}. ${t('claimPhase.8step.heading.phase6')}. ${t('currentStep')}. ${t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: 5 })}.`,
         ),
       ).toBeTruthy()
+      expect(screen.getByText(t('claimPhase.8step.details.phase6'))).toBeTruthy()
     })
   })
 
   describe('when phase is greater than current', () => {
     it('renders correct label and text after press', () => {
       initializeTestInstance(8, 7, true)
-      expect(screen.getByLabelText('Step 8 of 8. Claim decided. Incomplete.')).toBeTruthy()
-      fireEvent.press(screen.getAllByRole('tab')[0])
       expect(
-        screen.getByText("You’ll be able to view and download your decision letter. We'll also mail you this letter."),
+        screen.getByLabelText(
+          `${t('stepXofY', { current: 8, total: 8 })}. ${t('claimPhase.8step.heading.phase8')}. ${t('incomplete')}.`,
+        ),
       ).toBeTruthy()
+      fireEvent.press(screen.getAllByRole('tab')[0])
+      expect(screen.getByText(t('claimPhase.8step.details.phase8'))).toBeTruthy()
     })
   })
 })
