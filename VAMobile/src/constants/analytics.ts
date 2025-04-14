@@ -877,6 +877,16 @@ export const Events = {
       name: 'vama_pref_name_success',
     }
   },
+  vama_prof_person_noauth: (): Event => {
+    return {
+      name: 'vama_prof_person_noauth',
+    }
+  },
+  vama_prof_contact_noauth: (): Event => {
+    return {
+      name: 'vama_prof_contact_noauth',
+    }
+  },
   vama_prof_update_address: (): Event => {
     return {
       name: 'vama_prof_update_address',

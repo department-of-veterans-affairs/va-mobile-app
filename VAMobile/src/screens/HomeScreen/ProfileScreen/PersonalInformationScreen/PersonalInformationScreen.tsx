@@ -1,27 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { TFunction } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDemographics } from 'api/demographics/getDemographics'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { UserDemographics } from 'api/types/DemographicsData'
 import {
+  AlertWithHaptics,
   Box,
+  BoxProps,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
   LoadingComponent,
+  TextArea,
   TextView,
+  VAScrollView,
 } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
@@ -44,10 +51,17 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { gutter, condensedMarginBetween, formMarginBetween } = theme.dimensions
+  const { gutter, condensedMarginBetween, formMarginBetween, contentMarginBottom, standardMarginBetween } =
+    theme.dimensions
   const personalInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)
   const isScreenContentAllowed = screenContentAllowed('WG_PersonalInformation')
   const registerReviewEvent = useReviewEvent(true)
+  const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchUserAuthorizedServices,
+  } = useAuthorizedServices()
   const {
     data: personalInfo,
     isFetching: loadingPersonalInfo,
@@ -69,6 +83,12 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     registerReviewEvent()
     setReviewEventRegistered(true)
   }
+
+  useEffect(() => {
+    if (!userAuthorizedServices?.userProfileUpdate) {
+      logAnalyticsEvent(Events.vama_prof_person_noauth())
+    }
+  }, [userAuthorizedServices?.userProfileUpdate])
 
   const personalInformationItems = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = [
@@ -104,11 +124,37 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     if (personalInfoError) {
       refetchPersonalInfo()
     }
+    if (getUserAuthorizedServicesError) {
+      refetchUserAuthorizedServices()
+    }
+  }
+
+  const getNoAuth = () => {
+    const alertWrapperProps: BoxProps = {
+      mb: standardMarginBetween,
+    }
+    return (
+      <VAScrollView>
+        <Box mb={contentMarginBottom}>
+          <Box {...alertWrapperProps}>
+            <AlertWithHaptics variant="warning" description={t('noAccessProfileInfo.cantAccess')} />
+          </Box>
+          <Box>
+            <TextArea>
+              <TextView variant="MobileBody" paragraphSpacing={true}>
+                {t('noAccessProfileInfo.systemProblem')}
+              </TextView>
+              <TextView variant="MobileBody">{t('noAccessProfileInfo.toAccess')}</TextView>
+            </TextArea>
+          </Box>
+        </Box>
+      </VAScrollView>
+    )
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError
-  const loadingCheck = loadingPersonalInfo || loadingDemographics
+  const errorCheck = personalInformationInDowntime || getDemographicsError || getUserAuthorizedServicesError
+  const loadingCheck = loadingPersonalInfo || loadingDemographics || loadingUserAuthorizedServices
 
   return (
     <FeatureLandingTemplate
@@ -125,6 +171,8 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
           onTryAgain={onTryAgain}
           error={getDemographicsError}
         />
+      ) : !userAuthorizedServices?.userProfileUpdate ? (
+        getNoAuth()
       ) : (
         <>
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
