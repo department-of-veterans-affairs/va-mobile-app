@@ -108,21 +108,27 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (!serviceHistory || serviceHistory.length === 0) {
       return null
     }
-    const service = serviceHistory[serviceHistory.length - 1]
-    const branchOfService = t('militaryInformation.branch', {
-      branch: service.branchOfService,
-    })
 
-    const beginYear = service.beginDate.slice(0, 4)
-    const endYear = service.endDate.slice(0, 4)
+    for (let i = serviceHistory.length - 1; i >= 0; i--) {
+      const service = serviceHistory[i]
+      const { beginDate, endDate, branchOfService } = service
+      if (beginDate && endDate) {
+        const localizedBranch = t('militaryInformation.branch', {
+          branch: branchOfService,
+        })
+        const beginYear = beginDate.slice(0, 4)
+        const endYear = endDate.slice(0, 4)
 
-    return (
-      <Box>
-        <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusMilitaryServiceTestID">
-          {branchOfService} • {beginYear}-{endYear}
-        </TextView>
-      </Box>
-    )
+        return (
+          <Box>
+            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusMilitaryServiceTestID">
+              {localizedBranch} • {beginYear}-{endYear}
+            </TextView>
+          </Box>
+        )
+      }
+    }
+    return null
   }
 
   const getError = () => {
