@@ -34,7 +34,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
             type="custom"
             onPress={() => {
               navigateTo('Webview', {
-                url: 'https://www.staging.va.gov/track-claims/appeals/A1113',
+                url: LINK_URL_CLAIM_APPEAL_STATUS,
                 displayTitle: t('webview.vagov'),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
