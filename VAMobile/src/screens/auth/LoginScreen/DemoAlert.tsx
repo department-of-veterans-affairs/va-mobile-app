@@ -30,12 +30,14 @@ function DemoAlert({ visible, setVisible, onConfirm }: AlertPromptProps) {
   }
 
   const onDemo = () => {
-    setVisible(false)
-    setInput('')
-    if (input === DEMO_PASSWORD) {
-      onConfirm()
-    } else {
-      Alert.alert('Invalid Code', 'Try Again')
+    if (visible) {
+      setVisible(false)
+      setInput('')
+      if (input === DEMO_PASSWORD) {
+        onConfirm()
+      } else {
+        Alert.alert('Invalid Code', 'Try Again')
+      }
     }
   }
 

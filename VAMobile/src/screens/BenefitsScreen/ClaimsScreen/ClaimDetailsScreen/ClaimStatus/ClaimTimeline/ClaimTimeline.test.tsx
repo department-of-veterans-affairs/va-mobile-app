@@ -2,6 +2,7 @@ import React, { RefObject } from 'react'
 import { ScrollView } from 'react-native'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
 
@@ -27,16 +28,46 @@ context('ClaimTimeline', () => {
 
   it('shows full list of steps', () => {
     initializeTestInstance(false)
-    expect(screen.queryByText('You have 2 file requests from VA')).toBeFalsy()
-    expect(screen.getByLabelText('Step 1 of 8. Claim received. Complete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 2 of 8. Initial review. Complete.')).toBeTruthy()
+    expect(screen.queryByText(t('claimPhase.youHaveFileRequestVA_plural', { count: 2 }))).toBeFalsy()
     expect(
-      screen.getByLabelText('Step 3 of 8. Evidence gathering. Current step. Step 1 through 2 complete.'),
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 1, total: 8 })}. ${t('claimPhase.8step.heading.phase1')}. ${t('complete')}.`,
+      ),
     ).toBeTruthy()
-    expect(screen.getByLabelText('Step 4 of 8. Evidence review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 5 of 8. Rating. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 6 of 8. Preparing decision letter. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 7 of 8. Final review. Incomplete.')).toBeTruthy()
-    expect(screen.getByLabelText('Step 8 of 8. Claim decided. Incomplete.')).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 2, total: 8 })}. ${t('claimPhase.8step.heading.phase2')}. ${t('complete')}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 3, total: 8 })}. ${t('claimPhase.8step.heading.phase3')}. ${t('currentStep')}. ${t('claimPhase.heading.a11y.stepCompleteRange', { lastStep: 2 })}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 4, total: 8 })}. ${t('claimPhase.8step.heading.phase4')}. ${t('incomplete')}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 5, total: 8 })}. ${t('claimPhase.8step.heading.phase5')}. ${t('incomplete')}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 6, total: 8 })}. ${t('claimPhase.8step.heading.phase6')}. ${t('incomplete')}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 7, total: 8 })}. ${t('claimPhase.8step.heading.phase7')}. ${t('incomplete')}.`,
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.getByLabelText(
+        `${t('stepXofY', { current: 7, total: 8 })}. ${t('claimPhase.8step.heading.phase7')}. ${t('incomplete')}.`,
+      ),
+    ).toBeTruthy()
   })
 })
