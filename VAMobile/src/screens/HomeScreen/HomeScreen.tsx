@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { colors as DSColors } from '@department-of-veterans-affairs/mobile-tokens'
 import { DateTime } from 'luxon'
@@ -30,7 +30,6 @@ import {
   ActivityButton,
   AnnouncementBanner,
   BackgroundVariant,
-  BorderColorVariant,
   Box,
   BoxProps,
   CategoryLanding,
@@ -40,6 +39,7 @@ import {
   LinkRow,
   LoadingComponent,
   Nametag,
+  ObfuscatedTextView,
   TextView,
 } from 'components'
 import { Events } from 'constants/analytics'
@@ -114,6 +114,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const veteranStatusQuery = useVeteranStatus()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+
+  const [showDisabilityRating, setShowDisabilityRating] = useState(false)
+  const [showCompensation, setShowCompensation] = useState(false)
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
@@ -205,6 +208,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }
 
   const hasRecurringPaymentInfo = !!recurringPayment.amount && !!recurringPayment.date
+  const hasDisabilityRating = !!disabilityRatingQuery.data?.combinedDisabilityRating
 
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
@@ -274,10 +278,7 @@ export function HomeScreen({}: HomeScreenProps) {
     paymentHistoryQuery.isLoading ||
     veteranStatusQuery.isLoading
 
-  const hasAboutYouInfo =
-    !!disabilityRatingQuery.data?.combinedDisabilityRating ||
-    hasRecurringPaymentInfo ||
-    !!serviceHistoryQuery.data?.mostRecentBranch
+  const hasAboutYouInfo = hasDisabilityRating || hasRecurringPaymentInfo || !!serviceHistoryQuery.data?.mostRecentBranch
 
   const aboutYouFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.militaryServiceHistory && serviceHistoryInDowntime) ||
@@ -450,54 +451,113 @@ export function HomeScreen({}: HomeScreenProps) {
             <Box>
               <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
-                {!!disabilityRatingQuery.data?.combinedDisabilityRating && (
+                {hasDisabilityRating && (
                   <Box
                     pt={theme.dimensions.standardMarginBetween}
                     pb={hasRecurringPaymentInfo ? 0 : theme.dimensions.standardMarginBetween}
-                    pl={theme.dimensions.standardMarginBetween}>
+                    px={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('disabilityRating.title')} ${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`}
-                      variant={'VeteranStatusBranch'}>
+                      accessibilityRole="header"
+                      pb={theme.dimensions.condensedMarginBetween}
+                      variant={'HomeScreenHeader'}>
                       {t('disabilityRating.title')}
                     </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={
-                        'NametagNumber'
-                      }>{`${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data.combinedDisabilityRating })}`}</TextView>
-                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {t('disabilityRating.serviceConnected')}
-                    </TextView>
+                    <Box
+                      accessible={true}
+                      accessibilityLabel={
+                        showDisabilityRating
+                          ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data?.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
+                          : t('disabilityRating.title.obfuscatedLabel')
+                      }>
+                      <ObfuscatedTextView
+                        showText={showDisabilityRating}
+                        obfuscatedText={t('disabilityRatingDetails.percentage.obfuscated')}
+                        revealedText={t('disabilityRatingDetails.percentage', {
+                          rate: disabilityRatingQuery.data?.combinedDisabilityRating,
+                        })}
+                        obfuscatedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'disabled',
+                        }}
+                        revealedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'primary',
+                        }}
+                      />
+                      <ObfuscatedTextView
+                        showText={showDisabilityRating}
+                        obfuscatedText={t('disabilityRating.serviceConnected.obfuscated')}
+                        revealedText={t('disabilityRating.serviceConnected')}
+                        revealedTextProps={{ variant: 'VeteranStatusProof', color: 'primary' }}
+                        obfuscatedTextProps={{ variant: 'VeteranStatusProof', color: 'disabled' }}
+                      />
+                    </Box>
+                    <Box pt={theme.dimensions.standardMarginBetween}>
+                      <Button
+                        onPress={() => setShowDisabilityRating(!showDisabilityRating)}
+                        label={showDisabilityRating ? t('hide') : t('show')}
+                        testID={'showDisabilityTestID'}
+                        buttonType={ButtonVariants.Primary}
+                      />
+                    </Box>
                   </Box>
                 )}
-                {hasRecurringPaymentInfo && !!disabilityRatingQuery.data?.combinedDisabilityRating && (
-                  <Box
-                    mx={theme.dimensions.standardMarginBetween}
-                    my={theme.dimensions.condensedMarginBetween}
-                    borderBottomWidth={1}
-                    borderColor={theme.colors.border.aboutYou as BorderColorVariant}
-                  />
+                {hasRecurringPaymentInfo && hasDisabilityRating && (
+                  <Box mx={theme.dimensions.standardMarginBetween} my={theme.dimensions.standardMarginBetween} />
                 )}
                 {hasRecurringPaymentInfo && (
                   <Box
-                    pt={
-                      disabilityRatingQuery.data?.combinedDisabilityRating ? 0 : theme.dimensions.standardMarginBetween
-                    }
-                    pl={theme.dimensions.standardMarginBetween}
+                    pt={hasDisabilityRating ? 0 : theme.dimensions.standardMarginBetween}
+                    px={theme.dimensions.standardMarginBetween}
                     pb={theme.dimensions.standardMarginBetween}>
                     <TextView
-                      accessibilityLabel={`${t('monthlyCompensationPayment')} ${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
-                      variant={'VeteranStatusBranch'}>
+                      pb={theme.dimensions.condensedMarginBetween}
+                      accessibilityRole={'header'}
+                      variant={'HomeScreenHeader'}>
                       {t('monthlyCompensationPayment')}
                     </TextView>
-                    <TextView
-                      accessible={false}
-                      importantForAccessibility={'no'}
-                      variant={'NametagNumber'}>{`${recurringPayment.amount}`}</TextView>
-                    <TextView accessible={false} importantForAccessibility={'no'} variant={'VeteranStatusProof'}>
-                      {`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
-                    </TextView>
+                    <Box
+                      accessible={true}
+                      accessibilityLabel={
+                        showCompensation
+                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          : t('monthlyCompensationPayment.obfuscated')
+                      }>
+                      <ObfuscatedTextView
+                        showText={showCompensation}
+                        obfuscatedText={t('monthlyCompensationPayment.amount.obfuscated')}
+                        revealedText={recurringPayment.amount || ''}
+                        revealedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'primary',
+                        }}
+                        obfuscatedTextProps={{
+                          variant: 'NametagNumber',
+                          color: 'disabled',
+                        }}
+                      />
+                      <ObfuscatedTextView
+                        showText={showCompensation}
+                        obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                        revealedTextProps={{
+                          variant: 'VeteranStatusProof',
+                          color: 'primary',
+                        }}
+                        obfuscatedTextProps={{
+                          variant: 'VeteranStatusProof',
+                          color: 'disabled',
+                        }}
+                      />
+                    </Box>
+                    <Box pt={theme.dimensions.standardMarginBetween}>
+                      <Button
+                        onPress={() => setShowCompensation(!showCompensation)}
+                        label={showCompensation ? t('hide') : t('show')}
+                        buttonType={ButtonVariants.Primary}
+                        testID={'showCompensationTestID'}
+                      />
+                    </Box>
                   </Box>
                 )}
               </Box>
