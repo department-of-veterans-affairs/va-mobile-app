@@ -30,7 +30,7 @@ const TravelPayE2eIdConstants = {
   SUCCESS_NEXT_TEXT2_ID: 'successNextText2ID',
   COUNTRY_TEXT: 'United States',
   STATE_TEXT: 'Arizona',
-  FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
+  FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
   NOT_ELIGIBLE_SCREEN_ID: 'NotEligibleTypeScreen',
   FILE_ONLINE_COMPONENT_ID: 'fileOnlineComponent',
   FILE_ONLINE_TITLE_ID: 'fileOnlineTitle',
@@ -80,39 +80,48 @@ const TravelPayE2eIdConstants = {
 }
 
 const fillHomeAddressFields = async () => {
-  // Set the country field
-  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-  await waitFor(element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)))
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).typeText('2')
+  await element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.CONTACT_INFO_STREET_ADDRESS_LINE_2_ID)))
     .toBeVisible()
-    .withTimeout(2000)
-  await element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)).tap()
+    .withTimeout(4000)
+  await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
+  await expect(element(by.text('United States'))).toExist()
+  await element(by.text('United States')).tap()
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
+  await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
+  await element(by.text('Arizona')).tap()
+  await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).clearText()
+  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
+}
+
+export async function updateAddress() {
   await waitFor(element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  // Set the street address
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).typeText('3101 N Fort Valley Rd')
   await element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.STREET_ADDRESS_LINE_1_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  // Scroll the page to make the state and zip code fields visible
-  await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('bottom')
-
-  // Set the city
+  await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
+    .scroll(100, 'down', NaN, 0.8)
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
-
-  // Set the state
-  await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
-  await element(by.text(TravelPayE2eIdConstants.STATE_TEXT)).tap()
-  await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
+  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
     .toBeVisible()
     .withTimeout(4000)
-  // Set the zip code
-  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
-  await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
 
   // Save the address by using the suggested address
   await element(by.id(CommonE2eIdConstants.CONTACT_INFO_SAVE_ID)).tap()
@@ -215,7 +224,7 @@ const checkReviewClaimScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.HOW_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.VEHICLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.WHERE_ID))).toExist()
-  await expect(element(by.text('3101 N Fort Valley Rd'))).toExist()
+  await expect(element(by.text('3101 N Fort Valley Rd, 2'))).toExist()
   await expect(element(by.text('Flagstaff, AZ, 86001'))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.LEFT_BACK_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_HELP_BUTTON_ID))).toExist()
@@ -404,6 +413,7 @@ describe('Travel Pay', () => {
     await expect(element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID))).toExist()
     await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
     await fillHomeAddressFields()
+    await updateAddress()
   })
 
   it('navigates to the error screen when the answer is no to any of the questions', async () => {
