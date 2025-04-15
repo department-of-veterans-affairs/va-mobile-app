@@ -85,10 +85,10 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   }
 
   useEffect(() => {
-    if (!userAuthorizedServices?.userProfileUpdate) {
+    if (!userAuthorizedServices?.userProfileUpdate && !loadingUserAuthorizedServices) {
       logAnalyticsEvent(Events.vama_prof_person_noauth())
     }
-  }, [userAuthorizedServices?.userProfileUpdate])
+  }, [loadingUserAuthorizedServices, userAuthorizedServices?.userProfileUpdate])
 
   const personalInformationItems = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = [
@@ -153,7 +153,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError || getUserAuthorizedServicesError
+  const errorCheck = personalInformationInDowntime || getDemographicsError
   const loadingCheck = loadingPersonalInfo || loadingDemographics || loadingUserAuthorizedServices
 
   return (
@@ -170,6 +170,12 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
           error={getDemographicsError}
+        />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchUserAuthorizedServices}
         />
       ) : !userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()

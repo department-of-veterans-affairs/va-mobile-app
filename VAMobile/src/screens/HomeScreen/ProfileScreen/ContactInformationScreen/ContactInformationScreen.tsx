@@ -162,10 +162,10 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   useEffect(() => {
-    if (!userAuthorizedServices?.userProfileUpdate) {
+    if (!userAuthorizedServices?.userProfileUpdate && !loadingUserAuthorizedServices) {
       logAnalyticsEvent(Events.vama_prof_contact_noauth())
     }
-  }, [userAuthorizedServices?.userProfileUpdate])
+  }, [loadingUserAuthorizedServices, userAuthorizedServices?.userProfileUpdate])
 
   const navigateTo = useRouteNavigation()
 
@@ -264,7 +264,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   }
 
   const loadingCheck = loadingContactInformation || loadingUserAuthorizedServices
-  const errorCheck = contactInformationInDowntime || contactInformationError || getUserAuthorizedServicesError
+  const contactInfoErrorCheck = contactInformationInDowntime || contactInformationError
 
   return (
     <FeatureLandingTemplate
@@ -274,11 +274,17 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       testID="ContactInfoTestID">
       {loadingCheck ? (
         <LoadingComponent text={t('contactInformation.loading')} />
-      ) : errorCheck ? (
+      ) : contactInfoErrorCheck ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
           onTryAgain={onTryAgain}
           error={contactInformationError}
+        />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchUserAuthorizedServices}
         />
       ) : !userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()
