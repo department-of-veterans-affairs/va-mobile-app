@@ -12,10 +12,7 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
-import { context, fireEvent, render, screen, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-
-jest.mock('utils/remoteConfig')
+import { context, fireEvent, render, screen } from 'testUtils'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -172,8 +169,7 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
-  const initializeTestInstance = (attributes: AppointmentAttributes, featureFlag: boolean = true) => {
-    when(featureEnabled).calledWith('travelPaySMOC').mockReturnValue(featureFlag)
+  const initializeTestInstance = (attributes: AppointmentAttributes) => {
     render(<AppointmentFileTravelPayAlert attributes={attributes} />)
   }
 
