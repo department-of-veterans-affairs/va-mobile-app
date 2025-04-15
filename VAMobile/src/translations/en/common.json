@@ -1522,6 +1522,7 @@
   "video": "Video",
   "webview.appointments.loading": "Loading appointments page...",
   "webview.claims.loading": "Loading claims and appeal page...",
+  "webview.notifications.loading": "Loading email and text notification settings...",
   "webview.vagov": "va.gov",
   "webview.valocation.loading": "Loading VA location finder...",
   "whatsNew.dismissMessage": "Dismiss this message",
