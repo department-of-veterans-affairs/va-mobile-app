@@ -33,6 +33,7 @@ export type FeatureToggleType =
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'testFeature'
+  | 'travelPaySMOC'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
@@ -55,6 +56,7 @@ type FeatureToggleValues = {
   submitEvidenceExpansion: boolean
   sso: boolean
   testFeature: boolean
+  travelPaySMOC: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
@@ -78,6 +80,7 @@ export const defaults: FeatureToggleValues = {
   submitEvidenceExpansion: false,
   sso: true,
   testFeature: false,
+  travelPaySMOC: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
