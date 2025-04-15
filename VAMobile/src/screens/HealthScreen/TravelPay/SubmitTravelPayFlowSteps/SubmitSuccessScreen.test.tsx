@@ -10,12 +10,12 @@ import SubmitSuccessScreen from './SubmitSuccessScreen'
 const params = {
   facilityName: 'Test Facility',
   appointmentDateTime: '2021-01-01T00:00:00Z',
+  loading: false,
 }
 
 context('SubmitSuccessScreen', () => {
-  const props = mockNavProps(undefined, undefined, { params })
-
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (loading: boolean = false) => {
+    const props = mockNavProps(undefined, undefined, { params: { ...params, loading } })
     render(<SubmitSuccessScreen {...props} />)
   }
 
@@ -36,5 +36,10 @@ context('SubmitSuccessScreen', () => {
     expect(screen.getByText(t('travelPay.success.nextText2'))).toBeTruthy()
     expect(screen.getByTestId('goToAppointmentLinkID')).toBeTruthy()
     expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
+  })
+
+  it('should show the loading screen when the loading prop is true', () => {
+    initializeTestInstance(true)
+    expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
   })
 })

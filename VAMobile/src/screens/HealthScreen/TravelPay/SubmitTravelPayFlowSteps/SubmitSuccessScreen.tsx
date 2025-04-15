@@ -5,7 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { DateTime } from 'luxon'
 
-import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, LoadingComponent, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import getEnv from 'utils/env'
 import { useOrientation, useTheme } from 'utils/hooks'
@@ -17,11 +17,15 @@ type SubmitSuccessScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackPa
 const { LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
 
 function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
-  const { appointmentDateTime, facilityName } = route.params
+  const { appointmentDateTime, facilityName, loading } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()
   const isPortrait = useOrientation()
+
+  if (loading) {
+    return <LoadingComponent text={t('travelPay.submitLoading')} />
+  }
 
   return (
     <VAScrollView>

@@ -13,16 +13,23 @@ function BurdenStatement() {
     <LargePanel
       title={t('travelPay.privacyStatement.sheetTitle')}
       rightButtonText={t('close')}
+      rightButtonTestID="closeButtonID"
+      testID="burdenStatementScreenID"
       children={
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <TextView variant="MobileBodyBold">{t('travelPay.privacyStatement.header')}</TextView>
-          <TextView mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
+          <TextView testID="burdenStatementTitleID" variant="MobileBodyBold">
+            {t('travelPay.privacyStatement.header')}
+          </TextView>
+          <TextView testID="burdenStatementTextID" mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
             {t('travelPay.privacyStatement.description')}
           </TextView>
-          <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBodyBold">
+          <TextView
+            testID="burdenStatementActTitleID"
+            mt={theme.dimensions.standardMarginBetween}
+            variant="MobileBodyBold">
             {t('travelPay.privacyAct.header')}
           </TextView>
-          <TextView mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
+          <TextView testID="burdenStatementActTextID" mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
             {t('travelPay.privacyAct.description')}
           </TextView>
         </Box>

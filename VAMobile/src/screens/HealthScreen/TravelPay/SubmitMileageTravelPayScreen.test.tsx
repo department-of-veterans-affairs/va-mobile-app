@@ -221,6 +221,7 @@ context('SubmitMileageTravelPayScreen', () => {
           fireEvent.press(button)
           expect(mockNavigationSpy).toHaveBeenCalledWith('ReviewClaimScreen', {
             appointmentDateTime: params.appointmentDateTime,
+            facilityName: params.facilityName,
           })
         })
       })
@@ -268,31 +269,16 @@ context('SubmitMileageTravelPayScreen', () => {
         })
       })
     })
-    describe('SubmitLoadingScreen', () => {
-      it('should show SubmitLoadingScreen when index is 6', () => {
-        initializeTestInstance(6)
-        expect(screen.getByTestId('SubmitLoadingScreen')).toBeTruthy()
-        expect(screen.getByText(t('close'))).toBeTruthy()
-      })
-      describe('when the user presses the Close button', () => {
-        it('should navigate back', () => {
-          initializeTestInstance(6)
-          const button = screen.getByTestId('rightCloseTestID')
-          fireEvent.press(button)
-          expect(mockBack).toHaveBeenCalled()
-        })
-      })
-    })
     describe('SubmitSuccessScreen', () => {
-      it('should show SubmitSuccessScreen when index is 7', () => {
-        initializeTestInstance(7)
+      it('should show SubmitSuccessScreen when index is 6', () => {
+        initializeTestInstance(6)
         expect(screen.getByTestId('SubmitSuccessScreen')).toBeTruthy()
         expect(screen.getByText(t('close'))).toBeTruthy()
         expect(screen.getByText(t('travelPay.continueToClaim'))).toBeTruthy()
       })
       describe('when the user presses the Close button', () => {
         it('should exit the flow', () => {
-          initializeTestInstance(7)
+          initializeTestInstance(6)
           const button = screen.getByTestId('rightCloseTestID')
           fireEvent.press(button)
           expect(mockBack).toHaveBeenCalled()
@@ -300,7 +286,7 @@ context('SubmitMileageTravelPayScreen', () => {
       })
       describe('when the user presses the Continue to Claim button', () => {
         it('should navigate back', () => {
-          initializeTestInstance(7)
+          initializeTestInstance(6)
           const button = screen.getByTestId('continueToClaimTestID')
           fireEvent.press(button)
           expect(mockBack).toHaveBeenCalled()

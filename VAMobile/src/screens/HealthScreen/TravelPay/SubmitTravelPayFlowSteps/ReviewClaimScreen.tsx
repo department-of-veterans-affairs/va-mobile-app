@@ -17,7 +17,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
-  const { appointmentDateTime } = route.params
+  const { appointmentDateTime, facilityName } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
@@ -32,7 +32,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="reviewClaimScreenID">
       <Box
         mb={theme.dimensions.standardMarginBetween}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
@@ -88,11 +88,11 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
         <TextView testID="travelAgreementHeaderID" variant="MobileBodyBold">
           {t('travelPay.travelAgreementHeader')}
         </TextView>
-        <TextView mt={theme.dimensions.condensedMarginBetween} testID="travelAgreementTextID" variant="MobileBody">
+        <TextView mt={theme.dimensions.condensedMarginBetween} testID="penaltyStatementID" variant="MobileBody">
           <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatementLine') + ' '}</TextView>
           {t('travelPay.penaltyStatement')}
         </TextView>
-        <TextView mt={theme.dimensions.formMarginBetween} testID="travelAgreementTextID" variant="MobileBody">
+        <TextView mt={theme.dimensions.formMarginBetween} testID="penaltyStatementAgreementID" variant="MobileBody">
           {t('travelPay.penaltyStatement.agreement')}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -120,7 +120,11 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
           <Button
             onPress={() => {
               if (isCheckboxChecked) {
-                navigateTo('SubmitLoadingScreen')
+                navigateTo('SubmitSuccessScreen', {
+                  loading: true,
+                  appointmentDateTime,
+                  facilityName,
+                })
               } else {
                 setError(t('required'))
               }

@@ -16,8 +16,12 @@ function FileOnlineComponent() {
   return (
     <View testID="fileOnlineComponent">
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold">{t('travelPay.otherWaysToFile')}</TextView>
-        <TextView variant="MobileBody">{t('travelPay.otherWaysToFile.method1')}</TextView>
+        <TextView testID="fileOnlineTitle" variant="MobileBodyBold">
+          {t('travelPay.otherWaysToFile')}
+        </TextView>
+        <TextView testID="fileOnlineComponentMethod1ID" variant="MobileBody">
+          {t('travelPay.otherWaysToFile.method1')}
+        </TextView>
         <Box my={theme.dimensions.condensedMarginBetween}>
           <LinkWithAnalytics
             type="url"
@@ -26,7 +30,9 @@ function FileOnlineComponent() {
             testID="fileOnlineBTSSSLink"
           />
         </Box>
-        <TextView variant="MobileBody">{t('travelPay.otherWaysToFile.method2')}</TextView>
+        <TextView testID="fileOnlineComponentMethod2ID" variant="MobileBody">
+          {t('travelPay.otherWaysToFile.method2')}
+        </TextView>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <LinkWithAnalytics
             type="url"

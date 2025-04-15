@@ -15,10 +15,16 @@ function TravelClaimHelpScreen() {
     <LargePanel
       title={t('travelPay.help.title')}
       rightButtonText={t('close')}
+      testID="travelClaimHelpScreenID"
+      rightButtonTestID="rightCloseTestID"
       children={
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <TextView variant="MobileBodyBold">{t('travelPay.help.useThisApp')}</TextView>
-          <TextView variant="MobileBody">{t('travelPay.help.youCanStillFile')}</TextView>
+          <TextView testID="travelClaimHelpTitleID" variant="MobileBodyBold">
+            {t('travelPay.help.useThisApp')}
+          </TextView>
+          <TextView testID="travelClaimHelpTextID" variant="MobileBody">
+            {t('travelPay.help.youCanStillFile')}
+          </TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VABulletList
               listOfText={[

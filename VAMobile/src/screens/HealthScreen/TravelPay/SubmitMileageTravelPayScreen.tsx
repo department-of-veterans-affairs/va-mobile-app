@@ -25,7 +25,6 @@ import {
   VehicleScreen,
 } from './SubmitTravelPayFlowSteps'
 import InterstitialScreen from './SubmitTravelPayFlowSteps/InterstitialScreen'
-import SubmitLoadingScreen from './SubmitTravelPayFlowSteps/SubmitLoadingScreen'
 
 const helpIconProps: IconProps = { name: 'Help', fill: 'default' }
 
@@ -47,6 +46,7 @@ type ScreenListObj = {
   params?: {
     appointmentDateTime?: string
     facilityName?: string
+    loading?: boolean
   }
 }
 
@@ -57,9 +57,10 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   AddressScreen: undefined
   ReviewClaimScreen: {
     appointmentDateTime: string
+    facilityName: string
   }
-  SubmitLoadingScreen: undefined
   SubmitSuccessScreen: {
+    loading: boolean
     appointmentDateTime: string
     facilityName: string
   }
@@ -78,6 +79,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
 
+  const [loading, setLoading] = useState(true)
   const [screenListIndex, setScreenListIndex] = useState(initialRouteIndex)
 
   useBeforeNavBackListener(navigation, (e) => {
@@ -143,8 +145,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
   }
 
   const submitTravelClaim = async () => {
-    const index = screenList.findIndex((screen) => screen.name === 'SubmitLoadingScreen')
-    setScreenListIndex(index)
+    setLoading(true)
 
     // Set a timeout to navigate to the error screen if the claim is not submitted in 30 seconds
     const timeout = setTimeout(() => {
@@ -155,17 +156,20 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       await new Promise<void>((resolve) => {
         setTimeout(() => {
           resolve()
-        }, 2000)
+        }, 1000)
       })
+      setLoading(false)
       navigateTo('SubmitSuccessScreen', {
         appointmentDateTime,
         facilityName,
+        loading: false,
       })
       setScreenListIndex((prev) => prev + 1)
     } catch (error) {
       navigateToErrorScreen()
     } finally {
       clearTimeout(timeout)
+      setLoading(false)
     }
   }
 
@@ -276,22 +280,8 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       secondaryButtonOnPress: undefined,
       params: {
         appointmentDateTime: appointmentDateTime,
+        facilityName: facilityName,
       },
-    },
-    {
-      name: 'SubmitLoadingScreen',
-      backButtonOnPress: undefined,
-      leftButtonText: undefined,
-      leftButtonTestID: undefined,
-      leftButtonOnPress: undefined,
-      rightButtonText: t('close'),
-      rightButtonOnPress: navigation.goBack,
-      rightButtonTestID: 'rightCloseTestID',
-      primaryButtonText: undefined,
-      primaryButtonTestID: undefined,
-      primaryButtonOnPress: undefined,
-      secondaryButtonText: undefined,
-      secondaryButtonOnPress: undefined,
     },
     {
       name: 'SubmitSuccessScreen',
@@ -310,6 +300,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       params: {
         appointmentDateTime: appointmentDateTime,
         facilityName: facilityName,
+        loading: loading,
       },
     },
   ]
@@ -341,19 +332,14 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
           <TravelPayStack.Screen key={'AddressScreen'} name="AddressScreen" component={AddressScreen} />
           <TravelPayStack.Screen key={'ReviewClaimScreen'} name="ReviewClaimScreen" component={ReviewClaimScreen} />
           <TravelPayStack.Screen
-            key={'SubmitLoadingScreen'}
-            name="SubmitLoadingScreen"
-            component={SubmitLoadingScreen}
-            listeners={{
-              focus: async () => {
-                submitTravelClaim()
-              },
-            }}
-          />
-          <TravelPayStack.Screen
             key={'SubmitSuccessScreen'}
             name="SubmitSuccessScreen"
             component={SubmitSuccessScreen}
+            listeners={{
+              focus: async () => {
+                await submitTravelClaim()
+              },
+            }}
           />
           <TravelPayStack.Screen key={'ErrorScreen'} name="ErrorScreen" component={ErrorScreen} />
         </TravelPayStack.Navigator>

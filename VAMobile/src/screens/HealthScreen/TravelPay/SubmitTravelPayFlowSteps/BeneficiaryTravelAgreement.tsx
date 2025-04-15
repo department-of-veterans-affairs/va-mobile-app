@@ -13,9 +13,13 @@ function BeneficiaryTravelAgreement() {
     <LargePanel
       title={t('travelPay.beneficiaryTravelAgreement.title')}
       rightButtonText={t('close')}
+      rightButtonTestID="closeButtonID"
+      testID="beneficiaryTravelAgreementID"
       children={
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <TextView variant="MobileBodyBold">{t('travelPay.travelAgreementHeader')}</TextView>
+          <TextView testID="travelAgreementHeaderID" variant="MobileBodyBold">
+            {t('travelPay.travelAgreementHeader')}
+          </TextView>
           <VABulletList
             paragraphSpacing
             listOfText={[

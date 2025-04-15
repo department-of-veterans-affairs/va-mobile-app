@@ -58,11 +58,15 @@ function ErrorScreen({ route }: ErrorScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView variant="BitterHeading" accessibilityRole="header">
+        <TextView testID="errorTitleID" variant="BitterHeading" accessibilityRole="header">
           {title}
         </TextView>
         {textLines.map((textLine, index) => (
-          <TextView key={index} variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView
+            key={index}
+            testID={`errorTextID${index}`}
+            variant="MobileBody"
+            mt={theme.dimensions.standardMarginBetween}>
             {textLine}
           </TextView>
         ))}

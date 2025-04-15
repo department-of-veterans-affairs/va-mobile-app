@@ -25,6 +25,7 @@ const residentialAddress: AddressData = {
 
 const params = {
   appointmentDateTime: '2021-01-01T00:00:00Z',
+  facilityName: 'Test Facility',
 }
 
 const mockNavigationSpy = jest.fn()
@@ -90,13 +91,17 @@ context('ReviewClaimScreen', () => {
       })
     })
     describe('when the user has checked the checkbox', () => {
-      it('should navigate to the SubmitLoadingScreen', () => {
+      it('should navigate to the SubmitSuccessScreen', () => {
         initializeTestInstance({ residentialAddress })
         const checkbox = screen.getByTestId('checkboxTestID')
         fireEvent.press(checkbox)
         const button = screen.getByTestId('submitTestID')
         fireEvent.press(button)
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitLoadingScreen')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
+          facilityName: params.facilityName,
+          appointmentDateTime: params.appointmentDateTime,
+          loading: true,
+        })
       })
     })
   })

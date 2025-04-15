@@ -24,10 +24,10 @@ function InterstitialScreen() {
         <TextView testID="milageQuestionID" variant="BitterHeading" accessibilityRole="header">
           {t('travelPay.beforeYouFileQuestion')}
         </TextView>
-        <TextView testID="milageQualifierID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="eligibilityTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.checkEligibility')}
         </TextView>
-        <TextView testID="referToPortalID" variant="MobileBody">
+        <TextView testID="eligibilityDescriptionID" variant="MobileBody">
           {t('travelPay.checkEligibility.description')}
         </TextView>
         <LinkWithAnalytics
@@ -36,10 +36,10 @@ function InterstitialScreen() {
           text={t('travelPay.checkEligibility.link')}
           testID="checkEligibilityLinkID"
         />
-        <TextView testID="milageQualifierID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="directDepositTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.setUpDirectDeposit')}
         </TextView>
-        <TextView testID="referToPortalID" variant="MobileBody">
+        <TextView testID="directDepositDescriptionID" variant="MobileBody">
           {t('travelPay.setUpDirectDeposit.description')}
         </TextView>
         <LinkWithAnalytics

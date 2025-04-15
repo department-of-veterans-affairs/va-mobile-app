@@ -47,7 +47,9 @@ function AddressScreen() {
       </Box>
       <AddressSummary addressData={addressData} />
       <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBody">{t('travelPay.addressConfirmation')}</TextView>
+        <TextView testID="addressConfirmationID" variant="MobileBody">
+          {t('travelPay.addressConfirmation')}
+        </TextView>
       </Box>
     </VAScrollView>
   )
