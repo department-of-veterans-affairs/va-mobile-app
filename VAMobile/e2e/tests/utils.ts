@@ -175,6 +175,8 @@ export const CommonE2eIdConstants = {
   CONTACT_INFO_CLOSE_ID: 'ContactInfoCloseTestID',
   MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
+  // travel pay
+  TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
 }
 
 /** Logs into demo mode.
