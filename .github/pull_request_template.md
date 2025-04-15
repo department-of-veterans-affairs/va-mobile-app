@@ -2,7 +2,11 @@
 <!-- Please include a description of the change and context. What would a code reviewer, or a future dev, 
 need to know about this PR in order to understand why this PR was created? This could include dependencies 
 introduced, changes in behavior, pointers to more detailed documentation. The description should be more 
-than a link to an issue.  -->
+than a link to an issue.
+
+Also, please connect an issue to your pull request: https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue
+
+-->
 
 ## Screenshots/Video
 <!-- Add screenshots or video as needed. Before/after if changes are to be compared by reviewers.

@@ -1,1 +1,1 @@
-On the home screen, we have updated the compensation displayed from 'Monthly Compensation Payment' to 'Compensation & Pension - Recurring' to provide Veterans with a more cohesive view of their payments on web and mobile.
+We have enhanced the Veteran Status Card with a new API and clearer error messages. Other changes include consistent alert styling, removal of an incorrect link on the RX screen, and accessibility fixes for screen reader support and UI colors.

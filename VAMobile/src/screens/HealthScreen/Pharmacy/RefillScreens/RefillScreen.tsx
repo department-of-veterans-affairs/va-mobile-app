@@ -202,7 +202,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
             <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="error"
-                header={t('prescriptions.refill.pleaseSelect')}
+                description={t('prescriptions.refill.pleaseSelect')}
                 scrollViewRef={scrollViewRef}
               />
             </Box>
