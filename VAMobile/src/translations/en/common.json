@@ -1522,6 +1522,8 @@
   "veteranStatus.latestPeriodOfService": "Latest period of service",
   "veteranStatus.disabilityRating": "Disability rating",
   "veteranStatus.about": "About this card",
+  "veteranStatus.old.uniformedServices": "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any VA benefits.",
+  "veteranStatus.old.uniformedServices.A11yLabel": "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any V-A benefits.",
   "veteranStatus.uniformedServices": "You can use this card to prove you served in the United States Uniformed Services.",
   "veteranStatus.uniformedServices.A11yLabel": "You can use this card to prove you served in the United States Uniformed Services.",
   "veteranStatus.noBenefitsEntitled": "This card doesn't entitle you to any VA benefits.",
