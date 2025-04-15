@@ -1,10 +1,12 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { RatingData } from 'api/types'
 import * as api from 'store/api'
 import { context, render, waitFor, when } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 
@@ -46,46 +48,46 @@ context('DisabilityRatingsScreen', () => {
         },
       })
     initializeTestInstance()
-    await waitFor(() => expect(screen.getAllByRole('header', { name: 'Combined disability rating' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('70%')).toBeTruthy())
     await waitFor(() =>
-      expect(
-        screen.getByText(
-          "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
-        ),
-      ).toBeTruthy(),
+      expect(screen.getAllByRole('header', { name: t('disabilityRatingDetails.combinedTotalTitle') })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getAllByRole('header', { name: 'Individual ratings' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('50%')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('disabilityRatingDetails.percentage', { rate: 70 }))).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('disabilityRatingDetails.combinedTotalSummary'))).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getAllByRole('header', { name: t('disabilityRatingDetails.individualTitle') })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText(t('disabilityRatingDetails.percentage', { rate: 50 }))).toBeTruthy())
     await waitFor(() => expect(screen.getByText('PTSD')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Effective date:  12/01/2012')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('30%')).toBeTruthy())
+    await waitFor(() =>
+      expect(
+        screen.getByText(t('disabilityRatingDetails.effectiveDate', { dateEffective: '12/01/2012' })),
+      ).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText(t('disabilityRatingDetails.percentage', { rate: 30 }))).toBeTruthy())
     await waitFor(() => expect(screen.getByText('Headaches, migraine')).toBeTruthy())
-    await waitFor(() => expect(screen.getAllByText('Service-connected disability?  Yes')).toBeTruthy())
-    await waitFor(() => expect(screen.getByText('Effective date:  08/09/2013')).toBeTruthy())
     await waitFor(() =>
-      expect(screen.getAllByRole('header', { name: 'Learn about VA disability ratings' })).toBeTruthy(),
+      expect(screen.getAllByText(t('disabilityRatingDetails.serviceConnected', { yesOrNo: 'Yes' }))).toBeTruthy(),
     )
     await waitFor(() =>
       expect(
-        screen.getByText(
-          'To learn how we determined your VA combined disability rating, use our disability rating calculator and ratings table.',
-        ),
+        screen.getByText(t('disabilityRatingDetails.effectiveDate', { dateEffective: '08/09/2013' })),
       ).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link', { name: 'About VA disability ratings' })).toBeTruthy())
-    await waitFor(() => expect(screen.getAllByRole('header', { name: 'Need Help?' })).toBeTruthy())
+    await waitFor(() => expect(screen.getAllByRole('header', { name: t('disabilityRating.learnAbout') })).toBeTruthy())
+    await waitFor(() => expect(screen.getByText(t('disabilityRating.learnAboutSummary'))).toBeTruthy())
     await waitFor(() =>
-      expect(
-        screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
-      ).toBeTruthy(),
+      expect(screen.getByRole('link', { name: t('disabilityRating.learnAboutLinkTitle') })).toBeTruthy(),
     )
-    await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
-    await waitFor(() => expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy())
     await waitFor(() =>
-      expect(
-        screen.queryByRole('header', { name: 'You do not have a VA combined disability rating on record.' }),
-      ).toBeFalsy(),
+      expect(screen.getAllByRole('header', { name: t('disabilityRatingDetails.needHelp') })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByText(t('claimDetails.callVA'))).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })).toBeTruthy(),
+    )
+    await waitFor(() => expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy())
+    await waitFor(() =>
+      expect(screen.queryByRole('header', { name: t('disabilityRating.noDisabilityRatings.title') })).toBeFalsy(),
     )
   })
 
@@ -102,9 +104,7 @@ context('DisabilityRatingsScreen', () => {
         })
       initializeTestInstance()
       await waitFor(() =>
-        expect(
-          screen.getByRole('header', { name: 'You do not have a VA combined disability rating on record.' }),
-        ).toBeTruthy(),
+        expect(screen.getByRole('header', { name: t('disabilityRating.noDisabilityRatings.title') })).toBeTruthy(),
       )
     })
   })

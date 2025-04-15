@@ -10,8 +10,8 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
+import { usePayments } from 'api/payments'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { Box, LoadingComponent, TextView, VALogo, VAScrollView } from 'components'
@@ -63,7 +63,7 @@ function SyncScreen({}: SyncScreenProps) {
   // Prefetch data for `About you` section
   useServiceHistory({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
   useDisabilityRating({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
-  useLetterBeneficiaryData({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  usePayments('', 1, { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
 
