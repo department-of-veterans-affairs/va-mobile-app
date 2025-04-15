@@ -124,9 +124,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
     if (personalInfoError) {
       refetchPersonalInfo()
     }
-    if (getUserAuthorizedServicesError) {
-      refetchUserAuthorizedServices()
-    }
   }
 
   const getNoAuth = () => {
@@ -174,8 +171,8 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       ) : getUserAuthorizedServicesError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
           onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
         />
       ) : !userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()

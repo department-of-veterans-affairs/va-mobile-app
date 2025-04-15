@@ -230,16 +230,6 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  const onTryAgain = () => {
-    if (contactInformationError) {
-      refetchContactInformation()
-    }
-
-    if (getUserAuthorizedServicesError) {
-      refetchUserAuthorizedServices()
-    }
-  }
-
   const getNoAuth = () => {
     const alertWrapperProps: BoxProps = {
       mb: standardMarginBetween,
@@ -277,14 +267,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       ) : contactInfoErrorCheck ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
-          onTryAgain={onTryAgain}
+          onTryAgain={refetchContactInformation}
           error={contactInformationError}
         />
       ) : getUserAuthorizedServicesError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
           onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
         />
       ) : !userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()
