@@ -352,6 +352,7 @@ const checkTravelPayFlow = async (existingAddress: boolean) => {
 describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   })
 
   it('ends the flow on the error screen when the home address is not entered', async () => {
