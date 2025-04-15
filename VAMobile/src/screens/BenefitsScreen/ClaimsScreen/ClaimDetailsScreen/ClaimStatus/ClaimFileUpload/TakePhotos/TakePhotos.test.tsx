@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -22,22 +23,20 @@ context('TakePhotos', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
-    expect(screen.getByRole('tab', { name: 'This feature is not yet accessible to screen readers' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Select photos to upload for' })).toBeTruthy()
+    expect(screen.getByRole('tab', { name: t('fileUpload.accessibilityAlert.title') })).toBeTruthy()
+    expect(
+      screen.getByRole('header', { name: t('fileUpload.uploadFileUsingCamera', { displayName: '' }) }),
+    ).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.takePhotoEachPage'))).toBeTruthy()
     expect(
       screen.getByText(
-        'To submit evidence that supports this claim, take a picture of each page of your file. Then upload the photos to this app.',
+        t('fileUpload.ifMoreThan10.1') + t('fileUpload.ifMoreThan10.2') + t('fileUpload.ifMoreThan10.3'),
       ),
     ).toBeTruthy()
-    expect(
-      screen.getByText(
-        "You can submit up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.",
-      ),
-    ).toBeTruthy()
-    expect(screen.getByText('Maximum file size:')).toBeTruthy()
-    expect(screen.getByText('50 MB')).toBeTruthy()
-    expect(screen.getByText('Accepted file types:')).toBeTruthy()
-    expect(screen.getByText('PDF (unlocked), GIF, JPEG, JPG, BMP, TXT')).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Take or select photos' })).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.maxFileSize'))).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.50MB'))).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.acceptedFileTypes'))).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.acceptedFileTypeOptions'))).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
   })
 })

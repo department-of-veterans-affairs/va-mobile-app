@@ -22,7 +22,7 @@ export type VATextColors = {
   input: string
   inputFocused: string
   actionBar: string
-  actionBarDisabled: string
+  disabled: string
   bodyText: string
   showAll: string
   labelTag: string
