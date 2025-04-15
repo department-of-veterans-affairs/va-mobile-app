@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, mockNavProps, render } from 'testUtils'
 
@@ -13,11 +14,7 @@ context('ConsolidatedClaimsNote', () => {
   })
 
   it('Renders ConsolidatedClaimsNote', () => {
-    expect(screen.getByRole('header', { name: 'Why we sometimes combine claims' })).toBeTruthy()
-    expect(
-      screen.getByText(
-        'If you turn in a new claim while we’re reviewing another one from you, we’ll add any new information to the original claim and close the new claim, with no action required from you.',
-      ),
-    ).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('claimDetails.whyWeCombinePanel') })).toBeTruthy()
+    expect(screen.getByText(t('claimDetails.consolidatedClaims.noteContent'))).toBeTruthy()
   })
 })

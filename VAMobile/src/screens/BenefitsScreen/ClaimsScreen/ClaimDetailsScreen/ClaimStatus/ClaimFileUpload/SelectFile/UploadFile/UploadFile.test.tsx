@@ -2,6 +2,7 @@ import React from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -65,29 +66,29 @@ context('UploadFile', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByRole('header', { name: 'Upload files' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('fileUpload.uploadFiles') })).toBeTruthy()
     expect(screen.getByTestId('File 1 0.1 kilobytes')).toBeTruthy()
     expect(screen.getByLabelText('Document type picker required')).toBeTruthy()
-    expect(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) ')).toBeTruthy()
-    expect(screen.getByText('Submit file')).toBeTruthy()
+    expect(screen.getByLabelText(t('fileUpload.evidenceOnly'))).toBeTruthy()
+    expect(screen.getByText(t('fileUpload.submit'))).toBeTruthy()
   })
 
   describe('on click of the upload button', () => {
     it('should display an error if the checkbox is not checked', () => {
       fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
-      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
-      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
-      expect(screen.getByRole('checkbox', { name: 'Check the box to confirm the information is correct' })).toBeTruthy()
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+      fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
+      expect(screen.getByRole('checkbox', { name: t('fileUpload.evidenceOnly.error') })).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
     it('should bring up confirmation requirements are met', () => {
       fireEvent.press(screen.getByRole('spinbutton', { name: 'Document type picker required' }))
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
-      fireEvent.press(screen.getByRole('button', { name: 'Done' }))
-      fireEvent.press(screen.getByLabelText('The file I uploaded is evidence for this claim. (Required) '))
-      fireEvent.press(screen.getByRole('button', { name: 'Submit file' }))
+      fireEvent.press(screen.getByRole('button', { name: t('done') }))
+      fireEvent.press(screen.getByLabelText(t('fileUpload.evidenceOnly')))
+      fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
       expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
