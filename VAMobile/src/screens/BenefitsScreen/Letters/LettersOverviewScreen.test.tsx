@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
@@ -50,31 +51,35 @@ context('LettersOverviewScreen', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Downloaded documents will list your address as:')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Mailing address Add your mailing address' })).toBeTruthy()
+    expect(screen.getByText(t('letters.overview.documents'))).toBeTruthy()
     expect(
-      screen.getByText(
-        'If this address is incorrect you may want to update it, but your letter will still be valid even with the incorrect address.',
-      ),
+      screen.getByRole('link', {
+        name: `${t('contactInformation.mailingAddress')} ${t('contactInformation.addYour', { field: 'mailing address' })}`,
+      }),
     ).toBeTruthy()
+    expect(screen.getByText(t('letters.overview.ifThisAddress'))).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Review letters' })).toBeTruthy()
   })
 
   it('should go to edit address when the address is pressed', () => {
-    fireEvent.press(screen.getByRole('link', { name: 'Mailing address Add your mailing address' }))
+    fireEvent.press(
+      screen.getByRole('link', {
+        name: `${t('contactInformation.mailingAddress')} ${t('contactInformation.addYour', { field: 'mailing address' })}`,
+      }),
+    )
     expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', {
-      displayTitle: 'Mailing address',
+      displayTitle: t('contactInformation.mailingAddress'),
       addressType: profileAddressOptions.MAILING_ADDRESS,
     })
   })
 
   it('should go to letters list screen when Review letters is pressed', () => {
-    fireEvent.press(screen.getByRole('button', { name: 'Review letters' }))
+    fireEvent.press(screen.getByRole('button', { name: t('letters.overview.viewLetters') }))
     expect(mockNavigationSpy).toHaveBeenCalledWith('LettersList')
   })
 
   it('should show No Letters screen when service is not authorized', () => {
     initializeTestInstance(false)
-    expect(screen.getByRole('header', { name: "We couldn't find information about your VA letters" })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('noLetters.header') })).toBeTruthy()
   })
 })
