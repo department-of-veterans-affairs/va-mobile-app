@@ -8,7 +8,6 @@ import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 type AppointmentFileTravelPayAlertProps = {
   attributes: AppointmentAttributes
@@ -18,10 +17,6 @@ function AppointmentFileTravelPayAlert({ attributes }: AppointmentFileTravelPayA
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
-  if (!featureEnabled('travelPaySMOC')) {
-    return null
-  }
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)

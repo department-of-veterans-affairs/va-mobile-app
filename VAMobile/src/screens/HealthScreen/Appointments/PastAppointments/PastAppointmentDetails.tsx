@@ -9,6 +9,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import {
   AppointmentDetailsSubTypeConstants,
@@ -82,7 +83,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}>
-      <AppointmentFileTravelPayAlert attributes={attributes} />
+      {featureEnabled('travelPaySMOC') && <AppointmentFileTravelPayAlert attributes={attributes} />}
       {isPhoneAppointment ? (
         <PhoneAppointment
           appointmentID={appointment.id}

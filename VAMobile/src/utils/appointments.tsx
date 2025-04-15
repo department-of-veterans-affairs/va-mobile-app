@@ -373,10 +373,6 @@ export const getDaysLeftToFileTravelPay = (startDateUtc: string) => {
 }
 
 const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: number) => {
-  if (!featureEnabled('travelPaySMOC')) {
-    return undefined
-  }
-
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
   if (isEligibleForTravelPay(attributes) && daysLeftToFile >= 0) {
     return {
@@ -482,7 +478,7 @@ export const getTextLinesForAppointmentListItem = (
     (attributes.status === AppointmentStatusConstants.SUBMITTED ||
       attributes.status === AppointmentStatusConstants.CANCELLED)
   const careText = getCareText(typeOfCare, serviceCategoryName, t)
-  let result: Array<TextLineWithIconProps | undefined> = []
+  let result: Array<TextLineWithIconProps | undefined | boolean> = []
 
   if (isPending) {
     const type = pendingType(appointmentType, t, phoneOnly)
@@ -496,7 +492,7 @@ export const getTextLinesForAppointmentListItem = (
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      getTravelPay(attributes, t, condensedMarginBetween),
+      featureEnabled('travelPaySMOC') && getTravelPay(attributes, t, condensedMarginBetween),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
