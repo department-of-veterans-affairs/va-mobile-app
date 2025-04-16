@@ -58,18 +58,20 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
             testID="goToAppointmentLinkID"
           />
         </Box>
-        <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('travelPay.success.nextText2')}
         </TextView>
-        <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
-          text={t('travelPay.setUpDirectDeposit.link')}
-          onPress={() => {
-            navigation.getParent()?.goBack()
-          }}
-          testID="setUpDirectDepositLinkID"
-        />
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
+            text={t('travelPay.setUpDirectDeposit.link')}
+            onPress={() => {
+              navigation.getParent()?.goBack()
+            }}
+            testID="setUpDirectDepositLinkID"
+          />
+        </Box>
       </Box>
     </VAScrollView>
   )

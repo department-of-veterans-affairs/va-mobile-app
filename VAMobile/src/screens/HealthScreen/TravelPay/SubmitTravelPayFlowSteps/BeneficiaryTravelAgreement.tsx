@@ -20,16 +20,18 @@ function BeneficiaryTravelAgreement() {
           <TextView testID="travelAgreementHeaderID" variant="MobileBodyBold">
             {t('travelPay.travelAgreementHeader')}
           </TextView>
-          <VABulletList
-            paragraphSpacing
-            listOfText={[
-              t('travelPay.beneficiaryTravelAgreement.bulletOne'),
-              t('travelPay.beneficiaryTravelAgreement.bulletTwo'),
-              t('travelPay.beneficiaryTravelAgreement.bulletThree'),
-              t('travelPay.beneficiaryTravelAgreement.bulletFour'),
-              t('travelPay.beneficiaryTravelAgreement.bulletFive'),
-            ]}
-          />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VABulletList
+              paragraphSpacing
+              listOfText={[
+                t('travelPay.beneficiaryTravelAgreement.bulletOne'),
+                t('travelPay.beneficiaryTravelAgreement.bulletTwo'),
+                t('travelPay.beneficiaryTravelAgreement.bulletThree'),
+                t('travelPay.beneficiaryTravelAgreement.bulletFour'),
+                t('travelPay.beneficiaryTravelAgreement.bulletFive'),
+              ]}
+            />
+          </Box>
         </Box>
       }
     />
