@@ -12,9 +12,10 @@ const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
 type NeedHelpDataProps = {
   isAppeal?: boolean
+  appealId?: string
 }
 
-function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
+function NeedHelpData({ isAppeal, appealId }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -34,7 +35,7 @@ function NeedHelpData({ isAppeal }: NeedHelpDataProps) {
             type="custom"
             onPress={() => {
               navigateTo('Webview', {
-                url: LINK_URL_CLAIM_APPEAL_STATUS,
+                url: LINK_URL_CLAIM_APPEAL_STATUS + appealId,
                 displayTitle: t('webview.vagov'),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
