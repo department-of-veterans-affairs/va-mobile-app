@@ -222,6 +222,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
     LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabResultHeader: buildFont('SourceSansPro-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
