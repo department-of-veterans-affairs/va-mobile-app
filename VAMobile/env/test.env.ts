@@ -17,12 +17,10 @@ export const LINK_URL_IN_APP_RECRUITMENT =
 export const LINK_URL_VETERAN_USABILITY_PROJECT = 'https://veteranusability.us/'
 export const LINK_URL_VETERANS_CRISIS_LINE = 'https://www.veteranscrisisline.net/'
 export const LINK_URL_VETERANS_CRISIS_LINE_GET_HELP = 'https://www.veteranscrisisline.net/get-help/chat'
-export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://www.va.gov/health-care/schedule-view-va-appointments/'
 export const LINK_URL_PRIVACY_POLICY = 'https://www.va.gov/privacy-policy/'
 export const LINK_URL_DECISION_REVIEWS = 'https://www.va.gov/decision-reviews/'
 export const LINK_URL_COMPENSATION_CLAIM_EXAM = 'https://benefits.va.gov/compensation/claimexam.asp'
 export const LINK_URL_YOUR_CLAIMS = 'https://www.va.gov/your-claims'
-export const LINK_URL_CLAIM_APPEAL_STATUS = 'https://www.va.gov/claim-or-appeal-status/'
 export const LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT =
   'https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication'
 export const LINK_URL_GO_TO_MY_HEALTHEVET =
