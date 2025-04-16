@@ -1,7 +1,15 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openAppointments,
+  openContactInfo,
+  openHealth,
+  openProfile,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const TravelPayE2eIdConstants = {
   RIGHT_CLOSE_BUTTON_ID: 'rightCloseTestID',
@@ -86,8 +94,8 @@ const fillHomeAddressFields = async () => {
     .toBeVisible()
     .withTimeout(4000)
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_ID)).tap()
-  await expect(element(by.text('United States'))).toExist()
-  await element(by.text('United States')).tap()
+  await expect(element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT))).toExist()
+  await element(by.text(TravelPayE2eIdConstants.COUNTRY_TEXT)).tap()
   await element(by.id(CommonE2eIdConstants.COUNTRY_PICKER_CONFIRM_ID)).tap()
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
   await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
@@ -98,7 +106,6 @@ const fillHomeAddressFields = async () => {
   await element(by.id(CommonE2eIdConstants.STATE_ID)).tap()
   await element(by.text('Arizona')).tap()
   await element(by.id(CommonE2eIdConstants.STATE_PICKER_CONFIRM_ID)).tap()
-  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).clearText()
   await element(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID)).scrollTo('top')
 }
 
@@ -115,8 +122,6 @@ export async function updateAddress() {
     .toBeVisible()
     .whileElement(by.id(CommonE2eIdConstants.EDIT_ADDRESS_ID))
     .scroll(100, 'down', NaN, 0.8)
-  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).replaceText('Flagstaff')
-  await element(by.id(CommonE2eIdConstants.CITY_TEST_ID)).tapReturnKey()
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).replaceText('86001')
   await element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)).tapReturnKey()
   await waitFor(element(by.id(CommonE2eIdConstants.ZIP_CODE_ID)))
@@ -406,19 +411,22 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
   })
 
-  it('navigates to the update address screen from the travel pay flow when tapping the update address link on the no address error screen', async () => {
-    await startTravelPayFlow()
-    await checkTravelPayFlow(false)
-    await element(by.id(TravelPayE2eIdConstants.UPDATE_ADDRESS_LINK_ID)).tap()
-    await setTimeout(3000)
-    await expect(element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID))).toExist()
+  it('Completes the flow when the home address is exists', async () => {
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
+    await openProfile()
+    await openContactInfo()
     await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
+
     await fillHomeAddressFields()
     await updateAddress()
+
+    await openHealth()
+
+    await startTravelPayFlow()
+    await checkTravelPayFlow(true)
   })
 
   it('navigates to the error screen when the answer is no to any of the questions', async () => {
-    await openHealth()
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
@@ -465,9 +473,5 @@ describe('Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_QUESTION_ID))).toExist()
     await element(by.id(TravelPayE2eIdConstants.LEFT_BACK_BUTTON_ID)).tap()
     await expect(element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID))).toExist()
-  })
-
-  it('verifies travel pay flow when the veteran has a home address', async () => {
-    await checkTravelPayFlow(true)
   })
 })
