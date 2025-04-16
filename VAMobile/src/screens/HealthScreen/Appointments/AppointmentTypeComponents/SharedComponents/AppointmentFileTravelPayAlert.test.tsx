@@ -266,6 +266,7 @@ context('AppointmentFileTravelPayAlert', () => {
     fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
     expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
       appointmentDateTime: attributes.startDateUtc,
+      facilityName: attributes.location.name,
     })
   })
 

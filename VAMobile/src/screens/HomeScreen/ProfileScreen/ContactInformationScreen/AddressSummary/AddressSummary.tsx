@@ -142,7 +142,7 @@ export type addressDataField = {
   /** Address type of the address displayed */
   addressType: profileAddressType
   /** Called on press of the address summary */
-  onPress: () => void
+  onPress?: () => void
 }
 
 /**

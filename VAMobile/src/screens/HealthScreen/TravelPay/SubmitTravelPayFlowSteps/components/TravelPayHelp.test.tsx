@@ -15,6 +15,7 @@ context('TravelPayHelp', () => {
   it('should initialize correctly', () => {
     initializeTestInstance()
 
+    expect(screen.getByTestId('helpTitleID')).toBeTruthy()
     expect(screen.getByText(t('travelPay.helpTitle'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
