@@ -153,6 +153,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
 
   const css = `
   header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
+  nav[aria-label="My HealtheVet"] { display: none; }
 `
 
   const INJECTED_JAVASCRIPT = `(function() {
