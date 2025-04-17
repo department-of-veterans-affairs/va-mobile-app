@@ -117,8 +117,6 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
-      await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
-
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
@@ -129,13 +127,9 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.needHelp') })).toBeTruthy())
-      await waitFor(() => expect(screen.getByText(t('claimDetails.callVA'))).toBeTruthy())
-      await waitFor(() =>
-        expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })).toBeTruthy(),
-      )
-      await waitFor(() =>
-        fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })),
-      )
+      expect(screen.getByText(t('claimDetails.callVA'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) }))
       await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
     })
 
@@ -143,7 +137,6 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
       await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.needHelp') })).toBeTruthy())
     })
