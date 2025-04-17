@@ -32,6 +32,7 @@ import Reply from './svgs/Reply.svg'
 import Trash from './svgs/Trash.svg'
 import Unread from './svgs/Unread.svg'
 import UploadPhoto from './svgs/UploadPhoto.svg'
+import VASeal from './svgs/VASeal.svg'
 import VideoCamera from './svgs/VideoCamera.svg'
 // VASelector
 import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
@@ -87,6 +88,7 @@ export const VA_ICON_MAP = {
   Trash,
   Unread,
   UploadPhoto,
+  VASeal,
   VideoCamera,
 }
 

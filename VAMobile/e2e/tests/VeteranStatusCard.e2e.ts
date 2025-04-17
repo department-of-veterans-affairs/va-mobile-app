@@ -39,7 +39,7 @@ beforeAll(async () => {
 Validates the veteran status page design
 */
 export async function validateVeteranStatusDesign() {
-  await expect(element(by.text('Veteran status'))).toExist()
+  await expect(element(by.text('Veteran Status Card')).atIndex(0)).toExist()
   const veteranStatusCardVAIcon = await element(by.id('VeteranStatusCardVAIcon')).takeScreenshot(
     'veteranStatusCardVAIcon',
   )
