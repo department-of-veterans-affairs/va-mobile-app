@@ -195,20 +195,18 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         <TextView variant="MobileBody" color="bodyText" mb={16}>
           {t('veteranStatus.fixAnError.2')}
         </TextView>
-        <ClickToCallPhoneNumberDeprecated
-          phone={t('8008271000')}
+        <ClickToCallPhoneNumber
+          a11yLabel={a11yLabelID(t('8008271000'))}
           displayedText={displayedTextPhoneNumber(t('8008271000'))}
-          colorOverride={'link'}
-          iconColorOverride={theme.colors.icon.link}
+          phone={t('8008271000')}
         />
         <TextView variant="MobileBody" color="bodyText" mt={16} mb={16}>
           {t('veteranStatus.fixAnError.3')}
         </TextView>
-        <ClickToCallPhoneNumberDeprecated
-          phone={t('8005389552')}
+        <ClickToCallPhoneNumber
+          a11yLabel={a11yLabelID(t('8005389552'))}
           displayedText={displayedTextPhoneNumber(t('8005389552'))}
-          colorOverride={'link'}
-          iconColorOverride={theme.colors.icon.link}
+          phone={t('8005389552')}
         />
       </Box>
     )
@@ -315,7 +313,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             )}
             <Box my={theme.dimensions.formMarginBetween}>
               <TextView variant="MobileBody" color="primaryContrast" mb={theme.dimensions.formMarginBetween}>
-                {t('veteranStatus.uniformedServices')}
+                {t('veteranStatus.old.uniformedServices')}
               </TextView>
               <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
                 {t('veteranStatus.fixAnError')}
