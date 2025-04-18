@@ -554,7 +554,9 @@ context('ClaimExamAppointment', () => {
       expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointments.pending.reasonTitle') })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointments.pending.yourContactInfo') })).toBeTruthy()
       expect(screen.getByText(`${t('email')}: test@test.com`)).toBeTruthy()

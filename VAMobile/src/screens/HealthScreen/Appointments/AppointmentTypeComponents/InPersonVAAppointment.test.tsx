@@ -839,11 +839,7 @@ context('InPersonVAAppointment', () => {
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
       expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly'))).toBeTruthy()
 
       expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
       expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
