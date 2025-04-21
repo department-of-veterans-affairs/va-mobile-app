@@ -113,18 +113,27 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       const service = serviceHistory[i]
       const { beginDate, endDate, branchOfService } = service
       if (beginDate && endDate) {
-        const localizedBranch = t('militaryInformation.branch', {
-          branch: branchOfService,
-        })
         const beginYear = beginDate.slice(0, 4)
         const endYear = endDate.slice(0, 4)
+        const visibleText = t('militaryInformation.combined.history', {
+          branch: branchOfService,
+          begin: beginYear,
+          end: endYear,
+        })
+        const a11yLabel = t('militaryInformation.combined.historyA11yLabel', {
+          branch: branchOfService,
+          begin: beginYear,
+          end: endYear,
+        })
 
         return (
-          <Box>
-            <TextView variant="MobileBody" color="primaryContrast" testID="veteranStatusMilitaryServiceTestID">
-              {localizedBranch} • {beginYear}-{endYear}
-            </TextView>
-          </Box>
+          <TextView
+            variant="MobileBody"
+            color="primaryContrast"
+            testID="veteranStatusMilitaryServiceTestID"
+            accessibilityLabel={a11yLabel}>
+            {visibleText}
+          </TextView>
         )
       }
     }

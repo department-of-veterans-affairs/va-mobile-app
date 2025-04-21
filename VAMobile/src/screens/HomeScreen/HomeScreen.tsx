@@ -18,7 +18,6 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { useLetterBeneficiaryData } from 'api/letters'
 import { useServiceHistory } from 'api/militaryService'
 import { usePayments } from 'api/payments'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
@@ -108,7 +107,6 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const disabilityRatingQuery = useDisabilityRating()
   const serviceHistoryQuery = useServiceHistory()
-  const letterBeneficiaryQuery = useLetterBeneficiaryData()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
   const veteranStatusQuery = useVeteranStatus()
@@ -266,7 +264,6 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouFeatureActive &&
     !serviceHistoryQuery.isFetched &&
     !disabilityRatingQuery.isFetched &&
-    !letterBeneficiaryQuery.isFetched &&
     !paymentHistoryQuery.isFetched &&
     !veteranStatusQuery.isFetched
 
@@ -274,7 +271,6 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouNotFetched ||
     serviceHistoryQuery.isLoading ||
     disabilityRatingQuery.isLoading ||
-    letterBeneficiaryQuery.isLoading ||
     paymentHistoryQuery.isLoading ||
     veteranStatusQuery.isLoading
 

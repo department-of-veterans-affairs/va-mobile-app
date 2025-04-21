@@ -955,6 +955,8 @@
   "militaryInformation.branch": "{{branch}}",
   "militaryInformation.history": "{{begin}} – {{end}}",
   "militaryInformation.historyA11yLabel": "{{begin}} to {{end}}",
+  "militaryInformation.combined.history": "{{branch}} • {{begin}}–{{end}}",
+  "militaryInformation.combined.historyA11yLabel": "{{branch}} {{begin}} to {{end}}",
   "militaryInformation.incorrectServiceInfo": "What if my military service information doesn't look right?",
   "militaryInformation.incorrectServiceInfo.body.1": "Some Veterans have reported seeing military service information in their VA.gov profiles that doesn’t seem right. When this happens, it’s because there’s an error in the information we’re pulling into VA.gov from the Defense Enrollment Eligibility Reporting System (DEERS).",
   "militaryInformation.incorrectServiceInfo.body.2": "If the military service information in your profile doesn’t look right, please call the Defense Manpower Data Center (DMDC). They’ll work with you to update your information in DEERS.",

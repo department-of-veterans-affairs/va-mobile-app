@@ -266,7 +266,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      const secondPeriodText = 'United States Army • 2010-2017'
+      const secondPeriodText = 'United States Army • 2010–2017'
       expect(screen.getByText(secondPeriodText)).toBeTruthy()
     })
   })

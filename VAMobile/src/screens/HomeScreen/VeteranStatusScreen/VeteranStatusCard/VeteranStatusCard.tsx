@@ -128,7 +128,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         mt={emblemOffset}
         px={16}
         style={dropShadowStyle}>
-        <Box pt={8}>
+        <Box mt={8}>
           <TextView color="primaryContrast" variant={headerVariant}>
             {t('veteranStatus.name')}
           </TextView>
@@ -141,18 +141,16 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
           </TextView>
         </Box>
 
-        <Box pt={8}>
-          <TextView color="primaryContrast" variant={headerVariant}>
+        <Box>
+          <TextView color="primaryContrast" variant={headerVariant} mt={8}>
             {t('veteranStatus.latestPeriodOfService')}
           </TextView>
-          <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusMilitaryServiceTestID">
-            {getLatestPeriodOfService()}
-          </TextView>
+          {getLatestPeriodOfService()}
         </Box>
 
         <Box flexDirection={isLandscape ? 'row' : 'column'}>
           <Box flex={isLandscape ? 1 : undefined}>
-            <TextView color="primaryContrast" variant={headerVariant}>
+            <TextView color="primaryContrast" variant={headerVariant} mt={8}>
               {t('veteranStatus.dodIdNumber')}
             </TextView>
             <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDODTestID">
@@ -162,7 +160,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
 
           {percentText && percentText !== '0%' && (
             <Box flex={isLandscape ? 1 : undefined}>
-              <TextView color="primaryContrast" variant={headerVariant}>
+              <TextView color="primaryContrast" variant={headerVariant} mt={8}>
                 {t('veteranStatus.disabilityRating')}
               </TextView>
               <TextView color="primaryContrast" variant="MobileBody" testID="veteranStatusDisabilityRatingTestID">
