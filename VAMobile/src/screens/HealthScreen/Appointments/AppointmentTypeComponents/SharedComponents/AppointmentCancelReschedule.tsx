@@ -176,15 +176,8 @@ const phoneFacilitySchedulingLink = (
       ) : undefined}
       {!useFacilityLocatorFallback && (
         <LinkWithAnalytics
-          type="custom"
-          onPress={() => {
-            navigateTo('Webview', {
-              url: LINK_URL_VA_SCHEDULING,
-              displayTitle: t('webview.vagov'),
-              loadingMessage: t('webview.appointments.loading'),
-              useSSO: true,
-            })
-          }}
+          type="url"
+          url={LINK_URL_VA_SCHEDULING}
           text={t('appointments.vaSchedule')}
           a11yLabel={a11yLabelVA(t('appointments.vaSchedule'))}
           testID="vaLinkApptsCancelTestID"
