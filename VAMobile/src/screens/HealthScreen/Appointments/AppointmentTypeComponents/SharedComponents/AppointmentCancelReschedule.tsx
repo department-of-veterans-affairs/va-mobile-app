@@ -1,8 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ParamListBase } from '@react-navigation/native'
-
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { UseMutateFunction } from '@tanstack/react-query'
@@ -24,13 +22,7 @@ import {
   getAppointmentAnalyticsStatus,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import {
-  RouteNavigationFunction,
-  useDestructiveActionSheet,
-  useDestructiveActionSheetProps,
-  useRouteNavigation,
-  useTheme,
-} from 'utils/hooks'
+import { useDestructiveActionSheet, useDestructiveActionSheetProps, useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -154,7 +146,6 @@ const phoneFacilitySchedulingLink = (
   location: AppointmentLocation | undefined,
   t: TFunction,
   theme: VATheme,
-  navigateTo: RouteNavigationFunction<ParamListBase>,
 ) => {
   return (
     <Box>
@@ -343,7 +334,7 @@ function AppointmentCancelReschedule({
         {body}
       </TextView>
       {!isClaimExam ? (
-        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme, navigateTo)
+        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme)
       ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
           type="url"
