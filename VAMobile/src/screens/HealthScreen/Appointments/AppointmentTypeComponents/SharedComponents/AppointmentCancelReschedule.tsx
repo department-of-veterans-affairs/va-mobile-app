@@ -22,7 +22,7 @@ import {
   getAppointmentAnalyticsStatus,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useDestructiveActionSheetProps, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useDestructiveActionSheetProps, useTheme } from 'utils/hooks'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -286,7 +286,6 @@ function AppointmentCancelReschedule({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
-  const navigateTo = useRouteNavigation()
   const { location, cancelId } = attributes || ({} as AppointmentAttributes)
 
   const header = getHeader(subType, t)
