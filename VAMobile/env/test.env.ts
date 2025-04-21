@@ -28,6 +28,7 @@ export const LINK_URL_GO_TO_MY_HEALTHEVET =
 export const LINK_URL_OMB_PAGE = 'https://www.reginfo.gov/public/do/PRAMain'
 export const APPLE_STORE_LINK = 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596'
 export const GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.mobileapp'
+export const LINK_URL_CLAIM_APPEAL_STATUS = 'https://va.gov/track-claims/appeals/'
 export const LINK_URL_GO_TO_PATIENT_PORTAL = 'https://patientportal.myhealth.va.gov/'
 export const LINK_URL_ASK_VA_GOV = 'https://ask.va.gov/'
 export const LINK_URL_GO_TO_VA_GOV = 'https://va.gov'
