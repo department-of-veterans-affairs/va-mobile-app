@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { ClaimsAndAppealsListPayload } from 'api/types'
@@ -85,7 +86,7 @@ context('ClaimsHistoryScreen', () => {
         })
         .mockResolvedValue(mockPayload)
       initializeTestInstance(false)
-      await waitFor(() => expect(screen.getByText("We can't find any claims information for you")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('claimsAndAppeals.noClaimsAndAppealsAccess.title'))).toBeTruthy())
     })
   })
 
@@ -100,7 +101,7 @@ context('ClaimsHistoryScreen', () => {
         })
         .mockRejectedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The VA mobile app isn't working right now")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('errors.callHelpCenter.vaAppNotWorking'))).toBeTruthy())
     })
   })
 
@@ -125,9 +126,9 @@ context('ClaimsHistoryScreen', () => {
         })
         .mockResolvedValue(payload)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText('Claims and appeal status are unavailable')).toBeTruthy())
-      await waitFor(() => expect(screen.queryByText('Active')).toBeFalsy())
-      await waitFor(() => expect(screen.queryByText('Closed')).toBeFalsy())
+      await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.claimAndAppealStatusUnavailable'))).toBeTruthy())
+      expect(screen.queryByText(t('claimsTab.active'))).toBeFalsy()
+      expect(screen.queryByText(t('claimsTab.closed'))).toBeFalsy()
     })
   })
 })

@@ -2,12 +2,14 @@ import React from 'react'
 import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { claim as claimData } from '../claimData'
@@ -79,7 +81,7 @@ context('ClaimDetailsScreen', () => {
   describe('when loadingClaim is set to true', () => {
     it('should show loading screen', async () => {
       renderWithData()
-      expect(screen.getByText('Loading your claim details...')).toBeTruthy()
+      expect(screen.getByText(t('claimInformation.loading'))).toBeTruthy()
     })
   })
 
@@ -92,7 +94,7 @@ context('ClaimDetailsScreen', () => {
           phase: 2,
         },
       })
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Submit evidence' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('button', { name: t('claimDetails.submitEvidence') })).toBeTruthy())
     })
   })
 
@@ -101,16 +103,20 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
-      await waitFor(() => expect(screen.getByTestId('Step 1 of 8. Claim received. Complete.')).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByTestId(
+            `${t('stepXofY', { current: 1, total: 8 })}. ${t('claimPhase.8step.heading.phase1')}. ${t('complete')}.`,
+          ),
+        ).toBeTruthy(),
+      )
     })
 
     it('should display the Files component', async () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => fireEvent.press(screen.getByText('Files')))
-      await waitFor(() => fireEvent.press(screen.getByText('Files')))
-
+      await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
@@ -120,16 +126,10 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
       })
-      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            'Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.',
-          ),
-        ).toBeTruthy(),
-      )
-      await waitFor(() => expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy())
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: '800-827-1000' })))
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.needHelp') })).toBeTruthy())
+      expect(screen.getByText(t('claimDetails.callVA'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) }))
       await waitFor(() => expect(Linking.openURL).toHaveBeenCalled())
     })
 
@@ -137,9 +137,8 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => fireEvent.press(screen.getByText('Files')))
-      await waitFor(() => fireEvent.press(screen.getByText('Files')))
-      await waitFor(() => expect(screen.getByRole('header', { name: 'Need help?' })).toBeTruthy())
+      await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.needHelp') })).toBeTruthy())
     })
   })
 
@@ -148,7 +147,9 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
         ...claimData,
       })
-      await waitFor(() => expect(screen.getByRole('header', { name: "What you've claimed" })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('claimDetails.whatYouHaveClaimed') })).toBeTruthy(),
+      )
     })
 
     describe('Active on click of Find out why we sometimes combine claims.', () => {
@@ -156,9 +157,7 @@ context('ClaimDetailsScreen', () => {
         renderWithData(ClaimTypeConstants.ACTIVE, false, {
           ...claimData,
         })
-        await waitFor(() =>
-          fireEvent.press(screen.getByRole('link', { name: 'Find out why we sometimes combine claims' })),
-        )
+        await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('claimDetails.whyWeCombineLink') })))
         await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('ConsolidatedClaimsNote'))
       })
     })
@@ -167,7 +166,7 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.CLOSED, false, {
         ...claimData,
       })
-      await waitFor(() => expect(screen.getByRole('heading', { name: 'Decision letter mailed' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('heading', { name: t('claims.decisionLetterMailed') })).toBeTruthy())
     })
 
     describe('Closed on click of WhatDoIDoIfDisagreement', () => {
@@ -176,7 +175,7 @@ context('ClaimDetailsScreen', () => {
           ...claimData,
         })
         await waitFor(() =>
-          fireEvent.press(screen.getByRole('link', { name: 'Learn what to do if you disagree with our decision' })),
+          fireEvent.press(screen.getByRole('link', { name: t('claimDetails.learnWhatToDoIfDisagreeLink') })),
         )
         await waitFor(() =>
           expect(mockNavigationSpy).toHaveBeenCalledWith('WhatDoIDoIfDisagreement', {
@@ -197,7 +196,9 @@ context('ClaimDetailsScreen', () => {
 
       renderWithData()
 
-      await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
+      )
     })
   })
 })
