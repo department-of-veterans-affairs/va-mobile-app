@@ -48,7 +48,7 @@ context('NeedHelpData', () => {
   describe('when isAppeal is true', () => {
     it('should launch webview on click of the url', () => {
       initializeTestInstance(true, 'A1113')
-      fireEvent.press(screen.getByRole('link', { name: 'Go to VA.gov' }))
+      fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
       const expectNavArgs = {
         url: 'https://va.gov/track-claims/appeals/' + 'A1113',
         displayTitle: t('webview.vagov'),
