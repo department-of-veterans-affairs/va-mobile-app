@@ -21,8 +21,8 @@ jest.mock('utils/hooks', () => {
 })
 
 context('NeedHelpData', () => {
-  const initializeTestInstance = (isAppeal?: boolean, appealId?: string) => {
-    render(<NeedHelpData isAppeal={isAppeal} appealId={appealId} />)
+  const initializeTestInstance = (appealId?: string) => {
+    render(<NeedHelpData appealId={appealId} />)
   }
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ context('NeedHelpData', () => {
     expect(screen.getByText(displayedTextPhoneNumber(t('8008271000')))).toBeTruthy()
     expect(screen.queryByText(t('appealDetails.viewMoreDetails'))).toBeFalsy()
     expect(screen.queryByText(t('goToVAGov'))).toBeFalsy()
-    initializeTestInstance(true)
+    initializeTestInstance('A1113')
     expect(screen.getByText(t('appealDetails.viewMoreDetails'))).toBeTruthy()
     expect(screen.getByText(t('goToVAGov'))).toBeTruthy()
   })
@@ -47,7 +47,7 @@ context('NeedHelpData', () => {
 
   describe('when isAppeal is true', () => {
     it('should launch webview on click of the url', () => {
-      initializeTestInstance(true, 'A1113')
+      initializeTestInstance('A1113')
       fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
       const expectNavArgs = {
         url: 'https://va.gov/track-claims/appeals/' + 'A1113',

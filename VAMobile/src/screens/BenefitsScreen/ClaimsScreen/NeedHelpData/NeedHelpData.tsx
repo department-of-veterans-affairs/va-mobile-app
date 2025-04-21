@@ -11,17 +11,16 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
 type NeedHelpDataProps = {
-  isAppeal?: boolean
   appealId?: string
 }
 
-function NeedHelpData({ isAppeal, appealId }: NeedHelpDataProps) {
+function NeedHelpData({ appealId }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
 
   function renderAppealData() {
-    if (!isAppeal) {
+    if (!appealId) {
       return <></>
     }
 

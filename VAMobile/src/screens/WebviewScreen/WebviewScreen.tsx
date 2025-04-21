@@ -151,6 +151,9 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     })
   }
 
+  // The following two consts are an effort to reduce the 'noise' of the websites we are linking to
+  // via webview and make them a more specific path for the user to experience. This code ignores headers,
+  // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
   const css = `
   header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
   nav[aria-label="My HealtheVet"] { display: none; }
