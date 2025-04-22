@@ -19,7 +19,7 @@ We distribute testing builds through TestFlight for iOS, and Firebase's AppTeste
 To get access to either TestFlight or App Tester, follow the platform-specific instructions for your testing device on the [Tool Setup page](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Tool%20Setup).
 
 ### Charles Proxy
-We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing. We've got guides for [setting up Charles Proxy](https://docs.google.com/document/d/1nUJCIfGTap6RJK_E6xqiKF0OQ4yH-gmi/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true), and [how to mock response data](https://docs.google.com/document/d/10qeXwn55uGnx9wXj0FmKdLyh-dxwDNWj/edit?usp=sharing&ouid=116379542377954476916&rtpof=true&sd=true) or [set exclusions](https://docs.google.com/document/d/1_obvBLHnTTNZGb5N1Rezq8duZhy-rZ1g/edit).
+We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing.
 
 ### On demand build
 We create [on-demand builds](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml) of the pre-production mobile app using a github workflow for testing new frontend code. You need to have write-access to the mobile app repo to kick off these builds.
@@ -37,9 +37,6 @@ The VAMobile and VA.gov vaults contain usernames and passwords for staging test 
 
 ### Github
 Most commonly used: [writing a bug ticket with the new bug report template](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?assignees=&labels=bug&template=bug-report.md&title=BUG+-+%5BSEVERITY%5D+-+%5BiOS%2FAndroid%2FAll%5D+-+%5BShort+description%5D). 
-
-### Zenhub
-Most commonly used: [the shared team Zenhub board](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/board?repos=292052392) and [the cumulative flow report to track ticket (or bug!) trends over several sprints](https://app.zenhub.com/workspaces/va-mobile-60f1a34998bc75000f2a489f/reports/cumulative?r=&p[]=With%20QA&p[]=Icebox&p[]=With%20QA%281.43.0%20until%202%2F14%29&p[]=Ready%20to%20Merge%20to%20develop&p[]=Closed&p[]=With%20QA%20%28pre-develop%29&p[]=With%20QA%20%28develop%29&p[]=Blocked&df=06-15-2021&dt=06-15-2023&dr=24m&labels[]=bug&notLabels[]=).
 
 ## How do I
 ### Log into the mobile app in a staging environment?

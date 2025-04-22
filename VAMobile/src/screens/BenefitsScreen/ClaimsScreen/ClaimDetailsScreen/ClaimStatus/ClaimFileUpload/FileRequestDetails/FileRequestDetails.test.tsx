@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { ClaimEventData } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -87,8 +88,8 @@ context('FileRequestDetails', () => {
   describe("when the request hasn't had files uploaded", () => {
     it('should display the select a file and take or select photos buttons', () => {
       renderWithRequest(requestWithoutFiles)
-      expect(screen.getByRole('button', { name: 'Select a file' })).toBeTruthy()
-      expect(screen.getByRole('button', { name: 'Take or select photos' })).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy()
     })
 
     it('should display request title and description', () => {
@@ -102,12 +103,12 @@ context('FileRequestDetails', () => {
     it('should display headings and info', () => {
       renderWithRequest(requestWithFilesAwaitingReview)
       expect(screen.getAllByRole('header', { name: 'Request 4' })[0]).toBeTruthy()
-      expect(screen.getByRole('header', { name: 'Submitted on' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('fileRequestDetails.submittedTitle') })).toBeTruthy()
       expect(screen.getByText('May 13, 2021 (pending)')).toBeTruthy()
-      expect(screen.getByRole('header', { name: 'File type' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('fileRequestDetails.fileTitle') })).toBeTruthy()
       expect(screen.getByText('post-deployment-document.pdf')).toBeTruthy()
       expect(screen.getByText('DD214.pdf')).toBeTruthy()
-      expect(screen.getByRole('header', { name: 'Request type' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('fileRequestDetails.typeTitle') })).toBeTruthy()
       expect(screen.getByText('Military Personnel Record')).toBeTruthy()
       expect(screen.getByText('Combat not verified')).toBeTruthy()
     })
@@ -116,7 +117,7 @@ context('FileRequestDetails', () => {
   describe('when the request has files which are no longer required', () => {
     it('should display special heading instead of submission date', () => {
       renderWithRequest(requestWithFilesNoLongerRequired)
-      expect(screen.getByRole('header', { name: 'No longer needed' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('noLongerNeeded') })).toBeTruthy()
       expect(screen.queryByRole('header', { name: 'Submitted' })).toBeFalsy()
       expect(screen.queryByText('May 13, 2021 (pending)')).toBeFalsy()
     })

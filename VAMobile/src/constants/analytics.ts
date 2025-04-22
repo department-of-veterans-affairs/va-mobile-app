@@ -1217,6 +1217,23 @@ export const Events = {
       },
     }
   },
+  vama_vsc_error_shown: (errorType?: string): Event => {
+    return {
+      name: 'vama_vsc_error_shown',
+      params: {
+        errorType,
+      },
+    }
+  },
+  vama_webview: (url: string, id?: string): Event => {
+    return {
+      name: 'vama_webview',
+      params: {
+        url,
+        id,
+      },
+    }
+  },
   vama_webview_fail: (error: string): Event => {
     return {
       name: 'vama_webview_fail',

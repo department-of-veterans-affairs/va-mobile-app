@@ -2,7 +2,6 @@
 title: Release process
 ---
 
-![Release Process](/img/release/va-mobile-release-process.png)
 ```mermaid
 flowchart LR
     subgraph ReleaseProcess

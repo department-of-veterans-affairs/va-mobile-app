@@ -1,6 +1,6 @@
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
-export const primaryTextColor = colors.vadsColorBaseDarker
+export const primaryTextColor = colors.vadsColorBase
 
 export const lightTheme = {
   background: {
@@ -103,7 +103,7 @@ export const lightTheme = {
     input: colors.vadsColorBlack,
     inputFocused: colors.vadsColorBlack,
     actionBar: colors.vadsColorWhite,
-    actionBarDisabled: colors.vadsColorBaseLight,
+    disabled: colors.vadsColorBaseLight,
     bodyText: primaryTextColor,
     showAll: colors.vadsColorPrimary,
     labelTag: colors.vadsColorBase,
@@ -242,8 +242,8 @@ export const darkTheme = {
     input: colors.vadsColorBaseLight,
     inputFocused: colors.vadsColorBaseLightest,
     actionBar: colors.uswdsSystemColorBlueVivid30,
-    actionBarDisabled: colors.vadsColorBaseLight,
-    bodyText: colors.vadsColorBaseLighter,
+    disabled: colors.vadsColorBaseLight,
+    bodyText: colors.vadsColorBaseLightest,
     showAll: colors.uswdsSystemColorBlueVivid30,
     labelTag: colors.vadsColorBase,
     textWithIconButtonInactive: colors.vadsColorBaseLight,
