@@ -22,7 +22,7 @@ const MODAL_GUTTER = 16
 const MAX_WIDTH = 400
 
 /**
- * Prompt to unlock demo mode for App. Used for Android as IOS already has `Alert.prompt`
+ * Payment Breakdown Modal that shows the breakdown of payments from the last recurring payment`
  */
 const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalProps) => {
   const insets = useSafeAreaInsets()
@@ -80,7 +80,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: theme.colors.background.menu,
+    backgroundColor: theme.colors.background.textBox,
   }
 
   return (
@@ -157,7 +157,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
                     initial: false,
                   })
                 }}
-                testID="howToFixLegalNameID"
+                testID="GoToPaymentHistoryTestID"
               />
             </Box>
           </Box>

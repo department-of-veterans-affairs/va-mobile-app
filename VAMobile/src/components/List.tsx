@@ -41,10 +41,10 @@ export type ListProps = {
   /**optional a11y hint for the title */
   titleA11yLabel?: string
 
-  /* optional text on the right on same row of title */
+  /** optional text on the right on same row of title */
   rightTitleText?: string
 
-  /**optional a11y hint for the rightTitleText */
+  /** optional a11y hint for the rightTitleText */
   rightTitleTextA11yLabel?: string
 }
 
