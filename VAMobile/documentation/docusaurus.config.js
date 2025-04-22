@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
-
-const lightCodeTheme = require('prism-react-renderer/themes/github')
-const darkCodeTheme = require('prism-react-renderer/themes/dracula')
+//
+import { themes as prismThemes } from 'prism-react-renderer'
 
 /**
  * Function to form up configuration for Design System Engineering Docs imported from va-mobile-library repo
@@ -55,6 +54,10 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'department-of-veterans-affairs', // Usually your GitHub org/user name.
   projectName: 'va-mobile-app', // Usually your repo name.
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   plugins: [
     './docusaurus-plugin-react-native-web',
     engineeringDocForm('documentation', 'documentation', [
@@ -168,11 +171,11 @@ const config = {
             items: [
               {
                 label: 'Documentation',
-                to: '/docs/intro',
+                to: '/docs/Intro',
               },
               {
                 label: 'Design System',
-                to: '/design/intro',
+                to: '/design/Intro',
               },
             ],
           },
@@ -211,8 +214,8 @@ const config = {
       },
 
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: prismThemes.github,
+        darkTheme: prismThemes.dracula,
       },
     },
 }
