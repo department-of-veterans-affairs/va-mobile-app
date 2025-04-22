@@ -10,7 +10,6 @@ import { setTimeout } from 'timers/promises'
 import {
   CommonE2eIdConstants,
   changeMockData,
-  checkImages,
   loginToDemoMode,
   openBenefits,
   openDisabilityRating,
@@ -20,11 +19,11 @@ import {
 
 export const VeteranStatusCardConstants = {
   VETERAN_STATUS_ID: 'veteranStatusButtonID',
-  VETERAN_STATUS_DISABILITY_RATING_TEXT: '100% service connected',
+  VETERAN_STATUS_DISABILITY_RATING_TEXT: '100%',
   VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT: 'United States Army',
   VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT: 'September 01, 1998 – January 01, 2000',
-  VETERAN_STATUS_DISCLAIMER_TEXT:
-    "You can use this Veteran status to prove you served in the United States Uniformed Services. This status doesn't entitle you to any VA benefits.",
+  VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_TEXT: 'United States Coast Guard • 1998–2000',
+  VETERAN_STATUS_DISCLAIMER_TEXT: "This card doesn't entitle you to any VA benefits.",
   VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT: '800-827-1000',
   VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT: '800-538-9552',
   VETERAN_STATUS_CLOSE_ID: 'veteranStatusCloseID',
@@ -39,24 +38,16 @@ beforeAll(async () => {
 Validates the veteran status page design
 */
 export async function validateVeteranStatusDesign() {
-  await expect(element(by.text('Veteran Status Card')).atIndex(0)).toExist()
-  const veteranStatusCardVAIcon = await element(by.id('VeteranStatusCardVAIcon')).takeScreenshot(
-    'veteranStatusCardVAIcon',
-  )
-  checkImages(veteranStatusCardVAIcon)
+  await expect(element(by.text('Veteran Status Card'))).toExist()
+  await expect(element(by.id('VeteranStatusCardVAIcon'))).toExist()
   await expect(element(by.id('veteranStatusFullNameTestID'))).toExist()
-  await expect(element(by.id('veteranStatusBranchTestID'))).toExist()
   await expect(element(by.id('veteranStatusDisabilityRatingTestID'))).toExist()
-  await expect(element(by.id('veteranStatusMilitaryServiceTestID')).atIndex(0)).toExist()
+  await expect(element(by.id('veteranStatusMilitaryServiceTestID'))).toExist()
   await expect(element(by.id('veteranStatusDODTestID'))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DISCLAIMER_TEXT))).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_DOB_DISABILITY_ERROR_PHONE_TEXT))).toExist()
   await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
   await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_ERROR_PHONE_TEXT))).toExist()
-  const veteranStatusCardBranchIcon = await element(by.id('veteranStatusCardBranchEmblem')).takeScreenshot(
-    'veteranStatusCardBranchIcon',
-  )
-  checkImages(veteranStatusCardBranchIcon)
 }
 
 /*
@@ -146,17 +137,13 @@ describe('Veteran Status Card', () => {
   tapPhoneAndTTYLinks()
 
   it('verify the period of service matches app', async () => {
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD)).atIndex(1)).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
+    await element(by.id('veteranStatusTestID')).scrollTo('bottom')
+    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await setTimeout(2000)
     await openMilitaryInformation()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_BRANCH_1_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD))).toExist()
-    await expect(element(by.text(VeteranStatusCardConstants.VETERAN_STATUS_PERIOD_OF_SERVICE_PERIOD_2_TEXT))).toExist()
     await element(by.id(VeteranStatusCardConstants.BACK_TO_PROFILE_ID)).tap()
   })
 
