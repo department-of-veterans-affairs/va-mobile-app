@@ -9,9 +9,9 @@ import NoAppointments from './NoAppointments'
 
 context('NoAppointments', () => {
   it('initializes correctly', () => {
-    render(<NoAppointments subText="You don't have any appointments in this range" />)
+    render(<NoAppointments subText={t('noAppointments.youDontHaveForDates')} />)
     expect(screen.getByText(t('noAppointments.youDontHave'))).toBeTruthy()
-    expect(screen.getByText("You don't have any appointments in this range")).toBeTruthy()
+    expect(screen.getByText(t('noAppointments.youDontHaveForDates'))).toBeTruthy()
     expect(screen.getByText(t('noAppointments.visitVA'))).toBeTruthy()
   })
 })
