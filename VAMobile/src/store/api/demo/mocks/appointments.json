@@ -957,6 +957,15 @@
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
+              "claim": {
+                "claimNumber": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "claimStatus": "Closed",
+                "id": "TC0928098230498",
+                "appointmentDateTime": "{{now - 31 days}}",
+                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "createdOn": "{{now - 25 days}}",
+                "modifiedOn": "{{now - 28 days}}"
+              },
               "metadata": {
                 "status": 200,
                 "message": "Data retrieved successfully.",
@@ -1253,9 +1262,18 @@
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
+              "claim": {
+                "claimNumber": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "claimStatus": "In Progress",
+                "id": "TC0928098230498",
+                "appointmentDateTime": "{{now - 31 days}}",
+                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "createdOn": "{{now - 28 days}}",
+                "modifiedOn": "{{now - 28 days}}"
+              },
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully.",
                 "success": true
               }
             }
