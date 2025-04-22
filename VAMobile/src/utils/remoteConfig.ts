@@ -80,7 +80,7 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
-  veteranStatusCardRedesign: false,
+  veteranStatusCardRedesign: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults
