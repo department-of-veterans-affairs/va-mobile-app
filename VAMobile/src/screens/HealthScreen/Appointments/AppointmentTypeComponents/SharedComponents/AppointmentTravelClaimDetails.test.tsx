@@ -88,7 +88,9 @@ describe('AppointmentTravelClaimDetails', () => {
       initializeTestInstance(travelPayClaimData)
       expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
       expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
-      expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+      expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
     })
     it('should display the travel pay claim details', () => {
       initializeTestInstance(travelPayClaimData)

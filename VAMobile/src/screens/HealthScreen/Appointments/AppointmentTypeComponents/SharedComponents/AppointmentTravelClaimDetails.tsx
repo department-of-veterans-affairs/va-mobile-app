@@ -2,12 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, BoxProps, TextView } from 'components'
+import { Box, BoxProps, ClickToCallPhoneNumber, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
-
-import TravelPayHelp from '../../../TravelPay/SubmitTravelPayFlowSteps/components/TravelPayHelp'
 
 type TravelClaimFiledDetailsProps = {
   attributes: AppointmentAttributes
@@ -52,7 +50,15 @@ function TravelClaimFiledDetails({ attributes }: TravelClaimFiledDetailsProps) {
           status: attributes.travelPayClaim?.claim?.claimStatus,
         })}
       </TextView>
-      <TravelPayHelp />
+      <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+        {t('travelPay.travelClaimFiledDetails.needHelp')}
+      </TextView>
+      <TextView testID="helpTextID" variant="MobileBody">
+        {t('travelPay.helpText')}
+      </TextView>
+      <Box my={theme.dimensions.condensedMarginBetween}>
+        <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={'travelPay.phone.a11yHint'} />
+      </Box>
     </Box>
   )
 }
