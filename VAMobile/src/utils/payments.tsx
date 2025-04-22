@@ -117,8 +117,6 @@ const getListItemsForPayments = (
     })
   })
 
-  console.log(`totalAmount: ${totalAmount.toFixed(2)}`)
-
   return {
     listItems,
     totalAmount: numberToUSDollars(totalAmount),

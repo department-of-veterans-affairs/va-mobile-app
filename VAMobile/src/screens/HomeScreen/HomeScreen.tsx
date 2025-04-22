@@ -202,8 +202,6 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
-  console.log('NEK')
-  console.log(paymentHistoryQuery.data ? JSON.stringify(paymentHistoryQuery.data) : paymentHistoryQuery.data)
   const recurringPayment = {
     amount: paymentHistoryQuery.data?.meta.recurringPayment.amount,
     date: paymentHistoryQuery.data?.meta.recurringPayment.date,

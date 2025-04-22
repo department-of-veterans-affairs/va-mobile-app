@@ -52,7 +52,6 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     }
 
     // parse out the month
-    // TODO fix later time issue
     const lastPaymentDateYYYYDDMM = getFormattedDate(lastPaymentDate, 'yyyy-MM-dd')
     const paymentsByLastDate: PaymentsData[] = paymentHistoryQuery.data?.paymentsByDate?.[lastPaymentDateYYYYDDMM] || []
     const payments = []
@@ -84,7 +83,6 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     backgroundColor: theme.colors.background.menu,
   }
 
-  const padding = 5
   return (
     <View>
       <Modal
@@ -131,45 +129,6 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
                   {getFormattedDate(lastPaymentDate, 'MMMM dd, yyyy')}
                 </TextView>
                 {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
-                {renderPaymentBreakdown()}
                 <Box flexDirection="row" justifyContent="space-between">
                   <TextView variant="MobileBodyBold">{t('paymentBreakdownModal.total')}</TextView>
                   <TextView variant="MobileBodyBold">{lastPaymentAmount}</TextView>
@@ -179,7 +138,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
             <Box
               borderColor={'primary'}
               borderTopWidth={1}
-              p={padding}
+              p={5}
               flexDirection="row"
               justifyContent="center"
               alignItems={'center'}
@@ -194,6 +153,8 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
                   onCancel()
                   navigateTo('PaymentsTab', {
                     screen: 'PaymentHistory',
+                    // make it so that the initial parent screen renders so `back` navigates back to payment screen instead of home screen.
+                    initial: false,
                   })
                 }}
                 testID="howToFixLegalNameID"
