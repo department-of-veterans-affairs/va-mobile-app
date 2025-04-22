@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import * as api from 'store/api'
@@ -26,7 +27,7 @@ context('AppointmentsScreen', () => {
           },
         })
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("We can't load some of your VA appointments")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('appointments.appointmentsStatusSomeUnavailable'))).toBeTruthy())
     })
   })
 
@@ -41,7 +42,7 @@ context('AppointmentsScreen', () => {
           },
         })
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("We can't load some of your VA appointments")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('appointments.appointmentsStatusSomeUnavailable'))).toBeTruthy())
     })
   })
 
@@ -51,7 +52,7 @@ context('AppointmentsScreen', () => {
         .calledWith(`/v0/appointments`, expect.anything())
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('errors.networkConnection.header'))).toBeTruthy())
     })
   })
 })

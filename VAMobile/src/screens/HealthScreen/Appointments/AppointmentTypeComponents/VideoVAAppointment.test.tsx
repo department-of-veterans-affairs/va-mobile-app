@@ -10,6 +10,7 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import { context, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
 
 import VideoVAAppointment from './VideoVAAppointment'
@@ -79,49 +80,63 @@ context('VideoVAAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByLabelText('Video appointment at  V-A  location')).toBeTruthy()
-      expect(screen.getByText('Join this appointment at a VA facility.')).toBeTruthy()
-      expect(screen.getByLabelText('Join this appointment at a  V-A  facility.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.videoVA.upcomingTitle') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.videoVA.upcomingTitle')))).toBeTruthy()
+      expect(screen.getByText(t('appointments.videoVA.upcomingBody'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.videoVA.upcomingBody')))).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Add to calendar' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint("Add this appointment to your device's calendar")).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('upcomingAppointments.addToCalendar') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.addToCalendarA11yHint'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.typeOfCare.title') })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.provider.title') })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(screen.getByText(t('appointments.clinic', { clinicName: 'Johnson Clinic suite 100' }))).toBeTruthy()
       expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+        screen.getByText(
+          t('appointments.physicalLocation', { physicalLocation: '123 San Jacinto Ave, San Jacinto, CA 92583' }),
+        ),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
+        ),
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
       expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
-      expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
+      expect(
+        screen.getByRole('header', { name: t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule') }),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')),
+      ).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -142,54 +157,56 @@ context('VideoVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByLabelText('Video appointment at  V-A  location')).toBeTruthy()
-      expect(screen.getByText('Join this appointment at a VA facility.')).toBeTruthy()
-      expect(screen.getByLabelText('Join this appointment at a  V-A  facility.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.videoVA.upcomingTitle') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.videoVA.upcomingTitle')))).toBeTruthy()
+      expect(screen.getByText(t('appointments.videoVA.upcomingBody'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.videoVA.upcomingBody')))).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Add to calendar' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint("Add this appointment to your device's calendar")).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('upcomingAppointments.addToCalendar') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.addToCalendarA11yHint'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(
-        screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
-        ),
+        screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'))).toBeTruthy()
+
+      expect(screen.getByText(t('appointments.clinic', { clinicName: t('appointments.notAvailable') }))).toBeTruthy()
+      expect(
+        screen.getByText(t('appointments.physicalLocation', { physicalLocation: t('appointments.notAvailable') })),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: t('appointments.notAvailable') })),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
         ),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
-      expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
-
-      expect(screen.getByText('Clinic: Not available')).toBeTruthy()
-      expect(screen.getByText('Location: Not available')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
-      expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
       expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Need to reschedule or cancel?' })).toBeTruthy()
-      expect(screen.getByText('If you need to reschedule or cancel this appointment, call us.')).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: 'Find your VA location' })).toBeTruthy()
-      expect(screen.getByLabelText('Find your  V-A  location')).toBeTruthy()
       expect(
-        screen.getByAccessibilityHint(
-          "Takes you to the V-A facility locator page. This page will open in your device's browser",
-        ),
+        screen.getByRole('header', { name: t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule') }),
       ).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.doYouNeedToCancelOrReschedule.noAppCancel.body')),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('upcomingAppointmentDetails.findYourVALocation') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('upcomingAppointmentDetails.findYourVALocation')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVALocation.a11yHint'))).toBeTruthy()
     })
   })
 
@@ -199,52 +216,62 @@ context('VideoVAAppointment', () => {
         ...defaultAppointmentAttributes,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
+      expect(
+        screen.getByRole('header', {
+          name: t('appointments.pastTitle', {
+            appointmentType:
+              t('appointments.videoVA.upcomingTitle').charAt(0).toLowerCase() +
+              t('appointments.videoVA.upcomingTitle').slice(1),
+          }),
+        }),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.pastBody'))).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.typeOfCare.title') })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.provider.title') })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
-      expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Need to schedule another appointment?' })).toBeTruthy()
+      expect(screen.getByText(t('appointments.clinic', { clinicName: 'Johnson Clinic suite 100' }))).toBeTruthy()
       expect(
         screen.getByText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on VA.gov.',
+          t('appointments.physicalLocation', { physicalLocation: '123 San Jacinto Ave, San Jacinto, CA 92583' }),
         ),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
       ).toBeTruthy()
       expect(
-        screen.getByLabelText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on  V-A .gov .',
+        screen.getByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
         ),
       ).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.schedule.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.schedule.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.schedule.body')))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -265,49 +292,51 @@ context('VideoVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Past)
-      expect(screen.getByRole('header', { name: 'Past video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByText('This appointment happened in the past.')).toBeTruthy()
+      expect(
+        screen.getByRole('header', {
+          name: t('appointments.pastTitle', {
+            appointmentType:
+              t('appointments.videoVA.upcomingTitle').charAt(0).toLowerCase() +
+              t('appointments.videoVA.upcomingTitle').slice(1),
+          }),
+        }),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.pastBody'))).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(
-        screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
-        ),
+        screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'))).toBeTruthy()
+
+      expect(screen.getByText(t('appointments.clinic', { clinicName: t('appointments.notAvailable') }))).toBeTruthy()
+      expect(
+        screen.getByText(t('appointments.physicalLocation', { physicalLocation: t('appointments.notAvailable') })),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: t('appointments.notAvailable') })),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
-      expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
-
-      expect(screen.getByText('Clinic: Not available')).toBeTruthy()
-      expect(screen.getByText('Location: Not available')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
-      expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Need to schedule another appointment?' })).toBeTruthy()
-      expect(
-        screen.getByText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on VA.gov.',
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByLabelText(
-          'If you need to schedule another appointment, call us or schedule a new appointment on  V-A .gov .',
-        ),
-      ).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.schedule.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.schedule.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.schedule.body')))).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
   })
 
@@ -319,56 +348,70 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
+      expect(
+        screen.getByRole('header', {
+          name: t('appointments.canceledTitle', {
+            appointmentType:
+              t('appointments.videoVA.upcomingTitle').charAt(0).toLowerCase() +
+              t('appointments.videoVA.upcomingTitle').slice(1),
+          }),
+        }),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('appointments.pending.cancelled.theTimeAndDate', { who: t('appointments.canceled.whoCanceled.you') }),
+        ),
+      ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'What' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.typeOfCare.title') })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Who' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.provider.title') })).toBeTruthy()
       expect(screen.getByText('Larry Bird')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
-      expect(screen.getByText('Clinic: Johnson Clinic suite 100')).toBeTruthy()
-      expect(screen.getByText('Location: 123 San Jacinto Ave, San Jacinto, CA 92583')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(screen.getByText(t('appointments.clinic', { clinicName: 'Johnson Clinic suite 100' }))).toBeTruthy()
       expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+        screen.getByText(
+          t('appointments.physicalLocation', { physicalLocation: '123 San Jacinto Ave, San Jacinto, CA 92583' }),
+        ),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
+        ),
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
       expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
-      expect(
-        screen.getByText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.',
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByLabelText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on  V-A .gov .',
-        ),
-      ).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.reschedule.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.reschedule.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.reschedule.body')))).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -391,53 +434,59 @@ context('VideoVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByRole('header', { name: 'Canceled video appointment at VA location' })).toBeTruthy()
-      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
       expect(
-        screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
-        ),
+        screen.getByRole('header', {
+          name: t('appointments.canceledTitle', {
+            appointmentType:
+              t('appointments.videoVA.upcomingTitle').charAt(0).toLowerCase() +
+              t('appointments.videoVA.upcomingTitle').slice(1),
+          }),
+        }),
       ).toBeTruthy()
       expect(
         screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
+          t('appointments.pending.cancelled.theTimeAndDate', { who: t('appointments.canceled.whoCanceled.you') }),
         ),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
-      expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
+      expect(screen.getByRole('header', { name: 'Saturday, February 6, 2021\n11:53 AM PST' })).toBeTruthy()
 
-      expect(screen.getByText('Clinic: Not available')).toBeTruthy()
-      expect(screen.getByText('Location: Not available')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you shared with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(
-        screen.getByText('Other details: Please arrive 20 minutes before the start of your appointment'),
+        screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'))).toBeTruthy()
+
+      expect(screen.getByText(t('appointments.clinic', { clinicName: t('appointments.notAvailable') }))).toBeTruthy()
+      expect(
+        screen.getByText(t('appointments.physicalLocation', { physicalLocation: t('appointments.notAvailable') })),
+      ).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: t('appointments.notAvailable') })),
+      ).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
+        ),
       ).toBeTruthy()
 
       expect(screen.getByRole('header', { name: t('appointmentsTab.medicationWording.title') })).toBeTruthy()
       expect(screen.getByRole('link', { name: t('appointmentsTab.medicationWording.whatToBringLink') })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Need to reschedule?' })).toBeTruthy()
-      expect(
-        screen.getByText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on VA.gov.',
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByLabelText(
-          'If you need to reschedule this appointment, call us or schedule a new appointment on  V-A .gov .',
-        ),
-      ).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.reschedule.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.reschedule.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.reschedule.body')))).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
   })
 
@@ -464,46 +513,44 @@ context('VideoVAAppointment', () => {
         ],
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
-      expect(screen.getByRole('header', { name: 'Request for appointment' })).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We'll try to schedule your appointment in the next 2 business days. Check back here or call your facility for updates.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.request.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending.body'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredDateAndTimeFrame') })).toBeTruthy()
       expect(screen.getByText('10/01/2021 in the afternoon')).toBeTruthy()
       expect(screen.getByText('11/03/2021 in the morning')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Type of care' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.typeOfCare.pendingTitle') })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Video')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredModality') })).toBeTruthy()
+      expect(screen.getByText(t('video'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.canceled.whoCanceled.facility') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.reasonTitle') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
-      expect(screen.getByText('Email: test@test.com')).toBeTruthy()
-      expect(screen.getByText('Phone: (666) 666-6666')).toBeTruthy()
-      expect(screen.getByText('Best time to call: Morning')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.yourContactInfo') })).toBeTruthy()
+      expect(screen.getByText(`${t('email')}: test@test.com`)).toBeTruthy()
+      expect(screen.getByText(`${t('appointmentList.phoneOnly')}: (666) 666-6666`)).toBeTruthy()
+      expect(screen.getByText(t('appointments.bestTimeToCall') + 'Morning')).toBeTruthy()
 
-      expect(screen.getByRole('button', { name: 'Cancel request' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Cancel this appointment request')).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('cancelRequest') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('appointments.pending.cancelRequest.a11yHint'))).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -524,38 +571,30 @@ context('VideoVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Pending)
-      expect(screen.getByRole('header', { name: 'Request for appointment' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.request.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending.body'))).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredDateAndTimeFrame') })).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredModality') })).toBeTruthy()
+      expect(screen.getByText(t('video'))).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.canceled.whoCanceled.facility') })).toBeTruthy()
       expect(
-        screen.getByText(
-          "We'll try to schedule your appointment in the next 2 business days. Check back here or call your facility for updates.",
-        ),
+        screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))),
+      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'))).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.pending.reasonTitle') })).toBeTruthy()
+      expect(
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: t('appointments.notAvailable') })),
       ).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Video')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
-      expect(
-        screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
-        ),
-      ).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
-      expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
-
-      expect(screen.queryByRole('button', { name: 'Cancel request' })).toBeFalsy()
+      expect(screen.queryByRole('button', { name: t('cancelRequest') })).toBeFalsy()
     })
   })
 
@@ -584,50 +623,50 @@ context('VideoVAAppointment', () => {
         ],
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByRole('header', { name: 'Canceled request for appointment' })).toBeTruthy()
-      expect(screen.getByText('You canceled this request.')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.request.canceledTitle') })).toBeTruthy()
+      expect(
+        screen.getByText(t('appointments.canceled.request', { who: t('appointments.canceled.whoCanceled.you') })),
+      ).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredDateAndTimeFrame') })).toBeTruthy()
       expect(screen.getByText('10/01/2021 in the afternoon')).toBeTruthy()
       expect(screen.getByText('11/03/2021 in the morning')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Type of care' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.typeOfCare.pendingTitle') })).toBeTruthy()
       expect(screen.getByText('General check up')).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Video')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredModality') })).toBeTruthy()
+      expect(screen.getByText(t('video'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.canceled.whoCanceled.facility') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Running a Fever')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Your contact information' })).toBeTruthy()
-      expect(screen.getByText('Email: test@test.com')).toBeTruthy()
-      expect(screen.getByText('Phone: (666) 666-6666')).toBeTruthy()
-      expect(screen.getByText('Best time to call: Morning')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Need to request another appointment?' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.reasonTitle') })).toBeTruthy()
       expect(
-        screen.getByText('If you still need an appointment, call us or request a new appointment on VA.gov.'),
-      ).toBeTruthy()
-      expect(
-        screen.getByLabelText('If you still need an appointment, call us or request a new appointment on  V-A .gov .'),
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.yourContactInfo') })).toBeTruthy()
+      expect(screen.getByText(`${t('email')}: test@test.com`)).toBeTruthy()
+      expect(screen.getByText(`${t('appointmentList.phoneOnly')}: (666) 666-6666`)).toBeTruthy()
+      expect(screen.getByText(t('appointments.bestTimeToCall') + 'Morning')).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.reschedule.pending.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.reschedule.pending.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.reschedule.pending.body')))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
 
     it('renders correctly with null data', () => {
@@ -650,43 +689,37 @@ context('VideoVAAppointment', () => {
         typeOfCare: undefined,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByRole('header', { name: 'Canceled request for appointment' })).toBeTruthy()
-      expect(screen.getByText('You canceled this request.')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Preferred date and timeframe' })).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'How you prefer to attend' })).toBeTruthy()
-      expect(screen.getByText('Video')).toBeTruthy()
-
-      expect(screen.getByRole('header', { name: 'Facility' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.request.canceledTitle') })).toBeTruthy()
       expect(
-        screen.getByLabelText(
-          "We can't show the health care facility's information right now. Try again later. Or go to  V-A .gov to find your facility's information.",
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show the health care facility's information right now. Try again later. Or go to VA.gov to find your facility's information.",
-        ),
+        screen.getByText(t('appointments.canceled.request', { who: t('appointments.canceled.whoCanceled.you') })),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to find your  V-A  facility')).toBeTruthy()
-      expect(screen.getByAccessibilityHint("This page will open in your device's browser")).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredDateAndTimeFrame') })).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Details you’d like to share with your provider' })).toBeTruthy()
-      expect(screen.getByText('Reason: Not available')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.pending.preferredModality') })).toBeTruthy()
+      expect(screen.getByText(t('video'))).toBeTruthy()
 
-      expect(screen.getByRole('header', { name: 'Need to request another appointment?' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.canceled.whoCanceled.facility') })).toBeTruthy()
       expect(
-        screen.getByText('If you still need an appointment, call us or request a new appointment on VA.gov.'),
+        screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))),
       ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAnything'))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.inPersonVA.missingAddress.goToVALink')))).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('upcomingAppointmentDetails.findYourVAFacility.a11yHint'))).toBeTruthy()
+
+      expect(screen.getByRole('header', { name: t('appointments.pending.reasonTitle') })).toBeTruthy()
       expect(
-        screen.getByLabelText('If you still need an appointment, call us or request a new appointment on  V-A .gov .'),
+        screen.getByText(t('upcomingAppointmentDetails.reasonDetails', { reason: t('appointments.notAvailable') })),
       ).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Go to VA.gov to schedule' })).toBeTruthy()
-      expect(screen.getByLabelText('Go to  V-A .gov to schedule')).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.reschedule.pending.title') })).toBeTruthy()
+      expect(screen.getByText(t('appointments.reschedule.pending.body'))).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.reschedule.pending.body')))).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: t('appointments.vaSchedule') })).toBeTruthy()
+      expect(screen.getByLabelText(a11yLabelVA(t('appointments.vaSchedule')))).toBeTruthy()
     })
   })
   describe('VideoVAAppointment Canceled and Canceled Pending different cancel types that are not patient', () => {
@@ -697,7 +730,7 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.CLINIC,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByText('Larry Bird canceled this appointment.')).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending.cancelled.theTimeAndDate', { who: 'Larry Bird' }))).toBeTruthy()
     })
 
     it('canceled pending - clinic cancel', () => {
@@ -707,7 +740,7 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.CLINIC,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByText('Larry Bird canceled this request.')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled.request', { who: 'Larry Bird' }))).toBeTruthy()
     })
 
     it('canceled - clinic rebook', () => {
@@ -717,7 +750,7 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByText('Larry Bird canceled this appointment.')).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending.cancelled.theTimeAndDate', { who: 'Larry Bird' }))).toBeTruthy()
     })
 
     it('canceled pending - clinic rebook', () => {
@@ -727,7 +760,7 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.CLINIC_REBOOK,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByText('Larry Bird canceled this request.')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled.request', { who: 'Larry Bird' }))).toBeTruthy()
     })
 
     it('canceled - patient rebook', () => {
@@ -737,7 +770,11 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Canceled)
-      expect(screen.getByText('You canceled this appointment.')).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('appointments.pending.cancelled.theTimeAndDate', { who: t('appointments.canceled.whoCanceled.you') }),
+        ),
+      ).toBeTruthy()
     })
 
     it('canceled pending - patient rebook', () => {
@@ -747,7 +784,9 @@ context('VideoVAAppointment', () => {
         statusDetail: AppointmentStatusDetailTypeConsts.PATIENT_REBOOK,
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.CanceledAndPending)
-      expect(screen.getByText('You canceled this request.')).toBeTruthy()
+      expect(
+        screen.getByText(t('appointments.canceled.request', { who: t('appointments.canceled.whoCanceled.you') })),
+      ).toBeTruthy()
     })
   })
 
@@ -769,13 +808,13 @@ context('VideoVAAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
       expect(screen.getByText('5901 East 7th Street')).toBeTruthy()
       expect(screen.getByText('Long Beach, CA 90822')).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
     })
 
     it('has directions with lat long, no address, and has phone', () => {
@@ -796,21 +835,17 @@ context('VideoVAAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show your health care facility's address right now. But you can still get directions to the facility. You can also call your facility to get the address.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.hasDirections.noAddressOnly'))).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
     })
 
     it('has directions with lat long, no address, no phone', () => {
@@ -827,18 +862,14 @@ context('VideoVAAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show your health care facility's address or phone number right now. But you can still get directions to the facility. You can also find your facility's information on VA.gov.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.hasDirections.noPhone'))).toBeTruthy()
 
-      expect(screen.getByRole('link', { name: 'Get directions' })).toBeTruthy()
-      expect(screen.getByAccessibilityHint('Opens the maps application to get directions')).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('directions') })).toBeTruthy()
+      expect(screen.getByAccessibilityHint(t('directions.a11yHint'))).toBeTruthy()
 
-      expect(screen.getAllByRole('link', { name: 'Go to VA.gov to find your VA facility' })).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('appointments.inPersonVA.missingAddress.goToVALink') })).toBeTruthy()
     })
 
     it('no directions, no phone', () => {
@@ -853,13 +884,9 @@ context('VideoVAAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show your health care facility's address or phone number right now. Try again later. Or go to VA.gov to find your facility's information.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noPhone'))).toBeTruthy()
     })
 
     it('no directions, with phone', () => {
@@ -878,18 +905,14 @@ context('VideoVAAppointment', () => {
         },
       }
       initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
-      expect(screen.getByRole('header', { name: 'Where to attend' })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appointments.location.title') })).toBeTruthy()
       expect(screen.getByText('VA Long Beach Healthcare System')).toBeTruthy()
-      expect(
-        screen.getByText(
-          "We can't show your health care facility's address right now. Try again later. Or call your facility to get the address.",
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(t('appointments.inPersonVA.missingAddress.noDirections.noAddressOnly'))).toBeTruthy()
 
       expect(screen.getAllByRole('link', { name: '123-456-7890' })).toBeTruthy()
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
-      expect(screen.getAllByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-      expect(screen.getAllByLabelText('TTY: 7 1 1')).toBeTruthy()
+      expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+      expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
     })
   })
 })
