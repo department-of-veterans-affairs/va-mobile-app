@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Linking } from 'react-native'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
@@ -9,9 +9,20 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import NeedHelpData from './NeedHelpData'
 
+const mockNavigationSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useBeforeNavBackListener: jest.fn(),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('NeedHelpData', () => {
-  const initializeTestInstance = (isAppeal?: boolean) => {
-    render(<NeedHelpData isAppeal={isAppeal} />)
+  const initializeTestInstance = (appealId?: string) => {
+    render(<NeedHelpData appealId={appealId} />)
   }
 
   beforeEach(() => {
@@ -24,7 +35,7 @@ context('NeedHelpData', () => {
     expect(screen.getByText(displayedTextPhoneNumber(t('8008271000')))).toBeTruthy()
     expect(screen.queryByText(t('appealDetails.viewMoreDetails'))).toBeFalsy()
     expect(screen.queryByText(t('goToVAGov'))).toBeFalsy()
-    initializeTestInstance(true)
+    initializeTestInstance('A1113')
     expect(screen.getByText(t('appealDetails.viewMoreDetails'))).toBeTruthy()
     expect(screen.getByText(t('goToVAGov'))).toBeTruthy()
   })
@@ -35,10 +46,16 @@ context('NeedHelpData', () => {
   })
 
   describe('when isAppeal is true', () => {
-    it('should launch external link on click of the url', () => {
-      initializeTestInstance(true)
+    it('should launch webview on click of the url', () => {
+      initializeTestInstance('A1113')
       fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
-      expect(Alert.alert).toHaveBeenCalled()
+      const expectNavArgs = {
+        url: 'https://va.gov/track-claims/appeals/' + 'A1113',
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('webview.claims.loading'),
+        useSSO: true,
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 })

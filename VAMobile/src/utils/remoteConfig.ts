@@ -74,7 +74,7 @@ export const defaults: FeatureToggleValues = {
   preferredNameGenderWaygate: true,
   prescriptions: true,
   submitEvidenceExpansion: false,
-  sso: false,
+  sso: true,
   testFeature: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
