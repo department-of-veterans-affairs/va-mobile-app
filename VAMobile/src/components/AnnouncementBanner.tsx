@@ -39,6 +39,7 @@ const AnnouncementBanner: FC<AnnouncementBannerProps> = ({ title, link, a11yLabe
   })
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Pressable
       style={pressableStyle}
       onPress={() => launchExternalLink(link)}

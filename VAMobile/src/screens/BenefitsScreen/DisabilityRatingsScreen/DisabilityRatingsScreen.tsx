@@ -159,6 +159,7 @@ function DisabilityRatingsScreen() {
     return (
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"
@@ -168,6 +169,7 @@ function DisabilityRatingsScreen() {
           </TextView>
         </Box>
         <Box accessible={true}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             accessibilityRole="text"
@@ -198,6 +200,7 @@ function DisabilityRatingsScreen() {
           </TextView>
         </Box>
         <Box accessible={true}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             selectable={false}

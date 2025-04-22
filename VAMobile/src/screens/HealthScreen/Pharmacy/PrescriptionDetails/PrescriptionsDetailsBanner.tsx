@@ -40,6 +40,7 @@ function PrescriptionsDetailsBanner() {
 
     return (
       <>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}

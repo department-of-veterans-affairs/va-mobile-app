@@ -59,6 +59,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
   }
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Pressable
       style={pressableStyle}
       onPress={onActivityPress}

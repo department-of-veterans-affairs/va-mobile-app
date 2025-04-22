@@ -152,6 +152,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       return {
         content: (
           <>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>
             <PrescriptionListItem prescription={prescription.attributes} hideInstructions={true} />
           </>

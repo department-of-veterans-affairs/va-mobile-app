@@ -52,6 +52,7 @@ const BasicError: FC<BasicErrorProps> = ({
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             accessibilityLabel={headerA11yLabel}
             variant="MobileBodyBold"

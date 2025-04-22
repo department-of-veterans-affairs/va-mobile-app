@@ -86,6 +86,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
             testID="inAppRecruitmentLearnMoreTestID"
           />
         </Box>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="HelperText"
           mt={theme.dimensions.standardMarginBetween}

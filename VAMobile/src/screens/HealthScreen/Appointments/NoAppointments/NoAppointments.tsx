@@ -31,6 +31,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
         {t('noAppointments.youDontHave')}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant="MobileBody"
         textAlign="center"

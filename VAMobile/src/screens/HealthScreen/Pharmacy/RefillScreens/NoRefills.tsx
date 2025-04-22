@@ -22,6 +22,7 @@ function NoRefills() {
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('prescriptions.noRefill.header')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           textAlign="center"

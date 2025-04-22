@@ -116,6 +116,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       return (
         <View key={index}>
           <View>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <MenuItem
               onPress={onPressMenu}
               viewStyle={menuStyle}
@@ -136,6 +137,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
   return (
     <>
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <Pressable onPress={showMenu} style={launchBtnStyle} accessibilityLabel={t('more')} accessibilityRole={'link'}>
         <IconWithText name="MoreHoriz" fill={currentTheme.colors.icon.active} label={t('more')} />
       </Pressable>

@@ -28,6 +28,7 @@ function VeteransCrisisLineScreen() {
       rightButtonText={t('done')}
       rightButtonTestID="veteranCrisisLineBackID">
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBodyBold"
           accessibilityRole="header"

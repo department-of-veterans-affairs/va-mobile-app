@@ -123,6 +123,7 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
   return (
     <Box>
       <Box {...headerWrapperProps}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant={'MobileBody'} accessibilityLabel={t('selectedOutOfTotal.a11yLabel', selectedOutOfTotal)}>
           {t('selectedOutOfTotal', selectedOutOfTotal)}
         </TextView>

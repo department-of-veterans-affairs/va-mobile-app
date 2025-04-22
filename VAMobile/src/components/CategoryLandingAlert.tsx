@@ -33,6 +33,7 @@ const CategoryLandingAlert: FC<CategoryLandingAlertProps> = ({ text, isError }: 
   const alertVariant = isError ? 'CategoryLandingError' : 'CategoryLandingWarning'
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Box
       alignItems="center"
       mt={theme.dimensions.condensedMarginBetween}

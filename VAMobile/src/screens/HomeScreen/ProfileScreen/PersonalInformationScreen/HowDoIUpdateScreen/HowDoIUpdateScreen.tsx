@@ -33,6 +33,7 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
   function renderVAMedicalCenterSection() {
     return (
       <Box>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('howDoIUpdate.ifEnrolledInVAHealth'))}
@@ -47,6 +48,7 @@ function HowDoIUpdateScreen({ route }: HowDoIUpdateScreenProps) {
           a11yHint={t('howDoIUpdate.findYourNearestVAMedicalCenter.a11yHint')}
           testID="findNearestVAMedicalCenterID"
         />
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={t('howDoIUpdate.ifNotEnrolledInVAHealth.a11yLabel')}

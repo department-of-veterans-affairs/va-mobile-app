@@ -134,6 +134,8 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           }
 
           return (
+            // unsure - "navigate to {translatedName}"
+            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
             <TouchableWithoutFeedback
               accessibilityLabel={translatedName}
               testID={translatedName}

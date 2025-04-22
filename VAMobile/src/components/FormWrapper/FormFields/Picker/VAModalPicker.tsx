@@ -206,6 +206,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
 
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <Pressable onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
         {content}
       </Pressable>

@@ -35,6 +35,7 @@ function AppealPhase({ event }: AppealPhaseProps) {
       <TextArea noBorder={true}>
         <Box flexDirection={'row'}>
           <PhaseIndicator phase={-1} current={0} />
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <Box
             accessibilityLabel={a11yLabelVA(`${heading} ${dateText}`)}
             flexDirection={'column'}

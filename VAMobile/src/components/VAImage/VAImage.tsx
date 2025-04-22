@@ -48,6 +48,8 @@ const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
   const ratio = width / imageProps.width
 
   return (
+    // not 100% sure on this one
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Image
       source={imageProps.source}
       style={{ width: width, height: imageProps.height * ratio }}

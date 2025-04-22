@@ -95,6 +95,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     }
 
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <StyledPressable
         onPress={onPressCallback}
         accessibilityLabel={translation(buttonText)}
@@ -121,6 +122,7 @@ function CarouselTabBar({ onCarouselEnd, screenList, translation }: CarouselTabB
     }
 
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <StyledPressable
         onPress={onContinue}
         accessibilityLabel={translation(buttonText)}

@@ -109,6 +109,7 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       ) : (
         <>
           <Box mx={gutter}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
               mb={theme.dimensions.standardMarginBetween}

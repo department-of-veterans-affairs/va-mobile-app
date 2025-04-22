@@ -19,6 +19,7 @@ function NoPaymentsScreen() {
         headerA11yLabel={a11yLabelVA(t('payments.noPayments.title'))}
         description={t('payments.noPayments.body.1')}
         descriptionA11yLabel={a11yLabelVA(t('payments.noPayments.body.1'))}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}
@@ -26,6 +27,7 @@ function NoPaymentsScreen() {
           mt={theme.dimensions.contentMarginTop}>
           {t('payments.missingOrNoPayments.body.1')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}

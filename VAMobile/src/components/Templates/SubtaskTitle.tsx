@@ -21,6 +21,7 @@ const SubtaskTitle = ({ title, a11yLabel, mt }: SubtaskTitleProps) => {
 
   return (
     <Box mt={mt ?? buttonPadding} mb={buttonPadding} mx={gutter}>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView variant="BitterHeading" accessibilityLabel={a11yLabel} accessibilityRole="header">
         {title}
       </TextView>

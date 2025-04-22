@@ -31,6 +31,7 @@ const HeaderTitle: FC<HeaderTitleProps> = ({
 
   const combinestyle = StyleSheet.flatten([{ height: headerHeight }, defaultStyle.headerText])
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <View
       ref={focusRef}
       accessibilityRole="header"

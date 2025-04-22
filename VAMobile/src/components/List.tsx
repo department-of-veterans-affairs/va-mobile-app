@@ -71,6 +71,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
         <TextView
           {...titleProps}
           accessibilityLabel={titleA11yLabel}

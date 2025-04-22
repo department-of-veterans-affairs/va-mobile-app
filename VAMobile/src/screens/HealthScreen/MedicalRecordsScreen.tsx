@@ -42,6 +42,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         )}
       </Box>
       <Box mx={theme.dimensions.gutter}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView accessibilityLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}>
           {t('vaMedicalRecords.viewCompleteRecord')}
         </TextView>

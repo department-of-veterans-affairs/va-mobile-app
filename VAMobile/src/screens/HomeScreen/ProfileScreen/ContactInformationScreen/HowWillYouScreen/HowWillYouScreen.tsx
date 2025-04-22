@@ -24,6 +24,7 @@ function HowWillYouScreen({}: HowWillYouScreenProps) {
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('howWillYou.useInfo.1')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('howWillYou.useInfo.2'))}>
           {t('howWillYou.useInfo.2')}
         </TextView>

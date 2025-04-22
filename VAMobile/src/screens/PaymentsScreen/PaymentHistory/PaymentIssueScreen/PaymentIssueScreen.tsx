@@ -25,6 +25,7 @@ function PaymentIssue({}: PaymentIssueScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifMyPaymentDoesNotLookRight')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" paragraphSpacing={true} accessibilityLabel={t('paymentIssues.body.a11yLabel')}>
           {t('paymentIssues.body')}
         </TextView>

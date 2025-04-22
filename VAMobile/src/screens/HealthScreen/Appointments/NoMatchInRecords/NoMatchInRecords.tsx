@@ -14,6 +14,7 @@ function NoMatchInRecords() {
   function accordionContent(textID: string) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(getTranslation(`noMatch.${textID}`, t))}>
           {getTranslation(`noMatch.${textID}`, t)}
         </TextView>
@@ -24,6 +25,7 @@ function NoMatchInRecords() {
 
   function accordionHeader(textID: string) {
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <TextView variant="MobileBodyBold" accessibilityLabel={a11yLabelVA(getTranslation(`noMatch.${textID}`, t))}>
         {getTranslation(`noMatch.${textID}`, t)}
       </TextView>
@@ -34,6 +36,7 @@ function NoMatchInRecords() {
     <VAScrollView>
       <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mx={theme.dimensions.gutter}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBodyBold"
             accessibilityLabel={a11yLabelVA(t('noMatch.title'))}
@@ -41,6 +44,7 @@ function NoMatchInRecords() {
             accessible={true}>
             {t('noMatch.title')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             accessibilityLabel={a11yLabelVA(t('noMatch.noMatch'))}

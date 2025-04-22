@@ -139,9 +139,11 @@ function AppointmentDetailsModality({ attributes, subType, type }: AppointmentDe
 
   return (
     <Box>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={a11yLabelVA(heading || '')}>
         {heading}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant="MobileBody"
         paragraphSpacing={

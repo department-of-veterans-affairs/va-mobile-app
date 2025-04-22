@@ -35,6 +35,7 @@ function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {display}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} accessibilityLabel={a11yLabel}>
           {text}
         </TextView>

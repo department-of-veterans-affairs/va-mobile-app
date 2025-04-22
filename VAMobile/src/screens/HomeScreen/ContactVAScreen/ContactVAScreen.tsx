@@ -33,12 +33,14 @@ function ContactVAScreen({ navigation }: ContactVAScreenProps) {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineButton />
         <TextArea>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBodyBold"
             accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))}
             accessibilityRole="header">
             {t('contactVA.va411.callMy')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             mt={standardMarginBetween}

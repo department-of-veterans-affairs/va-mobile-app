@@ -351,6 +351,7 @@ export function HomeScreen({}: HomeScreenProps) {
               {activityFeatureInDowntime ? (
                 <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
               ) : (
+                // eslint-disable-next-line react-native-a11y/has-accessibility-hint
                 <Box
                   flexDirection="row"
                   alignItems="center"
@@ -411,6 +412,7 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView variant="ActivityFooter" accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
                 {t('activity.informationNotIncluded')}
               </TextView>
@@ -460,6 +462,11 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                     <Box
                       accessible={true}
+                      accessibilityHint={
+                        showDisabilityRating
+                          ? t('disabilityRating.title.unobfuscatedLabel')
+                          : t('disabilityRating.title.obfuscatedLabel')
+                      }
                       accessibilityLabel={
                         showDisabilityRating
                           ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data?.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
@@ -514,6 +521,11 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                     <Box
                       accessible={true}
+                      accessibilityHint={
+                        showCompensation
+                          ? t('monthlyCompensationPayment.unobfuscated')
+                          : t('monthlyCompensationPayment.obfuscated')
+                      }
                       accessibilityLabel={
                         showCompensation
                           ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
@@ -564,6 +576,7 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             mx={theme.dimensions.gutter}
             mb={theme.dimensions.standardMarginBetween}

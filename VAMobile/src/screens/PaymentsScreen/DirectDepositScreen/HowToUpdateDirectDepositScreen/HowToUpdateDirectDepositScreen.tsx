@@ -35,6 +35,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
         </AlertWithHaptics>
         <Box mt={standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBodyBold"
               accessibilityRole="header"

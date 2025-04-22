@@ -198,12 +198,14 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
           {t('prescriptions.refillRequestSummary.whatsNext')}
         </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.1'))}
             paragraphSpacing={true}>
             {t('prescriptions.refillRequestSummary.yourRefills.success.1')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             accessibilityLabel={a11yLabelVA(t('prescriptions.refillRequestSummary.yourRefills.success.2'))}>

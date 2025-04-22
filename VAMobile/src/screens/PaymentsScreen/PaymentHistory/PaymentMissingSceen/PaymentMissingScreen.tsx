@@ -26,12 +26,14 @@ function PaymentMissing({}: PaymentMissingScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('payments.ifIAmMissingPayemt')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}
           accessibilityLabel={a11yLabelVA(t('payments.missingOrNoPayments.body.1'))}>
           {t('payments.missingOrNoPayments.body.1')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}

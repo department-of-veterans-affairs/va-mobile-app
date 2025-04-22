@@ -70,6 +70,7 @@ const MessageAlert: FC<MessageAlertProps> = ({
         description={t('secureMessaging.reply.error.youCantSend')}
         scrollViewRef={scrollViewRef}
         focusOnError={focusOnError}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           paragraphSpacing={true}

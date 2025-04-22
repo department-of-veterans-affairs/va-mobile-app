@@ -65,6 +65,7 @@ function EstimatedDecisionDate({ maxEstDate, showCovidMessage }: EstimatedDecisi
 
   return (
     <TextArea>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <Box accessibilityLabel={`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
         <TextView variant="MobileBodyBold">{displayDate}</TextView>

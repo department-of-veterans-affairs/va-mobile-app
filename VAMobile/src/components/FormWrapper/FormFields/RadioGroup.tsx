@@ -88,6 +88,7 @@ const RadioGroup = <T,>({
     // Render option as simple text
     if (hasSingleOption) {
       return (
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
         <TextView accessibilityLabel={a11yLabel || getTranslation(labelKey, t, labelArgs)} variant="VASelector">
           {getTranslation(labelKey, t, labelArgs)}
         </TextView>

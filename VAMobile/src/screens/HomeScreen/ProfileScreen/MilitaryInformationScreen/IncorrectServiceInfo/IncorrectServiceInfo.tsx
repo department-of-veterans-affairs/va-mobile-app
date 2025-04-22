@@ -26,6 +26,7 @@ function IncorrectServiceInfo({}: IncorrectServiceInfoScreenProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.1')}
           variant="MobileBody"
@@ -33,12 +34,14 @@ function IncorrectServiceInfo({}: IncorrectServiceInfoScreenProps) {
           mb={theme.dimensions.formMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body.1')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.2')}
           variant="MobileBody"
           mb={theme.dimensions.formMarginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body.2')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           accessibilityLabel={t('militaryInformation.incorrectServiceInfo.bodyA11yLabel.3')}
           variant="MobileBody"

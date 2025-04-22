@@ -405,6 +405,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               <TextView variant="HelperText">
                 {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
               </TextView>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView
                 variant="HelperText"
                 accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', {

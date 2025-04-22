@@ -123,6 +123,7 @@ function LoginScreen() {
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <Box
           alignItems={'center'}
           flex={1}

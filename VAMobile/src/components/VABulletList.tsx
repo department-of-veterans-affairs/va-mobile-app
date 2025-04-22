@@ -86,6 +86,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bul
             <Box mr={20} mt={12}>
               <Box backgroundColor={bulletColor || 'bullet'} height={6} width={6} />
             </Box>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView {...textViewProps} accessibilityLabel={a11yLabel}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}

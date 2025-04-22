@@ -383,6 +383,8 @@ export class Menu extends React.Component<Props, State> {
           transparent
           onDismiss={this._onDismiss}>
           <View style={StyleSheet.absoluteFill}>
+            {/* should we i18n the label below? */}
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <Pressable
               accessible={true}
               style={[StyleSheet.absoluteFill]}
