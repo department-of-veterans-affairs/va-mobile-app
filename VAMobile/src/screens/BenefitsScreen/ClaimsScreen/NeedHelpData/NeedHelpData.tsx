@@ -2,8 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -33,6 +35,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_CLAIM_APPEAL_STATUS, appealId))
               navigateTo('Webview', {
                 url: LINK_URL_CLAIM_APPEAL_STATUS + appealId,
                 displayTitle: t('webview.vagov'),

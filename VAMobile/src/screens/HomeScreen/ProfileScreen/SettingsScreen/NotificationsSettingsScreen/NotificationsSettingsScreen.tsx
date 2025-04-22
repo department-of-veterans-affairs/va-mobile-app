@@ -234,6 +234,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
             <LinkWithAnalytics
               type="custom"
               onPress={() => {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
                 navigateTo('Webview', {
                   url: LINK_URL_VA_NOTIFICATIONS,
                   displayTitle: t('webview.vagov'),
