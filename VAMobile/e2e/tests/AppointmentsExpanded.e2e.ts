@@ -361,7 +361,7 @@ const checkUpcomingApptDetails = async (
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
   await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment, travelClaimNumber)
 
-  if (travelClaimNumber) {
+  if (pastAppointment && travelClaimNumber) {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
     await expect(element(by.text('Claim number: ' + travelClaimNumber))).toExist()
   } else {
