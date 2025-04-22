@@ -58,6 +58,7 @@ import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
+import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
@@ -115,6 +116,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const [showDisabilityRating, setShowDisabilityRating] = useState(false)
   const [showCompensation, setShowCompensation] = useState(false)
+  const [paymentBreakdownVisible, setPaymentBreakdownVisible] = useState(false)
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
@@ -200,6 +202,8 @@ export function HomeScreen({}: HomeScreenProps) {
     }
   }, [serviceHistoryQuery?.data?.serviceHistory, personalInformationQuery?.data?.id])
 
+  console.log('NEK')
+  console.log(paymentHistoryQuery.data ? JSON.stringify(paymentHistoryQuery.data) : paymentHistoryQuery.data)
   const recurringPayment = {
     amount: paymentHistoryQuery.data?.meta.recurringPayment.amount,
     date: paymentHistoryQuery.data?.meta.recurringPayment.date,
@@ -535,7 +539,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       <ObfuscatedTextView
                         showText={showCompensation}
                         obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate((recurringPayment.date as string).substring(0, 10), 'MMMM d, yyyy')}`}
                         revealedTextProps={{
                           variant: 'VeteranStatusProof',
                           color: 'primary',
@@ -552,6 +556,13 @@ export function HomeScreen({}: HomeScreenProps) {
                         label={showCompensation ? t('hide') : t('show')}
                         buttonType={ButtonVariants.Primary}
                         testID={'showCompensationTestID'}
+                      />
+                      <Box mt={theme.dimensions.condensedMarginBetween} />
+                      <Button
+                        onPress={() => setPaymentBreakdownVisible(true)}
+                        label={t('monthlyCompensationPayment.seeDetails')}
+                        buttonType={ButtonVariants.Secondary}
+                        testID={'seePaymentBreakdownButtonTestID'}
                       />
                     </Box>
                   </Box>
@@ -589,6 +600,7 @@ export function HomeScreen({}: HomeScreenProps) {
           />
         </Box>
       </Box>
+      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }

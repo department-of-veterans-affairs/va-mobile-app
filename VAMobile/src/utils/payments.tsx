@@ -9,7 +9,7 @@ import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'com
 import { VATheme } from 'styles/theme'
 
 import { getTestIDFromTextLines } from './accessibility'
-import { formatDateUtc, getFormattedDate } from './formattingUtils'
+import { formatDateUtc, getFormattedDate, numberToUSDollars, strNumberToNumber } from './formattingUtils'
 
 /**
  * @param paymentList - type PaymentsList, list of payments
@@ -55,7 +55,7 @@ export const getGroupedPayments = (
   let groupIdx = 0
   return map(sortedDates, (date) => {
     const listOfPayments = paymentsGroupedByDate[date]
-    const listItems = getListItemsForPayments(
+    const { listItems, totalAmount } = getListItemsForPayments(
       listOfPayments,
       translations,
       onPaymentPress,
@@ -67,7 +67,7 @@ export const getGroupedPayments = (
     const displayedDate = getFormattedDate(date, 'MMMM d, yyyy')
     return (
       <Box key={date} mb={theme.dimensions.standardMarginBetween}>
-        <DefaultList items={listItems} title={displayedDate} />
+        <DefaultList items={listItems} title={displayedDate} rightTitleText={totalAmount + ''} />
       </Box>
     )
   })
@@ -89,11 +89,11 @@ const getListItemsForPayments = (
   onPaymentPress: (payement: PaymentsData) => void,
   paymentsPagination: PaymentsMetaPagination,
   groupIdx: number,
-): Array<DefaultListItemObj> => {
+): { listItems: Array<DefaultListItemObj>; totalAmount: string } => {
   const listItems: Array<DefaultListItemObj> = []
   const { t } = translations
   const { currentPage, perPage, totalEntries } = paymentsPagination
-
+  let totalAmount = 0
   forEach(listOfPayments, (payment, index) => {
     const { paymentType, amount } = payment.attributes
     const textLines: Array<TextLineWithIconProps> = []
@@ -102,6 +102,8 @@ const getListItemsForPayments = (
       { text: t('text.raw', { text: paymentType }), variant: 'MobileBodyBold' },
       { text: t('text.raw', { text: amount }), variant: 'MobileBody' },
     )
+
+    totalAmount += strNumberToNumber(amount)
 
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = t('listPosition', { position, total: totalEntries })
@@ -115,7 +117,12 @@ const getListItemsForPayments = (
     })
   })
 
-  return listItems
+  console.log(`totalAmount: ${totalAmount.toFixed(2)}`)
+
+  return {
+    listItems,
+    totalAmount: numberToUSDollars(totalAmount),
+  }
 }
 
 /**

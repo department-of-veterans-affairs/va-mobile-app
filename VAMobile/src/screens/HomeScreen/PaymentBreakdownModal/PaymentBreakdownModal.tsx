@@ -1,0 +1,209 @@
+import React, { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Modal, Pressable, PressableProps, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { usePayments } from 'api/payments'
+import { PaymentsData } from 'api/types'
+import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { getFormattedDate } from 'utils/formattingUtils'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+export type PaymentBreakdownModalProps = {
+  /** Boolean to show or hide the modal */
+  visible: boolean
+  /** Function to set modal visibility */
+  setVisible: (value: boolean) => void
+}
+const MODAL_GUTTER = 16
+const MAX_WIDTH = 400
+
+/**
+ * Prompt to unlock demo mode for App. Used for Android as IOS already has `Alert.prompt`
+ */
+const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalProps) => {
+  const insets = useSafeAreaInsets()
+  const theme = useTheme()
+  const navigateTo = useRouteNavigation()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const paymentHistoryQuery = usePayments('', 1)
+  const windowWidth = useWindowDimensions().width
+
+  const lastPaymentAmount = useMemo(() => {
+    if (paymentHistoryQuery.data?.meta.recurringPayment.amount) {
+      return paymentHistoryQuery.data?.meta.recurringPayment.amount
+    }
+    return ''
+  }, [paymentHistoryQuery.data])
+
+  const lastPaymentDate = useMemo(() => {
+    if (paymentHistoryQuery.data?.meta.recurringPayment.date) {
+      return paymentHistoryQuery.data.meta.recurringPayment.date.substring(0, 10)
+    }
+    return ''
+  }, [paymentHistoryQuery.data])
+
+  const renderPaymentBreakdown = useCallback(() => {
+    if (!paymentHistoryQuery.data?.meta.recurringPayment) {
+      return null
+    }
+
+    // parse out the month
+    // TODO fix later time issue
+    const lastPaymentDateYYYYDDMM = getFormattedDate(lastPaymentDate, 'yyyy-MM-dd')
+    const paymentsByLastDate: PaymentsData[] = paymentHistoryQuery.data?.paymentsByDate?.[lastPaymentDateYYYYDDMM] || []
+    const payments = []
+    paymentsByLastDate.forEach((payment, idx) => {
+      payments.push(
+        <Box flexDirection="row" justifyContent="space-between" key={idx}>
+          <TextView variant="MobileBody">{payment.attributes.paymentType}</TextView>
+          <TextView variant="MobileBody">{payment.attributes.amount}</TextView>
+        </Box>,
+      )
+    })
+
+    return payments
+  }, [paymentHistoryQuery.data, lastPaymentDate])
+
+  const onCancel = () => {
+    setVisible(false)
+  }
+
+  const pressableProps: PressableProps = {
+    onPress: onCancel,
+    accessibilityRole: 'button',
+    accessibilityHint: t('paymentBreakdownModal.close.a11yHint'),
+  }
+
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: theme.colors.background.menu,
+  }
+
+  const padding = 5
+  return (
+    <View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={visible}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={onCancel}>
+        <Box
+          flex={1}
+          width={'100%'}
+          flexDirection="column"
+          accessibilityViewIsModal={true}
+          justifyContent={'center'}
+          alignItems={'center'}>
+          <Box width={'100%'} height={'100%'} backgroundColor="modalOverlay" opacity={0.3} position={'absolute'} />
+          <Box
+            backgroundColor={'alertBox'}
+            borderRadius={5}
+            style={{ width: windowWidth >= MAX_WIDTH ? MAX_WIDTH : windowWidth, maxHeight: '50%' }}
+            ml={insets.left}
+            mr={insets.right}
+            mx={theme.dimensions.gutter}>
+            <Box
+              borderColor={'primary'}
+              borderBottomWidth={1}
+              flexDirection="row"
+              justifyContent="space-between"
+              py={12}
+              px={MODAL_GUTTER}>
+              <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
+                {t('paymentBreakdownModal.title')}
+              </TextView>
+              <Box justifyContent={'center'}>
+                <Pressable {...pressableProps}>
+                  <Icon name={'Close'} fill={'base'} width={30} height={30} />
+                </Pressable>
+              </Box>
+            </Box>
+            <VAScrollView contentContainerStyle={scrollStyles} removeInsets={true}>
+              <Box p={MODAL_GUTTER}>
+                <TextView variant="MobileBodyBold" allowFontScaling={false}>
+                  {getFormattedDate(lastPaymentDate, 'MMMM dd, yyyy')}
+                </TextView>
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                {renderPaymentBreakdown()}
+                <Box flexDirection="row" justifyContent="space-between">
+                  <TextView variant="MobileBodyBold">{t('paymentBreakdownModal.total')}</TextView>
+                  <TextView variant="MobileBodyBold">{lastPaymentAmount}</TextView>
+                </Box>
+              </Box>
+            </VAScrollView>
+            <Box
+              borderColor={'primary'}
+              borderTopWidth={1}
+              p={padding}
+              flexDirection="row"
+              justifyContent="center"
+              alignItems={'center'}
+              py={12}
+              px={MODAL_GUTTER}>
+              <LinkWithAnalytics
+                type="custom"
+                text={'Go to payment history'}
+                icon={{ name: 'Launch', fill: 'default' }}
+                linkType={'directions'}
+                onPress={() => {
+                  onCancel()
+                  navigateTo('PaymentsTab', {
+                    screen: 'PaymentHistory',
+                  })
+                }}
+                testID="howToFixLegalNameID"
+              />
+            </Box>
+          </Box>
+        </Box>
+      </Modal>
+    </View>
+  )
+}
+
+export default PaymentBreakdownModal

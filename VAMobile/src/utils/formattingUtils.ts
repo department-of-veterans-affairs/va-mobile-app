@@ -359,3 +359,25 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
 export const getTranslation = (key: string, t: TFunction, options?: $Dictionary): string => {
   return options ? t(key, options) : t(key)
 }
+
+/**
+ * Converts string amount to a number $2,200.40 -> 2200.4
+ * @param amount - the amount as a string, may have currency symbol
+ */
+export const strNumberToNumber = (amount: string): number => {
+  // replace anything that is not a number with empty string
+  return Number(amount.replace(/[^\d.]/g, ''))
+}
+
+/**
+ * Convert string into USD curerncy string
+ * @param amount
+ */
+export const numberToUSDollars = (amount: number): string => {
+  const USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+
+  return USDollar.format(amount)
+}
