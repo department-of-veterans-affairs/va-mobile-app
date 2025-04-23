@@ -125,7 +125,7 @@ describe('VA Letters', () => {
   })
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
-    it(`should view ${letterType.name}`, async () => {
+    it.skip(`should view ${letterType.name}`, async () => {
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()

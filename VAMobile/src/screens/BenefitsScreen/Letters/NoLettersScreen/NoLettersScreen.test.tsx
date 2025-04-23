@@ -1,19 +1,19 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import NoLettersScreen from './NoLettersScreen'
 
 context('NoLettersScreen', () => {
   it('initializes correctly', () => {
     render(<NoLettersScreen />)
-    expect(screen.getByRole('header', { name: "We couldn't find information about your VA letters" })).toBeTruthy()
-    expect(
-      screen.getByText('If you think you should have access to this information, please call our VA benefits hotline.'),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-827-1000' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+    expect(screen.getByRole('header', { name: t('noLetters.header') })).toBeTruthy()
+    expect(screen.getByText(t('noLetters.ifYouThink'))).toBeTruthy()
+    expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
   })
 })

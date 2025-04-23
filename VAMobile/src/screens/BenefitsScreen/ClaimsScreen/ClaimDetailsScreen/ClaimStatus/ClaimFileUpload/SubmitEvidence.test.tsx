@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { t } from 'i18next'
+
 import { context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 
 import SubmitEvidence from './SubmitEvidence'
@@ -23,23 +25,17 @@ context('SubmitEvidence', () => {
   describe('initializes', () => {
     it('displays correctly', async () => {
       renderWithData()
-      await waitFor(() => expect(screen.getByRole('header', { name: 'Submit evidence' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.submitEvidence') })).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByRole('header', { name: 'What to know before you submit evidence' })).toBeTruthy(),
+        expect(screen.getByRole('header', { name: t('claimDetails.submitEvidence.whatToKnow.title') })).toBeTruthy(),
       )
-      await waitFor(() =>
-        expect(
-          screen.getByText(
-            'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, your claim will go back to that step for review.',
-          ),
-        ).toBeTruthy(),
-      )
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Select a file' })).toBeTruthy())
-      await waitFor(() => expect(screen.getByRole('button', { name: 'Take or select photos' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('claimDetails.submitEvidence.whatToKnow.body'))).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('button', { name: t('fileUpload.selectAFile') })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })).toBeTruthy())
     })
     it('on select file press', async () => {
       renderWithData()
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Select a file' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('fileUpload.selectAFile') })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('SelectFile', {
           claimID: '600156928',
@@ -48,7 +44,7 @@ context('SubmitEvidence', () => {
     })
     it('on take or select pphotos press', async () => {
       renderWithData()
-      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Take or select photos' })))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('fileUpload.takeOrSelectPhotos') })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('TakePhotos', {
           claimID: '600156928',
