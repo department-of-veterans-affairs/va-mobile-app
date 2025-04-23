@@ -37,7 +37,7 @@ function ErrorScreen({ route }: ErrorScreenProps) {
             />
           ),
         }
-      case 'noEligibleType':
+      case 'unsupportedType':
         return {
           title: t('travelPay.error.notEligible.title'),
           textLines: [t('travelPay.error.notEligible.text')],

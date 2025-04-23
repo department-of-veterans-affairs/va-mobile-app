@@ -177,8 +177,8 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
     navigateTo('TravelClaimHelpScreen')
   }
 
-  const navigateToNoEligibleTypeScreen = () => {
-    navigateToErrorScreen('noEligibleType')
+  const navigateToUnsupportedTypeScreen = () => {
+    navigateToErrorScreen('unsupportedType')
   }
 
   const navigateToNoAddressScreen = () => {
@@ -229,7 +229,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       primaryButtonTestID: 'yesTestID',
       primaryButtonOnPress: navigateToNextScreen,
       secondaryButtonText: t('no'),
-      secondaryButtonOnPress: navigateToNoEligibleTypeScreen,
+      secondaryButtonOnPress: navigateToUnsupportedTypeScreen,
     },
     {
       name: 'VehicleScreen',
@@ -245,7 +245,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       primaryButtonTestID: 'yesTestID',
       primaryButtonOnPress: address ? navigateToNextScreen : navigateToNoAddressScreen,
       secondaryButtonText: t('no'),
-      secondaryButtonOnPress: navigateToNoEligibleTypeScreen,
+      secondaryButtonOnPress: navigateToUnsupportedTypeScreen,
     },
     {
       name: 'AddressScreen',
@@ -261,7 +261,7 @@ function SubmitMileageTravelPayScreen({ navigation, initialRouteIndex = 1, route
       primaryButtonTestID: 'yesTestID',
       primaryButtonOnPress: navigateToNextScreen,
       secondaryButtonText: t('no'),
-      secondaryButtonOnPress: navigateToNoEligibleTypeScreen,
+      secondaryButtonOnPress: navigateToUnsupportedTypeScreen,
     },
     {
       name: 'ReviewClaimScreen',

@@ -1,1 +1,1 @@
-export type TravelPayError = 'noAddress' | 'noEligibleType' | 'error'
+export type TravelPayError = 'noAddress' | 'unsupportedType' | 'error'

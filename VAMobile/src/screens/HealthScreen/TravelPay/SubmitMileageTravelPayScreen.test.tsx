@@ -111,11 +111,11 @@ context('SubmitMileageTravelPayScreen', () => {
       })
 
       describe('when the user presses the No button', () => {
-        it('should navigate to Error Screen with noEligibleType error', () => {
+        it('should navigate to Error Screen with unsupportedType error', () => {
           initializeTestInstance(2)
           const button = screen.getByTestId(t('No'))
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'noEligibleType' })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
         })
       })
 
@@ -176,11 +176,11 @@ context('SubmitMileageTravelPayScreen', () => {
       })
 
       describe('when user presses the No button', () => {
-        it('should navigate to the Error Screen with noEligibleType error', () => {
+        it('should navigate to the Error Screen with unsupportedType error', () => {
           initializeTestInstance(3)
           const button = screen.getByTestId(t('No'))
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'noEligibleType' })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
         })
       })
 
@@ -226,11 +226,11 @@ context('SubmitMileageTravelPayScreen', () => {
         })
       })
       describe('when user presses the No button', () => {
-        it('should navigate to the Error Screen with noEligibleType error', () => {
+        it('should navigate to the Error Screen with unsupportedType error', () => {
           initializeTestInstance(4, { residentialAddress })
           const button = screen.getByTestId(t('No'))
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'noEligibleType' })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
         })
       })
 

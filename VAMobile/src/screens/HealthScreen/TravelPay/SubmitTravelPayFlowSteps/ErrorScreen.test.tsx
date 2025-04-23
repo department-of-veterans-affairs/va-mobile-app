@@ -41,8 +41,8 @@ context('ErrorScreen', () => {
     expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
   })
 
-  it('should display no eligible error when error is noEligibleType', () => {
-    initializeTestInstance('noEligibleType')
+  it('should display no eligible error when error is unsupportedType', () => {
+    initializeTestInstance('unsupportedType')
     expect(screen.getByText(t('travelPay.error.notEligible.title'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.error.notEligible.text'))).toBeTruthy()
     expect(screen.getByTestId('fileOnlineComponent')).toBeTruthy()

@@ -281,7 +281,7 @@ const checkErrorScreen = async (error: string) => {
       await expect(element(by.id(TravelPayE2eIdConstants.UPDATE_ADDRESS_LINK_ID))).toExist()
       await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '0'))).toExist()
       break
-    case 'noEligibleType':
+    case 'unsupportedType':
       await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TEXT_ID + '0'))).toExist()
       break
     case 'error':
@@ -430,20 +430,20 @@ describe('Travel Pay', () => {
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
-    await checkErrorScreen('noEligibleType')
+    await checkErrorScreen('unsupportedType')
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
-    await checkErrorScreen('noEligibleType')
+    await checkErrorScreen('unsupportedType')
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
-    await checkErrorScreen('noEligibleType')
+    await checkErrorScreen('unsupportedType')
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
   })
 
