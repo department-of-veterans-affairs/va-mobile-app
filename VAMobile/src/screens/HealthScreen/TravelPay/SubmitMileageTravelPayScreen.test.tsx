@@ -26,6 +26,11 @@ const residentialAddress: AddressData = {
   zipCodeSuffix: '1234',
 }
 
+const params = {
+  appointmentDateTime: '2021-01-01T00:00:00Z',
+  facilityName: 'Test Facility',
+}
+
 const mockActionSheetSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
@@ -43,8 +48,14 @@ context('SubmitMileageTravelPayScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
-  const props = mockNavProps(undefined, { navigate: mockNavigationSpy, goBack: mockBack })
-  const initializeTestInstance = (initialIndex: number = 2, contactInformation?: Partial<UserContactInformation>) => {
+  const props = mockNavProps(
+    undefined,
+    { navigate: mockNavigationSpy, goBack: mockBack },
+    {
+      params,
+    },
+  )
+  const initializeTestInstance = (initialIndex: number = 1, contactInformation?: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
     if (contactInformation) {
       queriesData = [
@@ -61,51 +72,22 @@ context('SubmitMileageTravelPayScreen', () => {
 
   it('should initialize correctly', () => {
     initializeTestInstance()
-    expect(screen.getByTestId('MileageScreen')).toBeTruthy()
+    expect(screen.getByTestId('InterstitialScreen')).toBeTruthy()
   })
 
   describe('Screens', () => {
-    describe('Not Eligible Screen', () => {
-      it('should show Not Eligible Screen when index is 0', () => {
+    describe('Error Screen', () => {
+      it('should show Error Screen when index is 0', () => {
         initializeTestInstance(0)
-        expect(screen.getByTestId('NotEligibleTypeScreen')).toBeTruthy()
-        expect(screen.getByText(t('cancel'))).toBeTruthy()
+        expect(screen.getByTestId('ErrorScreen')).toBeTruthy()
         expect(screen.getByText(t('close'))).toBeTruthy()
       })
-      describe('when the user presses the Cancel button', () => {
+      describe('when the user presses the Close button', () => {
         it('should navigate back', () => {
           initializeTestInstance(0)
-          const button = screen.getByTestId('leftCancelTestID')
+          const button = screen.getByTestId('rightCloseTestID')
           fireEvent.press(button)
           expect(mockBack).toHaveBeenCalled()
-        })
-      })
-      describe('when the user presses the Close button', () => {
-        it('should navigate back to previous screen', () => {
-          initializeTestInstance(0)
-          const closeButton = screen.getByTestId('closeTestID')
-
-          fireEvent.press(closeButton)
-          expect(mockNavigationSpy).toBeCalledWith('MileageScreen')
-        })
-      })
-    })
-    describe('ErrorScreen', () => {
-      it('should show Error Screen when index is 1', () => {
-        initializeTestInstance(1)
-        expect(screen.getByTestId('ErrorScreen')).toBeTruthy()
-        expect(screen.getAllByText(t('close'))).toHaveLength(2)
-      })
-      describe('when the user presses the Close buttons', () => {
-        it('should navigate back', () => {
-          initializeTestInstance(1)
-          const leftClose = screen.getByTestId('leftCloseTestID')
-          const closeButton = screen.getByTestId('closeTestID')
-          const buttons = [leftClose, closeButton]
-          buttons.forEach((button) => {
-            fireEvent.press(button)
-          })
-          expect(mockBack).toHaveBeenCalledTimes(2)
         })
       })
     })
@@ -113,112 +95,151 @@ context('SubmitMileageTravelPayScreen', () => {
       it('should show Mileage Screen when index is 2', () => {
         initializeTestInstance(2)
         expect(screen.getByTestId('MileageScreen')).toBeTruthy()
-        expect(screen.getByText(t('cancel'))).toBeTruthy()
+        expect(screen.getByText(t('back'))).toBeTruthy()
+        expect(screen.getByText(t('help'))).toBeTruthy()
         expect(screen.getByText(t('yes'))).toBeTruthy()
         expect(screen.getByText(t('no'))).toBeTruthy()
       })
+
       describe('when the user presses the Yes button', () => {
         it('should navigate to the next screen', () => {
           initializeTestInstance(2)
           const button = screen.getByTestId('yesTestID')
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('VehicleScreen', {})
+          expect(mockNavigationSpy).toHaveBeenCalledWith('VehicleScreen', undefined)
         })
       })
 
       describe('when the user presses the No button', () => {
-        it('should navigate to Not Eligible Screen', () => {
+        it('should navigate to Error Screen with unsupportedType error', () => {
           initializeTestInstance(2)
           const button = screen.getByTestId(t('No'))
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('NotEligibleTypeScreen')
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
         })
       })
 
-      describe('when the user presses on the Cancel button', () => {
-        it('should navigate back', () => {
+      describe('when the user presses on the Back button', () => {
+        it('should navigate back to the Interstitial Screen', () => {
           initializeTestInstance(2)
-          const button = screen.getByTestId('leftCancelTestID')
+          const button = screen.getByTestId('leftBackTestID')
           fireEvent.press(button)
-          expect(mockBack).toHaveBeenCalled()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('InterstitialScreen', undefined)
+        })
+      })
+
+      describe('when the user presses on the Help button', () => {
+        it('should navigate to the Travel Claim Help Screen', () => {
+          initializeTestInstance(2)
+          const button = screen.getByTestId('rightHelpTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelClaimHelpScreen')
         })
       })
     })
+
     describe('VehicleScreen', () => {
       it('should show VehicleScreen when index is 3', () => {
         initializeTestInstance(3)
         expect(screen.getByTestId('VehicleScreen')).toBeTruthy()
-        expect(screen.getByText(t('cancel'))).toBeTruthy()
+        expect(screen.getByText(t('back'))).toBeTruthy()
+        expect(screen.getByText(t('help'))).toBeTruthy()
         expect(screen.getByText(t('yes'))).toBeTruthy()
         expect(screen.getByText(t('no'))).toBeTruthy()
       })
-      describe('when the user presses the Yes button', () => {
-        it('should navigate to the next screen', () => {
+      describe('when the user presses the Back button', () => {
+        it('should navigate back', () => {
           initializeTestInstance(3)
-          const button = screen.getByTestId('yesTestID')
+          const button = screen.getByTestId('leftBackTestID')
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('AddressScreen', {})
+          expect(mockNavigationSpy).toHaveBeenCalledWith('MileageScreen', undefined)
         })
       })
+
+      describe('when the user presses the Yes button', () => {
+        describe('when the user has an address', () => {
+          it('should navigate to the next screen', () => {
+            initializeTestInstance(3, { residentialAddress })
+            const button = screen.getByTestId('yesTestID')
+            fireEvent.press(button)
+            expect(mockNavigationSpy).toHaveBeenCalledWith('AddressScreen', undefined)
+          })
+        })
+        describe('when the user does not have an address', () => {
+          it('should navigate to the Error Screen with noAddress error', () => {
+            initializeTestInstance(3)
+            const button = screen.getByTestId('yesTestID')
+            fireEvent.press(button)
+            expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'noAddress' })
+          })
+        })
+      })
+
       describe('when user presses the No button', () => {
-        it('should navigate to Not Eligible Screen', () => {
+        it('should navigate to the Error Screen with unsupportedType error', () => {
           initializeTestInstance(3)
           const button = screen.getByTestId(t('No'))
           fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('NotEligibleTypeScreen')
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
+        })
+      })
+
+      describe('when the user presses on the Help button', () => {
+        it('should navigate to the Travel Claim Help Screen', () => {
+          initializeTestInstance(3)
+          const button = screen.getByTestId('rightHelpTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelClaimHelpScreen')
         })
       })
     })
+
     describe('AddressScreen', () => {
-      describe('when the user has an address', () => {
-        it('should show AddressScreen when index is 4', () => {
-          initializeTestInstance(4, {
-            residentialAddress,
-          })
-          expect(screen.getByTestId('AddressScreen')).toBeTruthy()
-          expect(screen.getByText(t('cancel'))).toBeTruthy()
-          expect(screen.getByText(t('yes'))).toBeTruthy()
-          expect(screen.getByText(t('no'))).toBeTruthy()
+      it('should show AddressScreen when index is 4', () => {
+        initializeTestInstance(4, {
+          residentialAddress,
         })
-
-        describe('when the user presses the Yes button', () => {
-          it('should navigate to the next screen', () => {
-            initializeTestInstance(4, { residentialAddress })
-            const button = screen.getByTestId('yesTestID')
-            fireEvent.press(button)
-            expect(mockNavigationSpy).toHaveBeenCalledWith('ReviewClaimScreen', {})
-          })
+        expect(screen.getByTestId('AddressScreen')).toBeTruthy()
+        expect(screen.getByText(t('back'))).toBeTruthy()
+        expect(screen.getByText(t('help'))).toBeTruthy()
+        expect(screen.getByText(t('yes'))).toBeTruthy()
+        expect(screen.getByText(t('no'))).toBeTruthy()
+      })
+      describe('when the user presses the Back button', () => {
+        it('should navigate back', () => {
+          initializeTestInstance(4)
+          const button = screen.getByTestId('leftBackTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('VehicleScreen', undefined)
         })
+      })
 
-        describe('when user presses the No button', () => {
-          it('should navigate to Not Eligible Screen', () => {
-            initializeTestInstance(4, { residentialAddress })
-            const button = screen.getByTestId(t('No'))
-            fireEvent.press(button)
-            expect(mockNavigationSpy).toHaveBeenCalledWith('NotEligibleTypeScreen')
+      describe('when the user presses the Yes button', () => {
+        it('should navigate to the next screen with the appointment date time', () => {
+          initializeTestInstance(4, { residentialAddress })
+          const button = screen.getByTestId('yesTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ReviewClaimScreen', {
+            appointmentDateTime: params.appointmentDateTime,
+            facilityName: params.facilityName,
           })
         })
       })
-      describe('when the user does NOT have an address', () => {
-        it('should show AddressScreen when index is 4', () => {
-          initializeTestInstance(4)
-          expect(screen.getByTestId('AddressScreen')).toBeTruthy()
-          const cancelButtons = screen.getAllByText(t('cancel'))
-          expect(cancelButtons).toHaveLength(2)
-          expect(screen.queryByText(t('no'))).toBeFalsy()
+      describe('when user presses the No button', () => {
+        it('should navigate to the Error Screen with unsupportedType error', () => {
+          initializeTestInstance(4, { residentialAddress })
+          const button = screen.getByTestId(t('No'))
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', { error: 'unsupportedType' })
         })
+      })
 
-        describe('when the user presses the Cancel button', () => {
-          it('should navigate back', () => {
-            initializeTestInstance(4)
-            const cancelButton = screen.getByTestId('cancelTestID')
-            const leftCancelButton = screen.getByTestId('leftCancelTestID')
-            const cancelButtons = [cancelButton, leftCancelButton]
-            cancelButtons.forEach((button) => {
-              fireEvent.press(button)
-            })
-            expect(mockBack).toHaveBeenCalledTimes(2)
-          })
+      describe('when the user presses on the Help button', () => {
+        it('should navigate to the Travel Claim Help Screen', () => {
+          initializeTestInstance(4, { residentialAddress })
+          const button = screen.getByTestId('rightHelpTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelClaimHelpScreen')
         })
       })
     })
@@ -226,23 +247,25 @@ context('SubmitMileageTravelPayScreen', () => {
       it('should show ReviewClaimScreen when index is 5', () => {
         initializeTestInstance(5)
         expect(screen.getByTestId('ReviewClaimScreen')).toBeTruthy()
-        expect(screen.getByText(t('cancel'))).toBeTruthy()
-        expect(screen.getByText(t('submit'))).toBeTruthy()
+        expect(screen.getByText(t('back'))).toBeTruthy()
+        expect(screen.getByText(t('help'))).toBeTruthy()
       })
-      describe('when the user presses the Submit button', () => {
-        it('should navigate to success screen', () => {
-          initializeTestInstance(5)
-          const button = screen.getByTestId('submitTestID')
-          fireEvent.press(button)
-          expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {})
-        })
-      })
-      describe('when the user presses the Cancel button', () => {
+
+      describe('when the user presses the Back button', () => {
         it('should navigate back', () => {
           initializeTestInstance(5)
-          const button = screen.getByTestId('leftCancelTestID')
+          const button = screen.getByTestId('leftBackTestID')
           fireEvent.press(button)
-          expect(mockBack).toHaveBeenCalled()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('AddressScreen', undefined)
+        })
+      })
+
+      describe('when the user presses the Help button', () => {
+        it('should navigate to the Travel Claim Help Screen', () => {
+          initializeTestInstance(5)
+          const button = screen.getByTestId('rightHelpTestID')
+          fireEvent.press(button)
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelClaimHelpScreen')
         })
       })
     })
@@ -250,17 +273,23 @@ context('SubmitMileageTravelPayScreen', () => {
       it('should show SubmitSuccessScreen when index is 6', () => {
         initializeTestInstance(6)
         expect(screen.getByTestId('SubmitSuccessScreen')).toBeTruthy()
+        expect(screen.getByText(t('close'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.continueToClaim'))).toBeTruthy()
       })
       describe('when the user presses the Close button', () => {
         it('should exit the flow', () => {
           initializeTestInstance(6)
-          const leftClose = screen.getByTestId('leftCloseTestID')
-          const closeButton = screen.getByTestId('closeTestID')
-          const buttons = [leftClose, closeButton]
-          buttons.forEach((button) => {
-            fireEvent.press(button)
-          })
-          expect(mockBack).toHaveBeenCalledTimes(2)
+          const button = screen.getByTestId('rightCloseTestID')
+          fireEvent.press(button)
+          expect(mockBack).toHaveBeenCalled()
+        })
+      })
+      describe('when the user presses the Continue to Claim button', () => {
+        it('should navigate back', () => {
+          initializeTestInstance(6)
+          const button = screen.getByTestId('continueToClaimTestID')
+          fireEvent.press(button)
+          expect(mockBack).toHaveBeenCalled()
         })
       })
     })

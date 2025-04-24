@@ -31,6 +31,9 @@ import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 import SubmitMileageTravelPayScreen from './TravelPay'
+import BeneficiaryTravelAgreement from './TravelPay/SubmitTravelPayFlowSteps/BeneficiaryTravelAgreement'
+import BurdenStatement from './TravelPay/SubmitTravelPayFlowSteps/BurdenStatement'
+import TravelClaimHelp from './TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -49,8 +52,12 @@ export type HealthStackParamList = WebviewStackParams & {
     appointmentID: string
   }
   SubmitTravelPayClaimScreen: {
-    appointmentDateTime?: string
+    appointmentDateTime: string
+    facilityName: string
   }
+  BurdenStatementScreen: undefined
+  BeneficiaryTravelAgreementScreen: undefined
+  TravelClaimHelpScreen: undefined
   Messages: undefined
   SecureMessaging: {
     activeTab: number
@@ -221,6 +228,24 @@ export const getHealthScreens = () => {
       name="SubmitTravelPayClaimScreen"
       component={SubmitMileageTravelPayScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'TravelClaimHelpScreen'}
+      name="TravelClaimHelpScreen"
+      component={TravelClaimHelp}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'BurdenStatementScreen'}
+      name="BurdenStatementScreen"
+      component={BurdenStatement}
+      options={LARGE_PANEL_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'BeneficiaryTravelAgreementScreen'}
+      name="BeneficiaryTravelAgreementScreen"
+      component={BeneficiaryTravelAgreement}
+      options={LARGE_PANEL_OPTIONS}
     />,
     <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]

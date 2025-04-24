@@ -37,6 +37,13 @@ export const LINK_URL_ASK_VA_GOV = 'https://ask.va.gov/'
 export const LINK_URL_GO_TO_VA_GOV = 'https://va.gov'
 export const LINK_URL_ABOUT_PACT_ACT = 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/'
 export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/apply/application/introduction'
+export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS =
+  'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-health'
+export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
+  'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#eligibility-for-general-health'
+export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
+  'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/'
 export const ENVIRONMENT = 'test'
 export const CARRIER_TRACKING_URL_USPS = 'https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum='
 export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums='
