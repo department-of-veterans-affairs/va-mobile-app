@@ -16,7 +16,5 @@ context('MileageScreen', () => {
   it('initializes correctly', () => {
     initializeTestInstance()
     expect(screen.getByText(t('travelPay.mileageQuestion'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.mileageQualifier'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.referToPortal'))).toBeTruthy()
   })
 })

@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
-import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
 import AddressScreen from './AddressScreen'
@@ -41,7 +40,7 @@ context('AddressScreen', () => {
   })
   const props = mockNavProps(undefined, { navigate: mockNavigationSpy })
 
-  const initializeTestInstance = (contactInformation?: Partial<UserContactInformation>) => {
+  const initializeTestInstance = (contactInformation: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
 
     if (contactInformation) {
@@ -57,38 +56,13 @@ context('AddressScreen', () => {
     render(<AddressScreen {...props} />, { queriesData })
   }
 
-  it('navigates to EditAddress screen when residential address is pressed', () => {
-    initializeTestInstance()
-    const testID =
-      t('contactInformation.residentialAddress') +
-      ' ' +
-      t('contactInformation.addYour', { field: t(`contactInformation.residentialAddress`).toLowerCase() })
-    const button = screen.getByTestId(testID)
-    fireEvent.press(button)
-    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', {
-      displayTitle: t('contactInformation.residentialAddress'),
-      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
-    })
-  })
-
   it('initializes correctly', () => {
-    initializeTestInstance()
+    initializeTestInstance({ residentialAddress })
     expect(screen.getByText(t('travelPay.addressQuestion'))).toBeTruthy()
-  })
-
-  describe('when there is address data', () => {
-    it('renders the residential address', () => {
-      initializeTestInstance({ residentialAddress })
-      expect(screen.getByText(t('travelPay.addressQualifier'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.referToPortal'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.addressPOBox'))).toBeTruthy()
-    })
-  })
-
-  describe('when there is no address data', () => {
-    it('renders the no address text', () => {
-      initializeTestInstance()
-      expect(screen.getByText(t('travelPay.noAddressText'))).toBeTruthy()
-    })
+    expect(screen.getByText(residentialAddress.addressLine1)).toBeTruthy()
+    expect(
+      screen.getByText([residentialAddress.city, residentialAddress.stateCode, residentialAddress.zipCode].join(', ')),
+    ).toBeTruthy()
+    expect(screen.getByText(t('travelPay.addressConfirmation'))).toBeTruthy()
   })
 })

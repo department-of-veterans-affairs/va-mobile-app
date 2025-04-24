@@ -1,20 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
+
 import { useContactInformation } from 'api/contactInformation'
-import { Box, TextArea, TextLine, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextArea, TextLine, TextView, VABulletList, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ navigation, route }: ReviewClaimScreenProps) {
+function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
+  const { appointmentDateTime, facilityName } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
+
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
+  const [error, setError] = useState<string>('')
 
   const theme = useTheme()
   const isPortrait = useOrientation()
@@ -24,38 +32,43 @@ function ReviewClaimScreen({ navigation, route }: ReviewClaimScreenProps) {
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="reviewClaimScreenID">
       <Box
-        mb={theme.dimensions.contentMarginBottom}
+        mb={theme.dimensions.standardMarginBetween}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView testID="reviewTitleID" variant="BitterBoldHeading" accessibilityRole="header">
+        <TextView testID="reviewTitleID" variant="BitterHeading" accessibilityRole="header">
           {t('travelPay.reviewTitle')}
         </TextView>
-        <TextView testID="reviewTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('travelPay.reviewText')}
-        </TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextArea>
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <TextView testID="whatID" variant="MobileBodyBold">
               {t('travelPay.reviewDetails.what')}
             </TextView>
+
             <TextView testID="milageOnlyID" variant="MobileBody">
               {t('travelPay.reviewDetails.milageOnly')}
             </TextView>
-          </TextArea>
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextArea>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <VABulletList
+                listOfText={[
+                  DateTime.fromISO(appointmentDateTime).toFormat(
+                    `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
+                  ),
+                ]}
+              />
+            </Box>
+          </Box>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <TextView testID="howID" variant="MobileBodyBold">
               {t('travelPay.reviewDetails.how')}
             </TextView>
             <TextView testID="vehicleID" variant="MobileBody">
               {t('travelPay.reviewDetails.vehicle')}
             </TextView>
-          </TextArea>
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <TextArea>
+          </Box>
+          <Box>
             <TextView testID="whereID" variant="MobileBodyBold">
               {t('travelPay.reviewDetails.where')}
             </TextView>
@@ -66,7 +79,59 @@ function ReviewClaimScreen({ navigation, route }: ReviewClaimScreenProps) {
                 </TextView>
               </>
             ))}
-          </TextArea>
+          </Box>
+        </TextArea>
+      </Box>
+      <Box
+        mt={theme.dimensions.formMarginBetween}
+        mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        <TextView testID="travelAgreementHeaderID" variant="MobileBodyBold">
+          {t('travelPay.travelAgreementHeader')}
+        </TextView>
+        <TextView mt={theme.dimensions.condensedMarginBetween} testID="penaltyStatementID" variant="MobileBody">
+          <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatementLine') + ' '}</TextView>
+          {t('travelPay.penaltyStatement')}
+        </TextView>
+        <TextView mt={theme.dimensions.formMarginBetween} testID="penaltyStatementAgreementID" variant="MobileBody">
+          {t('travelPay.penaltyStatement.agreement')}
+        </TextView>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('travelPay.reviewLink')}
+            testID="travelAgreementLinkID"
+            onPress={() => {
+              navigateTo('BeneficiaryTravelAgreementScreen')
+            }}
+          />
+        </Box>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <Checkbox
+            label={t('travelPay.penaltyStatement.checkbox')}
+            onPress={() => {
+              setIsCheckboxChecked(!isCheckboxChecked)
+            }}
+            checked={isCheckboxChecked}
+            error={error}
+            testID="checkboxTestID"
+          />
+        </Box>
+        <Box my={theme.dimensions.textAndButtonLargeMargin}>
+          <Button
+            onPress={() => {
+              if (isCheckboxChecked) {
+                navigateTo('SubmitSuccessScreen', {
+                  loading: true,
+                  appointmentDateTime,
+                  facilityName,
+                })
+              } else {
+                setError(t('required'))
+              }
+            }}
+            testID="submitTestID"
+            label={t('travelPay.submitClaim')}
+          />
         </Box>
       </Box>
     </VAScrollView>

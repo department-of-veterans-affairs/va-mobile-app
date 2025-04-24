@@ -15,8 +15,11 @@ context('FileOnlineComponent', () => {
   it('should initialize correctly', () => {
     initializeTestInstance()
 
-    expect(screen.getByText(t('travelPay.youCanStillFile'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.youCanStillFile.bulletOne'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.youCanStillFile.bulletTwo'))).toBeTruthy()
+    expect(screen.getByTestId('fileOnlineComponent')).toBeTruthy()
+    expect(screen.getByText(t('travelPay.otherWaysToFile'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.otherWaysToFile.method1'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.otherWaysToFile.method2'))).toBeTruthy()
+    expect(screen.getByTestId('fileOnlineBTSSSLink')).toBeTruthy()
+    expect(screen.getByTestId('fileOnlineVAFormLink')).toBeTruthy()
   })
 })
