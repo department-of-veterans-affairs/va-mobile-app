@@ -52,7 +52,7 @@ context('PrescriptionDetails', () => {
       expect(screen.getByRole('header', { name: t('prescription.details.orderedOnHeader') })).toBeTruthy()
       expect(screen.getByRole('header', { name: t('prescription.details.vaFacilityHeader') })).toBeTruthy()
       expect(screen.getByRole('link', { name: '(217) 636-6712' })).toBeTruthy()
-      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
     })
   })
 
@@ -69,9 +69,9 @@ context('PrescriptionDetails', () => {
         prescriptionNumber: '',
       })
       expect(screen.getByRole('header', { name: 'SOMATROPIN 5MG INJ (VI)' })).toBeTruthy()
-      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} None noted`)).toBeTruthy()
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} ${t('noneNoted')}`)).toBeTruthy()
       expect(screen.getByRole('header', { name: t('prescription.details.instructionsHeader') })).toBeTruthy()
-      expect(screen.getAllByText('None noted')).toBeTruthy()
+      expect(screen.getAllByText(t('noneNoted'))).toBeTruthy()
       expect(screen.getByRole('header', { name: t('prescription.details.refillLeftHeader') })).toBeTruthy()
       expect(screen.getByRole('header', { name: t('fillDate') })).toBeTruthy()
       expect(screen.getByRole('header', { name: t('prescription.details.quantityHeader') })).toBeTruthy()
