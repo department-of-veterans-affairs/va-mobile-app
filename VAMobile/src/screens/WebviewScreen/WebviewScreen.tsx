@@ -94,7 +94,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const { url, displayTitle, loadingMessage, useSSO } = route.params
-  const isSSOSession = featureEnabled('sso') && useSSO
+  const isSSOSession = useSSO
 
   const theme = useTheme()
   const webviewRef = useRef() as MutableRefObject<WebView>
