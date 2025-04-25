@@ -176,7 +176,6 @@ export function HealthScreen({}: HealthScreenProps) {
             {t('healthHelp.info')}
           </TextView>
           <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
-            {/* should we add a hint here? - "Takes you to the HealthHelp screen?" */}
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileFooterLink"

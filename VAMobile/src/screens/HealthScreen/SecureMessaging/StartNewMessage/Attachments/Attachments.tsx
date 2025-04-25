@@ -199,7 +199,7 @@ function Attachments({ navigation, route }: AttachmentsProps) {
         </TextView>
         <VABulletList listOfText={bullets} />
         {image && uri && (
-          // need to set label has \ufeff so that samsung just says image and not unliable image
+          // need to set label has \ufeff so that samsung just says image and not unlabeled image
           // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <Box
             mb={theme.dimensions.standardMarginBetween}

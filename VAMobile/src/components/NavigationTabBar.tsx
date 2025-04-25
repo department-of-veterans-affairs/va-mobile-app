@@ -134,10 +134,9 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           }
 
           return (
-            // unsure - "navigate to {translatedName}"
-            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
             <TouchableWithoutFeedback
               accessibilityLabel={translatedName}
+              accessibilityHint={t('navigateTo', { translatedName })}
               testID={translatedName}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>

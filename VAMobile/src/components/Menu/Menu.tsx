@@ -14,6 +14,8 @@ import {
   ViewStyle,
 } from 'react-native'
 
+import { TFunction } from 'i18next'
+
 import theme from 'styles/themes/standardTheme'
 
 export enum Position {
@@ -128,6 +130,8 @@ interface Props {
   style?: StyleProp<ViewStyle>
   /** method to run when menu is hidden */
   onHidden?: () => Record<string, unknown>
+  /** translation function */
+  t: TFunction
 }
 
 type AnimationType = {
@@ -372,7 +376,7 @@ export class Menu extends React.Component<Props, State> {
       menuState === STATES.SHOWN ||
       animationStarted
 
-    const { testID, style, children } = this.props
+    const { testID, style, children, t } = this.props
 
     return (
       <View collapsable={false} testID={testID}>
@@ -383,13 +387,12 @@ export class Menu extends React.Component<Props, State> {
           transparent
           onDismiss={this._onDismiss}>
           <View style={StyleSheet.absoluteFill}>
-            {/* should we i18n the label below? */}
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <Pressable
               accessible={true}
               style={[StyleSheet.absoluteFill]}
               onPress={this.hide}
-              accessibilityLabel={'close menu'}
+              accessibilityLabel={t('closeMenu')}
               accessibilityRole={'button'}
             />
             <Animated.View
