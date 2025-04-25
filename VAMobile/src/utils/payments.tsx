@@ -67,7 +67,7 @@ export const getGroupedPayments = (
     const displayedDate = getFormattedDate(date, 'MMMM d, yyyy')
     return (
       <Box key={date} mb={theme.dimensions.standardMarginBetween}>
-        <DefaultList items={listItems} title={displayedDate} rightTitleText={totalAmount + ''} />
+        <DefaultList items={listItems} title={displayedDate} rightTitleText={totalAmount} />
       </Box>
     )
   })
