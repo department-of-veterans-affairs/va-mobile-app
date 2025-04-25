@@ -22,7 +22,7 @@ const MODAL_GUTTER = 16
 const MAX_WIDTH = 400
 
 /**
- * Payment Breakdown Modal that shows the breakdown of payments from the last recurring payment`
+ * Payment Breakdown Modal that shows the breakdown of payments from the last recurring payment
  */
 const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalProps) => {
   const insets = useSafeAreaInsets()
@@ -58,7 +58,9 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     paymentsByLastDate.forEach((payment, idx) => {
       payments.push(
         <Box flexDirection="row" justifyContent="space-between" key={idx}>
-          <TextView variant="MobileBody">{payment.attributes.paymentType}</TextView>
+          <TextView flex={1} variant="MobileBody">
+            {payment.attributes.paymentType}
+          </TextView>
           <TextView variant="MobileBody">{payment.attributes.amount}</TextView>
         </Box>,
       )
@@ -103,7 +105,8 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
           <Box
             backgroundColor={'alertBox'}
             borderRadius={5}
-            style={{ width: windowWidth >= MAX_WIDTH ? MAX_WIDTH : windowWidth, maxHeight: '50%' }}
+            width={windowWidth >= MAX_WIDTH ? MAX_WIDTH : windowWidth}
+            maxHeight={'50%'}
             ml={insets.left}
             mr={insets.right}
             mx={theme.dimensions.gutter}>
@@ -126,7 +129,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
             <VAScrollView contentContainerStyle={scrollStyles} removeInsets={true}>
               <Box p={MODAL_GUTTER}>
                 <TextView variant="MobileBodyBold" allowFontScaling={false}>
-                  {getFormattedDate(lastPaymentDate, 'MMMM dd, yyyy')}
+                  {getFormattedDate(lastPaymentDate, 'MMMM d, yyyy')}
                 </TextView>
                 {renderPaymentBreakdown()}
                 <Box flexDirection="row" justifyContent="space-between">
@@ -146,9 +149,8 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
               px={MODAL_GUTTER}>
               <LinkWithAnalytics
                 type="custom"
-                text={'Go to payment history'}
+                text={t('paymentBreakdownModal.goToPaymentHistory')}
                 icon={{ name: 'Launch', fill: 'default' }}
-                linkType={'directions'}
                 onPress={() => {
                   onCancel()
                   navigateTo('PaymentsTab', {

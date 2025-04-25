@@ -18,9 +18,13 @@ export const HomeE2eIdConstants = {
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
-  MONTHLY_PAYMENT_TITLE_TEXT: 'Compensation & Pension - Recurring',
-  MONTHLY_PAYMENT_AMOUNT_TEXT: '$3,084.74',
+  MONTHLY_PAYMENT_TITLE_TEXT: 'Latest payment',
+  MONTHLY_PAYMENT_AMOUNT_TEXT: '$1,775.93',
   MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT: '$••••••••••',
+  LATEST_PAYMENT_ROW_ONE_PAYMENT_TYPE: 'Regular Chapter 31',
+  LATEST_PAYMENT_ROW_ONE_AMOUNT: '$603.33',
+  LATEST_PAYMENT_ROW_TWO_PAYMENT_TYPE: 'Post-9/11 GI Bill',
+  LATEST_PAYMENT_ROW_TWO_AMOUNT: '$1,172.60',
 }
 
 beforeAll(async () => {
@@ -173,13 +177,30 @@ describe('Home Screen', () => {
     await expect(element(by.text(HomeE2eIdConstants.DISABILITY_RATING_SUBTEXT_TEXT))).toExist()
   })
 
-  it('should reveal compensation on pressing show', async () => {
+  it('should reveal latest payment on pressing show', async () => {
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_TITLE_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_OBFUSCATED_TEXT))).toExist()
 
     await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID)).tap()
 
     await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_AMOUNT_TEXT))).toExist()
+  })
+
+  it('should show latest payment breakdown', async () => {
+    await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID)).tap()
+
+    await expect(element(by.text(HomeE2eIdConstants.LATEST_PAYMENT_ROW_ONE_PAYMENT_TYPE))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.LATEST_PAYMENT_ROW_ONE_AMOUNT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.LATEST_PAYMENT_ROW_TWO_PAYMENT_TYPE))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.LATEST_PAYMENT_ROW_TWO_AMOUNT))).toExist()
+  })
+
+  it('payment breakdown: should navigate to prescription home and then tab to home  ', async () => {
+    await element(by.id(CommonE2eIdConstants.LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID)).tap()
+    await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_SCREEN_ID))).toExist()
+
+    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+    await expect(element(by.text(HomeE2eIdConstants.MONTHLY_PAYMENT_TITLE_TEXT))).toExist()
   })
 
   it('should show home page VA Resources content', async () => {

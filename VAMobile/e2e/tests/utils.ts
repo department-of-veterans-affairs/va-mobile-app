@@ -84,6 +84,8 @@ export const CommonE2eIdConstants = {
   DISABILITY_RATING_OBFUSCATED_PERCENT_TEXT: '•••••%',
   HOME_SCREEN_SHOW_DISABILITY_BUTTON_ID: 'showDisabilityTestID',
   HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID: 'showCompensationTestID',
+  HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
+  LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
   //health
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
@@ -120,6 +122,7 @@ export const CommonE2eIdConstants = {
   //payments
   PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
   DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
+  PAYMENT_HISTORY_SCREEN_ID: 'paymentHistoryTestID',
   //profile, settings
   PROFILE_SCROLL_ID: 'profileID',
   PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',

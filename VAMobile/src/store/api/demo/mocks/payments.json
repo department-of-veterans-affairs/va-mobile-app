@@ -16,6 +16,18 @@
             }
           },
           {
+            "id": "4396444",
+            "type": "payment_history",
+            "attributes": {
+              "account": "********0567",
+              "amount": "$1,172.60",
+              "bank": "BANK OF AMERICA, N.A.",
+              "date": "2024-06-01T00:00:00.000-03:00",
+              "paymentMethod": "Direct Deposit",
+              "paymentType": "Post-9/11 GI Bill"
+            }
+          },
+          {
             "id": "5927090",
             "type": "payment_history",
             "attributes": {
@@ -93,11 +105,11 @@
             "currentPage": 1,
             "perPage": 10,
             "totalPages": 1,
-            "totalEntries": 7
+            "totalEntries": 8
           },
           "availableYears": [2024, 2023],
           "recurringPayment": {
-            "amount": "$603.33",
+            "amount": "$1,775.93",
             "date": "2024-06-01T00:00:00.000-05:00"
           }
         },

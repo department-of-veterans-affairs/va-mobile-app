@@ -361,7 +361,7 @@ export const getTranslation = (key: string, t: TFunction, options?: $Dictionary)
 }
 
 /**
- * Converts string amount to a number $2,200.40 -> 2200.4
+ * Converts string amount to a number $2,200.40 to 2200.4
  * @param amount - the amount as a string, may have currency symbol
  */
 export const strNumberToNumber = (amount: string): number => {
@@ -370,8 +370,8 @@ export const strNumberToNumber = (amount: string): number => {
 }
 
 /**
- * Convert string into USD curerncy string
- * @param amount
+ * Convert string into USD currency string
+ * @param amount - the amount as a number
  */
 export const numberToUSDollars = (amount: number): string => {
   const USDollar = new Intl.NumberFormat('en-US', {

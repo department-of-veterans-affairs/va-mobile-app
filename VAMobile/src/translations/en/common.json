@@ -1076,6 +1076,7 @@
   "pastAppointments.selectADateRange": "Select a date range",
   "paymentBreakdownModal.title": "Latest payment",
   "paymentBreakdownModal.close.a11yHint": "Close payment breakdown modal",
+  "paymentBreakdownModal.goToPaymentHistory": "Go to payment history",
   "paymentBreakdownModal.total": "Total",
   "paymentDetails.account": "Account",
   "paymentDetails.amount": "Amount",
