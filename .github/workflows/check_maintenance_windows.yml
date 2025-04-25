@@ -1,6 +1,7 @@
 name: "[Utils] Check Maintenance Windows"
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     # 04:00 UTC, 12:00AM ET, 9:00PM every day at Midnight
