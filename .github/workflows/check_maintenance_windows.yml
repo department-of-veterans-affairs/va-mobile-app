@@ -1,4 +1,4 @@
-name: "[Utility] Check Maintenance Windows"
+name: "[Utils] Check Maintenance Windows"
 
 on:
   workflow_dispatch:
