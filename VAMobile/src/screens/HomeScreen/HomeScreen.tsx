@@ -492,7 +492,10 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowDisabilityRating(!showDisabilityRating)}
+                        onPress={() => {
+                          setShowDisabilityRating(!showDisabilityRating)
+                          logAnalyticsEvent(Events.vama_obf_textview('disabilityRating', !showDisabilityRating))
+                        }}
                         label={showDisabilityRating ? t('hide') : t('show')}
                         testID={'showDisabilityTestID'}
                         buttonType={ButtonVariants.Primary}
@@ -550,14 +553,20 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowCompensation(!showCompensation)}
+                        onPress={() => {
+                          setShowCompensation(!showCompensation)
+                          logAnalyticsEvent(Events.vama_obf_textview('latestPayment', !showCompensation))
+                        }}
                         label={showCompensation ? t('hide') : t('show')}
                         buttonType={ButtonVariants.Primary}
                         testID={'showCompensationTestID'}
                       />
                       <Box mt={theme.dimensions.condensedMarginBetween} />
                       <Button
-                        onPress={() => setPaymentBreakdownVisible(true)}
+                        onPress={() => {
+                          setPaymentBreakdownVisible(true)
+                          logAnalyticsEvent(Events.vama_payment_bd_details())
+                        }}
                         label={t('monthlyCompensationPayment.seeDetails')}
                         buttonType={ButtonVariants.Secondary}
                         testID={'seePaymentBreakdownButtonTestID'}

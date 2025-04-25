@@ -5,7 +5,7 @@ import { t } from 'i18next'
 
 import { PaymentsGetData } from 'api/types'
 import { get } from 'store/api'
-import { context, mockNavProps, render } from 'testUtils'
+import { context, render } from 'testUtils'
 import { when } from 'testUtils'
 import { getFormattedDate } from 'utils/formattingUtils'
 
@@ -84,7 +84,7 @@ jest.mock('utils/hooks', () => {
 })
 
 context('PaymentBreakdownModal', () => {
-  const setVisibleMock = jest.fn((visible: boolean) => {})
+  const setVisibleMock = jest.fn(() => {})
   beforeEach(() => {
     when(get as jest.Mock)
       .calledWith('/v0/payment-history', expect.anything())

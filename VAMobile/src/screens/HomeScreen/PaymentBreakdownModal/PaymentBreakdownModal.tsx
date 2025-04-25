@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { ReactNode, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -8,7 +8,9 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { usePayments } from 'api/payments'
 import { PaymentsData } from 'api/types'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -54,7 +56,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     // parse out the month
     const lastPaymentDateYYYYDDMM = getFormattedDate(lastPaymentDate, 'yyyy-MM-dd')
     const paymentsByLastDate: PaymentsData[] = paymentHistoryQuery.data?.paymentsByDate?.[lastPaymentDateYYYYDDMM] || []
-    const payments = []
+    const payments: ReactNode[] = []
     paymentsByLastDate.forEach((payment, idx) => {
       payments.push(
         <Box flexDirection="row" justifyContent="space-between" key={idx}>
@@ -160,6 +162,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
                   })
                 }}
                 testID="GoToPaymentHistoryTestID"
+                analyticsOnPress={() => logAnalyticsEvent(Events.vama_goto_payment_hist())}
               />
             </Box>
           </Box>
