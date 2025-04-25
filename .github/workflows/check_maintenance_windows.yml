@@ -1,0 +1,29 @@
+name: "[Utility] Check Maintenance Windows"
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 04:00 UTC, 12:00AM ET, 9:00PM every day at Midnight
+    - cron: "00 4 * * *"
+
+jobs:
+  check_maintenance_windows:
+    name: Check Maintenance Windows
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: VAMobile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_ACTIONS_PAT }}
+      - name: Cut release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
+        run: |
+          pip install -r requirements.txt
+          echo "Running Script to check maintenance windows..."
+          python3 maintenance_windows.py
