@@ -42,7 +42,7 @@ import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } 
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOnResumeForeground, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -55,6 +55,7 @@ type NotificationsSettingsScreenProps = StackScreenProps<HomeStackParamList, 'No
 function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
@@ -231,8 +232,16 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
           </TextView>
           <Box mx={gutter}>
             <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_VA_NOTIFICATIONS}
+              type="custom"
+              onPress={() => {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
+                navigateTo('Webview', {
+                  url: LINK_URL_VA_NOTIFICATIONS,
+                  displayTitle: t('webview.vagov'),
+                  loadingMessage: t('webview.notifications.loading'),
+                  useSSO: true,
+                })
+              }}
               text={t('notifications.settings.link.text')}
               a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
               testID="noficationSettingsLinkID"

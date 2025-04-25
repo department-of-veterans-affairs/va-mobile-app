@@ -220,7 +220,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
             <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="error"
-                header={t('editEmail.alertError')}
+                description={t('editEmail.alertError')}
                 focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />

@@ -151,7 +151,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
             {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <NeedHelpData isAppeal={true} />
+            <NeedHelpData appealId={appealID} />
           </Box>
         </Box>
       )}

@@ -151,12 +151,20 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
     })
   }
 
+  // The following two consts are an effort to reduce the 'noise' of the websites we are linking to
+  // via webview and make them a more specific path for the user to experience. This code ignores headers,
+  // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
+  const css = `
+  header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
+  nav[aria-label="My HealtheVet"] { display: none; }
+`
+
   const INJECTED_JAVASCRIPT = `(function() {
-    localStorage.setItem('hasSession', true);
-    document.getElementsByClassName("header")[0].style.display='none';
-  	document.getElementsByClassName("va-nav-breadcrumbs")[0].style.display='none';
-  	document.getElementsByClassName("footer")[0].style.display='none';
-	})();`
+  localStorage.setItem('hasSession', true);
+  const styleElement = document.createElement('style');
+  styleElement.innerHTML = \`${css}\`;
+  document.head.appendChild(styleElement);
+})();`
 
   const controlProps: WebviewControlsProps = {
     onBackPressed: backPressed,
