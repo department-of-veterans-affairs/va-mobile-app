@@ -7,7 +7,7 @@ import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-compone
 import { DateTime } from 'luxon'
 
 import { useContactInformation } from 'api/contactInformation'
-import { submitClaim } from 'api/travelPay/submitClaim'
+import { submitClaim } from 'api/travelPay'
 import {
   Box,
   LinkWithAnalytics,

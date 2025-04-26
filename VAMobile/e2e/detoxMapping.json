@@ -191,6 +191,7 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
+    "travelPay": ["TravelPay"],
     "utils": [
       "Allergies",
       "Appeals",
@@ -348,6 +349,7 @@
       "VALetters",
       "Payments"
     ],
+    "travelPay.ts": ["TravelPay"],
     "vaccine.ts": ["VaccineRecords"],
     "api.ts": [
       "Appeals",
