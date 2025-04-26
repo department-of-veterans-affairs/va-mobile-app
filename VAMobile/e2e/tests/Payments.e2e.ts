@@ -35,7 +35,7 @@ describe('Payments Screen', () => {
     await expect(element(by.id(PaymentsE2eIDConstants.MISSING_PAYMENTS_LINK_ID))).toExist()
     await expect(element(by.id(PaymentsE2eIDConstants.PAYMENTS_YEAR_PICKER_ID))).toExist()
     await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0)).toExist()
-    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID))).toExist()
+    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).atIndex(0)).toExist()
   })
 
   it("verify what if I'm missing a payment information", async () => {
@@ -81,11 +81,7 @@ describe('Payments Screen', () => {
   })
 
   it('verify the payment details for direct deposit', async () => {
-    await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)))
-      .toBeVisible()
-      .whileElement(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_SCROLL_ID))
-      .scroll(200, 'down')
-    await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).tap()
+    await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_2_ID)).atIndex(0).tap()
     await expect(element(by.text('BANK OF AMERICA, N.A.'))).toExist()
     await expect(element(by.text('********0567'))).toExist()
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_DETAILS_BACK_ID)).tap()
