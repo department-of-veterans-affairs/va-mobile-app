@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
-import { QueriesData, context, fireEvent, mockNavProps, render, screen } from 'testUtils'
+import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 
 import ReviewClaimScreen from './ReviewClaimScreen'
 
@@ -29,6 +29,7 @@ const params = {
 }
 
 const mockNavigationSpy = jest.fn()
+const mockSubmitClaimSpy = jest.fn()
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -39,8 +40,24 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('api/travelPay/submitClaim', () => {
+  return {
+    submitClaim: () => mockSubmitClaimSpy(),
+  }
+})
+
+jest.mock('components/Templates/MultiStepSubtask', () => {
+  const original = jest.requireActual('components/Templates/MultiStepSubtask')
+  const ReactActual = jest.requireActual('react')
+  return {
+    ...original,
+    useSubtaskProps: jest.fn(),
+    SubtaskContext: ReactActual.createContext({ setSubtaskProps: jest.fn() }),
+  }
+})
+
 context('ReviewClaimScreen', () => {
-  const props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params })
+  const props = mockNavProps(undefined, undefined, { params })
 
   const initializeTestInstance = (contactInformation?: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
@@ -91,16 +108,47 @@ context('ReviewClaimScreen', () => {
       })
     })
     describe('when the user has checked the checkbox', () => {
-      it('should navigate to the SubmitSuccessScreen', () => {
+      it('should show the loading screen', () => {
         initializeTestInstance({ residentialAddress })
         const checkbox = screen.getByTestId('checkboxTestID')
         fireEvent.press(checkbox)
         const button = screen.getByTestId('submitTestID')
         fireEvent.press(button)
+        expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
+        expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
+      })
+    })
+  })
+
+  describe('when the submission is successful', () => {
+    it('should navigate to the SubmitSuccessScreen', async () => {
+      initializeTestInstance({ residentialAddress })
+      const checkbox = screen.getByTestId('checkboxTestID')
+      fireEvent.press(checkbox)
+      const button = screen.getByTestId('submitTestID')
+      fireEvent.press(button)
+
+      await waitFor(() => {
         expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
           facilityName: params.facilityName,
           appointmentDateTime: params.appointmentDateTime,
-          loading: true,
+        })
+      })
+    })
+  })
+
+  describe('when the submission fails', () => {
+    it('should navigate to the ErrorScreen', async () => {
+      mockSubmitClaimSpy.mockImplementation(() => Promise.reject(new Error('Failed to submit travel claim')))
+      initializeTestInstance({ residentialAddress })
+      const checkbox = screen.getByTestId('checkboxTestID')
+      fireEvent.press(checkbox)
+      const button = screen.getByTestId('submitTestID')
+      fireEvent.press(button)
+
+      await waitFor(() => {
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', {
+          error: 'error',
         })
       })
     })

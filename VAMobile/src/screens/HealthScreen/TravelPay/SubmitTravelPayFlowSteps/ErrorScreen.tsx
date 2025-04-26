@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -19,6 +20,12 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
+
+  useSubtaskProps({
+    rightButtonText: t('close'),
+    rightButtonTestID: 'rightCloseTestID',
+    primaryButtonTestID: 'continueToClaimTestID',
+  })
 
   const getErrorContent = (travelPayError: TravelPayError) => {
     switch (travelPayError) {

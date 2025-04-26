@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -7,7 +7,18 @@ import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-compone
 import { DateTime } from 'luxon'
 
 import { useContactInformation } from 'api/contactInformation'
-import { Box, LinkWithAnalytics, TextArea, TextLine, TextView, VABulletList, VAScrollView } from 'components'
+import { submitClaim } from 'api/travelPay/submitClaim'
+import {
+  Box,
+  LinkWithAnalytics,
+  LoadingComponent,
+  TextArea,
+  TextLine,
+  TextView,
+  VABulletList,
+  VAScrollView,
+} from 'components'
+import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -20,16 +31,73 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
   const { appointmentDateTime, facilityName } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const { setSubtaskProps } = useContext(SubtaskContext)
+
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => navigateTo('AddressScreen'),
+    leftButtonTestID: 'leftBackTestID',
+    rightButtonText: t('help'),
+    rightIconProps: {
+      name: 'Help',
+      fill: 'default',
+    },
+    rightButtonTestID: 'rightHelpTestID',
+    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
+  })
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
-  const [error, setError] = useState<string>('')
+  const [checkBoxError, setCheckBoxError] = useState<string>('')
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!loading) {
+      return
+    }
+    setSubtaskProps({
+      rightButtonText: t('close'),
+      rightButtonTestID: 'rightCloseTestID',
+    })
+  }, [loading, setSubtaskProps, t])
 
   const theme = useTheme()
   const isPortrait = useOrientation()
 
   const contactInformationQuery = useContactInformation({ enabled: true })
-
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
+
+  const navigateToErrorScreen = () => {
+    navigateTo('ErrorScreen', { error: 'error' })
+  }
+
+  const submitTravelClaim = async () => {
+    if (!isCheckboxChecked) {
+      setCheckBoxError(t('required'))
+      return
+    }
+    setLoading(true)
+
+    // Set a timeout to navigate to the error screen if the claim is not submitted in 30 seconds
+    const timeout = setTimeout(() => {
+      navigateToErrorScreen()
+    }, 30000)
+    try {
+      await submitClaim()
+      navigateTo('SubmitSuccessScreen', {
+        appointmentDateTime,
+        facilityName,
+      })
+    } catch (error) {
+      navigateToErrorScreen()
+    } finally {
+      clearTimeout(timeout)
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return <LoadingComponent text={t('travelPay.submitLoading')} />
+  }
 
   return (
     <VAScrollView testID="reviewClaimScreenID">
@@ -112,26 +180,12 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
               setIsCheckboxChecked(!isCheckboxChecked)
             }}
             checked={isCheckboxChecked}
-            error={error}
+            error={checkBoxError}
             testID="checkboxTestID"
           />
         </Box>
         <Box my={theme.dimensions.textAndButtonLargeMargin}>
-          <Button
-            onPress={() => {
-              if (isCheckboxChecked) {
-                navigateTo('SubmitSuccessScreen', {
-                  loading: true,
-                  appointmentDateTime,
-                  facilityName,
-                })
-              } else {
-                setError(t('required'))
-              }
-            }}
-            testID="submitTestID"
-            label={t('travelPay.submitClaim')}
-          />
+          <Button onPress={submitTravelClaim} testID="submitTestID" label={t('travelPay.submitClaim')} />
         </Box>
       </Box>
     </VAScrollView>

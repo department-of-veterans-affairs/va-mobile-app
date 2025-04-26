@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { UseMutateFunction } from '@tanstack/react-query'
-import { DateTime } from 'luxon/src/datetime'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'

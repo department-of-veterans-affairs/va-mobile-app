@@ -1,23 +1,59 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+
+import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
 const { LINK_URL_TRAVEL_PAY_ELIGIBILITY, LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
 
-function InterstitialScreen() {
+type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'InterstitialScreen'>
+
+function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
+  const confirmAlert = useDestructiveActionSheet()
+
+  const onLeftButtonPress = () => {
+    confirmAlert({
+      title: t('travelPay.cancelClaim.title'),
+      cancelButtonIndex: 0,
+      destructiveButtonIndex: 1,
+      buttons: [
+        {
+          text: t('travelPay.cancelClaim.continue'),
+        },
+        {
+          text: t('travelPay.cancelClaim.cancel'),
+          onPress: () => {
+            navigation.goBack()
+          },
+        },
+      ],
+    })
+  }
+
+  useSubtaskProps({
+    leftButtonText: t('cancel'),
+    leftButtonTestID: 'leftCancelTestID',
+    onLeftButtonPress,
+    primaryContentButtonText: t('continue'),
+    primaryButtonTestID: 'continueTestID',
+    onPrimaryContentButtonPress: () => navigateTo('MileageScreen'),
+  })
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="InterstitialScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
