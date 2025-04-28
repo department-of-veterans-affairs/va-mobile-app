@@ -27,6 +27,7 @@ jest.mock('utils/remoteConfig')
 context('MedicalRecordsScreen', () => {
   const initializeTestInstance = () => {
     when(featureEnabled).calledWith('allergies').mockReturnValue(true)
+    when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />)
   }
 
