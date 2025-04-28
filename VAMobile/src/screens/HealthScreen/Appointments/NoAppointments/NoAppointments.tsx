@@ -2,8 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -44,14 +46,15 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
         (featureEnabled('sso') ? (
           <LinkWithAnalytics
             type="custom"
-            onPress={() =>
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
               navigateTo('Webview', {
                 url: LINK_URL_SCHEDULE_APPOINTMENTS,
                 displayTitle: t('webview.vagov'),
                 loadingMessage: t('webview.appointments.loading'),
                 useSSO: true,
               })
-            }
+            }}
             text={t('noAppointments.visitVA')}
             a11yLabel={a11yLabelVA(t('noAppointments.visitVA'))}
             a11yHint={t('mobileBodyLink.a11yHint')}

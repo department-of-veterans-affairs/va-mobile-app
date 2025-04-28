@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { SecureMessagingRecipients, SecureMessagingSignatureData } from 'api/types'
 import * as api from 'store/api'
@@ -101,16 +102,12 @@ context('StartNewMessage', () => {
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
       initializeTestInstance()
-      expect(screen.getByText('Loading a new message...')).toBeTruthy()
-      await waitFor(() => expect(screen.getByText("We can't match you with a provider")).toBeTruthy())
+      expect(screen.getByText(t('secureMessaging.formMessage.startNewMessage.loading'))).toBeTruthy()
       await waitFor(() =>
-        expect(
-          screen.getByText(
-            "We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
-          ),
-        ).toBeTruthy(),
+        expect(screen.getByText(t('secureMessaging.startNewMessage.noMatchWithProvider'))).toBeTruthy(),
       )
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Go to inbox' })))
+      expect(screen.getByText(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))).toBeTruthy()
+      fireEvent.press(screen.getByRole('link', { name: t('secureMessaging.goToInbox') }))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', { activeTab: 0 }))
     })
   })
@@ -123,7 +120,7 @@ context('StartNewMessage', () => {
         .calledWith('/v0/messaging/health/messages/signature')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByText("The app can't be loaded.")).toBeTruthy())
+      await waitFor(() => expect(screen.getByText(t('errors.networkConnection.header'))).toBeTruthy())
     })
   })
 
@@ -136,9 +133,11 @@ context('StartNewMessage', () => {
         .mockResolvedValue(signature)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      await waitFor(() => fireEvent.press(screen.getByTestId('General')))
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Done')))
-      await waitFor(() => expect(screen.getByText('Subject (Required)')).toBeTruthy())
+      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      fireEvent.press(screen.getByLabelText(t('done')))
+      await waitFor(() =>
+        expect(screen.getByText(`${t('secureMessaging.startNewMessage.subject')} ${t('required')}`)).toBeTruthy(),
+      )
     })
   })
 
@@ -150,7 +149,7 @@ context('StartNewMessage', () => {
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByText('Cancel')))
+      await waitFor(() => fireEvent.press(screen.getByText(t('cancel'))))
       await waitFor(() => expect(goBack).toHaveBeenCalled())
     })
 
@@ -162,9 +161,9 @@ context('StartNewMessage', () => {
         .mockResolvedValue(signature)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
-      await waitFor(() => fireEvent.press(screen.getByTestId('General')))
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Done')))
-      await waitFor(() => fireEvent.press(screen.getByText('Cancel')))
+      fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
+      fireEvent.press(screen.getByLabelText(t('done')))
+      fireEvent.press(screen.getByText(t('cancel')))
       await waitFor(() => expect(mockUseComposeCancelConfirmationSpy).toHaveBeenCalled())
     })
   })
@@ -178,12 +177,14 @@ context('StartNewMessage', () => {
           .calledWith('/v0/messaging/health/messages/signature')
           .mockResolvedValue(signature)
         initializeTestInstance()
-        await waitFor(() => fireEvent.press(screen.getByText('Save')))
-        await waitFor(() => expect(screen.getAllByText('Select a care team to message')).toBeTruthy())
-        await waitFor(() => expect(screen.getAllByText('Select a category')).toBeTruthy())
-        await waitFor(() => expect(screen.getAllByText('Enter a message')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('We need more information')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('To save this message, provide this information:')).toBeTruthy())
+        await waitFor(() => fireEvent.press(screen.getByText(t('save'))))
+        await waitFor(() =>
+          expect(screen.getAllByText(t('secureMessaging.startNewMessage.to.fieldError'))).toBeTruthy(),
+        )
+        expect(screen.getAllByText(t('secureMessaging.startNewMessage.category.fieldError'))).toBeTruthy()
+        expect(screen.getAllByText(t('secureMessaging.formMessage.message.fieldError'))).toBeTruthy()
+        expect(screen.getByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
+        expect(screen.getByText(t('secureMessaging.formMessage.saveDraft.validation.text'))).toBeTruthy()
       })
     })
   })
@@ -197,12 +198,14 @@ context('StartNewMessage', () => {
           .calledWith('/v0/messaging/health/messages/signature')
           .mockResolvedValue(signature)
         initializeTestInstance()
-        await waitFor(() => fireEvent.press(screen.getByText('Send')))
-        await waitFor(() => expect(screen.getAllByText('Select a care team to message')).toBeTruthy())
-        await waitFor(() => expect(screen.getAllByText('Select a category')).toBeTruthy())
-        await waitFor(() => expect(screen.getAllByText('Enter a message')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('We need more information')).toBeTruthy())
-        await waitFor(() => expect(screen.getByText('To send this message, provide this information:')).toBeTruthy())
+        await waitFor(() => fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send'))))
+        await waitFor(() =>
+          expect(screen.getAllByText(t('secureMessaging.startNewMessage.to.fieldError'))).toBeTruthy(),
+        )
+        expect(screen.getAllByText(t('secureMessaging.startNewMessage.category.fieldError'))).toBeTruthy()
+        expect(screen.getAllByText(t('secureMessaging.formMessage.message.fieldError'))).toBeTruthy()
+        expect(screen.getByText(t('secureMessaging.formMessage.weNeedMoreInfo'))).toBeTruthy()
+        expect(screen.getByText(t('secureMessaging.formMessage.sendMessage.validation.text'))).toBeTruthy()
       })
     })
   })
@@ -215,7 +218,7 @@ context('StartNewMessage', () => {
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Add Files')))
+      await waitFor(() => fireEvent.press(screen.getByLabelText(t('secureMessaging.formMessage.addFiles'))))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
     })
   })
@@ -229,7 +232,13 @@ context('StartNewMessage', () => {
         .mockResolvedValue(signature)
       initializeTestInstance()
       await waitFor(() =>
-        expect(screen.getAllByText('Your care team may take up to 3 business days to reply.')).toBeTruthy(),
+        expect(
+          screen.getAllByText(
+            t('secureMessaging.startNewMessage.nonurgent.careTeam') +
+              t('secureMessaging.startNewMessage.nonurgent.threeDays') +
+              t('secureMessaging.startNewMessage.nonurgent.reply'),
+          ),
+        ).toBeTruthy(),
       )
     })
   })

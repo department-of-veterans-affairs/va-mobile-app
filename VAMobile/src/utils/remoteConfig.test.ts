@@ -32,10 +32,11 @@ const mockOverrides = {
   preferredNameGenderWaygate: false,
   prescriptions: true,
   submitEvidenceExpansion: true,
-  sso: false,
+  sso: true,
   testFeature: false,
   useOldLinkComponent: false,
   whatsNewUI: false,
+  veteranStatusCardRedesign: true,
   allergies: true,
 }
 
