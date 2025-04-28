@@ -56,18 +56,22 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           testID="viewMedicalRecordsLinkID"
         />
       </Box>
-      <Box mx={gutter}>
-        <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
-      </Box>
-      <Box mx={gutter}>
-        <LinkWithAnalytics
-          type="url"
-          url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
-          text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-          a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
-          testID="shareMyHealthDataLinkID"
-        />
-      </Box>
+      {featureEnabled('shareMyHealthDataLink') && (
+        <>
+          <Box mx={gutter}>
+            <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
+          </Box>
+          <Box mx={gutter}>
+            <LinkWithAnalytics
+              type="url"
+              url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
+              text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+              a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+              testID="shareMyHealthDataLinkID"
+            />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }
