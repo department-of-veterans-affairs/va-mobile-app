@@ -55,7 +55,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: veteranStatus, isError } = useVeteranStatus({ enabled: false })
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
-  const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
+  const veteranStatusConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
   const showError = !veteranStatusConfirmed || (veteranStatusConfirmed && !serviceHistory.length)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
