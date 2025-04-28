@@ -35,9 +35,7 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   }
 }
 
-type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'> & {
-  initialRouteIndex?: number
-}
+type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'>
 
 const TravelPayStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
