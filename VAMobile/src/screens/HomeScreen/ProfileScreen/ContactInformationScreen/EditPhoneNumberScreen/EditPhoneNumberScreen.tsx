@@ -271,7 +271,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
             <Box mt={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="error"
-                header={t('editPhoneNumber.checkPhoneNumber')}
+                description={t('editPhoneNumber.checkPhoneNumber')}
                 focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />

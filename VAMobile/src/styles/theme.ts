@@ -22,7 +22,7 @@ export type VATextColors = {
   input: string
   inputFocused: string
   actionBar: string
-  actionBarDisabled: string
+  disabled: string
   bodyText: string
   showAll: string
   labelTag: string
@@ -97,6 +97,7 @@ export type VATypographyThemeVariants = {
   MobileBodyBold: string
   MobileBodyLink: string
   MobileBodyTight: string
+  MobileBodyTightBold: string
   NametagNumber: string
   ProfileScreenHeader: string
   TableHeaderBold: string
@@ -110,6 +111,8 @@ export type VATypographyThemeVariants = {
   VeteranStatusProof: string
   webviewTitle: string
   MobileFooterLink: string
+  VeteranStatusCardHeaderPortraitBold: string
+  VeteranStatusCardHeaderLandscapeBold: string
 }
 
 export type VABackgroundColors = {
@@ -245,12 +248,15 @@ export type VATheme = {
     LabelTag: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyTight: VAFontSizes
+    MobileBodyTightBold: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     UnreadMessagesTag: VAFontSizes
     VASelector: VAFontSizes
     FooterText: VAFontSizes
+    VeteranStatusCardHeaderPortraitBold: VAFontSizes
+    VeteranStatusCardHeaderLandscapeBold: VAFontSizes
   }
   mode: ColorSchemeTypes
   paragraphSpacing: {

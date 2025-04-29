@@ -17,30 +17,25 @@ As part of this story we want to: <!-- List the desired outcome(s) for this tick
 ## Acceptance Criteria
 <!-- Add a checkbox for each item required to fulfill the user story/issue. -->  
 
--  [ ] AC 1
--  [ ] AC 2
--  [ ] AC 3
+- [ ] AC 1
+- [ ] AC 2
+- [ ] AC 3
 
 **Accessibility Requirements**
 - [ ] AC 1
 - [ ] AC 2
 - [ ] AC 3
 
+## Design Link(s)
+<!-- If this issue requires design links, include here. -->  
+
 ## Notes & Open Questions
 
-- Dependencies/Roadblocks:
-    - Any internal/external dependencies?
-    - Test accounts needed?
-- Does this require QA?
+- Any internal/external dependencies?
+- Test accounts needed?
+- Does this require QA? If so, is there a clear test plan? 
     
-- Dev Notes: 
-
-
-## Ticket Checklist
-
-- [ ] Acceptance criteria defined
-- [ ] Labels added (front-end, back-end, feature)
-- [ ] Linked to an Epic
+- Additional Dev Notes: 
 
 
 

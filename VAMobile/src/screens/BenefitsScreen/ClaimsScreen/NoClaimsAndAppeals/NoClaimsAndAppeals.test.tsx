@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
@@ -49,15 +50,9 @@ context('NoClaimsAndAppeals', () => {
   it('initializes correctly for no claims or appeals', async () => {
     initializeTestInstance(ClaimTypeConstants.ACTIVE, [])
     await waitFor(() =>
-      expect(screen.getByRole('header', { name: "You don't have any submitted claims or appeals" })).toBeTruthy(),
+      expect(screen.getByRole('header', { name: t('noClaims.youDontHaveAnyClaimsOrAppeals') })).toBeTruthy(),
     )
-    await waitFor(() =>
-      expect(
-        screen.getByText(
-          'This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.',
-        ),
-      ).toBeTruthy(),
-    )
+    expect(screen.getByText(t('noClaims.appOnlyShowsCompletedClaimsAndAppeals'))).toBeTruthy()
   })
 
   it('initializes correctly for no claims', async () => {
@@ -66,12 +61,8 @@ context('NoClaimsAndAppeals', () => {
         service: 'claims',
       },
     ])
-    await waitFor(() => expect(screen.getByRole('header', { name: "You don't have any appeals" })).toBeTruthy())
-    await waitFor(() =>
-      expect(
-        screen.getByText('This app shows only completed applications but you don’t have active appeals.'),
-      ).toBeTruthy(),
-    )
+    await waitFor(() => expect(screen.getByRole('header', { name: t('noClaims.youDontHaveAnyAppeals') })).toBeTruthy())
+    expect(screen.getByText(t('noClaims.appOnlyShowsCompletedAppeals'))).toBeTruthy()
   })
 
   it('initializes correctly for no appeals', async () => {
@@ -80,29 +71,15 @@ context('NoClaimsAndAppeals', () => {
         service: 'appeals',
       },
     ])
-    await waitFor(() =>
-      expect(screen.getByRole('header', { name: "You don't have any submitted claims" })).toBeTruthy(),
-    )
-    await waitFor(() =>
-      expect(
-        screen.getByText(
-          'This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.',
-        ),
-      ).toBeTruthy(),
-    )
+    await waitFor(() => expect(screen.getByRole('header', { name: t('noClaims.youDontHaveAnyClaims') })).toBeTruthy())
+    expect(screen.getByText(t('noClaims.appOnlyShowsCompletedClaims'))).toBeTruthy()
   })
 
   it('initializes correctly for closed claims and appeals', async () => {
     initializeTestInstance(ClaimTypeConstants.CLOSED, [])
     await waitFor(() =>
-      expect(screen.getByRole('header', { name: " You don't have any closed claims or appeals" })).toBeTruthy(),
+      expect(screen.getByRole('header', { name: t('noClaims.youDontHaveAnyClosedClaimsOrAppeals') })).toBeTruthy(),
     )
-    await waitFor(() =>
-      expect(
-        screen.queryByText(
-          'This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.',
-        ),
-      ).toBeFalsy(),
-    )
+    expect(screen.queryByText(t('noClaims.appOnlyShowsCompletedClaims'))).toBeFalsy()
   })
 })
