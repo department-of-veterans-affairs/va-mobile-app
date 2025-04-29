@@ -55,6 +55,7 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, imagesEmptyError, onPress 
   return (
     <Pressable {...pressableProps}>
       {imagesEmptyError && (
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
         <TextView accessibilityLabel={a11yErrorLabel} variant="MobileBodyBold" color="error" mb={dimensions.gutter}>
           {t('fileUpload.requiredPhoto')}
         </TextView>
