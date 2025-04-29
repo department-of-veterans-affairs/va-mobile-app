@@ -32,8 +32,8 @@ export const getAppointments = (store: DemoStore, params: Params): AppointmentsG
     if (DateTime.fromISO(endDate) < DateTime.now()) {
       // Filter data from json file with dates in specified time range
       const pastAppts = JSON.parse(JSON.stringify(store['/v0/appointments'].past))
+      const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
       const filteredApptsData = pastAppts.data.filter((appt: AppointmentData) => {
-        const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
         const apptDate = DateTime.fromISO(appt.attributes.startDateLocal)
         return interval.contains(apptDate)
       })
