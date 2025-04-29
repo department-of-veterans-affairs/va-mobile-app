@@ -76,13 +76,9 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
 
   return (
     <Box>
-      <Box flexDirection="row" justifyContent={'space-between'}>
+      <Box flexDirection="row" justifyContent={'space-between'} accessible={true}>
         {title && (
-          <TextView
-            {...titleProps}
-            accessibilityLabel={titleA11yLabel}
-            testID={titleA11yLabel || title}
-            accessible={true}>
+          <TextView {...titleProps} accessibilityLabel={titleA11yLabel} testID={titleA11yLabel || title}>
             {title}
           </TextView>
         )}
@@ -90,8 +86,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
           <TextView
             {...titleProps}
             accessibilityLabel={rightTitleTextA11yLabel}
-            testID={rightTitleTextA11yLabel || rightTitleText}
-            accessible={true}>
+            testID={rightTitleTextA11yLabel || rightTitleText}>
             {rightTitleText}
           </TextView>
         )}
