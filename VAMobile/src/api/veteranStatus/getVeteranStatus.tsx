@@ -11,10 +11,9 @@ import { veteranStatusKeys } from './queryKeys'
  */
 const getVeteranStatus = async (): Promise<VeteranVerificationStatusPayload | undefined> => {
   const response = await get<VeteranVerificationStatusPayload>('/v0/vet_verification_status')
-  if (!response || !response.data) {
-    throw new Error('vet_verification_status returned no data')
+  if (response) {
+    return response
   }
-  return response
 }
 
 /**
