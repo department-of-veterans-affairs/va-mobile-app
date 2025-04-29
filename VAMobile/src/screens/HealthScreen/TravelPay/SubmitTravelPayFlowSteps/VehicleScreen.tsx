@@ -32,7 +32,8 @@ function VehicleScreen() {
     primaryButtonTestID: 'yesTestID',
     onPrimaryContentButtonPress: address
       ? () => navigateTo('AddressScreen')
-      : () => navigateTo('ErrorScreen', { error: 'noAddress' }),
+      : //TODO add unit test to cover this scenario once we update the logic for update address
+        () => navigateTo('ErrorScreen', { error: 'noAddress' }),
     secondaryContentButtonText: t('no'),
     onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
   })
