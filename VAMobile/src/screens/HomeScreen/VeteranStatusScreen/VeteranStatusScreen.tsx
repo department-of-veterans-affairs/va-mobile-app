@@ -127,6 +127,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         })
 
         return (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             variant="MobileBody"
             color="primaryContrast"

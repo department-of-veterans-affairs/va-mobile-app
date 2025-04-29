@@ -111,6 +111,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
       </Box>
 
       <View style={VASealStyle}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <Box
           accessible={true}
           accessibilityRole="image"
