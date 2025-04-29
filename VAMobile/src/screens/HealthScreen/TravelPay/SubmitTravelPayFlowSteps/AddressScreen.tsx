@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useContactInformation } from 'api/contactInformation'
 import { Box, TextView, VAScrollView } from 'components'
+import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import AddressSummary, {
@@ -10,13 +11,32 @@ import AddressSummary, {
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useOrientation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 function AddressScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const contactInformationQuery = useContactInformation({ enabled: true })
   const [retried, setRetried] = useState(false)
+  const navigateTo = useRouteNavigation()
+
+  useSubtaskProps({
+    leftButtonText: t('back'),
+    onLeftButtonPress: () => navigateTo('VehicleScreen'),
+    leftButtonTestID: 'leftBackTestID',
+    rightButtonText: t('help'),
+    rightButtonTestID: 'rightHelpTestID',
+    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
+    rightIconProps: {
+      name: 'Help',
+      fill: 'default',
+    },
+    primaryContentButtonText: t('yes'),
+    primaryButtonTestID: 'yesTestID',
+    onPrimaryContentButtonPress: () => navigateTo('ReviewClaimScreen'),
+    secondaryContentButtonText: t('no'),
+    onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
+  })
 
   useEffect(() => {
     if (contactInformationQuery.failureCount > 0) {
