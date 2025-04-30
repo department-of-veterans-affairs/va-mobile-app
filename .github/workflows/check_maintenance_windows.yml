@@ -9,7 +9,7 @@ on:
 
 jobs:
   check_maintenance_windows:
-    name: Check Maintenance Windows
+    name: Checkout repo
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_ACTIONS_PAT }}
-      - name: Cut release branch
+      - name: Check Maintenance Windows
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}

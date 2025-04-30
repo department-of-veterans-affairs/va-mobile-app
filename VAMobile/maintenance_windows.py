@@ -1,102 +1,189 @@
-import pagerduty
+import http.client
+import json
+import time
 import os
 
-API_KEY = os.environ.get('PAGERDUTY_API_KEY')
+API_KEY = os.environ.get('API_KEY')
 
-# Creating client and making api call
-client = pagerduty.RestApiV2Client(API_KEY)
+# Creating client to make API calls
+conn = http.client.HTTPSConnection("api.pagerduty.com")
+#
+headers = {
+    'Accept': "application/json",
+    'Content-Type': "application/json",
+    'Authorization': API_KEY
+}
 
-
-# Listing all services
-services = client.list_all('services')
-# Getting service details
-#NOTE This may not be needed anymore
-def get_services(): 
-    search = "TESTService1"
-    found_services = []
-    for item in services:
-        if 'name' in item and search in item['name']:
-            found_services.append({
-                "id": item['id'],
-                "name": item["name"]
-            })
-    return found_services
-
-service_data = get_services()
-if service_data:
-    for item in service_data:
-        service_name = (item['name'])
-        service_id = (item['id'])
-else:
-    print(f"No services matching {search}")
-
-# Locating service to add to maintenance window
 def service_to_add():
-    search = "TESTService2"
+    retries = 3
+    delay = 1
     add_services = []
-    for item in services:
-        if 'name' in item and search in item['name']:
-            added_service_id = item['id']
-            add_services.append({
-                "id": item['id'],
-                "type": item['type'],
-            })
-    return add_services, added_service_id
-
-# Creating variables to use later on in the script
-add_services, added_service_id = service_to_add()
-
-# List Maintenance Windows That are future
-def list_maint_windows():
-    current_services = []
-    start_time = None
-    end_time = None
-    mid = None
-    name = None
-
-    try: 
-        data = client.rget('/maintenance_windows?filter=future')
-        search_word = "TESTService1"
-        if data:
-            for item in data:
-                if 'services' in item:
-                    for service in item['services']:
-                        if 'summary' in service and search_word in service['summary']:
-                            current_services.append(item['services'])
-                            start_time = item.get('start_time')
-                            end_time = item.get('end_time')
-                            mid = item.get('id')
-                            description = item.get('description')
-                            return current_services, start_time, end_time, mid, description
-                else:
-                    print("No future services")
-            if not current_services:
-                print(f"No future maintenance windows found containing {search_word}")
+    for attempt in range(retries):
+        try:
+            conn = http.client.HTTPSConnection("api.pagerduty.com")
+            conn.request("GET","/services?query=Mobile", headers=headers)
+            sresponse = conn.getresponse()
+            if sresponse.status == 200:
+                srv_list = sresponse.read().decode('utf-8')
+                service_to_add = json.loads(srv_list)
+                service_list = service_to_add.get('services')
+                if service_list:
+                    for service in service_list:
+                        service_id = service.get('id')
+                        service_type = service.get('type')
+                        service_name = service.get('summary')
+                        if service_id and service_name:
+                            add_services.append({
+                                'id': service_id,
+                                'type': service_type,
+                                'name': service_name
+                            })
+                conn.close()
+                return add_services
+            else:
+                print("ERROR! Service not found...")
+                conn.close()
+        except (http.client.HTTPException, URLError) as e:
+            print(f"Attempt {attempt + 1}: {e}")
+            if 'conn' in locals():
+                conn.close()
+        if attempt < retries - 1:
+            print(f"Retrying in {delay} seconds...")
+            time.sleep(delay)
+            delay *= 2
         else:
-            print("WARNING No data returned")
-            return [], None, None, None, None
-    except Exception as e:
-        print(f"Error fetching maintenance windows: {e}")
-        return [], None, None, None, None
-    return current_services, start_time, end_time, mid, description
+            print(f"Failed to after {retries} attempts.")
+            return []
 
-# Creating variables to use later on in the script
-current_services, start, end, mid, description = list_maint_windows()
+def list_maint_windows():
+    retries = 3
+    delay = 1
+    search_word = 'TESTService1'
+    for attempt in range(retries):
+        try:
+            conn = http.client.HTTPSConnection("api.pagerduty.com")
+            conn.request("GET","/maintenance_windows?filter=future", headers=headers)
+            mresponse = conn.getresponse()
+            if mresponse.status == 200:
+                mw_list = mresponse.read().decode('utf-8')
+                mw_data = json.loads(mw_list)
+                mw_list = mw_data.get('maintenance_windows')
+                future_windows = []
+                count = 0
 
-# Updating the maintenance window to include test2
+                if mw_list:
+                    for item in mw_list:
+                        if 'services' in item:
+                            found_service = False
+                            for service in item['services']:
+                                if 'summary' in service and search_word in service['summary']:
+                                    found_service = True
+                                    count += 1
+                                    break
+                            if found_service:
+                                future_windows.append({
+                                    'services': item.get('services'),
+                                    'start_time': item.get('start_time'),
+                                    'end_time': item.get('end_time'),
+                                    'id': item.get('id'),
+                                    'description': item.get('description')
+                                })
+                conn.close()
+                return future_windows, count
+            else:
+                print(f"Attempt {attempt + 1} - Error in list_maint_windows(): {mresponse.status}")
+                conn.close()
+        except (http.client.HTTPException, URLError) as e:
+            print(f"Attempt {attempt + 1} - Exception in list_maint_windows(): {e}")
+            if 'conn' in locals():
+                conn.close()
+        if attempt < retries - 1:
+            print(f"Retrying list_maint_windows() in {delay} seconds...")
+            time.sleep(delay)
+            delay *= 2
+        else:
+            print(f"Failed to list_maint_windows() after {retries} attempts.")
+            return [], 0  
+
+# Updating Maintenance windows to add the service
 def update_maint_window():
-    if current_services:
-        print(f"Updating maintenance window Name: {description} ID: {mid}")
-        current_services.append(add_services)
-        service_list = sum(current_services, [])
-        client.rput(f"/maintenance_windows/{mid}", json={
-            'maintenance_window':{
-              'start_time': start,
-              'end_time': end,
-              'services': service_list
-            }
-        })
-    else:
-        print("No maintenance windows to update")
+    future_windows, count = list_maint_windows()
+    if future_windows:
+        print(f"Checking and updating {count} maintenance window(s)")
+        query1 = "TESTService1"
+        query2 = "TESTService2"
+        services_to_add = service_to_add()
 
+        for i, window in enumerate(future_windows):
+            if not isinstance(window, dict):
+                print(f"Error: Encountered a non-dictionary item at index {i} in future_windows")
+                continue
+
+            window_id = window.get('id')
+            start_time = window.get('start_time')
+            end_time = window.get('end_time')
+            desc = window.get('description')
+            existing_services = window.get('services', [])
+            existing_service_names = {srv.get('summary') for srv in existing_services if srv.get('summary')}
+            existing_service_ids = {srv.get('id') for srv in existing_services if srv.get('id')}
+
+            print(f"\nProcessing window {i+1} with ID: {window_id}, Description: {desc}")
+
+            has_query1 = any(query1 in name for name in existing_service_names)
+            has_query2 = any(query2 in name for name in existing_service_names)
+
+            if has_query2:
+                print(f"  {query2} is already applied. No update needed for this window.")
+                continue
+
+            elif has_query1 and not has_query2:
+                print(f"  {query1} is applied, and {query2} is not. Adding {query2} services.")
+                updated_services = list(existing_services)
+                for service_to_add_item in services_to_add:
+                    if test2_query in service_to_add_item.get('name', '') and service_to_add_item.get('id') not in existing_service_ids:
+                        updated_services.append({'id': service_to_add_item['id'], 'type': 'service_reference'})
+
+                payload = {
+                    "maintenance_window": {
+                        "type": "maintenance_window",
+                        "start_time": start_time,
+                        "end_time": end_time,
+                        "description": desc,
+                        "services": updated_services
+                    }
+                }
+                json_payload = json.dumps(payload)
+
+                retries = 3
+                delay = 1
+                for attempt in range(retries):
+                    try:
+                        conn = http.client.HTTPSConnection("api.pagerduty.com")
+                        conn.request("PUT", f"/maintenance_windows/{window_id}", json_payload, headers)
+                        uresp = conn.getresponse()
+                        # response_body = uresp.read().decode('utf-8')
+                        print(f"  Attempt {attempt + 1} Update Response for {window_id} - Status: {uresp.status}")
+                        if 200 <= uresp.status < 300:
+                            print(f"  Successfully added {query2} services to {window_id} after {attempt + 1} attempts")
+                            break
+                        else:
+                            print(f"  Error updating {window_id}. Status: {uresp.status}")
+                    except (http.client.HTTPException, URLError) as e:
+                        print(f"  Attempt {attempt + 1} - Error updating {window_id}: {e}")
+                    finally:
+                        if 'conn' in locals():
+                            conn.close()
+
+                    if attempt < retries - 1:
+                        print(f"  Retrying in {delay} seconds...")
+                        time.sleep(delay)
+                        delay *= 2
+
+                else:
+                    print(f"  Failed to update {window_id} after {retries} attempts.")
+    else:
+        print("No future maintenance windows found to check.")
+
+future_windows, count = list_maint_windows()
+add_services = service_to_add()
 update_maint_window()
