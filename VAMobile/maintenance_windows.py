@@ -93,7 +93,7 @@ def list_maint_windows():
             else:
                 print(f"Attempt {attempt + 1} - Error in list_maint_windows(): {mresponse.status}")
                 conn.close()
-        except (http.client.HTTPException, URLError) as e:
+        except (http.client.HTTPException) as e:
             print(f"Attempt {attempt + 1} - Exception in list_maint_windows(): {e}")
             if 'conn' in locals():
                 conn.close()
