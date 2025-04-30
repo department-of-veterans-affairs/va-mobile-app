@@ -12,7 +12,7 @@ conn = http.client.HTTPSConnection("api.pagerduty.com")
 headers = {
     'Accept': "application/json",
     'Content-Type': "application/json",
-    'Authorization': PAGERDUTY_API_KEY
+    'Authorization': API_KEY
 }
 
 def service_to_add():
