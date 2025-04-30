@@ -32,8 +32,8 @@
             },
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
+            "startDateLocal": "{{now - 1 day}}",
+            "startDateUtc": "{{now - 1 day utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Los_Angeles",
@@ -75,8 +75,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
+            "startDateLocal": "{{now - 1 day}}",
+            "startDateUtc": "{{now - 1 day utc}}",
             "status": "SUBMITTED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -130,8 +130,8 @@
             "physicalLocation": null,
             "minutesDuration": 60,
             "phoneOnly": false,
-            "startDateLocal": "{{now - 45 minutes}}",
-            "startDateUtc": "{{now - 45 minutes utc}}",
+            "startDateLocal": "{{now - 1 day}}",
+            "startDateUtc": "{{now - 1 day utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
@@ -1715,48 +1715,6 @@
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
-        },
-        {
-          "id": "8a48e2fe7956f4d30179cddf3f3d0aaa",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA_VIDEO_CONNECT_ONSITE",
-            "cancelId": "190306",
-            "comment": null,
-            "healthcareProvider": "John Jones - Onsite - Confirmed",
-            "healthcareService": "MID-V10 CRH MH PSY MD PT",
-            "location": {
-              "id": "984GA",
-              "name": "Middletown VA Clinic",
-              "address": {
-                "street": "4337 North Union Road",
-                "city": "Middletown",
-                "state": "OH",
-                "zipCode": "45005-5211"
-              },
-              "lat": 39.50603,
-              "long": -84.316475,
-              "phone": {
-                "areaCode": "513",
-                "number": "423-8387",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "minutesDuration": 30,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 120 days}}",
-            "startDateUtc": "{{now - 120 days utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/New_York",
-            "vetextId": null,
-            "reason": null,
-            "isCovidVaccine": false,
-            "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
-          }
         }
       ],
       "meta": {
@@ -1765,7 +1723,7 @@
           "currentPage": 1,
           "perPage": 10,
           "totalPages": 4,
-          "totalEntries": 37
+          "totalEntries": 36
         }
       },
       "links": {
