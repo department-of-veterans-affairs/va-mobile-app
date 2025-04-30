@@ -2,6 +2,7 @@ import http.client
 import json
 import time
 import os
+from urllib.error import URLError
 
 API_KEY = os.environ.get('API_KEY')
 
