@@ -4,7 +4,7 @@ import time
 import os
 from urllib.error import URLError
 
-API_KEY = os.environ.get('API_KEY')
+API_KEY = os.environ.get('PAGERDUTY_API_KEY')
 
 # Creating client to make API calls
 conn = http.client.HTTPSConnection("api.pagerduty.com")
@@ -12,7 +12,7 @@ conn = http.client.HTTPSConnection("api.pagerduty.com")
 headers = {
     'Accept': "application/json",
     'Content-Type': "application/json",
-    'Authorization': API_KEY
+    'Authorization': PAGERDUTY_API_KEY
 }
 
 def service_to_add():
