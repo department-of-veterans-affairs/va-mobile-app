@@ -31,6 +31,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
         run: |
+          echo "Where am I?"
+          pwd
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
