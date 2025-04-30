@@ -20,10 +20,15 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_ACTIONS_PAT }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Check Maintenance Windows
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
         run: |
           echo "Running Script to check maintenance windows..."
+          pip install -r requirements.txt
           python3 maintenance_windows.py
