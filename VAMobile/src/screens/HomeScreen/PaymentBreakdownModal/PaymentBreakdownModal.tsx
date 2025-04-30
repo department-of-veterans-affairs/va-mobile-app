@@ -59,7 +59,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     const payments: ReactNode[] = []
     paymentsByLastDate.forEach((payment, idx) => {
       payments.push(
-        <Box flexDirection="row" justifyContent="space-between" key={idx}>
+        <Box flexDirection="row" justifyContent="space-between" accessible={true} key={idx}>
           <TextView flex={1} variant="MobileBody">
             {payment.attributes.paymentType}
           </TextView>
@@ -134,7 +134,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
                   {getFormattedDate(lastPaymentDate, 'MMMM d, yyyy')}
                 </TextView>
                 {renderPaymentBreakdown()}
-                <Box flexDirection="row" justifyContent="space-between">
+                <Box flexDirection="row" justifyContent="space-between" accessible={true}>
                   <TextView variant="MobileBodyBold">{t('paymentBreakdownModal.total')}</TextView>
                   <TextView variant="MobileBodyBold">{lastPaymentAmount}</TextView>
                 </Box>
