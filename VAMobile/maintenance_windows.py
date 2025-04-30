@@ -21,7 +21,7 @@ def service_to_add():
     for attempt in range(retries):
         try:
             conn = http.client.HTTPSConnection("api.pagerduty.com")
-            conn.request("GET","/services?query=Mobile", headers=headers)
+            conn.request("GET","/services?query=TESTService2", headers=headers)
             sresponse = conn.getresponse()
             if sresponse.status == 200:
                 srv_list = sresponse.read().decode('utf-8')
@@ -93,7 +93,7 @@ def list_maint_windows():
             else:
                 print(f"Attempt {attempt + 1} - Error in list_maint_windows(): {mresponse.status}")
                 conn.close()
-        except (http.client.HTTPException) as e:
+        except (http.client.HTTPException, URLError) as e:
             print(f"Attempt {attempt + 1} - Exception in list_maint_windows(): {e}")
             if 'conn' in locals():
                 conn.close()
@@ -103,7 +103,7 @@ def list_maint_windows():
             delay *= 2
         else:
             print(f"Failed to list_maint_windows() after {retries} attempts.")
-            return [], 0  
+            return [], 0
 
 # Updating Maintenance windows to add the service
 def update_maint_window():
@@ -140,7 +140,7 @@ def update_maint_window():
                 print(f"  {query1} is applied, and {query2} is not. Adding {query2} services.")
                 updated_services = list(existing_services)
                 for service_to_add_item in services_to_add:
-                    if test2_query in service_to_add_item.get('name', '') and service_to_add_item.get('id') not in existing_service_ids:
+                    if query2 in service_to_add_item.get('name', '') and service_to_add_item.get('id') not in existing_service_ids:
                         updated_services.append({'id': service_to_add_item['id'], 'type': 'service_reference'})
 
                 payload = {
@@ -161,14 +161,13 @@ def update_maint_window():
                         conn = http.client.HTTPSConnection("api.pagerduty.com")
                         conn.request("PUT", f"/maintenance_windows/{window_id}", json_payload, headers)
                         uresp = conn.getresponse()
-                        # response_body = uresp.read().decode('utf-8')
                         print(f"  Attempt {attempt + 1} Update Response for {window_id} - Status: {uresp.status}")
                         if 200 <= uresp.status < 300:
                             print(f"  Successfully added {query2} services to {window_id} after {attempt + 1} attempts")
                             break
                         else:
                             print(f"  Error updating {window_id}. Status: {uresp.status}")
-                    except (http.client.HTTPException, URLError) as e:
+                    except (http.client.HTTPException) as e:
                         print(f"  Attempt {attempt + 1} - Error updating {window_id}: {e}")
                     finally:
                         if 'conn' in locals():
