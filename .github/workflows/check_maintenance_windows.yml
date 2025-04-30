@@ -11,26 +11,27 @@ jobs:
   check_maintenance_windows:
     name: Checkout repo
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: VAMobile
+    # defaults:
+    #   run:
+    #     working-directory: VAMobile
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
-            maintenance_windows.py
-            requirements.txt
+            VAMobile/maintenance_windows.py
+            VAMobile/requirements.txt
           token: ${{ secrets.GH_ACTIONS_PAT }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.13"
       - name: Check Maintenance Windows
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
         run: |
-          echo "Running Script to check maintenance windows..."
+          echo "Installing dependencies..."
           pip install -r requirements.txt
+          echo "Running Script to check maintenance windows..."
           python3 maintenance_windows.py
