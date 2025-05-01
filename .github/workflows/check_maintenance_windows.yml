@@ -37,7 +37,7 @@ jobs:
           python3 maintenance_windows.py
 
   start_slack_thread_success:
-    name: Start Slack thread
+    name: Start Slack thread for success
     needs: check_maintenance_windows
     if: ${{ success() }}
     uses: ./.github/workflows/start_slack_thread.yml
@@ -47,7 +47,7 @@ jobs:
       message: "Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows>"
 
   start_slack_thread_failure:
-    name: Start Slack thread
+    name: Start Slack thread for failure
     needs: check_maintenance_windows
     if: ${{ failure() }}
     uses: ./.github/workflows/start_slack_thread.yml
