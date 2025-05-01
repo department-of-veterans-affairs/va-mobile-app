@@ -44,7 +44,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mobile&team_ids=all|Mobile Maintenance Windows>"
 
   start_slack_thread_failure:
     name: Start Slack thread
