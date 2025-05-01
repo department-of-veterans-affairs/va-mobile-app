@@ -37,7 +37,7 @@ jobs:
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
-          python3 maintenance_windows.py output.txt
+          python3 maintenance_windows.py > output.txt
           script_output=$(cat output.txt)
           echo "script_output=$script_output" >> "$GITHUB_OUTPUT"
 
