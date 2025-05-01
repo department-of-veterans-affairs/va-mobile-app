@@ -38,17 +38,15 @@ jobs:
           python3 maintenance_windows.py
           echo "output=${{ id }}" >> $GITHUB_OUTPUT
 
-  notify_update_success:
-
-start_slack_thread:
-  name: Start Slack thread
-  needs: check_maintenance_windows
-  if: ${{ success() }}
-  uses: ./.github/workflows/start_slack_thread.yml
-  secrets: inherit
-  with:
-    channel_name: va-mobile-sandbox
-    message: "Maintenance Windows updated! \n ${{ check_maintenance_windows.maint_windows.outputs.output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+  start_slack_thread:
+    name: Start Slack thread
+    needs: check_maintenance_windows
+    if: ${{ success() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: "Maintenance Windows updated! \n ${{ check_maintenance_windows.maint_windows.outputs.output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   #   name: Notify if windows update
   #   needs: check_maintenance_windows
