@@ -5,6 +5,12 @@ on:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
     - cron: "0 9 * * 1,2,3,4,5"
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release/v**'
 
 jobs:
   axe-scan:
@@ -24,7 +30,7 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install ChromeDriver
-        run: npm install -g chromedriver
+        run: npm install -g chromedriver@135.0.4
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
