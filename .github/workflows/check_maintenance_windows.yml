@@ -43,6 +43,9 @@ jobs:
           echo "EOF" >> "$GITHUB_OUTPUT"
           echo "script_output=$SCRIPT_OUTPUT" >> "$GITHUB_OUTPUT"
 
+      - name: debug GITHUB_OUTPUT
+        run: cat $GITHUB_OUTPUT
+
   start_slack_thread:
     name: Start Slack thread
     needs: check_maintenance_windows
