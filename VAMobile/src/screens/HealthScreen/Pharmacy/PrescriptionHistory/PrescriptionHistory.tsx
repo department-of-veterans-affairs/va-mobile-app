@@ -280,7 +280,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       }
 
       return (
-        <Box key={idx}>
+        <Box key={idx} pb={theme.dimensions.condensedMarginBetween}>
           <MultiTouchCard {...cardProps} />
         </Box>
       )
