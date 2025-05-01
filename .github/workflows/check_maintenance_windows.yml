@@ -11,8 +11,6 @@ jobs:
   check_maintenance_windows:
     name: Maintenance Window Update
     runs-on: ubuntu-latest
-    outputs:
-      python_output: ${{ steps.maint_windows.outputs.script_output }}
     defaults:
       run:
         working-directory: VAMobile
@@ -29,7 +27,6 @@ jobs:
         with:
           python-version: "3.13"
       - name: Check Maintenance Windows
-        id: maint_windows
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
@@ -37,14 +34,9 @@ jobs:
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
-          python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <(python3 maintenance_windows.py) > encoded_output.json
-          encoded_script_output=$(cat encoded_output.json)
-          echo "script_output=$encoded_script_output" >> "$GITHUB_OUTPUT"
+          python3 maintenance_windows.py
 
-      - name: debug GITHUB_OUTPUT
-        run: cat $GITHUB_OUTPUT
-
-  start_slack_thread:
+  start_slack_thread_success:
     name: Start Slack thread
     needs: check_maintenance_windows
     if: ${{ success() }}
@@ -52,4 +44,14 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows updated! \n ${{ needs.check_maintenance_windows.outputs.python_output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+
+  start_slack_thread_failure:
+    name: Start Slack thread
+    needs: check_maintenance_windows
+    if: ${{ failure() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: "Maintenance Windows update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
