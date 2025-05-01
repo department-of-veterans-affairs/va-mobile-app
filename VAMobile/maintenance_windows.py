@@ -22,7 +22,7 @@ def service_to_add():
     for attempt in range(retries):
         try:
             conn = http.client.HTTPSConnection("api.pagerduty.com")
-            conn.request("GET","/services?query=TESTService2", headers=headers) # Will be Mobile
+            conn.request("GET","/services?query=Mobile", headers=headers)
             sresponse = conn.getresponse()
             if sresponse.status == 200:
                 srv_list = sresponse.read().decode('utf-8')
@@ -59,7 +59,7 @@ def service_to_add():
 def list_maint_windows():
     retries = 3
     delay = 1
-    search_word = 'TESTService1' # Will be EVSS
+    search_word = 'EVSS'
     for attempt in range(retries):
         try:
             conn = http.client.HTTPSConnection("api.pagerduty.com")
@@ -111,8 +111,8 @@ def update_maint_window():
     future_windows, count = list_maint_windows()
     if future_windows:
         print(f"Checking and updating {count} maintenance window(s)")
-        query1 = "TESTService1"  # Will be EVSS 
-        query2 = "TESTService2" # Will be Mobile
+        query1 = "EVSS"
+        query2 = "Mobile"
         services_to_add = service_to_add()
 
         for i, window in enumerate(future_windows):

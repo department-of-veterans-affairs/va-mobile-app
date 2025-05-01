@@ -3,9 +3,9 @@ name: "[Utils] Check Maintenance Windows"
 on:
   push:
   workflow_dispatch:
-  # schedule:
-  # 04:00 UTC, 12:00AM ET, 9:00PM every day at Midnight
-  # - cron: "00 4 * * *"
+  schedule:
+    # 04:00 UTC, 12:00AM ET, 9:00PM PT every day
+    - cron: "00 4 * * *"
 
 jobs:
   check_maintenance_windows:
@@ -44,7 +44,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows>"
+      message: "Mobile Maintenance Windows update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows>"
 
   start_slack_thread_failure:
     name: Start Slack thread for failure
@@ -54,4 +54,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows>"
+      message: "Mobile Maintenance Windows update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. \n <https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows>"
