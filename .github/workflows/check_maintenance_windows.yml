@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows updated! \n ${{ check_maintenance_windows.maint_windows.outputs.output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "Maintenance Windows updated! \n ${{ steps.maint_windows.outputs.output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   #   name: Notify if windows update
   #   needs: check_maintenance_windows
