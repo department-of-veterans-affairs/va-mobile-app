@@ -9,7 +9,6 @@ on:
 
 jobs:
   check_maintenance_windows:
-    id: maint_windows
     name: Checkout repo
     runs-on: ubuntu-latest
     defaults:
@@ -28,6 +27,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Check Maintenance Windows
+        id: maint_windows
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
