@@ -37,9 +37,9 @@ jobs:
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
-          python3 maintenance_windows.py > output.txt
-          script_output=$(cat output.txt)
-          echo "script_output=$script_output" >> "$GITHUB_OUTPUT"
+          python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))' <(python3 maintenance_windows.py) > encoded_output.json
+          encoded_script_output=$(cat encoded_output.json)
+          echo "script_output=$encoded_script_output" >> "$GITHUB_OUTPUT"
 
       - name: debug GITHUB_OUTPUT
         run: cat $GITHUB_OUTPUT
