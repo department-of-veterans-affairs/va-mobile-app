@@ -38,7 +38,10 @@ jobs:
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
           script_output=$(python3 maintenance_windows.py)
-          echo "script_output=$script_output" >> "$GITHUB_OUTPUT"
+          echo "SCRIPT_OUTPUT<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$script_output" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "script_output=$SCRIPT_OUTPUT" >> "$GITHUB_OUTPUT"
 
   start_slack_thread:
     name: Start Slack thread
