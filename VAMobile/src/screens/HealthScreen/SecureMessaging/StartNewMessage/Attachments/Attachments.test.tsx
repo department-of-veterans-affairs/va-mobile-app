@@ -3,6 +3,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { ImagePickerResponse } from 'react-native-image-picker'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
@@ -52,7 +53,7 @@ context('Attachments', () => {
   describe('on click of select a file', () => {
     it('should call showActionSheetWithOptions and display the action sheet', async () => {
       await waitFor(() => {
-        fireEvent.press(screen.getByText('Select a file'))
+        fireEvent.press(screen.getByText(t('secureMessaging.attachments.selectAFile')))
 
         expect(mockShowActionSheetWithOptions).toHaveBeenCalled()
 
@@ -72,7 +73,7 @@ context('Attachments', () => {
       } as DocumentPickerResponse)
       jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
 
-      fireEvent.press(screen.getByText('Select a file'))
+      fireEvent.press(screen.getByText(t('secureMessaging.attachments.selectAFile')))
 
       const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
       actionSheetCallback(2)
@@ -81,7 +82,7 @@ context('Attachments', () => {
         promise
       })
 
-      expect(screen.getByRole('button', { name: 'Attach' })).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('secureMessaging.startNewMessage.attach') })).toBeTruthy()
       expect(screen.getByLabelText('custom-file-name.docx (0.1 megabytes)')).toBeTruthy()
     })
 
@@ -94,7 +95,7 @@ context('Attachments', () => {
         } as DocumentPickerResponse)
         jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(promise)
 
-        fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+        fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -105,7 +106,7 @@ context('Attachments', () => {
         await waitFor(() => {
           promise
         })
-        fireEvent.press(screen.getByRole('button', { name: 'Attach' }))
+        fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.startNewMessage.attach') }))
         expect(mockNavigationSpy).toHaveBeenCalledWith('EditDraft', {
           attachmentFileToAdd: { name: 'custom-file-name.docx', type: 'docx', uri: 'uri' },
           attachmentFileToRemove: {},
@@ -124,7 +125,7 @@ context('Attachments', () => {
         } as DocumentPickerResponse)
         jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-        fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+        fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
         const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -136,7 +137,7 @@ context('Attachments', () => {
           failCasePromise
         })
 
-        expect(screen.getByText("Attach a file that's smaller than 6 MB")).toBeTruthy()
+        expect(screen.getByText(t('secureMessaging.attachments.fileSizeError'))).toBeTruthy()
       })
 
       describe('when the error is a file type error', () => {
@@ -148,7 +149,7 @@ context('Attachments', () => {
           } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-          fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+          fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -160,7 +161,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(screen.getByText('Attach a DOC, DOCX, GIF, PDF, JPG, PNG, RTF, TXT, XLS, or XLSX')).toBeTruthy()
+          expect(screen.getByText(t('secureMessaging.attachments.fileTypeError'))).toBeTruthy()
         })
       })
 
@@ -174,7 +175,7 @@ context('Attachments', () => {
           } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-          fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+          fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -186,7 +187,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(screen.getByText(`Attach a file that's smaller than 6 MB`)).toBeTruthy()
+          expect(screen.getByText(t('secureMessaging.attachments.fileSizeError'))).toBeTruthy()
         })
       })
 
@@ -202,7 +203,7 @@ context('Attachments', () => {
           } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-          fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+          fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -214,7 +215,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(screen.getByText('The total size of your attachments must be smaller than 10 MB')).toBeTruthy()
+          expect(screen.getByText(t('secureMessaging.attachments.fileSumSizeError'))).toBeTruthy()
         })
       })
 
@@ -230,7 +231,7 @@ context('Attachments', () => {
           } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pickSingle').mockReturnValue(failCasePromise)
 
-          fireEvent.press(screen.getByRole('button', { name: 'Select a file' }))
+          fireEvent.press(screen.getByRole('button', { name: t('secureMessaging.attachments.selectAFile') }))
 
           const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
 
@@ -242,7 +243,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(screen.getByText('You already attached this file')).toBeTruthy()
+          expect(screen.getByText(t('secureMessaging.attachments.duplicateFileError'))).toBeTruthy()
         })
       })
     })

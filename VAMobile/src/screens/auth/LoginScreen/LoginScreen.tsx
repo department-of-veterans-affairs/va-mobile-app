@@ -116,7 +116,7 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       {!loadingRefreshToken && <CrisisLineButton />}
-      {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
+      {demoMode && <AlertWithHaptics variant="info" description="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}
