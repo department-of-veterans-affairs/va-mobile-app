@@ -13,7 +13,7 @@ jobs:
     name: Checkout repo
     runs-on: ubuntu-latest
     outputs:
-      python_output: ${{ steps.maint_windows.outputs.output }}
+      python_output: ${{ steps.maint_windows.outputs.py_output }}
     defaults:
       run:
         working-directory: VAMobile
