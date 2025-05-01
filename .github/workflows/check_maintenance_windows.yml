@@ -9,7 +9,7 @@ on:
 
 jobs:
   check_maintenance_windows:
-    id: maint_windows
+    # id: maint_windows
     name: Checkout repo
     runs-on: ubuntu-latest
     defaults:
