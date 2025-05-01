@@ -12,6 +12,8 @@ jobs:
     # id: maint_windows
     name: Checkout repo
     runs-on: ubuntu-latest
+    outputs:
+      python_output: ${{ steps.maint_windows.outputs.output }}
     defaults:
       run:
         working-directory: VAMobile
@@ -35,8 +37,8 @@ jobs:
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
-          python3 maintenance_windows.py
-          # echo "output=${{ id }}" >> $GITHUB_OUTPUT
+          py_output=$(python3 maintenance_windows.py)
+          echo "py_output=$py_output >> $GITHUB_OUTPUT"
 
   start_slack_thread:
     name: Start Slack thread
@@ -46,7 +48,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Maintenance Windows updated! \n ${{ jobs.check_maintenance_windows.outputs.output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "Maintenance Windows updated! \n ${{ neeeds.check_maintenance_windows.outputs.python_output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   #   name: Notify if windows update
   #   needs: check_maintenance_windows
