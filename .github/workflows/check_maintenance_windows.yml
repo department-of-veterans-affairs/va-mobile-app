@@ -9,11 +9,11 @@ on:
 
 jobs:
   check_maintenance_windows:
-    # id: maint_windows
-    name: Checkout repo
+    id: maint_windows
+    name: Maintenance Window Update
     runs-on: ubuntu-latest
     outputs:
-      python_output: ${{ steps.maint_windows.outputs.py_output }}
+      python_output: ${{ steps.maint_windows.outputs.script_output }}
     defaults:
       run:
         working-directory: VAMobile
@@ -37,8 +37,8 @@ jobs:
           echo "Installing dependencies..."
           pip install -r requirements.txt
           echo "Running Script to check maintenance windows..."
-          py_output=$(python3 maintenance_windows.py)
-          echo "py_output=$py_output >> $GITHUB_OUTPUT"
+          script_output=$(python3 maintenance_windows.py)
+          echo "script_output=$script_output" >> "$GITHUB_OUTPUT"
 
   start_slack_thread:
     name: Start Slack thread
@@ -49,35 +49,3 @@ jobs:
     with:
       channel_name: va-mobile-sandbox
       message: "Maintenance Windows updated! \n ${{ needs.check_maintenance_windows.outputs.python_output }} See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
-
-  #   name: Notify if windows update
-  #   needs: check_maintenance_windows
-  #   if: ${{ success() }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Notify Slack on update success
-  #       env:
-  #         SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-  #       run: |
-  #         curl -X POST \
-  #              -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-  #              -H 'Content-type: application/json' \
-  #              -d '{"channel": "va-mobile-sandbox", "text": "Maintenance window update success!" , "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \ # final channel will be va-mobile-app
-  #              https://slack.com/api/chat.postMessage
-  #
-  # notify_update_failure:
-  #   name: Notify if windows fail to update
-  #   needs: check_maintenance_windows
-  #   if: ${{ failure() }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Notify Slack on update failure
-  #       env:
-  #         SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-  #       run: |
-  #         curl -X POST \
-  #              -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-  #              -H 'Content-type: application/json' \
-  #              -d '{"channel": "va-mobile-sandbox", "text": "Maintenance Windows failed to update" , "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \ # final channel will be va-mobile-app
-  #              https://slack.com/api/chat.postMessage
-  #
