@@ -53,7 +53,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
@@ -521,7 +521,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       accessible={true}
                       accessibilityLabel={
                         showCompensation
-                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`
                           : t('monthlyCompensationPayment.obfuscated')
                       }>
                       <ObfuscatedTextView
@@ -540,7 +540,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       <ObfuscatedTextView
                         showText={showCompensation}
                         obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate((recurringPayment.date as string).substring(0, 10), 'MMMM d, yyyy')}`}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                         revealedTextProps={{
                           variant: 'VeteranStatusProof',
                           color: 'primary',

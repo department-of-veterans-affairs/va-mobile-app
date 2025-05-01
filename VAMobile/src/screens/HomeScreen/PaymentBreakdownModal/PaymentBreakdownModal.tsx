@@ -11,7 +11,7 @@ import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type PaymentBreakdownModalProps = {
@@ -43,7 +43,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
 
   const lastPaymentDate = useMemo(() => {
     if (paymentHistoryQuery.data?.meta.recurringPayment.date) {
-      return paymentHistoryQuery.data.meta.recurringPayment.date.substring(0, 10)
+      return paymentHistoryQuery.data.meta.recurringPayment.date
     }
     return ''
   }, [paymentHistoryQuery.data])
@@ -54,7 +54,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     }
 
     // parse out the month
-    const lastPaymentDateYYYYDDMM = getFormattedDate(lastPaymentDate, 'yyyy-MM-dd')
+    const lastPaymentDateYYYYDDMM = formatDateUtc(lastPaymentDate, 'yyyy-MM-dd')
     const paymentsByLastDate: PaymentsData[] = paymentHistoryQuery.data?.paymentsByDate?.[lastPaymentDateYYYYDDMM] || []
     const payments: ReactNode[] = []
     paymentsByLastDate.forEach((payment, idx) => {
@@ -131,7 +131,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
             <VAScrollView contentContainerStyle={scrollStyles} removeInsets={true}>
               <Box p={MODAL_GUTTER}>
                 <TextView variant="MobileBodyBold" allowFontScaling={false}>
-                  {getFormattedDate(lastPaymentDate, 'MMMM d, yyyy')}
+                  {formatDateUtc(lastPaymentDate, 'MMMM d, yyyy')}
                 </TextView>
                 {renderPaymentBreakdown()}
                 <Box flexDirection="row" justifyContent="space-between" accessible={true}>

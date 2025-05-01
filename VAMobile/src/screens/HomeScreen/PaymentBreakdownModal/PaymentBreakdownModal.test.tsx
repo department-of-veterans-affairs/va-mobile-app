@@ -7,7 +7,7 @@ import { PaymentsGetData } from 'api/types'
 import { get } from 'store/api'
 import { context, render } from 'testUtils'
 import { when } from 'testUtils'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 
 import PaymentBreakdownModal from './PaymentBreakdownModal'
 
@@ -98,7 +98,7 @@ context('PaymentBreakdownModal', () => {
 
     expect(screen.getByText(t('paymentBreakdownModal.title'))).toBeTruthy()
     await waitFor(() => {
-      expect(screen.getByText(getFormattedDate(firstPayment.date.substring(0, 10), 'MMMM d, yyyy'))).toBeTruthy()
+      expect(screen.getByText(formatDateUtc(firstPayment.date, 'MMMM d, yyyy'))).toBeTruthy()
     })
 
     expect(screen.getByText(`${firstPayment.paymentType}`)).toBeTruthy()
