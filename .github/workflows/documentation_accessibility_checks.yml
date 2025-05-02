@@ -28,8 +28,8 @@ jobs:
         run: |
           echo "Google Chrome Version..."
           google-chrome --version
-          npm install -g chromedriver
-          echo "Google Driver version..."
+          # npm install -g chromedriver
+          echo "Chrome Driver version..."
           chromedriver --version
       - name: Install mobile app modules
         working-directory: VAMobile
