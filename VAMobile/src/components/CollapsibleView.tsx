@@ -85,6 +85,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({
 
   const touchableRow = (
     <Box minHeight={theme.dimensions.touchableMinHeight}>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <Pressable
         accessibilityLabel={text}
         {...a11yHintProp(a11yHint || '')}

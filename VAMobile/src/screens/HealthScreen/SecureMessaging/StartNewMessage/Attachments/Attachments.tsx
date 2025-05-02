@@ -152,6 +152,7 @@ function Attachments({ navigation, route }: AttachmentsProps) {
     const text = [fileName, formattedFileSize].join(' ').trim()
     const textA11y = [fileName, formattedFileSizeA11y].join(' ').trim()
     return (
+      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
       <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween} accessibilityLabel={textA11y}>
         {text}
       </TextView>
@@ -198,7 +199,8 @@ function Attachments({ navigation, route }: AttachmentsProps) {
         </TextView>
         <VABulletList listOfText={bullets} />
         {image && uri && (
-          // need to set label has \ufeff so that samsung just says image and not unliable image
+          // need to set label has \ufeff so that samsung just says image and not unlabeled image
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <Box
             mb={theme.dimensions.standardMarginBetween}
             accessibilityRole="image"

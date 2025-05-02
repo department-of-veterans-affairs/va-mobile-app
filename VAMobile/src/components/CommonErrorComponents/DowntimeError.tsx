@@ -55,6 +55,7 @@ const DowntimeError: FC<DowntimeErrorProps> = ({ screenID }) => {
           header={t('downtime.title')}
           description={t('downtime.message.1', { endTime })}
           descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
             {t('downtime.message.2')}
           </TextView>
