@@ -27,7 +27,7 @@ jobs:
       - name: Reinstall version 135
         run: |
           sudo apt install -y google-chrome-stable
-          npm install -g chromedriver@135.0.7049.114
+          npm install -g chromedriver@135.0.3
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
