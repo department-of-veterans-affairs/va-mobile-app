@@ -24,6 +24,10 @@ jobs:
           node-version-file: "VAMobile/documentation/.nvmrc"
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
+      - name: Instal version 136  Chrome
+        run: |
+          npm install -g google-chrome
+          npm install -g chromedriver
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
@@ -42,6 +46,8 @@ jobs:
           google-chrome --version
           echo "Chrome Driver version..."
           chromedriver --version
+          echo "Chrome Path version..."
+          /opt/google/chrome/chrome --version
       - name: Check accessibility issues
         id: accessibility_check
         run: |
