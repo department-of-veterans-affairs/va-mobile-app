@@ -1,6 +1,7 @@
 name: "[Documentation] Accessibility Check"
 
 on:
+  push: #Adding for testing
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
@@ -24,7 +25,11 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install ChromeDriver
+        run: echo "Google Chrome Version..."
+        run: google-chrome --version
         run: npm install -g chromedriver
+        run: echo "Google Driver version..."
+        run: googledriver --version
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
