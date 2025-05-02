@@ -20,6 +20,10 @@ const getAppointments = (
   endDate: string,
   timeFrame: TimeFrameType,
 ): Promise<AppointmentsGetData | undefined> => {
+  const pastParams = timeFrame !== TimeFrameTypeConstants.UPCOMING && {
+    'include[]': 'travel_pay_claims',
+  }
+
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
@@ -28,6 +32,7 @@ const getAppointments = (
     sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
     'included[]': 'pending',
     useCache: 'false',
+    ...pastParams,
   } as Params)
 }
 
