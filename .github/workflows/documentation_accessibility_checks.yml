@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Reinstall version 135
         run: |
-          apt install -y google-chrome-stable
+          sudo apt install -y google-chrome-stable
           npm install -g chromedriver@135.0.7049.114
       - name: Install mobile app modules
         working-directory: VAMobile
