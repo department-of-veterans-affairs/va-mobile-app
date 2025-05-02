@@ -26,8 +26,8 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Instal version 136  Chrome
         run: |
-          sudo apt install -y google-chrome-stable=135.0.7049.114-1
-          # npm install -g chromedriver
+          sudo apt install -y google-chrome-stable=136.0.7103.49
+          npm install -g chromedriver
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
@@ -48,8 +48,6 @@ jobs:
           echo "Chrome Driver version..."
           chromedriver --version
           which chromedriver
-          echo "Chrome Path version..."
-          /opt/google/chrome/chrome --version
       - name: Check accessibility issues
         id: accessibility_check
         run: |
