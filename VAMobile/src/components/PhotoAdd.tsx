@@ -15,12 +15,14 @@ type PhotoAddProps = {
   width: number
   /** height of the component */
   height: number
+  /** error if no images present */
+  imagesEmptyError: boolean
   /** Add Photo on press with error and success callback */
   onPress: () => void
 }
 
-const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
-  const { colors: themeColor } = useTheme()
+const PhotoAdd: FC<PhotoAddProps> = ({ width, height, imagesEmptyError, onPress }) => {
+  const { colors: themeColor, dimensions } = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const pressableProps: PressableProps = {
@@ -48,8 +50,15 @@ const PhotoAdd: FC<PhotoAddProps> = ({ width, height, onPress }) => {
     maxFontSizeMultiplier: 2.5,
   }
 
+  const a11yErrorLabel = t('error', { error: t('fileUpload.requiredPhoto') })
+
   return (
     <Pressable {...pressableProps}>
+      {imagesEmptyError && (
+        <TextView accessibilityLabel={a11yErrorLabel} variant="MobileBodyBold" color="error" mb={dimensions.gutter}>
+          {t('fileUpload.requiredPhoto')}
+        </TextView>
+      )}
       <Box {...boxProps}>
         <Icon name={'AddCircle'} width={40} height={40} fill={themeColor.icon.photoAdd} maxWidth={70} />
       </Box>
