@@ -1,6 +1,6 @@
-import { DateTime, Interval } from 'luxon'
+import { DateTime } from 'luxon'
 
-import { AppointmentData, AppointmentsGetData } from 'api/types'
+import { AppointmentsGetData } from 'api/types'
 
 import { Params } from '../api'
 import { DemoStore } from './store'
@@ -26,20 +26,11 @@ export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData
  */
 export const getAppointments = (store: DemoStore, params: Params): AppointmentsGetData | undefined => {
   const endDate = params.endDate
-  const startDate = params.startDate as string
+  //ToDo fix pagination and past appointments to be broken up to the ranges that past appointments can be selected, do this when migrating to msw
 
   if (endDate && typeof endDate === 'string') {
     if (DateTime.fromISO(endDate) < DateTime.now()) {
-      // Filter data from json file with dates in specified time range
-      const pastAppts = JSON.parse(JSON.stringify(store['/v0/appointments'].past))
-      const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
-      const filteredApptsData = pastAppts.data.filter((appt: AppointmentData) => {
-        const apptDate = DateTime.fromISO(appt.attributes.startDateLocal)
-        return interval.contains(apptDate)
-      })
-      pastAppts.data = [...filteredApptsData]
-      pastAppts.meta.pagination.totalEntries = filteredApptsData.length
-      return pastAppts
+      return store['/v0/appointments'].past
     } else {
       return store['/v0/appointments'].upcoming
     }

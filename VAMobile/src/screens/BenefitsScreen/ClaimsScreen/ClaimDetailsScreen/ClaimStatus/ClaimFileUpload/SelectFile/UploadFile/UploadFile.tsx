@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { ScrollView } from 'react-native/types'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-import { spacing } from '@department-of-veterans-affairs/mobile-tokens'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
@@ -310,17 +308,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     navigation.dispatch(StackActions.pop(2))
   }
 
-  const fileSelectStyle = {
-    padding: spacing.vadsSpaceSm,
-    backgroundColor: 'transparent',
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: theme.colors.border.photoAdd,
-    textAlign: 'center',
-  }
-
-  const a11yErrorLabel = t('error', { error: t('fileUpload.requiredFile') })
-
   return (
     <VAScrollView scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.uploadFiles')} />
@@ -348,18 +335,16 @@ function UploadFile({ navigation, route }: UploadFileProps) {
               <FileList files={filesList} onDelete={onFileDelete} />
             ) : (
               <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
-                <Pressable onPress={onSelectFile} accessibilityRole="button">
-                  <Box>
-                    {filesEmptyError && (
-                      <TextView variant="MobileBodyBold" color="error" mb={3} accessibilityLabel={a11yErrorLabel}>
-                        {t('fileUpload.requiredFile')}
-                      </TextView>
-                    )}
-                    <TextView variant="MobileBodyBold" color="link" style={fileSelectStyle}>
-                      {t('fileUpload.selectAFile')}
-                    </TextView>
-                  </Box>
-                </Pressable>
+                {filesEmptyError && (
+                  <TextView variant="MobileBodyBold" color="error" mb={3}>
+                    {t('fileUpload.requiredFile')}
+                  </TextView>
+                )}
+                <Button
+                  buttonType={ButtonVariants.Secondary}
+                  onPress={onSelectFile}
+                  label={t('fileUpload.selectAFile')}
+                />
               </Box>
             )}
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>

@@ -31,7 +31,6 @@ const mockOverrides = {
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: false,
   prescriptions: true,
-  shareMyHealthDataLink: true,
   submitEvidenceExpansion: true,
   sso: true,
   testFeature: false,

@@ -288,7 +288,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}
-              imagesEmptyError={imagesEmptyError}
               onPress={(): void => {
                 onAddPhotos(
                   t,
@@ -387,6 +386,11 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               borderBottomColor="primary"
               pt={theme.dimensions.standardMarginBetween}
               pb={theme.dimensions.standardMarginBetween}>
+              {imagesEmptyError && (
+                <TextView variant="MobileBodyBold" color="error" mb={3} ml={theme.dimensions.gutter}>
+                  {t('fileUpload.requiredPhoto')}
+                </TextView>
+              )}
               <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {displayImages()}
               </Box>
