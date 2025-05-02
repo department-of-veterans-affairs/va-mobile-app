@@ -24,12 +24,13 @@ jobs:
           node-version-file: "VAMobile/documentation/.nvmrc"
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
-      - name: Install ChromeDriver
-        run: echo "Google Chrome Version..."
-        run: google-chrome --version
-        run: npm install -g chromedriver
-        run: echo "Google Driver version..."
-        run: googledriver --version
+      - name: Install ChromeDriver and print versions
+        run: |
+          echo "Google Chrome Version..."
+          google-chrome --version
+          npm install -g chromedriver
+          echo "Google Driver version..."
+          googledriver --version
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
