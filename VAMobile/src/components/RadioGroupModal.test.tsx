@@ -12,8 +12,6 @@ context('RadioGroupModal', () => {
   const onCancelSpy = jest.fn()
 
   beforeEach(() => {
-    jest.resetAllMocks()
-
     const group1: RadioPickerGroup = {
       title: 'Group 1 title',
       items: [
