@@ -44,8 +44,10 @@ jobs:
         run: |
           echo "Google Chrome Version..."
           google-chrome --version
+          which google-chrome
           echo "Chrome Driver version..."
           chromedriver --version
+          which chromedriver
           echo "Chrome Path version..."
           /opt/google/chrome/chrome --version
       - name: Check accessibility issues
