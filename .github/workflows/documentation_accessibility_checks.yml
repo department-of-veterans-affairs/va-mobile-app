@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Instal version 136  Chrome
         run: |
-          npm install -g google-chrome
+          sudo apt install google-chrome
           npm install -g chromedriver
       - name: Install mobile app modules
         working-directory: VAMobile
