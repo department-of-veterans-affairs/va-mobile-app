@@ -13,13 +13,13 @@ import {
   BeneficiaryTravelAgreement,
   BurdenStatement,
   ErrorScreen,
+  InterstitialScreen,
   MileageScreen,
   ReviewClaimScreen,
   SubmitSuccessScreen,
   TravelClaimHelpScreen,
   VehicleScreen,
 } from './SubmitTravelPayFlowSteps'
-import InterstitialScreen from './SubmitTravelPayFlowSteps/InterstitialScreen'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   InterstitialScreen: undefined
