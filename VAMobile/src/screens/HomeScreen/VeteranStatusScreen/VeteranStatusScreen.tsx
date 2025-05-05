@@ -92,11 +92,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </TextView>
         </Box>
         <Box>
-          <TextView
-            variant="HelperText"
-            color="primaryContrast"
-            mb={theme.dimensions.condensedMarginBetween}
-            testID="veteranStatusMilitaryServiceYearsTestID">
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
