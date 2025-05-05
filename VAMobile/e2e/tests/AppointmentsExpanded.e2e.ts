@@ -8,19 +8,21 @@ export const AppointmentsExpandede2eConstants = {
   APPT_DIRECTIONS_ID: 'directionsTestID',
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
+  TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
 }
 
 const checkTravelClaimAvailability = async (
   appointmentType: string,
   appointmentStatus: string,
   pastAppointment: boolean,
+  travelClaimNumber?: string,
 ) => {
   const isAllowed =
     appointmentType === 'ATLAS' ||
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
-  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed') {
+  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimNumber) {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
@@ -118,6 +120,7 @@ const checkUpcomingApptDetails = async (
   otherDetails?: string,
   locationName?: string,
   locationAddress?: string,
+  travelClaimNumber?: string,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -356,7 +359,14 @@ const checkUpcomingApptDetails = async (
     }
   }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
-  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment)
+  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment, travelClaimNumber)
+
+  if (travelClaimNumber && pastAppointment) {
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+    await expect(element(by.text('Claim number: ' + travelClaimNumber))).toExist()
+  } else {
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+  }
 
   await element(by.text('Appointments')).tap()
 }
@@ -808,6 +818,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'San Francisco VA Health Care System',
       '2360 East Pershing Boulevard',
+      'TC0928098230498',
     )
   })
 

@@ -18,6 +18,7 @@ import {
   AppointmentPreferredModality,
   AppointmentProvider,
   AppointmentReasonAndComment,
+  AppointmentTravelClaimDetails,
   AppointmentTypeOfCare,
   DEPRECATED_AppointmentCalendarButton,
 } from './SharedComponents'
@@ -66,6 +67,7 @@ function InPersonVAAppointment({
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
         <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
+        <AppointmentTravelClaimDetails attributes={attributes} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}
           attributes={attributes}
