@@ -166,8 +166,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   } = useLabsAndTests(
     {
       dateRange: {
-        start: getFormattedDate(datePickerOption.dates?.startDate.toISO(), 'MM-d-yyyy'),
-        end: getFormattedDate(datePickerOption.dates?.endDate.toISO(), 'MM-d-yyyy'),
+        start: getFormattedDate(datePickerOption.dates?.startDate.toISO(), 'yyyy-MM-dd'),
+        end: getFormattedDate(datePickerOption.dates?.endDate.toISO(), 'yyyy-MM-dd'),
       },
       timeFrame: datePickerOption.timeFrame,
     },
