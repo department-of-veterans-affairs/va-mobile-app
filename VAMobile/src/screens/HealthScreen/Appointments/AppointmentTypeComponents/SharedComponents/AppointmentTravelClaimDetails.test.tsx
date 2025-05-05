@@ -113,7 +113,7 @@ describe('AppointmentTravelClaimDetails', () => {
         ...travelPayClaimData,
         claim: { ...travelPayClaimData.claim!, claimNumber: '' },
       }
-      initializeTestInstance(modifiedData as any)
+      initializeTestInstance(modifiedData)
       expect(
         screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: undefined })),
       ).toBeNull()
