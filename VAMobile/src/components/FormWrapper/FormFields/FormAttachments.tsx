@@ -52,6 +52,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({
             <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
               <Icon name="AttachFile" width={20} height={20} fill={theme.colors.icon.spinner} />
             </Box>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBodyBold"
               ml={theme.dimensions.textIconMargin}

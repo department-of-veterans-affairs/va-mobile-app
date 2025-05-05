@@ -140,6 +140,7 @@ const VASelector: FC<VASelectorProps> = ({
   const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? t('error', { error }) : ''}`
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TouchableWithoutFeedback
       testID={testID}
       onPress={selectorOnPress}

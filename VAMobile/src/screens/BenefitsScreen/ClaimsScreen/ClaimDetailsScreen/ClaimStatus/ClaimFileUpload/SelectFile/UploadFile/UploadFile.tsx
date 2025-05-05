@@ -351,6 +351,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                 <Pressable onPress={onSelectFile} accessibilityRole="button">
                   <Box>
                     {filesEmptyError && (
+                      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
                       <TextView variant="MobileBodyBold" color="error" mb={3} accessibilityLabel={a11yErrorLabel}>
                         {t('fileUpload.requiredFile')}
                       </TextView>

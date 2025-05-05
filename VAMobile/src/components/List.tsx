@@ -78,14 +78,21 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
     <Box>
       <Box flexDirection="row" justifyContent={'space-between'} accessible={true}>
         {title && (
-          <TextView {...titleProps} accessibilityLabel={titleA11yLabel} testID={titleA11yLabel || title}>
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+          <TextView
+            {...titleProps}
+            accessibilityLabel={titleA11yLabel}
+            accessible={true}
+            testID={titleA11yLabel || title}>
             {title}
           </TextView>
         )}
         {rightTitleText && (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             {...titleProps}
             accessibilityLabel={rightTitleTextA11yLabel}
+            accessible={true}
             testID={rightTitleTextA11yLabel || rightTitleText}>
             {rightTitleText}
           </TextView>
