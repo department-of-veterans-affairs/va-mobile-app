@@ -60,6 +60,7 @@ function CernerAlert() {
 
     return (
       <>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('healthHelp.goToPortal'))}
@@ -73,6 +74,7 @@ function CernerAlert() {
         {allCernerFacilities ? (
           <></>
         ) : (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('cernerAlert.footer'))}>
             {t('cernerAlert.footer')}
           </TextView>
