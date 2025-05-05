@@ -44,7 +44,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -106,7 +106,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -163,7 +163,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -261,7 +261,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -317,7 +317,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -416,7 +416,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -475,7 +475,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -524,7 +524,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -573,7 +573,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -632,7 +632,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -682,7 +682,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -731,7 +731,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -790,7 +790,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -841,7 +841,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1026,7 +1026,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1093,7 +1093,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1147,7 +1147,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1201,7 +1201,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1255,7 +1255,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1309,7 +1309,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1363,8 +1363,20 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000001",
+                "claimStatus": "Fiscal rescinded",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "reimbursementAmount": 4.03,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
               }
             }
           }
@@ -1417,7 +1429,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1471,8 +1483,20 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000002",
+                "claimStatus": "Paid",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 10.26,
+                "reimbursementAmount": 8.2,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
               }
             }
           }
@@ -1525,8 +1549,19 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000001",
+                "claimStatus": "Denied",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
               }
             }
           }
@@ -1579,7 +1614,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1633,7 +1668,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1687,8 +1722,20 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000032",
+                "claimStatus": "Paid",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "reimbursementAmount": 4.8,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
               }
             }
           }
@@ -1741,7 +1788,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1795,7 +1842,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1903,7 +1950,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
@@ -1962,7 +2009,7 @@
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
-                "message": "No claims found.",
+                "message": "Data retrieved successfully",
                 "success": true
               }
             }
