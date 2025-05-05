@@ -58,6 +58,7 @@ jobs:
           pages_with_errors=0
           # Counter for total errors
           total_errors=0
+          chmod -R 777 "$CHROMEWEBDRIVER"
 
           for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
