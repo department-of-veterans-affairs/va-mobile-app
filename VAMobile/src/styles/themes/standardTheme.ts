@@ -164,6 +164,14 @@ const fontSizes = {
     fontSize: 14,
     lineHeight: 22,
   },
+  VeteranStatusCardHeaderPortraitBold: {
+    fontSize: 24,
+    lineHeight: 26,
+  },
+  VeteranStatusCardHeaderLandscapeBold: {
+    fontSize: 28,
+    lineHeight: 31,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -226,6 +234,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
     MobileBodyTight: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyTight, scheme.text.bodyText),
+    MobileBodyTightBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyTight, scheme.text.bodyText),
     NametagNumber: buildFont('Bitter-Regular', fontSizes.NametagNumbers, scheme.text.veteranStatusBranch),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold, scheme.text.primary),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel, scheme.text.bodyText),
@@ -242,6 +251,16 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     VeteranStatusProof: buildFont('SourceSansPro-Regular', fontSizes.veteranStatus, scheme.text.veteranStatusProof),
     webviewTitle: buildFont('SourceSansPro-Regular', fontSizes.webviewTitle, scheme.text.webviewTitle),
     MobileFooterLink: buildFont('SourceSansPro-Regular', fontSizes.FooterText, scheme.text.link, true),
+    VeteranStatusCardHeaderPortraitBold: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.VeteranStatusCardHeaderPortraitBold,
+      scheme.text.primary,
+    ),
+    VeteranStatusCardHeaderLandscapeBold: buildFont(
+      'SourceSansPro-Bold',
+      fontSizes.VeteranStatusCardHeaderLandscapeBold,
+      scheme.text.primary,
+    ),
   }
 }
 
@@ -301,12 +320,15 @@ let theme: VATheme = {
     LabelTag: fontSizes.LabelTag,
     MobileBody: fontSizes.MobileBody,
     MobileBodyTight: fontSizes.MobileBodyTight,
+    MobileBodyTightBold: fontSizes.MobileBodyTight,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
     FooterText: fontSizes.FooterText,
+    VeteranStatusCardHeaderPortraitBold: fontSizes.VeteranStatusCardHeaderPortraitBold,
+    VeteranStatusCardHeaderLandscapeBold: fontSizes.VeteranStatusCardHeaderLandscapeBold,
   },
   mode: Appearance.getColorScheme() === ColorSchemeConstantType.dark ? 'dark' : 'light',
   paragraphSpacing: {

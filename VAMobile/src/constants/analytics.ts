@@ -1225,6 +1225,15 @@ export const Events = {
       },
     }
   },
+  vama_webview: (url: string, id?: string): Event => {
+    return {
+      name: 'vama_webview',
+      params: {
+        url,
+        id,
+      },
+    }
+  },
   vama_webview_fail: (error: string): Event => {
     return {
       name: 'vama_webview_fail',

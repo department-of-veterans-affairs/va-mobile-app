@@ -14,6 +14,7 @@ function NoMilitaryInformationAccess() {
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
         {t('militaryInformation.noMilitaryInfoAccess.title')}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant="MobileBody"
         textAlign="center"

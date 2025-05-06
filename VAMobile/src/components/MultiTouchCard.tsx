@@ -95,6 +95,7 @@ const MultiTouchCard: FC<MultiTouchCardProps> = ({
 
   return (
     <>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       {orderIdentifier && <HiddenA11yElement accessibilityLabel={orderIdentifier}>{orderIdentifier}</HiddenA11yElement>}
       <Box {...mainBoxProps}>{mainContent}</Box>
       {hasBottomContent && getBottomContent()}

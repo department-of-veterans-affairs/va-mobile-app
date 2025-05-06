@@ -44,6 +44,7 @@ function PrescriptionHistoryNoMatches({ isFiltered }: PrescriptionHistoryNoMatch
         <TextView textAlign={'center'} variant="MobileBodyBold" accessibilityRole={'header'}>
           {t('prescription.history.empty.title')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           pt={theme.dimensions.condensedMarginBetween}
           textAlign={'center'}

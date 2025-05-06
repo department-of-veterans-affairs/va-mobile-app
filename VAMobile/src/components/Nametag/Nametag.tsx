@@ -31,7 +31,7 @@ export const Nametag = () => {
     }
   }, [personalInfo])
 
-  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.proofOf')}` : undefined
+  const accLabel = branch !== '' ? `${branch} ${t('veteranStatus.title')}` : undefined
 
   const pressableProps: PressableProps = {
     onPress: () => navigateTo('VeteranStatus'),
@@ -78,7 +78,7 @@ export const Nametag = () => {
               )}
               <Box flexDirection="row" alignItems="center">
                 <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
-                  {t('veteranStatus.proofOf')}
+                  {t('veteranStatus.title')}
                 </TextView>
               </Box>
             </Box>
