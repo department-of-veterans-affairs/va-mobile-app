@@ -1263,9 +1263,9 @@
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "claim": {
-                "claimNumber": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
                 "claimStatus": "In Progress",
-                "id": "TC0928098230498",
+                "claimNumber": "TC0928098230498",
                 "appointmentDateTime": "{{now - 31 days}}",
                 "facilityName": "DAYTSHR - Dayton VA Medical Center",
                 "createdOn": "{{now - 28 days}}",

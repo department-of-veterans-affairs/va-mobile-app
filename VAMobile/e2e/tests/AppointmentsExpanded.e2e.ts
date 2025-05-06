@@ -15,14 +15,14 @@ const checkTravelClaimAvailability = async (
   appointmentType: string,
   appointmentStatus: string,
   pastAppointment: boolean,
-  travelClaimNumber?: string,
+  travelClaimId?: string,
 ) => {
   const isAllowed =
     appointmentType === 'ATLAS' ||
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
-  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimNumber) {
+  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId) {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
@@ -120,7 +120,7 @@ const checkUpcomingApptDetails = async (
   otherDetails?: string,
   locationName?: string,
   locationAddress?: string,
-  travelClaimNumber?: string,
+  travelClaimId?: string,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -359,11 +359,11 @@ const checkUpcomingApptDetails = async (
     }
   }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
-  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment, travelClaimNumber)
+  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment, travelClaimId)
 
-  if (travelClaimNumber && pastAppointment) {
+  if (travelClaimId && pastAppointment) {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-    await expect(element(by.text('Claim number: ' + travelClaimNumber))).toExist()
+    await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
   }
@@ -818,7 +818,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'San Francisco VA Health Care System',
       '2360 East Pershing Boulevard',
-      'TC0928098230498',
+      '20d73591-ff18-4b66-9838-1429ebbf1b6e',
     )
   })
 

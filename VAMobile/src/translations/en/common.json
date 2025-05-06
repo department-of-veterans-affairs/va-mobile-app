@@ -1526,7 +1526,6 @@
   "travelPay.travelClaimFiledDetails.status": "Status: {{status}}",
   "travelPay.webview.claims.loading": "Loading Travel Claim Details Page...",
   "travelPay.travelClaimFiledDetails.goToVAGov": "View claim details on VA.gov",
-  "travelPay.travelClaimFiledDetails.status.processing": "Processing claim",
   "travelPay.travelClaimFiledDetails.goToVAGovA11yHint": "Takes you to the V-A .gov travel reimbursement page. This page will open in your device's browser",
   "tryAgain": "Try again",
   "upcoming": "upcoming",

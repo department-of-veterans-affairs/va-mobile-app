@@ -346,19 +346,29 @@ const getIsVideo = (attributes: AppointmentAttributes) => {
 }
 
 /**
+ * Returns true or false if the appointment meets the travel pay criteria
+ * @param attributes - type AppointmentAttributes, data attributes of an appointment
+ * @returns boolean, true if the appointment meets the travel pay criteria
+ */
+export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttributes) => {
+  const { status } = attributes
+  const isPast = !isAPendingAppointment(attributes)
+  const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
+  const isClinicVideo = isClinicVideoAppointment(attributes)
+  const isBooked = status === AppointmentStatusConstants.BOOKED
+  return isPast && isBooked && (isInPerson || isClinicVideo)
+}
+
+/**
  * Returns true or false if the appointment is eligible for travel pay
  * @param attributes - type AppointmentAttributes, data attributes of an appointment
  * @returns boolean, true if the appointment is eligible for travel pay
  */
 export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
-  const { status, travelPayClaim } = attributes
-  const isPast = !isAPendingAppointment(attributes)
-  const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
-  const isClinicVideo = isClinicVideoAppointment(attributes)
-  const isBooked = status === AppointmentStatusConstants.BOOKED
+  const { travelPayClaim } = attributes
   // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
   const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
-  return isPast && isBooked && (isInPerson || isClinicVideo) && hasNoClaim
+  return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
 }
 
 /**

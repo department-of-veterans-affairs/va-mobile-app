@@ -6,6 +6,7 @@ import { AppointmentAttributes, AppointmentTravelPayClaim } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
 import { render, screen } from 'testUtils'
+import { AppointmentDetailsSubType } from 'utils/appointments'
 
 import AppointmentTravelClaimDetails from './AppointmentTravelClaimDetails'
 
@@ -67,17 +68,25 @@ const travelPayClaimData: AppointmentTravelPayClaim = {
 }
 
 describe('AppointmentTravelClaimDetails', () => {
-  const initializeTestInstance = (travelPayClaim?: AppointmentTravelPayClaim) => {
+  const initializeTestInstance = (subType: AppointmentDetailsSubType, travelPayClaim?: AppointmentTravelPayClaim) => {
     const attributes = {
       ...baseAppointmentAttributes,
       travelPayClaim,
     }
-    render(<AppointmentTravelClaimDetails attributes={attributes} />)
+    render(<AppointmentTravelClaimDetails attributes={attributes} subType={subType} />)
   }
 
   describe('when travel pay claim is not present', () => {
     it('should not render', () => {
-      initializeTestInstance()
+      initializeTestInstance('Past')
+      expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+    })
+  })
+
+  describe('when subType is not Past', () => {
+    it('should not render', () => {
+      initializeTestInstance('Upcoming')
       expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
       expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
     })
@@ -85,7 +94,7 @@ describe('AppointmentTravelClaimDetails', () => {
 
   describe('when travel pay claim is present', () => {
     it('initializes correctly when all data is present', () => {
-      initializeTestInstance(travelPayClaimData)
+      initializeTestInstance('Past', travelPayClaimData)
       expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
       expect(
         screen.getByText(
@@ -101,22 +110,20 @@ describe('AppointmentTravelClaimDetails', () => {
           }),
         ),
       ).toBeTruthy()
-      expect(screen.getByTestId('goToVAGovID')).toBeTruthy()
+      expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
       expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
     })
 
-    it('should display status but not claim number or link when claim number is missing', () => {
+    it('should display status and link but not claim number when claim number is missing', () => {
       const modifiedData = {
         ...travelPayClaimData,
         claim: { ...travelPayClaimData.claim!, claimNumber: '' },
       }
-      initializeTestInstance(modifiedData)
-      expect(
-        screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: undefined })),
-      ).toBeNull()
+      initializeTestInstance('Past', modifiedData)
+      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: '' }))).toBeNull()
       expect(
         screen.getByText(
           t('travelPay.travelClaimFiledDetails.status', {
@@ -124,7 +131,7 @@ describe('AppointmentTravelClaimDetails', () => {
           }),
         ),
       ).toBeTruthy()
-      expect(screen.queryByTestId('goToVAGovID')).toBeNull()
+      expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
     })
   })
 })
