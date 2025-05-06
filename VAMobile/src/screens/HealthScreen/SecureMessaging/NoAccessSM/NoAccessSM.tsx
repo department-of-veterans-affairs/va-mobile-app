@@ -73,6 +73,7 @@ function NoAccessSM() {
               {t('noAccessSM.toAccess')}
             </TextView>
             <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
               my={theme.dimensions.contentMarginTop}
@@ -80,6 +81,7 @@ function NoAccessSM() {
               {t('noAccessSM.pleaseCall')}
             </TextView>
             <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
               my={theme.dimensions.contentMarginTop}

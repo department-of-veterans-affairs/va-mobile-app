@@ -25,6 +25,7 @@ function IndividualMessageErrorComponent() {
           description={t('errors.callHelpCenter.sorryWithRefresh')}
           primaryButton={tryAgain ? { label: t('refresh'), onPress: tryAgain, testID: t('refresh') } : undefined}>
           <Box>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
               my={standardMarginBetween}

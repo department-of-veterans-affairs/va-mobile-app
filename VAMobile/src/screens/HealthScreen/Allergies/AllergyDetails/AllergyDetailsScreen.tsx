@@ -142,6 +142,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
           </TextArea>
 
           <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
               {t('health.details.weBaseThis')}
             </TextView>

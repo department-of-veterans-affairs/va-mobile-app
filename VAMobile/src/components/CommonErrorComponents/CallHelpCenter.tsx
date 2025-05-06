@@ -67,6 +67,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
           description={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           primaryButton={onTryAgain && { label: t('refresh'), onPress: tryAgain, testID: t('refresh') }}>
           <Box>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
               paragraphSpacing={true}

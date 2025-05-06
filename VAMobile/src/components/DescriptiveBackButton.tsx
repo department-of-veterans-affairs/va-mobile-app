@@ -46,6 +46,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
   }
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TouchableWithoutFeedback
       ref={focusRef}
       onPress={onPress}
@@ -60,11 +61,7 @@ export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
         height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
         alignItems={'center'}>
         <Icon name={'ChevronLeft'} fill={theme.colors.icon.link} width={30} height={28} maxWidth={36} />
-        <TextView
-          variant="DescriptiveBackButton"
-          color="link"
-          allowFontScaling={false}
-          accessible={false}>
+        <TextView variant="DescriptiveBackButton" color="link" allowFontScaling={false} accessible={false}>
           {label}
         </TextView>
       </Box>
