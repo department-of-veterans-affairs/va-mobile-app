@@ -53,11 +53,12 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
+import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
@@ -115,6 +116,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const [showDisabilityRating, setShowDisabilityRating] = useState(false)
   const [showCompensation, setShowCompensation] = useState(false)
+  const [paymentBreakdownVisible, setPaymentBreakdownVisible] = useState(false)
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
@@ -497,7 +499,10 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowDisabilityRating(!showDisabilityRating)}
+                        onPress={() => {
+                          setShowDisabilityRating(!showDisabilityRating)
+                          logAnalyticsEvent(Events.vama_obf_textview('disabilityRating', !showDisabilityRating))
+                        }}
                         label={showDisabilityRating ? t('hide') : t('show')}
                         testID={'showDisabilityTestID'}
                         buttonType={ButtonVariants.Primary}
@@ -528,7 +533,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       }
                       accessibilityLabel={
                         showCompensation
-                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`
                           : t('monthlyCompensationPayment.obfuscated')
                       }>
                       <ObfuscatedTextView
@@ -547,7 +552,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       <ObfuscatedTextView
                         showText={showCompensation}
                         obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                         revealedTextProps={{
                           variant: 'VeteranStatusProof',
                           color: 'primary',
@@ -560,10 +565,23 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowCompensation(!showCompensation)}
+                        onPress={() => {
+                          setShowCompensation(!showCompensation)
+                          logAnalyticsEvent(Events.vama_obf_textview('latestPayment', !showCompensation))
+                        }}
                         label={showCompensation ? t('hide') : t('show')}
                         buttonType={ButtonVariants.Primary}
                         testID={'showCompensationTestID'}
+                      />
+                      <Box mt={theme.dimensions.condensedMarginBetween} />
+                      <Button
+                        onPress={() => {
+                          setPaymentBreakdownVisible(true)
+                          logAnalyticsEvent(Events.vama_payment_bd_details())
+                        }}
+                        label={t('monthlyCompensationPayment.seeDetails')}
+                        buttonType={ButtonVariants.Secondary}
+                        testID={'seePaymentBreakdownButtonTestID'}
                       />
                     </Box>
                   </Box>
@@ -602,6 +620,7 @@ export function HomeScreen({}: HomeScreenProps) {
           />
         </Box>
       </Box>
+      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }
