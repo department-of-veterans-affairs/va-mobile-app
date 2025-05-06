@@ -24,6 +24,7 @@ function TermsAndConditions() {
           {t('termsAndConditions.title')}
         </TextView>
         <TextArea>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             paragraphSpacing={true}

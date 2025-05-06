@@ -46,9 +46,11 @@ function DetailsTextSections({
   ) => {
     return (
       <>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView accessibilityLabel={headerLabel} accessibilityRole="header" variant="MobileBodyBold">
           {headerText}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView accessibilityLabel={valueLabel} variant="MobileBody">
           {valueText}
         </TextView>

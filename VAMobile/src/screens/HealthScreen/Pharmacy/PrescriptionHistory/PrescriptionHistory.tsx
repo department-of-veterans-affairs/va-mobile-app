@@ -417,6 +417,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
           }}
           testID="prescriptionRefillWarningTestID">
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             mt={theme.dimensions.standardMarginBetween}
             paragraphSpacing={true}
@@ -497,6 +498,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
               variant={'MobileBodyBold'}>
               {prescriptionListTitle()}
             </TextView>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               mb={theme.dimensions.standardMarginBetween}
               variant={'HelperText'}

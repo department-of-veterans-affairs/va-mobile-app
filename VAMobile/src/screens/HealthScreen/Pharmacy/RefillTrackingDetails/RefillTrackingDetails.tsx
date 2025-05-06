@@ -99,6 +99,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
         return (
           <Box key={prescriptionName} mt={condensedMarginBetween}>
             <TextView variant="MobileBodyBold">{prescriptionName}</TextView>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView accessibilityLabel={rxNumberA11yLabel} variant="HelperText" color="placeholder">
               {rxNumber}
             </TextView>
@@ -140,6 +141,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
               a11yLabel={trackingNumberA11yLabel}
             />
           ) : (
+            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
             <TextView variant={'MobileBody'} accessibilityLabel={trackingNumberA11yLabel || noneNoted}>
               {trackingNumber || noneNoted}
             </TextView>
@@ -147,6 +149,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
           <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
             <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryService || noneNoted}`}</TextView>
           </Box>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="HelperText"
             accessibilityLabel={`${t('prescriptions.refillTracking.dateShipped')}: ${shippedDateA11yLabel}`}>{`${t(
@@ -185,6 +188,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
         <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.condensedMarginBetween}>
           {prescriptionName}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant={'HelperText'} accessibilityLabel={rxNumberA11yLabel}>
           {rxNumber}
         </TextView>
@@ -220,6 +224,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
               {t('prescriptions.refillTracking.upTo15Days')}
             </TextView>
           </Box>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="HelperText"
             accessibilityLabel={a11yLabelVA(t('prescriptions.refillTracking.deliveryChanges'))}>

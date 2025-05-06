@@ -68,6 +68,7 @@ function WebviewControlButton({
   }
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TouchableOpacity
       {...touchableOpacityProps}
       accessibilityLabel={a11yLabel}
