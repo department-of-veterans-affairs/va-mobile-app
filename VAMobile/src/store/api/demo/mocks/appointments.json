@@ -1265,7 +1265,7 @@
               "claim": {
                 "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
                 "claimStatus": "In Progress",
-                "claimNumber": "TC0928098230498",
+                "claimNumber": "",
                 "appointmentDateTime": "{{now - 31 days}}",
                 "facilityName": "DAYTSHR - Dayton VA Medical Center",
                 "createdOn": "{{now - 28 days}}",
