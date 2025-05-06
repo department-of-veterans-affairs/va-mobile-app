@@ -38,7 +38,7 @@ beforeAll(async () => {
 Validates the veteran status page design
 */
 export async function validateVeteranStatusDesign() {
-  await expect(element(by.text('Veteran Status Card'))).toExist()
+  await expect(element(by.id('veteranStatusCardTitleTestID'))).toExist()
   await expect(element(by.id('VeteranStatusCardVAIcon'))).toExist()
   await expect(element(by.id('veteranStatusFullNameTestID'))).toExist()
   await expect(element(by.id('veteranStatusDisabilityRatingTestID'))).toExist()
@@ -102,13 +102,13 @@ export async function verifyMilitaryInfo(militaryBranch) {
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(militaryBranch)).atIndex(1)).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
