@@ -8,15 +8,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import {
-  AppointmentDetailsSubType,
-  AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
-} from 'utils/appointments'
+import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS = 'https://www.staging.va.gov/my-health/travel-pay/claims/' } = getEnv()
+const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 type TravelClaimFiledDetailsProps = {
   attributes: AppointmentAttributes
@@ -43,10 +39,7 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
   const theme = useTheme()
 
   const getContent = () => {
-    const isTravelPayAppointment = appointmentMeetsTravelPayCriteria(attributes)
-    if (!isTravelPayAppointment) {
-      return null
-    }
+    // When the appointment has a travel pay claim, display the claim details
     const { claim } = attributes.travelPayClaim || {}
     if (claim) {
       const status = claim.claimStatus

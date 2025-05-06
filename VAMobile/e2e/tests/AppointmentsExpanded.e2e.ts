@@ -449,6 +449,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123',
       undefined,
       '2341 North Ave',
+      '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
     )
   })
 

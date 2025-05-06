@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
-import { AppointmentAttributes, AppointmentTravelPayClaim } from 'api/types'
+import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
 import { render, screen } from 'testUtils'
@@ -67,6 +68,76 @@ const travelPayClaimData: AppointmentTravelPayClaim = {
   },
 }
 
+const mockStartDateUtc = DateTime.utc().toISO()
+
+type createProps = {
+  startDateUtc?: AppointmentAttributes['startDateUtc']
+  travelPayClaim?: AppointmentTravelPayClaim
+  appointmentType: AppointmentType
+}
+
+const createTestAppointmentAttributes = ({
+  startDateUtc = mockStartDateUtc,
+  travelPayClaim,
+  ...rest
+}: createProps): AppointmentAttributes => {
+  const { timeZone } = baseAppointmentAttributes
+  // Convert the UTC date to the local date
+  const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+}
+
+const tests = [
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: false,
+    testName: 'Community Care',
+  },
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.VA,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: true,
+    testName: 'In Person VA',
+  },
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: true,
+    testName: 'Video Atlas',
+  },
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: false,
+    testName: 'Video GFE',
+  },
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: false,
+    testName: 'Video Home',
+  },
+  {
+    attributes: createTestAppointmentAttributes({
+      appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
+      travelPayClaim: travelPayClaimData,
+    }),
+    expectedResult: true,
+    testName: 'Video On Site',
+  },
+]
+
 describe('AppointmentTravelClaimDetails', () => {
   const initializeTestInstance = (subType: AppointmentDetailsSubType, travelPayClaim?: AppointmentTravelPayClaim) => {
     const attributes = {
@@ -76,14 +147,6 @@ describe('AppointmentTravelClaimDetails', () => {
     render(<AppointmentTravelClaimDetails attributes={attributes} subType={subType} />)
   }
 
-  describe('when travel pay claim is not present', () => {
-    it('should not render', () => {
-      initializeTestInstance('Past')
-      expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
-      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
-    })
-  })
-
   describe('when subType is not Past', () => {
     it('should not render', () => {
       initializeTestInstance('Upcoming')
@@ -92,46 +155,63 @@ describe('AppointmentTravelClaimDetails', () => {
     })
   })
 
-  describe('when travel pay claim is present', () => {
-    it('initializes correctly when all data is present', () => {
-      initializeTestInstance('Past', travelPayClaimData)
-      expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
-      expect(
-        screen.getByText(
-          t('travelPay.travelClaimFiledDetails.claimNumber', {
-            claimNumber: travelPayClaimData.claim!.claimNumber,
-          }),
-        ),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(
-          t('travelPay.travelClaimFiledDetails.status', {
-            status: travelPayClaimData.claim!.claimStatus,
-          }),
-        ),
-      ).toBeTruthy()
-      expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
-      expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
+  describe('when the subType is Past', () => {
+    describe('when travel pay claim data is present', () => {
+      tests.forEach((test) => {
+        it(`initializes correctly when ${test.testName}`, () => {
+          initializeTestInstance('Past', travelPayClaimData)
+          expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
+        })
+      })
+
+      it('initializes correctly', () => {
+        initializeTestInstance('Past', travelPayClaimData)
+        expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('travelPay.travelClaimFiledDetails.claimNumber', {
+              claimNumber: travelPayClaimData.claim!.claimNumber,
+            }),
+          ),
+        ).toBeTruthy()
+        expect(
+          screen.getByText(
+            t('travelPay.travelClaimFiledDetails.status', {
+              status: travelPayClaimData.claim!.claimStatus,
+            }),
+          ),
+        ).toBeTruthy()
+        expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+        expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
+      })
+
+      it('should display status and link but not claim number when claim number is missing', () => {
+        const modifiedData = {
+          ...travelPayClaimData,
+          claim: { ...travelPayClaimData.claim!, claimNumber: '' },
+        }
+        initializeTestInstance('Past', modifiedData)
+        expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: '' }))).toBeNull()
+        expect(
+          screen.getByText(
+            t('travelPay.travelClaimFiledDetails.status', {
+              status: travelPayClaimData.claim!.claimStatus,
+            }),
+          ),
+        ).toBeTruthy()
+        expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+      })
     })
 
-    it('should display status and link but not claim number when claim number is missing', () => {
-      const modifiedData = {
-        ...travelPayClaimData,
-        claim: { ...travelPayClaimData.claim!, claimNumber: '' },
-      }
-      initializeTestInstance('Past', modifiedData)
-      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: '' }))).toBeNull()
-      expect(
-        screen.getByText(
-          t('travelPay.travelClaimFiledDetails.status', {
-            status: travelPayClaimData.claim!.claimStatus,
-          }),
-        ),
-      ).toBeTruthy()
-      expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+    describe('when travel pay claim is not present', () => {
+      it('should not render', () => {
+        initializeTestInstance('Past')
+        expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+        expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+      })
     })
   })
 })
