@@ -138,10 +138,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
           </Box>
           <Box>
             <TextArea>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('noAccessProfileInfo.systemProblem')}
-              </TextView>
-              <TextView variant="MobileBody">{t('noAccessProfileInfo.toAccess')}</TextView>
+              <TextView variant="MobileBody">{t('noAccessProfileInfo.systemProblem')}</TextView>
             </TextArea>
           </Box>
         </Box>
