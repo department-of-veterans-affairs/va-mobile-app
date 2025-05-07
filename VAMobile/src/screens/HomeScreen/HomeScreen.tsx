@@ -126,9 +126,6 @@ export function HomeScreen({}: HomeScreenProps) {
 
   useEffect(() => {
     if (foldersQuery.isFetched && foldersQuery.data) {
-      const inboxFolder = foldersQuery.data.data.find(
-        (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
-      )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])

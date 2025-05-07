@@ -120,7 +120,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       setModalVisible(true)
       snackbar.hide()
     }
-  }, [disabled, labelKey, snackbar, testID, t])
+  }, [disabled, snackbar])
 
   useEffect(() => {
     showModalByDefault && showModal()
