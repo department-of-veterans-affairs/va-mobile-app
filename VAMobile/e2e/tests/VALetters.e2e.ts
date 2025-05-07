@@ -116,7 +116,7 @@ describe('VA Letters', () => {
     await expect(element(by.text(LettersConstants.MAILING_ADDRESS))).toExist()
   })
 
-  it.skip('should view letter types', async () => {
+  it('should view letter types', async () => {
     await element(by.id(LettersConstants.LETTER_REVIEW_LETTERS_BUTTON_ID)).tap()
 
     for (const letterType of LettersConstants.LETTER_TYPES) {
@@ -125,7 +125,7 @@ describe('VA Letters', () => {
   })
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
-    it(`should view ${letterType.name}`, async () => {
+    it.skip(`should view ${letterType.name}`, async () => {
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
