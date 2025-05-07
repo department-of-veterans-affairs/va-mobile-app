@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { Box } from 'components'
 import { ClickToCallPhoneNumber, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 function TravelPayHelp() {
@@ -20,7 +21,11 @@ function TravelPayHelp() {
         {t('travelPay.helpText')}
       </TextView>
       <Box mt={theme.dimensions.condensedMarginBetween}>
-        <ClickToCallPhoneNumber phone={t('travelPay.phone')} center={false} a11yLabel={t('travelPay.phone.a11yHint')} />
+        <ClickToCallPhoneNumber
+          phone={t('travelPay.phone')}
+          center={false}
+          displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
+        />
       </Box>
     </View>
   )

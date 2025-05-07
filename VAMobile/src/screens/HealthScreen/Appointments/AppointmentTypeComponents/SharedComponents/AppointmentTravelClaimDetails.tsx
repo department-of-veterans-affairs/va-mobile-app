@@ -10,6 +10,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
@@ -68,8 +69,7 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
               })
             }}
             text={t('travelPay.travelClaimFiledDetails.goToVAGov')}
-            a11yLabel={a11yLabelVA(t('goToVAGov'))}
-            a11yHint={t('travelPay.travelClaimFiledDetails.goToVAGovA11yHint')}
+            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
             testID={`goToVAGovID-${claimId}`}
           />
           <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
@@ -82,7 +82,7 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
             <ClickToCallPhoneNumber
               phone={t('travelPay.phone')}
               center={false}
-              a11yLabel={'travelPay.phone.a11yHint'}
+              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
             />
           </Box>
         </>
