@@ -8,6 +8,7 @@ import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
 import { render, screen } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import AppointmentTravelClaimDetails from './AppointmentTravelClaimDetails'
 
@@ -185,7 +186,7 @@ describe('AppointmentTravelClaimDetails', () => {
         expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
         expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
         expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
-        expect(screen.getByText(t('travelPay.phone'))).toBeTruthy()
+        expect(screen.getByText(displayedTextPhoneNumber(t('travelPay.phone')))).toBeTruthy()
       })
 
       it('should display status and link but not claim number when claim number is missing', () => {
