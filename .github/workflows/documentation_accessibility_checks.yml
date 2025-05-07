@@ -10,7 +10,6 @@ on:
 jobs:
   axe-scan:
     name: Accessibility Check
-    # runs-on: ubuntu-22.04
     runs-on: ubuntu-latest
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
@@ -25,10 +24,10 @@ jobs:
           node-version-file: "VAMobile/documentation/.nvmrc"
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
-      - name: Reinstall version 135
-        run: |
-          sudo apt install -y google-chrome-stable
-          npm install -g chromedriver@135.0.3
+      # - name: Reinstall version 135
+      #   run: |
+      #     sudo apt install -y google-chrome-stable
+      #     npm install -g chromedriver@135.0.3
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
@@ -41,14 +40,14 @@ jobs:
           yarn start &
           npx wait-on http://localhost:3000 &
           sleep 10
-      - name: Print Chrome versions
-        run: |
-          echo "Google Chrome Version..."
-          google-chrome --version
-          which google-chrome
-          echo "Chrome Driver version..."
-          chromedriver --version
-          which chromedriver
+      # - name: Print Chrome versions
+      #   run: |
+      #     echo "Google Chrome Version..."
+      #     google-chrome --version
+      #     which google-chrome
+      #     echo "Chrome Driver version..."
+      #     chromedriver --version
+      #     which chromedriver
       - name: Check accessibility issues
         id: accessibility_check
         run: |
