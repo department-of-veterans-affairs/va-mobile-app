@@ -121,7 +121,6 @@ export function HomeScreen({}: HomeScreenProps) {
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_appts_count(appointmentsQuery.data.meta.upcomingAppointmentsCount))
     }
   }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
@@ -131,23 +130,18 @@ export function HomeScreen({}: HomeScreenProps) {
         (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
       )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
-      if (inboxFolder) {
-        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
-      }
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
       logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionsQuery.data.meta.prescriptionStatusCount.isRefillable))
     }
   }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppealsQuery.data?.meta.activeClaimsCount))
     }
   }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 

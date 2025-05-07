@@ -14,9 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
-import { Events } from 'constants/analytics'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -117,7 +115,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }, [isFocused, selectedValue, error, setError, focusUpdated])
 
   const showModal = useCallback((): void => {
-    logAnalyticsEvent(Events.vama_modalpick_open(labelKey ? getTranslation(labelKey, t) : testID ? testID : ''))
     if (!disabled) {
       setIsFocused(true)
       setModalVisible(true)
@@ -130,9 +127,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }, [showModalByDefault, showModal])
 
   const onConfirm = (): void => {
-    logAnalyticsEvent(
-      Events.vama_modalpick_sel(labelKey ? getTranslation(labelKey, t) : testID ? testID : '', currentSelectedValue),
-    )
     onSelectionChange(currentSelectedValue)
     setModalVisible(false)
     setIsFocused(false)
