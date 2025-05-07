@@ -9,6 +9,10 @@ import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import LabsAndTestsListScreen from './LabsAndTestsListScreen'
 
 context('LabsAndTestsListScreen', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   const defaultLabsAndTests = [
     {
       id: 'I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000',
@@ -34,6 +38,18 @@ context('LabsAndTestsListScreen', () => {
   it('renders the LabsAndTestsListScreen', () => {
     const { getByTestId } = initializeTestInstance()
     expect(getByTestId('labs-and-tests-list-screen')).toBeTruthy()
+  })
+
+  it('only calls the api once', async () => {
+    const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
+
+    initializeTestInstance()
+
+    await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
+
+    // Verify the API was called exactly once
+    expect(mockApiGet).toHaveBeenCalledTimes(1)
+    expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
   it('defaults to 3 months in date picker', async () => {

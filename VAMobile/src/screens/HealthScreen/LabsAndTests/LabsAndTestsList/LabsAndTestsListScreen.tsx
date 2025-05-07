@@ -158,6 +158,14 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   }
 
   const labsAndTestsInDowntime = useError(ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID)
+
+  // Helper function to validate date values
+  const hasValidDates = (): boolean => {
+    const start = datePickerOption.dates?.startDate.toISO()
+    const end = datePickerOption.dates?.endDate.toISO()
+    return !!start && !!end && start !== '' && end !== ''
+  }
+
   const {
     data: labsAndTests,
     isFetching: loading,
@@ -171,7 +179,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: datePickerOption.timeFrame,
     },
-    { enabled: screenContentAllowed('WG_LabsAndTestsList') && !labsAndTestsInDowntime },
+    { enabled: screenContentAllowed('WG_LabsAndTestsList') && !labsAndTestsInDowntime && hasValidDates() },
   )
 
   // Analytics
