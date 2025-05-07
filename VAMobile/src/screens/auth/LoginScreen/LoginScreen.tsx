@@ -116,13 +116,14 @@ function LoginScreen() {
       />
       <DemoAlert visible={demoPromptVisible} setVisible={setDemoPromptVisible} onConfirm={handleUpdateDemoMode} />
       {!loadingRefreshToken && <CrisisLineButton />}
-      {demoMode && <AlertWithHaptics variant="info" header="DEMO MODE" />}
+      {demoMode && <AlertWithHaptics variant="info" description="DEMO MODE" />}
       <WaygateWrapper waygateName="WG_Login" />
       <Box
         flex={1}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <Box
           alignItems={'center'}
           flex={1}

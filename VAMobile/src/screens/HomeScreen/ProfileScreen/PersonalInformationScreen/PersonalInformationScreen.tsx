@@ -175,6 +175,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
         getNoAuth()
       ) : (
         <>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>

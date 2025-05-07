@@ -4,9 +4,7 @@ import { Pressable, PressableProps, View } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 import { Box, BoxProps, TextArea } from './index'
@@ -52,7 +50,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
 
   const onPress = (): void => {
-    logAnalyticsEvent(Events.vama_accordion_click(testID || '', !expanded))
     if (customOnPress) {
       customOnPress(!expanded)
     }

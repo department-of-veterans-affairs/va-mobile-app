@@ -87,6 +87,7 @@ function ClaimPhase({ phase, attributes, claimID, scrollIsEnabled, scrollViewRef
 
   const detailsText = t(`claimPhase.${translationStepString}.details.phase${phase}`)
   const phaseExpandedContent = (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TextView mt={standardMarginBetween} accessibilityLabel={a11yLabelVA(detailsText)}>
       {detailsText}
     </TextView>
