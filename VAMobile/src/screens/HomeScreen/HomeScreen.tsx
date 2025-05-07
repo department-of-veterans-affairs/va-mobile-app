@@ -45,7 +45,6 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
@@ -121,33 +120,24 @@ export function HomeScreen({}: HomeScreenProps) {
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_appts_count(appointmentsQuery.data.meta.upcomingAppointmentsCount))
     }
   }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
     if (foldersQuery.isFetched && foldersQuery.data) {
-      const inboxFolder = foldersQuery.data.data.find(
-        (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
-      )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
-      if (inboxFolder) {
-        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
-      }
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
       logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionsQuery.data.meta.prescriptionStatusCount.isRefillable))
     }
   }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppealsQuery.data?.meta.activeClaimsCount))
     }
   }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
