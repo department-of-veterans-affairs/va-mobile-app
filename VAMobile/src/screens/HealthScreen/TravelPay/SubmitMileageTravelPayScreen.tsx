@@ -80,7 +80,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="SubmitSuccessScreen"
         name="SubmitSuccessScreen"
         component={SubmitSuccessScreen}
-        initialParams={{ appointmentDateTime, facilityName }}
+        initialParams={{ appointmentDateTime: attributes.startDateUtc, facilityName: attributes.location.name }}
       />
       <TravelPayMultiStepStack.Screen key="ErrorScreen" name="ErrorScreen" component={ErrorScreen} />
     </MultiStepSubtask>

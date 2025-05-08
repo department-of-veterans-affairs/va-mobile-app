@@ -30,6 +30,7 @@ const params = {
 
 const mockNavigationSpy = jest.fn()
 const mockSubmitClaimSpy = jest.fn()
+let mockIsPending = false
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -42,7 +43,10 @@ jest.mock('utils/hooks', () => {
 
 jest.mock('api/travelPay/submitClaim', () => {
   return {
-    submitClaim: () => mockSubmitClaimSpy(),
+    useSubmitTravelClaim: () => ({
+      mutate: mockSubmitClaimSpy,
+      isPending: mockIsPending,
+    }),
   }
 })
 
@@ -74,6 +78,10 @@ context('ReviewClaimScreen', () => {
     }
     render(<ReviewClaimScreen {...props} />, { queriesData })
   }
+
+  afterEach(() => {
+    mockIsPending = false
+  })
 
   it('initializes correctly', () => {
     initializeTestInstance({ residentialAddress })
@@ -107,22 +115,25 @@ context('ReviewClaimScreen', () => {
         expect(screen.getByText(t('required'))).toBeTruthy()
       })
     })
-    describe('when the user has checked the checkbox', () => {
-      it('should show the loading screen', () => {
-        initializeTestInstance({ residentialAddress })
-        const checkbox = screen.getByTestId('checkboxTestID')
-        fireEvent.press(checkbox)
-        const button = screen.getByTestId('submitTestID')
-        fireEvent.press(button)
-        expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
-        expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
-      })
+  })
+
+  describe('when the submission is pending', () => {
+    it('should show the loading screen', async () => {
+      mockIsPending = true
+      initializeTestInstance({ residentialAddress })
+      expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
+      expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
     })
   })
 
   describe('when the submission is successful', () => {
     it('should navigate to the SubmitSuccessScreen', async () => {
       initializeTestInstance({ residentialAddress })
+      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
+        if (options && options.onSuccess) {
+          options.onSuccess(true, {}, undefined)
+        }
+      })
       const checkbox = screen.getByTestId('checkboxTestID')
       fireEvent.press(checkbox)
       const button = screen.getByTestId('submitTestID')
@@ -130,8 +141,8 @@ context('ReviewClaimScreen', () => {
 
       await waitFor(() => {
         expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
-          facilityName: params.facilityName,
-          appointmentDateTime: params.appointmentDateTime,
+          appointmentDateTime: params.attributes.startDateUtc,
+          facilityName: params.attributes.location.name,
         })
       })
     })
@@ -139,7 +150,11 @@ context('ReviewClaimScreen', () => {
 
   describe('when the submission fails', () => {
     it('should navigate to the ErrorScreen', async () => {
-      mockSubmitClaimSpy.mockImplementation(() => Promise.reject(new Error('Failed to submit travel claim')))
+      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
+        if (options && options.onError) {
+          options.onError(new Error('Failed to submit travel claim'), {}, undefined)
+        }
+      })
       initializeTestInstance({ residentialAddress })
       const checkbox = screen.getByTestId('checkboxTestID')
       fireEvent.press(checkbox)
