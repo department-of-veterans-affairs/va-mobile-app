@@ -173,10 +173,12 @@ export function HealthScreen({}: HealthScreenProps) {
       </Box>
       {cernerExist && (
         <Box mx={theme.dimensions.buttonPadding}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView variant="TableFooterLabel" accessibilityLabel={a11yLabelVA(t('healthHelp.info'))}>
             {t('healthHelp.info')}
           </TextView>
           <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileFooterLink"
               accessibilityLabel={a11yLabelVA(t('healthHelp.checkFacility'))}

@@ -58,6 +58,7 @@ export const BackButton: FC<BackButtonProps> = ({
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TouchableWithoutFeedback
       ref={focusRef}
       onPress={onPress}

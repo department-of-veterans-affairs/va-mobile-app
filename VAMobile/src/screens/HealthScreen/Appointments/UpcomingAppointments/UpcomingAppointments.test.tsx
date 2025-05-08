@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -45,14 +46,14 @@ context('UpcomingAppointments', () => {
   describe('when loading is set to true', () => {
     it('shows loading screen and no appointments screen', () => {
       initializeTestInstance(undefined, true)
-      expect(screen.getByText('Loading your appointments...')).toBeTruthy()
+      expect(screen.getByText(t('appointments.loadingAppointments'))).toBeTruthy()
     })
   })
 
   describe('when no appointments', () => {
     it('shows no appointments screen', () => {
       initializeTestInstance(undefined)
-      expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
+      expect(screen.getByText(t('noAppointments.youDontHave'))).toBeTruthy()
     })
   })
 
@@ -73,7 +74,7 @@ context('UpcomingAppointments', () => {
     it('renders "Canceled" label', async () => {
       appointmentData[0].attributes.status = 'CANCELLED'
       initializeTestInstance({ data: appointmentData })
-      expect(screen.getByText('Canceled')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled'))).toBeTruthy()
     })
   })
 
@@ -82,7 +83,7 @@ context('UpcomingAppointments', () => {
       appointmentData[0].attributes.status = AppointmentStatusConstants.CANCELLED
       appointmentData[0].attributes.isPending = true
       initializeTestInstance({ data: appointmentData })
-      expect(screen.getByText('Canceled')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled'))).toBeTruthy()
     })
   })
 
@@ -91,7 +92,7 @@ context('UpcomingAppointments', () => {
       appointmentData[0].attributes.status = AppointmentStatusConstants.SUBMITTED
       appointmentData[0].attributes.isPending = true
       initializeTestInstance({ data: appointmentData })
-      expect(screen.getByText('Pending')).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending'))).toBeTruthy()
     })
   })
 })

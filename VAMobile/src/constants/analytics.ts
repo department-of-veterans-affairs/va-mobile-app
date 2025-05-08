@@ -6,15 +6,6 @@ import { Event, EventParams, UserAnalytic } from 'utils/analytics'
  */
 /*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
-  vama_accordion_click: (section: string, isOpened: boolean): Event => {
-    return {
-      name: 'vama_accordion_click',
-      params: {
-        section: section,
-        isOpened: isOpened,
-      },
-    }
-  },
   vama_af_shown: (af_status: string, firebase_screen: string): Event => {
     return {
       name: 'vama_af_shown',
@@ -690,27 +681,11 @@ export const Events = {
       },
     }
   },
-  vama_hs_appts_count: (apptCount: number): Event => {
-    return {
-      name: 'vama_hs_appts_count',
-      params: {
-        apptCount,
-      },
-    }
-  },
   vama_hs_appts_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_appts_load_time',
       params: {
         loadTime,
-      },
-    }
-  },
-  vama_hs_claims_count: (claimsCount: number): Event => {
-    return {
-      name: 'vama_hs_claims_count',
-      params: {
-        claimsCount,
       },
     }
   },
@@ -722,27 +697,11 @@ export const Events = {
       },
     }
   },
-  vama_hs_rx_count: (rxCount: number): Event => {
-    return {
-      name: 'vama_hs_rx_count',
-      params: {
-        rxCount,
-      },
-    }
-  },
   vama_hs_rx_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_rx_load_time',
       params: {
         loadTime,
-      },
-    }
-  },
-  vama_hs_sm_count: (smCount: number): Event => {
-    return {
-      name: 'vama_hs_sm_count',
-      params: {
-        smCount,
       },
     }
   },
@@ -825,14 +784,6 @@ export const Events = {
       },
     }
   },
-  vama_login_token_get: (success: boolean): Event => {
-    return {
-      name: 'vama_login_token_get',
-      params: {
-        success,
-      },
-    }
-  },
   vama_login_token_refresh: (error: Error): Event => {
     return {
       name: 'vama_login_token_refresh',
@@ -846,23 +797,6 @@ export const Events = {
       name: 'vama_login_token_store',
       params: {
         success,
-      },
-    }
-  },
-  vama_modalpick_open: (modal: string): Event => {
-    return {
-      name: 'vama_modalpick_open',
-      params: {
-        modal: modal,
-      },
-    }
-  },
-  vama_modalpick_sel: (modal: string, selection: string): Event => {
-    return {
-      name: 'vama_modalpick_sel',
-      params: {
-        modal: modal,
-        selection: selection,
       },
     }
   },
@@ -1060,14 +994,6 @@ export const Events = {
       },
     }
   },
-  vama_segcontrol_click: (label: string): Event => {
-    return {
-      name: 'vama_segcontrol_click',
-      params: {
-        label: label,
-      },
-    }
-  },
   vama_select_all: (): Event => {
     return {
       name: 'vama_select_all',
@@ -1242,6 +1168,15 @@ export const Events = {
       },
     }
   },
+  vama_webview: (url: string, id?: string): Event => {
+    return {
+      name: 'vama_webview',
+      params: {
+        url,
+        id,
+      },
+    }
+  },
   vama_webview_fail: (error: string): Event => {
     return {
       name: 'vama_webview_fail',
@@ -1268,6 +1203,27 @@ export const Events = {
   vama_whatsnew_more: (): Event => {
     return {
       name: 'vama_whatsnew_more',
+    }
+  },
+  // ObfuscatedTextView
+  vama_obf_textview: (cardName: string, revealed: boolean): Event => {
+    return {
+      name: 'vama_obf_textview',
+      params: {
+        card_name: cardName,
+        revealed,
+      },
+    }
+  },
+  // payment breakdown modal - see details
+  vama_payment_bd_details: (): Event => {
+    return {
+      name: 'vama_payment_bd_details',
+    }
+  },
+  vama_goto_payment_hist: (): Event => {
+    return {
+      name: 'vama_goto_payment_hist',
     }
   },
 }

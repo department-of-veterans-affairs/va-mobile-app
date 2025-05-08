@@ -288,6 +288,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
             <PhotoAdd
               width={calculatedWidth}
               height={calculatedWidth}
+              imagesEmptyError={imagesEmptyError}
               onPress={(): void => {
                 onAddPhotos(
                   t,
@@ -386,11 +387,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               borderBottomColor="primary"
               pt={theme.dimensions.standardMarginBetween}
               pb={theme.dimensions.standardMarginBetween}>
-              {imagesEmptyError && (
-                <TextView variant="MobileBodyBold" color="error" mb={3} ml={theme.dimensions.gutter}>
-                  {t('fileUpload.requiredPhoto')}
-                </TextView>
-              )}
               <Box display="flex" flexDirection="row" flexWrap="wrap">
                 {displayImages()}
               </Box>
@@ -405,6 +401,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               <TextView variant="HelperText">
                 {t('fileUpload.ofTenPhotos', { numOfPhotos: imagesList?.length })}
               </TextView>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView
                 variant="HelperText"
                 accessibilityLabel={t('fileUpload.ofFiftyMB.a11y', {
