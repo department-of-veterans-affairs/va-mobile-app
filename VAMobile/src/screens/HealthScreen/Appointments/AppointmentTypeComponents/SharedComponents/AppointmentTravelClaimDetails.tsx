@@ -8,7 +8,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
+import {
+  AppointmentDetailsSubType,
+  AppointmentDetailsSubTypeConstants,
+  appointmentMeetsTravelPayCriteria,
+  getDaysLeftToFileTravelPay,
+} from 'utils/appointments'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -86,6 +91,16 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
             />
           </Box>
         </>
+      )
+    }
+
+    const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
+
+    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0) {
+      return (
+        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+          {t('travelPay.travelClaimFiledDetails.noClaim')}
+        </TextView>
       )
     }
 
