@@ -34,7 +34,7 @@ context('MedicalRecordsScreen', () => {
   it('initializes correctly', async () => {
     initializeTestInstance()
     await waitFor(() => expect(screen.getByRole('header')).toBeTruthy())
-    await waitFor(() => expect(screen.getAllByRole('link')).toHaveLength(4))
+    await waitFor(() => expect(screen.getAllByRole('link')).toHaveLength(5))
   })
 
   it('should navigate to VaccineList on button press', () => {
