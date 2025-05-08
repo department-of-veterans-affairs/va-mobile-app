@@ -56,6 +56,7 @@ echo "LINK_URL_VA_NOTIFICATIONS=https://${WEBSITE_PREFIX}va.gov/profile/notifica
 echo "LINK_URL_CLAIM_APPEAL_STATUS=https://${WEBSITE_PREFIX}va.gov/track-claims/appeals/" >> .env
 echo "LINK_URL_VA_SCHEDULING=https://${WEBSITE_PREFIX}va.gov/health-care/schedule-view-va-appointments/" >> .env
 echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://${WEBSITE_PREFIX}va.gov/my-health/appointments/schedule/type-of-care" >> .env
+echo "LINK_URL_TRAVEL_PAY_WEB_DETAILS=https://${WEBSITE_PREFIX}va.gov/my-health/travel-pay/claims/" >> .env
 
 # Get all vars that are the same across environments
 while read p; do

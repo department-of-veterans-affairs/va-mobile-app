@@ -46,6 +46,17 @@
                 "status": 200,
                 "message": "Data retrieved successfully",
                 "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-ebf3-ed0f6908ee53",
+                "claimNumber": "TC00000000042",
+                "claimStatus": "In Progress",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
               }
             }
           }
@@ -957,6 +968,15 @@
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
+              "claim": {
+                "claimNumber": "TC0928098230498",
+                "claimStatus": "Closed",
+                "appointmentDateTime": "{{now - 31 days}}",
+                "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "createdOn": "{{now - 25 days}}",
+                "modifiedOn": "{{now - 28 days}}"
+              },
               "metadata": {
                 "status": 200,
                 "message": "Data retrieved successfully.",
@@ -1253,6 +1273,15 @@
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
+              "claim": {
+                "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "claimStatus": "In Progress",
+                "claimNumber": "",
+                "appointmentDateTime": "{{now - 31 days}}",
+                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "createdOn": "{{now - 28 days}}",
+                "modifiedOn": "{{now - 28 days}}"
+              },
               "metadata": {
                 "status": 200,
                 "message": "Data retrieved successfully",
