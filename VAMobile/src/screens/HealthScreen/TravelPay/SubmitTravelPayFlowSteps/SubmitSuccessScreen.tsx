@@ -23,10 +23,10 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
 
   useSubtaskProps({
     rightButtonText: t('close'),
+    onRightButtonPress: () => {
+      navigation.getParent()?.goBack()
+    },
     rightButtonTestID: 'rightCloseTestID',
-    primaryContentButtonText: t('travelPay.continueToClaim'),
-    primaryButtonTestID: 'continueToClaimTestID',
-    onPrimaryContentButtonPress: () => navigation.getParent()?.goBack(),
   })
 
   const theme = useTheme()

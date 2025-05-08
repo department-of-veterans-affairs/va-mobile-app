@@ -32,6 +32,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   friendlyLocationName: 'Johnson Clinic suite 100',
   healthcareProvider: 'Larry Bird',
   location: {
+    id: '123',
     name: 'VA Long Beach Healthcare System',
     address: {
       street: '5901 East 7th Street',
@@ -265,8 +266,7 @@ context('AppointmentFileTravelPayAlert', () => {
     initializeTestInstance(attributes)
     fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
     expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
-      appointmentDateTime: attributes.startDateUtc,
-      facilityName: attributes.location.name,
+      attributes,
     })
   })
 
