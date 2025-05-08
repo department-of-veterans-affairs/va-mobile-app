@@ -6,7 +6,7 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { Params as APIParams, post } from 'store/api/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-import { stripTZOffset } from 'utils/travelpay'
+import { stripTZOffset } from 'utils/travelPay'
 
 const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParameters) => {
   const endpoint = '/travel_pay/v0/claims' //TODO: Add endpoint
