@@ -64,6 +64,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {header}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           accessibilityLabel={descriptionA11yLabel}
           variant="MobileBody"

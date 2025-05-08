@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
@@ -15,7 +16,7 @@ import { HealthStackParamList } from './HealthStackScreens'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
-const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
+const { LINK_URL_MHV_VA_MEDICAL_RECORDS, SMHD_APPLE_STORE_LINK, SMHD_GOOGLE_PLAY_LINK } = getEnv()
 
 const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -52,12 +53,13 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           />
         )}
       </Box>
-      <Box mx={theme.dimensions.gutter}>
+      <Box mx={gutter}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView accessibilityLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord'))}>
           {t('vaMedicalRecords.viewCompleteRecord')}
         </TextView>
       </Box>
-      <Box mx={gutter}>
+      <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
@@ -66,6 +68,22 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           testID="viewMedicalRecordsLinkID"
         />
       </Box>
+      {featureEnabled('shareMyHealthDataLink') && (
+        <>
+          <Box mx={gutter}>
+            <TextView>{t('vaMedicalRecords.shareMyHealthDataApp')}</TextView>
+          </Box>
+          <Box mx={gutter}>
+            <LinkWithAnalytics
+              type="url"
+              url={isIOS() ? SMHD_APPLE_STORE_LINK : SMHD_GOOGLE_PLAY_LINK}
+              text={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+              a11yLabel={t('vaMedicalRecords.shareMyHealthDataApp.link')}
+              testID="shareMyHealthDataLinkID"
+            />
+          </Box>
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

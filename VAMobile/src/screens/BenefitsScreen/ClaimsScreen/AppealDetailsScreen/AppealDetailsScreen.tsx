@@ -9,11 +9,9 @@ import { filter, pluck } from 'underscore'
 import { useAppeal } from 'api/claimsAndAppeals'
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
@@ -57,9 +55,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)
-    if (selectedTab !== tab) {
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
-    }
   }
 
   const getFilteredIssues = (): Array<string> => {
@@ -151,7 +146,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
             {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <NeedHelpData isAppeal={true} />
+            <NeedHelpData appealId={appealID} />
           </Box>
         </Box>
       )}

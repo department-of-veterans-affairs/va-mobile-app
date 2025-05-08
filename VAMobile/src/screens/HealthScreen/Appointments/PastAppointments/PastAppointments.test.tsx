@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
@@ -61,8 +62,8 @@ context('PastAppointments', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance({ data: appointmentData() })
-    expect(screen.getByText('Select a date range')).toBeTruthy()
-    expect(screen.getAllByText('Past 3 months')).toBeTruthy()
+    expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+    expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
     expect(
       screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
     ).toBeTruthy()
@@ -71,7 +72,7 @@ context('PastAppointments', () => {
   describe('when loading is set to true', () => {
     it('shows loading screen', () => {
       initializeTestInstance(undefined, true)
-      expect(screen.getByText('Loading your appointments...')).toBeTruthy()
+      expect(screen.getByText(t('appointments.loadingAppointments'))).toBeTruthy()
     })
   })
 
@@ -90,28 +91,28 @@ context('PastAppointments', () => {
   describe('when the status is CANCELLED', () => {
     it('renders the "Canceled" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED) })
-      expect(screen.getByText('Canceled')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled'))).toBeTruthy()
     })
   })
 
   describe('when the status is CANCELLED and isPending is true', () => {
     it('renders the "Canceled" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.CANCELLED, true) })
-      expect(screen.getByText('Canceled')).toBeTruthy()
+      expect(screen.getByText(t('appointments.canceled'))).toBeTruthy()
     })
   })
 
   describe('when the status is SUBMITTED and isPending is true', () => {
     it('renders the "Pending" label', () => {
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.SUBMITTED, true) })
-      expect(screen.getByText('Pending')).toBeTruthy()
+      expect(screen.getByText(t('appointments.pending'))).toBeTruthy()
     })
   })
 
   describe('when there are no appointments', () => {
     it('renders NoAppointments', () => {
       initializeTestInstance()
-      expect(screen.getByText('You don’t have any appointments')).toBeTruthy()
+      expect(screen.getByText(t('noAppointments.youDontHave'))).toBeTruthy()
     })
   })
 })

@@ -5,6 +5,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
@@ -14,27 +15,23 @@ context('IndividualMessageErrorComponent', () => {
   })
 
   it('initializes correctly', () => {
-    expect(screen.getByText('Message could not be found')).toBeTruthy()
+    expect(screen.getByText(t('secureMessaging.viewMessage.errorTitle'))).toBeTruthy()
     expect(screen.getByText(t('errors.callHelpCenter.sorryWithRefresh'))).toBeTruthy()
-    expect(
-      screen.getByText(
-        "If the app still doesn't work, call the My HealtheVet Help Desk. We're here Monday-Friday, 8:00 a.m.-8:00 p.m. ET.",
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '877-327-0022' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Refresh screen' })).toBeTruthy()
+    expect(screen.getByText(t('secureMessaging.sendError.ifTheAppStill'))).toBeTruthy()
+    expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8773270022')) })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('refresh') })).toBeTruthy()
   })
 
   describe('when the My HealtheVet phone number link is clicked', () => {
     it('should call Linking open url with the parameter tel:8773270022', () => {
-      fireEvent.press(screen.getByRole('link', { name: '877-327-0022' }))
+      fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8773270022')) }))
       expect(Linking.openURL).toBeCalledWith('tel:8773270022')
     })
   })
   describe('when the call TTY phone link is clicked', () => {
     it('should call Linking open url with the parameter tel:711', () => {
-      fireEvent.press(screen.getByRole('link', { name: 'TTY: 711' }))
+      fireEvent.press(screen.getByRole('link', { name: t('contactVA.tty.displayText') }))
       expect(Linking.openURL).toBeCalledWith('tel:711')
     })
   })

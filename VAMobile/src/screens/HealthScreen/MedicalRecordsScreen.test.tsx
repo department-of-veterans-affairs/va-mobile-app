@@ -2,6 +2,7 @@ import React from 'react'
 import { Alert } from 'react-native'
 
 import { screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -17,11 +18,16 @@ jest.mock('utils/hooks', () => ({
   useRouteNavigation: () => mockNavigationSpy,
 }))
 
+jest.mock('utils/platform', () => ({
+  isIOS: jest.fn(() => false),
+}))
+
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
   const initializeTestInstance = () => {
     when(featureEnabled).calledWith('allergies').mockReturnValue(true)
+    when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />)
   }
 
@@ -46,6 +52,12 @@ context('MedicalRecordsScreen', () => {
   it('should open the VA medical records link', () => {
     initializeTestInstance()
     fireEvent.press(screen.getByTestId('viewMedicalRecordsLinkID'))
+    expect(Alert.alert).toHaveBeenCalled()
+  })
+
+  it('should open the Share My Health Data link', () => {
+    initializeTestInstance()
+    fireEvent.press(screen.getByRole('link', { name: t('vaMedicalRecords.shareMyHealthDataApp.link') }))
     expect(Alert.alert).toHaveBeenCalled()
   })
 })

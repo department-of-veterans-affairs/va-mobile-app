@@ -60,6 +60,7 @@ function GenericOnboarding({
           </View>
         </Box>
         {text && (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             accessibilityLabel={textA11yLabel}
             variant="MobileBody"

@@ -1,15 +1,28 @@
 import React from 'react'
-import { Alert, Linking } from 'react-native'
+import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import NeedHelpData from './NeedHelpData'
 
+const mockNavigationSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useBeforeNavBackListener: jest.fn(),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('NeedHelpData', () => {
-  const initializeTestInstance = (isAppeal?: boolean) => {
-    render(<NeedHelpData isAppeal={isAppeal} />)
+  const initializeTestInstance = (appealId?: string) => {
+    render(<NeedHelpData appealId={appealId} />)
   }
 
   beforeEach(() => {
@@ -17,28 +30,32 @@ context('NeedHelpData', () => {
   })
 
   it('Renders NeedHelpData', () => {
-    expect(screen.getByText('Need help?')).toBeTruthy()
-    expect(
-      screen.getByText('Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.'),
-    ).toBeTruthy()
-    expect(screen.getByText('800-827-1000')).toBeTruthy()
-    expect(screen.queryByText('To review more details about your appeal, go to VA.gov.')).toBeFalsy()
-    expect(screen.queryByText('Go to VA.gov')).toBeFalsy()
-    initializeTestInstance(true)
-    expect(screen.getByText('To review more details about your appeal, go to VA.gov.')).toBeTruthy()
-    expect(screen.getByText('Go to VA.gov')).toBeTruthy()
+    expect(screen.getByText(t('claimDetails.needHelp'))).toBeTruthy()
+    expect(screen.getByText(t('claimDetails.callVA'))).toBeTruthy()
+    expect(screen.getByText(displayedTextPhoneNumber(t('8008271000')))).toBeTruthy()
+    expect(screen.queryByText(t('appealDetails.viewMoreDetails'))).toBeFalsy()
+    expect(screen.queryByText(t('goToVAGov'))).toBeFalsy()
+    initializeTestInstance('A1113')
+    expect(screen.getByText(t('appealDetails.viewMoreDetails'))).toBeTruthy()
+    expect(screen.getByText(t('goToVAGov'))).toBeTruthy()
   })
 
   it('should launch external link on click of the number', () => {
-    fireEvent.press(screen.getByRole('link', { name: '800-827-1000' }))
-    expect(Linking.openURL).toHaveBeenCalledWith('tel:8008271000')
+    fireEvent.press(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8008271000')) }))
+    expect(Linking.openURL).toHaveBeenCalledWith(`tel:${t('8008271000')}`)
   })
 
   describe('when isAppeal is true', () => {
-    it('should launch external link on click of the url', () => {
-      initializeTestInstance(true)
-      fireEvent.press(screen.getByRole('link', { name: 'Go to VA.gov' }))
-      expect(Alert.alert).toHaveBeenCalled()
+    it('should launch webview on click of the url', () => {
+      initializeTestInstance('A1113')
+      fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
+      const expectNavArgs = {
+        url: 'https://va.gov/track-claims/appeals/' + 'A1113',
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('webview.claims.loading'),
+        useSSO: true,
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 })

@@ -126,7 +126,7 @@ describe('Appointments Screen', () => {
           threeMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: six months - eight months earlier verification', async () => {
@@ -142,7 +142,7 @@ describe('Appointments Screen', () => {
           sixMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: eleven months - nine months earlier verification', async () => {
@@ -158,18 +158,18 @@ describe('Appointments Screen', () => {
           nineMonthsEarlier.year,
       ),
     ).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: current year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + currentYear)).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 
   it('past appts: previous year verification', async () => {
     await element(by.id('getDateRangeTestID')).tap()
     await element(by.text('All of ' + lastYear)).tap()
-    await element(by.id('pastApptsDateRangeConfirmID')).tap()
+    await element(by.text('Done')).tap()
   })
 })

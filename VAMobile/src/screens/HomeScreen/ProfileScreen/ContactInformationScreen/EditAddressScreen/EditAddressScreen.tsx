@@ -593,7 +593,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
             <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="error"
-                header={t('editAddress.alertError')}
+                description={t('editAddress.alertError')}
                 focusOnError={onSaveClicked}
                 scrollViewRef={scrollViewRef}
               />
