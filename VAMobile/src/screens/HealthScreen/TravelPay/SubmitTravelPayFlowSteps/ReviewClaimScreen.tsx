@@ -27,7 +27,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
+function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const { attributes } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -77,26 +77,25 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
       return
     }
 
-    const mutationOptions = {
-      onSuccess: () => {
-        navigateTo('SubmitSuccessScreen', {
-          appointmentDateTime: attributes.startDateUtc,
-          facilityName: attributes.location.name,
-        })
-      },
-      onError: () => {
-        navigateTo('ErrorScreen', { error: 'error' })
-      },
-    }
-
     submitClaim(
       {
-        appointmentDateTime: attributes.startDateUtc, //TODO: Remove TZ offset
+        appointmentDateTime: attributes.startDateUtc,
         facilityStationNumber: attributes.location.id,
         appointmentType: 'Other',
         isComplete: false,
       },
-      mutationOptions,
+      {
+        onSuccess: (_data) => {
+          //TODOD: Modify the nav params to include the claim data
+          navigateTo('SubmitSuccessScreen', {
+            appointmentDateTime: attributes.startDateUtc,
+            facilityName: attributes.location.name,
+          })
+        },
+        onError: () => {
+          navigateTo('ErrorScreen', { error: 'error' })
+        },
+      },
     )
   }
 
