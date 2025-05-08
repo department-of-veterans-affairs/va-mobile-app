@@ -98,7 +98,7 @@ export type AppointmentPhone = {
 }
 
 export type AppointmentLocation = {
-  id: string
+  id?: string
   name: string
   address?: AppointmentAddress
   lat?: number

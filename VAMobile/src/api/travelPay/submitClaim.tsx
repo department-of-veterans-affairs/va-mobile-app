@@ -14,13 +14,13 @@ const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParam
  * Returns a mutation for submitting a travel pay claim
  */
 export const useSubmitTravelClaim = () => {
-  //TODO: modify saved data to include travel pay claims
+  //TODO: modify saved data to include travel pay claim
   // const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: submitClaim,
     onSuccess: () => {
-      //TODO: modify saved data to include travel pay claims
+      //TODO: modify saved data to include travel pay claim
     },
     onError: (error) => {
       if (isErrorObject(error)) {
