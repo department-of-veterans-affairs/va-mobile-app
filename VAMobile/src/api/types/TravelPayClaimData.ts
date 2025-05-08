@@ -19,7 +19,5 @@ export type SubmitSMOCTravelPayClaimParameters = {
 }
 
 export type SubmitTravelPayClaimResponseData = {
-  data: {
-    id: string
-  }
+  data: TravelPayClaimSummary
 }
