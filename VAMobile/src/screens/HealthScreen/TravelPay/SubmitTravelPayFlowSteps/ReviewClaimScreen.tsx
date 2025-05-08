@@ -28,7 +28,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
-  const { appointmentDateTime, facilityName } = route.params
+  const { attributes } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
@@ -69,6 +69,11 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
   const submitTravelClaim = async () => {
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
+      return
+    }
+
+    if (!attributes.location.id) {
+      navigateTo('ErrorScreen', { error: 'error' })
       return
     }
 
@@ -121,7 +126,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList
                 listOfText={[
-                  DateTime.fromISO(appointmentDateTime).toFormat(
+                  DateTime.fromISO(attributes.startDateUtc).toFormat(
                     `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
                   ),
                 ]}
