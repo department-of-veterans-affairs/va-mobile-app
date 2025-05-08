@@ -1,11 +1,31 @@
-export const submitClaim = (success: boolean = true, delay: number = 1000) => {
-  return new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      if (success) {
-        resolve()
-      } else {
-        reject(new Error('Failed to submit travel claim'))
+import { useMutation } from '@tanstack/react-query'
+
+import { SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponseData } from 'api/types'
+import { Params as APIParams, post } from 'store/api/api'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isErrorObject } from 'utils/common'
+
+const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParameters) => {
+  const endpoint = '/v0/travel-pay-claims' //TODO: Add endpoint
+  return post<SubmitTravelPayClaimResponseData>(endpoint, smocTravelPayClaimData as unknown as APIParams)
+}
+
+/**
+ * Returns a mutation for submitting a travel pay claim
+ */
+export const useSubmitTravelClaim = () => {
+  //TODO: modify saved data to include travel pay claims
+  // const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: submitClaim,
+    onSuccess: () => {
+      //TODO: modify saved data to include travel pay claims
+    },
+    onError: (error) => {
+      if (isErrorObject(error)) {
+        logNonFatalErrorToFirebase(error, 'submitClaim: Service error')
       }
-    }, delay)
+    },
   })
 }
