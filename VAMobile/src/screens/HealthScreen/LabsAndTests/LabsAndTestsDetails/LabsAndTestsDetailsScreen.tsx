@@ -191,7 +191,10 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       {observationsPresent && (
         <Box>
           <Box mx={theme.dimensions.tinyMarginBetween}>
-            <TextView {...titleProps} accessibilityLabel={a11yLabelVA(t('labsAndTests.details.results'))}>
+            <TextView
+              {...titleProps}
+              accessibilityLabel={a11yLabelVA(t('labsAndTests.details.results'))}
+              accessibilityHint={t('labsAndTests.details.results.accessibilityHint')}>
               {t('labsAndTests.details.results')}
             </TextView>
           </Box>
@@ -201,7 +204,8 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
         </Box>
       )}
       <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
+        {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis.a11yLabel'))}>
           {t('health.details.weBaseThis')}
         </TextView>
       </Box>
