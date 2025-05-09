@@ -1,5 +1,6 @@
 import React, { FC, Ref } from 'react'
 import { ScrollView, ScrollViewProps, ViewStyle } from 'react-native'
+import { IOScrollView } from 'react-native-intersection-observer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { VABackgroundColors } from 'styles/theme'
@@ -37,7 +38,7 @@ const VAScrollView: FC<VAScrollViewProps> = (props) => {
      * force scroll position by default to avoid visual bug where scrollbar appears in the center of a screen
      * scrollIndicatorInsets is an iOS only prop, this bug only appears on iOS
      */
-    <ScrollView
+    <IOScrollView
       ref={props.scrollViewRef}
       scrollIndicatorInsets={{ right: 1 }}
       contentContainerStyle={contentContainerStyle}
