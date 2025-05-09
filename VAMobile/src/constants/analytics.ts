@@ -688,6 +688,21 @@ export const Events = {
       },
     }
   },
+  vama_hs_scroll_act: (): Event => {
+    return {
+      name: 'vama_hs_scroll_act',
+    }
+  },
+  vama_hs_scroll_ab: (): Event => {
+    return {
+      name: 'vama_hs_scroll_ab',
+    }
+  },
+  vama_hs_scroll_ay: (): Event => {
+    return {
+      name: 'vama_hs_scroll_ay',
+    }
+  },
   vama_hs_sm_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_sm_load_time',

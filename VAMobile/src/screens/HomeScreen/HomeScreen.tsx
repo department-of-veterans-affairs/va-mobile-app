@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -321,13 +322,15 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityRole="header">
-            {t('activity')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_act)}>
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityRole="header">
+              {t('activity')}
+            </TextView>
+          </InView>
           {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -412,17 +415,19 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={
-              !loadingAboutYou && !hasAboutYouInfo
-                ? theme.dimensions.condensedMarginBetween
-                : theme.dimensions.standardMarginBetween
-            }
-            variant={'HomeScreenHeader'}
-            accessibilityRole="header">
-            {t('aboutYou')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_ay)}>
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={
+                !loadingAboutYou && !hasAboutYouInfo
+                  ? theme.dimensions.condensedMarginBetween
+                  : theme.dimensions.standardMarginBetween
+              }
+              variant={'HomeScreenHeader'}
+              accessibilityRole="header">
+              {t('aboutYou')}
+            </TextView>
+          </InView>
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -602,13 +607,15 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <AnnouncementBanner
-            title={t('learnAboutPACT')}
-            link={LINK_URL_ABOUT_PACT_ACT}
-            a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
-          />
-        </Box>
+        <InView triggerOnce={true} onChange={(inView: boolean) => logAnalyticsEvent(Events.vama_hs_scroll_ab)}>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <AnnouncementBanner
+              title={t('learnAboutPACT')}
+              link={LINK_URL_ABOUT_PACT_ACT}
+              a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
+            />
+          </Box>
+        </InView>
       </Box>
       <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
