@@ -415,19 +415,17 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween}>
-          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_ay)}>
-            <TextView
-              mx={theme.dimensions.gutter}
-              mb={
-                !loadingAboutYou && !hasAboutYouInfo
-                  ? theme.dimensions.condensedMarginBetween
-                  : theme.dimensions.standardMarginBetween
-              }
-              variant={'HomeScreenHeader'}
-              accessibilityRole="header">
-              {t('aboutYou')}
-            </TextView>
-          </InView>
+          <TextView
+            mx={theme.dimensions.gutter}
+            mb={
+              !loadingAboutYou && !hasAboutYouInfo
+                ? theme.dimensions.condensedMarginBetween
+                : theme.dimensions.standardMarginBetween
+            }
+            variant={'HomeScreenHeader'}
+            accessibilityRole="header">
+            {t('aboutYou')}
+          </TextView>
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -589,15 +587,17 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityLabel={a11yLabelVA(t('vaResources'))}
-            accessibilityRole="header">
-            {t('vaResources')}
-          </TextView>
+          {}
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_var)}>
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityLabel={a11yLabelVA(t('vaResources'))}
+              accessibilityRole="header">
+              {t('vaResources')}
+            </TextView>
+          </InView>
           <Box mx={theme.dimensions.condensedMarginBetween}>
             <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
             <LinkRow
