@@ -177,6 +177,7 @@ jobs:
           working-directory: VAMobile/android
       
       - name: Install bundle
+        working-directory: VAMobile/android
         run: bundle install
 
       - name: Set up JDK
