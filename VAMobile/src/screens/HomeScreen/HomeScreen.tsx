@@ -589,6 +589,7 @@ export function HomeScreen({}: HomeScreenProps) {
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
           {}
           <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_var)}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               mx={theme.dimensions.gutter}
               mb={theme.dimensions.standardMarginBetween}
@@ -607,7 +608,7 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         </Box>
-        <InView triggerOnce={true} onChange={(inView: boolean) => logAnalyticsEvent(Events.vama_hs_scroll_ab)}>
+        <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_ab)}>
           <Box mb={theme.dimensions.contentMarginBottom}>
             <AnnouncementBanner
               title={t('learnAboutPACT')}
