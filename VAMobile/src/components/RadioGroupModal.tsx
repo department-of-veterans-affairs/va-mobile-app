@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -56,9 +56,21 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   testID,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [showScrollView, setShowScrollView] = useState(false)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
+
+  // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
+  // https://github.com/facebook/react-native/issues/48822
+  useEffect(() => {
+    if (modalVisible) {
+      const timeout = setTimeout(() => setShowScrollView(true), 50)
+      return () => clearTimeout(timeout)
+    } else {
+      setShowScrollView(false)
+    }
+  }, [modalVisible])
 
   const showModal = () => {
     setModalVisible(true)
@@ -160,9 +172,11 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
                 <TextView {...commonButtonProps}>{t('apply')}</TextView>
               </Pressable>
             </Box>
-            <VAScrollView testID={testID} bounces={false}>
-              {getGroups()}
-            </VAScrollView>
+            {showScrollView && (
+              <VAScrollView testID={testID} bounces={false}>
+                {getGroups()}
+              </VAScrollView>
+            )}
           </Box>
         </Box>
       </Modal>
