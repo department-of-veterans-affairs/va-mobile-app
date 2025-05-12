@@ -16,6 +16,7 @@ const checkTravelClaimAvailability = async (
   appointmentStatus: string,
   pastAppointment: boolean,
   travelClaimId?: string,
+  daysSinceAppointmentStart: number = 0,
 ) => {
   const isAllowed =
     appointmentType === 'ATLAS' ||
@@ -23,7 +24,11 @@ const checkTravelClaimAvailability = async (
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
   if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId) {
-    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
+    if (daysSinceAppointmentStart < 30) {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
+    } else {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
+    }
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
   }
@@ -121,6 +126,7 @@ const checkUpcomingApptDetails = async (
   locationName?: string,
   locationAddress?: string,
   travelClaimId?: string,
+  daysSinceAppointmentStart?: number,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -359,11 +365,28 @@ const checkUpcomingApptDetails = async (
     }
   }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
-  await checkTravelClaimAvailability(appointmentType, appointmentStatus, pastAppointment, travelClaimId)
+  await checkTravelClaimAvailability(
+    appointmentType,
+    appointmentStatus,
+    pastAppointment,
+    travelClaimId,
+    daysSinceAppointmentStart,
+  )
 
   if (travelClaimId && pastAppointment) {
-    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-    await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    if (!daysSinceAppointmentStart || daysSinceAppointmentStart < 30) {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    } else {
+      await expect(
+        element(
+          by.text(
+            'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+          ),
+        ),
+      ).toExist()
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+    }
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
   }
@@ -858,6 +881,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Central California VA Health Care System',
       '2360 East Pershing Boulevard',
+      undefined,
+      31,
     )
   })
 

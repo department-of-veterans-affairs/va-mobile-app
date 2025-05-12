@@ -94,7 +94,6 @@ const tests = [
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: false,
     testName: 'Community Care',
   },
   {
@@ -102,7 +101,6 @@ const tests = [
       appointmentType: AppointmentTypeConstants.VA,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: true,
     testName: 'In Person VA',
   },
   {
@@ -110,7 +108,6 @@ const tests = [
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: true,
     testName: 'Video Atlas',
   },
   {
@@ -118,7 +115,6 @@ const tests = [
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: false,
     testName: 'Video GFE',
   },
   {
@@ -126,7 +122,6 @@ const tests = [
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: false,
     testName: 'Video Home',
   },
   {
@@ -134,18 +129,18 @@ const tests = [
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
       travelPayClaim: travelPayClaimData,
     }),
-    expectedResult: true,
     testName: 'Video On Site',
   },
 ]
 
 describe('AppointmentTravelClaimDetails', () => {
-  const initializeTestInstance = (subType: AppointmentDetailsSubType, travelPayClaim?: AppointmentTravelPayClaim) => {
-    const attributes = {
-      ...baseAppointmentAttributes,
-      travelPayClaim,
-    }
-    render(<AppointmentTravelClaimDetails attributes={attributes} subType={subType} />)
+  const initializeTestInstance = (
+    subType: AppointmentDetailsSubType,
+    attributes: Partial<AppointmentAttributes> = {},
+  ) => {
+    render(
+      <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+    )
   }
 
   describe('when subType is not Past', () => {
@@ -160,13 +155,13 @@ describe('AppointmentTravelClaimDetails', () => {
     describe('when travel pay claim data is present', () => {
       tests.forEach((test) => {
         it(`initializes correctly when ${test.testName}`, () => {
-          initializeTestInstance('Past', travelPayClaimData)
+          initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim })
           expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
         })
       })
 
       it('initializes correctly', () => {
-        initializeTestInstance('Past', travelPayClaimData)
+        initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
         expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
         expect(
           screen.getByText(
@@ -194,7 +189,7 @@ describe('AppointmentTravelClaimDetails', () => {
           ...travelPayClaimData,
           claim: { ...travelPayClaimData.claim!, claimNumber: '' },
         }
-        initializeTestInstance('Past', modifiedData)
+        initializeTestInstance('Past', { travelPayClaim: modifiedData })
         expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.claimNumber', { claimNumber: '' }))).toBeNull()
         expect(
           screen.getByText(
@@ -208,10 +203,34 @@ describe('AppointmentTravelClaimDetails', () => {
     })
 
     describe('when travel pay claim is not present', () => {
-      it('should not render', () => {
-        initializeTestInstance('Past')
-        expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
-        expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+      describe('when the appointment is not past the 30 day window', () => {
+        it('should not render', () => {
+          const notFiledData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              ...travelPayClaimData,
+              claim: undefined,
+            },
+          })
+          initializeTestInstance('Past', { ...notFiledData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+        })
+      })
+      describe('when the appointment is past the 30 day window', () => {
+        it('should render the no claim message when appointment meets travel pay criteria', () => {
+          const missedClaimDeadlineData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              ...travelPayClaimData,
+              claim: undefined,
+            },
+          })
+          initializeTestInstance('Past', { ...missedClaimDeadlineData })
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
+        })
       })
     })
   })
