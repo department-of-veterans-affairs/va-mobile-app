@@ -405,11 +405,6 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
         throw error
       }
     } finally {
-      if (refreshToken) {
-        await logAnalyticsEvent(Events.vama_login_token_get(true))
-      } else {
-        await logAnalyticsEvent(Events.vama_login_token_get(false))
-      }
       if (dispatch) {
         dispatch(dispatchFinishLoadingRefreshToken())
       }

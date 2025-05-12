@@ -157,7 +157,7 @@ function MainApp() {
     const previousRouteName = routeNameRef.current
     const currentRouteName = navigationRef.current?.getCurrentRoute()?.name
 
-    if (previousRouteName !== currentRouteName) {
+    if (previousRouteName !== currentRouteName && currentRouteName !== undefined) {
       await analytics().logScreenView({
         screen_name: currentRouteName,
         screen_class: currentRouteName,
