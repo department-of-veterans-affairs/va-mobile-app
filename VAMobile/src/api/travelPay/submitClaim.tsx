@@ -9,7 +9,7 @@ import { isErrorObject } from 'utils/common'
 import { stripTZOffset } from 'utils/travelPay'
 
 const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParameters) => {
-  const endpoint = '/travel_pay/v0/claims' //TODO: Add endpoint
+  const endpoint = '/v0/travel-pay/claims'
   const data = {
     ...smocTravelPayClaimData,
     // We need the local time with no TZ indicators for the external API
@@ -22,7 +22,6 @@ const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParam
  * Returns a mutation for submitting a travel pay claim
  */
 export const useSubmitTravelClaim = () => {
-  //TODO: modify saved data to include travel pay claim
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -36,7 +35,7 @@ export const useSubmitTravelClaim = () => {
       const newAppointmentsList = oldAppointments.data.map((appointment) => {
         const newAppointment = { ...appointment }
 
-        //TODO: Find a better way to identify the appointment
+        //TODO: Find a better way to identify the appointment and append the claim data
         if (
           newAppointment.attributes.startDateUtc === variables.appointmentDateTime &&
           newAppointment.attributes.location.id === variables.facilityStationNumber &&

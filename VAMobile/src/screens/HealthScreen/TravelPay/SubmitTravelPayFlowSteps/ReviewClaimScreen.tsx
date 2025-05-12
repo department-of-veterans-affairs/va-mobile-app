@@ -79,7 +79,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
 
     submitClaim(
       {
-        appointmentDateTime: attributes.startDateUtc,
+        appointmentDateTime: attributes.startDateLocal,
         facilityStationNumber: attributes.location.id,
         appointmentType: 'Other',
         isComplete: false,
