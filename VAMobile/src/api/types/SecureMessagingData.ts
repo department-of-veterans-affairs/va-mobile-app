@@ -3,6 +3,8 @@
  */
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import { Dictionary } from 'underscore'
+
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 
 /**
@@ -192,6 +194,8 @@ export type SecureMessagingFoldersGetData = {
   }
 }
 
+export type SecureMessagingAllRecipientData = Dictionary<SecureMessagingRecipientDataList>
+
 export type SecureMessagingRecipientData = {
   id: string
   type: string
@@ -200,6 +204,10 @@ export type SecureMessagingRecipientData = {
     name: string
     relationType: 'PATIENT'
     preferredTeam: boolean
+    stationNumber: string
+    locationName: string
+    suggestedNameDisplay: string
+    healthCareSystemName: string
   }
 }
 

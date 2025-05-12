@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start:metro-server": "react-native start --reset-cache",
+    "start:metro-server": "react-native start --reset-cache --experimental-debugger",
     "start": "yarn run env:staging && concurrently \"yarn run start:metro-server\" \"yarn run lint:watch\"",
     "test": "yarn run env:test && jest --coverage --colors --silent",
     "test:debug": "yarn run env:test && jest --colors",

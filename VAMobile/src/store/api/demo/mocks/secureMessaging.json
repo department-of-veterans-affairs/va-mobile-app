@@ -1869,5 +1869,87 @@
         "name": "ASC"
       }
     }
+  },
+  "/v0/messaging/health/allrecipients": {
+    "data": [
+      {
+        "id": "816092",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 816092,
+          "name": "UAT Test Rename TG",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": "Robert J. Dole VA Medical And Regional Office Center",
+          "suggestedNameDisplay": "Robert J. Dole VA Medical And Regional Office Center | Pharmacy | Ask a pharmacist | SLC10 - James, Donald Sr",
+          "healthCareSystemName": "VA Wichita Health Care",
+          "preferredTeam": true
+        }
+      },
+      {
+        "id": "893823",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 893823,
+          "name": "UAT_Reg_Mar19 ++",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": "Robert J. Dole VA Medical And Regional Office Center",
+          "suggestedNameDisplay": "Robert J. Dole VA Medical And Regional Office Center | Pharmacy | Ask a pharmacist | SLC10 - James, Donald Sr",
+          "healthCareSystemName": "VA Wichita Health Care",
+          "preferredTeam": true
+        }
+      },
+      {
+        "id": "816092",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 816092,
+          "name": "UAT Test Rename TG",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": "Robert J. Dole VA Medical And Regional Office Center",
+          "suggestedNameDisplay": "Robert J. Dole VA Medical And Regional Office Center | Pharmacy | Ask a pharmacist | SLC10 - James, Donald Sr",
+          "healthCareSystemName": "VA SF Health Care",
+          "preferredTeam": true
+        }
+      },
+      {
+        "id": "893823",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 893823,
+          "name": "UAT_Reg_Mar19 ++",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": "Robert J. Dole VA Medical And Regional Office Center",
+          "suggestedNameDisplay": "Robert J. Dole VA Medical And Regional Office Center | Pharmacy | Ask a pharmacist | SLC10 - James, Donald Sr",
+          "healthCareSystemName": "VA SF Health Care",
+          "preferredTeam": true
+        }
+      },
+      {
+        "id": "893823",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 893823,
+          "name": "UAT_Reg_Mar19 ++",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": "Robert J. Dole VA Medical And Regional Office Center",
+          "suggestedNameDisplay": "Robert J. Dole VA Medical And Regional Office Center | Pharmacy | Ask a pharmacist | SLC10 - James, Donald Sr",
+          "healthCareSystemName": null,
+          "preferredTeam": true
+        }
+      }
+    ],
+    "meta": {
+      "associatedTriageGroups": 36,
+      "friendlyTriageTeamPilotFacilities": "979",
+      "associatedBlockedTriageGroups": 0,
+      "sort": {
+        "name": "ASC"
+      }
+    }
   }
 }

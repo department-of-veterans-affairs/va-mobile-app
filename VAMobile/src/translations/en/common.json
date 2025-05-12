@@ -1395,6 +1395,12 @@
   "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "secureMessaging.viewMessage.loading": "Loading your message...",
   "secureMessaging.viewMessage.loadingAttachment": "Loading your attachment...",
+  "secureMessaging.selectRecipient.title": "Select a recipient",
+  "secureMessaging.selectRecipient.pickSystem": "Pick a care system",
+  "secureMessaging.selectRecipient.pickTeam": "Pick a care team",
+  "secureMessaging.selectRecipient.step1": "Step 1 of 2: Select the VA health care system that your care team belongs to",
+  "secureMessaging.selectRecipient.step2": "Step 2 of 2: Select the VA health care team that you would like to message",
+
   "select.all": "Select all",
   "selectAddress": "Select an address",
   "selectOption": "Select an option",

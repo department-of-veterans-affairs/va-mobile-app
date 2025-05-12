@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { Pressable, ScrollView, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, Icon, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useMessageRecipients,
   useMessageSignature,
   useSaveDraft,
@@ -38,6 +39,7 @@ import {
   TextArea,
   TextView,
 } from 'components'
+import { getInputWrapperProps, renderInputLabelSection } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
@@ -83,15 +85,17 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     error: sendMessageErrorDetails,
   } = useSendMessage()
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
+
   const {
-    data: recipients,
+    data: recipientsByHealthSystem,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
     isFetching: refetchingRecipients,
-  } = useMessageRecipients({
+  } = useAllMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
+
   const {
     data: signature,
     isFetched: signatureFetched,
@@ -126,7 +130,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const messageDataRef = useRef<SecureMessagingFormData>(messageData)
   messageDataRef.current = messageData
 
-  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noRecipientsReceived = !recipientsByHealthSystem || _.keys(recipientsByHealthSystem).length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
@@ -192,34 +196,34 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
-  const getToPickerOptions = (): Array<PickerItem> => {
-    return (recipients || []).map((recipient) => {
-      return {
-        label: recipient.attributes.name,
-        value: recipient.id,
-      }
-    })
-  }
+  // const getToPickerOptions = (): Array<PickerItem> => {
+  //   return (recipientsByHealthSystem || []).map((recipient) => {
+  //     return {
+  //       label: recipient.attributes.name,
+  //       value: recipient.id,
+  //     }
+  //   })
+  // }
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
   }
   const formFieldsList: Array<FormFieldType<unknown>> = [
-    {
-      fieldType: FieldType.Picker,
-      fieldProps: {
-        labelKey: 'secureMessaging.formMessage.to',
-        selectedValue: to,
-        onSelectionChange: setTo,
-        pickerOptions: getToPickerOptions(),
-        includeBlankPlaceholder: true,
-        isRequiredField: true,
-        testID: 'to field',
-        confirmTestID: 'messagePickerConfirmID',
-      },
-      fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
-    },
+    // {
+    //   fieldType: FieldType.Picker,
+    //   fieldProps: {
+    //     labelKey: 'secureMessaging.formMessage.to',
+    //     selectedValue: to,
+    //     onSelectionChange: setTo,
+    //     pickerOptions: getToPickerOptions(),
+    //     includeBlankPlaceholder: true,
+    //     isRequiredField: true,
+    //     testID: 'to field',
+    //     confirmTestID: 'messagePickerConfirmID',
+    //   },
+    //   fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
+    // },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
@@ -348,6 +352,37 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
+  const renderToButton = () => {
+    const wrapperProps = getInputWrapperProps(theme, undefined, false)
+
+    return (
+      <Box mb={theme.dimensions.formMarginBetween}>
+        {renderInputLabelSection(undefined, true, 'secureMessaging.formMessage.to', t, '')}
+        <Pressable
+          onPress={() => navigateTo('SelectCareSystem', { recipientsByHealthSystem })}
+          accessible={true}
+          accessibilityLabel={'no idea'}
+          accessibilityHint={'god help you'}>
+          <Box {...wrapperProps}>
+            <Box
+              width="100%"
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'space-between'}
+              alignItems={'center'}>
+              <TextView variant="MobileBody" flex={1}>
+                {'hook this up to some state'}
+              </TextView>
+              <Box ml={16} my={12}>
+                <Icon name="NavigateNext" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
+              </Box>
+            </Box>
+          </Box>
+        </Pressable>
+      </Box>
+    )
+  }
+
   function renderContent() {
     if (noProviderError) {
       return (
@@ -384,6 +419,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           replyTriageError={replyTriageError}
         />
         <TextArea>
+          {/*
+            - pass a setState or throw in redux?
+            - does react query have a transform data?
+          */}
+          {renderToButton()}
           <FormWrapper
             fieldsList={formFieldsList}
             onSave={onMessageSendOrSave}

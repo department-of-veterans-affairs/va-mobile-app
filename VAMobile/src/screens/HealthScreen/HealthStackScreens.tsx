@@ -10,9 +10,10 @@ import {
   RefillRequestSummaryItems,
   RefillStatus,
   SecureMessagingFormData,
+  SecureMessagingRecipientDataList,
   Vaccine,
 } from 'api/types'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
@@ -28,6 +29,8 @@ import StatusDefinition from './Pharmacy/StatusDefinition/StatusDefinition'
 import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
+import SelectCareSystem from './SecureMessaging/SelectRecipient/SelectCareSystem'
+import SelectCareTeam from './SecureMessaging/SelectRecipient/SelectCareTeam'
 import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
 import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
 
@@ -72,6 +75,10 @@ export type HealthStackParamList = WebviewStackParams & {
     attachmentFileToRemove?: ImagePickerResponse | DocumentPickerResponse
     saveDraftConfirmFailed?: boolean
   }
+  SelectCareSystem: {
+    recipientsByHealthSystem: SecureMessagingRecipientDataList
+  }
+  SelectCareTeam: undefined
   ReplyMessage: {
     messageID: number
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
@@ -156,6 +163,18 @@ export const getHealthScreens = () => {
       name="StartNewMessage"
       component={StartNewMessage}
       options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'SelectCareSystem'}
+      name="SelectCareSystem"
+      component={SelectCareSystem}
+      options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'SelectCareTeam'}
+      name="SelectCareTeam"
+      component={SelectCareTeam}
+      options={FEATURE_LANDING_TEMPLATE_OPTIONS}
     />,
     <HealthStack.Screen
       key={'ReplyMessage'}
