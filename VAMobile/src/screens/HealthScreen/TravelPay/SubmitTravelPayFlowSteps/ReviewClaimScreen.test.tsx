@@ -25,7 +25,8 @@ const residentialAddress: AddressData = {
 
 const params = {
   attributes: {
-    startDateUtc: '2021-01-01T00:00:00Z',
+    startDateUtc: '2021-02-06T19:53:14.000+00:00',
+    startDateLocal: '2021-02-06T18:53:14.000-01:00',
     location: {
       id: '123',
       name: 'Test Facility',
@@ -95,7 +96,7 @@ context('ReviewClaimScreen', () => {
     expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
     expect(
       screen.getByText(
-        DateTime.fromISO(params.attributes.startDateUtc).toFormat(
+        DateTime.fromISO(params.attributes.startDateLocal).toFormat(
           `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
         ),
       ),
@@ -165,7 +166,7 @@ context('ReviewClaimScreen', () => {
 
     expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
       {
-        appointmentDateTime: params.attributes.startDateUtc,
+        appointmentDateTime: params.attributes.startDateLocal,
         facilityStationNumber: params.attributes.location.id,
         appointmentType: 'Other',
         isComplete: false,
