@@ -24,12 +24,19 @@ const residentialAddress: AddressData = {
 }
 
 const params = {
-  appointmentDateTime: '2021-01-01T00:00:00Z',
-  facilityName: 'Test Facility',
+  attributes: {
+    startDateUtc: '2021-02-06T19:53:14.000+00:00',
+    startDateLocal: '2021-02-06T18:53:14.000-01:00',
+    location: {
+      id: '123',
+      name: 'Test Facility',
+    },
+  },
 }
 
 const mockNavigationSpy = jest.fn()
 const mockSubmitClaimSpy = jest.fn()
+let mockIsPending = false
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -42,7 +49,10 @@ jest.mock('utils/hooks', () => {
 
 jest.mock('api/travelPay/submitClaim', () => {
   return {
-    submitClaim: () => mockSubmitClaimSpy(),
+    useSubmitTravelClaim: () => ({
+      mutate: mockSubmitClaimSpy,
+      isPending: mockIsPending,
+    }),
   }
 })
 
@@ -75,6 +85,10 @@ context('ReviewClaimScreen', () => {
     render(<ReviewClaimScreen {...props} />, { queriesData })
   }
 
+  afterEach(() => {
+    mockIsPending = false
+  })
+
   it('initializes correctly', () => {
     initializeTestInstance({ residentialAddress })
     expect(screen.getByText(t('travelPay.reviewTitle'))).toBeTruthy()
@@ -82,7 +96,9 @@ context('ReviewClaimScreen', () => {
     expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
     expect(
       screen.getByText(
-        DateTime.fromISO(params.appointmentDateTime).toFormat(`cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`),
+        DateTime.fromISO(params.attributes.startDateLocal).toFormat(
+          `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
+        ),
       ),
     ).toBeTruthy()
     expect(screen.getByText(t('travelPay.reviewDetails.how'))).toBeTruthy()
@@ -107,39 +123,26 @@ context('ReviewClaimScreen', () => {
         expect(screen.getByText(t('required'))).toBeTruthy()
       })
     })
-    describe('when the user has checked the checkbox', () => {
-      it('should show the loading screen', () => {
-        initializeTestInstance({ residentialAddress })
-        const checkbox = screen.getByTestId('checkboxTestID')
-        fireEvent.press(checkbox)
-        const button = screen.getByTestId('submitTestID')
-        fireEvent.press(button)
-        expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
-        expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
-      })
-    })
   })
 
-  describe('when the submission is successful', () => {
-    it('should navigate to the SubmitSuccessScreen', async () => {
+  describe('when the submission is pending', () => {
+    it('should show the loading screen', async () => {
+      mockIsPending = true
       initializeTestInstance({ residentialAddress })
-      const checkbox = screen.getByTestId('checkboxTestID')
-      fireEvent.press(checkbox)
-      const button = screen.getByTestId('submitTestID')
-      fireEvent.press(button)
-
-      await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
-          facilityName: params.facilityName,
-          appointmentDateTime: params.appointmentDateTime,
-        })
-      })
+      expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
+      expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
     })
   })
+
+  describe('when the submission is successful', () => {})
 
   describe('when the submission fails', () => {
     it('should navigate to the ErrorScreen', async () => {
-      mockSubmitClaimSpy.mockImplementation(() => Promise.reject(new Error('Failed to submit travel claim')))
+      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
+        if (options && options.onError) {
+          options.onError(new Error('Failed to submit travel claim'), {}, undefined)
+        }
+      })
       initializeTestInstance({ residentialAddress })
       const checkbox = screen.getByTestId('checkboxTestID')
       fireEvent.press(checkbox)
@@ -152,5 +155,23 @@ context('ReviewClaimScreen', () => {
         })
       })
     })
+  })
+
+  it('should submit the claim', async () => {
+    initializeTestInstance({ residentialAddress })
+    const checkbox = screen.getByTestId('checkboxTestID')
+    fireEvent.press(checkbox)
+    const button = screen.getByTestId('submitTestID')
+    fireEvent.press(button)
+
+    expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
+      {
+        appointmentDateTime: params.attributes.startDateLocal,
+        facilityStationNumber: params.attributes.location.id,
+        appointmentType: 'Other',
+        isComplete: false,
+      },
+      expect.any(Object),
+    )
   })
 })

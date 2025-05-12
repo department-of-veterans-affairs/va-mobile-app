@@ -24,7 +24,6 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   useSubtaskProps({
     rightButtonText: t('close'),
     rightButtonTestID: 'rightCloseTestID',
-    primaryButtonTestID: 'continueToClaimTestID',
   })
 
   const getErrorContent = (travelPayError: TravelPayError) => {

@@ -12,8 +12,12 @@ const mockNavigationSpy = jest.fn()
 const mockBack = jest.fn()
 
 const params = {
-  appointmentDateTime: '2021-01-01T00:00:00Z',
-  facilityName: 'Test Facility',
+  attributes: {
+    startDateUtc: '2021-01-01T00:00:00Z',
+    location: {
+      name: 'Test Facility',
+    },
+  },
 }
 
 const mockActionSheetSpy = jest.fn()

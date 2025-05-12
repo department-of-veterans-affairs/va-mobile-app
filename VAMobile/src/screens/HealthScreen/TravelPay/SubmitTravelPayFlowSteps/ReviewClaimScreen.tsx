@@ -7,7 +7,7 @@ import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-compone
 import { DateTime } from 'luxon'
 
 import { useContactInformation } from 'api/contactInformation'
-import { submitClaim } from 'api/travelPay'
+import { useSubmitTravelClaim } from 'api/travelPay'
 import {
   Box,
   LinkWithAnalytics,
@@ -28,10 +28,11 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
-  const { appointmentDateTime, facilityName } = route.params
+  const { attributes } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
+  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim()
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -48,17 +49,16 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
   const [checkBoxError, setCheckBoxError] = useState<string>('')
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!loading) {
+    if (!submittingTravelClaim) {
       return
     }
     setSubtaskProps({
       rightButtonText: t('close'),
       rightButtonTestID: 'rightCloseTestID',
     })
-  }, [loading, setSubtaskProps, t])
+  }, [submittingTravelClaim, setSubtaskProps, t])
 
   const theme = useTheme()
   const isPortrait = useOrientation()
@@ -66,36 +66,40 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
   const contactInformationQuery = useContactInformation({ enabled: true })
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
-  const navigateToErrorScreen = () => {
-    navigateTo('ErrorScreen', { error: 'error' })
-  }
-
   const submitTravelClaim = async () => {
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
       return
     }
-    setLoading(true)
 
-    // Set a timeout to navigate to the error screen if the claim is not submitted in 30 seconds
-    const timeout = setTimeout(() => {
-      navigateToErrorScreen()
-    }, 30000)
-    try {
-      await submitClaim()
-      navigateTo('SubmitSuccessScreen', {
-        appointmentDateTime,
-        facilityName,
-      })
-    } catch (error) {
-      navigateToErrorScreen()
-    } finally {
-      clearTimeout(timeout)
-      setLoading(false)
+    if (!attributes.location.id) {
+      navigateTo('ErrorScreen', { error: 'error' })
+      return
     }
+
+    submitClaim(
+      {
+        appointmentDateTime: attributes.startDateLocal,
+        facilityStationNumber: attributes.location.id,
+        appointmentType: 'Other',
+        isComplete: false,
+      },
+      {
+        onSuccess: (_data) => {
+          //TODOD: Modify the nav params to include the claim data
+          navigateTo('SubmitSuccessScreen', {
+            appointmentDateTime: attributes.startDateUtc,
+            facilityName: attributes.location.name,
+          })
+        },
+        onError: () => {
+          navigateTo('ErrorScreen', { error: 'error' })
+        },
+      },
+    )
   }
 
-  if (loading) {
+  if (submittingTravelClaim) {
     return <LoadingComponent text={t('travelPay.submitLoading')} />
   }
 
@@ -121,7 +125,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList
                 listOfText={[
-                  DateTime.fromISO(appointmentDateTime).toFormat(
+                  DateTime.fromISO(attributes.startDateUtc).toFormat(
                     `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
                   ),
                 ]}

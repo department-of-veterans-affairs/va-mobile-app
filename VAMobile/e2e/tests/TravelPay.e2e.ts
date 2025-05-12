@@ -80,7 +80,6 @@ const TravelPayE2eIdConstants = {
   CHECK_BOX_ID: 'checkboxTestID',
   GO_TO_APPOINTMENT_LINK_ID: 'goToAppointmentLinkID',
   SET_UP_DIRECT_DEPOSIT_LINK_ID: 'setUpDirectDepositLinkID',
-  CONTINUE_TO_CLAIM_TEST_ID: 'continueToClaimTestID',
   TRAVEL_CLAIM_HELP_SCREEN_ID: 'travelClaimHelpScreenID',
   TRAVEL_CLAIM_HELP_TITLE_ID: 'travelClaimHelpTitleID',
   TRAVEL_CLAIM_HELP_TEXT_ID: 'travelClaimHelpTextID',
@@ -262,7 +261,6 @@ const checkSubmitSuccessScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.CONTINUE_TO_CLAIM_TEST_ID))).toExist()
 }
 
 const checkTravelPayFileOnlineComponent = async () => {
@@ -347,7 +345,7 @@ const checkTravelPayFlow = async (existingAddress: boolean) => {
     await element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID)).tap()
     await setTimeout(4000)
     await checkSubmitSuccessScreen()
-    await element(by.id(TravelPayE2eIdConstants.CONTINUE_TO_CLAIM_TEST_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
   } else {
     await checkErrorScreen('noAddress')
     await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()

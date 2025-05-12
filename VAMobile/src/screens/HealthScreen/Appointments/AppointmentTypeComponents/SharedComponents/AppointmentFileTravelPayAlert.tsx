@@ -34,10 +34,7 @@ function AppointmentFileTravelPayAlert({ attributes }: AppointmentFileTravelPayA
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            navigateTo('SubmitTravelPayClaimScreen', {
-              appointmentDateTime: attributes.startDateUtc,
-              facilityName: attributes.location.name,
-            })
+            navigateTo('SubmitTravelPayClaimScreen', { attributes })
           },
         }}
         testID="appointmentFileTravelPayAlert"
