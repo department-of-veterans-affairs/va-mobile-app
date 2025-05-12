@@ -27,7 +27,14 @@ export type DefaultListProps = {
 /**
  *Component to show a list composed of lines of display text built using TextLines
  */
-const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel, selectable }) => {
+const DefaultList: FC<DefaultListProps> = ({
+  items,
+  title,
+  titleA11yLabel,
+  rightTitleTextA11yLabel,
+  rightTitleText,
+  selectable,
+}) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, detoxTestID, ...listItemObj } = { ...item }
@@ -39,7 +46,15 @@ const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel, selec
     return { ...listItemObj, content, testId: testIdToUse, detoxTestID: detoxTestIDToUse }
   })
 
-  return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
+  return (
+    <List
+      items={listItemObjs}
+      title={title}
+      titleA11yLabel={titleA11yLabel}
+      rightTitleText={rightTitleText}
+      rightTitleTextA11yLabel={rightTitleTextA11yLabel}
+    />
+  )
 }
 
 export default DefaultList
