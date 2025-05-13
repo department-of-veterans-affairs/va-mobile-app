@@ -29,6 +29,8 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   AddressScreen: undefined
   ReviewClaimScreen: {
     attributes: AppointmentAttributes
+    appointmentID: string
+    apointmentDetailsKey: string
   }
   SubmitSuccessScreen: {
     appointmentDateTime: string
@@ -43,6 +45,8 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
 export type TravelPayStack = WebviewStackParams & {
   FlowSteps: {
     attributes: AppointmentAttributes
+    appointmentID: string
+    apointmentDetailsKey: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
@@ -55,7 +59,7 @@ const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
 const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
-  const { attributes } = route.params
+  const { attributes, appointmentID, apointmentDetailsKey } = route.params
 
   return (
     <MultiStepSubtask<SubmitTravelPayFlowModalStackParamList>
@@ -73,7 +77,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="ReviewClaimScreen"
         name="ReviewClaimScreen"
         component={ReviewClaimScreen}
-        initialParams={{ attributes }}
+        initialParams={{ attributes, appointmentID, apointmentDetailsKey }}
       />
       <TravelPayMultiStepStack.Screen
         key="SubmitSuccessScreen"
@@ -87,11 +91,15 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
 }
 
 function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenProps) {
-  const { attributes } = route.params
+  const { attributes, appointmentID, apointmentDetailsKey } = route.params
 
   return (
     <TravelPayStack.Navigator screenOptions={{ headerShown: false }}>
-      <TravelPayStack.Screen name="FlowSteps" component={FlowSteps} initialParams={{ attributes }} />
+      <TravelPayStack.Screen
+        name="FlowSteps"
+        component={FlowSteps}
+        initialParams={{ attributes, appointmentID, apointmentDetailsKey }}
+      />
       <TravelPayStack.Screen
         key={'TravelClaimHelpScreen'}
         name="TravelClaimHelpScreen"

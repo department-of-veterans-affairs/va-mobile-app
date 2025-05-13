@@ -170,8 +170,14 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
-  const initializeTestInstance = (attributes: AppointmentAttributes) => {
-    render(<AppointmentFileTravelPayAlert attributes={attributes} />)
+  const initializeTestInstance = (attributes: AppointmentAttributes, appointmentID: string = '123') => {
+    render(
+      <AppointmentFileTravelPayAlert
+        attributes={attributes}
+        appointmentID={appointmentID}
+        apointmentDetailsKey="key"
+      />,
+    )
   }
 
   it('should initialize correctly', async () => {
@@ -267,6 +273,8 @@ context('AppointmentFileTravelPayAlert', () => {
     fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
     expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
       attributes,
+      appointmentID: '123',
+      apointmentDetailsKey: 'key',
     })
   })
 

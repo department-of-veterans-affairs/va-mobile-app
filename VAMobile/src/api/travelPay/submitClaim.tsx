@@ -35,12 +35,7 @@ export const useSubmitTravelClaim = () => {
       const newAppointmentsList = oldAppointments.data.map((appointment) => {
         const newAppointment = { ...appointment }
 
-        //TODO: Find a better way to identify the appointment and append the claim data
-        if (
-          newAppointment.attributes.startDateUtc === variables.appointmentDateTime &&
-          newAppointment.attributes.location.id === variables.facilityStationNumber &&
-          !newAppointment.attributes.travelPayClaim?.claim?.id
-        ) {
+        if (newAppointment.id === variables.appointmentID) {
           newAppointment.attributes.travelPayClaim = {
             metadata: {
               status: 200,

@@ -83,7 +83,13 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}>
-      {featureEnabled('travelPaySMOC') && <AppointmentFileTravelPayAlert attributes={attributes} />}
+      {featureEnabled('travelPaySMOC') && (
+        <AppointmentFileTravelPayAlert
+          attributes={attributes}
+          appointmentID={appointment.id}
+          apointmentDetailsKey={route.key}
+        />
+      )}
       {isPhoneAppointment ? (
         <PhoneAppointment
           appointmentID={appointment.id}

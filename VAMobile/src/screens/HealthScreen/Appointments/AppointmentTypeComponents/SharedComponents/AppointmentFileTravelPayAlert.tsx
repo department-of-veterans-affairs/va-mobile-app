@@ -11,9 +11,15 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type AppointmentFileTravelPayAlertProps = {
   attributes: AppointmentAttributes
+  appointmentID: string
+  apointmentDetailsKey: string
 }
 
-function AppointmentFileTravelPayAlert({ attributes }: AppointmentFileTravelPayAlertProps) {
+function AppointmentFileTravelPayAlert({
+  attributes,
+  appointmentID,
+  apointmentDetailsKey,
+}: AppointmentFileTravelPayAlertProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -34,7 +40,7 @@ function AppointmentFileTravelPayAlert({ attributes }: AppointmentFileTravelPayA
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            navigateTo('SubmitTravelPayClaimScreen', { attributes })
+            navigateTo('SubmitTravelPayClaimScreen', { attributes, appointmentID, apointmentDetailsKey })
           },
         }}
         testID="appointmentFileTravelPayAlert"

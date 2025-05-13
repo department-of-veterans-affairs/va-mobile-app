@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CommonActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
+import { appointmentsKeys } from 'api/appointments'
 import { useContactInformation } from 'api/contactInformation'
 import { useSubmitTravelClaim } from 'api/travelPay'
+import { AppointmentsGetData } from 'api/types/AppointmentData'
 import {
   Box,
   LinkWithAnalytics,
@@ -19,6 +23,7 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -27,12 +32,13 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
-  const { attributes } = route.params
+function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
+  const { attributes, appointmentID, apointmentDetailsKey } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim()
+  const queryClient = useQueryClient()
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -79,6 +85,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
 
     submitClaim(
       {
+        appointmentID,
         appointmentDateTime: attributes.startDateLocal,
         facilityStationNumber: attributes.location.id,
         appointmentType: 'Other',
@@ -86,7 +93,16 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
       },
       {
         onSuccess: (_data) => {
-          //TODOD: Modify the nav params to include the claim data
+          const appointments = queryClient.getQueryData([
+            appointmentsKeys.appointments,
+            TimeFrameTypeConstants.PAST_THREE_MONTHS,
+          ]) as AppointmentsGetData
+
+          const appointment = appointments.data.find((appt) => appt.id === appointmentID)
+          navigation.dispatch({
+            ...CommonActions.setParams({ appointment }),
+            source: apointmentDetailsKey,
+          })
           navigateTo('SubmitSuccessScreen', {
             appointmentDateTime: attributes.startDateUtc,
             facilityName: attributes.location.name,
