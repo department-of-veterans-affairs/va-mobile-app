@@ -9,14 +9,13 @@ on:
       - VAMobile/src/**
 
 jobs:
-  defaults:
-    run:
-      working-directory: VAMobile
-
   # Noting the pr is merged
   if_merged:
     if: github.event.pull_request.meged == true
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: VAMobile
     steps:
       - name: Print PR has been merged
         run: echo "PR has been merged"
