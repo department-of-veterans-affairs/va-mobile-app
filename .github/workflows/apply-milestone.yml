@@ -2,11 +2,11 @@ name: "[Utils] Apply Milestone"
 on:
   #TODO remove after testing
   push: # for testing
-  pull_request:
-    types:
-      - closed
-    paths: # targeting only code that touches the app
-      - VAMobile/src/**
+  # pull_request:
+  #   types:
+  #     - closed
+  # paths: # targeting only code that touches the app
+  #   - VAMobile/src/**
 
 jobs:
   # Noting the pr is merged
@@ -16,17 +16,17 @@ jobs:
     defaults:
       run: |
         working-directory: VAMobile
-        pdd
+        pwd
         ls -al
     steps:
       - name: Print PR has been merged
         run: echo "PR has been merged"
 
   # Check linked issue to PR
-  check_linked_issue:
-    needs: if_merged
-    uses: ./.github/workflows/check_linked_issues.yml
-    secrets: inherit
+  # check_linked_issue:
+  #   needs: if_merged
+  #   uses: ./.github/workflows/check_linked_issues.yml
+  #   secrets: inherit
 
   # Locate Milestone
   locate_milestone:
