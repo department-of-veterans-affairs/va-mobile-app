@@ -70,13 +70,14 @@ context('AppointmentsScreen', () => {
   })
 
   describe('when startScheduling is true', () => {
-    when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
     it('should show the Start Scheduling link', async () => {
+      when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
       initializeTestInstance()
       expect(screen.getByText(t('appointments.startScheduling'))).toBeTruthy()
     })
 
     it('should be a clickable webview that navigates to the scheduling weblink flow', async () => {
+      when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: t('appointments.startScheduling') }))
       const expectNavArgs = {
