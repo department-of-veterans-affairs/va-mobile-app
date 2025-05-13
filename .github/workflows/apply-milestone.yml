@@ -11,7 +11,7 @@ on:
 jobs:
   # Noting the pr is merged
   if_merged:
-    if: github.event.pull_request.meged == true
+    # if: github.event.pull_request.meged == true
     runs-on: ubuntu-latest
     defaults:
       run:
