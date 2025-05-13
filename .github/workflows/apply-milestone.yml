@@ -30,20 +30,20 @@ jobs:
   #   secrets: inherit
 
   # Locate Milestone
-  locate_milestone:
-    runs-on: ubuntu-latest
-    needs: check_linked_issue
-    # secrets: inherit
-    steps:
-      - name: Get current milestones
-        id: milestoneInfo
-        run: |
-          echo "Getting current open milestones..."
-          milestone $(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
-          echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
-      - name: Print Info
-        run: |
-          echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestone }}"
+  # locate_milestone:
+  #   runs-on: ubuntu-latest
+  #   needs: check_linked_issue
+  #   # secrets: inherit
+  #   steps:
+  #     - name: Get current milestones
+  #       id: milestoneInfo
+  #       run: |
+  #         echo "Getting current open milestones..."
+  #         milestone $(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
+  #         echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
+  #     - name: Print Info
+  #       run: |
+  #         echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestone }}"
 
 # apply milestone to issue
 # apply_milesone:
