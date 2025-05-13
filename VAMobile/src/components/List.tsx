@@ -40,12 +40,18 @@ export type ListProps = {
 
   /**optional a11y hint for the title */
   titleA11yLabel?: string
+
+  /** optional text on the right on same row of title */
+  rightTitleText?: string
+
+  /** optional a11y hint for the rightTitleText */
+  rightTitleTextA11yLabel?: string
 }
 
 /**
  * A common component for showing a list of <ListItem>.
  */
-const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
+const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rightTitleTextA11yLabel }) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -70,16 +76,28 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
 
   return (
     <Box>
-      {title && (
-        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-        <TextView
-          {...titleProps}
-          accessibilityLabel={titleA11yLabel}
-          testID={titleA11yLabel || title}
-          accessible={true}>
-          {title}
-        </TextView>
-      )}
+      <Box flexDirection="row" justifyContent={'space-between'} accessible={true}>
+        {title && (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+          <TextView
+            {...titleProps}
+            accessibilityLabel={titleA11yLabel}
+            accessible={true}
+            testID={titleA11yLabel || title}>
+            {title}
+          </TextView>
+        )}
+        {rightTitleText && (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+          <TextView
+            {...titleProps}
+            accessibilityLabel={rightTitleTextA11yLabel}
+            accessible={true}
+            testID={rightTitleTextA11yLabel || rightTitleText}>
+            {rightTitleText}
+          </TextView>
+        )}
+      </Box>
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>
       </Box>
