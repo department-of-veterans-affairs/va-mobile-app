@@ -1,0 +1,31 @@
+{
+  "action": "open",
+  "pull_request": {
+    "head": {
+      "ref": "chore-branch-here",
+      "sha": "abcdef1234567890abcdef1234567890",
+      "repo": {
+        "full_name": "department-of-veterans-affairs/va-mobile-app"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "fedcba9876543210fedcba9876543210",
+      "repo": {
+        "full_name": "department-of-veterans-affairs/va-mobile-app"
+      }
+    },
+    "number": 999,
+    "merged": true,
+    "linked_issue_number": 1234,
+    "state": "closed",
+    "title": "Test PR for Workflow",
+    "body": "This is a test pull request for local testing.",
+    "user": {
+      "login": "test-user"
+    }
+  },
+  "repository": {
+    "full_name": "department-of-veterans-affairs/va-mobile-app"
+  }
+}

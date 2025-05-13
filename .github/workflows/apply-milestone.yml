@@ -1,18 +1,19 @@
 name: "[Utils] Apply Milestone"
 on:
-  #TODO remove after testing
-  push: # for testing
-  # pull_request:
-  #   types:
-  #     - closed
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - closed
   # paths: # targeting only code that touches the app
   #   - VAMobile/src/**
 
 jobs:
   # Noting the pr is merged
   if_merged:
-    # if: github.event.pull_request.meged == true
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     # defaults:
     #   run:
     #     working-directory: VAMobile
@@ -24,26 +25,36 @@ jobs:
           ls -al
 
   # Check linked issue to PR
-  # check_linked_issue:
-  #   needs: if_merged
-  #   uses: ./.github/workflows/check_linked_issues.yml
+  check_linked_issue:
+    needs: if_merged
+    uses: ./.github/workflows/check-linked-issues.yml
   #   secrets: inherit
 
   # Locate Milestone
-  # locate_milestone:
-  #   runs-on: ubuntu-latest
-  #   needs: check_linked_issue
-  #   # secrets: inherit
-  #   steps:
-  #     - name: Get current milestones
-  #       id: milestoneInfo
-  #       run: |
-  #         echo "Getting current open milestones..."
-  #         milestone $(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
-  #         echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
-  #     - name: Print Info
-  #       run: |
-  #         echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestone }}"
+  locate_milestone:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    # needs: check_linked_issue
+    # secrets: inherit
+    steps:
+      - name: Get current milestones
+        id: milestoneInfo
+        run: |
+          (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
+          	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
+            && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+            && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+          	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+          	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          	&& sudo apt update \
+          	&& sudo apt install gh -y
+            echo "Getting current open milestones..."
+            milestone=$(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
+            echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
+      - name: Print Info
+        run: |
+          echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestoneInfo }}"
 
 # apply milestone to issue
 # apply_milesone:
