@@ -53,7 +53,7 @@ import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
-const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
+const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_GO_TO_VA_GOV } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -390,6 +390,42 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const hasNoItems = filteredPrescriptions?.length === 0
 
+  const getNonVAMedsAlert = () => {
+    return (
+      <Box>
+        <AlertWithHaptics
+          variant="info"
+          expandable={true}
+          header={t('prescription.history.nonVAMeds.header')}
+          testID="nonVAMedsAlertTestID">
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            variant="MobileBody"
+            paragraphSpacing={true}
+            accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
+            {t('prescription.history.nonVAMeds.message')}
+          </TextView>
+          <LinkWithAnalytics
+            type="custom"
+            variant="base"
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_GO_TO_VA_GOV))
+              navigateTo('Webview', {
+                url: LINK_URL_GO_TO_VA_GOV,
+                displayTitle: t('webview.vagov'),
+                loadingMessage: t('loading.vaWebsite'),
+                useSSO: true,
+              })
+            }}
+            text={t('goToVAGov')}
+            a11yLabel={a11yLabelVA(t('goToVAGov'))}
+            testID="nonVAMedsLinkID"
+          />
+        </AlertWithHaptics>
+      </Box>
+    )
+  }
+
   const getTransferAlert = () => {
     if (!hasTransferred) {
       return <></>
@@ -405,7 +441,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <AlertWithHaptics
           variant="warning"
           expandable={true}
@@ -432,7 +468,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getRequestRefillButton = () => {
     return (
-      <Box mx={theme.dimensions.buttonPadding}>
+      <Box mx={theme.dimensions.buttonPadding} my={theme.dimensions.standardMarginBetween}>
         <Button
           testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
@@ -542,7 +578,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
-      testID="PrescriptionHistory">
+      testID="PrescriptionHistory"
+      footerContent={getRequestRefillButton()}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
@@ -565,7 +602,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
-          {getRequestRefillButton()}
+          {getNonVAMedsAlert()}
           {getTransferAlert()}
           {getContent()}
         </>
