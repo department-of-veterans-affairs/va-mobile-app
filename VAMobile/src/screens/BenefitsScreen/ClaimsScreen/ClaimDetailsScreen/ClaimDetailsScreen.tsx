@@ -182,7 +182,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       logAnalyticsEvent(
         analyticsEvent(claim.id, claim.attributes.claimType, claim.attributes.phase, claim.attributes.dateFiled),
       )
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }

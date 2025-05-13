@@ -169,12 +169,15 @@ jobs:
           cd ../app
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
 
-      - name: Setup ruby and restore bundler cache
+      - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.2'
-          bundler-cache: true
+          ruby-version: '3.1'
           working-directory: VAMobile/android
+      
+      - name: Install bundle
+        working-directory: VAMobile/android
+        run: bundle install
 
       - name: Set up JDK
         uses: actions/setup-java@v3

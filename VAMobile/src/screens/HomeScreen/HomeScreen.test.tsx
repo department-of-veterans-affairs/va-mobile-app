@@ -16,7 +16,7 @@ import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -547,7 +547,7 @@ context('HomeScreen', () => {
       await waitFor(() =>
         expect(
           screen.getByLabelText(
-            `${'$3084.74'} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate('2025-03-21T00:00:00.000-06:00', 'MMMM d, yyyy')}`,
+            `${'$3084.74'} ${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc('2025-03-21T00:00:00.000-06:00', 'MMMM d, yyyy')}`,
           ),
         ).toBeTruthy(),
       )
