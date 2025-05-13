@@ -9,6 +9,10 @@ on:
       - VAMobile/src/**
 
 jobs:
+  defaults:
+    run:
+      working-directory: VAMobile
+
   # Noting the pr is merged
   if_merged:
     if: github.event.pull_request.meged == true
