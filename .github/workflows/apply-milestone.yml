@@ -1,0 +1,45 @@
+name: "[Utils] Apply Milestone"
+on:
+  #TODO remove after testing
+  push: # for testing
+  pull_request:
+    types:
+      - closed
+    paths: # targeting only code that touches the app
+      - VAMobile/src/**
+
+jobs:
+  # Noting the pr is merged
+  if_merged:
+    if: github.event.pull_request.meged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print PR has been merged
+        run: echo "PR has been merged"
+
+  # Check linked issue to PR
+  check_linked_issue:
+    needs: if_merged
+    uses: ./.github/workflows/check_linked_issue.yml
+    secrets: inherit
+
+  # Locate Milestone
+  locate_milestone:
+    runs-on: ubuntu-latest
+    needs: check_linked_issue
+    # secrets: inherit
+    steps:
+      - name: Get current milestones
+        id: milestoneInfo
+        run: |
+          echo "Getting current open milestones..."
+          milestone $(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
+          echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
+      - name: Print Info
+        run: |
+          echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestone }}"
+
+# apply milestone to issue
+# apply_milesone:
+
+#TODO check go-live workflow for milestone closing
