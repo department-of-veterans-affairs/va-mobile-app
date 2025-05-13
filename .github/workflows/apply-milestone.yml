@@ -20,7 +20,7 @@ jobs:
   # Check linked issue to PR
   check_linked_issue:
     needs: if_merged
-    uses: ./.github/workflows/check_linked_issue.yml
+    uses: ./.github/workflows/check_linked_issues.yml
     secrets: inherit
 
   # Locate Milestone
