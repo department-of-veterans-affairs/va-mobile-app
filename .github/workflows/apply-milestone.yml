@@ -14,8 +14,10 @@ jobs:
     if: github.event.pull_request.meged == true
     runs-on: ubuntu-latest
     defaults:
-      run:
+      run: |
         working-directory: VAMobile
+        pdd
+        ls -al
     steps:
       - name: Print PR has been merged
         run: echo "PR has been merged"
