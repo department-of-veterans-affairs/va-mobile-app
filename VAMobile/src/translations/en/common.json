@@ -764,6 +764,7 @@
   "fileUpload.fileFolder": "File folder",
   "fileUpload.fileSizeError": "The selected photo(s) can not be uploaded because they exceed the maximum file size.",
   "fileUpload.fileTypeError": "The selected photo(s) can not be uploaded because they are not an accepted file type.",
+  "fileUpload.fileEncryptedError": "Please unlock your document and upload again, or upload locked document on VA.gov.",
   "fileUpload.ifMoreThan10.1": "You can ",
   "fileUpload.ifMoreThan10.2": "submit up to 10 photos",
   "fileUpload.ifMoreThan10.3": ". If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.",

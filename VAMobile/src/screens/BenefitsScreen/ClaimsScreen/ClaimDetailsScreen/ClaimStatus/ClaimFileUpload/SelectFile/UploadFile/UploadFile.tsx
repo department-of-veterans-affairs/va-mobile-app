@@ -31,6 +31,7 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { ErrorObject } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import {
@@ -66,6 +67,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const [filesEmptyError, setFilesEmptyError] = useState(false)
   const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
+
+  const ENCRYPTED_ERROR_CODE = 422
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -147,12 +150,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         )
         snackbar.show(t('fileUpload.submitted'))
       },
-      onError: () =>
+      onError: (err: ErrorObject) => {
         snackbar.show(t('fileUpload.submitted.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: onUploadConfirmed,
-        }),
+        })
+
+        if (err?.status === ENCRYPTED_ERROR_CODE) {
+          setError(t('fileUpload.fileEncryptedError'))
+        }
+      },
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)
