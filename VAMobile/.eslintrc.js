@@ -10,6 +10,7 @@ module.exports = {
     'plugin:react-hooks/recommended',
     '@department-of-veterans-affairs/mobile',
     'prettier',
+    'plugin:react-native-a11y/basic',
   ],
   env: {
     commonjs: true,
@@ -51,5 +52,6 @@ module.exports = {
         allowAsProps: true,
       },
     ],
+    'react-native-a11y/has-accessibility-hint': 1,
   },
 }

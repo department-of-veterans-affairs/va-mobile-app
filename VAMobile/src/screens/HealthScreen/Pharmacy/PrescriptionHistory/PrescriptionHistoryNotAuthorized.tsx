@@ -70,6 +70,7 @@ function PrescriptionHistoryNotAuthorized() {
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.systemProblem')}</TextView>
           <TextView paragraphSpacing={true}>{t('prescriptions.notAuthorized.toAccess')}</TextView>
           <VABulletList listOfText={[bulletOne, bulletTwo]} paragraphSpacing={true} />
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             mt={standardMarginBetween}
             accessibilityLabel={a11yLabelVA(t('prescriptions.notAuthorized.pleaseCall.a11y'))}
@@ -77,6 +78,7 @@ function PrescriptionHistoryNotAuthorized() {
             {t('prescriptions.notAuthorized.pleaseCall')}
           </TextView>
           <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(t('8773270022'))} phone={t('8773270022')} />
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBody"
             my={theme.dimensions.contentMarginTop}

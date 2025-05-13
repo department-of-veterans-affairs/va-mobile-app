@@ -19,6 +19,7 @@ function NoDisabilityRatings() {
   return (
     <VAScrollView contentContainerStyle={mainViewStyle}>
       <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBodyBold"
           textAlign="center"

@@ -83,6 +83,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({
           {getSpinner()}
         </Box>
       ) : inlineSpinner ? (
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
         <Box
           flexDirection="row"
           alignItems="center"

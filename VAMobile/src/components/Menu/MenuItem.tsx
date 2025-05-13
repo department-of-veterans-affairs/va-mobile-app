@@ -41,6 +41,7 @@ export const MenuItem = ({
   }
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <TouchableHighlight
       disabled={disabled}
       onPress={onPress}

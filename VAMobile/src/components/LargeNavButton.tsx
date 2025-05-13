@@ -78,6 +78,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   const accessibilityLabel = `${title} ${showLoading ? t('loadingActivity') : subText || ''}`.trim()
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Pressable
       style={pressableStyle}
       onPress={onPress}

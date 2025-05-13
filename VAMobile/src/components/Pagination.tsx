@@ -58,6 +58,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yLabel, 
     borderRadius: 5,
   }
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Pressable {...pressableProps} testID={testID} accessibilityLabel={a11yLabel}>
       <Box {...boxProps}>
         <Icon fill={theme.colors.icon.pagination} width={36} height={36} preventScaling={true} {...iconProps} />

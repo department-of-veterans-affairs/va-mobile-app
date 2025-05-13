@@ -4,6 +4,7 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { context, render } from 'testUtils'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
@@ -26,7 +27,7 @@ context('PrescriptionHistoryNotAuthorized', () => {
     expect(screen.getByText(t('prescriptions.notAuthorized.enrolled') + ' ' + t('and'))).toBeTruthy()
     expect(screen.getByText(t('prescriptions.notAuthorized.registered'))).toBeTruthy()
     expect(screen.getByText(t('prescriptions.notAuthorized.pleaseCall'))).toBeTruthy()
-    expect(screen.getByRole('link', { name: '877-327-0022' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: displayedTextPhoneNumber(t('8773270022')) })).toBeTruthy()
+    expect(screen.getByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
   })
 })
