@@ -29,6 +29,11 @@ export const linking: LinkingOptions<any> = {
               ViewMessage: 'messages/:messageID',
             },
           },
+          BenefitsTab:{
+            screens:{
+              ClaimLettersScreen:'claimLetters'
+            }
+          }
         },
       },
     },
