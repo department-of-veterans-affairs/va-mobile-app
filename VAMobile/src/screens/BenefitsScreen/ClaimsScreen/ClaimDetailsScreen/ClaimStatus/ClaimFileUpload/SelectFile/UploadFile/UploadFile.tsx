@@ -34,6 +34,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ErrorObject } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
+import { isEncryptedPdf } from 'utils/filesystem'
 import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
@@ -68,6 +69,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
 
+  // Error status code for an encrypted file
   const ENCRYPTED_ERROR_CODE = 422
 
   useSubtaskProps({
@@ -248,6 +250,13 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         setError(t('fileUpload.fileTypeError'))
         return
       }
+
+      const isEncrypted = await isEncryptedPdf(document)
+      if (isEncrypted) {
+        setError(t('fileUpload.fileEncryptedError'))
+        return
+      }
+
       setFilesEmptyError(false)
       setError('')
       setFilesList([document])

@@ -1,8 +1,12 @@
 import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
 
+import { Buffer } from 'buffer'
+import { PDFDocument } from 'pdf-lib'
+
 import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
+import { DocumentPickerResponse } from '../screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
@@ -121,7 +125,7 @@ export const unlinkFile = async (filePath: string): Promise<void> => {
 }
 
 /**
- * Get's the base64 string for a given file.
+ * Gets the base64 string for a given file.
  */
 export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
   // TODO: this is not currently used but will be used for the multi upload flow
@@ -138,4 +142,29 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
   }
 
   return await ReactNativeBlobUtil.fs.readFile(uri, 'base64')
+}
+
+/**
+ * Gets the UInt8Array from a base64 string
+ */
+export const getUInt8ArrayForBase64 = (base64: string) => {
+  const buffer = Buffer.from(base64, 'base64')
+  return new Uint8Array(buffer)
+}
+
+/**
+ * Checks if a pdf is encrypted
+ */
+export const isEncryptedPdf = async (doc: DocumentPickerResponse) => {
+  try {
+    const base64String = await getBase64ForUri(doc.uri)
+    if (base64String) {
+      const bytes = getUInt8ArrayForBase64(base64String)
+      // Throws an `EncryptedPDFError` if it can't load
+      await PDFDocument.load(bytes)
+      return false
+    }
+  } catch (err) {
+    return true
+  }
 }
