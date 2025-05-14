@@ -54,7 +54,7 @@ import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
-const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_GO_TO_VA_GOV } = getEnv()
+const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -395,15 +395,14 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     const linkProps: LinkProps = {
       type: 'custom',
       onPress: () => {
-        logAnalyticsEvent(Events.vama_webview(LINK_URL_GO_TO_VA_GOV))
+        logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
-          url: LINK_URL_GO_TO_VA_GOV,
+          url: LINK_URL_MHV_VA_MEDICATIONS,
           displayTitle: t('webview.vagov'),
           loadingMessage: t('loading.vaWebsite'),
           useSSO: true,
         })
       },
-      variant: 'base',
       text: t('goToVAGov'),
       a11yLabel: a11yLabelVA(t('goToVAGov')),
       testID: 'nonVAMedsLinkID',
@@ -418,10 +417,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
           testID="nonVAMedsAlertTestID">
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
+          <TextView
+            variant="MobileBody"
+            paragraphSpacing={true}
+            accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
             {t('prescription.history.nonVAMeds.message')}
           </TextView>
-          <LinkWithAnalytics {...linkProps} />
+          <LinkWithAnalytics icon="no icon" {...linkProps} />
         </AlertWithHaptics>
       </Box>
     )
@@ -469,7 +471,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const getRequestRefillButton = () => {
     return (
-      <Box mx={theme.dimensions.buttonPadding} my={theme.dimensions.standardMarginBetween}>
+      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
         <Button
           testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}

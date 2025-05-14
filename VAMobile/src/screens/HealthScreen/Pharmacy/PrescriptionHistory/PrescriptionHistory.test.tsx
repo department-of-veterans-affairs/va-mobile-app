@@ -316,7 +316,7 @@ context('PrescriptionHistory', () => {
       )
       fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-        url: 'https://va.gov',
+        url: 'https://www.va.gov/my-health/medications',
         displayTitle: t('webview.vagov'),
         loadingMessage: t('loading.vaWebsite'),
         useSSO: true,
