@@ -45,6 +45,7 @@ import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -391,36 +392,36 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasNoItems = filteredPrescriptions?.length === 0
 
   const getNonVAMedsAlert = () => {
+    const linkProps: LinkProps = {
+      type: 'custom',
+      onPress: () => {
+        logAnalyticsEvent(Events.vama_webview(LINK_URL_GO_TO_VA_GOV))
+        navigateTo('Webview', {
+          url: LINK_URL_GO_TO_VA_GOV,
+          displayTitle: t('webview.vagov'),
+          loadingMessage: t('loading.vaWebsite'),
+          useSSO: true,
+        })
+      },
+      variant: 'base',
+      text: t('goToVAGov'),
+      a11yLabel: a11yLabelVA(t('goToVAGov')),
+      testID: 'nonVAMedsLinkID',
+    }
+
     return (
-      <Box>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="info"
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
+          headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
           testID="nonVAMedsAlertTestID">
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            variant="MobileBody"
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
             {t('prescription.history.nonVAMeds.message')}
           </TextView>
-          <LinkWithAnalytics
-            type="custom"
-            variant="base"
-            onPress={() => {
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_GO_TO_VA_GOV))
-              navigateTo('Webview', {
-                url: LINK_URL_GO_TO_VA_GOV,
-                displayTitle: t('webview.vagov'),
-                loadingMessage: t('loading.vaWebsite'),
-                useSSO: true,
-              })
-            }}
-            text={t('goToVAGov')}
-            a11yLabel={a11yLabelVA(t('goToVAGov'))}
-            testID="nonVAMedsLinkID"
-          />
+          <LinkWithAnalytics {...linkProps} />
         </AlertWithHaptics>
       </Box>
     )
@@ -441,7 +442,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box mx={theme.dimensions.gutter}>
         <AlertWithHaptics
           variant="warning"
           expandable={true}
@@ -602,7 +603,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
-          {getNonVAMedsAlert()}
+          {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
           {getContent()}
         </>
