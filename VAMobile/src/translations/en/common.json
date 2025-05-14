@@ -1504,6 +1504,7 @@
   "travelPay.help.youCanStillFile.bulletOne": "You need to submit receipts for other expenses, like tolls, meals, or lodging",
   "travelPay.help.youCanStillFile.bulletTwo": "You traveled by bus, train, taxi, or other authorized public transportation",
   "travelPay.help.youCanStillFile.bulletThree": "You didn’t travel from the home address we have on file for you",
+  "travelPay.error.general": "We can't retrieve your travel claim details right now.",
   "travelPay.error.error.title": "We couldn't file your claim",
   "travelPay.error.error.text": "We're sorry. Something went wrong on our end. We couldn't file your travel reimbursement claim right now.",
   "travelPay.error.error.text2": "You can try again later or file your claim another way. You must file within 30 days of your appointment.",

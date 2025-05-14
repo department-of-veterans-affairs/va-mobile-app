@@ -1,12 +1,15 @@
 import React from 'react'
 
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
-import { render, screen } from 'testUtils'
+import { RootState } from 'store'
+import { MaintenanceWindowsGetData } from 'store/api'
+import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
+import { realStore, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
@@ -137,9 +140,11 @@ describe('AppointmentTravelClaimDetails', () => {
   const initializeTestInstance = (
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
+    // preloadedState?: Partial<RootState>,
   ) => {
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+      // { preloadedState }
     )
   }
 
@@ -232,6 +237,47 @@ describe('AppointmentTravelClaimDetails', () => {
           expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
         })
       })
+
+      describe('when there was an error retrieving travel claim data', () => {
+        describe('when the appointment is not past the 30 day window', () => {
+          it('should not render', () => {
+            const notFiledData = createTestAppointmentAttributes({
+              startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
+              appointmentType: AppointmentTypeConstants.VA,
+              travelPayClaim: {
+                metadata: {
+                  status: 500,
+                  message: 'Error retrieving travel pay claim data',
+                  success: false,
+                },
+              },
+            })
+            initializeTestInstance('Past', { ...notFiledData })
+            expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+            expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+            expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+          })
+        })
+      })
+
+      // describe('when the travel pay is in downtime', () => {
+      //   it('displays downtime message when travel pay is in downtime', () => {
+      //     const downtimeWindow = {
+      //       startTime: DateTime.now(),
+      //       endTime: DateTime.now().plus({ minutes: 1 }),
+      //     }
+      //     const preloadedState = {
+      //       errors: {
+      //         downtimeWindowsByFeature: {
+      //           travelPay: downtimeWindow,
+      //         },
+      //       } as unknown as ErrorsState,
+      //     }
+
+      //     initializeTestInstance('Past', {}, preloadedState)
+      //     expect(screen.getByText(t('downtime.message.1'))).toBeTruthy()
+      //   })
+      // })
     })
   })
 })
