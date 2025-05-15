@@ -179,7 +179,7 @@ describe('AppointmentTravelClaimDetails', () => {
         ).toBeTruthy()
         expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
         expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
-        expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.helpTitle'))).toBeTruthy()
         expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
         expect(screen.getByText(displayedTextPhoneNumber(t('travelPay.phone')))).toBeTruthy()
       })

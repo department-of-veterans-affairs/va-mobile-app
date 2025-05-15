@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, BoxProps, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
@@ -15,8 +15,9 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -79,19 +80,7 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
             testID={`goToVAGovID-${claimId}`}
           />
-          <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-            {t('travelPay.travelClaimFiledDetails.needHelp')}
-          </TextView>
-          <TextView testID="helpTextID" variant="MobileBody">
-            {t('travelPay.helpText')}
-          </TextView>
-          <Box my={theme.dimensions.condensedMarginBetween}>
-            <ClickToCallPhoneNumber
-              phone={t('travelPay.phone')}
-              center={false}
-              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-            />
-          </Box>
+          <TravelPayHelp />
         </>
       )
     }
@@ -103,19 +92,7 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
           <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
             {t('travelPay.error.general')}
           </TextView>
-          <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-            {t('travelPay.travelClaimFiledDetails.needHelp')}
-          </TextView>
-          <TextView testID="helpTextID" variant="MobileBody">
-            {t('travelPay.helpText')}
-          </TextView>
-          <Box my={theme.dimensions.condensedMarginBetween}>
-            <ClickToCallPhoneNumber
-              phone={t('travelPay.phone')}
-              center={false}
-              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-            />
-          </Box>
+          <TravelPayHelp />
         </>
       )
     }
