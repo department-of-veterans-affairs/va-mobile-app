@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
+import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 import ReviewClaimScreen from './ReviewClaimScreen'
 
@@ -24,14 +25,19 @@ const residentialAddress: AddressData = {
 }
 
 const params = {
-  attributes: {
-    startDateUtc: '2021-02-06T19:53:14.000+00:00',
-    startDateLocal: '2021-02-06T18:53:14.000-01:00',
-    location: {
-      id: '123',
-      name: 'Test Facility',
+  appointment: {
+    ...defaultAppoinment,
+    attributes: {
+      ...defaultAppointmentAttributes,
+      startDateUtc: '2021-02-06T19:53:14.000+00:00',
+      startDateLocal: '2021-02-06T18:53:14.000-01:00',
+      location: {
+        id: '123',
+        name: 'Test Facility',
+      },
     },
   },
+  appointmentRouteKey: 'key',
 }
 
 const mockNavigationSpy = jest.fn()
@@ -96,7 +102,7 @@ context('ReviewClaimScreen', () => {
     expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
     expect(
       screen.getByText(
-        DateTime.fromISO(params.attributes.startDateLocal).toFormat(
+        DateTime.fromISO(params.appointment.attributes.startDateLocal).toFormat(
           `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
         ),
       ),
@@ -166,10 +172,11 @@ context('ReviewClaimScreen', () => {
 
     expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
       {
-        appointmentDateTime: params.attributes.startDateLocal,
-        facilityStationNumber: params.attributes.location.id,
+        appointmentDateTime: params.appointment.attributes.startDateLocal,
+        facilityStationNumber: params.appointment.attributes.location.id,
         appointmentType: 'Other',
         isComplete: false,
+        appointmentID: params.appointment.id,
       },
       expect.any(Object),
     )

@@ -13,6 +13,7 @@ import {
 } from 'api/types'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
 import { context, fireEvent, render, screen } from 'testUtils'
+import { defaultAppoinment } from 'utils/tests/appointments'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -170,8 +171,13 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
-  const initializeTestInstance = (attributes: AppointmentAttributes) => {
-    render(<AppointmentFileTravelPayAlert attributes={attributes} />)
+  const initializeTestInstance = (attributes: AppointmentAttributes, appointmentID: string = '123') => {
+    const appointment = {
+      ...defaultAppoinment,
+      attributes,
+      id: appointmentID,
+    }
+    render(<AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey="key" />)
   }
 
   it('should initialize correctly', async () => {
@@ -263,10 +269,14 @@ context('AppointmentFileTravelPayAlert', () => {
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
     })
-    initializeTestInstance(attributes)
+    initializeTestInstance(attributes, '1')
     fireEvent(screen.getByText(t('travelPay.fileClaimAlert.button')), 'press')
     expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
-      attributes,
+      appointment: {
+        ...defaultAppoinment,
+        attributes,
+      },
+      appointmentRouteKey: 'key',
     })
   })
 

@@ -17,6 +17,7 @@ import {
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -39,10 +40,14 @@ const spacer = (theme: VATheme) => {
   return <Box {...boxProps} />
 }
 
-function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
+function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  if (!featureEnabled('travelPaySMOC')) {
+    return null
+  }
 
   const getContent = () => {
     // When the appointment has a travel pay claim, display the claim details
@@ -128,4 +133,4 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
   }
 }
 
-export default TravelClaimFiledDetails
+export default AppointmentTravelClaimDetails
