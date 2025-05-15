@@ -34,7 +34,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { ErrorObject } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
-import { isEncryptedPdf } from 'utils/filesystem'
+import { isPdfEncrypted } from 'utils/filesystem'
 import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
@@ -251,7 +251,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         return
       }
 
-      const isEncrypted = await isEncryptedPdf(document)
+      const isEncrypted = await isPdfEncrypted(document.uri)
       if (isEncrypted) {
         setError(t('fileUpload.fileEncryptedError'))
         return

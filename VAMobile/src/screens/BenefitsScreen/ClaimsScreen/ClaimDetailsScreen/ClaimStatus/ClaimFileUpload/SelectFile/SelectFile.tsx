@@ -16,7 +16,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
-import { isEncryptedPdf } from 'utils/filesystem'
+import { isPdfEncrypted } from 'utils/filesystem'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 import { FileRequestStackParams } from '../FileRequestSubtask'
@@ -71,7 +71,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         return
       }
 
-      const isEncrypted = await isEncryptedPdf(document)
+      const isEncrypted = await isPdfEncrypted(document.uri)
       if (isEncrypted) {
         setError(t('fileUpload.fileEncryptedError'))
         return

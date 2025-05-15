@@ -1,12 +1,8 @@
 import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
 
-import { Buffer } from 'buffer'
-import { PDFDocument } from 'pdf-lib'
-
 import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
-import { DocumentPickerResponse } from '../screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
@@ -147,24 +143,59 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
 /**
  * Gets the UInt8Array from a base64 string
  */
-export const getUInt8ArrayForBase64 = (base64: string) => {
-  const buffer = Buffer.from(base64, 'base64')
-  return new Uint8Array(buffer)
+export const getUInt8ArrayForBase64 = (base64Str: string) => {
+  const binaryString = ReactNativeBlobUtil.base64.decode(base64Str) // decode to binary string
+  const len = binaryString.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return Array.from(bytes)
 }
 
 /**
- * Checks if a pdf is encrypted
+ * Find if an array of fixed length is nested within a variable-sized array
+ * @param variableArray - array of variable size (file)
+ * @param fixedArray - array of fixed size (signature)
  */
-export const isEncryptedPdf = async (doc: DocumentPickerResponse) => {
-  try {
-    const base64String = await getBase64ForUri(doc.uri)
-    if (base64String) {
-      const bytes = getUInt8ArrayForBase64(base64String)
-      // Throws an `EncryptedPDFError` if it can't load
-      await PDFDocument.load(bytes)
-      return false
-    }
-  } catch (err) {
-    return true
+export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]) => {
+  if (
+    !Array.isArray(variableArray) ||
+    variableArray.length === 0 ||
+    !Array.isArray(fixedArray) ||
+    fixedArray.length === 0
+  ) {
+    return false
   }
+
+  // Skip expensive check if possible
+  const startIndex = variableArray.indexOf(fixedArray[0])
+
+  return startIndex < 0
+    ? false
+    : variableArray.some((_, variableIndex) => {
+        // docx sig isn't near the beginning of the file
+        if (variableIndex < startIndex) {
+          return false
+        }
+        return fixedArray.every(
+          (fixedElement, fixedIndex) => fixedElement === variableArray[variableIndex + fixedIndex],
+        )
+      })
+}
+
+/**
+ * Checks if a file is a PDF, then looks for the encrypted PDF signature
+ * within the file content. The "/Encrypt" signature is also added to view-only
+ * PDFs as well as password-encrypted PDF files
+ * @param uri - Uri string of the file
+ */
+export const isPdfEncrypted = async (uri: string): Promise<boolean> => {
+  const base64String = await getBase64ForUri(uri)
+  if (!base64String) {
+    return false
+  }
+  const bytes = getUInt8ArrayForBase64(base64String)
+  const encryptSig = [...'/Encrypt'].map((str) => str.charCodeAt(0))
+  return arrayIncludesArray(bytes, encryptSig)
 }
