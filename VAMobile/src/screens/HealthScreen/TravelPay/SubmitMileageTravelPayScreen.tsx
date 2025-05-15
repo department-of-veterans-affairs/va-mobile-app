@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { AppointmentAttributes } from 'api/types'
+import { AppointmentData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
@@ -28,9 +28,8 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   VehicleScreen: undefined
   AddressScreen: undefined
   ReviewClaimScreen: {
-    attributes: AppointmentAttributes
-    appointmentID: string
-    apointmentDetailsKey: string
+    appointment: AppointmentData
+    appointmentRouteKey: string
   }
   SubmitSuccessScreen: {
     appointmentDateTime: string
@@ -44,9 +43,8 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
 
 export type TravelPayStack = WebviewStackParams & {
   FlowSteps: {
-    attributes: AppointmentAttributes
-    appointmentID: string
-    apointmentDetailsKey: string
+    appointment: AppointmentData
+    appointmentRouteKey: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
@@ -59,7 +57,8 @@ const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
 const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
-  const { attributes, appointmentID, apointmentDetailsKey } = route.params
+  const { appointment, appointmentRouteKey } = route.params
+  const { attributes } = appointment
 
   return (
     <MultiStepSubtask<SubmitTravelPayFlowModalStackParamList>
@@ -77,7 +76,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="ReviewClaimScreen"
         name="ReviewClaimScreen"
         component={ReviewClaimScreen}
-        initialParams={{ attributes, appointmentID, apointmentDetailsKey }}
+        initialParams={{ appointment, appointmentRouteKey }}
       />
       <TravelPayMultiStepStack.Screen
         key="SubmitSuccessScreen"
@@ -91,14 +90,14 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
 }
 
 function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenProps) {
-  const { attributes, appointmentID, apointmentDetailsKey } = route.params
+  const { appointment, appointmentRouteKey } = route.params
 
   return (
     <TravelPayStack.Navigator screenOptions={{ headerShown: false }}>
       <TravelPayStack.Screen
         name="FlowSteps"
         component={FlowSteps}
-        initialParams={{ attributes, appointmentID, apointmentDetailsKey }}
+        initialParams={{ appointment, appointmentRouteKey }}
       />
       <TravelPayStack.Screen
         key={'TravelClaimHelpScreen'}

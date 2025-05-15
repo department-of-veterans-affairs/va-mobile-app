@@ -3,23 +3,19 @@ import { useTranslation } from 'react-i18next'
 
 import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { AppointmentAttributes } from 'api/types'
+import { AppointmentData } from 'api/types'
 import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type AppointmentFileTravelPayAlertProps = {
-  attributes: AppointmentAttributes
-  appointmentID: string
-  apointmentDetailsKey: string
+  appointment: AppointmentData
+  appointmentRouteKey: string
 }
 
-function AppointmentFileTravelPayAlert({
-  attributes,
-  appointmentID,
-  apointmentDetailsKey,
-}: AppointmentFileTravelPayAlertProps) {
+function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: AppointmentFileTravelPayAlertProps) {
+  const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -40,7 +36,7 @@ function AppointmentFileTravelPayAlert({
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            navigateTo('SubmitTravelPayClaimScreen', { attributes, appointmentID, apointmentDetailsKey })
+            navigateTo('SubmitTravelPayClaimScreen', { appointment, appointmentRouteKey })
           },
         }}
         testID="appointmentFileTravelPayAlert"
