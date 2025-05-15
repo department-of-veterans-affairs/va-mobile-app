@@ -6,11 +6,14 @@ import { DateTime } from 'luxon'
 import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
-import { render, screen } from 'testUtils'
+import { render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import AppointmentTravelClaimDetails from './AppointmentTravelClaimDetails'
+
+jest.mock('utils/remoteConfig')
 
 const baseAppointmentAttributes: AppointmentAttributes = {
   appointmentType: AppointmentTypeConstants.VA,
@@ -134,14 +137,25 @@ const tests = [
 ]
 
 describe('AppointmentTravelClaimDetails', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
+    travelPaySMOCEnabled = true,
   ) => {
+    when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
     )
   }
+
+  describe('when travel pay is not enabled', () => {
+    it('should not render', () => {
+      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false)
+      expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+    })
+  })
 
   describe('when subType is not Past', () => {
     it('should not render', () => {
