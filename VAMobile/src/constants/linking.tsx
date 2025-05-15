@@ -135,6 +135,27 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    }else if (pathParts[0] === 'claimLetters') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'BenefitsTab',
+                  state: {
+                    routes: [
+                      { name: 'Benefits' },
+                      { name: 'ClaimLettersScreen' },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     }
   },
 }
