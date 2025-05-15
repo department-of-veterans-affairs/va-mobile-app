@@ -6,9 +6,8 @@ import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { AppointmentAttributes } from 'api/types'
 import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants } from 'store/api'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type AppointmentFileTravelPayAlertProps = {
   attributes: AppointmentAttributes
@@ -21,7 +20,6 @@ function AppointmentFileTravelPayAlert({ attributes }: AppointmentFileTravelPayA
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
-  // const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPay)
 
   if (!eligibleForTravelPay || daysLeftToFile < 0) {
     return null

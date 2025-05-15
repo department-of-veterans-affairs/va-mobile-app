@@ -1,15 +1,12 @@
 import React from 'react'
 
 import { t } from 'i18next'
-import { DateTime, Settings } from 'luxon'
+import { DateTime } from 'luxon'
 
 import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
-import { RootState } from 'store'
-import { MaintenanceWindowsGetData } from 'store/api'
-import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
-import { realStore, render, screen, when } from 'testUtils'
+import { render, screen } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
@@ -140,11 +137,9 @@ describe('AppointmentTravelClaimDetails', () => {
   const initializeTestInstance = (
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
-    // preloadedState?: Partial<RootState>,
   ) => {
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
-      // { preloadedState }
     )
   }
 
@@ -257,25 +252,6 @@ describe('AppointmentTravelClaimDetails', () => {
           expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
         })
       })
-
-      // describe('when the travel pay is in downtime', () => {
-      //   it('displays downtime message when travel pay is in downtime', () => {
-      //     const downtimeWindow = {
-      //       startTime: DateTime.now(),
-      //       endTime: DateTime.now().plus({ minutes: 1 }),
-      //     }
-      //     const preloadedState = {
-      //       errors: {
-      //         downtimeWindowsByFeature: {
-      //           travelPay: downtimeWindow,
-      //         },
-      //       } as unknown as ErrorsState,
-      //     }
-
-      //     initializeTestInstance('Past', {}, preloadedState)
-      //     expect(screen.getByText(t('downtime.message.1'))).toBeTruthy()
-      //   })
-      // })
     })
   })
 })

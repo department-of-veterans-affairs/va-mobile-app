@@ -46,7 +46,6 @@ export type DowntimeFeatureType =
   | 'user_profile_update'
   | 'payment_history'
   | 'rx_refill'
-  | 'travel_pay'
 
 export const DowntimeFeatureTypeConstants: {
   facilityLocator: DowntimeFeatureType
@@ -63,7 +62,6 @@ export const DowntimeFeatureTypeConstants: {
   userProfileUpdate: DowntimeFeatureType
   payments: DowntimeFeatureType
   rx: DowntimeFeatureType
-  travelPay: DowntimeFeatureType
 } = {
   facilityLocator: 'facility_locator',
   appeals: 'appeals',
@@ -79,7 +77,6 @@ export const DowntimeFeatureTypeConstants: {
   userProfileUpdate: 'user_profile_update',
   payments: 'payment_history',
   rx: 'rx_refill',
-  travelPay: 'travel_pay',
 }
 
 export const ScreenIDToFeatureName = {
@@ -98,7 +95,6 @@ export const ScreenIDToFeatureName = {
   [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: 'Personal Information',
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: 'Payments',
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: 'VA Prescriptions',
-  [ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID]: 'Travel Pay',
 }
 
 export const ScreenIDToDowntimeFeatures = {
@@ -120,7 +116,6 @@ export const ScreenIDToDowntimeFeatures = {
   [ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID]: [DowntimeFeatureTypeConstants.userProfileUpdate],
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
-  [ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPay],
 }
 
 export type MaintenanceWindowsGetData = {
