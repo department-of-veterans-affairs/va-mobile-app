@@ -155,6 +155,7 @@ export const getUInt8ArrayForBase64 = (base64Str: string) => {
 
 /**
  * Find if an array of fixed length is nested within a variable-sized array
+ * Logic is based on vets-website file utility function checkIsEncryptedPdf
  * @param variableArray - array of variable size (file)
  * @param fixedArray - array of fixed size (signature)
  */
@@ -169,8 +170,9 @@ export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]
   }
 
   // Skip expensive check if possible
+  // If variableArray does not contain the first index of fixedArray, skip the check & return false
+  // Otherwise, do logic check to see if variable array contains the fixed array
   const startIndex = variableArray.indexOf(fixedArray[0])
-
   return startIndex < 0
     ? false
     : variableArray.some((_, variableIndex) => {
@@ -196,6 +198,8 @@ export const isPdfEncrypted = async (uri: string): Promise<boolean> => {
     return false
   }
   const bytes = getUInt8ArrayForBase64(base64String)
+  // Evaluates to an array of numbers representing the Unicode code points of the characters
+  // Returns Unicode value [47, 69, 110, 99, 114, 121, 112, 116]
   const encryptSig = [...'/Encrypt'].map((str) => str.charCodeAt(0))
   return arrayIncludesArray(bytes, encryptSig)
 }
