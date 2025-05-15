@@ -155,7 +155,7 @@ export const getUInt8ArrayForBase64 = (base64Str: string) => {
 
 /**
  * Find if an array of fixed length is nested within a variable-sized array
- * Logic is based on vets-website file utility function checkIsEncryptedPdf
+ * Logic is based on vets-website file utility function arrayIncludesArray
  * @param variableArray - array of variable size (file)
  * @param fixedArray - array of fixed size (signature)
  */
@@ -190,6 +190,7 @@ export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]
  * Checks if a file is a PDF, then looks for the encrypted PDF signature
  * within the file content. The "/Encrypt" signature is also added to view-only
  * PDFs as well as password-encrypted PDF files
+ * Logic is based on vets-website file utility function checkIsEncryptedPdf
  * @param uri - Uri string of the file
  */
 export const isPdfEncrypted = async (uri: string): Promise<boolean> => {
