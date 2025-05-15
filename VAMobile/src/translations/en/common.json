@@ -1575,6 +1575,7 @@
   "video": "Video",
   "webview.appointments.loading": "Loading appointment scheduling...",
   "webview.claims.loading": "Loading claims and appeal page...",
+  "webview.medicalRecords.loading": "Loading medical records...",
   "webview.notifications.loading": "Loading email and text notification settings...",
   "webview.vagov": "va.gov",
   "webview.valocation.loading": "Loading VA location finder...",

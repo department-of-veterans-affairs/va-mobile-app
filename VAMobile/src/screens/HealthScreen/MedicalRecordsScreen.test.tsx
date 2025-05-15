@@ -5,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
+import getEnv from 'utils/env'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import MedicalRecordsScreen from './MedicalRecordsScreen'
@@ -49,10 +50,17 @@ context('MedicalRecordsScreen', () => {
     expect(mockNavigationSpy).toHaveBeenCalledWith('AllergyList')
   })
 
-  it('should open the VA medical records link', () => {
-    initializeTestInstance()
-    fireEvent.press(screen.getByTestId('viewMedicalRecordsLinkID'))
-    expect(Alert.alert).toHaveBeenCalled()
+  it('should navigate to webview with correct parameters when view complete medical record link is pressed', () => {
+    const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
+    render(<MedicalRecordsScreen {...mockNavProps()} />)
+    const completeRecordLink = screen.getByTestId('viewMedicalRecordsLinkID')
+    fireEvent.press(completeRecordLink)
+    expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+      url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.medicalRecords.loading'),
+      useSSO: true,
+    })
   })
 
   it('should open the Share My Health Data link', () => {

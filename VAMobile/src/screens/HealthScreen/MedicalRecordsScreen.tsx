@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
@@ -61,8 +63,16 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       </Box>
       <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
+          type="custom"
+          onPress={() => {
+            logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
+            navigateTo('Webview', {
+              url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: t('webview.medicalRecords.loading'),
+              useSSO: true,
+            })
+          }}
           text={t('vaMedicalRecords.viewCompleteRecord.link')}
           a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord.link'))}
           testID="viewMedicalRecordsLinkID"
