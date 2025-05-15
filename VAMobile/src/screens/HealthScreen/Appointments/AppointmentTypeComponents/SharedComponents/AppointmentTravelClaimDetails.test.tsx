@@ -234,7 +234,7 @@ describe('AppointmentTravelClaimDetails', () => {
       })
 
       describe('when there was an error retrieving travel claim data', () => {
-        it('should render and error message', () => {
+        it('should render an error message when appointment is less than 30 days old', () => {
           const errorData = createTestAppointmentAttributes({
             startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
             appointmentType: AppointmentTypeConstants.VA,
@@ -250,6 +250,24 @@ describe('AppointmentTravelClaimDetails', () => {
           expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
           expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
           expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+        })
+        it('should render an error message when appointment is more than 30 days old', () => {
+          const errorData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Error retrieving travel pay claim data',
+                success: false,
+              },
+            },
+          })
+          initializeTestInstance('Past', { ...errorData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeNull()
         })
       })
     })
