@@ -415,14 +415,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
+          description={t('prescription.history.nonVAMeds.message')}
+          descriptionA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}
           testID="nonVAMedsAlertTestID">
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            variant="MobileBody"
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}>
-            {t('prescription.history.nonVAMeds.message')}
-          </TextView>
           <LinkWithAnalytics icon="no icon" {...linkProps} />
         </AlertWithHaptics>
       </Box>
