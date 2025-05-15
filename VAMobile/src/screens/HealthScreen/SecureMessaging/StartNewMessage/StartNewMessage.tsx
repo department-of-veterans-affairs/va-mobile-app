@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -10,6 +10,7 @@ import _ from 'underscore'
 
 import {
   secureMessagingKeys,
+  useFolderMessages,
   useMessageRecipients,
   useMessageSignature,
   useSaveDraft,
@@ -101,6 +102,16 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
+
+  const {
+    data: sentMessagesData,
+    error: inboxError,
+    isFetched: inboxFetched,
+    refetch: refetchInbox,
+    isFetching: refetchingInbox,
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
+    enabled: screenContentAllowed('WG_StartNewMessage'),
+  })
   const [to, setTo] = useState('')
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -191,12 +202,51 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       setResetErrors(true)
     }
   }
+  const fullRecipentList = useMemo(() => {
+    console.debug('sentMessagesData:', sentMessagesData)
+    const uniqueRecipientHash = {} as Record<
+      string,
+      { id: string | number; attributes: { name: string }; date: string }
+    >
+
+    sentMessagesData?.data?.forEach((m) => {
+      const recipient = {
+        id: m?.attributes?.recipientId || '',
+        attributes: { name: m.attributes.recipientName },
+        date: m.attributes.sentDate,
+      }
+      console.debug('recipient:', recipient)
+      if (!uniqueRecipientHash[recipient.id]) {
+        uniqueRecipientHash[recipient.id] = recipient
+      } else {
+        // If the recipient already exists, compare dates and keep the most recent one
+        if (new Date(recipient.date) > new Date(uniqueRecipientHash[recipient.id].date)) {
+          uniqueRecipientHash[recipient.id] = recipient
+        }
+      }
+    })
+    console.debug('uniqueRecipientHash:', uniqueRecipientHash)
+    const recipientsArray = Object.values(uniqueRecipientHash)
+    const recents = [
+      {
+        id: 'recents',
+        attributes: { name: 'Recently used' },
+      },
+      ...recipientsArray,
+      {
+        id: 'all',
+        attributes: { name: 'All recipients' },
+      },
+    ]
+
+    return [...recents, ...(recipients || [])]
+  }, [recipients, sentMessagesData])
 
   const getToPickerOptions = (): Array<PickerItem> => {
-    return (recipients || []).map((recipient) => {
+    return (fullRecipentList || []).map((recipient) => {
       return {
         label: recipient.attributes.name,
-        value: recipient.id,
+        value: String(recipient.id),
       }
     })
   }
