@@ -1,12 +1,15 @@
 import React from 'react'
 
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
-import { render, screen, when } from 'testUtils'
+import { RootState } from 'store'
+import { MaintenanceWindowsGetData } from 'store/api'
+import { ErrorsState, checkForDowntimeErrors } from 'store/slices'
+import { realStore, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -142,10 +145,12 @@ describe('AppointmentTravelClaimDetails', () => {
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
     travelPaySMOCEnabled = true,
+    // preloadedState?: Partial<RootState>,
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+      // { preloadedState }
     )
   }
 
@@ -284,6 +289,25 @@ describe('AppointmentTravelClaimDetails', () => {
           expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeNull()
         })
       })
+
+      // describe('when the travel pay is in downtime', () => {
+      //   it('displays downtime message when travel pay is in downtime', () => {
+      //     const downtimeWindow = {
+      //       startTime: DateTime.now(),
+      //       endTime: DateTime.now().plus({ minutes: 1 }),
+      //     }
+      //     const preloadedState = {
+      //       errors: {
+      //         downtimeWindowsByFeature: {
+      //           travelPay: downtimeWindow,
+      //         },
+      //       } as unknown as ErrorsState,
+      //     }
+
+      //     initializeTestInstance('Past', {}, preloadedState)
+      //     expect(screen.getByText(t('downtime.message.1'))).toBeTruthy()
+      //   })
+      // })
     })
   })
 })
