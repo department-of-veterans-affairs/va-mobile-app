@@ -16,7 +16,7 @@ export type Observation = {
   value: value | null
   referenceRange: string | null
   status: string | null
-  comment: string | null
+  comments: string | null
   sampleTested: string | null
   bodySite: string | null
 }

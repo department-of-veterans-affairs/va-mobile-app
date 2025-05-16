@@ -121,7 +121,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       getTextLine(t('labsAndTests.details.comment'), 0, condensedMarginBetween, 'MobileBodyBold') || {
         text: placeHolder,
       },
-      getTextLine(observation?.comment, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
+      getTextLine(observation?.comments, condensedMarginBetween, 0, 'MobileBody') || { text: placeHolder },
     ]
   }
 
