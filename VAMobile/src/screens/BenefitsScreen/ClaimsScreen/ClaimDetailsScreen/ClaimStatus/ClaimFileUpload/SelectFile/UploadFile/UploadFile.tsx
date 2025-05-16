@@ -31,7 +31,7 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import { ErrorObject } from 'store/api'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { isPdfEncrypted } from 'utils/filesystem'
@@ -64,13 +64,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const [error, setError] = useState('')
+  const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
   const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
-
-  // Error status code for an encrypted file
-  const ENCRYPTED_ERROR_CODE = 422
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -152,16 +150,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         )
         snackbar.show(t('fileUpload.submitted'))
       },
-      onError: (err: ErrorObject) => {
+      onError: () => {
         snackbar.show(t('fileUpload.submitted.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: onUploadConfirmed,
         })
-
-        if (err?.status === ENCRYPTED_ERROR_CODE) {
-          setError(t('fileUpload.fileEncryptedError'))
-        }
       },
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
@@ -254,11 +248,13 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       const isEncrypted = await isPdfEncrypted(document.uri)
       if (isEncrypted) {
         setError(t('fileUpload.fileEncryptedError'))
+        setErrorA11y(a11yLabelVA(t('fileUpload.fileEncryptedError')))
         return
       }
 
       setFilesEmptyError(false)
       setError('')
+      setErrorA11y('')
       setFilesList([document])
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
@@ -349,7 +345,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
           <Box flex={1}>
             {!!error && (
               <Box mb={theme.dimensions.standardMarginBetween}>
-                <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
+                <AlertWithHaptics
+                  variant="error"
+                  description={error}
+                  descriptionA11yLabel={errorA11y}
+                  scrollViewRef={scrollViewRef}
+                />
               </Box>
             )}
             {request && (
