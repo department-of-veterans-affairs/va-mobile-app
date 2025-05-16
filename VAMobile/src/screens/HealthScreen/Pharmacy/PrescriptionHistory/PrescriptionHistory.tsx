@@ -409,7 +409,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     return (
-      <Box mb={theme.dimensions.standardMarginBetween}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="info"
           expandable={true}
