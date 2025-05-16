@@ -21,12 +21,12 @@ const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParam
 /**
  * Returns a mutation for submitting a travel pay claim
  */
-export const useSubmitTravelClaim = () => {
+export const useSubmitTravelClaim = (appointmentId: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: submitClaim,
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       // Find what appointment queries have data
       const appointmentQueries = queryClient.getQueriesData<AppointmentsGetData>({
         queryKey: [appointmentsKeys.appointments],
@@ -40,7 +40,7 @@ export const useSubmitTravelClaim = () => {
             timeFrame,
           ) &&
           !!queryData &&
-          queryData.data.some((appointment) => appointment.id === variables.appointmentID)
+          queryData.data.some((appointment) => appointment.id === appointmentId)
         )
       }) as [QueryKey, AppointmentsGetData][]
 
@@ -48,7 +48,7 @@ export const useSubmitTravelClaim = () => {
       const newAppointmentsQueryData = validAppointmentQueries.map(([queryKey, queryData]) => {
         const newQueryData = {
           data: queryData?.data.map((appointment) => {
-            if (appointment.id === variables.appointmentID) {
+            if (appointment.id === appointmentId) {
               return appendClaimDataToAppointment(appointment, data?.data)
             }
             return { ...appointment }

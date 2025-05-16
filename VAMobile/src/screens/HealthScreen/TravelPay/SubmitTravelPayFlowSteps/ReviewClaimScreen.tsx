@@ -35,7 +35,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
-  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim()
+  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -82,7 +82,6 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
 
     submitClaim(
       {
-        appointmentID: appointment.id,
         appointmentDateTime: attributes.startDateLocal,
         facilityStationNumber: attributes.location.id,
         appointmentType: 'Other',
