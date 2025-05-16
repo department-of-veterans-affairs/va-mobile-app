@@ -15,6 +15,7 @@ import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview 
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
 import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
+import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from './labsAndTests'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
@@ -49,7 +50,8 @@ export type DemoStore = AppointmentsDemoStore &
   PrescriptionsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
-  AllergyDemoStore
+  AllergyDemoStore &
+  LabsAndTestsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -68,6 +70,7 @@ type DemoApiReturns =
   | NotificationDemoApiReturnTypes
   | DemographicsDemoApiReturnTypes
   | AllergyDemoReturnTypes
+  | LabsAndTestsDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -136,6 +139,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/vaccine.json'),
     import('./mocks/disablityRating.json'),
     import('./mocks/decisionLetters.json'),
+    import('./mocks/labsAndTests.json'),
     import('./mocks/letters.json'),
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
@@ -222,7 +226,10 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
     }
-    case '/v1/health/allergy-intolerances': {
+    case '/v1/health/labs-and-tests': {
+      return getLabsAndTestsList(store, params, endpoint)
+    }
+    case '/v0/health/allergy-intolerances': {
       return getAllergyList(store, params, endpoint)
     }
     case '/v0/payment-history': {

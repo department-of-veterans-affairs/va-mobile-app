@@ -1,6 +1,7 @@
 {
   "directory": {
     "allergies": ["Allergies"],
+    "labsAndTests": ["LabsAndTests"],
     "appointments": ["Appointments", "AppointmentsExpanded"],
     "authorizedServices": [
       "Appeals",
@@ -44,6 +45,7 @@
       "SettingsScreen",
       "SignIn",
       "Allergies",
+      "LabsAndTests",
       "VaccineRecords",
       "Claims",
       "Appeals",
@@ -86,6 +88,7 @@
       "ProfileScreen",
       "SettingsScreen",
       "Allergies",
+      "LabsAndTests",
       "VaccineRecords",
       "VALetters",
       "VeteransCrisisLine",
@@ -135,6 +138,7 @@
     "PaymentsScreen": ["Payments", "DirectDeposit"],
     "slices": [
       "Allergies",
+      "LabsAndTests",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -164,6 +168,7 @@
     ],
     "translations": [
       "Allergies",
+      "LabsAndTests",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -193,6 +198,7 @@
     ],
     "utils": [
       "Allergies",
+      "LabsAndTests",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
@@ -228,11 +234,13 @@
   },
   "files": {
     "allergies.ts": ["Allergies"],
+    "labsAndTests.ts": ["LabsAndTests"],
     "accounts.ts": ["DirectDeposit"],
     "appointments.ts": ["Appointments", "AppointmentsExpanded"],
     "claims.ts": ["Claims", "Appeals", "AppealsExpanded"],
     "common.ts": [
       "Allergies",
+      "LabsAndTests",
       "Appeals",
       "AppealsExpanded",
       "Appointments",
