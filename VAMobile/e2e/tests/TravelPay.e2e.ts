@@ -158,11 +158,7 @@ const startTravelPayFlow = async () => {
   await element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT)).tap()
 }
 
-const openTravelPayFlow = async (text: string, login: boolean = true) => {
-  if (login) {
-    await loginToDemoMode()
-  }
-  await openPastAppointments()
+const openAppointmentInList = async (text: string) => {
   try {
     await waitFor(element(by.text(text)))
       .toBeVisible()
@@ -175,6 +171,14 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
       .scroll(250, 'up')
   }
   await element(by.text(text)).tap()
+}
+
+const openTravelPayFlow = async (text: string, login: boolean = true) => {
+  if (login) {
+    await loginToDemoMode()
+  }
+  await openPastAppointments()
+  await openAppointmentInList(text)
 
   await startTravelPayFlow()
 }
@@ -478,6 +482,20 @@ describe('Travel Pay', () => {
   })
 
   it('shows the travel claim detials after filing the travel pay claim', async () => {
+    await element(by.id('PastApptDetailsTestID')).scrollTo('bottom')
+    await waitFor(element(by.id('goToVAGovID-mock_id')))
+      .toBeVisible()
+      .whileElement(by.id('PastApptDetailsTestID'))
+      .scroll(100, 'down', NaN, 0.8)
+    await expect(element(by.id('goToVAGovID-mock_id'))).toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
+  })
+
+  it('updates the appointments cache when the travel pay claim is submitted', async () => {
+    await element(by.text('Appointments')).tap()
+    await openAppointmentInList('Sami Alsahhar - Onsite - Confirmed')
+    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
     await element(by.id('PastApptDetailsTestID')).scrollTo('bottom')
     await waitFor(element(by.id('goToVAGovID-mock_id')))
       .toBeVisible()
