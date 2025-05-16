@@ -1407,6 +1407,7 @@
   "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "secureMessaging.viewMessage.loading": "Loading your message...",
   "secureMessaging.viewMessage.loadingAttachment": "Loading your attachment...",
+  "secureMessaging.viewMessage.opened": "Opened by your care team",
   "seeDetails": "See details",
   "select.all": "Select all",
   "selectAddress": "Select an address",
