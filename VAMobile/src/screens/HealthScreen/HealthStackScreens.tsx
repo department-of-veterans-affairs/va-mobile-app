@@ -5,7 +5,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import {
   Allergy,
-  AppointmentAttributes,
   AppointmentData,
   PrescriptionData,
   RefillRequestSummaryItems,
@@ -50,7 +49,8 @@ export type HealthStackParamList = WebviewStackParams & {
     appointmentID: string
   }
   SubmitTravelPayClaimScreen: {
-    attributes: AppointmentAttributes
+    appointment: AppointmentData
+    appointmentRouteKey: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined

@@ -84,6 +84,8 @@ const TravelPayE2eIdConstants = {
   TRAVEL_CLAIM_HELP_TITLE_ID: 'travelClaimHelpTitleID',
   TRAVEL_CLAIM_HELP_TEXT_ID: 'travelClaimHelpTextID',
   TRAVEL_PAY_HELP_COMPONENT_ID: 'travelPayHelp',
+  TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
+  APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID: 'appointmentFileTravelPayAlert',
 }
 
 const fillHomeAddressFields = async () => {
@@ -409,7 +411,7 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
   })
 
-  it('Completes the flow when the home address is exists', async () => {
+  it('sets the home address when the home address is not set', async () => {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
     await openProfile()
     await openContactInfo()
@@ -417,14 +419,10 @@ describe('Travel Pay', () => {
 
     await fillHomeAddressFields()
     await updateAddress()
-
-    await openHealth()
-
-    await startTravelPayFlow()
-    await checkTravelPayFlow(true)
   })
 
   it('navigates to the error screen when the answer is no to any of the questions', async () => {
+    await openHealth()
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
@@ -471,5 +469,21 @@ describe('Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_QUESTION_ID))).toExist()
     await element(by.id(TravelPayE2eIdConstants.LEFT_BACK_BUTTON_ID)).tap()
     await expect(element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID))).toExist()
+  })
+
+  it('submits the travel pay claim when the home address is exists', async () => {
+    await checkTravelPayFlow(true)
+    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
+  })
+
+  it('shows the travel claim detials after filing the travel pay claim', async () => {
+    await element(by.id('PastApptDetailsTestID')).scrollTo('bottom')
+    await waitFor(element(by.id('goToVAGovID-mock_id')))
+      .toBeVisible()
+      .whileElement(by.id('PastApptDetailsTestID'))
+      .scroll(100, 'down', NaN, 0.8)
+    await expect(element(by.id('goToVAGovID-mock_id'))).toExist()
+    await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 })

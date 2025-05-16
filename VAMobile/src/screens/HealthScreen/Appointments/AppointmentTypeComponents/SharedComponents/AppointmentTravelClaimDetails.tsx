@@ -29,8 +29,10 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+
+import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -53,10 +55,14 @@ const spacer = (theme: VATheme) => {
   return <Box {...boxProps} />
 }
 
-function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
+function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  if (!featureEnabled('travelPaySMOC')) {
+    return null
+  }
 
   const getContent = () => {
     // When the appointment has a travel pay claim, display the claim details
@@ -93,49 +99,26 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
             testID={`goToVAGovID-${claimId}`}
           />
-          <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-            {t('travelPay.travelClaimFiledDetails.needHelp')}
-          </TextView>
-          <TextView testID="helpTextID" variant="MobileBody">
-            {t('travelPay.helpText')}
-          </TextView>
-          <Box my={theme.dimensions.condensedMarginBetween}>
-            <ClickToCallPhoneNumber
-              phone={t('travelPay.phone')}
-              center={false}
-              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-            />
-          </Box>
+          <TravelPayHelp />
         </>
       )
     }
 
+    // When travel pay call fails, display an error message
     if (claimError) {
       return (
         <>
           <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
             {t('travelPay.error.general')}
           </TextView>
-          <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-            {t('travelPay.travelClaimFiledDetails.needHelp')}
-          </TextView>
-          <TextView testID="helpTextID" variant="MobileBody">
-            {t('travelPay.helpText')}
-          </TextView>
-          <Box my={theme.dimensions.condensedMarginBetween}>
-            <ClickToCallPhoneNumber
-              phone={t('travelPay.phone')}
-              center={false}
-              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-            />
-          </Box>
+          <TravelPayHelp />
         </>
       )
     }
 
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0) {
+    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}
@@ -176,27 +159,4 @@ function TravelClaimFiledDetails({ attributes, subType }: TravelClaimFiledDetail
   }
 }
 
-export default TravelClaimFiledDetails
-
-// const HelpContent = () => {
-//   const { t } = useTranslation(NAMESPACE.COMMON)
-//   const theme = useTheme()
-
-//   return (
-//     <>
-//       <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-//         {t('travelPay.travelClaimFiledDetails.needHelp')}
-//       </TextView>
-//       <TextView testID="helpTextID" variant="MobileBody">
-//         {t('travelPay.helpText')}
-//       </TextView>
-//       <Box my={theme.dimensions.condensedMarginBetween}>
-//         <ClickToCallPhoneNumber
-//           phone={t('travelPay.phone')}
-//           center={false}
-//           displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-//         />
-//       </Box>
-//     </>
-//   )
-// }
+export default AppointmentTravelClaimDetails

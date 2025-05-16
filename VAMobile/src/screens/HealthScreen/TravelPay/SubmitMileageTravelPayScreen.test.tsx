@@ -5,6 +5,7 @@ import { screen } from '@testing-library/react-native'
 import { contactInformationKeys } from 'api/contactInformation'
 import { UserContactInformation } from 'api/types'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
+import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 import SubmitMileageTravelPayScreen from './SubmitMileageTravelPayScreen'
 
@@ -12,10 +13,13 @@ const mockNavigationSpy = jest.fn()
 const mockBack = jest.fn()
 
 const params = {
-  attributes: {
-    startDateUtc: '2021-01-01T00:00:00Z',
-    location: {
-      name: 'Test Facility',
+  appointment: {
+    ...defaultAppointmentAttributes,
+    attributes: {
+      startDateUtc: '2021-01-01T00:00:00Z',
+      location: {
+        name: 'Test Facility',
+      },
     },
   },
 }

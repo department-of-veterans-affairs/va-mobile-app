@@ -17,13 +17,14 @@ const checkTravelClaimAvailability = async (
   pastAppointment: boolean,
   travelClaimId?: string,
   daysSinceAppointmentStart: number = 0,
+  claimError: boolean = false,
 ) => {
   const isAllowed =
     appointmentType === 'ATLAS' ||
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
-  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId) {
+  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId && !claimError) {
     if (daysSinceAppointmentStart < 30) {
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
     } else {
