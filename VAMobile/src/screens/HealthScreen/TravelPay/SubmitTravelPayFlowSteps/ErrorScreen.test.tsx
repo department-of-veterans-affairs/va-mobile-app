@@ -3,6 +3,7 @@ import React from 'react'
 import { t } from 'i18next'
 
 import { TravelPayError } from 'constants/travelPay'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import ErrorScreen from './ErrorScreen'
@@ -49,9 +50,12 @@ context('ErrorScreen', () => {
     expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
   })
 
-  it('should navigate to ContactInformation when updateAddressLink is pressed', () => {
+  it('should navigate to EditAddress screen when updateAddressLink is pressed', () => {
     initializeTestInstance('noAddress')
     fireEvent.press(screen.getByTestId('updateAddressLink'))
-    expect(mockNavigationSpy).toHaveBeenCalledWith('ContactInformation')
+    expect(mockNavigationSpy).toHaveBeenCalledWith('EditAddress', {
+      displayTitle: t('contactInformation.residentialAddress'),
+      addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+    })
   })
 })

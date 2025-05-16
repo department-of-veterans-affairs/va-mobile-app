@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useContactInformation } from 'api/contactInformation'
 import { Box, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import AddressSummary, {
   addressDataField,
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 function AddressScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  const contactInformationQuery = useContactInformation({ enabled: true })
-  const [retried, setRetried] = useState(false)
   const navigateTo = useRouteNavigation()
 
   useSubtaskProps({
@@ -37,17 +32,6 @@ function AddressScreen() {
     secondaryContentButtonText: t('no'),
     onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
   })
-
-  useEffect(() => {
-    if (contactInformationQuery.failureCount > 0) {
-      setRetried(true)
-    }
-
-    if (retried && !contactInformationQuery.isFetching) {
-      const retryStatus = contactInformationQuery.error ? 'fail' : 'success'
-      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
-    }
-  }, [contactInformationQuery.failureCount, contactInformationQuery.error, contactInformationQuery.isFetching, retried])
 
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: undefined },

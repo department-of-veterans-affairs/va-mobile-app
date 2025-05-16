@@ -7,12 +7,13 @@ import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
-type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
+type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen' | 'NoAddressErrorScreen'>
 
 function ErrorScreen({ route }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -38,7 +39,10 @@ function ErrorScreen({ route }: ErrorScreenProps) {
               text={t('travelPay.error.noAddress.link')}
               testID="updateAddressLink"
               onPress={() => {
-                navigateTo('ContactInformation')
+                navigateTo('EditAddress', {
+                  displayTitle: t('contactInformation.residentialAddress'),
+                  addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+                })
               }}
             />
           ),
@@ -60,7 +64,7 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const { title, textLines, content } = getErrorContent(error)
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="ErrorScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>

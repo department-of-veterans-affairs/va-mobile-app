@@ -1,15 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  loginToDemoMode,
-  openAppointments,
-  openContactInfo,
-  openHealth,
-  openProfile,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
 
 const TravelPayE2eIdConstants = {
   RIGHT_CLOSE_BUTTON_ID: 'rightCloseTestID',
@@ -86,6 +78,7 @@ const TravelPayE2eIdConstants = {
   TRAVEL_PAY_HELP_COMPONENT_ID: 'travelPayHelp',
   TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
   APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID: 'appointmentFileTravelPayAlert',
+  ERROR_SCREEN_ID: 'ErrorScreen',
 }
 
 const fillHomeAddressFields = async () => {
@@ -338,13 +331,13 @@ const checkInterstitialScreen = async () => {
 }
 
 const checkTravelPayFlow = async (existingAddress: boolean) => {
-  await checkInterstitialScreen()
-  await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
-  await checkMilageScreen()
-  await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
-  await checkVehicleScreen()
-  await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
   if (existingAddress) {
+    await checkInterstitialScreen()
+    await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
+    await checkMilageScreen()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await checkVehicleScreen()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
     await checkAddressScreen()
     await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
     await checkReviewClaimScreen()
@@ -364,14 +357,23 @@ describe('Travel Pay', () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   })
 
-  it('ends the flow on the error screen when the home address is not entered', async () => {
+  it('initializes to the no address error screen when the home address is not entered', async () => {
     await openTravelPayFlow('Sami Alsahhar - Onsite - Confirmed')
     await checkTravelPayFlow(false)
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
   })
 
-  it('is correctly displays the cancel and keep going buttons when the top left cancel button is tapped', async () => {
+  it('allows the user to update the address from the no address error screen', async () => {
     await startTravelPayFlow()
+    await checkTravelPayFlow(false)
+    await element(by.id(TravelPayE2eIdConstants.UPDATE_ADDRESS_LINK_ID)).tap()
+    await fillHomeAddressFields()
+    await updateAddress()
+    await expect(element(by.id(TravelPayE2eIdConstants.ERROR_SCREEN_ID))).not.toExist()
+    await checkInterstitialScreen()
+  })
+
+  it('is correctly displays the cancel and keep going buttons when the top left cancel button is tapped', async () => {
     await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
     await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))
       .toBeVisible()
@@ -415,18 +417,7 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
   })
 
-  it('sets the home address when the home address is not set', async () => {
-    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
-    await openProfile()
-    await openContactInfo()
-    await element(by.id(CommonE2eIdConstants.HOME_ADDRESS_ID)).tap()
-
-    await fillHomeAddressFields()
-    await updateAddress()
-  })
-
   it('navigates to the error screen when the answer is no to any of the questions', async () => {
-    await openHealth()
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
     await element(by.id(TravelPayE2eIdConstants.NO_BUTTON_TEXT)).tap()
@@ -475,7 +466,7 @@ describe('Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID))).toExist()
   })
 
-  it('submits the travel pay claim when the home address is exists', async () => {
+  it('submits the travel pay claim', async () => {
     await checkTravelPayFlow(true)
     await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
