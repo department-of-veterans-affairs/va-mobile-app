@@ -26,6 +26,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
@@ -49,6 +50,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
@@ -73,6 +75,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
