@@ -305,16 +305,21 @@ context('PrescriptionHistory', () => {
         fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
       )
       expect(screen.getByLabelText(a11yLabelVA(t('prescription.history.nonVAMeds.header')))).toBeTruthy()
-      expect(screen.getByText(t('prescription.history.nonVAMeds.message'))).toBeTruthy()
-      expect(screen.getByLabelText(a11yLabelVA(t('prescription.history.nonVAMeds.message')))).toBeTruthy()
-      expect(screen.getByRole('link', { name: t('goToVAGov') })).toBeTruthy()
+      expect(
+        screen.getByText(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+      ).toBeTruthy()
+      expect(
+        screen.getByLabelText(
+          a11yLabelVA(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+        ),
+      ).toBeTruthy()
     })
 
     it('should open a webview that navigates to va.gov when link is clicked', async () => {
       await waitFor(() =>
         fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
       )
-      fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
+      fireEvent.press(screen.getByRole('link', { name: t('prescription.history.nonVAMeds.link.text') }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
         url: 'https://www.va.gov/my-health/medications',
         displayTitle: t('webview.vagov'),

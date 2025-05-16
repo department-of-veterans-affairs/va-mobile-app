@@ -392,9 +392,12 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasNoItems = filteredPrescriptions?.length === 0
 
   const getNonVAMedsAlert = () => {
-    const linkProps: LinkProps = {
-      type: 'custom',
-      onPress: () => {
+    const pressableProps: PressableProps = {
+      accessibilityRole: 'link',
+      accessibilityLabel: a11yLabelVA(
+        t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
+      ),
+      onPress: (): void => {
         logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
           url: LINK_URL_MHV_VA_MEDICATIONS,
@@ -403,9 +406,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           useSSO: true,
         })
       },
-      text: t('goToVAGov'),
-      a11yLabel: a11yLabelVA(t('goToVAGov')),
-      testID: 'nonVAMedsLinkID',
     }
 
     return (
@@ -415,10 +415,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
-          description={t('prescription.history.nonVAMeds.message')}
-          descriptionA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.message'))}
           testID="nonVAMedsAlertTestID">
-          <LinkWithAnalytics icon="no icon" {...linkProps} />
+          <Pressable {...pressableProps}>
+            <TextView>
+              <TextView variant="MobileBody">{t('prescription.history.nonVAMeds.message')}</TextView>
+              <TextView variant="MobileBodyLink">{t('prescription.history.nonVAMeds.link.text')}</TextView>
+            </TextView>
+          </Pressable>
         </AlertWithHaptics>
       </Box>
     )
