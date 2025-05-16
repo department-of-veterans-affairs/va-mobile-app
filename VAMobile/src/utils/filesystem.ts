@@ -3,6 +3,7 @@ import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blo
 import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
+import { DocumentPickerResponse } from '../screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
@@ -191,11 +192,11 @@ export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]
  * within the file content. The "/Encrypt" signature is also added to view-only
  * PDFs as well as password-encrypted PDF files
  * Logic is based on vets-website file utility function checkIsEncryptedPdf
- * @param uri - Uri string of the file
+ * @param document - DocumentPickerResponse file document
  */
-export const isPdfEncrypted = async (uri: string): Promise<boolean> => {
-  const base64String = await getBase64ForUri(uri)
-  if (!base64String) {
+export const isPdfEncrypted = async (document: DocumentPickerResponse): Promise<boolean> => {
+  const base64String = await getBase64ForUri(document.uri)
+  if (!base64String || !document.name.toLowerCase().endsWith('pdf')) {
     return false
   }
   const bytes = getUInt8ArrayForBase64(base64String)

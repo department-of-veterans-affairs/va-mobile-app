@@ -245,7 +245,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         return
       }
 
-      const isEncrypted = await isPdfEncrypted(document.uri)
+      const isEncrypted = await isPdfEncrypted(document)
       if (isEncrypted) {
         setError(t('fileUpload.fileEncryptedError'))
         setErrorA11y(a11yLabelVA(t('fileUpload.fileEncryptedError')))
