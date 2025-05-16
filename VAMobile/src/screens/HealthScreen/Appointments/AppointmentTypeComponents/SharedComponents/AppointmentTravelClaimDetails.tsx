@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, BoxProps, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
@@ -15,9 +15,10 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+
+import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -52,6 +53,8 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
   const getContent = () => {
     // When the appointment has a travel pay claim, display the claim details
     const { claim } = attributes.travelPayClaim || {}
+    const claimError = attributes.travelPayClaim?.metadata.success === false
+
     if (claim) {
       const status = claim.claimStatus
       const claimNumber = claim.claimNumber
@@ -82,26 +85,26 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
             testID={`goToVAGovID-${claimId}`}
           />
-          <TextView testID="helpTitleID" variant="MobileBodyBold" mt={theme.dimensions.condensedMarginBetween}>
-            {t('travelPay.travelClaimFiledDetails.needHelp')}
+          <TravelPayHelp />
+        </>
+      )
+    }
+
+    // When travel pay call fails, display an error message
+    if (claimError) {
+      return (
+        <>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.error.general')}
           </TextView>
-          <TextView testID="helpTextID" variant="MobileBody">
-            {t('travelPay.helpText')}
-          </TextView>
-          <Box my={theme.dimensions.condensedMarginBetween}>
-            <ClickToCallPhoneNumber
-              phone={t('travelPay.phone')}
-              center={false}
-              displayedText={displayedTextPhoneNumber(t('travelPay.phone'))}
-            />
-          </Box>
+          <TravelPayHelp />
         </>
       )
     }
 
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0) {
+    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}

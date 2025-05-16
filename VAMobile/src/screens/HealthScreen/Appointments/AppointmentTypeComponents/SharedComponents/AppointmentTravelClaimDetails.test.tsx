@@ -193,7 +193,7 @@ describe('AppointmentTravelClaimDetails', () => {
         ).toBeTruthy()
         expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
         expect(screen.getByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
-        expect(screen.getByText(t('travelPay.travelClaimFiledDetails.needHelp'))).toBeTruthy()
+        expect(screen.getByText(t('travelPay.helpTitle'))).toBeTruthy()
         expect(screen.getByText(t('travelPay.helpText'))).toBeTruthy()
         expect(screen.getByText(displayedTextPhoneNumber(t('travelPay.phone')))).toBeTruthy()
       })
@@ -244,6 +244,44 @@ describe('AppointmentTravelClaimDetails', () => {
           })
           initializeTestInstance('Past', { ...missedClaimDeadlineData })
           expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
+        })
+      })
+
+      describe('when there was an error retrieving travel claim data', () => {
+        it('should render an error message when appointment is less than 30 days old', () => {
+          const errorData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Error retrieving travel pay claim data',
+                success: false,
+              },
+            },
+          })
+          initializeTestInstance('Past', { ...errorData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+        })
+        it('should render an error message when appointment is more than 30 days old', () => {
+          const errorData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Error retrieving travel pay claim data',
+                success: false,
+              },
+            },
+          })
+          initializeTestInstance('Past', { ...errorData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeNull()
         })
       })
     })
