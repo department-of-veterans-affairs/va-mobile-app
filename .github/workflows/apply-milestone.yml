@@ -1,62 +1,63 @@
-name: "[Utils] Apply Milestone"
+name: Milestone Linker
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    types:
-      - closed
-  # paths: # targeting only code that touches the app
-  #   - VAMobile/src/**
+    types: [opened, edited, synchronize, closed] # Trigger on relevant PR events
+    paths: # targeting only code that touches the app
+      - VAMobile/src/**
 
 jobs:
-  # Noting the pr is merged
-  if_merged:
+  process_pr_and_issue:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-    # defaults:
-    #   run:
-    #     working-directory: VAMobile
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
     steps:
-      - name: Print PR has been merged
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract Linked Issue Number from PR Body
+        id: extract_issue
         run: |
-          echo "PR has been merged"
-          pwd
-          ls -al
+          PR_BODY="${{ github.event.pull_request.body }}"
+          LINKED_ISSUE_NUMBER=""
 
-  # Check linked issue to PR
-  check_linked_issue:
-    needs: if_merged
-    uses: ./.github/workflows/check-linked-issues.yml
-  #   secrets: inherit
+          if [[ "$PR_BODY" =~ ([Cc]loses|[Ff]ixes|[Rr]esolves)[[:space:]]?#([0-9]+) ]]; then
+            LINKED_ISSUE_NUMBER="${BASH_REMATCH[2]}"
+          fi
 
-  # Locate Milestone
-  locate_milestone:
-    runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-    # needs: check_linked_issue
-    # secrets: inherit
-    steps:
-      - name: Get current milestones
-        id: milestoneInfo
+          if [[ -z "$LINKED_ISSUE_NUMBER" ]]; then
+            echo "No explicit linked issue found in PR description for PR #${{ github.event.pull_request.number }}."
+            echo "linked_issue_number=" >> $GITHUB_OUTPUT
+          else
+            echo "Linked issue number found: #$LINKED_ISSUE_NUMBER"
+            echo "linked_issue_number=$LINKED_ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Conditional Action Add Milestone to issue or PR
+        if: github.event.pull_request.merged == true
         run: |
-          (type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
-          	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
-            && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-            && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
-          	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-          	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-          	&& sudo apt update \
-          	&& sudo apt install gh -y
-            echo "Getting current open milestones..."
-            milestone=$(gh api /repos/department-of-veterans-affairs/va-mobile-app/milestones --jq  '[.[] | select(.state == "open" and .due_on != null ) | {"milestone_number": .number, "version": .title, "due_on": .due_on}] | sort_by(.due_on)')
-            echo "milestoneInfo=$milestone" >> $GITHUB_OUTPUT
-      - name: Print Info
-        run: |
-          echo "Milestone Info: ${{ steps.milestoneInfo.outputs.milestoneInfo }}"
+          PR_NUM="${{ github.event.pull_request.number }}"
+          LINKED_ISSUE_NUM="${{ steps.extract_issue.outputs.linked_issue_number }}"
+          MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].number')
+          MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].title')
 
-# apply milestone to issue
-# apply_milesone:
+          if [[ -z "$LINKED_ISSUE_NUM" ]]; then
+            echo "PR Number $PR_NUM"
+          else
+            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+          fi
 
-#TODO check go-live workflow for milestone closing
+          if [[ -n "$LINKED_ISSUE_NUM" ]]; then
+          echo "Linked issue $LINKED_ISSUE_NUM found. Adding milestone $MILESTONE_TITLE."
+            gh issue edit $LINKED_ISSUE_NUM --milestone $MILESTONE_TITLE
+          else
+            echo "Setting milestone $MILESTONE_TITLE" for PR $PR_NUM
+            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+            echo "Processing PR $PR_NUM..."
+             gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
