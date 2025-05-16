@@ -2,6 +2,7 @@ import React from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
+import { useContactInformation } from 'api/contactInformation'
 import { AppointmentData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
@@ -35,6 +36,9 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
     appointmentDateTime: string
     facilityName: string
   }
+  NoAddressErrorScreen: {
+    error: 'noAddress'
+  }
   ErrorScreen: {
     error: TravelPayError
   }
@@ -60,15 +64,27 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
   const { appointment, appointmentRouteKey } = route.params
   const { attributes } = appointment
 
+  const contactInformationQuery = useContactInformation({ enabled: true })
+  const residentialAddress = contactInformationQuery.data?.residentialAddress
+
   return (
     <MultiStepSubtask<SubmitTravelPayFlowModalStackParamList>
       stackNavigator={TravelPayMultiStepStack}
       navigationMultiStepCancelScreen={1}>
-      <TravelPayMultiStepStack.Screen
-        key="InterstitialScreen"
-        name="InterstitialScreen"
-        component={InterstitialScreen}
-      />
+      {residentialAddress ? (
+        <TravelPayMultiStepStack.Screen
+          key="InterstitialScreen"
+          name="InterstitialScreen"
+          component={InterstitialScreen}
+        />
+      ) : (
+        <TravelPayMultiStepStack.Screen
+          key="NoAddressErrorScreen"
+          name="NoAddressErrorScreen"
+          component={ErrorScreen}
+          initialParams={{ error: 'noAddress' }}
+        />
+      )}
       <TravelPayMultiStepStack.Screen key="MileageScreen" name="MileageScreen" component={MileageScreen} />
       <TravelPayMultiStepStack.Screen key="VehicleScreen" name="VehicleScreen" component={VehicleScreen} />
       <TravelPayMultiStepStack.Screen key="AddressScreen" name="AddressScreen" component={AddressScreen} />
@@ -93,7 +109,7 @@ function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenPro
   const { appointment, appointmentRouteKey } = route.params
 
   return (
-    <TravelPayStack.Navigator screenOptions={{ headerShown: false }}>
+    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
       <TravelPayStack.Screen
         name="FlowSteps"
         component={FlowSteps}
