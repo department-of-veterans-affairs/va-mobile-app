@@ -46,7 +46,7 @@ export type DowntimeFeatureType =
   | 'user_profile_update'
   | 'payment_history'
   | 'rx_refill'
-  | 'travel_pay'
+  | 'travel_pay_features'
 
 export const DowntimeFeatureTypeConstants: {
   facilityLocator: DowntimeFeatureType
@@ -79,7 +79,7 @@ export const DowntimeFeatureTypeConstants: {
   userProfileUpdate: 'user_profile_update',
   payments: 'payment_history',
   rx: 'rx_refill',
-  travelPay: 'travel_pay',
+  travelPay: 'travel_pay_features',
 }
 
 export const ScreenIDToFeatureName = {
