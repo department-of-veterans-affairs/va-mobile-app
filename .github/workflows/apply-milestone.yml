@@ -2,12 +2,14 @@ name: Milestone Linker
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, closed] # Trigger on relevant PR events
+    types: 
+      - closed # Trigger on relevant PR events
     paths: # targeting only code that touches the app
       - VAMobile/src/**
 
 jobs:
   process_pr_and_issue:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -37,7 +39,6 @@ jobs:
           fi
 
       - name: Conditional Action Add Milestone to issue or PR
-        if: github.event.pull_request.merged == true
         run: |
           PR_NUM="${{ github.event.pull_request.number }}"
           LINKED_ISSUE_NUM="${{ steps.extract_issue.outputs.linked_issue_number }}"
