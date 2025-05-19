@@ -272,6 +272,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
             titleA11yLabel={a11yLabelVA(t('letters.benefitService.benefitAndDisabilityInfo'))}
           />
 
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             accessibilityLabel={a11yLabelVA(t('letters.benefitService.sendMessageIfIncorrectInfo'))}
             variant="MobileBody"

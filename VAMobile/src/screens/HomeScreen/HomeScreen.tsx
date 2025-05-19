@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -45,7 +46,6 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
@@ -53,11 +53,12 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
+import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
 import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
 import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
 import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
@@ -115,37 +116,29 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const [showDisabilityRating, setShowDisabilityRating] = useState(false)
   const [showCompensation, setShowCompensation] = useState(false)
+  const [paymentBreakdownVisible, setPaymentBreakdownVisible] = useState(false)
 
   useEffect(() => {
     if (appointmentsQuery.isFetched && appointmentsQuery.data?.meta) {
       logAnalyticsEvent(Events.vama_hs_appts_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_appts_count(appointmentsQuery.data.meta.upcomingAppointmentsCount))
     }
   }, [appointmentsQuery.data, appointmentsQuery.isFetched, loginTimestamp])
 
   useEffect(() => {
     if (foldersQuery.isFetched && foldersQuery.data) {
-      const inboxFolder = foldersQuery.data.data.find(
-        (folder) => folder.attributes.name === FolderNameTypeConstants.inbox,
-      )
       logAnalyticsEvent(Events.vama_hs_sm_load_time(DateTime.now().toMillis() - loginTimestamp))
-      if (inboxFolder) {
-        logAnalyticsEvent(Events.vama_hs_sm_count(inboxFolder.attributes.unreadCount))
-      }
     }
   }, [foldersQuery.isFetched, foldersQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (prescriptionsQuery.isFetched && prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable) {
       logAnalyticsEvent(Events.vama_hs_rx_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_rx_count(prescriptionsQuery.data.meta.prescriptionStatusCount.isRefillable))
     }
   }, [prescriptionsQuery.isFetched, prescriptionsQuery.data, loginTimestamp])
 
   useEffect(() => {
     if (claimsAndAppealsQuery.isFetched && claimsAndAppealsQuery.data?.meta.activeClaimsCount) {
       logAnalyticsEvent(Events.vama_hs_claims_load_time(DateTime.now().toMillis() - loginTimestamp))
-      logAnalyticsEvent(Events.vama_hs_claims_count(claimsAndAppealsQuery.data?.meta.activeClaimsCount))
     }
   }, [claimsAndAppealsQuery.isFetched, claimsAndAppealsQuery.data, loginTimestamp])
 
@@ -329,13 +322,15 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityRole="header">
-            {t('activity')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_activity)}>
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityRole="header">
+              {t('activity')}
+            </TextView>
+          </InView>
           {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -351,6 +346,7 @@ export function HomeScreen({}: HomeScreenProps) {
               {activityFeatureInDowntime ? (
                 <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
               ) : (
+                // eslint-disable-next-line react-native-a11y/has-accessibility-hint
                 <Box
                   flexDirection="row"
                   alignItems="center"
@@ -411,6 +407,7 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView variant="ActivityFooter" accessibilityLabel={a11yLabelVA(t('activity.informationNotIncluded'))}>
                 {t('activity.informationNotIncluded')}
               </TextView>
@@ -460,6 +457,11 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                     <Box
                       accessible={true}
+                      accessibilityHint={
+                        showDisabilityRating
+                          ? t('disabilityRating.title.unobfuscatedLabel')
+                          : t('disabilityRating.title.obfuscatedLabel')
+                      }
                       accessibilityLabel={
                         showDisabilityRating
                           ? `${t('disabilityRatingDetails.percentage', { rate: disabilityRatingQuery.data?.combinedDisabilityRating })} ${t('disabilityRating.serviceConnected')}`
@@ -490,7 +492,10 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowDisabilityRating(!showDisabilityRating)}
+                        onPress={() => {
+                          setShowDisabilityRating(!showDisabilityRating)
+                          logAnalyticsEvent(Events.vama_obf_textview('disabilityRating', !showDisabilityRating))
+                        }}
                         label={showDisabilityRating ? t('hide') : t('show')}
                         testID={'showDisabilityTestID'}
                         buttonType={ButtonVariants.Primary}
@@ -514,9 +519,14 @@ export function HomeScreen({}: HomeScreenProps) {
                     </TextView>
                     <Box
                       accessible={true}
+                      accessibilityHint={
+                        showCompensation
+                          ? t('monthlyCompensationPayment.unobfuscated')
+                          : t('monthlyCompensationPayment.obfuscated')
+                      }
                       accessibilityLabel={
                         showCompensation
-                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`
+                          ? `${recurringPayment.amount} ${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`
                           : t('monthlyCompensationPayment.obfuscated')
                       }>
                       <ObfuscatedTextView
@@ -535,7 +545,7 @@ export function HomeScreen({}: HomeScreenProps) {
                       <ObfuscatedTextView
                         showText={showCompensation}
                         obfuscatedText={t('monthlyCompensationPayment.depositedOn.obfuscated')}
-                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${getFormattedDate(recurringPayment.date as string, 'MMMM d, yyyy')}`}
+                        revealedText={`${t('monthlyCompensationPayment.depositedOn')} ${formatDateUtc(recurringPayment.date as string, 'MMMM d, yyyy')}`}
                         revealedTextProps={{
                           variant: 'VeteranStatusProof',
                           color: 'primary',
@@ -548,10 +558,23 @@ export function HomeScreen({}: HomeScreenProps) {
                     </Box>
                     <Box pt={theme.dimensions.standardMarginBetween}>
                       <Button
-                        onPress={() => setShowCompensation(!showCompensation)}
+                        onPress={() => {
+                          setShowCompensation(!showCompensation)
+                          logAnalyticsEvent(Events.vama_obf_textview('latestPayment', !showCompensation))
+                        }}
                         label={showCompensation ? t('hide') : t('show')}
                         buttonType={ButtonVariants.Primary}
                         testID={'showCompensationTestID'}
+                      />
+                      <Box mt={theme.dimensions.condensedMarginBetween} />
+                      <Button
+                        onPress={() => {
+                          setPaymentBreakdownVisible(true)
+                          logAnalyticsEvent(Events.vama_payment_bd_details())
+                        }}
+                        label={t('monthlyCompensationPayment.seeDetails')}
+                        buttonType={ButtonVariants.Secondary}
+                        testID={'seePaymentBreakdownButtonTestID'}
                       />
                     </Box>
                   </Box>
@@ -564,14 +587,17 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityLabel={a11yLabelVA(t('vaResources'))}
-            accessibilityRole="header">
-            {t('vaResources')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_resources)}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityLabel={a11yLabelVA(t('vaResources'))}
+              accessibilityRole="header">
+              {t('vaResources')}
+            </TextView>
+          </InView>
           <Box mx={theme.dimensions.condensedMarginBetween}>
             <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
             <LinkRow
@@ -581,14 +607,17 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <AnnouncementBanner
-            title={t('learnAboutPACT')}
-            link={LINK_URL_ABOUT_PACT_ACT}
-            a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
-          />
-        </Box>
+        <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_banner)}>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <AnnouncementBanner
+              title={t('learnAboutPACT')}
+              link={LINK_URL_ABOUT_PACT_ACT}
+              a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
+            />
+          </Box>
+        </InView>
       </Box>
+      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }

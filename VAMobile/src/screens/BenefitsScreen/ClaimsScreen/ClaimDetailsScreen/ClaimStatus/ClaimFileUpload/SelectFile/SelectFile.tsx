@@ -153,6 +153,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
             {t('fileUpload.50MB')}
           </TextView>

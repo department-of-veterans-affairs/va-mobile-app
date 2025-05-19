@@ -30,6 +30,7 @@ const LinkRow: FC<LinkRowProps> = ({ title, titleA11yLabel, onPress }: LinkRowPr
 
   return (
     <Pressable style={pressableStyle} onPress={onPress} accessible={true} accessibilityRole={'link'}>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView flex={1} width={'100%'} variant={'HomeScreen'} accessibilityLabel={titleA11yLabel}>
         {title}
       </TextView>

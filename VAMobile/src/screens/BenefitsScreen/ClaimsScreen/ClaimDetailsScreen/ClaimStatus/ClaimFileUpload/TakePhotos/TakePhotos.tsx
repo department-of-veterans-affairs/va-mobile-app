@@ -101,10 +101,12 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.takePhotoEachPage')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.ifMoreThan10.a11y')}>
             {t('fileUpload.ifMoreThan10.1')}
             <TextView variant="MobileBodyBold">
               {t('fileUpload.ifMoreThan10.2')}
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('fileUpload.ifMoreThan10.3'))}>
                 {t('fileUpload.ifMoreThan10.3')}
               </TextView>
@@ -113,6 +115,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
             {t('fileUpload.50MB')}
           </TextView>

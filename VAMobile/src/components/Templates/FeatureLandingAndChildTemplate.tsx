@@ -143,6 +143,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
         {...scrollViewProps}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
           {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
         </View>
