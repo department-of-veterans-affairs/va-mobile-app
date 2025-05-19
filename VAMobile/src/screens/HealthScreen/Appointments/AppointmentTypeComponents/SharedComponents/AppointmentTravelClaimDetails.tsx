@@ -20,7 +20,7 @@ import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { VATheme } from 'styles/theme'
-import { a11yLabelVA } from 'utils/a11yLabel'
+import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
@@ -29,7 +29,8 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
@@ -140,7 +141,39 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Past:
-      const content = getContent()
+      const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+      const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+      const endTime =
+        downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat("DDD 'at' t ZZZZ")
+
+      if (travelPayInDowntime) {
+        return (
+          <Box justifyContent="center">
+            <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
+              {t('Travel pay is currently unavailable')}
+            </TextView>
+
+            {/* <AlertWithHaptics
+              variant="warning"
+              header={t('downtime.title')}
+              description={t('downtime.message.1', { endTime })}
+              descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
+              <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
+                {t('downtime.message.2')}
+              </TextView>
+              <ClickToCallPhoneNumber
+                displayedText={displayedTextPhoneNumber(t('8006982411'))}
+                phone={t('8006982411')}
+                a11yLabel={a11yLabelID(t('8006982411'))}
+                variant={'base'}
+              />
+            </AlertWithHaptics> */}
+          </Box>
+        )
+        // return <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
+      }
+
+      const content = travelPayInDowntime ? null : getContent()
 
       if (!content) {
         return null

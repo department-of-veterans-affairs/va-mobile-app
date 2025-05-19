@@ -145,12 +145,12 @@ describe('AppointmentTravelClaimDetails', () => {
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
     travelPaySMOCEnabled = true,
-    // preloadedState?: Partial<RootState>,
+    preloadedState?: Partial<RootState>,
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
-      // { preloadedState }
+      { preloadedState },
     )
   }
 
