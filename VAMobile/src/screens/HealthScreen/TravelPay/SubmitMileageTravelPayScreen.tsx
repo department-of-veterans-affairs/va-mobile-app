@@ -3,10 +3,13 @@ import React from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { AppointmentData } from 'api/types'
+import DowntimeError from 'components/CommonErrorComponents/DowntimeError'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api'
+import { useDowntime } from 'utils/hooks'
 
 import { HealthStackParamList } from '../HealthStackScreens'
 import {
@@ -59,6 +62,12 @@ const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalSta
 const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
   const { appointment, appointmentRouteKey } = route.params
   const { attributes } = appointment
+
+  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+
+  if (travelPayInDowntime) {
+    return <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
+  }
 
   return (
     <MultiStepSubtask<SubmitTravelPayFlowModalStackParamList>
