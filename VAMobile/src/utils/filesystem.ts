@@ -196,7 +196,8 @@ export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]
  */
 export const isPdfEncrypted = async (document: DocumentPickerResponse): Promise<boolean> => {
   const base64String = await getBase64ForUri(document.uri)
-  if (!base64String || !document.name.toLowerCase().endsWith('pdf')) {
+  const pdfTypes = ['pdf', 'application/pdf', 'com.adobe.pdf']
+  if (!base64String || !pdfTypes.includes(document.type)) {
     return false
   }
   const bytes = getUInt8ArrayForBase64(base64String)
