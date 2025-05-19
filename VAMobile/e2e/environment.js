@@ -1,7 +1,7 @@
 import { device } from 'detox'
 
 const { DetoxCircusEnvironment } = require('detox/runners/jest')
-const _ = require('lodash')
+const _ = require('underscore')
 
 class PlatformPrepender {
   add_test(event, state) {

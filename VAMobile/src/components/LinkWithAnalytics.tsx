@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Link, LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
-import _ from 'lodash'
+import _ from 'underscore'
 
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -49,7 +49,7 @@ const FormDirectionsUrl = (location: LocationData): string => {
 const LinkWithAnalytics = ({ analyticsOnPress, analyticsProps, disablePadding, ...props }: LinkWithAnalyticsProps) => {
   const { locationData, phoneNumber, textNumber, TTYnumber, url, type } = props
   const eventProps = { locationData, phoneNumber, textNumber, TTYnumber, url, type, ...analyticsProps }
-  const definedProps = _.pickBy(eventProps, (prop) => prop !== undefined)
+  const definedProps = _.pick(eventProps, (prop) => prop !== undefined)
   const theme = useTheme()
 
   const py = disablePadding ? 0 : theme.dimensions.buttonPadding

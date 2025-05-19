@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { includes } from 'lodash'
+import { includes } from 'underscore'
 
 import { DirectDepositData, PaymentAccountData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
@@ -64,8 +64,9 @@ export const checkIfRoutingNumberIsInvalid = (error: APIError): boolean => {
   }
 
   const errorKeys = getErrorKeys(error)
+  const errorText = error?.text || ''
   return (
     includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER) ||
-    includes(error?.text, DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
+    errorText.includes(DirectDepositErrors.INVALID_ROUTING_NUMBER_TEXT)
   )
 }
