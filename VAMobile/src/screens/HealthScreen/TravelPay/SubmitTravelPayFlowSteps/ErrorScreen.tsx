@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useContactInformation } from 'api/contactInformation'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
@@ -13,7 +15,7 @@ import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
-type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen' | 'NoAddressErrorScreen'>
+type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
 
 function ErrorScreen({ route }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -21,11 +23,21 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
+  const contactInformationQuery = useContactInformation({ enabled: true })
+  const residentialAddress = contactInformationQuery.data?.residentialAddress
 
   useSubtaskProps({
     rightButtonText: t('close'),
     rightButtonTestID: 'rightCloseTestID',
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      if (error === 'noAddress' && residentialAddress) {
+        navigateTo('AddressScreen')
+      }
+    }, [error, residentialAddress, navigateTo]),
+  )
 
   const getErrorContent = (travelPayError: TravelPayError) => {
     switch (travelPayError) {
