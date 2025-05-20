@@ -1,23 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Screen } from 'react-native-screens'
 import { useSelector } from 'react-redux'
 
 import { AppointmentAttributes } from 'api/types'
-import {
-  AlertWithHaptics,
-  Box,
-  BoxProps,
-  ClickToCallPhoneNumber,
-  DowntimeError,
-  ErrorComponent,
-  LinkWithAnalytics,
-  TextView,
-} from 'components'
+import { AlertWithHaptics, Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { VATheme } from 'styles/theme'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
@@ -60,6 +50,11 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  const travelPayNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const endTime =
+    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat("DDD 'at' t ZZZZ")
 
   if (!featureEnabled('travelPaySMOC')) {
     return null
@@ -127,33 +122,19 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
       )
     }
 
-    // const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPay)
-    // // const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-    // // const endTime =
-    // //   downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPay]?.endTime?.toFormat("DDD 'at' t ZZZZ")
-
-    // if (travelPayInDowntime) {
-    //   return <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
-    // }
-
     return null
   }
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Past:
-      const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-      const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-      const endTime =
-        downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat("DDD 'at' t ZZZZ")
-
-      if (travelPayInDowntime) {
+      if (!travelPayNotInDowntime) {
         return (
           <Box justifyContent="center">
-            <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
+            {/* <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
               {t('Travel pay is currently unavailable')}
-            </TextView>
+            </TextView> */}
 
-            {/* <AlertWithHaptics
+            <AlertWithHaptics
               variant="warning"
               header={t('downtime.title')}
               description={t('downtime.message.1', { endTime })}
@@ -167,15 +148,14 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
                 a11yLabel={a11yLabelID(t('8006982411'))}
                 variant={'base'}
               />
-            </AlertWithHaptics> */}
+            </AlertWithHaptics>
           </Box>
         )
-        // return <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
       }
 
-      const content = travelPayInDowntime ? null : getContent()
+      const content = travelPayNotInDowntime ? getContent() : null
 
-      if (!content) {
+      if (!content && !travelPayNotInDowntime) {
         return null
       }
       return (

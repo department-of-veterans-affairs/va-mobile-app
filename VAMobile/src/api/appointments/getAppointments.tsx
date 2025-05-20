@@ -20,7 +20,7 @@ const getAppointments = (
   endDate: string,
   timeFrame: TimeFrameType,
 ): Promise<AppointmentsGetData | undefined> => {
-  // const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPay)
+  // const travelPayNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const pastParams = timeFrame !== TimeFrameTypeConstants.UPCOMING && {
     'include[]': 'travel_pay_claims',
   }
