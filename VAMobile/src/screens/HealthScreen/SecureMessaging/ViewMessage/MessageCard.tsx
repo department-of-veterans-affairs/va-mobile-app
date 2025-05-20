@@ -74,7 +74,9 @@ function MessageCard({ message, folderId }: MessageCardProps) {
           {formatSubject(category, subject, t)}
         </TextView>
         {showReadReceipt && (
-          <LabelTag text={t('secureMessaging.viewMessage.opened')} labelType={LabelTagTypeConstants.tagInactive} />
+          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.condensedMarginBetween}>
+            <LabelTag text={t('secureMessaging.viewMessage.opened')} labelType={LabelTagTypeConstants.tagInactive} />
+          </Box>
         )}
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {senderName}
