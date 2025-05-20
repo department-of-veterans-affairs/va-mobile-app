@@ -13,7 +13,7 @@ const MilestoneIssues = () => {
             {milestone.issues.map((issue) => (
               <li key={issue.number}>
                 <a href={issue.url}>
-                  #{issue.number} {issue.title} {issue.isPR ? '(PR)' : '(Issue)'}
+                  {issue.title} {issue.isPR ? '(PR)' : '(Issue)'}
                 </a>
               </li>
             ))}
