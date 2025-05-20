@@ -58,7 +58,6 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
           {inlineTextWithIcons?.map((textObj: InlineTextWithIconsProps, index: number) => {
             return <InlineTextWithIcons key={index} {...textObj} />
           })}
-          {/* BRING THIS UP TM */}
           {isSentReadTag && (
             <Box mt={7}>
               <LabelTag text={t('secureMessaging.folders.read.tag')} labelType={LabelTagTypeConstants.tagInactive} />
