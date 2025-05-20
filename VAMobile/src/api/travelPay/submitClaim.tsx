@@ -1,7 +1,7 @@
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { appointmentsKeys } from 'api/appointments'
-import { AppointmentsGetData, SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponseData } from 'api/types'
+import { AppointmentsGetData, SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { Params as APIParams, post } from 'store/api/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -15,7 +15,7 @@ const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParam
     // We need the local time with no TZ indicators for the external API
     appointmentDateTime: stripTZOffset(smocTravelPayClaimData.appointmentDateTime),
   }
-  return post<SubmitTravelPayClaimResponseData>(endpoint, data as unknown as APIParams)
+  return post<SubmitTravelPayClaimResponse>(endpoint, data as unknown as APIParams)
 }
 
 /**
@@ -49,7 +49,7 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
         const newQueryData = {
           data: queryData?.data.map((appointment) => {
             if (appointment.id === appointmentId) {
-              return appendClaimDataToAppointment(appointment, data?.data)
+              return appendClaimDataToAppointment(appointment, data?.data.attributes)
             }
             return { ...appointment }
           }),
