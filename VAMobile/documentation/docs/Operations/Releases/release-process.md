@@ -8,11 +8,11 @@ flowchart LR
         direction TB
         subgraph Step1
             direction LR
-            A("Release branch & RC build is created from <i>develop</i><br><b>(new_release_branch.yml)</b>") --> B("Runs 2am ET, every Wednesday<br>(Script exits if not a release week <br><b>release_branch.sh</b>")
+            A("Release branch & RC build is created from <i>develop</i><br><b>(new_release_branch.yml)</b>") --> B("Runs 2am ET, every Wednesday<br>(Script exits if not a release week) <br><b>release_branch.sh</b>")
         end
         subgraph Step2
             direction LR
-            C("Release approval is created<br><b>(release_branch_issue.yml)</b>") --> D("When Github actions detects a branch named<br><i>release/*</i> is published")
+            C("Release approval issue is created<br><b>(release_branch_issue.yml)</b>") --> D("When Github actions detects a branch named<br><i>release/*</i> is pushed")
         end
         subgraph Step3
             direction LR
@@ -20,11 +20,11 @@ flowchart LR
         end
         subgraph Step4
             direction LR
-            F("<i>/approve</i> comment to issue") --> G("Comment manually added to release PR by an authorized user")
+            F("Approval is sent to release approvers<br><b>(approve_command.yml)</b>") --> G("Approvers will get an email at the time of the workflow run. Once the task is approved, it will wait for 7 days (10,080 minutes). After this time passes, the workflows will continue.") --> S("If necessary, the timer can be bypassed by navigating to the approval screen and clicking bypass. Only Admins of the repo can do this.")
         end
         subgraph Step5
             direction LR
-            H("Release branch is merged into <i>main</i><br><b>(release_pull_request.yml)</b>") --> I("Tag release build <i>v\*\.\*\.\*</i><br><b>(release_build.yml)</b>") --> S("PR is opened to merge the release branch back into <i>develop</i><br><b>(release_pull_request.yml)</b>") --> J("Actions triggered by <i>/approve v\*\.\*\.\*</i><br><b>(approve_command.yml)</b>")
+            H("Release branch is merged into <i>main</i><br><b>(release_pull_request.yml)</b>") --> I("Tag release build <i>v\*\.\*\.\*</i><br><b>(release_build.yml)</b>") --> T("PR is opened to merge the release branch back to <i>develop</i><br><b>(release_pull_request.yml)</b>") --> J("Actions triggered by approval<br><b>(approve_command.yml)</b>")
         end
         subgraph Step6
             direction LR
@@ -59,7 +59,7 @@ F:::blue
 G:::gray
 H:::blue
 I:::blue
-J:::gray
+J:::blue
 K:::blue
 L:::gray
 M:::blue
@@ -68,6 +68,7 @@ O:::blue
 P:::gray
 Q:::blue
 R:::gray
-S:::blue
+S:::Rose
+T:::blue
 ReleaseProcess:::white
 ```
