@@ -15,6 +15,14 @@ module.exports = {
         addFileAttribute: 'true',
       },
     ],
+    [
+      'jest-slow-test-reporter',
+      {
+        numTests: 5,
+        warnOnSlowerThan: 1000,
+        color: true,
+      },
+    ],
   ],
   transform: {
     '^.+\\.tsx?$': [
