@@ -70,24 +70,10 @@ export const initialErrorsState: ErrorsState = {
  */
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   try {
-    let response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
+    const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
     if (!response) {
       dispatch(dispatchSetDowntime(undefined))
       return
-    }
-
-    response = {
-      data: [
-        {
-          id: '123456',
-          type: 'maintenance_windows',
-          attributes: {
-            service: DowntimeFeatureTypeConstants.travelPayFeatures,
-            startTime: '2025-05-20T00:00:00Z',
-            endTime: '2025-06-01T02:00:00Z',
-          },
-        },
-      ],
     }
 
     // filtering out any maintenance windows we haven't mapped to a screen in the app
