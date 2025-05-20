@@ -70,6 +70,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
           type="url"
           url={LINK_URL_TRAVEL_PAY_ELIGIBILITY}
           text={t('travelPay.checkEligibility.link')}
+          a11yLabel={a11yLabelVA(t('travelPay.checkEligibility.link'))}
           testID="checkEligibilityLinkID"
         />
         <TextView testID="directDepositTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
@@ -82,6 +83,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
           type="url"
           url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
           text={t('travelPay.setUpDirectDeposit.link')}
+          a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
           testID="setUpDirectDepositLinkID"
         />
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">

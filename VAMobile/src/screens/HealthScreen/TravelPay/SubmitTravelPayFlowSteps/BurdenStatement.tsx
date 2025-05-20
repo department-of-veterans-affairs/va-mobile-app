@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 function BurdenStatement() {
@@ -20,7 +21,11 @@ function BurdenStatement() {
           <TextView testID="burdenStatementTitleID" variant="MobileBodyBold">
             {t('travelPay.privacyStatement.header')}
           </TextView>
-          <TextView testID="burdenStatementTextID" mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
+          <TextView
+            testID="burdenStatementTextID"
+            mt={theme.dimensions.tinyMarginBetween}
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('travelPay.privacyStatement.description'))}>
             {t('travelPay.privacyStatement.description')}
           </TextView>
           <TextView
@@ -29,7 +34,11 @@ function BurdenStatement() {
             variant="MobileBodyBold">
             {t('travelPay.privacyAct.header')}
           </TextView>
-          <TextView testID="burdenStatementActTextID" mt={theme.dimensions.tinyMarginBetween} variant="MobileBody">
+          <TextView
+            testID="burdenStatementActTextID"
+            mt={theme.dimensions.tinyMarginBetween}
+            variant="MobileBody"
+            accessibilityLabel={a11yLabelVA(t('travelPay.privacyAct.description'))}>
             {t('travelPay.privacyAct.description')}
           </TextView>
         </Box>
