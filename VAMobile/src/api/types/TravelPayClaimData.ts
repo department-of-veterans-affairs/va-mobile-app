@@ -18,6 +18,10 @@ export type SubmitSMOCTravelPayClaimParameters = {
   isComplete: boolean
 }
 
-export type SubmitTravelPayClaimResponseData = {
-  data: TravelPayClaimSummary
+export type SubmitTravelPayClaimResponse = {
+  data: {
+    id: string
+    type: string
+    attributes: TravelPayClaimSummary
+  }
 }

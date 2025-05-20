@@ -90,7 +90,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       {
         onSuccess: (data) => {
           navigation.dispatch({
-            ...CommonActions.setParams({ appointment: appendClaimDataToAppointment(appointment, data?.data) }),
+            ...CommonActions.setParams({
+              appointment: appendClaimDataToAppointment(appointment, data?.data.attributes),
+            }),
             source: appointmentRouteKey,
           })
           navigateTo('SubmitSuccessScreen', {
