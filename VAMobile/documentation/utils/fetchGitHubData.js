@@ -1,4 +1,3 @@
-// Required built-in and third-party modules
 const fs = require('fs')
 const fetch = require('node-fetch')
 const path = require('path')
@@ -8,34 +7,46 @@ require('dotenv').config()
 const GITHUB_TOKEN = process.env.DOCS_RELEASE_REPORT_PAT
 const OWNER = 'department-of-veterans-affairs'
 const REPO = 'va-mobile-app'
-
-// Output path for the JSON data file (Docusaurus will read this)
 const OUTPUT_PATH = path.resolve('static', 'data', 'github-milestones.json')
 
-// Main async function to fetch GitHub milestones and their closed issues/PRs
+// Utility: Write an empty JSON array to the output file
+function writeEmptyFile() {
+  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
+  fs.writeFileSync(OUTPUT_PATH, '[]')
+}
+
+// Utility: Check GitHub rate limit from headers
+function checkRateLimit(res) {
+  const remaining = parseInt(res.headers.get('x-ratelimit-remaining'), 10)
+  const reset = parseInt(res.headers.get('x-ratelimit-reset'), 10)
+  if (remaining === 0) {
+    const resetDate = new Date(reset * 1000)
+    throw new Error(`⚠️ GitHub rate limit exceeded. Try again after ${resetDate.toLocaleTimeString()}`)
+  }
+}
+
 async function fetchMilestonesAndIssues() {
-  // Handle missing token gracefully by writing empty array
+  // Gracefully handle missing token
   if (!GITHUB_TOKEN) {
     console.warn('⚠️  GITHUB_TOKEN not defined. Writing empty data file.')
-    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
-    fs.writeFileSync(OUTPUT_PATH, '[]')
+    writeEmptyFile()
     return
   }
 
   try {
-    // GitHub API request headers
     const headers = {
       Authorization: `token ${GITHUB_TOKEN}`,
       Accept: 'application/vnd.github.v3+json',
     }
 
-    // Fetch all closed milestones from the GitHub repository
+    // --- Fetch closed milestones ---
     const milestonesRes = await fetch(
       `https://api.github.com/repos/${OWNER}/${REPO}/milestones?state=closed&per_page=100`,
       { headers },
     )
 
-    // Handle any API errors from GitHub
+    checkRateLimit(milestonesRes) // Check for rate limiting
+
     if (!milestonesRes.ok) {
       const errorText = await milestonesRes.text()
       throw new Error(`GitHub API error: ${milestonesRes.status} ${milestonesRes.statusText}\n${errorText}`)
@@ -43,26 +54,30 @@ async function fetchMilestonesAndIssues() {
 
     const milestones = await milestonesRes.json()
 
-    // Filter milestones that:
-    // - Start with "v" (e.g. "v1.0.0")
-    // - Have a due date
-    // Then sort them by due date (most recent first)
     const filteredMilestones = milestones
       .filter((m) => m.title.toLowerCase().startsWith('v') && m.due_on)
       .sort((a, b) => new Date(b.due_on) - new Date(a.due_on))
 
     const data = []
 
-    // For each matching milestone, fetch all closed issues assigned to it
+    // --- Fetch closed issues for each milestone ---
     for (const milestone of filteredMilestones) {
       const issuesRes = await fetch(
         `https://api.github.com/repos/${OWNER}/${REPO}/issues?state=closed&milestone=${milestone.number}&per_page=100`,
         { headers },
       )
 
+      checkRateLimit(issuesRes) // Check again on issues fetch
+
+      if (!issuesRes.ok) {
+        const errorText = await issuesRes.text()
+        throw new Error(
+          `GitHub Issues API error for milestone ${milestone.number}: ${issuesRes.status} ${issuesRes.statusText}\n${errorText}`,
+        )
+      }
+
       const issues = await issuesRes.json()
 
-      // Store the milestone info and its associated issues
       data.push({
         title: milestone.title,
         due_on: milestone.due_on,
@@ -70,21 +85,21 @@ async function fetchMilestonesAndIssues() {
           title: issue.title,
           number: issue.number,
           url: issue.html_url,
-          isPR: !!issue.pull_request, // Flag PRs separately
+          isPR: !!issue.pull_request,
         })),
       })
     }
 
-    // Ensure the output directory exists and write the JSON file
+    // --- Write JSON to file ---
     fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true })
     fs.writeFileSync(OUTPUT_PATH, JSON.stringify(data, null, 2))
     console.log(`✅ GitHub milestone data written to ${OUTPUT_PATH}`)
   } catch (err) {
-    // Log any unexpected error and exit with failure code
-    console.error('❌ Failed to fetch GitHub data:', err)
-    process.exit(1)
+    // If something fails, log it and write an empty file so Docusaurus can still build
+    console.error('❌ Failed to fetch GitHub data:', err.message)
+    writeEmptyFile()
+    process.exit(0) // Exit cleanly for build tools
   }
 }
 
-// Start the script
 fetchMilestonesAndIssues()
