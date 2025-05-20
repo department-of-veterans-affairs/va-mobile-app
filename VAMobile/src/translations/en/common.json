@@ -1488,7 +1488,6 @@
   "travelPay.beneficiaryTravelAgreement.bulletThree": "I have not received other transportation resources at no-cost to me.",
   "travelPay.beneficiaryTravelAgreement.bulletFour": "I am the only person claiming for the travel listed.",
   "travelPay.beneficiaryTravelAgreement.bulletFive": "I have not previously received payment for the transportation claimed.",
-  "travelPay.referToPortal": "But you can file a claim using the Beneficiary Travel Self Service System (BTSSS) or VA Form 10-3542.",
   "travelPay.otherWaysToFile": "Other ways to file",
   "travelPay.otherWaysToFile.method1": "You can file through the Beneficiary Travel Self Service System (BTSSS).",
   "travelPay.otherWaysToFile.method1.link": "Start a travel claim through BTSSS",

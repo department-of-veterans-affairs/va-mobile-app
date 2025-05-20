@@ -4,6 +4,7 @@ import { View } from 'react-native'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
@@ -38,6 +39,7 @@ function FileOnlineComponent() {
             type="url"
             url={LINK_URL_VA_FORM_10_3542}
             text={t('travelPay.otherWaysToFile.method2.link')}
+            a11yLabel={a11yLabelVA(t('travelPay.otherWaysToFile.method2.link'))}
             testID="fileOnlineVAFormLink"
           />
         </Box>
