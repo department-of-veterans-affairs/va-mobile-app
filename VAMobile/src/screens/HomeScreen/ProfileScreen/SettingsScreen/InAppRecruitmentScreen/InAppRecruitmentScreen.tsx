@@ -49,7 +49,11 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
   }
 
   return (
-    <LargePanel title={t('giveFeedback')} rightButtonText={t('close')} rightButtonTestID="backToSettingsScreenID">
+    <LargePanel
+      title={t('giveFeedback')}
+      rightButtonText={t('close')}
+      rightButtonTestID="backToSettingsScreenID"
+      hideModal={isWebviewOpen}>
       <Box
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.contentMarginBottom}
