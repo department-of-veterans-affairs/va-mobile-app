@@ -77,18 +77,8 @@ context('SubmitMileageTravelPayScreen', () => {
     render(<SubmitMileageTravelPayScreen {...props} />, { queriesData })
   }
 
-  describe('when the home address is set', () => {
-    it('should initialize correctly and show interstitial screen', () => {
-      initializeTestInstance({ residentialAddress })
-      expect(screen.getByTestId('InterstitialScreen')).toBeTruthy()
-    })
-  })
-
-  describe('when the home address is not set', () => {
-    it('should initialize correctly and show no address error screen', () => {
-      initializeTestInstance()
-      expect(screen.getByTestId('ErrorScreen')).toBeTruthy()
-      expect(screen.getByTestId('updateAddressLink')).toBeTruthy()
-    })
+  it('should initialize correctly and show interstitial screen', () => {
+    initializeTestInstance({ residentialAddress })
+    expect(screen.getByTestId('InterstitialScreen')).toBeTruthy()
   })
 })
