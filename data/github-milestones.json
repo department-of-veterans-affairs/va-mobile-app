@@ -292,7 +292,7 @@
         "isPR": false
       },
       {
-        "title": "Update app colors to align with VADS/USWDS",
+        "title": "Update app colors to align with VA Design System and USWDS",
         "number": 7573,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/7573",
         "isPR": false
