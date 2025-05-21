@@ -132,6 +132,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   return (
+    // Modal to ensure keyboard navigation is confined to focusable elements within panel
     <Modal visible={!hideModal} transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
