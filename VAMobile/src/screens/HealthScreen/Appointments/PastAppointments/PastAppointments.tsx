@@ -6,19 +6,10 @@ import { useSelector } from 'react-redux'
 import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
-import {
-  AlertWithHaptics,
-  Box,
-  LoadingComponent,
-  Pagination,
-  PaginationProps,
-  TextView,
-  VAModalPicker,
-} from 'components'
+import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import TravelPayHelp from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components/TravelPayHelp'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
