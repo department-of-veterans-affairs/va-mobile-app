@@ -19,11 +19,12 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
+  travelPayInDowntime: boolean = false,
 ): Promise<AppointmentsGetData | undefined> => {
-  // const travelPayNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-  const pastParams = timeFrame !== TimeFrameTypeConstants.UPCOMING && {
-    'include[]': 'travel_pay_claims',
-  }
+  const pastParams = timeFrame !== TimeFrameTypeConstants.UPCOMING &&
+    !travelPayInDowntime && {
+      'include[]': 'travel_pay_claims',
+    }
 
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
@@ -49,6 +50,7 @@ export const useAppointments = (
   const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
+  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
@@ -65,12 +67,17 @@ export const useAppointments = (
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
           queryFn: () =>
-            getAppointments(pastRange.startDate, pastRange.endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS),
+            getAppointments(
+              pastRange.startDate,
+              pastRange.endDate,
+              TimeFrameTypeConstants.PAST_THREE_MONTHS,
+              travelPayInDowntime,
+            ),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
 
-      return getAppointments(startDate, endDate, timeFrame)
+      return getAppointments(startDate, endDate, timeFrame, travelPayInDowntime)
     },
     meta: {
       errorName: 'getAppointments: Service error',
