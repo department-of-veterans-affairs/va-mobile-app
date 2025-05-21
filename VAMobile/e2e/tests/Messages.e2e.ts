@@ -276,6 +276,24 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.SEND_BUTTON_ID))).toExist()
   })
 
+  it('verify tap select a file action sheet options are correct', async () => {
+    await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID)).tap()
+    await element(by.id(MessagesE2eIdConstants.SELECT_A_FILE_ID)).tap()
+    await expect(element(by.text(CommonE2eIdConstants.CAMERA_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.PHOTO_GALLERY_TEXT))).toExist()
+    await expect(element(by.text(CommonE2eIdConstants.FILE_FOLDER_TEXT))).toExist()
+  })
+
+  it('should close the action sheet and tap cancel', async () => {
+    if (device.getPlatform() === 'android') {
+      await element(by.text('Cancel ')).tap()
+      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
+    } else {
+      await element(by.text('Cancel')).atIndex(2).tap()
+      await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
+    }
+  })
+
   it('should input text into the message field', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_INPUT_ID)).replaceText('Testing')
   })
