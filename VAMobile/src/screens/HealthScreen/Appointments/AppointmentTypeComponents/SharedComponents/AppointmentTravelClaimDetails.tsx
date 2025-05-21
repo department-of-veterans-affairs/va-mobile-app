@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { AppointmentAttributes } from 'api/types'
-import { AlertWithHaptics, Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { AlertWithHaptics, Box, BoxProps, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { VATheme } from 'styles/theme'
-import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
@@ -19,7 +19,6 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -51,16 +50,33 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const travelPayNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const endTime =
-    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat("DDD 'at' t ZZZZ")
+    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
 
   if (!featureEnabled('travelPaySMOC')) {
     return null
   }
 
   const getContent = () => {
+    // When travel pay is in downtime, display a downtime message
+    if (travelPayInDowntime) {
+      return (
+        <>
+          <Box justifyContent="center" mt={theme.dimensions.standardMarginBetween}>
+            <AlertWithHaptics
+              variant="warning"
+              header={t('travelPay.downtime.title')}
+              description={t('downtime.message.1', { endTime })}
+              descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}
+            />
+            <TravelPayHelp />
+          </Box>
+        </>
+      )
+    }
+
     // When the appointment has a travel pay claim, display the claim details
     const { claim } = attributes.travelPayClaim || {}
     const claimError = attributes.travelPayClaim?.metadata.success === false
@@ -112,6 +128,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
       )
     }
 
+    // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
     if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
@@ -127,35 +144,9 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Past:
-      if (!travelPayNotInDowntime) {
-        return (
-          <Box justifyContent="center">
-            {/* <TextView variant="MobileBody" mb={theme.dimensions.condensedMarginBetween}>
-              {t('Travel pay is currently unavailable')}
-            </TextView> */}
+      const content = getContent()
 
-            <AlertWithHaptics
-              variant="warning"
-              header={t('downtime.title')}
-              description={t('downtime.message.1', { endTime })}
-              descriptionA11yLabel={t('downtime.message.1.a11yLabel', { endTime })}>
-              <TextView accessibilityLabel={t('downtime.message.2.a11yLabel')} my={theme.dimensions.contentMarginTop}>
-                {t('downtime.message.2')}
-              </TextView>
-              <ClickToCallPhoneNumber
-                displayedText={displayedTextPhoneNumber(t('8006982411'))}
-                phone={t('8006982411')}
-                a11yLabel={a11yLabelID(t('8006982411'))}
-                variant={'base'}
-              />
-            </AlertWithHaptics>
-          </Box>
-        )
-      }
-
-      const content = travelPayNotInDowntime ? getContent() : null
-
-      if (!content && !travelPayNotInDowntime) {
+      if (!content && !travelPayInDowntime) {
         return null
       }
       return (
