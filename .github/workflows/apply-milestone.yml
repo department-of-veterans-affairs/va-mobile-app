@@ -1,0 +1,64 @@
+name: Milestone Linker
+
+on:
+  pull_request:
+    types: 
+      - closed # Trigger on relevant PR events
+    paths: # targeting only code that touches the app
+      - VAMobile/src/**
+
+jobs:
+  process_pr_and_issue:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract Linked Issue Number from PR Body
+        id: extract_issue
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          LINKED_ISSUE_NUMBER=""
+
+          if [[ "$PR_BODY" =~ ([Cc]loses|[Ff]ixes|[Rr]esolves)[[:space:]]?#([0-9]+) ]]; then
+            LINKED_ISSUE_NUMBER="${BASH_REMATCH[2]}"
+          fi
+
+          if [[ -z "$LINKED_ISSUE_NUMBER" ]]; then
+            echo "No explicit linked issue found in PR description for PR #${{ github.event.pull_request.number }}."
+            echo "linked_issue_number=" >> $GITHUB_OUTPUT
+          else
+            echo "Linked issue number found: #$LINKED_ISSUE_NUMBER"
+            echo "linked_issue_number=$LINKED_ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Conditional Action Add Milestone to issue or PR
+        run: |
+          PR_NUM="${{ github.event.pull_request.number }}"
+          LINKED_ISSUE_NUM="${{ steps.extract_issue.outputs.linked_issue_number }}"
+          MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].number')
+          MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].title')
+
+          if [[ -z "$LINKED_ISSUE_NUM" ]]; then
+            echo "PR Number $PR_NUM"
+          else
+            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+          fi
+
+          if [[ -n "$LINKED_ISSUE_NUM" ]]; then
+          echo "Linked issue $LINKED_ISSUE_NUM found. Adding milestone $MILESTONE_TITLE."
+            gh issue edit $LINKED_ISSUE_NUM --milestone $MILESTONE_TITLE
+          else
+            echo "Setting milestone $MILESTONE_TITLE" for PR $PR_NUM
+            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+            echo "Processing PR $PR_NUM..."
+             gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
