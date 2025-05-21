@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
-import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 import ReviewClaimScreen from './ReviewClaimScreen'
 
@@ -26,7 +26,7 @@ const residentialAddress: AddressData = {
 
 const params = {
   appointment: {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     attributes: {
       ...defaultAppointmentAttributes,
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
