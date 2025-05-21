@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, DowntimeError, LinkWithAnalytics, TextView, VAScrollView } from 'components'
+import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useDowntime, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
@@ -24,16 +23,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
-
-  const travelPayNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-
-  // if (travelPayNotInDowntime) {
-  //   return (
-  //     <VAScrollView testID="InterstitialScreen">
-  //       <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
-  //     </VAScrollView>
-  //   )
-  // }
 
   const onLeftButtonPress = () => {
     confirmAlert({
@@ -68,61 +57,51 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        {travelPayNotInDowntime ? (
-          <>
-            {' '}
-            <TextView testID="milageQuestionID" variant="BitterHeading" accessibilityRole="header">
-              {t('travelPay.beforeYouFileQuestion')}
-            </TextView>
-            <TextView testID="eligibilityTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-              {t('travelPay.checkEligibility')}
-            </TextView>
-            <TextView testID="eligibilityDescriptionID" variant="MobileBody">
-              {t('travelPay.checkEligibility.description')}
-            </TextView>
-            <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_TRAVEL_PAY_ELIGIBILITY}
-              text={t('travelPay.checkEligibility.link')}
-              testID="checkEligibilityLinkID"
-            />
-            <TextView
-              testID="directDepositTitleID"
-              variant="MobileBodyBold"
-              mt={theme.dimensions.standardMarginBetween}>
-              {t('travelPay.setUpDirectDeposit')}
-            </TextView>
-            <TextView testID="directDepositDescriptionID" variant="MobileBody">
-              {t('travelPay.setUpDirectDeposit.description')}
-            </TextView>
-            <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
-              text={t('travelPay.setUpDirectDeposit.link')}
-              testID="setUpDirectDepositLinkID"
-            />
-            <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
-              {t('travelPay.burdenTime')}
-            </TextView>
-            <TextView mt={theme.dimensions.tinyMarginBetween} testID="ombControlNumberID" variant="MobileBody">
-              {t('travelPay.ombControlNumber')}
-            </TextView>
-            <TextView mt={theme.dimensions.tinyMarginBetween} testID="ombExpirationDateID" variant="MobileBody">
-              {t('travelPay.ombExpirationDate')}
-            </TextView>
-            <LinkWithAnalytics
-              type="custom"
-              onPress={() => {
-                navigateTo('BurdenStatementScreen')
-              }}
-              text={t('travelPay.reviewPrivacyStatement')}
-              a11yLabel={a11yLabelVA(t('travelPay.reviewPrivacyStatement'))}
-              testID="reviewPrivacyStatementLinkID"
-            />
-          </>
-        ) : (
-          <DowntimeError screenID={ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID} />
-        )}
+        <TextView testID="milageQuestionID" variant="BitterHeading" accessibilityRole="header">
+          {t('travelPay.beforeYouFileQuestion')}
+        </TextView>
+        <TextView testID="eligibilityTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('travelPay.checkEligibility')}
+        </TextView>
+        <TextView testID="eligibilityDescriptionID" variant="MobileBody">
+          {t('travelPay.checkEligibility.description')}
+        </TextView>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_TRAVEL_PAY_ELIGIBILITY}
+          text={t('travelPay.checkEligibility.link')}
+          testID="checkEligibilityLinkID"
+        />
+        <TextView testID="directDepositTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('travelPay.setUpDirectDeposit')}
+        </TextView>
+        <TextView testID="directDepositDescriptionID" variant="MobileBody">
+          {t('travelPay.setUpDirectDeposit.description')}
+        </TextView>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
+          text={t('travelPay.setUpDirectDeposit.link')}
+          testID="setUpDirectDepositLinkID"
+        />
+        <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
+          {t('travelPay.burdenTime')}
+        </TextView>
+        <TextView mt={theme.dimensions.tinyMarginBetween} testID="ombControlNumberID" variant="MobileBody">
+          {t('travelPay.ombControlNumber')}
+        </TextView>
+        <TextView mt={theme.dimensions.tinyMarginBetween} testID="ombExpirationDateID" variant="MobileBody">
+          {t('travelPay.ombExpirationDate')}
+        </TextView>
+        <LinkWithAnalytics
+          type="custom"
+          onPress={() => {
+            navigateTo('BurdenStatementScreen')
+          }}
+          text={t('travelPay.reviewPrivacyStatement')}
+          a11yLabel={a11yLabelVA(t('travelPay.reviewPrivacyStatement'))}
+          testID="reviewPrivacyStatementLinkID"
+        />
       </Box>
     </VAScrollView>
   )
