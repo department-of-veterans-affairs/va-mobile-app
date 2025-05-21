@@ -53,6 +53,7 @@ function InAppRecruitmentScreen({ navigation }: InAppRecruitmentScreenProps) {
       title={t('giveFeedback')}
       rightButtonText={t('close')}
       rightButtonTestID="backToSettingsScreenID"
+      // Hide the modal when webview is opened
       hideModal={isWebviewOpen}>
       <Box
         mt={theme.dimensions.contentMarginTop}
