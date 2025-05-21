@@ -81,7 +81,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     const { claim } = attributes.travelPayClaim || {}
     const claimError = attributes.travelPayClaim?.metadata.success === false
 
-    if (claim) {
+    if (claim && !travelPayInDowntime) {
       const status = claim.claimStatus
       const claimNumber = claim.claimNumber
       const claimId = claim.id
