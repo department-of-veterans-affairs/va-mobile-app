@@ -3,7 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { contactInformationKeys } from 'api/contactInformation'
-import { UserContactInformation } from 'api/types'
+import { AddressData, UserContactInformation } from 'api/types'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
 
@@ -22,6 +22,20 @@ const params = {
       },
     },
   },
+}
+
+const residentialAddress: AddressData = {
+  id: 1,
+  addressLine1: '10 Laurel Way',
+  addressPou: 'RESIDENCE/CHOICE',
+  addressType: 'DOMESTIC',
+  city: 'Novato',
+  countryCodeIso3: '1',
+  internationalPostalCode: '1',
+  province: 'province',
+  stateCode: 'CA',
+  zipCode: '94920',
+  zipCodeSuffix: '1234',
 }
 
 const mockActionSheetSpy = jest.fn()
@@ -48,7 +62,7 @@ context('SubmitMileageTravelPayScreen', () => {
       params,
     },
   )
-  const initializeTestInstance = (initialIndex: number = 1, contactInformation?: Partial<UserContactInformation>) => {
+  const initializeTestInstance = (contactInformation?: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
     if (contactInformation) {
       queriesData = [
@@ -60,11 +74,11 @@ context('SubmitMileageTravelPayScreen', () => {
         },
       ]
     }
-    render(<SubmitMileageTravelPayScreen {...props} initialRouteIndex={initialIndex} />, { queriesData })
+    render(<SubmitMileageTravelPayScreen {...props} />, { queriesData })
   }
 
   it('should initialize correctly and show interstitial screen', () => {
-    initializeTestInstance()
+    initializeTestInstance({ residentialAddress })
     expect(screen.getByTestId('InterstitialScreen')).toBeTruthy()
   })
 })

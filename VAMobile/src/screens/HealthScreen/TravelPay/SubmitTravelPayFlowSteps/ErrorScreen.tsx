@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useContactInformation } from 'api/contactInformation'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
@@ -20,11 +23,21 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
+  const contactInformationQuery = useContactInformation({ enabled: true })
+  const residentialAddress = contactInformationQuery.data?.residentialAddress
 
   useSubtaskProps({
     rightButtonText: t('close'),
     rightButtonTestID: 'rightCloseTestID',
   })
+
+  useFocusEffect(
+    useCallback(() => {
+      if (error === 'noAddress' && residentialAddress) {
+        navigateTo('AddressScreen')
+      }
+    }, [error, residentialAddress, navigateTo]),
+  )
 
   const getErrorContent = (travelPayError: TravelPayError) => {
     switch (travelPayError) {
@@ -38,7 +51,10 @@ function ErrorScreen({ route }: ErrorScreenProps) {
               text={t('travelPay.error.noAddress.link')}
               testID="updateAddressLink"
               onPress={() => {
-                navigateTo('ContactInformation')
+                navigateTo('EditAddress', {
+                  displayTitle: t('contactInformation.residentialAddress'),
+                  addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
+                })
               }}
             />
           ),
@@ -60,7 +76,7 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const { title, textLines, content } = getErrorContent(error)
 
   return (
-    <VAScrollView>
+    <VAScrollView testID="ErrorScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>

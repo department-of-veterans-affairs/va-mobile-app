@@ -93,7 +93,7 @@ function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenPro
   const { appointment, appointmentRouteKey } = route.params
 
   return (
-    <TravelPayStack.Navigator screenOptions={{ headerShown: false }}>
+    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
       <TravelPayStack.Screen
         name="FlowSteps"
         component={FlowSteps}
