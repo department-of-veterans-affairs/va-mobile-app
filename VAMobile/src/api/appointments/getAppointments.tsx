@@ -22,7 +22,6 @@ const getAppointments = (
   timeFrame: TimeFrameType,
   includeTravelClaims: boolean = false,
 ): Promise<AppointmentsGetData | undefined> => {
-  console.info('getAppts includeTravelClaims', includeTravelClaims)
   const pastParams = includeTravelClaims && {
     'include[]': 'travel_pay_claims',
   }

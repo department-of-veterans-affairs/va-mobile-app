@@ -205,7 +205,6 @@ export const getGroupedAppointments = (
   upcomingPageMetaData: AppointmentsMetaPagination,
   includeTravelClaims: boolean = false,
 ): ReactNode => {
-  console.info('getGroupedAppointments includeTravelClaims', includeTravelClaims)
   if (!appointments) {
     return <></>
   }
@@ -285,8 +284,6 @@ const getListItemsForAppointments = (
   const listItems: Array<DefaultListItemObj> = []
   const { t } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
-
-  console.info('getListItemsForAppointments includeTravelClaims', includeTravelClaims)
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const textLines = getTextLinesForAppointmentListItem(appointment, t, theme, includeTravelClaims)
@@ -495,8 +492,6 @@ export const getTextLinesForAppointmentListItem = (
       attributes.status === AppointmentStatusConstants.CANCELLED)
   const careText = getCareText(typeOfCare, serviceCategoryName, t)
   let result: Array<TextLineWithIconProps | undefined | boolean> = []
-
-  console.info('getTextLinesForAppointmentListItem includeTravelClaims', includeTravelClaims)
 
   if (isPending) {
     const type = pendingType(appointmentType, t, phoneOnly)
