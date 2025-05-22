@@ -9,6 +9,7 @@ import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import { appointmentsKeys } from './queryKeys'
 
@@ -19,12 +20,12 @@ const getAppointments = (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
-  travelPayInDowntime: boolean = false,
+  includeTravelClaims: boolean = false,
 ): Promise<AppointmentsGetData | undefined> => {
-  const pastParams = timeFrame !== TimeFrameTypeConstants.UPCOMING &&
-    !travelPayInDowntime && {
-      'include[]': 'travel_pay_claims',
-    }
+  console.info('getAppts includeTravelClaims', includeTravelClaims)
+  const pastParams = includeTravelClaims && {
+    'include[]': 'travel_pay_claims',
+  }
 
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
@@ -50,7 +51,9 @@ export const useAppointments = (
   const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+  const travelPayEnabled =
+    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+  const includeTravelClaims = timeFrame !== TimeFrameTypeConstants.UPCOMING && travelPayEnabled
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
@@ -64,6 +67,7 @@ export const useAppointments = (
 
         // Prefetch past appointments when upcoming appointments are being fetched so that the default
         // appointments list in the `Past` tab will already be loaded if a user views past appointments.
+        // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
           queryFn: () =>
@@ -71,13 +75,13 @@ export const useAppointments = (
               pastRange.startDate,
               pastRange.endDate,
               TimeFrameTypeConstants.PAST_THREE_MONTHS,
-              travelPayInDowntime,
+              travelPayEnabled,
             ),
           staleTime: ACTIVITY_STALE_TIME,
         })
       }
 
-      return getAppointments(startDate, endDate, timeFrame, travelPayInDowntime)
+      return getAppointments(startDate, endDate, timeFrame, includeTravelClaims)
     },
     meta: {
       errorName: 'getAppointments: Service error',
