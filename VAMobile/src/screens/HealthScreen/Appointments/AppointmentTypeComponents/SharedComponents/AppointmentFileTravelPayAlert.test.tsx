@@ -12,7 +12,7 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
-import { RenderParams, context, fireEvent, render, screen } from 'testUtils'
+import { context, fireEvent, render, screen } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'
 
 const mockNavigationSpy = jest.fn()
@@ -171,11 +171,7 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
-  const initializeTestInstance = (
-    attributes: AppointmentAttributes,
-    appointmentID: string = '123',
-    // options?: RenderParams,
-  ) => {
+  const initializeTestInstance = (attributes: AppointmentAttributes, appointmentID: string = '123') => {
     const appointment = {
       ...defaultAppointment,
       attributes,
