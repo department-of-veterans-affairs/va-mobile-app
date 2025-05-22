@@ -22,12 +22,9 @@ import {
   bytesToFinalSizeDisplayA11y,
   getMaxWidthAndHeightOfImage,
 } from 'utils/common'
-import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
-
-const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
   max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
@@ -115,12 +112,6 @@ function Attachments({ navigation, route }: AttachmentsProps) {
   }
 
   const onSelectAFile = (): void => {
-    // For integration tests, bypass the file picking process
-    if (IS_TEST) {
-      const img = { fileName: 'file.txt' } as Asset
-      const assets = [img]
-      return callbackOnSuccessfulFileSelection({ assets }, true)
-    }
     logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
     onAddFileAttachments(
       t,
