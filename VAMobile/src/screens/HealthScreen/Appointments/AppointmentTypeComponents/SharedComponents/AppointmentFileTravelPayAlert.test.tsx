@@ -12,7 +12,6 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
-import { ErrorsState } from 'store/slices'
 import { RenderParams, context, fireEvent, render, screen } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'
 
@@ -175,14 +174,14 @@ context('AppointmentFileTravelPayAlert', () => {
   const initializeTestInstance = (
     attributes: AppointmentAttributes,
     appointmentID: string = '123',
-    options?: RenderParams,
+    // options?: RenderParams,
   ) => {
     const appointment = {
       ...defaultAppointment,
       attributes,
       id: appointmentID,
     }
-    render(<AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey="key" />, { ...options })
+    render(<AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey="key" />)
   }
 
   it('should initialize correctly', async () => {
@@ -214,30 +213,6 @@ context('AppointmentFileTravelPayAlert', () => {
       phoneOnly: false,
     })
     initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
-
-  it('should NOT render if travel pay in downtime', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
-    })
-    initializeTestInstance(attributes, '123', {
-      preloadedState: {
-        errors: {
-          downtimeWindowsByFeature: {
-            travel_pay_features: {
-              startTime: DateTime.now(),
-              endTime: DateTime.now().plus({ hours: 1 }),
-            },
-          },
-        } as ErrorsState,
-      },
-    })
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
   })
 
