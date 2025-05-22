@@ -976,7 +976,7 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": null
+            "readReceipt": "READ"
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113100"
@@ -1103,7 +1103,7 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": "READ"
       },
       "relationships": {
         "attachments": {

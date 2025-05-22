@@ -415,7 +415,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          <MessageCard message={message} />
+          <MessageCard message={message} folderId={currentFolderIdParam} />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <Box accessible={true} accessibilityRole={'header'}>
