@@ -58,6 +58,7 @@ function PastAppointments({
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const endTime =
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const pagination = {
     currentPage: page,
@@ -249,7 +250,15 @@ function PastAppointments({
           />
         </Box>
       )}
-      {getGroupedAppointments(appointmentsToShow, theme, { t }, onPastAppointmentPress, true, pagination)}
+      {getGroupedAppointments(
+        appointmentsToShow,
+        theme,
+        { t },
+        onPastAppointmentPress,
+        true,
+        pagination,
+        includeTravelClaims,
+      )}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

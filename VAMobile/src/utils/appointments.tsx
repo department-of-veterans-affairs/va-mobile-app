@@ -29,7 +29,6 @@ import {
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
 } from './formattingUtils'
-import { featureEnabled } from './remoteConfig'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -204,7 +203,9 @@ export const getGroupedAppointments = (
   onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
+  includeTravelClaims: boolean = false,
 ): ReactNode => {
+  console.info('getGroupedAppointments includeTravelClaims', includeTravelClaims)
   if (!appointments) {
     return <></>
   }
@@ -228,6 +229,7 @@ export const getGroupedAppointments = (
         upcomingPageMetaData,
         groupIdx,
         theme,
+        includeTravelClaims,
       )
       groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
@@ -278,13 +280,16 @@ const getListItemsForAppointments = (
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
+  includeTravelClaims: boolean,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
   const { t } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
+  console.info('getListItemsForAppointments includeTravelClaims', includeTravelClaims)
+
   _.forEach(listOfAppointments, (appointment, index) => {
-    const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+    const textLines = getTextLinesForAppointmentListItem(appointment, t, theme, includeTravelClaims)
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = t('listPosition', { position, total: totalEntries })
     const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
@@ -470,6 +475,7 @@ export const getTextLinesForAppointmentListItem = (
   appointment: AppointmentData,
   t: TFunction,
   theme: VATheme,
+  includeTravelClaims: boolean,
 ): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
   const {
@@ -490,6 +496,8 @@ export const getTextLinesForAppointmentListItem = (
   const careText = getCareText(typeOfCare, serviceCategoryName, t)
   let result: Array<TextLineWithIconProps | undefined | boolean> = []
 
+  console.info('getTextLinesForAppointmentListItem includeTravelClaims', includeTravelClaims)
+
   if (isPending) {
     const type = pendingType(appointmentType, t, phoneOnly)
     result = [
@@ -502,7 +510,7 @@ export const getTextLinesForAppointmentListItem = (
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      featureEnabled('travelPaySMOC') && getTravelPay(attributes, t, condensedMarginBetween),
+      includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween),
       getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
