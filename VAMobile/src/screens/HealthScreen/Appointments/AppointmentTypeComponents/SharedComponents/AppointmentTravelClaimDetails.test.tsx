@@ -6,7 +6,8 @@ import { DateTime } from 'luxon'
 import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
 import { AppointmentTypeConstants } from 'api/types'
 import { AppointmentStatusConstants } from 'api/types'
-import { render, screen, when } from 'testUtils'
+import { ErrorsState } from 'store/slices'
+import { RenderParams, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -142,10 +143,12 @@ describe('AppointmentTravelClaimDetails', () => {
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
     travelPaySMOCEnabled = true,
+    options?: RenderParams,
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     render(
       <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+      { ...options },
     )
   }
 
@@ -155,6 +158,28 @@ describe('AppointmentTravelClaimDetails', () => {
       expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
       expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
     })
+
+    it('should not display a downtime alert when travel pay is in downtime', () => {
+      const downtimeWindow = {
+        startTime: DateTime.now(),
+        endTime: DateTime.now().plus({ hours: 1 }),
+      }
+
+      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, {
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              travel_pay_features: {
+                ...downtimeWindow,
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+
+      // Check that the downtime alert is not displayed
+      expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
+    })
   })
 
   describe('when subType is not Past', () => {
@@ -162,6 +187,28 @@ describe('AppointmentTravelClaimDetails', () => {
       initializeTestInstance('Upcoming')
       expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
       expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+    })
+
+    it('should not display a downtime alert when travel pay is in downtime', () => {
+      const downtimeWindow = {
+        startTime: DateTime.now(),
+        endTime: DateTime.now().plus({ hours: 1 }),
+      }
+
+      initializeTestInstance('Upcoming', {}, true, {
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              travel_pay_features: {
+                ...downtimeWindow,
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+
+      // Check that the downtime alert is not displayed
+      expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
     })
   })
 
@@ -282,6 +329,38 @@ describe('AppointmentTravelClaimDetails', () => {
           expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
           expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
           expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeNull()
+        })
+      })
+    })
+
+    describe('when travel pay is in downtime', () => {
+      const downtimeWindow = {
+        startTime: DateTime.now(),
+        endTime: DateTime.now().plus({ hours: 1 }),
+      }
+
+      tests.forEach((test) => {
+        it(`initializes correctly when ${test.testName}`, () => {
+          initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, {
+            preloadedState: {
+              errors: {
+                downtimeWindowsByFeature: {
+                  travel_pay_features: {
+                    ...downtimeWindow,
+                  },
+                },
+              } as ErrorsState,
+            },
+          })
+          expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.getByText(t('travelPay.downtime.title'))).toBeTruthy()
+          expect(
+            screen.getByText(
+              t('downtime.message.1', {
+                endTime: downtimeWindow.endTime.toFormat('EEEE, fff'),
+              }),
+            ),
+          ).toBeTruthy()
         })
       })
     })
