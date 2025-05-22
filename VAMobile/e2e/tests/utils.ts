@@ -771,3 +771,39 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
+
+/**
+ * Navigates to the developer settings and configures API endpoint overrides for testing.
+ * This allows forcing specific API responses during E2E testing.
+ *
+ * @param endpoint - The API endpoint identifier to override
+ * @param options - Configuration options
+ * @param options.otherStatus - Optional custom status to set for the endpoint override
+ *
+ *
+ * @example
+ * // Override an endpoint with a custom 500 error status
+ * await toggleOverrideApi('/v0/travel-pay/claims', \{ otherStatus: "500" \});
+ */
+export async function toggleOverrideApi(endpoint: string, { otherStatus }: { otherStatus?: string } = {}) {
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await waitFor(element(by.label('Override Api Calls')))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(100, 'down')
+  await element(by.label('Override Api Calls')).tap()
+  await waitFor(element(by.id(`otherSelector-${endpoint}`)))
+    .toBeVisible()
+    .whileElement(by.id('overrideAPITestID'))
+    .scroll(250, 'down')
+
+  if (otherStatus) {
+    await element(by.id(`otherSelector-${endpoint}`)).tap()
+    await element(by.id('overrideAPITestID')).scroll(100, 'down')
+    await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+  }
+
+  await element(by.label('Set API Errors')).tap()
+}

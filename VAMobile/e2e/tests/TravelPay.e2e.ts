@@ -1,7 +1,15 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openAppointments,
+  openDismissLeavingAppPopup,
+  openHealth,
+  toggleOverrideApi,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const TravelPayE2eIdConstants = {
   RIGHT_CLOSE_BUTTON_ID: 'rightCloseTestID',
@@ -227,7 +235,6 @@ const checkReviewClaimScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.WHAT_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_ONLY_ID))).toExist()
-  // TODO: Add the date and time to the review claim screen
   await expect(element(by.id(TravelPayE2eIdConstants.HOW_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.VEHICLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.WHERE_ID))).toExist()
@@ -271,11 +278,14 @@ const checkTravelPayFileOnlineComponent = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID)
 }
 
 const checkErrorScreen = async (error: string) => {
+  await expect(element(by.id(TravelPayE2eIdConstants.ERROR_SCREEN_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ERROR_TITLE_ID))).toExist()
   switch (error) {
     case 'noAddress':
@@ -328,9 +338,11 @@ const checkInterstitialScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.ELIGIBILITY_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.DIRECT_DEPOSIT_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.BURDEN_TIME_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.OMB_CONTROL_NUMBER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.OMB_EXPIRATION_DATE_ID))).toExist()
@@ -478,6 +490,12 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 
+  it('opens a webview to view claim details on web', async () => {
+    await element(by.id('goToVAGovID-mock_id')).tap()
+    await expect(element(by.text('Travel Claim Details'))).toExist()
+    await element(by.id('webviewBack')).tap()
+  })
+
   it('updates the appointments cache when the travel pay claim is submitted', async () => {
     await element(by.text('Appointments')).tap()
     await openAppointmentInList('Sami Alsahhar - Onsite - Confirmed')
@@ -490,5 +508,36 @@ describe('Travel Pay', () => {
       .scroll(100, 'down', NaN, 0.8)
     await expect(element(by.id('goToVAGovID-mock_id'))).toExist()
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
+  })
+
+  it('shows the error screen when the travel pay claim fails to submit', async () => {
+    await element(by.text('Appointments')).tap()
+    await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
+    // Override the travel pay claim API to return a 500 error
+    await toggleOverrideApi('/v0/travel-pay/claims', { otherStatus: '500' })
+    await openHealth()
+
+    await openAppointmentInList('Sami Alsahhar - ATLAS - Confirmed')
+
+    await startTravelPayFlow()
+    await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id(TravelPayE2eIdConstants.CHECK_BOX_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID)).tap()
+
+    await checkErrorScreen('error')
+  })
+
+  it('continues to show the Travel Pay Alert to submit a claim after the error screen', async () => {
+    await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
+    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).toExist()
+    await element(by.text('Appointments')).tap()
+    await openAppointmentInList('Sami Alsahhar - ATLAS - Confirmed')
+    await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).toExist()
   })
 })

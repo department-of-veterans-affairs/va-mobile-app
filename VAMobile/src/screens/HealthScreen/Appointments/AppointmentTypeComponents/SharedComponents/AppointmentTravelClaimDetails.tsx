@@ -105,6 +105,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
                 displayTitle: t('travelPay.webview.claims.displayTitle'),
                 loadingMessage: t('travelPay.webview.claims.loading'),
                 useSSO: true,
+                backButtonTestID: `webviewBack`,
               })
             }}
             text={t('travelPay.travelClaimFiledDetails.goToVAGov')}
