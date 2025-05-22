@@ -5,6 +5,7 @@ import {
   CommonE2eIdConstants,
   loginToDemoMode,
   openAppointments,
+  openDismissLeavingAppPopup,
   openHealth,
   toggleOverrideApi,
   toggleRemoteConfigFlag,
@@ -277,8 +278,10 @@ const checkTravelPayFileOnlineComponent = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID)
 }
 
 const checkErrorScreen = async (error: string) => {
@@ -335,9 +338,11 @@ const checkInterstitialScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.ELIGIBILITY_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.DIRECT_DEPOSIT_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.DIRECT_DEPOSIT_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.BURDEN_TIME_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.OMB_CONTROL_NUMBER_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.OMB_EXPIRATION_DATE_ID))).toExist()
