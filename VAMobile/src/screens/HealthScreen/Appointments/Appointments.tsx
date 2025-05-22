@@ -9,14 +9,18 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
-import { useDowntime, useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import CernerAlert from '../CernerAlert'
@@ -25,11 +29,14 @@ import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
+const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
+
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
@@ -129,7 +136,24 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         />
       ) : (
         <Box>
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween} mt={-10} mx={theme.dimensions.gutter}>
+            {featureEnabled('startScheduling') ? (
+              <LinkWithAnalytics
+                type="custom"
+                onPress={() => {
+                  logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
+                  navigateTo('Webview', {
+                    url: LINK_URL_SCHEDULE_APPOINTMENTS,
+                    displayTitle: t('webview.vagov'),
+                    loadingMessage: t('webview.appointments.loading'),
+                    useSSO: true,
+                  })
+                }}
+                text={t('appointments.startScheduling')}
+              />
+            ) : (
+              <></>
+            )}
             <SegmentedControl
               labels={controlLabels}
               onChange={onTabChange}
