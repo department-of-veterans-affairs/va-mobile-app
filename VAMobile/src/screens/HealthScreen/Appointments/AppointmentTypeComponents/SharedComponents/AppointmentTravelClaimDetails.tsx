@@ -20,7 +20,6 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
@@ -54,10 +53,6 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const endTime =
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
-
-  if (!featureEnabled('travelPaySMOC')) {
-    return null
-  }
 
   const getContent = () => {
     // When travel pay is in downtime, display a downtime message

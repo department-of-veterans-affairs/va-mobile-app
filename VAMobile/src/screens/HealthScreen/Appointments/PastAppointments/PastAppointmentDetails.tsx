@@ -11,7 +11,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useDowntime } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import {
   AppointmentDetailsSubTypeConstants,
@@ -44,8 +43,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
 
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
 
   useEffect(() => {
     if (attributes) {

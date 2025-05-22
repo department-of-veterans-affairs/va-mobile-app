@@ -50,8 +50,7 @@ export const useAppointments = (
   const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const includeTravelClaims = timeFrame !== TimeFrameTypeConstants.UPCOMING && travelPayEnabled
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]

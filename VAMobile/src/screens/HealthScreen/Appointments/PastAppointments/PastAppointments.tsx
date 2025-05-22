@@ -58,7 +58,6 @@ function PastAppointments({
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const endTime =
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
-  const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const pagination = {
     currentPage: page,
@@ -240,7 +239,7 @@ function PastAppointments({
           cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
-      {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
+      {travelPayInDowntime && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
             variant="warning"
@@ -257,7 +256,7 @@ function PastAppointments({
         onPastAppointmentPress,
         true,
         pagination,
-        includeTravelClaims,
+        !travelPayInDowntime,
       )}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
