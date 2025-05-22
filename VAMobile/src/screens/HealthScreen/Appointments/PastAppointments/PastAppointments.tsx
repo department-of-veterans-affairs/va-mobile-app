@@ -16,7 +16,6 @@ import { ErrorsState } from 'store/slices'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 import NoAppointments from '../NoAppointments/NoAppointments'
 
