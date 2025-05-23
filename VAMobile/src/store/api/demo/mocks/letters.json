@@ -49,7 +49,7 @@
         "benefitInformation": {
           "monthlyAwardAmount": 3084.75,
           "serviceConnectedPercentage": 100,
-          "awardEffectiveDate": "2016-11-01",
+          "awardEffectiveDate": "2023-07-01T00:00:00Z",
           "hasChapter35Eligibility": true,
           "hasNonServiceConnectedPension": false,
           "hasServiceConnectedDisabilities": true,
