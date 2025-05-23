@@ -169,7 +169,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
           {t('travelPay.travelAgreementHeader')}
         </TextView>
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="penaltyStatementID" variant="MobileBody">
-          <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatementLine') + ' '}</TextView>
+          <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatement.title') + ' '}</TextView>
           {t('travelPay.penaltyStatement')}
         </TextView>
         <TextView mt={theme.dimensions.formMarginBetween} testID="penaltyStatementAgreementID" variant="MobileBody">
