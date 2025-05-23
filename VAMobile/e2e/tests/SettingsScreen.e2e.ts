@@ -81,19 +81,21 @@ describe('Settings Screen', () => {
     }
   })
 
-  it('should show Give feedback screen', async () => {
-    await element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_ID)).tap()
-    await expect(element(by.text('Make this app better for all Veterans'))).toExist()
-    await expect(element(by.text('Go to questionnaire'))).toExist()
-    await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
-  })
+  // In app recruitment currently disabled by waygate
+  // it('should show Give feedback screen', async () => {
+  //   await element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_ID)).tap()
+  //   await expect(element(by.text('Make this app better for all Veterans'))).toExist()
+  //   await expect(element(by.text('Go to questionnaire'))).toExist()
+  //   await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
+  // })
 
-  it('should tap on "go to questionnaire" in in app recruitment', async () => {
-    await element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_QUESTIONNARE_ID)).tap()
-    await device.takeScreenshot('inAppRecruitmentQuestionnaire')
-    await element(by.text('Done')).tap()
-    await element(by.id(SettingsE2eIdConstants.BACK_TO_SETTINGS_SCREEN_ID)).tap()
-  })
+  // In app recruitment currently disabled by waygate
+  // it('should tap on "go to questionnaire" in in app recruitment', async () => {
+  //   await element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_QUESTIONNARE_ID)).tap()
+  //   await device.takeScreenshot('inAppRecruitmentQuestionnaire')
+  //   await element(by.text('Done')).tap()
+  //   await element(by.id(SettingsE2eIdConstants.BACK_TO_SETTINGS_SCREEN_ID)).tap()
+  // })
 
   it('should show Privacy Policy page', async () => {
     await element(by.id(SettingsE2eIdConstants.PRIVACY_ROW_ID)).tap()

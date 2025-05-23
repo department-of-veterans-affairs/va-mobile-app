@@ -89,7 +89,7 @@ export async function tapPhoneAndTTYLinks() {
 Validates that the military information is correct
 param militaryBranch: String name of the military branch to test
 */
-export async function verifyMilitaryInfo(militaryBranch) {
+export async function verifyMilitaryInfo(militaryBranch: string) {
   it(militaryBranch + ': verify the name and branch matches the home/profile page', async () => {
     await changeMockData(
       'profile.json',
@@ -102,13 +102,14 @@ export async function verifyMilitaryInfo(militaryBranch) {
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(militaryBranch))).toExist()
+    const expectedBranchText = `${militaryBranch} • 1998–2000`
+    await expect(element(by.text(expectedBranchText))).toBeVisible()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
     await openProfile()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(militaryBranch))).toExist()
+    await expect(element(by.text(expectedBranchText))).toExist()
     await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
     await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
     await expect(element(by.text(militaryBranch))).toExist()
