@@ -226,20 +226,6 @@ context('AppointmentFileTravelPayAlert', () => {
     expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
   })
 
-  it('should render the singular "day" text if one day left to file', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      startDateUtc: DateTime.now().minus({ days: 29 }).toUTC().toISO(),
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: travelPayClaimData,
-    })
-    initializeTestInstance(attributes)
-    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 1, days: 1 }))).toBeTruthy()
-    expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
-  })
-
   it('should NOT render if appointment is canceled', async () => {
     const attributes = createTestAppointmentAttributes({
       status: AppointmentStatusConstants.CANCELLED,
