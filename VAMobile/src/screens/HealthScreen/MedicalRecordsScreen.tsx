@@ -12,7 +12,6 @@ import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getWaygateToggles } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from './HealthStackScreens'
 
@@ -26,16 +25,13 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
 
-  const { WG_LabsAndTestsEnabled } = getWaygateToggles()
-  const isLabsAndTestsEnabled = WG_LabsAndTestsEnabled?.enabled
-
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {isLabsAndTestsEnabled && (
+        {featureEnabled('labsAndTests') && (
           <LargeNavButton
             title={t('labsAndTests.buttonTitle')}
             onPress={() => navigateTo('LabsAndTestsList')}
