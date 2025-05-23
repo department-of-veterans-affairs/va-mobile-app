@@ -52,6 +52,7 @@ function PrescriptionHelp({}: PrescriptionHelpProps) {
           {t('prescription.help.listHeader')}
         </TextView>
         <VABulletList listOfText={medicationNoIncludedList} paragraphSpacing={true} />
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('prescription.help.footer'))}>
           {t('prescription.help.footer')}
         </TextView>

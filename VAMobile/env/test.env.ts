@@ -12,6 +12,7 @@ export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
 export const LINK_URL_MHV_VA_MEDICAL_RECORDS = 'https://www.va.gov/my-health/medical-records/'
+export const LINK_URL_MHV_VA_MEDICATIONS = 'https://www.va.gov/my-health/medications'
 export const LINK_URL_IN_APP_RECRUITMENT =
   'https://docs.google.com/forms/d/e/1FAIpQLSfRb0OtW34qKm8tGoQwwwDFs8IqwOMCLTde3DeM-ukKOEZBnA/viewform'
 export const LINK_URL_VETERAN_USABILITY_PROJECT = 'https://veteranusability.us/'
@@ -49,3 +50,5 @@ export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/tra
 export const CARRIER_TRACKING_URL_FEDEX = 'https://www.fedex.com/apps/fedextrack/?tracknumbers='
 export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking.html?AWB='
 export const DEMO_PASSWORD = ''
+export const SMHD_APPLE_STORE_LINK = 'https://apps.apple.com/us/app/share-my-health-data/id1031651418'
+export const SMHD_GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.smhd'

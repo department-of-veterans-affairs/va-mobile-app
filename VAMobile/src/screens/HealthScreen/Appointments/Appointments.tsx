@@ -11,12 +11,10 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
-import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -71,7 +69,6 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
       }
       setPage(1)
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
     }
     setSelectedTab(tab)
   }

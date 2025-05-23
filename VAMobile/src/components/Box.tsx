@@ -91,7 +91,9 @@ export type BoxProps = ViewProps & {
   height?: number | string
   /** sets the min height of this component*/
   minHeight?: number | string
-  /**alings the text of this component*/
+  /** sets the max height of this component */
+  maxHeight?: number | string
+  /** aligns the text of this component*/
   textAlign?: 'center' | 'left' | 'right'
   /** sets the background color of this component*/
   backgroundColor?: BackgroundVariant
@@ -244,6 +246,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     minWidth: typeof props.minWidth === 'number' ? `${props.minWidth}px` : props.minWidth,
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
     minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
+    maxHeight: typeof props.maxHeight === 'number' ? `${props.maxHeight}px` : props.maxHeight,
     flex: props.flex,
     'flex-direction': props.flexDirection,
     'flex-shrink': props.flexShrink,

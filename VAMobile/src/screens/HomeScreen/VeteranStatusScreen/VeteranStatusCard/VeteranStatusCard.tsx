@@ -104,6 +104,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
         justifyContent="center"
         backgroundColor={theme.colors.background.carousel as BackgroundVariant}
         borderRadiusTop={15}
+        testID="veteranStatusCardTitleTestID"
         style={titleStyle}>
         <TextView accessibilityRole="header" color="primaryContrast" variant={titleVariant}>
           {t('veteranStatus.title')}
@@ -111,6 +112,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
       </Box>
 
       <View style={VASealStyle}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <Box
           accessible={true}
           accessibilityRole="image"

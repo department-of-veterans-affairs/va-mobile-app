@@ -55,7 +55,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { data: veteranStatus, isError } = useVeteranStatus({ enabled: false })
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
-  const veteranStatusConfirmed = veteranStatus?.data.attributes.veteranStatus === 'confirmed'
+  const veteranStatusConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
   const showError = !veteranStatusConfirmed || (veteranStatusConfirmed && !serviceHistory.length)
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -92,11 +92,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </TextView>
         </Box>
         <Box>
-          <TextView
-            variant="HelperText"
-            color="primaryContrast"
-            mb={theme.dimensions.condensedMarginBetween}
-            testID="veteranStatusMilitaryServiceTestID">
+          <TextView variant="HelperText" color="primaryContrast" mb={theme.dimensions.condensedMarginBetween}>
             {t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate })}
           </TextView>
         </Box>
@@ -127,6 +123,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         })
 
         return (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             variant="MobileBody"
             color="primaryContrast"
@@ -162,6 +159,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           headerA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.title'))}
           description={t('veteranStatus.error.notTitle38.body1')}
           descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.body1'))}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView accessibilityLabel={t('veteranStatus.error.notTitle38.body2')}>
             {t('veteranStatus.error.notTitle38.body2')}
           </TextView>

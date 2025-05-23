@@ -3,6 +3,7 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { DemographicsPayload, UserDemographics } from 'api/types'
 import { get } from 'store/api'
@@ -117,6 +118,35 @@ context('PersonalInformationScreen', () => {
 
       renderWithData(undefined, demographics)
       await waitFor(() => expect(screen.getByText('Gar')).toBeTruthy())
+    })
+  })
+
+  describe('errors', () => {
+    it('displays no auth screen when user not authorized', () => {
+      renderWithData([
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            appeals: true,
+            appointments: true,
+            claims: true,
+            decisionLetters: true,
+            directDepositBenefits: true,
+            directDepositBenefitsUpdate: true,
+            disabilityRating: true,
+            lettersAndDocuments: true,
+            militaryServiceHistory: true,
+            paymentHistory: true,
+            preferredName: true,
+            prescriptions: true,
+            scheduleAppointments: true,
+            secureMessaging: true,
+            userProfileUpdate: false, // Important one here
+          },
+        },
+      ])
+
+      expect(screen.findByText(t('noAccessProfileInfo.cantAccess'))).toBeTruthy()
     })
   })
 })
