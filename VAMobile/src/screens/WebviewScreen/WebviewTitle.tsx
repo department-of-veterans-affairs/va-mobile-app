@@ -22,6 +22,7 @@ function WebviewTitle({ title }: WebviewTitleProps) {
   }
 
   return (
+    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
     <Box accessibilityLabel={title} {...titleBoxProps}>
       <Box mr={theme.dimensions.textIconMargin}>
         <Icon name={'Lock'} height={36} width={24} fill={theme.colors.text.webviewTitle} preventScaling={true} />

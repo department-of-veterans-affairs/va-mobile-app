@@ -11,12 +11,10 @@ import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
-import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -118,9 +116,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   }
 
   const onTabChange = (tab: number) => {
-    if (tab !== selectedTab) {
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
-    }
     setSelectedTab(tab)
   }
 

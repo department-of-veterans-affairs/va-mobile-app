@@ -10,7 +10,7 @@ context('PhotoAdd', () => {
   const onPressSpy = jest.fn()
 
   beforeEach(() => {
-    render(<PhotoAdd width={110} height={110} onPress={onPressSpy} />)
+    render(<PhotoAdd width={110} height={110} onPress={onPressSpy} imagesEmptyError={false} />)
   })
 
   it('renders a11yHint', () => {

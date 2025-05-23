@@ -26,10 +26,12 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
+  | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'testFeature'
@@ -49,10 +51,12 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
+  shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
   testFeature: boolean
@@ -73,11 +77,13 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
-  submitEvidenceExpansion: false,
+  submitEvidenceExpansion: true,
+  shareMyHealthDataLink: false,
   sso: true,
   testFeature: false,
   travelPaySMOC: false,
@@ -171,7 +177,6 @@ export const getFeatureToggles = (): FeatureToggleValues => {
   if (overrideRemote) {
     return devConfig
   }
-
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
     if (!key.startsWith('WG')) {

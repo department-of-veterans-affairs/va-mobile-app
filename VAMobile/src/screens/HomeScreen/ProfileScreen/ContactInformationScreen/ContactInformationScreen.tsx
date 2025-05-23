@@ -5,19 +5,24 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { TFunction } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { FormattedPhoneType, PhoneData, PhoneKey, PhoneTypeConstants } from 'api/types'
 import { UserContactInformation } from 'api/types/ContactInformation'
 import {
+  AlertWithHaptics,
   Box,
+  BoxProps,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
   LoadingComponent,
+  TextArea,
   TextLine,
   TextView,
+  VAScrollView,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -128,6 +133,12 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const {
+    data: userAuthorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchUserAuthorizedServices,
+  } = useAuthorizedServices()
+  const {
     data: contactInformation,
     isFetching: loadingContactInformation,
     error: contactInformationError,
@@ -136,7 +147,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const registerReviewEvent = useReviewEvent(true)
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
-  const { contentMarginBottom, gutter, condensedMarginBetween } = theme.dimensions
+  const { contentMarginBottom, gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const [retried, setRetried] = useState(false)
 
   useEffect(() => {
@@ -149,6 +160,12 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
     }
   }, [failureCount, contactInformationError, loadingContactInformation, retried])
+
+  useEffect(() => {
+    if (!userAuthorizedServices?.userProfileUpdate && !loadingUserAuthorizedServices) {
+      logAnalyticsEvent(Events.vama_prof_contact_noauth())
+    }
+  }, [loadingUserAuthorizedServices, userAuthorizedServices?.userProfileUpdate])
 
   const navigateTo = useRouteNavigation()
 
@@ -213,22 +230,54 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
+  const getNoAuth = () => {
+    const alertWrapperProps: BoxProps = {
+      mb: standardMarginBetween,
+    }
+    return (
+      <VAScrollView>
+        <Box mb={contentMarginBottom}>
+          <Box {...alertWrapperProps}>
+            <AlertWithHaptics variant="warning" description={t('noAccessProfileInfo.cantAccess')} />
+          </Box>
+          <Box>
+            <TextArea>
+              <TextView variant="MobileBody">{t('noAccessProfileInfo.systemProblem')}</TextView>
+            </TextArea>
+          </Box>
+        </Box>
+      </VAScrollView>
+    )
+  }
+
+  const loadingCheck = loadingContactInformation || loadingUserAuthorizedServices
+  const contactInfoErrorCheck = contactInformationInDowntime || contactInformationError
+
   return (
     <FeatureLandingTemplate
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID">
-      {loadingContactInformation ? (
+      {loadingCheck ? (
         <LoadingComponent text={t('contactInformation.loading')} />
-      ) : contactInformationInDowntime || contactInformationError ? (
+      ) : contactInfoErrorCheck ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
           onTryAgain={refetchContactInformation}
           error={contactInformationError}
         />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
+          onTryAgain={refetchUserAuthorizedServices}
+          error={getUserAuthorizedServicesError}
+        />
+      ) : !userAuthorizedServices?.userProfileUpdate ? (
+        getNoAuth()
       ) : (
         <>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
           </TextView>

@@ -60,7 +60,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
           })}
           {isSentReadTag && (
             <Box mt={7}>
-              <LabelTag text={t('secureMessaging.folders.read.tag')} labelType={LabelTagTypeConstants.tagInactive} />
+              <LabelTag text={t('secureMessaging.viewMessage.opened')} labelType={LabelTagTypeConstants.tagInactive} />
             </Box>
           )}
         </Box>

@@ -29,6 +29,11 @@ export const linking: LinkingOptions<any> = {
               ViewMessage: 'messages/:messageID',
             },
           },
+          BenefitsTab: {
+            screens: {
+              ClaimLettersScreen: 'claimLetters',
+            },
+          },
         },
       },
     },
@@ -123,6 +128,24 @@ export const linking: LinkingOptions<any> = {
                       ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
                       { name: 'ClaimsHistoryScreen' },
                     ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'claimLetters') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'BenefitsTab',
+                  state: {
+                    routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
                   },
                 },
               ],

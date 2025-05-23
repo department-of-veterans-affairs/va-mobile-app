@@ -84,6 +84,8 @@ export const CommonE2eIdConstants = {
   DISABILITY_RATING_OBFUSCATED_PERCENT_TEXT: '•••••%',
   HOME_SCREEN_SHOW_DISABILITY_BUTTON_ID: 'showDisabilityTestID',
   HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID: 'showCompensationTestID',
+  HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
+  LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
   //health
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
@@ -120,6 +122,7 @@ export const CommonE2eIdConstants = {
   //payments
   PAYMENT_HISTORY_BUTTON_ID: 'toPaymentHistoryID',
   DIRECT_DEPOSIT_BUTTON_ID: 'toDirectDepositID',
+  PAYMENT_HISTORY_SCREEN_ID: 'paymentHistoryTestID',
   //profile, settings
   PROFILE_SCROLL_ID: 'profileID',
   PERSONAL_INFO_BUTTON_ID: 'toPersonalInfoID',
@@ -770,4 +773,40 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+}
+
+/**
+ * Navigates to the developer settings and configures API endpoint overrides for testing.
+ * This allows forcing specific API responses during E2E testing.
+ *
+ * @param endpoint - The API endpoint identifier to override
+ * @param options - Configuration options
+ * @param options.otherStatus - Optional custom status to set for the endpoint override
+ *
+ *
+ * @example
+ * // Override an endpoint with a custom 500 error status
+ * await toggleOverrideApi('/v0/travel-pay/claims', \{ otherStatus: "500" \});
+ */
+export async function toggleOverrideApi(endpoint: string, { otherStatus }: { otherStatus?: string } = {}) {
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await waitFor(element(by.label('Override Api Calls')))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(100, 'down')
+  await element(by.label('Override Api Calls')).tap()
+  await waitFor(element(by.id(`otherSelector-${endpoint}`)))
+    .toBeVisible()
+    .whileElement(by.id('overrideAPITestID'))
+    .scroll(250, 'down')
+
+  if (otherStatus) {
+    await element(by.id(`otherSelector-${endpoint}`)).tap()
+    await element(by.id('overrideAPITestID')).scroll(100, 'down')
+    await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+  }
+
+  await element(by.label('Set API Errors')).tap()
 }

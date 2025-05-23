@@ -136,6 +136,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           return (
             <TouchableWithoutFeedback
               accessibilityLabel={translatedName}
+              accessibilityHint={t('navigateTo', { translatedName })}
               testID={translatedName}
               {...props}
               {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>

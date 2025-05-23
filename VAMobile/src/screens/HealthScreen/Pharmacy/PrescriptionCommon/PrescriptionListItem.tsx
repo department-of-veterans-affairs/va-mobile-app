@@ -38,6 +38,7 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
     const instructionsText = instructions || t('prescription.instructions.noneNoted')
     return (
       <Box mt={condensedMarginBetween}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant={'HelperText'} my={condensedMarginBetween} accessibilityLabel={`${instructionsText}.`}>
           {instructionsText}
         </TextView>
@@ -49,9 +50,11 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
 
   return (
     <Box>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`} accessibilityRole="header">
         {prescriptionName}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView variant={'HelperText'} color={'placeholder'} accessibilityLabel={`${rxNumberA11yLabel}.`}>
         {rxNumber}
       </TextView>
@@ -61,18 +64,21 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
         </Box>
       )}
       {renderInstructions()}
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         accessibilityLabel={`${refillDateText}.`}
         variant={'HelperText'}
         mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {refillDateText}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
         accessibilityLabel={`${t('fillDate')} ${dateA11yLabel}.`}>
         {`${t('fillDate')}: ${dateMMddyyyy}`}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}

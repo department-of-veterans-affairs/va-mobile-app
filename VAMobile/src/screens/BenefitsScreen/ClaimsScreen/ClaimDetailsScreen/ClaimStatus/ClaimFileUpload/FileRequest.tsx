@@ -131,6 +131,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
         />
       ) : (
         <Box mb={contentMarginBottom}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             variant="MobileBodyBold"
             accessibilityRole="header"

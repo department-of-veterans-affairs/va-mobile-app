@@ -63,6 +63,7 @@ function CernerAlertSM() {
           {t('cernerAlertSM.sendingAMessage')}
         </TextView>
         <VABulletList listOfText={bullets} paragraphSpacing={true} />
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('cernerAlertSM.youllNeedToGoThere'))}
@@ -75,6 +76,7 @@ function CernerAlertSM() {
         {allCernerFacilities ? (
           <></>
         ) : (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('cernerAlertSM.footer'))}>
             {t('cernerAlertSM.footer')}
           </TextView>
