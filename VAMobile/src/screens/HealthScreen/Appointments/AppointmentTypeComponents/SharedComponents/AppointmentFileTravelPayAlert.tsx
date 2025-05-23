@@ -31,11 +31,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
     <Box mb={theme.dimensions.standardMarginBetween}>
       <Alert
         variant="info"
-        description={
-          daysLeftToFile === 1
-            ? t('travelPay.fileClaimAlert.description', { count: daysLeftToFile, days: daysLeftToFile })
-            : t('travelPay.fileClaimAlert.description_plural', { count: daysLeftToFile, days: daysLeftToFile })
-        }
+        description={t('travelPay.fileClaimAlert.description', { count: daysLeftToFile, days: daysLeftToFile })}
         header={t('travelPay.fileClaimAlert.header')}
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),

@@ -183,7 +183,7 @@ context('AppointmentFileTravelPayAlert', () => {
   it('should initialize correctly', async () => {
     initializeTestInstance(inPersonVAAttributes)
     expect(screen.getByText(t('travelPay.fileClaimAlert.header'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.fileClaimAlert.description_plural', { count: 29, days: 29 }))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 29, days: 29 }))).toBeTruthy()
     expect(screen.getByText(t('travelPay.fileClaimAlert.button'))).toBeTruthy()
   })
 
@@ -222,7 +222,7 @@ context('AppointmentFileTravelPayAlert', () => {
       travelPayClaim: travelPayClaimData,
     })
     initializeTestInstance(attributes)
-    expect(screen.getByText(t('travelPay.fileClaimAlert.description_plural', { count: 0, days: 0 }))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
     expect(screen.getByTestId('appointmentFileTravelPayAlert')).toBeTruthy()
   })
 
