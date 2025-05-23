@@ -18,10 +18,7 @@ function BurdenStatement() {
       testID="burdenStatementScreenID"
       children={
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <TextView
-            testID="burdenStatementTitleID"
-            variant="MobileBodyBold"
-            accessibilityLabel={a11yLabelVA(t('privacyStatement.header'))}>
+          <TextView testID="burdenStatementTitleID" variant="MobileBodyBold">
             {t('travelPay.privacyStatement.header')}
           </TextView>
           <TextView
@@ -34,8 +31,7 @@ function BurdenStatement() {
           <TextView
             testID="burdenStatementActTitleID"
             mt={theme.dimensions.standardMarginBetween}
-            variant="MobileBodyBold"
-            accessibilityLabel={a11yLabelVA(t('travelPay.privacyAct.header'))}>
+            variant="MobileBodyBold">
             {t('travelPay.privacyAct.header')}
           </TextView>
           <TextView
