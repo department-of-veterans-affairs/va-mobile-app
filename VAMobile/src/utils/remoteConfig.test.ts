@@ -36,6 +36,7 @@ const mockOverrides = {
   submitEvidenceExpansion: true,
   sso: true,
   testFeature: false,
+  travelPaySMOC: false,
   useOldLinkComponent: false,
   whatsNewUI: false,
   veteranStatusCardRedesign: true,

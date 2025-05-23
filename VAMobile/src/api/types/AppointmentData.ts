@@ -1,3 +1,5 @@
+import { TravelPayClaimSummary } from './TravelPayClaimData'
+
 export const AppointmentTimeZoneConstants: {
   PacificHonolulu: AppointmentTimeZone
   AmericaAnchorage: AppointmentTimeZone
@@ -96,6 +98,7 @@ export type AppointmentPhone = {
 }
 
 export type AppointmentLocation = {
+  id?: string
   name: string
   address?: AppointmentAddress
   lat?: number
@@ -103,6 +106,11 @@ export type AppointmentLocation = {
   phone?: AppointmentPhone
   url?: string
   code?: string
+}
+
+export type AppointmentTravelPayClaim = {
+  metadata: { status: number; success: boolean; message: string }
+  claim?: TravelPayClaimSummary
 }
 
 export type AppointmentTimeZone =
@@ -176,6 +184,7 @@ export type AppointmentAttributes = {
   bestTimeToCall?: Array<string>
   vetextId: string
   physicalLocation?: string
+  travelPayClaim?: AppointmentTravelPayClaim
 }
 
 export type AppointmentData = {

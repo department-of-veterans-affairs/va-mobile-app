@@ -18,6 +18,7 @@ import {
   AppointmentPreferredModality,
   AppointmentProvider,
   AppointmentReasonAndComment,
+  AppointmentTravelClaimDetails,
   AppointmentTypeOfCare,
   DEPRECATED_AppointmentCalendarButton,
 } from './SharedComponents'
@@ -59,6 +60,7 @@ function PhoneAppointment({ appointmentID, attributes, subType, goBack, cancelAp
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
         <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
+        <AppointmentTravelClaimDetails attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}
           attributes={attributes}
