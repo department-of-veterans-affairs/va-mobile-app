@@ -21,11 +21,11 @@ function BurdenStatement() {
           <TextView testID="burdenStatementTitleID" variant="MobileBodyBold">
             {t('travelPay.privacyStatement.header')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             testID="burdenStatementTextID"
             mt={theme.dimensions.tinyMarginBetween}
             variant="MobileBody"
-            /*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/
             accessibilityLabel={a11yLabelVA(t('travelPay.privacyStatement.description'))}>
             {t('travelPay.privacyStatement.description')}
           </TextView>
@@ -35,11 +35,11 @@ function BurdenStatement() {
             variant="MobileBodyBold">
             {t('travelPay.privacyAct.header')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             testID="burdenStatementActTextID"
             mt={theme.dimensions.tinyMarginBetween}
             variant="MobileBody"
-            /*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/
             accessibilityLabel={a11yLabelVA(t('travelPay.privacyAct.description'))}>
             {t('travelPay.privacyAct.description')}
           </TextView>
