@@ -388,7 +388,10 @@ const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: numbe
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
   if (isEligibleForTravelPay(attributes) && daysLeftToFile >= 0) {
     return {
-      text: t('travelPay.daysToFile', { count: daysLeftToFile, days: daysLeftToFile }),
+      text:
+        daysLeftToFile === 1
+          ? t('travelPay.daysToFile', { count: daysLeftToFile, days: daysLeftToFile })
+          : t('travelPay.daysToFile_plural', { count: daysLeftToFile, days: daysLeftToFile }),
       textTag: { labelType: LabelTagTypeConstants.tagBlue },
       mb,
     }
