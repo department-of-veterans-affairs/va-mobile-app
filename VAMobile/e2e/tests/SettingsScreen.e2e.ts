@@ -89,6 +89,7 @@ describe('Settings Screen', () => {
   //   await expect(element(by.text('Learn more about the Veteran Usability Project'))).toExist()
   // })
 
+  // In app recruitment currently disabled by waygate
   // it('should tap on "go to questionnaire" in in app recruitment', async () => {
   //   await element(by.id(SettingsE2eIdConstants.IN_APP_RECRUITMENT_QUESTIONNARE_ID)).tap()
   //   await device.takeScreenshot('inAppRecruitmentQuestionnaire')
