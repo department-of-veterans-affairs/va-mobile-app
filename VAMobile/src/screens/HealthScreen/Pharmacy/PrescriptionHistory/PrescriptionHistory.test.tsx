@@ -1,14 +1,28 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import PrescriptionHistory from './PrescriptionHistory'
+
+const mockNavigationSpy = jest.fn()
+
+jest.mock('utils/remoteConfig')
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 const prescriptionData: PrescriptionsGetData = {
   data: [
@@ -245,6 +259,7 @@ const prescriptionData: PrescriptionsGetData = {
 }
 
 context('PrescriptionHistory', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = () => {
     render(<PrescriptionHistory {...mockNavProps()} />)
   }
@@ -280,6 +295,37 @@ context('PrescriptionHistory', () => {
         expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
       )
       await waitFor(() => expect(screen.getByLabelText(t('prescription.history.transferred.title'))).toBeTruthy())
+    })
+  })
+
+  describe('When nonVAMedsLink is true', () => {
+    it('should display the alert for non-VA medications', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      expect(screen.getByLabelText(a11yLabelVA(t('prescription.history.nonVAMeds.header')))).toBeTruthy()
+      expect(
+        screen.getByText(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+      ).toBeTruthy()
+      expect(
+        screen.getByLabelText(
+          a11yLabelVA(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+        ),
+      ).toBeTruthy()
+    })
+
+    it('should open a webview that navigates to va.gov when link is clicked', async () => {
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      fireEvent.press(screen.getByRole('link', { name: t('prescription.history.nonVAMeds.link.text') }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+        url: 'https://www.va.gov/my-health/medications',
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('loading.vaWebsite'),
+        useSSO: true,
+      })
     })
   })
 })

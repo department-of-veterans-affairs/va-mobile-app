@@ -414,15 +414,14 @@ describe('Messages Screen', () => {
   })
 
   it('verify a message threads', async () => {
-    await element(
-      by.id(
-        'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2024 Appointment: Preparing for your visit',
-      ),
-    ).tap()
+    await expect(element(by.text('Opened by your care team'))).toExist()
+    await element(by.text('Va Flagship Mobile Applications Interface 2_dayt29')).atIndex(0).tap()
     await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+    await expect(element(by.text('Opened by your care team'))).toExist()
     await expect(element(by.text('Melvin Freeman\nUSMC Veteran'))).toExist()
     await expect(element(by.text('See you at your appointment.  Please do not forget to fast.'))).toExist()
     await expect(element(by.text('Testing '))).toExist()
+
     await expect(
       element(
         by.text(
@@ -512,13 +511,7 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await element(by.id('Sent')).tap()
     await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
-    await expect(
-      element(
-        by.id(
-          'Va Flagship Mobile Applications Interface 2_dayt29 November 16, 2024 Appointment: Preparing for your visit',
-        ),
-      ),
-    ).toExist()
+    await expect(element(by.text('Va Flagship Mobile Applications Interface 2_dayt29')).atIndex(0)).toExist()
   })
 
   it('verify a sent messages can display attachments', async () => {
