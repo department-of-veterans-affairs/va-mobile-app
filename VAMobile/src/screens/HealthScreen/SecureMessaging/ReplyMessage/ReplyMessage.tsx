@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -77,6 +77,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const [resetErrors, setResetErrors] = useState(false)
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
+  const messageRef = useRef<TextInput>(null)
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
   const { messageID, attachmentFileToAdd, saveDraftConfirmFailed } = route.params
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
@@ -187,6 +188,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
         inputType: 'none',
         value: messageReply,
         onChange: setMessageReply,
+        inputRef: messageRef,
         labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,

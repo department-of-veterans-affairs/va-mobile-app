@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
+import { KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
 
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
@@ -101,6 +101,11 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const onBlur = (): void => {
     setIsFocused(false)
     setFocusUpdated(true)
+    // if (ref && ref.current) {
+    //   ref.current.clear()
+    // }
+    // // @ts-ignore
+    // // ref.current.blur()
   }
 
   const onFocus = () => {
@@ -163,11 +168,17 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     )
 
     const content = (
-      <Box>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => {
+          if (inputRef && inputRef.current) {
+            inputRef.current.focus()
+          }
+        }}>
         {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, helperTextKey)}
         {!!error && renderInputError(error)}
         {textInputBox}
-      </Box>
+      </Pressable>
     )
 
     return <Box>{content}</Box>

@@ -43,6 +43,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   const { displayTitle } = route.params
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
+  const routingNumRef = useRef<TextInput>(null)
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [invalidRoutingNumberError, setIsInvalidRoutingNumberError] = useState(false)
@@ -161,6 +162,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
         onChange: setRoutingNumber,
         maxLength: MAX_ROUTING_DIGITS,
         value: routingNumber,
+        inputRef: routingNumRef,
         isRequiredField: true,
         testID: 'routingNumber',
       },

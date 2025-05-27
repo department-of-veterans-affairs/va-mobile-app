@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -24,6 +25,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useDestructiveActionSheet()
+  const preferredNameRef = useRef<TextInput>(null)
 
   const getInitialState = (): string => {
     const item = demographics?.preferredName
@@ -109,6 +111,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
         labelKey: 'personalInformation.preferredNameScreen.body',
         value: preferredName,
         onChange: onSetName,
+        inputRef: preferredNameRef,
         helperTextKey: 'personalInformation.preferredName.editHelperText',
         a11yLabel: 'personalInformation.preferredNameScreen.body.a11yLabel',
         testID: 'preferredNameTestID',

@@ -91,6 +91,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const scrollViewRef = useRef<ScrollView>(null)
 
   const addressLine1Ref = useRef<TextInput>(null)
+  const addressLine2Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
@@ -494,6 +495,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         value: addressLine2,
         onChange: setAddressLine2,
         maxLength: MAX_ADDRESS_LENGTH,
+        inputRef: addressLine2Ref,
         helperTextKey: 'editAddress.streetAddress.helperText',
         testID: 'streetAddressLine2TestID',
       },

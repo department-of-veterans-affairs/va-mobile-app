@@ -310,6 +310,8 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
         cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
+        useModal: true,
+        // autoFocus: true,
       },
       (buttonIndex) => {
         if (buttonIndex || buttonIndex === 0) {
@@ -512,6 +514,7 @@ export function useShowActionSheet(): (
       textStyle: { color: currentTheme.colors.text.primary },
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      useModal: true,
       ...options,
       options: casedOptionText,
     }

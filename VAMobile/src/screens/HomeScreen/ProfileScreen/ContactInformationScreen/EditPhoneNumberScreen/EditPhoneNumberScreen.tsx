@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -39,6 +39,8 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
+  const editPhoneNumRef = useRef<TextInput>(null)
+  const editExtRef = useRef<TextInput>(null)
 
   const { data: contactInformation } = useContactInformation()
   const {
@@ -194,6 +196,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         inputType: 'phone',
         labelKey: 'editPhoneNumber.number',
         onChange: setPhoneNumberOnChange,
+        inputRef: editPhoneNumRef,
         maxLength: MAX_DIGITS_AFTER_FORMAT,
         value: phoneNumber,
         onEndEditing: onEndEditingPhoneNumber,
@@ -214,6 +217,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         inputType: 'phone',
         labelKey: 'editPhoneNumber.extension',
         onChange: setExtension,
+        inputRef: editExtRef,
         value: extension,
         testID: 'phoneNumberExtensionTestID',
       },

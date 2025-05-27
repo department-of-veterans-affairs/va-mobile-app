@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -146,6 +146,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const [resetErrors, setResetErrors] = useState(false)
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
+  const subjectRef = useRef<TextInput>(null)
+  const messageRef = useRef<TextInput>(null)
 
   const [isDiscarded, editCancelConfirmation] = useComposeCancelConfirmation()
 
@@ -412,6 +414,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           labelKey: 'secureMessaging.startNewMessage.subject',
           value: subject,
           onChange: setSubject,
+          inputRef: subjectRef,
           helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
           isRequiredField: category === CategoryTypeFields.other,
           testID: 'editDraftSubjectTestID',
@@ -448,6 +451,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         inputType: 'none',
         value: body,
         onChange: setBody,
+        inputRef: messageRef,
         labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,

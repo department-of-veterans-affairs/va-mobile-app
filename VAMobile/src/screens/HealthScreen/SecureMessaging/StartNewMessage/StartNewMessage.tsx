@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -114,6 +114,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [resetErrors, setResetErrors] = useState(false)
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
+  const subjectRef = useRef<TextInput>(null)
+  const messageRef = useRef<TextInput>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   const messageData = {
@@ -241,6 +243,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         labelKey: 'secureMessaging.startNewMessage.subject',
         value: subject,
         onChange: setSubject,
+        inputRef: subjectRef,
         helperTextKey: 'secureMessaging.startNewMessage.subject.helperText',
         isRequiredField: category === CategoryTypeFields.other,
         testID: 'startNewMessageSubjectTestID',
@@ -272,6 +275,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         inputType: 'none',
         value: message,
         onChange: setMessage,
+        inputRef: messageRef,
         labelKey: 'secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,

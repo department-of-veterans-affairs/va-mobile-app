@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -44,6 +44,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [saveDisabled, setSaveDisabled] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
+  const editEmailRef = useRef<TextInput>(null)
 
   useEffect(() => {
     if (emailSaved || emailDeleted) {
@@ -154,6 +155,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
         inputType: 'email',
         labelKey: 'contactInformation.email',
         onChange: setEmail,
+        inputRef: editEmailRef,
         value: email,
         isRequiredField: true,
         testID: 'emailAddressEditTestID',
