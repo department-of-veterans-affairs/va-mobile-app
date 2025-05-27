@@ -21,11 +21,14 @@ jobs:
         # Run this only if it was manually run or the branch contains release.
         if: ${{ github.event_name == 'workflow_dispatch' || contains(github.ref, 'release/') }}
         run: |
+          echo "Waiting for approval and timer.."
           echo "env_name=release" >> $GITHUB_OUTPUT
   indicate_start:
+    needs: get-workflow-environment
     runs-on: ubuntu-latest
     steps:
-      - name: Dump the client payload context
+      # TODO Need to work through adding comment and not searching for string and applying emoji
+      - name: Adding release approved comment
         env:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
         run: |
@@ -39,12 +42,14 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
+    needs: get-workflow-environment
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
     secrets:
       GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
   comment_complete:
+    needs: get-workflow-environment
     runs-on: ubuntu-latest
     needs: run_prs
     steps:

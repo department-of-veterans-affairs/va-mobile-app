@@ -145,3 +145,4 @@ jobs:
     name: Run release approval
     needs: [release_ticket]
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@develop
+    secrets: inherit
