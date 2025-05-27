@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+App updates include a weblink added on the Prescriptions page to view non-VA medications and general bug fixes.
