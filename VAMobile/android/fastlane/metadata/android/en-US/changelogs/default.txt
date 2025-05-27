@@ -1,1 +1,1 @@
-We updated the payment listed on the homescreen to show the latest monthly payment and includes an option to view the breakdown of that payment. We fixed a few bugs and UI issues.
+App updates include a weblink added on the Prescriptions page to view non-VA medications and general bug fixes.

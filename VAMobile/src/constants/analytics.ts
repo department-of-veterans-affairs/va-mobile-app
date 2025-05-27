@@ -688,6 +688,21 @@ export const Events = {
       },
     }
   },
+  vama_hs_scroll_banner: (): Event => {
+    return {
+      name: 'vama_hs_scroll_ab',
+    }
+  },
+  vama_hs_scroll_activity: (): Event => {
+    return {
+      name: 'vama_hs_scroll_act',
+    }
+  },
+  vama_hs_scroll_resources: (): Event => {
+    return {
+      name: 'vama_hs_scroll_var',
+    }
+  },
   vama_hs_sm_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_sm_load_time',
@@ -809,6 +824,16 @@ export const Events = {
   vama_pref_name_success: (): Event => {
     return {
       name: 'vama_pref_name_success',
+    }
+  },
+  vama_prof_person_noauth: (): Event => {
+    return {
+      name: 'vama_prof_person_noauth',
+    }
+  },
+  vama_prof_contact_noauth: (): Event => {
+    return {
+      name: 'vama_prof_contact_noauth',
     }
   },
   vama_prof_update_address: (): Event => {

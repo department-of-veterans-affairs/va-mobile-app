@@ -8,9 +8,9 @@ import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
-const fetchRemote = !__DEV__ && !IS_TEST
+const fetchRemote = !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
-const RC_CACHE_TIME = 1800 // 30 min
+const RC_CACHE_TIME = 0 // 30 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 export let overrideRemote = false
 
@@ -26,6 +26,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
@@ -49,6 +50,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
@@ -73,6 +75,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
@@ -108,6 +111,8 @@ export const activateRemoteConfig = async (): Promise<void> => {
       console.debug('Remote Config: Fetching and activating')
       await remoteConfig().fetch(RC_CACHE_TIME)
       await remoteConfig().activate()
+      const tmp = await remoteConfig().getValue('test')
+      console.log('LOOK HERE: ', tmp)
       console.debug('Remote Config: Activated config')
     }
 
