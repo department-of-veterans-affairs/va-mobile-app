@@ -129,8 +129,6 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-          # - *VA PO for awareness:* CC: <@${SLACK_rtwell}>
-          - *Release coordination:* <@${SLACK_becca}>",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
             "unfurl_media": false
@@ -154,7 +152,7 @@ jobs:
       - name: get_approver
         id: approver-id
         run: |
-          APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login' | head -n 1)
+          APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login')
           APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
           echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
           echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
