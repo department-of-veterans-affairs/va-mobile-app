@@ -5,6 +5,7 @@
 name: '[Build] Optimize Image'
 
 on:
+  pull_request:
   push:
     branches:
       - 'release/v[0-9]+.[0-9]+.[0-9]+'
