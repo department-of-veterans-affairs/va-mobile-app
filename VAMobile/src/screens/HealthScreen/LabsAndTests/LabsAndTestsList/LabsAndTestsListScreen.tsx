@@ -30,8 +30,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getDateMonthsAgo, getFormattedDate } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -63,24 +62,26 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     }
     const todaysDate = DateTime.local()
 
-    const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-    const threeMonthsEarlier = todaysDate.minus({ months: 3 }).endOf('month').endOf('day')
+    // Use the new utility function to calculate dates
+    const threeMonthsEarlier = getDateMonthsAgo(3, 'end', 'end')
+    const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
 
-    const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-    const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
+    const sixMonthsEarlier = getDateMonthsAgo(6, 'end', 'end')
+    const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
 
-    const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-    const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
+    const nineMonthsEarlier = getDateMonthsAgo(9, 'end', 'end')
+    const elevenMonthsEarlier = getDateMonthsAgo(11, 'start', 'start')
 
-    const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
-    const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
+    const twelveMonthsEarlier = getDateMonthsAgo(12, 'end', 'end')
+    const fourteenMonthsEarlier = getDateMonthsAgo(14, 'start', 'start')
+
     const options: Array<TimeFrameDropDownItem> = [
       {
         label: t('labsAndTests.list.pastThreeMonths'),
         value: t('labsAndTests.list.pastThreeMonths'),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(todaysDate),
-          date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')),
+          date2: getMMMyyyy(threeMonthsEarlier),
         }),
         dates: {
           startDate: threeMonthsEarlier.startOf('day'),
@@ -89,11 +90,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
-        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
-        value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
+        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
+        value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(fiveMonthsEarlier),
-          date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')),
+          date2: getMMMyyyy(threeMonthsEarlier),
         }),
         dates: {
           startDate: fiveMonthsEarlier,
@@ -132,7 +133,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         value: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getMMMyyyy(twelveMonthsEarlier),
-          date2: getMMMyyyy(fourteenMonthsEarlier.endOf('month').endOf('day')),
+          date2: getMMMyyyy(fourteenMonthsEarlier),
         }),
         dates: {
           startDate: fourteenMonthsEarlier.startOf('day'),

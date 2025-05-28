@@ -1,6 +1,7 @@
 import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
 
+import { getDateMonthsAgo } from '../../src/utils/formattingUtils'
 import {
   loginToDemoMode,
   openHealth,
@@ -12,17 +13,18 @@ import {
 
 const todaysDate = DateTime.local()
 
-const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-const threeMonthsEarlier = todaysDate.minus({ months: 3 }).endOf('month').endOf('day')
+// Use the utility function to calculate dates
+const threeMonthsEarlier = getDateMonthsAgo(3, 'end', 'end')
+const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
 
-const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
+const sixMonthsEarlier = getDateMonthsAgo(6, 'end', 'end')
+const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
 
-const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
+const nineMonthsEarlier = getDateMonthsAgo(9, 'end', 'end')
+const elevenMonthsEarlier = getDateMonthsAgo(11, 'start', 'start')
 
-const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
-const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).startOf('month').startOf('day')
+const twelveMonthsEarlier = getDateMonthsAgo(12, 'end', 'end')
+const fourteenMonthsEarlier = getDateMonthsAgo(14, 'start', 'start')
 
 const resetDateRangeToDefault = async () => {
   await element(by.id('labsAndTestDataRangeTestID')).tap()
