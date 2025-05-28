@@ -93,7 +93,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
   release_coordination:
     name: release coordination
@@ -119,7 +119,7 @@ jobs:
         run: |
           SLACK_MESSAGE=$(cat <<EOF
           {
-            "channel": "va-mobile-sandbox",
+            "channel": "va-mobile-app",
             "text": "*Release Ticket #:* <https://github.com/department-of-veterans-affairs/va-mobile-app/issues/${{ needs.release_ticket.outputs.ticketNumber }}|${{ needs.release_ticket.outputs.ticketNumber }}>\n\
           *Release Report:* Github Report Link to be provided\n\
           *Release Date:* ${{ needs.release_ticket.outputs.releaseDate }}\n\n\
@@ -129,6 +129,8 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
+            - *VA PO for awareness:* CC: <@${SLACK_rtwell}>
+            - *Release coordination:* <@${SLACK_becca}>",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
             "unfurl_media": false
