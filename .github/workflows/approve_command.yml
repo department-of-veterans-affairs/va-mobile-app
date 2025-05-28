@@ -6,7 +6,6 @@ on:
 
 jobs:
   indicate_start:
-    needs: get-workflow-environment
     runs-on: ubuntu-latest
     steps:
       - name: Adding release approved comment
