@@ -156,5 +156,5 @@ jobs:
           APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
           echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
           echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
-          gh issue comment ${{steps.create_issue.outputs.number}} -b "/approve ${{ needs.release_ticket.outputs.versionNumber }} 
+          gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "/approve ${{ needs.release_ticket.outputs.versionNumber }} 
           Approved by: @$APPROVER_NAME"
