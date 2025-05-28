@@ -1333,7 +1333,6 @@
   "secureMessaging.folders.messageMovedError": "Message not moved",
   "secureMessaging.folders.moveTo": "{{messageString}} to {{folderString}}",
   "secureMessaging.folders.noFolderMessages": "You don't have any messages in this folder",
-  "secureMessaging.folders.read.tag": "Read",
   "secureMessaging.folders.sent.read.a11y": "Recipient has read your message",
   "secureMessaging.formMessage.addFiles": "Add Files",
   "secureMessaging.formMessage.message": "Message",

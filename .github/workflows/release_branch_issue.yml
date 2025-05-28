@@ -1,10 +1,11 @@
 name: "[Release] New Release Issue"
 
 on:
+  push:
   create:
 jobs:
   release_ticket:
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
+    # if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
       ticketNumber: ${{steps.create_issue.outputs.number}}
@@ -144,5 +145,16 @@ jobs:
   approval:
     name: Run release approval
     needs: [release_ticket]
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/approve_command.yml@develop
     secrets: inherit
+    environment:
+      - name: release
+    steps:
+      - name: get_approver
+        id: approver-id
+        run: |
+          APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login' | head -n 1)
+          APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
+          echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
+          echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
+          gh issue comment ${{steps.create_issue.outputs.number}} -b "/approve ${{ needs.release_ticket.outputs.versionNumber }} 
+          Approved by: @$APPROVER_NAME"

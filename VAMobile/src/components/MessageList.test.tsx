@@ -74,7 +74,7 @@ context('MessageList', () => {
   })
 
   it('should render Read tag for read sent message', () => {
-    expect(screen.findByText('Read')).toBeTruthy()
+    expect(screen.findByText('Opened by your care team')).toBeTruthy()
   })
 
   it('should render the Icon components for unread item with attachment', () => {
