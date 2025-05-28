@@ -9,29 +9,14 @@ import AddressSummary, {
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 function AddressScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const navigateTo = useRouteNavigation()
 
-  useSubtaskProps({
-    leftButtonText: t('back'),
-    onLeftButtonPress: () => navigateTo('VehicleScreen'),
-    leftButtonTestID: 'leftBackTestID',
-    rightButtonText: t('help'),
-    rightButtonTestID: 'rightHelpTestID',
-    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
-    rightIconProps: {
-      name: 'Help',
-      fill: 'default',
-    },
-    primaryContentButtonText: t('yes'),
-    primaryButtonTestID: 'yesTestID',
-    onPrimaryContentButtonPress: () => navigateTo('ReviewClaimScreen'),
-    secondaryContentButtonText: t('no'),
-    onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
-  })
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'VehicleScreen', 'ReviewClaimScreen'))
 
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: undefined },

@@ -3,9 +3,13 @@ import React from 'react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { AppointmentAttributes, AppointmentTravelPayClaim, AppointmentType } from 'api/types'
-import { AppointmentTypeConstants } from 'api/types'
-import { AppointmentStatusConstants } from 'api/types'
+import {
+  AppointmentAttributes,
+  AppointmentStatusConstants,
+  AppointmentTravelPayClaim,
+  AppointmentType,
+  AppointmentTypeConstants,
+} from 'api/types'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
