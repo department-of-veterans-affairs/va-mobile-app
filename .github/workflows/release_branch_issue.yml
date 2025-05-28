@@ -93,7 +93,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-app
+      channel_name: va-mobile-sandbox
       message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
   release_coordination:
     name: release coordination
