@@ -1,6 +1,7 @@
 name: "[Release] New Release Issue"
 
 on:
+  push:
   create:
 jobs:
   release_ticket:
