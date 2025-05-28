@@ -481,7 +481,6 @@ describe('Travel Pay', () => {
   })
 
   it('shows the travel claim detials after filing the travel pay claim', async () => {
-    await element(by.id('PastApptDetailsTestID')).scrollTo('bottom')
     await waitFor(element(by.id('goToVAGovID-mock_id')))
       .toBeVisible()
       .whileElement(by.id('PastApptDetailsTestID'))
