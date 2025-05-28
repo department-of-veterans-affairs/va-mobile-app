@@ -7,11 +7,23 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
-import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
-import { AttachmentLink, Box, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
+import {
+  SecureMessagingAttachment,
+  SecureMessagingMessageAttributes,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
+import {
+  AttachmentLink,
+  Box,
+  LabelTag,
+  LabelTagTypeConstants,
+  LinkWithAnalytics,
+  LoadingComponent,
+  TextView,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import { READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { RootState } from 'store'
 import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -24,20 +36,23 @@ import { formatSubject, getLinkifiedText } from 'utils/secureMessaging'
 export type MessageCardProps = {
   /* message object */
   message: SecureMessagingMessageAttributes
+  folderId: number
 }
 
-function MessageCard({ message }: MessageCardProps) {
+function MessageCard({ message, folderId }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
   const { t: tFunction } = useTranslation()
-  const { hasAttachments, attachment, attachments, senderName, sentDate, body, subject, category } = message
+  const { hasAttachments, attachment, attachments, senderName, sentDate, body, subject, category, readReceipt } =
+    message
   const dateTime = getFormattedDateAndTimeZone(sentDate)
   const navigateTo = useRouteNavigation()
   const fileToGet = {} as SecureMessagingAttachment
   const { isFetching: attachmentFetchPending, refetch: refetchFile } = useDownloadFileAttachment(fileToGet, {
     enabled: false,
   })
+  const showReadReceipt = folderId === SecureMessagingSystemFolderIdConstants.SENT && readReceipt === READ
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const replyExpired =
     demoMode && message.messageId === 2092809
@@ -58,6 +73,11 @@ function MessageCard({ message }: MessageCardProps) {
         <TextView variant="MobileBodyBold" accessibilityRole={'header'} mt={theme.dimensions.standardMarginBetween}>
           {formatSubject(category, subject, t)}
         </TextView>
+        {showReadReceipt && (
+          <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.condensedMarginBetween}>
+            <LabelTag text={t('secureMessaging.viewMessage.opened')} labelType={LabelTagTypeConstants.tagInactive} />
+          </Box>
+        )}
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {senderName}
         </TextView>
