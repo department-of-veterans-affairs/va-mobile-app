@@ -1,7 +1,6 @@
 import { Appearance } from 'react-native'
 
 import { colors, font } from '@department-of-veterans-affairs/mobile-tokens'
-import { typography } from '@department-of-veterans-affairs/mobile-tokens/dist/types/font/typography'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
