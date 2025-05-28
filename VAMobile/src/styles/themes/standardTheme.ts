@@ -1,6 +1,7 @@
 import { Appearance } from 'react-native'
 
-import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors, font } from '@department-of-veterans-affairs/mobile-tokens'
+import { typography } from '@department-of-veterans-affairs/mobile-tokens/dist/types/font/typography'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
 import { isIOS } from 'utils/platform'
@@ -195,6 +196,27 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
+const buildFontFromMobileTokens = (
+  mtTypography: {
+    fontFamily: string
+    fontSize: number
+    lineHeight: number
+    marginBottom: number
+    letterSpacing: number
+  },
+  scheme: VAColorScheme,
+) => {
+  const styles = [
+    `color:${scheme.text.primary}`,
+    `font-family:"${mtTypography.fontFamily}"`,
+    `font-size:${mtTypography.fontSize}px`,
+    `line-height: ${mtTypography.lineHeight}px`,
+    `letter-spacing: ${mtTypography.letterSpacing}px`,
+  ]
+
+  return styles.join(';\n')
+}
+
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
@@ -261,6 +283,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.VeteranStatusCardHeaderLandscapeBold,
       scheme.text.primary,
     ),
+    // TODO: update to pull in the full mobile design token typography
+    vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
   }
 }
 

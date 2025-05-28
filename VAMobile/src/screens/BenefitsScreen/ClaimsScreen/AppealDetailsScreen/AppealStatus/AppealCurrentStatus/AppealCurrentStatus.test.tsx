@@ -267,7 +267,7 @@ context('AppealStatus', () => {
     it('should display the withdrawn data', () => {
       status.type = 'withdrawn'
       initializeTestInstance(status, 'vba', 'higherLevelReview', '', 'compensation')
-      expect(screen.getByRole('header', { name: t('appealDetails.withdrawn') })).toBeTruthy()
+      expect(screen.getByRole('header', { name: t('appealDetails.withdrawYourApproval') })).toBeTruthy()
       expect(screen.getByText(t('appealDetails.withdrawnDescription'))).toBeTruthy()
     })
   })

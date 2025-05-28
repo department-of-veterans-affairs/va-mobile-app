@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { filter, pluck } from 'underscore'
 
 import { useAppeal } from 'api/claimsAndAppeals'
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
@@ -55,12 +54,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)
-  }
-
-  const getFilteredIssues = (): Array<string> => {
-    // Only show issues with a lastAction of null, this signifies the issue is active
-    const filteredIssues = filter(issues, (issue) => issue.lastAction == null)
-    return pluck(filteredIssues, 'description')
   }
 
   const getDisplayType = (): string => {
@@ -143,7 +136,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 programArea={programArea}
               />
             )}
-            {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
+            {appeal && selectedTab === 1 && <AppealIssues issues={issues} />}
           </Box>
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <NeedHelpData appealId={appealID} />
