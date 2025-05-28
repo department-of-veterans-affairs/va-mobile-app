@@ -145,7 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: release_ticket
     env:
-      GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     environment:
       name: release
     steps:
