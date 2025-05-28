@@ -22,11 +22,11 @@ function AppealIssues({ issues }: AppealsIssuesProps) {
       denied: AppealIssue[]
       withdrawn: AppealIssue[]
     } = {
-      open: [{ description: 'open 1' }, { description: 'open 2' }],
-      remand: [{ description: 'remand 1' }, { description: 'remand 2' }],
-      granted: [{ description: 'granted 1' }, { description: 'granted 2' }],
-      denied: [{ description: 'denied 1' }, { description: 'denied 2' }],
-      withdrawn: [{ description: 'withdrawn 1' }, { description: 'withdrawn 2' }],
+      open: [],
+      remand: [],
+      granted: [],
+      denied: [],
+      withdrawn: [],
     }
 
     if (issues.length) {
