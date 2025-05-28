@@ -1,7 +1,6 @@
 name: "[Release] New Release Issue"
 
 on:
-  push:
   create:
 jobs:
   release_ticket:
@@ -146,8 +145,7 @@ jobs:
     name: Run release approval
     needs: [release_ticket]
     secrets: inherit
-    environment:
-      - name: release
+    environment: release
     steps:
       - name: get_approver
         id: approver-id
