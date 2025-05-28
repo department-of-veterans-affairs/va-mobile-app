@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AlertWithHaptics, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelVA } from 'utils/a11yLabel'
+import { a11yLabelMyVA411, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 function NoLabsAndTestsRecords() {
@@ -16,7 +16,10 @@ function NoLabsAndTestsRecords() {
         header={t('labsAndTests.noRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('labsAndTests.noRecords.alert.title'))}
         description={t('labsAndTests.noRecords.alert.text.1')}>
-        <TextView paragraphSpacing={true} variant="MobileBody">
+        <TextView
+          paragraphSpacing={true}
+          variant="MobileBody"
+          accessibilityLabel={a11yLabelMyVA411(t('labsAndTests.noRecords.alert.text.2'))}>
           {t('labsAndTests.noRecords.alert.text.2')}
         </TextView>
         <ClickToCallPhoneNumber
