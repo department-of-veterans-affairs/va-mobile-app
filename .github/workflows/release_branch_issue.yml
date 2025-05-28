@@ -146,7 +146,7 @@ jobs:
     needs: release_ticket
     secrets: inherit
     environment:
-      - name: release
+      name: release
     steps:
       - name: get_approver
         id: approver-id
