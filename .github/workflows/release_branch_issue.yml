@@ -144,8 +144,6 @@ jobs:
     name: Run release approval
     runs-on: ubuntu-latest
     needs: release_ticket
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     environment:
       name: release
     steps:
