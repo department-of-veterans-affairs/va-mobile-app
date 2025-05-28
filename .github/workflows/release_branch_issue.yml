@@ -149,6 +149,13 @@ jobs:
     environment:
       name: release
     steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v3
+      - name: "Set up GH CLI secret"
+        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
+      - name: "Log into GH CLI"
+        run: gh auth login --with-token < token.txt
+
       - name: get_approver
         id: approver-id
         run: |
