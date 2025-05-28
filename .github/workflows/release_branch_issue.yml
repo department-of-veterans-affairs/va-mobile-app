@@ -143,9 +143,10 @@ jobs:
                https://slack.com/api/chat.postMessage
   approval:
     name: Run release approval
-    needs: [release_ticket]
+    needs: release_ticket
     secrets: inherit
-    environment: release
+    environment:
+      - name: release
     steps:
       - name: get_approver
         id: approver-id
