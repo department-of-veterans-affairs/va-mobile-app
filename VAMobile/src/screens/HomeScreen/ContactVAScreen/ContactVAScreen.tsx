@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { A11y } from 'react-native-a11y-order'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -33,26 +34,36 @@ function ContactVAScreen({ navigation }: ContactVAScreenProps) {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineButton />
         <TextArea>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            variant="MobileBodyBold"
-            accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))}
-            accessibilityRole="header">
-            {t('contactVA.va411.callMy')}
-          </TextView>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            variant="MobileBody"
-            mt={standardMarginBetween}
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
-            {t('contactVA.va411.body')}
-          </TextView>
-          <ClickToCallPhoneNumber
-            displayedText={displayedTextPhoneNumber(t('8006982411'))}
-            phone={t('8006982411')}
-            a11yLabel={a11yLabelID(t('8006982411'))}
-          />
+          <A11y.Order>
+            <A11y.Index index={3}>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))}
+                accessibilityRole="header">
+                {t('contactVA.va411.callMy')}
+              </TextView>
+            </A11y.Index>
+
+            <A11y.Index index={2}>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+              <TextView
+                variant="MobileBody"
+                mt={standardMarginBetween}
+                paragraphSpacing={true}
+                accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
+                {t('contactVA.va411.body')}
+              </TextView>
+            </A11y.Index>
+
+            <A11y.Index index={1}>
+              <ClickToCallPhoneNumber
+                displayedText={displayedTextPhoneNumber(t('8006982411'))}
+                phone={t('8006982411')}
+                a11yLabel={a11yLabelID(t('8006982411'))}
+              />
+            </A11y.Index>
+          </A11y.Order>
         </TextArea>
       </Box>
     </FeatureLandingTemplate>
