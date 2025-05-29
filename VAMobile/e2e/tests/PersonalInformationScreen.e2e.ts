@@ -64,12 +64,12 @@ const checkLocatorAndContactLinks = async (scrollID?: string) => {
   await device.takeScreenshot('PersonalInformationFindVALocations')
   await device.launchApp({ newInstance: false })
 
-  await scrollToThenTap(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID, undefined, true)
+  await scrollToThenTap(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID, scrollID, true)
   await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationPhoneNumber')
   await device.launchApp({ newInstance: false })
 
-  await scrollToThenTap(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID, undefined, true)
+  await scrollToThenTap(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID, scrollID, true)
   await setTimeout(1000)
   await device.takeScreenshot('PersonalInformationTTY')
   await device.launchApp({ newInstance: false })

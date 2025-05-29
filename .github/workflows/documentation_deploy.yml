@@ -14,6 +14,8 @@ jobs:
   deploy:
     name: Deploy documentation site to GitHub Pages
     runs-on: ubuntu-latest
+    env:
+      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
