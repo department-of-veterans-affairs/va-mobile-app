@@ -67,8 +67,8 @@ context('AppealIssues', () => {
   it('should initialize', () => {
     // Currently on appeal
     expect(screen.getByRole('header', { name: t('appealDetails.currentlyOnAppeal') })).toBeTruthy()
-    // open
-    expect(screen.getByRole('header', { name: t('appealDetails.open') })).toBeTruthy()
+    // under consideration
+    expect(screen.getByRole('header', { name: t('appealDetails.underConsideration') })).toBeTruthy()
     expect(screen.getByText('Appeal is still under review')).toBeTruthy()
     // remand
     expect(screen.getByRole('header', { name: t('appealDetails.remand') })).toBeTruthy()

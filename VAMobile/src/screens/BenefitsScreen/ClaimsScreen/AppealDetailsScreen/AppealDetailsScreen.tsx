@@ -138,9 +138,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
             )}
             {appeal && selectedTab === 1 && <AppealIssues issues={issues} />}
           </Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <NeedHelpData appealId={appealID} />
-          </Box>
+          <NeedHelpData appealId={appealID} />
         </Box>
       )}
     </FeatureLandingTemplate>

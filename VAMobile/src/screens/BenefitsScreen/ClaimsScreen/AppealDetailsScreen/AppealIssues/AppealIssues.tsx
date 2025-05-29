@@ -2,27 +2,27 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AppealIssue, AppealIssueLastAction } from 'api/types'
-import { Box, TextArea, TextView, VABulletList } from 'components'
+import { Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-type AppealsIssuesProps = {
+type AppealIssuesProps = {
   issues: Array<AppealIssue>
 }
 
-function AppealIssues({ issues }: AppealsIssuesProps) {
+function AppealIssues({ issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
-      open: AppealIssue[]
+      underConsideration: AppealIssue[]
       remand: AppealIssue[]
       granted: AppealIssue[]
       denied: AppealIssue[]
       withdrawn: AppealIssue[]
     } = {
-      open: [],
+      underConsideration: [],
       remand: [],
       granted: [],
       denied: [],
@@ -57,8 +57,8 @@ function AppealIssues({ issues }: AppealsIssuesProps) {
             break
           }
           default:
-            // any issue with a lastAction of null is considered open
-            byStatus.open.push(issue)
+            // any issue with a lastAction of null is considered under consideration("open")
+            byStatus.underConsideration.push(issue)
             break
         }
       })
@@ -70,7 +70,7 @@ function AppealIssues({ issues }: AppealsIssuesProps) {
     if (!items.length) {
       return null
     }
-    const listsOfIssues = items.map((item) => item.description)
+    const listOfIssues = items.map((item) => item.description)
     return (
       <>
         <TextView
@@ -80,36 +80,39 @@ function AppealIssues({ issues }: AppealsIssuesProps) {
           {title}
         </TextView>
         <Box mt={theme.dimensions.condensedMarginBetween} ml={theme.dimensions.gutter}>
-          <VABulletList listOfText={listsOfIssues} />
+          <VABulletList listOfText={listOfIssues} />
         </Box>
       </>
     )
   }
 
-  const showCurrentlOnAppeal = issuesByStatus.open.length || issuesByStatus.remand.length
+  const showCurrentlyOnAppeal = issuesByStatus.underConsideration.length || issuesByStatus.remand.length
   const showClosed = issuesByStatus.granted.length || issuesByStatus.denied.length || issuesByStatus.withdrawn.length
+
+  const additionalBorderStyles: BoxProps = {
+    borderBottomWidth: undefined,
+    borderBottomColor: undefined,
+  }
   return (
     <>
-      {showCurrentlOnAppeal ? (
-        <TextArea>
+      {showCurrentlyOnAppeal ? (
+        <TextArea borderBoxStyle={additionalBorderStyles}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('appealDetails.currentlyOnAppeal')}
           </TextView>
-          {renderSections(issuesByStatus.open, t('appealDetails.open'))}
+          {renderSections(issuesByStatus.underConsideration, t('appealDetails.underConsideration'))}
           {renderSections(issuesByStatus.remand, t('appealDetails.remand'))}
         </TextArea>
       ) : null}
       {showClosed ? (
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('appealDetails.closed')}
-            </TextView>
-            {renderSections(issuesByStatus.granted, t('appealDetails.granted'))}
-            {renderSections(issuesByStatus.denied, t('appealDetails.denied'))}
-            {renderSections(issuesByStatus.withdrawn, t('appealDetails.withdrawnText'))}
-          </TextArea>
-        </Box>
+        <TextArea borderBoxStyle={additionalBorderStyles}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('appealDetails.closed')}
+          </TextView>
+          {renderSections(issuesByStatus.granted, t('appealDetails.granted'))}
+          {renderSections(issuesByStatus.denied, t('appealDetails.denied'))}
+          {renderSections(issuesByStatus.withdrawn, t('appealDetails.withdrawnText'))}
+        </TextArea>
       ) : null}
     </>
   )

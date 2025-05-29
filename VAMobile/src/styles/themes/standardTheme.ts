@@ -195,6 +195,12 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
+/**
+ * Function to export typography from mobile-token. Current implementation is a band-aid  for a future task to align
+ * design styling with styling the app
+ * @param mtTypography - mobile token typography
+ * @param scheme - color object to pull in the correct color for light/dark mode
+ */
 const buildFontFromMobileTokens = (
   mtTypography: {
     fontFamily: string
