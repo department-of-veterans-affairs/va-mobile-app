@@ -111,7 +111,6 @@ context('LabsAndTestsDetailsScreen', () => {
       },
     }
     const { getByTestId } = initializeTestInstance({ ...sampleData })
-    await waitFor(() => expect(getByTestId('decoded-report').children[0]).toEqual('None noted'))
     await waitFor(() => expect(getByTestId('decoded-report').props.children).toEqual('None noted'))
   })
 
