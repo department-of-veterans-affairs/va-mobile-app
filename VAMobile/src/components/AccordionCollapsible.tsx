@@ -92,8 +92,6 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   }
 
   const boxProps: BoxProps = {
-    borderBottomColor: 'primary',
-    borderBottomWidth: theme.dimensions.borderWidth,
     accessibilityRole: 'tablist',
   }
 
