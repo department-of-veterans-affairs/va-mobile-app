@@ -1,6 +1,7 @@
 import React, { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { A11y } from 'react-native-a11y-order'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
@@ -35,6 +36,8 @@ export type ChildTemplateProps = {
   /** Optional header button requiring label, icon, and onPress props */
   headerButton?: HeaderButton
   /** Optional footer content pinned below the scrollable space */
+  floatingButton?: ReactNode
+  /** Optional footer content pinned below the scrollable space */
   footerContent?: ReactNode
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
@@ -53,6 +56,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   titleA11y,
   headerButton,
   children,
+  floatingButton,
   footerContent,
   scrollViewProps,
   testID,
@@ -72,6 +76,10 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     backgroundColor: theme.colors.background.main,
     flex: 1,
   }
+
+  const a11yStyle: ViewStyle = { flex: 1 }
+
+  const floatingButtonStyle: ViewStyle = { position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1 }
 
   const headerProps: HeaderBannerProps = {
     leftButton: {
@@ -130,26 +138,35 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
 
   return (
     <View style={fillStyle}>
-      <StatusBar
-        translucent
-        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
-        backgroundColor={theme.colors.background.main}
-      />
-      <HeaderBanner {...headerProps} />
-      <VAScrollView
-        testID={testID}
-        scrollEventThrottle={1}
-        onScroll={(event) => {
-          transitionHeader(event.nativeEvent.contentOffset.y)
-        }}
-        {...scrollViewProps}>
-        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-        <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
-          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
-        </View>
-        <WaygateWrapper>{children}</WaygateWrapper>
-      </VAScrollView>
-      <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
+      <A11y.Order style={a11yStyle}>
+        <A11y.Index index={1}>
+          <StatusBar
+            translucent
+            barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+            backgroundColor={theme.colors.background.main}
+          />
+          <HeaderBanner {...headerProps} />
+        </A11y.Index>
+        <A11y.Index index={2} style={floatingButtonStyle}>
+          {floatingButton}
+        </A11y.Index>
+        <A11y.Index index={3} style={a11yStyle}>
+          <VAScrollView
+            testID={testID}
+            scrollEventThrottle={1}
+            onScroll={(event) => {
+              transitionHeader(event.nativeEvent.contentOffset.y)
+            }}
+            {...scrollViewProps}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
+              {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
+            </View>
+            <WaygateWrapper>{children}</WaygateWrapper>
+          </VAScrollView>
+          <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
+        </A11y.Index>
+      </A11y.Order>
     </View>
   )
 }

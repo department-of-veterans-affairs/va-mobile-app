@@ -546,7 +546,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.contentMarginBottom * 2} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
@@ -580,7 +580,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={getRequestRefillButton()}>
+      floatingButton={getRequestRefillButton()}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
