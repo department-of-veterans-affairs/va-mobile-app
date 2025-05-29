@@ -19,7 +19,8 @@ function NoLabsAndTestsRecords() {
         <TextView
           paragraphSpacing={true}
           variant="MobileBody"
-          accessibilityLabel={a11yLabelMyVA411(t('labsAndTests.noRecords.alert.text.2'))}>
+          accessibilityLabel={a11yLabelMyVA411(t('labsAndTests.noRecords.alert.text.2'))}
+          accessibilityHint={t('labsAndTests.noRecords.alert.text.2.hint')}>
           {t('labsAndTests.noRecords.alert.text.2')}
         </TextView>
         <ClickToCallPhoneNumber
