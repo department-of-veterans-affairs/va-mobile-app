@@ -462,11 +462,11 @@ export type ClaimEventData = {
   documentId?: string
 }
 
-export type ClaimEFolderData = {
-  data: Array<ClaimEFolderDocuments>
+export type ClaimLetterDocsData = {
+  data: Array<ClaimLetterDocuments>
 }
 
-export type ClaimEFolderDocuments = {
+export type ClaimLetterDocuments = {
   id: string
   type: string
   attributes: {

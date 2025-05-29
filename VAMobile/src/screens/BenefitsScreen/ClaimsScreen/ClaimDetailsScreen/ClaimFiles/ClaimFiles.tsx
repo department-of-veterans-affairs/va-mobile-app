@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 import _ from 'underscore'
 
-import { ClaimData, ClaimEFolderDocuments } from 'api/types'
+import { ClaimData, ClaimLetterDocuments } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -13,13 +13,13 @@ import { useTheme } from 'utils/hooks'
 
 type ClaimFilesProps = {
   claim: ClaimData
-  eFolderDocuments?: Array<ClaimEFolderDocuments>
+  claimLetterDocuments?: Array<ClaimLetterDocuments>
   setDownloadFile: React.Dispatch<React.SetStateAction<boolean>>
   setDocumentID: React.Dispatch<React.SetStateAction<string>>
   setFileName: React.Dispatch<React.SetStateAction<string>>
 }
 
-function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, setFileName }: ClaimFilesProps) {
+function ClaimFiles({ claim, claimLetterDocuments, setDownloadFile, setDocumentID, setFileName }: ClaimFilesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const isFocused = useIsFocused()
@@ -46,8 +46,8 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
           textLines: textLines,
           onPress:
             event.documentId &&
-            eFolderDocuments &&
-            eFolderDocuments.filter((doc) => doc.id === event.documentId).length > 0
+            claimLetterDocuments &&
+            claimLetterDocuments.filter((doc) => doc.id === event.documentId).length > 0
               ? () => {
                   setDocumentID(event?.documentId || '')
                   setFileName(event?.filename || '')
@@ -74,8 +74,8 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
               textLines: textLines,
               onPress:
                 document.documentId &&
-                eFolderDocuments &&
-                eFolderDocuments.filter((doc) => doc.id === document.documentId).length > 0
+                claimLetterDocuments &&
+                claimLetterDocuments.filter((doc) => doc.id === document.documentId).length > 0
                   ? () => {
                       setDocumentID(document?.documentId || '')
                       setFileName(document?.filename || '')

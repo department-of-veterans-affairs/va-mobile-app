@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useClaim, useDownloadEFolderDocument, useEFolderDocuments } from 'api/claimsAndAppeals'
+import { useClaim, useClaimLetterDocuments, useDownloadEFolderDocument } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
@@ -73,11 +73,11 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     refetch: refetchClaim,
   } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const {
-    data: eFolderDocuments,
-    isFetching: loadingEFolder,
-    error: claimEfolderError,
-    refetch: refetchEfolder,
-  } = useEFolderDocuments({ enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+    data: claimLetterDocuments,
+    isFetching: loadingClaimLetterDocs,
+    error: claimLetterDocsError,
+    refetch: refetchClaimLetterDocs,
+  } = useClaimLetterDocuments({ enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const { isFetching: downloading, refetch: refetchEFolderDocument } = useDownloadEFolderDocument(
     eFolderDocumentID,
     eFolderFileName,
@@ -90,6 +90,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const [count, setCount] = useState(-1)
 
   const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
+
+  console.log('claimLetterDocuments: ', claimLetterDocuments)
 
   useFocusEffect(
     useCallback(() => {
@@ -322,13 +324,13 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen"
       backLabelTestID="claimsDetailsBackTestID">
-      {loadingClaim || loadingEFolder || downloading ? (
+      {loadingClaim || loadingClaimLetterDocs || downloading ? (
         <LoadingComponent text={downloading ? t('claimFile.loading') : t('claimInformation.loading')} />
-      ) : claimError || claimEfolderError ? (
+      ) : claimError || claimLetterDocsError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}
-          error={claimError || claimEfolderError}
-          onTryAgain={claimError ? refetchClaim : refetchEfolder}
+          error={claimError || claimLetterDocsError}
+          onTryAgain={claimError ? refetchClaim : refetchClaimLetterDocs}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
@@ -362,7 +364,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 1 && (
               <ClaimFiles
                 claim={claim}
-                eFolderDocuments={eFolderDocuments}
+                claimLetterDocuments={claimLetterDocuments}
                 setDownloadFile={setDownloadFile}
                 setDocumentID={setEFolderDocumentID}
                 setFileName={setEFolderFileName}
