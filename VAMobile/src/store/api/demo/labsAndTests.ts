@@ -5,11 +5,6 @@ import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
 import { Params } from '..'
 import { DemoStore } from './store'
 
-function parseDate(dateString: string): Date {
-  const [month, day, year] = dateString.split('-').map(Number)
-  return new Date(year, month - 1, day)
-}
-
 function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoStore): LabsAndTestsListPayload {
   const todaysDate = DateTime.local()
   const threeMonthsEarlier = todaysDate.minus({ months: 3 }).endOf('month').endOf('day')
@@ -54,6 +49,6 @@ export type LabsAndTestsDemoStore = LabsAndTestsList
 export type LabsAndTestsDemoReturnTypes = undefined | LabsAndTestsListPayload
 
 export const getLabsAndTestsList = (store: DemoStore, params: Params, endpoint: string): LabsAndTestsListPayload => {
-  const endDate = params.endDate
-  return getTestDataDateRangeStore(endpoint, parseDate(endDate.toString()), store)
+  const endDate = new Date(params.endDate.toString())
+  return getTestDataDateRangeStore(endpoint, endDate, store)
 }
