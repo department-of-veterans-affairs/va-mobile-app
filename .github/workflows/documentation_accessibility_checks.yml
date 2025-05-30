@@ -16,12 +16,18 @@ jobs:
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
+    env:
+      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
     steps:
-      - uses: browser-actions/setup-chrome@v1
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Setup Chrome and Chromedriver
+        uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 137
           install-dependencies: true
-      - uses: actions/checkout@v4
+          install-chromedriver: true
+      - run: chrome --version
       - name: Install Axe CLI globally
         run: |
           npm install @axe-core/cli -g
@@ -37,6 +43,7 @@ jobs:
       - name: Start web server
         working-directory: VAMobile/documentation
         run: |
+          chrome --version
           yarn install --frozen-lockfile
           yarn build
           yarn start &
@@ -45,6 +52,7 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
+          chrome --version
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
 
