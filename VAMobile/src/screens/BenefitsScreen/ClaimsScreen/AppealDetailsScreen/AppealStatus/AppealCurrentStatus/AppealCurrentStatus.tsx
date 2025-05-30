@@ -162,7 +162,7 @@ const getStatusHeadingAndTitle = (
       appealStatusDisplayedData.details = [t('appealDetails.fieldGrantStatusDescription', { aojDesc })]
       break
     case AppealStatusTypesConstants.withdrawn:
-      appealStatusDisplayedData.title = t('appealDetails.withdrawYourApproval')
+      appealStatusDisplayedData.title = t('appealDetails.withdrawn')
       appealStatusDisplayedData.details = [t('appealDetails.withdrawnDescription')]
       break
     case AppealStatusTypesConstants.ftr:
