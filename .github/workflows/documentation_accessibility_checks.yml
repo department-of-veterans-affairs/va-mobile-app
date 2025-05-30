@@ -1,6 +1,9 @@
 name: "[Documentation] Accessibility Check"
 
 on:
+  push:
+    branches:
+      - 'fix/**'
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
@@ -14,6 +17,10 @@ jobs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
     steps:
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 137
+          install-dependencies: true
       - uses: actions/checkout@v4
       - name: Install Axe CLI globally
         run: |
