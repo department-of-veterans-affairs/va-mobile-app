@@ -14,6 +14,7 @@ import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
+import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import com.wix.reactnativenotifications.core.AppLaunchHelper
 import com.wix.reactnativenotifications.core.AppLifecycleFacade
@@ -57,7 +58,7 @@ class MainApplication : Application(), ReactApplication, INotificationsApplicati
         get() = getDefaultReactHost(applicationContext, reactNativeHost)
     override fun onCreate() {
         super.onCreate()
-        SoLoader.init(this, false)
+        SoLoader.init(this, OpenSourceMergedSoMapping)
         if (BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true)
         }

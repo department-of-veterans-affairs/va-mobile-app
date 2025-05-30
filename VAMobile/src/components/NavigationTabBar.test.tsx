@@ -30,7 +30,6 @@ context('NavigationTabBar', () => {
   ]
 
   const renderWithRoute = (index = 0) => {
-    jest.resetAllMocks()
     render(
       <NavigationTabBar
         state={{ index, routes } as unknown as TabNavigationState<ParamListBase>}
