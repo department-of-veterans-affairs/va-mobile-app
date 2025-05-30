@@ -474,12 +474,19 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       : {
           position: 'absolute',
           bottom: 0,
-          left: 0,
-          right: 0,
+          left: 8,
+          right: 8,
+          backgroundColor: 'black',
+          borderRadius: 4,
+          shadowColor: '#000000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.25,
+          shadowRadius: 12,
+          elevation: 5,
         }
 
     return (
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween} style={floatingButtonStyles}>
+      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} style={floatingButtonStyles}>
         <Button
           testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
@@ -556,7 +563,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.contentMarginBottom * 2} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.contentMarginBottom * 3} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
