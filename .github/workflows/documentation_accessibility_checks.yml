@@ -65,7 +65,6 @@ jobs:
           CHROMEDRIVER_TEST_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
           CHROME_TEST_VERSION: ${{ steps.setup-chrome.outputs.chrome-version }}
         run: |
-          browser-driver-manager which chrome
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
 
