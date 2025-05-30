@@ -35,11 +35,9 @@ jobs:
           echo ${{ steps.setup-chrome.outputs.chrome-version }}
           echo ${{ steps.setup-chrome.outputs.chromedriver-path }}
           echo ${{ steps.setup-chrome.outputs.chromedriver-version }}
-      # - name: Setup axe-core CLI tools
-      #   run: |
-      #     npm install @axe-core/cli -g
-      #     npm install -g browser-driver-manager
-      #     npx browser-driver-manager install chrome@137
+      - name: Setup axe-core CLI tools
+        run: |
+          npm install @axe-core/cli -g
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -61,6 +59,7 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         env:
+          AXE_CORE_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CHROME_TEST_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           CHROMEDRIVER_TEST_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
           CHROME_TEST_VERSION: ${{ steps.setup-chrome.outputs.chrome-version }}
