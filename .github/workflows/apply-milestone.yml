@@ -1,9 +1,8 @@
-name: Milestone Linker
+name: "[Admin] Milestone Linker"
 
 on:
   pull_request:
-    types: 
-      - closed # Trigger on relevant PR events
+    types: closed # Trigger on relevant PR events
     paths: # targeting only code that touches the app
       - VAMobile/src/**
 
@@ -12,51 +11,56 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
       issues: write
-
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Extract Linked Issue Number from PR Body
-        id: extract_issue
-        run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
-          LINKED_ISSUE_NUMBER=""
+      - name: Check Linked Issues
+        uses: nearform-actions/github-action-check-linked-issues@v1
+        id: check-linked-issues
 
-          if [[ "$PR_BODY" =~ ([Cc]loses|[Ff]ixes|[Rr]esolves)[[:space:]]?#([0-9]+) ]]; then
-            LINKED_ISSUE_NUMBER="${BASH_REMATCH[2]}"
-          fi
+      - name: Get those linked issues
+        run: |
+          echo "Linked Issues Count: ${{ steps.check-linked-issues.outputs.linked_issues_count }}"
+          echo "Linked Issues: ${{ steps.check-linked-issues.outputs.issues }}"
+
+      - name: Use linked issues
+        id: found_linked_issues
+        run: |
+          LINKED_ISSUE=${{ steps.check-linked-issues.outputs.issues }}
+          LINKED_ISSUE_NUMBER=$(echo "$LINKED_ISSUE" | cut -d '#' -f 2)
 
           if [[ -z "$LINKED_ISSUE_NUMBER" ]]; then
             echo "No explicit linked issue found in PR description for PR #${{ github.event.pull_request.number }}."
-            echo "linked_issue_number=" >> $GITHUB_OUTPUT
           else
             echo "Linked issue number found: #$LINKED_ISSUE_NUMBER"
             echo "linked_issue_number=$LINKED_ISSUE_NUMBER" >> $GITHUB_OUTPUT
           fi
 
       - name: Conditional Action Add Milestone to issue or PR
+        if: ${{ always() }}
         run: |
           PR_NUM="${{ github.event.pull_request.number }}"
-          LINKED_ISSUE_NUM="${{ steps.extract_issue.outputs.linked_issue_number }}"
+          LINKED_ISSUE_NUM="${{ steps.found_linked_issues.outputs.linked_issue_number }}"
+          LINKED_ISSUE_N=$(echo "$LINKED_ISSUE_NUM" | sed 's/]$//g')
           MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].number')
           MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].title')
 
-          if [[ -z "$LINKED_ISSUE_NUM" ]]; then
+          if [[ -z "$LINKED_ISSUE_N" ]]; then
             echo "PR Number $PR_NUM"
           else
-            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+            echo "Linked Issue Number: $LINKED_ISSUE_N"
           fi
 
-          if [[ -n "$LINKED_ISSUE_NUM" ]]; then
-          echo "Linked issue $LINKED_ISSUE_NUM found. Adding milestone $MILESTONE_TITLE."
-            gh issue edit $LINKED_ISSUE_NUM --milestone $MILESTONE_TITLE
+          if [[ -n "$LINKED_ISSUE_N" ]]; then
+          echo "Linked issue $LINKED_ISSUE_N found. Adding milestone $MILESTONE_TITLE."
+            gh issue edit $LINKED_ISSUE_N --milestone $MILESTONE_TITLE
           else
             echo "Setting milestone $MILESTONE_TITLE" for PR $PR_NUM
-            echo "Linked Issue Number: $LINKED_ISSUE_NUM"
+            echo "Linked Issue Number: $LINKED_ISSUE_N"
             echo "Processing PR $PR_NUM..."
              gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
           fi
