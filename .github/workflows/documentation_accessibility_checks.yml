@@ -31,10 +31,10 @@ jobs:
       - run: chrome --version
       - run: chromedriver --version
       - run: |
-          ${{ steps.setup-chrome.outputs.chrome-path }} --version
-          ${{ steps.setup-chrome.outputs.chrome-version }} --version
-          ${{ steps.setup-chrome.outputs.chromedriver-path }} --version
-          ${{ steps.setup-chrome.outputs.chromedriver-version }} --version
+          echo ${{ steps.setup-chrome.outputs.chrome-path }}
+          echo ${{ steps.setup-chrome.outputs.chrome-version }}
+          echo ${{ steps.setup-chrome.outputs.chromedriver-path }}
+          echo ${{ steps.setup-chrome.outputs.chromedriver-version }}
       - name: Install Axe CLI globally
         run: |
           npm install @axe-core/cli -g
