@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps, ScrollView, ViewStyle } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -33,6 +33,7 @@ import {
   PaginationProps,
   TextView,
 } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -468,33 +469,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getRequestRefillButton = () => {
-    const floatingButtonStyles: ViewStyle = screenReaderEnabled
-      ? {}
-      : {
-          position: 'absolute',
-          bottom: 0,
-          left: 8,
-          right: 8,
-          backgroundColor: 'black',
-          borderRadius: 4,
-          shadowColor: '#000000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.25,
-          shadowRadius: 12,
-          elevation: 5,
-        }
-
-    return (
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} style={floatingButtonStyles}>
-        <Button
-          testID="refillRequestTestID"
-          label={t('prescription.history.startRefillRequest')}
-          onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-        />
-      </Box>
-    )
-  }
+  const getRequestRefillButton = () => (
+    <FloatingButton
+      testID="refillRequestTestID"
+      label={t('prescription.history.startRefillRequest')}
+      onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+    />
+  )
 
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
