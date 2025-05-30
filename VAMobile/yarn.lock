@@ -10101,11 +10101,6 @@ react-is@^18.3.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-native-a11y-order@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/react-native-a11y-order/-/react-native-a11y-order-0.2.3.tgz#93d6344b19ee04a40b633200dc27bef0bf54538d"
-  integrity sha512-F2XgZA/wzHRHdzLr08s/JYpAn6in/pv2bZyBCSi0MvwEOBsmsfGEdau/OzdzFcELa7DGNDPKb2B0VoHIEqFg1w==
-
 react-native-blob-util@^0.21.2:
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.21.2.tgz#26dc7907b2ef68ae92882bb5e512b3b41c641acb"
