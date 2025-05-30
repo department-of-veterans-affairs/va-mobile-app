@@ -15,6 +15,8 @@ export type TextAreaProps = {
   noBorder?: boolean
   /** optional testID */
   testID?: string
+  /** optional styling for a TextArea with borders */
+  borderBoxStyle?: BoxProps
 }
 
 /**
@@ -22,7 +24,7 @@ export type TextAreaProps = {
  *
  * @returns TextView component
  */
-const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children, testID }) => {
+const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children, testID, borderBoxStyle = {} }) => {
   const theme = useTheme()
 
   const borderProps: BoxProps = noBorder
@@ -55,7 +57,7 @@ const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children, testID }) =>
   }
 
   return (
-    <Box {...boxProps} {...borderProps} testID={testID}>
+    <Box {...boxProps} {...borderProps} {...borderBoxStyle} testID={testID}>
       {children}
     </Box>
   )
