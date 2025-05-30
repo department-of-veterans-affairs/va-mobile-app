@@ -35,12 +35,13 @@ jobs:
       #     echo ${{ steps.setup-chrome.outputs.chrome-version }}
       #     echo ${{ steps.setup-chrome.outputs.chromedriver-path }}
       #     echo ${{ steps.setup-chrome.outputs.chromedriver-version }}
-      - name: Install Axe CLI globally
+      - name: Setup axe-core CLI tools
         run: |
           npm install @axe-core/cli -g
           npm install -g browser-driver-manager
-          npx browser-driver-manager install chrome
-      - uses: actions/setup-node@v4
+          npx browser-driver-manager install chrome@137
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version-file: "VAMobile/documentation/.nvmrc"
           cache: yarn
@@ -49,7 +50,7 @@ jobs:
         working-directory: VAMobile
         run: |
           yarn install --frozen-lockfile
-      - name: Start web server
+      - name: Create the build and start web server
         working-directory: VAMobile/documentation
         run: |
           yarn install --frozen-lockfile
@@ -60,6 +61,7 @@ jobs:
       - name: Check accessibility issues
         id: accessibility_check
         run: |
+          browser-driver-manager which chrome
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
 
