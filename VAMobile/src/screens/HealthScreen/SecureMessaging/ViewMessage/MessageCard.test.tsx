@@ -1,9 +1,16 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
+import {
+  CategoryTypeFields,
+  SecureMessagingAttachment,
+  SecureMessagingMessageAttributes,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
+import { READ } from 'constants/secureMessaging'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 
@@ -37,23 +44,29 @@ const messageAttributes: SecureMessagingMessageAttributes = {
   senderName: 'John Smith',
   recipientId: 2,
   recipientName: 'Jane Smith',
+  readReceipt: READ,
 }
 
 context('MessageCard', () => {
-  beforeEach(() => {
-    render(<MessageCard message={messageAttributes} />)
-  })
-
   it('renders MessageCard correctly', () => {
+    render(<MessageCard message={messageAttributes} folderId={SecureMessagingSystemFolderIdConstants.INBOX} />)
     expect(screen.getByText('Education: Test Message Subject')).toBeTruthy()
     expect(screen.getByText('John Smith')).toBeTruthy()
     expect(screen.getByText(getFormattedDateAndTimeZone(mockDateISO!))).toBeTruthy()
     expect(screen.getByText('Test Message Body')).toBeTruthy()
-    expect(screen.getByLabelText('Only use messages for non-urgent needs')).toBeTruthy()
+    expect(screen.getByLabelText(t('secureMessaging.replyHelp.onlyUseMessages'))).toBeTruthy()
+    expect(screen.queryByText(t('secureMessaging.viewMessage.opened'))).toBeFalsy()
   })
 
   it('clicking on Only use messages for non-urgent needs should open largePanel', () => {
+    render(<MessageCard message={messageAttributes} folderId={SecureMessagingSystemFolderIdConstants.INBOX} />)
     fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs'))
+    expect(mockNavigationSpy).toHaveBeenCalled()
+  })
+
+  it('renders read receipt when READ and in sent folder', () => {
+    render(<MessageCard message={messageAttributes} folderId={SecureMessagingSystemFolderIdConstants.SENT} />)
+    expect(screen.getByText(t('secureMessaging.viewMessage.opened'))).toBeTruthy()
     expect(mockNavigationSpy).toHaveBeenCalled()
   })
 })
