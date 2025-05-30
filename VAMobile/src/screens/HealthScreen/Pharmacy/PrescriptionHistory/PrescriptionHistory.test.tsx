@@ -248,6 +248,7 @@ const prescriptionData: PrescriptionsGetData = {
       unknown: 0,
       total: 1,
     },
+    hasNonVaMeds: true,
   },
   links: {
     self: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
