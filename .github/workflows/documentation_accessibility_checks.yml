@@ -21,23 +21,25 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Setup Chrome and Chromedriver
-        id: setup-chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: 137
-          install-dependencies: true
-          install-chromedriver: true
-      - run: chrome --version
-      - run: chromedriver --version
-      - run: |
-          echo ${{ steps.setup-chrome.outputs.chrome-path }}
-          echo ${{ steps.setup-chrome.outputs.chrome-version }}
-          echo ${{ steps.setup-chrome.outputs.chromedriver-path }}
-          echo ${{ steps.setup-chrome.outputs.chromedriver-version }}
+      # - name: Setup Chrome and Chromedriver
+      #   id: setup-chrome
+      #   uses: browser-actions/setup-chrome@v1
+      #   with:
+      #     chrome-version: 137
+      #     install-dependencies: true
+      #     install-chromedriver: true
+      # - run: chrome --version
+      # - run: chromedriver --version
+      # - run: |
+      #     echo ${{ steps.setup-chrome.outputs.chrome-path }}
+      #     echo ${{ steps.setup-chrome.outputs.chrome-version }}
+      #     echo ${{ steps.setup-chrome.outputs.chromedriver-path }}
+      #     echo ${{ steps.setup-chrome.outputs.chromedriver-version }}
       - name: Install Axe CLI globally
         run: |
           npm install @axe-core/cli -g
+          npm install -g browser-driver-manager
+          npx browser-driver-manager install chrome
       - uses: actions/setup-node@v4
         with:
           node-version-file: "VAMobile/documentation/.nvmrc"
