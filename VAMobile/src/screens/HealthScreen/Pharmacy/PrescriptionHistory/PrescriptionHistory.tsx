@@ -603,6 +603,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
+          <Box position="absolute" bottom={0}>
+            <Button onPress={() => {}} label="Test screenreader order" />
+          </Box>
           {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
           {getContent()}
