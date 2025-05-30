@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable, PressableProps, ScrollView } from 'react-native'
+import { Pressable, PressableProps, ScrollView, ViewStyle } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -469,8 +469,17 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }
 
   const getRequestRefillButton = () => {
+    const floatingButtonStyles: ViewStyle = screenReaderEnabled
+      ? {}
+      : {
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }
+
     return (
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
+      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween} style={floatingButtonStyles}>
         <Button
           testID="refillRequestTestID"
           label={t('prescription.history.startRefillRequest')}
@@ -604,9 +613,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
-          {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
+          {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}
