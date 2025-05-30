@@ -22,12 +22,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Setup Chrome and Chromedriver
+        id: setup-chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: 137
           install-dependencies: true
           install-chromedriver: true
       - run: chrome --version
+      - run: chromedriver --version
+      - run: |
+          ${{ steps.setup-chrome.outputs.chrome-path }} --version
+          ${{ steps.setup-chrome.outputs.chrome-version }} --version
+          ${{ steps.setup-chrome.outputs.chromedriver-path }} --version
+          ${{ steps.setup-chrome.outputs.chromedriver-version }} --version
       - name: Install Axe CLI globally
         run: |
           npm install @axe-core/cli -g
