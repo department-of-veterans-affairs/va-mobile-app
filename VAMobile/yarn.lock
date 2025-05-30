@@ -7983,10 +7983,10 @@ jest-haste-map@^29.7.0:
   optionalDependencies:
     fsevents "^2.3.2"
 
-jest-image-snapshot@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/jest-image-snapshot/-/jest-image-snapshot-6.5.0.tgz#4a200802cf52e53686e3d5e83138a6f2b6119a39"
-  integrity sha512-oTMGQEpvW3Q3+BwlULINBJRpvsVDXAILqjniCuiUT7us4f1YDQF99fPrMVy4yIQui1ZIHe7fjqRsErfK6tUlSQ==
+jest-image-snapshot@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/jest-image-snapshot/-/jest-image-snapshot-6.5.1.tgz#cc714aff86187ecf38f90c506b443769aff87499"
+  integrity sha512-xlJFufgfY2Z4DsRsjcnTwxuynvo1bKdhf4OfcEftNuUAK+BwSCUtPmwlBGJhQ0XJXfm9JMAi/4BhQiHbaV8HrA==
   dependencies:
     chalk "^4.0.0"
     get-stdin "^5.0.1"
@@ -10596,10 +10596,10 @@ react-native-keyboard-manager@^6.5.11-2:
   resolved "https://registry.yarnpkg.com/react-native-keyboard-manager/-/react-native-keyboard-manager-6.5.11-2.tgz#3d8cc8abb70ff4afe330dc83318dcbd30724fc18"
   integrity sha512-YpU7Ek7CZZbT06x8X6G/wwUjL915AOwWho/vxxlj7Dm3CljzmSHAJu4TwR7oCTihoD82W+fA1mUmozmYJYrDGg==
 
-react-native-keychain@^9.2.0:
-  version "9.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-9.2.1.tgz#64967dfd39497fa5392740cf0126d4afad1e9574"
-  integrity sha512-8tABv6o/XyicIBzpbfhknhPvx4PlctANUopN/UR09yq/onpIKAH5AhUGrMXw7/cXOnMuorxqBGjUtsQFDCdWJg==
+react-native-keychain@^9.2.3:
+  version "9.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-9.2.3.tgz#d21d88a39847c8910fe1e18f8280a4a32a24a6bc"
+  integrity sha512-dbn50fk4HLr4JQ71X3j6ZSTbKv+G9s85Zv9cE2na7k7KGn1j+wxjqGTE3wG+WKB3nNEylgu/KXR99mtsC/hpRQ==
 
 react-native-localize@^3.3.0:
   version "3.3.0"

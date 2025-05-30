@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node utils/fetchGitHubData.js",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
@@ -30,6 +31,7 @@
     "file-loader": "^6.2.0",
     "mdx-mermaid": "^2.0.0",
     "mermaid": "^10.9.3",
+    "node-fetch": "2",
     "prism-react-renderer": "^2.4.1",
     "raw-loader": "^4.0.2",
     "react": "^19.0.0",

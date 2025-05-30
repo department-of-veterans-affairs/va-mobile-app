@@ -77,9 +77,11 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   })
 
   useEffect(() => {
-    if (showError) {
-      logAnalyticsEvent(Events.vama_vsc_error_shown(veteranStatus?.data?.attributes?.notConfirmedReason))
-    }
+    if (!showError) return
+
+    const notConfirmedReason = veteranStatus?.data?.attributes?.notConfirmedReason
+    const message = notConfirmedReason ?? 'MISSING_SERVICE_HISTORY'
+    logAnalyticsEvent(Events.vama_vsc_error_shown(message))
   }, [showError, veteranStatus])
 
   const getPeriodOfService: React.ReactNode = map(serviceHistory, (service: ServiceData) => {

@@ -182,3 +182,7 @@ buck-out/
 /VAMobile/artifacts
 /VAMobile/e2e/tests/__image_snapshots__
 /VAMobile/e2e/test_reports
+
+# Documentation
+/VAMobile/documentation/.env
+/VAMobile/documentation/static/data/github-milestones.json
