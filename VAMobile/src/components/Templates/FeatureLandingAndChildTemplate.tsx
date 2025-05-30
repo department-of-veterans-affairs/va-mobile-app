@@ -35,8 +35,6 @@ export type ChildTemplateProps = {
   /** Optional header button requiring label, icon, and onPress props */
   headerButton?: HeaderButton
   /** Optional footer content pinned below the scrollable space */
-  floatingButton?: ReactNode
-  /** Optional footer content pinned below the scrollable space */
   footerContent?: ReactNode
   /** Optional ScrollView props to pass through to VAScrollView if desired */
   scrollViewProps?: VAScrollViewProps
@@ -55,7 +53,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   titleA11y,
   headerButton,
   children,
-  floatingButton,
   footerContent,
   scrollViewProps,
   testID,
