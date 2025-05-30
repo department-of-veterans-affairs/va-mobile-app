@@ -289,10 +289,32 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
 }
 
 /**
+ * Returns a DateTime object representing a date n months ago from the current date
+ * The returned DateTime will be set to the beginning or end of the month based on the 'position' parameter
+ *
+ * @param monthsAgo - number of months to go back from current date
+ * @param position - 'start' to get the first day of the month, 'end' to get the last day of the month
+ * @param timePosition - 'start' to set time to beginning of the day, 'end' to set time to end of the day
+ *
+ * @returns DateTime object representing the date n months ago with specified position
+ */
+export const getDateMonthsAgo = (
+  monthsAgo: number,
+  position: 'start' | 'end' = 'start',
+  timePosition: 'start' | 'end' = 'start',
+): DateTime => {
+  const todaysDate = DateTime.local()
+  const dateMonthsAgo = todaysDate.minus({ months: monthsAgo })
+
+  const positionedDate = position === 'start' ? dateMonthsAgo.startOf('month') : dateMonthsAgo.endOf('month')
+
+  return timePosition === 'start' ? positionedDate.startOf('day') : positionedDate.endOf('day')
+}
+
+/**
  * Converts 1234567890 to 123-456-7890
  * @param phoneNumber - string that has the phone number
  */
-
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
   return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }

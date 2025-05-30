@@ -10,3 +10,13 @@
 export const a11yLabelVA = (phrase: string): string => {
   return phrase.replace(/VA\.gov\./gi, 'VA.gov .').replace(/VA/g, ' V-A ')
 }
+
+/**
+ * Finds MyVA411 in a phrase and converts it into My V-A 4 1 1.
+ * @param phrase - string that includes 'MyVA411' in its content
+ *
+ * ex. 'call our MyVA411 main information line' into 'call our My V-A 4 1 1 main information line'
+ */
+export const a11yLabelMyVA411 = (phrase: string): string => {
+  return phrase.replace(/MyVA411/gi, 'My V-A 4 1 1')
+}
