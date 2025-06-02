@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { AppointmentAttributes } from 'api/types'
-import { AlertWithHaptics, Box, BoxProps, LinkWithAnalytics, TextView } from 'components'
+import { AlertWithHaptics, Box, BoxProps, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
@@ -152,7 +152,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
       }
       return (
         <Box testID="travelClaimDetails">
-          {spacer(theme)}
+          <TextAreaSpacer />
           <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
             {t('travelPay.travelClaimFiledDetails.header')}
           </TextView>
