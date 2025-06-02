@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { AppointmentAttributes } from 'api/types'
-import { AlertWithHaptics, Box, BoxProps, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
@@ -29,20 +28,6 @@ const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 type TravelClaimFiledDetailsProps = {
   attributes: AppointmentAttributes
   subType: AppointmentDetailsSubType
-}
-
-const spacer = (theme: VATheme) => {
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    height: theme.dimensions.standardMarginBetween,
-    backgroundColor: 'main',
-    mx: -theme.dimensions.gutter,
-  }
-  return <Box {...boxProps} />
 }
 
 function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
