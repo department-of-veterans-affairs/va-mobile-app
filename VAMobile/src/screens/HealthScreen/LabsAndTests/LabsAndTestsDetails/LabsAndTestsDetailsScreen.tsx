@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { atob } from 'react-native-quick-base64'
 
@@ -23,7 +23,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
-import { Observation } from '../../../../api/types/LabsAndTestsData'
+import { Observation } from '../../../../api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
@@ -42,8 +42,18 @@ type LabDisplayData = {
 function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScreenProps) {
   const dispatch = useAppDispatch()
   const { labOrTest } = route.params
+  const [detailsLoading, setDetailsLoading] = useState(true)
 
-  const detailsLoading = false
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const { standardMarginBetween, condensedMarginBetween, tinyMarginBetween } = theme.dimensions
+  const placeHolder = t('noneNoted')
+
+  useEffect(() => {
+    if (labOrTest?.attributes) {
+      setDetailsLoading(false)
+    }
+  }, [labOrTest])
 
   // analytics
   useEffect(() => {
@@ -53,12 +63,6 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       }),
     )
   }, [dispatch, labOrTest])
-
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  const { standardMarginBetween, condensedMarginBetween, tinyMarginBetween } = theme.dimensions
-
-  const placeHolder = t('noneNoted')
 
   if (!labOrTest) {
     return <></>
@@ -74,11 +78,13 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
     orderedBy: labOrTest.attributes?.orderedBy || placeHolder,
   }
 
+  // Extract the property names from the LabDisplayData object as typed keys.
+  // These keys are later used in the JSX to dynamically render each field
+  // with consistent formatting and proper i18n labels via the t() function.
   const keys = Object.keys(data) as (keyof LabDisplayData)[]
+
   const displayName = labOrTest.attributes?.display
-
   const decodedReport = labOrTest.attributes?.encodedData ? atob(labOrTest.attributes?.encodedData) : placeHolder
-
   const observationsPresent = (labOrTest.attributes?.observations?.length ?? 0) > 0
 
   // string, marginBottom, marginTop, variant
@@ -141,7 +147,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
     return listItems
   }
 
-  // Setting this testId also sets the ally label for the list item
+  // Setting this testId also sets the a11y label for the list item
   const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
     return textLines.map((line) => line.text).join(' ')
   }

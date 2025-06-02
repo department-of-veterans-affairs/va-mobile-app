@@ -1,6 +1,5 @@
 export type LabsAndTestsListPayload = {
   data: Array<LabsAndTests>
-
   meta: {
     dataFromStore: boolean
   }
