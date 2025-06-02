@@ -3,15 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS, LINK_URL_VA_FORM_10_3542 } = getEnv()
 
 function FileOnlineComponent() {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
   return (
@@ -25,10 +28,19 @@ function FileOnlineComponent() {
         </TextView>
         <Box my={theme.dimensions.condensedMarginBetween}>
           <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS}
+            type="custom"
             text={t('travelPay.otherWaysToFile.method1.link')}
             testID="fileOnlineBTSSSLink"
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS))
+              navigateTo('Webview', {
+                url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+                displayTitle: t('travelPay.webview.fileForTravelPay.title'),
+                loadingMessage: t('loading.vaWebsite'),
+                useSSO: true,
+                backButtonTestID: `webviewBack`,
+              })
+            }}
           />
         </Box>
         <TextView testID="fileOnlineComponentMethod2ID" variant="MobileBody">
