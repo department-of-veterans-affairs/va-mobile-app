@@ -54,6 +54,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     enabled: screenContentAllowed('WG_Appointments'),
   })
   // Resets scroll position to top whenever current page appointment list changes:
+  // comment here
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,
   // since the appointment list sizes differ depending on content
