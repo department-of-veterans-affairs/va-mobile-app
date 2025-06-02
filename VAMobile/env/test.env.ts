@@ -38,7 +38,7 @@ export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/ap
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
 export const LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS =
-  'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-health'
+  'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt'
 export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
   'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#eligibility-for-general-health'
 export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
