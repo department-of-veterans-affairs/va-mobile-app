@@ -17,8 +17,8 @@ const FloatingButton: FC<ButtonProps> = (props: ButtonProps) => {
   const floatingButtonStyle: ViewStyle = {
     position: 'absolute',
     bottom: 0,
-    left: 8,
-    right: 8,
+    left: 0,
+    right: 0,
     backgroundColor: colors.vadsColorBlack,
     borderRadius: 4,
     shadowColor: colors.vadsColorBlack,
