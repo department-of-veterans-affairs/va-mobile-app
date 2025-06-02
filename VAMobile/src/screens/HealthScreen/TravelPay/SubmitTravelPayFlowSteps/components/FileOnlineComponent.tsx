@@ -38,7 +38,6 @@ function FileOnlineComponent() {
                 displayTitle: t('travelPay.webview.fileForTravelPay.title'),
                 loadingMessage: t('loading.vaWebsite'),
                 useSSO: true,
-                backButtonTestID: `webviewBack`,
               })
             }}
           />
