@@ -32,12 +32,13 @@ graph LR
         Awards([Awards])
         PaymentHistory([Payment History])
 
-        DEPRECATED
+        DEPRECATED(DEPRECATED)
 
         DecisionLetters([Decision Letters])
         Efolder([Efolder])
 
-        Profile["Profile:
+        Users([Users])
+        Profile("Profile:
             Addresses
             Demographics
             Emails
@@ -45,7 +46,7 @@ graph LR
             MilitaryInformation
             Phones
             PreferredNames
-        "]
+        ")
 
         Appointments([Appointments])
         Clinics([Clinics/Facilities])
@@ -76,7 +77,6 @@ graph LR
         Pensions([Pensions])
         PushNotifications([Push Notifications])
 
-        Users
     end
     
     subgraph Upstream[Upstream Services]
@@ -95,7 +95,6 @@ graph LR
         ArcGIS([ArcGIS])
         CDW([CDW])
         DEERS([DEERS])
-        VAProfile([VAProfile])
         VAOS([VAOS])
         VistA([VistA])
         VEText([VEText])
@@ -106,15 +105,16 @@ graph LR
         DSLogon([DSLogon])
         IDME([ID.ME])
         Logingov([Logingov])
-        TooManyToList([Too Many To List])
+        VAProfile([VAProfile])
         MPI([MPI])
+        TooManyToList([Too Many To List])
         EVSS([EVSS])
         subgraph MHV
             RX(["RX (Prescriptions)"])
             SM(["SM (Secure Messaging)"])
         end
-        BID([BID])
         CHIP([CHIP])
+        BID([BID])
         DMC(["Debts Management Center (DMC)"])
         EOAS([EOAS/Preneeds])
         PPMS([PPMS])
@@ -123,14 +123,16 @@ graph LR
         APNsGCM([APNs/GCM])
         AWS([AWS])
     end
+
+    classDef dashedBorder stroke-dasharray: 5 5, stroke-width: 2px
+    class DEPRECATED,Lighthouse dashedBorder
     
     Appeals --> Caseflow
     Caseflow --> VACOLS
 
-
-
     %% VaccineRecords --> CDC
     %% VaccineRecords --> Lighthouse
+
     Claims --> LHBenefitsClaims
     DisabilityRating --> LHVetService
     Dependents --> LHBenefitsIntake
@@ -143,11 +145,10 @@ graph LR
     Locations --> LHVetHealth
     Observations --> LHVetHealth
 
-
     Lighthouse ---> DEERS
-    Lighthouse ---> VBMS
     Lighthouse --> ArcGIS
     Lighthouse --> CDW
+    Lighthouse ---> VBMS
     Lighthouse --> BGS
 
     Dependents --> VBMS
@@ -156,8 +157,7 @@ graph LR
     PaymentHistory --> BGS
     BGS --> CorpDB
 
-
-    DEPRECATED --> EVSS
+    DEPRECATED -.-> EVSS
     EVSS --> BGS
     EVSS --> DEERS
     EVSS --> VBMS
@@ -167,6 +167,8 @@ graph LR
     Efolder --> VBMS
     VBMS --> CorpDB
     VBMS --> MPI
+
+    Users --> MPI
     
     Profile --> VAProfile
     VAProfile --> TooManyToList
@@ -194,12 +196,10 @@ graph LR
     Messages --> SM
     Threads --> SM
     TriageTeams --> SM
-    
     MHV --> MPI
 
     Cemeteries --> EOAS
     PreneedsBurials --> EOAS
-
 
     Debts --> DMC
     FinancialStatusReports --> DMC
@@ -209,9 +209,10 @@ graph LR
     Checkin --> CHIP
     Pensions --> BID
     
-    PushNotifications --> VEText
+    PushNotifications ---> VEText
     VEText --> APNsGCM
     VEText --> AWS
+
 ```
 Image: Diagram mapping all the upstream services used by the VA Mobile API
 
