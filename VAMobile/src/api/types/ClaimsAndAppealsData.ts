@@ -337,6 +337,39 @@ type AppealAlertTypes =
   | 'scheduled_dro_hearing'
   | 'dro_hearing_no_show'
 
+export type AppealIssueLastActionTypes =
+  | 'field_grant'
+  | 'withdrawn'
+  | 'allowed'
+  | 'denied'
+  | 'remand'
+  | 'cavc_remand'
+  | null
+
+export const AppealIssueLastAction: {
+  fieldGrant: AppealIssueLastActionTypes
+  withdrawn: AppealIssueLastActionTypes
+  allowed: AppealIssueLastActionTypes
+  denied: AppealIssueLastActionTypes
+  remand: AppealIssueLastActionTypes
+  cavcRemand: AppealIssueLastActionTypes
+} = {
+  fieldGrant: 'field_grant',
+  withdrawn: 'withdrawn',
+  allowed: 'allowed',
+  denied: 'denied',
+  remand: 'remand',
+  cavcRemand: 'cavc_remand',
+}
+
+export type AppealIssue = {
+  active: boolean
+  description: string
+  diagnosticCode: string | null
+  lastAction: AppealIssueLastActionTypes
+  date: string | null
+}
+
 export type AppealAttributesData = {
   appealsIds?: Array<string>
   active: boolean
@@ -354,13 +387,7 @@ export type AppealAttributesData = {
     data: string
   }>
   incompleteHistory: boolean
-  issues: Array<{
-    active: boolean
-    description: string
-    diagnosticCode: string | null
-    lastAction: 'field_grant' | 'withdrawn' | 'allowed' | 'denied' | 'remand' | 'cavc_remand' | null
-    date: string | null
-  }>
+  issues: Array<AppealIssue>
   location: 'aoj' | 'bva'
   programArea: AppealProgramAreaTypes
   status: AppealStatusData
