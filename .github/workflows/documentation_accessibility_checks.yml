@@ -21,20 +21,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      # - name: Setup Chrome and Chromedriver
-      #   id: setup-chrome
-      #   uses: browser-actions/setup-chrome@v1
-      #   with:
-      #     chrome-version: 137
-      #     install-dependencies: true
-      #     install-chromedriver: true
       - name: Setup axe-core CLI tools
         run: |
           npm install @axe-core/cli -g
-      #     npm install -g browser-driver-manager
-      #     npx browser-driver-manager install chrome@137
-      # - run: browser-driver-manager version chrome
-      # - run: browser-driver-manager which chrome
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -55,8 +44,6 @@ jobs:
           sleep 10
       - name: Check accessibility issues
         id: accessibility_check
-        # env:
-        #  AXE_CORE_CHROME_PATH: '/home/runner/.browser-driver-manager/chrome/linux-137.0.7151.68/chrome-linux64/chrome'
         run: |
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
