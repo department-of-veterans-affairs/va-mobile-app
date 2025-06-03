@@ -53,7 +53,7 @@ jobs:
           sleep 10
       - name: Check accessibility issues
         id: accessibility_check
-        env:
+        # env:
           # AXE_CORE_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           # Path to the downloaded sitemap file
