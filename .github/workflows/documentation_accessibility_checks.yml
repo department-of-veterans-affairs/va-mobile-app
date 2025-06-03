@@ -55,8 +55,8 @@ jobs:
           sleep 10
       - name: Check accessibility issues
         id: accessibility_check
-        # env:
-          # AXE_CORE_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        env:
+          AXE_CORE_CHROME_PATH: '/home/runner/.browser-driver-manager/chrome/linux-137.0.7151.68/chrome-linux64/chrome'
         run: |
           # Path to the downloaded sitemap file
           sitemap_path="VAMobile/documentation/build/sitemap.xml"
