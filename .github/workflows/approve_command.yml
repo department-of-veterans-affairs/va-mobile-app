@@ -1,8 +1,8 @@
-name: '[Release] Approve Slash Command'
+name: "[Release] Approve Slash Command"
 
 on:
   repository_dispatch:
-    types: [ approve-command ]
+    types: [approve-command]
 
 jobs:
   indicate_start:
@@ -14,7 +14,7 @@ jobs:
         run: |
           echo "$PAYLOAD_CONTEXT"
           echo ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      - name: 'Add reaction to approve command'
+      - name: "Add reaction to approve command"
         uses: peter-evans/create-or-update-comment@v1
         with:
           token: ${{ secrets.GH_ACTIONS_PAT }}
@@ -29,22 +29,21 @@ jobs:
     secrets:
       GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
   comment_complete:
-    needs: get-workflow-environment
+    needs: [get-workflow-environment, runs_prs]
     runs-on: ubuntu-latest
-    needs: run_prs
     steps:
-      - name: 'Checkout repo'
+      - name: "Checkout repo"
         uses: actions/checkout@v3
-      - name: 'Set up GH CLI secret'
+      - name: "Set up GH CLI secret"
         run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - name: 'Log into GH CLI'
+      - name: "Log into GH CLI"
         run: gh auth login --with-token < token.txt
-      - name: 'Comment on original issue with PR info'
+      - name: "Comment on original issue with PR info"
         run: |
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
           [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
           Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
-      - name: 'Close original issue'
+      - name: "Close original issue"
         run: |
           gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
@@ -56,4 +55,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+      message: "The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."

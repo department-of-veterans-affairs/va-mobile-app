@@ -15,6 +15,9 @@ on:
     paths:
       - "VAMobile/src/**"
       - "VAMobile/package.json"
+      - ".github/workflows/e2e_android.yml"
+      - ".github/workflows/e2e_ios.yml"
+      - ".github/workflows/e2e_detox_mapping.yml"
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -141,7 +144,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-xlarge
+    runs-on: macos-latest-large
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
