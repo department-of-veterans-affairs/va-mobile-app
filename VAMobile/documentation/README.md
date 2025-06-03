@@ -2,6 +2,8 @@
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
+NOTE: The following commands must be ran at the documentation root (`VAMobile/documentation`) in order to properly launch the dev server/docs
+
 ### Installation
 
 ```
