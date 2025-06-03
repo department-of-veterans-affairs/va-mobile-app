@@ -3,5 +3,5 @@ export const claimsAndAppealsKeys = {
   claim: ['claim'] as const,
   claimsAndAppeals: ['claimsAndAppeals'] as const,
   claimLetterDocs: ['claimLetterDocs'] as const,
-  eFolderDownloadDoc: ['EFolderDownloadDoc'] as const,
+  claimLetterDownloadDoc: ['claimLetterDownloadDoc'] as const,
 }

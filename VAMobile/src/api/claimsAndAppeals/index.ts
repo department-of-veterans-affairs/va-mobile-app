@@ -1,4 +1,4 @@
-export * from './downloadEFolderDocument'
+export * from './downloadClaimLetterDocument'
 export * from './getAppeal'
 export * from './getClaim'
 export * from './getClaimsAndAppeals'

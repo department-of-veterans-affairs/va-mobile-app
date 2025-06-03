@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useClaim, useClaimLetterDocuments, useDownloadEFolderDocument } from 'api/claimsAndAppeals'
+import { useClaim, useClaimLetterDocuments, useDownloadClaimLetterDocument } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
@@ -59,8 +59,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const controlIDs = ['claimsStatusID', 'claimsFilesID']
   const controlLabels = [t('claimDetails.status'), t('files')]
   const [selectedTab, setSelectedTab] = useState(0)
-  const [eFolderDocumentID, setEFolderDocumentID] = useState('')
-  const [eFolderFileName, setEFolderFileName] = useState('')
+  const [claimLetterDocumentID, setClaimLetterDocumentID] = useState('')
+  const [claimLetterFileName, setClaimLetterFileName] = useState('')
   const [downloadFile, setDownloadFile] = useState(false)
 
   const { claimID, claimType } = route.params
@@ -78,9 +78,9 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     error: claimLetterDocsError,
     refetch: refetchClaimLetterDocs,
   } = useClaimLetterDocuments({ enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
-  const { isFetching: downloading, refetch: refetchEFolderDocument } = useDownloadEFolderDocument(
-    eFolderDocumentID,
-    eFolderFileName,
+  const { isFetching: downloading, refetch: refetchClaimLetterDocument } = useDownloadClaimLetterDocument(
+    claimLetterDocumentID,
+    claimLetterFileName,
   )
   const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -90,8 +90,6 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const [count, setCount] = useState(-1)
 
   const [scrollIsEnabled, setScrollIsEnabled] = useState(true)
-
-  console.log('claimLetterDocuments: ', claimLetterDocuments)
 
   useFocusEffect(
     useCallback(() => {
@@ -113,10 +111,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   useEffect(() => {
     if (downloadFile) {
       logAnalyticsEvent(Events.vama_claim_file_view())
-      refetchEFolderDocument()
+      refetchClaimLetterDocument()
       setDownloadFile(false)
     }
-  }, [downloadFile, refetchEFolderDocument])
+  }, [downloadFile, refetchClaimLetterDocument])
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
@@ -366,8 +364,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
                 claim={claim}
                 claimLetterDocuments={claimLetterDocuments}
                 setDownloadFile={setDownloadFile}
-                setDocumentID={setEFolderDocumentID}
-                setFileName={setEFolderFileName}
+                setDocumentID={setClaimLetterDocumentID}
+                setFileName={setClaimLetterFileName}
               />
             )}
           </Box>

@@ -43,7 +43,7 @@ context('ClaimDetailsScreen', () => {
           },
         },
         {
-          queryKey: [claimsAndAppealsKeys.eFolderDocs],
+          queryKey: [claimsAndAppealsKeys.claimLetterDocs],
           data: [],
         },
       ]
@@ -72,7 +72,7 @@ context('ClaimDetailsScreen', () => {
         },
       })
     when(api.get as jest.Mock)
-      .calledWith(`/v0/efolder/documents`, {})
+      .calledWith(`/v0/claim-letter/documents`, {})
       .mockResolvedValue({
         data: [],
       })
