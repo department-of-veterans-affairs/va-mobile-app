@@ -46,7 +46,7 @@ jobs:
           PR_NUM="${{ github.event.pull_request.number }}"
           LINKED_ISSUE_NUM="${{ steps.found_linked_issues.outputs.linked_issue_number }}"
           LINKED_ISSUE_N=$(echo "$LINKED_ISSUE_NUM" | sed 's/]$//g')
-          MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].number')
+          MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=due_date&direction=asc" --jq '.[0].number')
           MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=number&direction=asc" --jq '.[0].title')
 
           if [[ -z "$LINKED_ISSUE_N" ]]; then
