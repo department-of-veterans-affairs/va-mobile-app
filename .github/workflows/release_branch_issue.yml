@@ -1,4 +1,4 @@
-name: '[Release] New Release Issue'
+name: "[Release] New Release Issue"
 
 on:
   create:
@@ -54,7 +54,7 @@ jobs:
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
           gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}  
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket
@@ -93,7 +93,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app
-      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:'
+      message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
   release_coordination:
     name: release coordination
     if: ${{ success() }}
@@ -128,8 +128,8 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-          - *VA PO for awareness:* CC: <@${SLACK_rtwell}>
-          - *Release coordination:* <@SLACK_becca>",
+            - *VA PO for awareness:* CC: <@${SLACK_rtwell}>
+            - *Release coordination:* <@${SLACK_becca}>",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
             "unfurl_media": false
@@ -141,3 +141,26 @@ jobs:
                -H 'Content-type: application/json' \
                -d @- \
                https://slack.com/api/chat.postMessage
+  approval:
+    name: Run release approval
+    runs-on: ubuntu-latest
+    needs: release_ticket
+    environment:
+      name: release
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v3
+      - name: "Set up GH CLI secret"
+        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
+      - name: "Log into GH CLI"
+        run: gh auth login --with-token < token.txt
+
+      - name: get_approver
+        id: approver-id
+        run: |
+          APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login')
+          APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
+          echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
+          echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
+          gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "/approve ${{ needs.release_ticket.outputs.versionNumber }} 
+          Approved by: @$APPROVER_NAME"
