@@ -228,6 +228,7 @@ describe('AppointmentTravelClaimDetails', () => {
       it('initializes correctly', () => {
         initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
         expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
+        expect(screen.getByTestId('TextAreaSpacer')).toBeTruthy()
         expect(
           screen.getByText(
             t('travelPay.travelClaimFiledDetails.claimNumber', {
