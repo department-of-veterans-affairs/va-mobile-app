@@ -1,4 +1,4 @@
-import { getDateMonthsAgo } from './formattingUtils'
+import { getDateMonthsAgo } from './dateUtils'
 
 describe('formattingUtils', () => {
   describe('getDateMonthsAgo', () => {

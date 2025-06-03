@@ -4,7 +4,6 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
@@ -30,7 +29,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { formatDateMMMMDDYYYY, getDateMonthsAgo, getFormattedDate } from 'utils/formattingUtils'
+import { getAccessibleDate, getDateMonthsAgo, getDateRange, getFormattedDate, todaysDate } from 'utils/dateUtils'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -53,16 +53,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const [page, setPage] = useState(1)
   const [datePickerOption, setDatePickerOption] = useState<TimeFrameDropDownItem>({} as TimeFrameDropDownItem)
   const timeRangeOptions: Array<TimeFrameDropDownItem> = useMemo(() => {
-    const getMMMyyyy = (date: DateTime): string => {
-      return getFormattedDate(date.toISO(), 'MMM yyyy')
-    }
-
-    const getDateRange = (startDate: DateTime, endDate: DateTime): string => {
-      return `${getMMMyyyy(startDate)} - ${getMMMyyyy(endDate)}`
-    }
-    const todaysDate = DateTime.local()
-
-    // Use the new utility function to calculate dates
     const threeMonthsEarlier = getDateMonthsAgo(3, 'end', 'end')
     const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
 
@@ -80,8 +70,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: t('labsAndTests.list.pastThreeMonths'),
         value: t('labsAndTests.list.pastThreeMonths'),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getMMMyyyy(todaysDate),
-          date2: getMMMyyyy(threeMonthsEarlier),
+          date1: getAccessibleDate(threeMonthsEarlier),
+          date2: getAccessibleDate(todaysDate),
         }),
         dates: {
           startDate: threeMonthsEarlier.startOf('day'),
@@ -93,8 +83,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
         value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getMMMyyyy(fiveMonthsEarlier),
-          date2: getMMMyyyy(threeMonthsEarlier),
+          date1: getAccessibleDate(fiveMonthsEarlier),
+          date2: getAccessibleDate(threeMonthsEarlier),
         }),
         dates: {
           startDate: fiveMonthsEarlier,
@@ -106,8 +96,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getMMMyyyy(eightMonthsEarlier),
-          date2: getMMMyyyy(sixMonthsEarlier),
+          date1: getAccessibleDate(eightMonthsEarlier),
+          date2: getAccessibleDate(sixMonthsEarlier),
         }),
         dates: {
           startDate: eightMonthsEarlier,
@@ -119,8 +109,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getMMMyyyy(elevenMonthsEarlier),
-          date2: getMMMyyyy(nineMonthsEarlier),
+          date1: getAccessibleDate(elevenMonthsEarlier),
+          date2: getAccessibleDate(nineMonthsEarlier),
         }),
         dates: {
           startDate: elevenMonthsEarlier,
@@ -132,8 +122,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         value: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getMMMyyyy(twelveMonthsEarlier),
-          date2: getMMMyyyy(fourteenMonthsEarlier),
+          date1: getAccessibleDate(twelveMonthsEarlier),
+          date2: getAccessibleDate(fourteenMonthsEarlier),
         }),
         dates: {
           startDate: fourteenMonthsEarlier.startOf('day'),

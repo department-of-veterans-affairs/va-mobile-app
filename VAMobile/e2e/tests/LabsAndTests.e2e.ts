@@ -1,7 +1,7 @@
 import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
 
-import { getDateMonthsAgo } from '../../src/utils/formattingUtils'
+import { getDateMonthsAgo } from '../../src/utils/dateUtils'
 import {
   loginToDemoMode,
   openHealth,
