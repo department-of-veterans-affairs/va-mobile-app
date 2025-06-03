@@ -1,9 +1,6 @@
 name: "[Documentation] Accessibility Check"
 
 on:
-  push:
-    branches:
-      - 'fix/**'
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
