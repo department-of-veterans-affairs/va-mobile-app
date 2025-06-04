@@ -85,9 +85,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
           text={t('travelPay.checkEligibility.link')}
           a11yLabel={a11yLabelVA(t('travelPay.checkEligibility.link'))}
           testID="checkEligibilityLinkID"
-          analyticsOnPress={() => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'check eligibility'))
-          }}
         />
         <TextView testID="directDepositTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
           {t('travelPay.setUpDirectDeposit')}
@@ -101,9 +98,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
           text={t('travelPay.setUpDirectDeposit.link')}
           a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
           testID="setUpDirectDepositLinkID"
-          analyticsOnPress={() => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'set up direct deposit'))
-          }}
         />
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
           {t('travelPay.burdenTime')}
@@ -117,7 +111,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
         <LinkWithAnalytics
           type="custom"
           onPress={() => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'review privacy statement'))
             navigateTo('BurdenStatementScreen')
           }}
           text={t('travelPay.reviewPrivacyStatement')}

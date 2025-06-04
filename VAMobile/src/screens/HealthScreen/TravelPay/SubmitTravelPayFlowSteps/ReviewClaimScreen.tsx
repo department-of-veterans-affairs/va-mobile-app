@@ -171,7 +171,6 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
             text={t('travelPay.reviewLink')}
             testID="travelAgreementLinkID"
             onPress={() => {
-              logAnalyticsEvent(Events.vama_smoc_button_click('review', 'review travel agreement'))
               navigateTo('BeneficiaryTravelAgreementScreen')
             }}
           />

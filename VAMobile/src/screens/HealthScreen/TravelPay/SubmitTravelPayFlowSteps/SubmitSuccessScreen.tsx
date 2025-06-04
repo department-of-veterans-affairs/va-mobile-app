@@ -80,9 +80,6 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
             text={t('travelPay.setUpDirectDeposit.link')}
             a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
             testID="setUpDirectDepositLinkID"
-            analyticsOnPress={() => {
-              logAnalyticsEvent(Events.vama_smoc_button_click('success', 'set up direct deposit'))
-            }}
           />
         </Box>
       </Box>
