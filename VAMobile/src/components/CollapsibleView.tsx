@@ -4,12 +4,10 @@ import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
+import { Box, ColorVariant, TextArea, TextView } from 'components'
+import { BoxProps } from 'components/Box'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from './Box'
-import TextView from './TextView'
-import { ColorVariant, TextArea } from './index'
 
 /**
  * Signifies props passed into {@link CollapsibleView}
