@@ -7,8 +7,10 @@ import { DateTime } from 'luxon'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useOrientation, useTheme } from 'utils/hooks'
 
@@ -25,6 +27,7 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
   useSubtaskProps({
     rightButtonText: t('close'),
     onRightButtonPress: () => {
+      logAnalyticsEvent(Events.vama_smoc_button_click('success', 'close'))
       navigation.getParent()?.goBack()
     },
     rightButtonTestID: 'rightCloseTestID',
@@ -62,6 +65,9 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
               navigation.getParent()?.goBack()
             }}
             testID="goToAppointmentLinkID"
+            analyticsOnPress={() => {
+              logAnalyticsEvent(Events.vama_smoc_button_click('success', 'Back to your appointment'))
+            }}
           />
         </Box>
         <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
@@ -73,10 +79,10 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
             url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
             text={t('travelPay.setUpDirectDeposit.link')}
             a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
-            onPress={() => {
-              navigation.getParent()?.goBack()
-            }}
             testID="setUpDirectDepositLinkID"
+            analyticsOnPress={() => {
+              logAnalyticsEvent(Events.vama_smoc_button_click('success', 'set up direct deposit'))
+            }}
           />
         </Box>
       </Box>
