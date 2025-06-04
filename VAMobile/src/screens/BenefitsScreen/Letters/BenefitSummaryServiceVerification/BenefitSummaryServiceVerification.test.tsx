@@ -38,7 +38,7 @@ context('BenefitSummaryServiceVerification', () => {
             benefitInformation: {
               awardEffectiveDate: awardEffectiveDate || null,
               hasChapter35Eligibility: false,
-              monthlyAwardAmount: monthlyAwardAmount || null,
+              monthlyAwardAmount: monthlyAwardAmount || monthlyAwardAmount === 0 ? monthlyAwardAmount : null,
               serviceConnectedPercentage: serviceConnectedPercentage || null,
               hasDeathResultOfDisability: false,
               hasSurvivorsIndemnityCompensationAward: true,
@@ -126,9 +126,16 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when the monthly award amount does not exist', () => {
     it('should not display that switch on the screen', async () => {
       initializeTestInstance(undefined, date, 88)
+      await waitFor(() => expect(screen.queryByTestId('monthly-award')).toBeFalsy())
+    })
+  })
+
+  describe('when the monthly award amount is $0 and the awardEffectiveDate exists', () => {
+    it('should display "Your current monthly award is $0.00. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
+      initializeTestInstance(0, date, 88)
       await waitFor(() =>
         expect(
-          screen.queryByRole('switch', {
+          screen.getByRole('switch', {
             name:
               t('letters.benefitService.monthlyAward', {
                 monthlyAwardAmount: roundToHundredthsPlace(0),
@@ -137,12 +144,27 @@ context('BenefitSummaryServiceVerification', () => {
                 date: 'June 06, 2013',
               }),
           }),
-        ).toBeFalsy(),
+        ).toBeTruthy(),
       )
     })
   })
 
-  describe('when the awardEffectiveDate does not exist but the monthly payment amount does', () => {
+  describe('when the monthly award amount is $0 and the awardEffectiveDate does not exist', () => {
+    it('should display "Your current monthly award is $0.00." for that switch', async () => {
+      initializeTestInstance(0, undefined, 88)
+      await waitFor(() =>
+        expect(
+          screen.getByRole('switch', {
+            name: t('letters.benefitService.monthlyAward', {
+              monthlyAwardAmount: roundToHundredthsPlace(0),
+            }),
+          }),
+        ).toBeTruthy(),
+      )
+    })
+  })
+
+  describe('when the awardEffectiveDate does not exist but the monthly payment amount does and is non-zero', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}." for that switch', async () => {
       initializeTestInstance(123, undefined, 88)
       await waitFor(() =>
