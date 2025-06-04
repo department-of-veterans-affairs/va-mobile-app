@@ -1,5 +1,35 @@
 [
   {
+    "title": "v2.51.0",
+    "due_on": "2025-06-03T07:00:00Z",
+    "issues": [
+      {
+        "title": "Add deep linking to claim letters screen",
+        "number": 10883,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10883",
+        "isPR": true
+      },
+      {
+        "title": "Implementation: Add link for non-VA medications",
+        "number": 10769,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10769",
+        "isPR": false
+      },
+      {
+        "title": "Analytic Tracking for Homepage Scroll Depth",
+        "number": 10735,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10735",
+        "isPR": false
+      },
+      {
+        "title": "BUG - sev-3 - All - Lack of 'unauthorized service error' messaging on Contact and Personal Info screens leads to app fragility",
+        "number": 9629,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9629",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.50.0",
     "due_on": "2025-05-20T07:00:00Z",
     "issues": [
