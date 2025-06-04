@@ -1251,27 +1251,6 @@ export const Events = {
       },
     }
   },
-  vama_smoc_claim_success: (): Event => {
-    return {
-      name: 'vama_smoc_claim_success',
-    }
-  },
-  vama_smoc_claim_error: (error: string): Event => {
-    return {
-      name: 'vama_smoc_claim_error',
-      params: {
-        error,
-      },
-    }
-  },
-  vama_smoc_submit_click: (checkboxChecked: boolean): Event => {
-    return {
-      name: 'vama_smoc_submit_click',
-      params: {
-        checkboxChecked,
-      },
-    }
-  },
 }
 
 export const UserAnalytics = {

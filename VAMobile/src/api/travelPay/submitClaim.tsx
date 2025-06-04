@@ -2,10 +2,9 @@ import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { appointmentsKeys } from 'api/appointments'
 import { AppointmentsGetData, SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
-import { Events } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { Params as APIParams, post } from 'store/api/api'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { appendClaimDataToAppointment, stripTZOffset } from 'utils/travelPay'
 
@@ -28,7 +27,6 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
   return useMutation({
     mutationFn: submitClaim,
     onSuccess: (data) => {
-      logAnalyticsEvent(Events.vama_smoc_claim_success())
       // Find what appointment queries have data
       const appointmentQueries = queryClient.getQueriesData<AppointmentsGetData>({
         queryKey: [appointmentsKeys.appointments],
@@ -67,7 +65,6 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
     },
     onError: (error) => {
       if (isErrorObject(error)) {
-        logAnalyticsEvent(Events.vama_smoc_claim_error(error.message))
         logNonFatalErrorToFirebase(error, 'submitClaim: Service error')
       }
     },
