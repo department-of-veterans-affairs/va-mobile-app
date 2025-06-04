@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
+import { facilitiesKeys } from 'api/facilities/queryKeys'
 import { AddressData, UserContactInformation } from 'api/types'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
@@ -174,6 +175,7 @@ context('ReviewClaimScreen', () => {
       {
         appointmentDateTime: params.appointment.attributes.startDateLocal,
         facilityStationNumber: params.appointment.attributes.location.id,
+        facilityName: params.appointment.attributes.location.name,
         appointmentType: 'Other',
         isComplete: false,
       },
