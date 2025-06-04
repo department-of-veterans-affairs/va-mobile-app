@@ -20,8 +20,10 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
 
@@ -37,7 +39,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const { setSubtaskProps } = useContext(SubtaskContext)
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'review', 'AddressScreen', undefined, false))
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
   const [checkBoxError, setCheckBoxError] = useState<string>('')
@@ -59,6 +61,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
   const submitTravelClaim = async () => {
+    logAnalyticsEvent(Events.vama_smoc_submit_click(isCheckboxChecked))
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
       return
@@ -142,11 +145,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.where')}
             </TextView>
             {address.map((line: TextLine) => (
-              <>
-                <TextView key={line.text} variant="MobileBody">
-                  {line.text}
-                </TextView>
-              </>
+              <TextView key={line.text} variant="MobileBody">
+                {line.text}
+              </TextView>
             ))}
           </Box>
         </TextArea>
@@ -170,6 +171,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
             text={t('travelPay.reviewLink')}
             testID="travelAgreementLinkID"
             onPress={() => {
+              logAnalyticsEvent(Events.vama_smoc_button_click('review', 'review travel agreement'))
               navigateTo('BeneficiaryTravelAgreementScreen')
             }}
           />

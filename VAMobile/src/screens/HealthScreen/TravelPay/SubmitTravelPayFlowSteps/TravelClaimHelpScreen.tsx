@@ -2,14 +2,19 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, LargePanel, TextView, VABulletList } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
+import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
 function TravelClaimHelpScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  useSMOCAnalyticsPageView('help')
 
   return (
     <LargePanel
@@ -34,7 +39,14 @@ function TravelClaimHelpScreen() {
               ]}
             />
           </Box>
-          <FileOnlineComponent />
+          <FileOnlineComponent
+            btsssAnalyticsOnPress={() => {
+              logAnalyticsEvent(Events.vama_smoc_button_click('help', 'file onlinebtsss'))
+            }}
+            vaFormAnalyticsOnPress={() => {
+              logAnalyticsEvent(Events.vama_smoc_button_click('help', 'va form103542'))
+            }}
+          />
           <TravelPayHelp />
         </Box>
       }

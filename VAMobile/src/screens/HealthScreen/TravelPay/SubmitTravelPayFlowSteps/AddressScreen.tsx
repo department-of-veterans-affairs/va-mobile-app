@@ -9,14 +9,16 @@ import AddressSummary, {
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getCommonSubtaskProps } from 'utils/travelPay'
+import { getCommonSubtaskProps, useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 function AddressScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  useSMOCAnalyticsPageView('address')
+
   const navigateTo = useRouteNavigation()
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'VehicleScreen', 'ReviewClaimScreen'))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'address', 'VehicleScreen', 'ReviewClaimScreen'))
 
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: undefined },

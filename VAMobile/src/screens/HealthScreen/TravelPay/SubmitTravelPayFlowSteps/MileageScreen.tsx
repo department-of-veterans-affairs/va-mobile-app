@@ -5,16 +5,18 @@ import { Box, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getCommonSubtaskProps } from 'utils/travelPay'
+import { getCommonSubtaskProps, useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 function MileageScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  useSMOCAnalyticsPageView('mileage')
 
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'InterstitialScreen', 'VehicleScreen'))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'mileage', 'InterstitialScreen', 'VehicleScreen'))
 
   return (
     <VAScrollView>
