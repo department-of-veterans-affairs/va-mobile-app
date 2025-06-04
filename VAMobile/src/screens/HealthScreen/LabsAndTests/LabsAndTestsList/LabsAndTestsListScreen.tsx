@@ -53,6 +53,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const [page, setPage] = useState(1)
   const [datePickerOption, setDatePickerOption] = useState<TimeFrameDropDownItem>({} as TimeFrameDropDownItem)
   const timeRangeOptions: Array<TimeFrameDropDownItem> = useMemo(() => {
+    const twoMonthsEarlier = getDateMonthsAgo(2, 'start', 'start')
     const threeMonthsEarlier = getDateMonthsAgo(3, 'end', 'end')
     const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
 
@@ -70,11 +71,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: t('labsAndTests.list.pastThreeMonths'),
         value: t('labsAndTests.list.pastThreeMonths'),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getAccessibleDate(threeMonthsEarlier),
+          date1: getAccessibleDate(twoMonthsEarlier),
           date2: getAccessibleDate(todaysDate),
         }),
         dates: {
-          startDate: threeMonthsEarlier.startOf('day'),
+          startDate: twoMonthsEarlier.startOf('day'),
           endDate: todaysDate.endOf('day'),
         },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
@@ -122,8 +123,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         value: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
-          date1: getAccessibleDate(twelveMonthsEarlier),
-          date2: getAccessibleDate(fourteenMonthsEarlier),
+          date1: getAccessibleDate(fourteenMonthsEarlier),
+          date2: getAccessibleDate(twelveMonthsEarlier),
         }),
         dates: {
           startDate: fourteenMonthsEarlier.startOf('day'),
@@ -267,7 +268,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
           <VAModalPicker
             selectedValue={datePickerOption.value}
             onSelectionChange={onTimeRangeSelectionChange}
-            pickerOptions={timeRangeOptions}
+            pickerOptions={timeRangeOptions.map((option) => ({
+              ...option,
+              testID: option.a11yLabel,
+            }))}
             labelKey={'labsAndTests.list.selectADateRange'}
             testID="labsAndTestDataRangeTestID"
             confirmTestID="labsAndTestsDateRangeConfirmID"
