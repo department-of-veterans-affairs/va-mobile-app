@@ -231,6 +231,7 @@ export type VATheme = {
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
     fullScreenContentButtonHeight: number
+    floatingButtonOffset: number
   }
   fontFace: {
     regular: string
