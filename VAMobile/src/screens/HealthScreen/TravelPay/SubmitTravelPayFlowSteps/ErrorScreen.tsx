@@ -60,7 +60,7 @@ function ErrorScreen({ route, navigation }: ErrorScreenProps) {
               text={t('travelPay.error.noAddress.link')}
               testID="updateAddressLink"
               onPress={() => {
-                logAnalyticsEvent(Events.vama_smoc_button_click(error, 'update address'))
+                logAnalyticsEvent(Events.vama_smoc_button_click('noAddress', 'update address'))
                 navigateTo('EditAddress', {
                   displayTitle: t('contactInformation.residentialAddress'),
                   addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
@@ -103,14 +103,7 @@ function ErrorScreen({ route, navigation }: ErrorScreenProps) {
           </TextView>
         ))}
         {content}
-        <FileOnlineComponent
-          btsssAnalyticsOnPress={() => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('error', 'file onlinebtsss'))
-          }}
-          vaFormAnalyticsOnPress={() => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('error', 'va form103542'))
-          }}
-        />
+        <FileOnlineComponent />
         <TravelPayHelp />
       </Box>
     </VAScrollView>

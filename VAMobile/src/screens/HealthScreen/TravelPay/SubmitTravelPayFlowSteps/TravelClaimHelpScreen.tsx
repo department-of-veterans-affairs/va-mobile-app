@@ -2,9 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, LargePanel, TextView, VABulletList } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
@@ -39,14 +37,7 @@ function TravelClaimHelpScreen() {
               ]}
             />
           </Box>
-          <FileOnlineComponent
-            btsssAnalyticsOnPress={() => {
-              logAnalyticsEvent(Events.vama_smoc_button_click('help', 'file onlinebtsss'))
-            }}
-            vaFormAnalyticsOnPress={() => {
-              logAnalyticsEvent(Events.vama_smoc_button_click('help', 'va form103542'))
-            }}
-          />
+          <FileOnlineComponent />
           <TravelPayHelp />
         </Box>
       }

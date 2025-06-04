@@ -12,12 +12,7 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS, LINK_URL_VA_FORM_10_3542 } = getEnv()
 
-type FileOnlineComponentProps = {
-  btsssAnalyticsOnPress?: () => void
-  vaFormAnalyticsOnPress?: () => void
-}
-
-function FileOnlineComponent({ btsssAnalyticsOnPress, vaFormAnalyticsOnPress }: FileOnlineComponentProps) {
+function FileOnlineComponent() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -45,7 +40,6 @@ function FileOnlineComponent({ btsssAnalyticsOnPress, vaFormAnalyticsOnPress }: 
                 useSSO: true,
               })
             }}
-            analyticsOnPress={btsssAnalyticsOnPress}
           />
         </Box>
         <TextView testID="fileOnlineComponentMethod2ID" variant="MobileBody">
@@ -58,7 +52,6 @@ function FileOnlineComponent({ btsssAnalyticsOnPress, vaFormAnalyticsOnPress }: 
             text={t('travelPay.otherWaysToFile.method2.link')}
             a11yLabel={a11yLabelVA(t('travelPay.otherWaysToFile.method2.link'))}
             testID="fileOnlineVAFormLink"
-            analyticsOnPress={vaFormAnalyticsOnPress}
           />
         </Box>
       </Box>
