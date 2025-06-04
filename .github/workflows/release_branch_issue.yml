@@ -105,6 +105,7 @@ jobs:
             "repos/${{ github.repository }}/milestones/$MILESTONE_ID" \
             -F state=closed
   start_slack_thread:
+    if: ${{ always() }}
     name: Start Slack thread
     needs: release_ticket
     uses: ./.github/workflows/start_slack_thread.yml
