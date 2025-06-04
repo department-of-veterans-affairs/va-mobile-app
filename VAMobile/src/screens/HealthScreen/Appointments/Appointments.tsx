@@ -4,12 +4,13 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
@@ -44,6 +45,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
   const [page, setPage] = useState(1)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const {
     data: userAuthorizedServices,
@@ -110,6 +112,22 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
+  const getStartSchedulingButton = () => (
+    <FloatingButton
+      testID="startSchedulingTestID"
+      label={t('appointments.startScheduling')}
+      onPress={() => {
+        logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
+        navigateTo('Webview', {
+          url: LINK_URL_SCHEDULE_APPOINTMENTS,
+          displayTitle: t('webview.vagov'),
+          loadingMessage: t('webview.appointments.loading'),
+          useSSO: true,
+        })
+      }}
+    />
+  )
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -117,6 +135,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
+      footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID">
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -137,23 +156,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       ) : (
         <Box>
           <Box mb={theme.dimensions.standardMarginBetween} mt={-10} mx={theme.dimensions.gutter}>
-            {featureEnabled('startScheduling') ? (
-              <LinkWithAnalytics
-                type="custom"
-                onPress={() => {
-                  logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
-                  navigateTo('Webview', {
-                    url: LINK_URL_SCHEDULE_APPOINTMENTS,
-                    displayTitle: t('webview.vagov'),
-                    loadingMessage: t('webview.appointments.loading'),
-                    useSSO: true,
-                  })
-                }}
-                text={t('appointments.startScheduling')}
-              />
-            ) : (
-              <></>
-            )}
+            {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
             <SegmentedControl
               labels={controlLabels}
               onChange={onTabChange}
