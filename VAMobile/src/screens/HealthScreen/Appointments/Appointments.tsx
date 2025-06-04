@@ -155,8 +155,8 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         />
       ) : (
         <Box>
+          {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
           <Box mb={theme.dimensions.standardMarginBetween} mt={-10} mx={theme.dimensions.gutter}>
-            {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
             <SegmentedControl
               labels={controlLabels}
               onChange={onTabChange}
