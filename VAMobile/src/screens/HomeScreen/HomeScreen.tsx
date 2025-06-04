@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform } from 'react-native'
+import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -321,13 +322,15 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityRole="header">
-            {t('activity')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_activity)}>
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityRole="header">
+              {t('activity')}
+            </TextView>
+          </InView>
           {loadingActivity ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -423,6 +426,7 @@ export function HomeScreen({}: HomeScreenProps) {
             accessibilityRole="header">
             {t('aboutYou')}
           </TextView>
+          <Nametag />
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -439,7 +443,6 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <Box>
-              <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {hasDisabilityRating && (
                   <Box
@@ -584,15 +587,17 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            mx={theme.dimensions.gutter}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'HomeScreenHeader'}
-            accessibilityLabel={a11yLabelVA(t('vaResources'))}
-            accessibilityRole="header">
-            {t('vaResources')}
-          </TextView>
+          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_resources)}>
+            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+            <TextView
+              mx={theme.dimensions.gutter}
+              mb={theme.dimensions.standardMarginBetween}
+              variant={'HomeScreenHeader'}
+              accessibilityLabel={a11yLabelVA(t('vaResources'))}
+              accessibilityRole="header">
+              {t('vaResources')}
+            </TextView>
+          </InView>
           <Box mx={theme.dimensions.condensedMarginBetween}>
             <LinkRow title={t('contactUs')} onPress={() => navigateTo('ContactVA')} />
             <LinkRow
@@ -602,13 +607,15 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          <AnnouncementBanner
-            title={t('learnAboutPACT')}
-            link={LINK_URL_ABOUT_PACT_ACT}
-            a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
-          />
-        </Box>
+        <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_banner)}>
+          <Box mb={theme.dimensions.contentMarginBottom}>
+            <AnnouncementBanner
+              title={t('learnAboutPACT')}
+              link={LINK_URL_ABOUT_PACT_ACT}
+              a11yLabel={a11yLabelVA(t('learnAboutPACT'))}
+            />
+          </Box>
+        </InView>
       </Box>
       <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
