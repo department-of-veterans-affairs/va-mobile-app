@@ -5,7 +5,7 @@ import { t } from 'i18next'
 
 import { AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import { context, mockNavProps, render } from 'testUtils'
-import { defaultAppoinment } from 'utils/tests/appointments'
+import { defaultAppointment } from 'utils/tests/appointments'
 
 import UpcomingAppointments from './UpcomingAppointments'
 
@@ -21,9 +21,9 @@ jest.mock('../../../../utils/hooks', () => {
 context('UpcomingAppointments', () => {
   const appointmentData: AppointmentsList = [
     {
-      ...defaultAppoinment,
+      ...defaultAppointment,
       attributes: {
-        ...defaultAppoinment.attributes,
+        ...defaultAppointment.attributes,
         healthcareService: undefined,
       },
     },
