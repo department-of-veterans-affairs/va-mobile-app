@@ -15,10 +15,8 @@ graph LR
     subgraph Services[VA Mobile API Services]
         Appeals([Appeals])
 
-        %% VaccineRecords([Vaccine Records])
         Claims([Claims])
         DisabilityRating([Disability Rating])
-        Letters([Letters])
         PaymentInfo([Payment Info])
 
         Allergies([Allergies])
@@ -32,7 +30,7 @@ graph LR
         Awards([Awards])
         PaymentHistory([Payment History])
 
-        DEPRECATED(DEPRECATED)
+        Letters([Letters])
 
         DecisionLetters([Decision Letters])
         Efolder([Efolder])
@@ -85,13 +83,12 @@ graph LR
         subgraph Lighthouse
             LHBenefitsClaims([Benefits Claims API])
             LHVetService([Vet Service History and Eligibility API])
-            LHLetters([VA Letter Generator API])
+            %% LHLetters([VA Letter Generator API]) %% In Progress
             LHDirectDeposit([Direct Deposit Management API])
             LHVetHealth(["Veterans Health /
                 Patient Health API (FHIR)"])
             LHBenefitsIntake([Benefits Intake API])
         end
-        %% CDC([CDC])
         ArcGIS([ArcGIS])
         CDW([CDW])
         DEERS([DEERS])
@@ -125,19 +122,15 @@ graph LR
     end
 
     classDef dashedBorder stroke-dasharray: 5 5, stroke-width: 2px
-    class DEPRECATED,Lighthouse dashedBorder
     
     Appeals --> Caseflow
     Caseflow --> VACOLS
 
-    %% VaccineRecords --> CDC
-    %% VaccineRecords --> Lighthouse
-
     Claims --> LHBenefitsClaims
     DisabilityRating --> LHVetService
     Dependents --> LHBenefitsIntake
-    Letters --> LHLetters
     PaymentInfo --> LHDirectDeposit
+    %% Letters --> LHLetters # In Progress
 
     Allergies --> LHVetHealth
     Immunizations --> LHVetHealth
@@ -157,7 +150,7 @@ graph LR
     PaymentHistory --> BGS
     BGS --> CorpDB
 
-    DEPRECATED -.-> EVSS
+    Letters --> EVSS
     EVSS --> BGS
     EVSS --> DEERS
     EVSS --> VBMS
@@ -188,7 +181,6 @@ graph LR
     SIS --> DSLogon
     SIS --> IDME
     SIS --> Logingov
-    SIS --> MHV
     
     Prescriptions --> RX
     Attachments --> SM
@@ -222,7 +214,6 @@ Image: Diagram mapping all the upstream services used by the VA Mobile API
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
 | BID   | n/a                                                                                                                                 | n/a                                       |
 | Caseflow   | [#caseflow-support-team](https://dsva.slack.com/archives/C0200QGKPKR)                                                                                                                                 | n/a                                       |
-| CDC        | n/a                                                                                                                                                                                                   | [iisinfo@cdc.gov](mailto:iisinfo@cdc.gov) |
 | CHIP (Check-in)   | [#check-in-experience](https://dsva.slack.com/archives/C022AC2STBM)                                                                                                                                   | n/a                                       |
 | DSLogon    | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN)                                                                                                                                            | n/a                                       |
 | EVSS       | [#evss-prod](https://dsva.slack.com/archives/C8R3JS8BU)                                                                                                                                               | n/a                                       |
