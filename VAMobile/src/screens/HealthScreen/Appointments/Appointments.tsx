@@ -9,7 +9,7 @@ import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veter
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
-import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics } from 'components'
+import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import FloatingButton from 'components/FloatingButton'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
@@ -156,7 +156,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       ) : (
         <Box>
           {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
-          <Box mb={theme.dimensions.standardMarginBetween} mt={-10} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
               onChange={onTabChange}
