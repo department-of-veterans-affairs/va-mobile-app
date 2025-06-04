@@ -12,7 +12,7 @@ config:
   look: classic
 ---
 graph LR
-    subgraph Services[Vets API Services]
+    subgraph Services[VA Mobile API Services]
         Appeals([Appeals])
 
         %% VaccineRecords([Vaccine Records])
