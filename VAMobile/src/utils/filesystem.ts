@@ -3,6 +3,7 @@ import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blo
 import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
+import { DocumentPickerResponse } from '../screens/BenefitsScreen/BenefitsStackScreens'
 import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
@@ -121,7 +122,7 @@ export const unlinkFile = async (filePath: string): Promise<void> => {
 }
 
 /**
- * Get's the base64 string for a given file.
+ * Gets the base64 string for a given file.
  */
 export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
   // TODO: this is not currently used but will be used for the multi upload flow
@@ -138,4 +139,70 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
   }
 
   return await ReactNativeBlobUtil.fs.readFile(uri, 'base64')
+}
+
+/**
+ * Gets the UInt8Array from a base64 string
+ */
+export const getUInt8ArrayForBase64 = (base64Str: string) => {
+  const binaryString = ReactNativeBlobUtil.base64.decode(base64Str) // decode to binary string
+  const len = binaryString.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return Array.from(bytes)
+}
+
+/**
+ * Find if an array of fixed length is nested within a variable-sized array
+ * Logic is based on vets-website file utility function arrayIncludesArray
+ * @param variableArray - array of variable size (file)
+ * @param fixedArray - array of fixed size (signature)
+ */
+export const arrayIncludesArray = (variableArray: number[], fixedArray: number[]) => {
+  if (
+    !Array.isArray(variableArray) ||
+    variableArray.length === 0 ||
+    !Array.isArray(fixedArray) ||
+    fixedArray.length === 0
+  ) {
+    return false
+  }
+
+  // Skip expensive check if possible
+  // If variableArray does not contain the first index of fixedArray, skip the check & return false
+  // Otherwise, do logic check to see if variable array contains the fixed array
+  const startIndex = variableArray.indexOf(fixedArray[0])
+  return startIndex < 0
+    ? false
+    : variableArray.some((_, variableIndex) => {
+        // docx sig isn't near the beginning of the file
+        if (variableIndex < startIndex) {
+          return false
+        }
+        return fixedArray.every(
+          (fixedElement, fixedIndex) => fixedElement === variableArray[variableIndex + fixedIndex],
+        )
+      })
+}
+
+/**
+ * Checks if a file is a PDF, then looks for the encrypted PDF signature
+ * within the file content. The "/Encrypt" signature is also added to view-only
+ * PDFs as well as password-encrypted PDF files
+ * Logic is based on vets-website file utility function checkIsEncryptedPdf
+ * @param document - DocumentPickerResponse file document
+ */
+export const isPdfEncrypted = async (document: DocumentPickerResponse): Promise<boolean> => {
+  const base64String = await getBase64ForUri(document.uri)
+  const pdfTypes = ['pdf', 'application/pdf', 'com.adobe.pdf']
+  if (!base64String || !pdfTypes.includes(document.type)) {
+    return false
+  }
+  const bytes = getUInt8ArrayForBase64(base64String)
+  // Evaluates to an array of numbers representing the Unicode code points of the characters
+  // Returns Unicode value [47, 69, 110, 99, 114, 121, 112, 116]
+  const encryptSig = [...'/Encrypt'].map((str) => str.charCodeAt(0))
+  return arrayIncludesArray(bytes, encryptSig)
 }

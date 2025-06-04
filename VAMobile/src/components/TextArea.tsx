@@ -48,7 +48,7 @@ const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children, testID }) =>
 
   if (onPress) {
     return (
-      <TouchableWithoutFeedback onPress={_onPress}>
+      <TouchableWithoutFeedback accessibilityRole="button" onPress={_onPress}>
         <Box {...boxProps}>{children}</Box>
       </TouchableWithoutFeedback>
     )

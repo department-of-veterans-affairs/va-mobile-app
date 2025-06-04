@@ -278,7 +278,6 @@ const checkTravelPayFileOnlineComponent = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID))).toExist()
-  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID))).toExist()
   await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID)
@@ -481,7 +480,6 @@ describe('Travel Pay', () => {
   })
 
   it('shows the travel claim detials after filing the travel pay claim', async () => {
-    await element(by.id('PastApptDetailsTestID')).scrollTo('bottom')
     await waitFor(element(by.id('goToVAGovID-mock_id')))
       .toBeVisible()
       .whileElement(by.id('PastApptDetailsTestID'))

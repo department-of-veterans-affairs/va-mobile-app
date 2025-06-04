@@ -13,9 +13,11 @@ import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
+import { isPdfEncrypted } from 'utils/filesystem'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 import { FileRequestStackParams } from '../FileRequestSubtask'
@@ -29,6 +31,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [error, setError] = useState('')
+  const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
   const { claimID, request } = route.params
@@ -70,7 +73,15 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
         return
       }
 
+      const isEncrypted = await isPdfEncrypted(document)
+      if (isEncrypted) {
+        setError(t('fileUpload.fileEncryptedError'))
+        setErrorA11y(a11yLabelVA(t('fileUpload.fileEncryptedError')))
+        return
+      }
+
       setError('')
+      setErrorA11y('')
       navigateTo('UploadFile', { claimID, request, fileUploaded: document })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
@@ -130,7 +141,12 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
       <Box flex={1}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
+            <AlertWithHaptics
+              variant="error"
+              description={error}
+              descriptionA11yLabel={errorA11y}
+              scrollViewRef={scrollViewRef}
+            />
           </Box>
         )}
         <TextArea>
@@ -153,6 +169,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
           <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView variant="MobileBody" accessibilityLabel={t('fileUpload.50MB.a11y')}>
             {t('fileUpload.50MB')}
           </TextView>

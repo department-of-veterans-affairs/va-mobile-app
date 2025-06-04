@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { AppointmentAttributes } from 'api/types'
-import { AlertWithHaptics, Box, BoxProps, LinkWithAnalytics, TextView } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { VATheme } from 'styles/theme'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
@@ -19,6 +18,7 @@ import {
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
@@ -30,20 +30,6 @@ type TravelClaimFiledDetailsProps = {
   subType: AppointmentDetailsSubType
 }
 
-const spacer = (theme: VATheme) => {
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    height: theme.dimensions.standardMarginBetween,
-    backgroundColor: 'main',
-    mx: -theme.dimensions.gutter,
-  }
-  return <Box {...boxProps} />
-}
-
 function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -51,8 +37,9 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const endTime =
-    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const endTime = formatDateTimeReadable(
+    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime,
+  )
 
   const getContent = () => {
     // When travel pay is in downtime, display a downtime message
@@ -147,7 +134,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
       }
       return (
         <Box testID="travelClaimDetails">
-          {spacer(theme)}
+          <TextAreaSpacer />
           <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
             {t('travelPay.travelClaimFiledDetails.header')}
           </TextView>

@@ -21,6 +21,7 @@ function BurdenStatement() {
           <TextView testID="burdenStatementTitleID" variant="MobileBodyBold">
             {t('travelPay.privacyStatement.header')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             testID="burdenStatementTextID"
             mt={theme.dimensions.tinyMarginBetween}
@@ -34,6 +35,7 @@ function BurdenStatement() {
             variant="MobileBodyBold">
             {t('travelPay.privacyAct.header')}
           </TextView>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             testID="burdenStatementActTextID"
             mt={theme.dimensions.tinyMarginBetween}

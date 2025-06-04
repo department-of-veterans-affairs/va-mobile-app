@@ -37,6 +37,7 @@ function HealthHelp({}: HealthHelpProps) {
         mx={theme.dimensions.standardMarginBetween}
         mt={theme.dimensions.contentMarginTop}
         mb={theme.dimensions.formMarginBetween}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBodyBold"
           accessibilityRole="header"
@@ -44,6 +45,7 @@ function HealthHelp({}: HealthHelpProps) {
           mb={theme.dimensions.standardMarginBetween}>
           {t('healthHelp.usesVAHealth')}
         </TextView>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('healthHelp.goToPortal'))}
@@ -63,6 +65,7 @@ function HealthHelp({}: HealthHelpProps) {
         {allCernerFacilities ? (
           <></>
         ) : (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
           <TextView
             variant="MobileBody"
             accessibilityLabel={a11yLabelVA(t('healthHelp.canStillUse'))}

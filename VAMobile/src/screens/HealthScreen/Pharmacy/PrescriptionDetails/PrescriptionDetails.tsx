@@ -158,6 +158,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               <TextView variant="MobileBodyBold" accessibilityRole="header">
                 {prescriptionName}
               </TextView>
+              {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
               <TextView color={'placeholder'} accessibilityLabel={rxNumberA11yLabel}>
                 {rxNumber}
               </TextView>

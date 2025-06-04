@@ -28,6 +28,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('appealDetails.viewMoreDetails'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
@@ -58,6 +59,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
       <TextView variant="MobileBodyBold" accessibilityRole="header" accessible={true}>
         {t('claimDetails.needHelp')}
       </TextView>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant="MobileBody"
         mb={theme.dimensions.standardMarginBetween}

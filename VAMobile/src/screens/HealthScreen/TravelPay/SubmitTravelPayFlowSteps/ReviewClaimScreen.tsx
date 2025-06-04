@@ -23,7 +23,7 @@ import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepS
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { appendClaimDataToAppointment } from 'utils/travelPay'
+import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
@@ -37,18 +37,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const { setSubtaskProps } = useContext(SubtaskContext)
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
-  useSubtaskProps({
-    leftButtonText: t('back'),
-    onLeftButtonPress: () => navigateTo('AddressScreen'),
-    leftButtonTestID: 'leftBackTestID',
-    rightButtonText: t('help'),
-    rightIconProps: {
-      name: 'Help',
-      fill: 'default',
-    },
-    rightButtonTestID: 'rightHelpTestID',
-    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
-  })
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
   const [checkBoxError, setCheckBoxError] = useState<string>('')
@@ -169,7 +158,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
           {t('travelPay.travelAgreementHeader')}
         </TextView>
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="penaltyStatementID" variant="MobileBody">
-          <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatementLine') + ' '}</TextView>
+          <TextView variant="MobileBodyBold">{t('travelPay.penaltyStatement.title') + ' '}</TextView>
           {t('travelPay.penaltyStatement')}
         </TextView>
         <TextView mt={theme.dimensions.formMarginBetween} testID="penaltyStatementAgreementID" variant="MobileBody">

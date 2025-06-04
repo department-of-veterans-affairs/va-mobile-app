@@ -359,3 +359,44 @@ export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TF
 export const getTranslation = (key: string, t: TFunction, options?: $Dictionary): string => {
   return options ? t(key, options) : t(key)
 }
+
+/**
+ * Converts string amount to a number $2,200.40 to 2200.4
+ * @param amount - the amount as a string, may have currency symbol
+ */
+export const strNumberToNumber = (amount: string): number => {
+  // replace anything that is not a number with empty string
+  return Number(amount.replace(/[^\d.]/g, ''))
+}
+
+/**
+ * Convert string into USD currency string
+ * @param amount - the amount as a number
+ */
+export const numberToUSDollars = (amount: number): string => {
+  const USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+
+  return USDollar.format(amount)
+}
+
+/**
+ * Formats a Luxon DateTime object into a human-readable string.
+ *
+ * Uses Luxon's `toFormat` method with format token `EEEE, fff` to ensure consistent
+ * timezone display across platforms (verified on Android & iOS). Previously used
+ * `ZZZZ` token caused duplicated timezone abbreviations (e.g., "CDT CDT").
+ *
+ * Example output: "Saturday, May 31, 2025 at 9:00 PM CDT"
+ *
+ * @param dateTime - the Luxon DateTime object to format; may be null or undefined
+ * @returns The formatted date-time string, or an empty string if dateTime is null or undefined
+ */
+export const formatDateTimeReadable = (dateTime?: DateTime | null): string => {
+  if (!dateTime) {
+    return ''
+  }
+  return dateTime.toFormat('EEEE, fff')
+}

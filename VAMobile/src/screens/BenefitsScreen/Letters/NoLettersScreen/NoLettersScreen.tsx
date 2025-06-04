@@ -20,6 +20,7 @@ function NoLettersScreen() {
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
+        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBodyBold"
           accessibilityLabel={a11yLabelVA(t('noLetters.header'))}

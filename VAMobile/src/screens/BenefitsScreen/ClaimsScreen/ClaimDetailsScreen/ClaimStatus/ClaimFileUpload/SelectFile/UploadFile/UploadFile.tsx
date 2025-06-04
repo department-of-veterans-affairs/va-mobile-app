@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { ScrollView } from 'react-native/types'
 
 import { StackActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { spacing } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { useUploadFileToClaim } from 'api/claimsAndAppeals'
 import { ClaimEventData, UploadFileToClaimParamaters } from 'api/types'
@@ -29,8 +31,10 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
+import { isPdfEncrypted } from 'utils/filesystem'
 import {
   useBeforeNavBackListener,
   useDestructiveActionSheet,
@@ -60,6 +64,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const confirmAlert = useDestructiveActionSheet()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const [error, setError] = useState('')
+  const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
   const showActionSheet = useShowActionSheet()
@@ -145,12 +150,13 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         )
         snackbar.show(t('fileUpload.submitted'))
       },
-      onError: () =>
+      onError: () => {
         snackbar.show(t('fileUpload.submitted.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: onUploadConfirmed,
-        }),
+        })
+      },
     }
     const params: UploadFileToClaimParamaters = { claimID, documentType: documentType, request, files: filesList }
     uploadFileToClaim(params, mutateOptions)
@@ -238,8 +244,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         setError(t('fileUpload.fileTypeError'))
         return
       }
+
+      const isEncrypted = await isPdfEncrypted(document)
+      if (isEncrypted) {
+        setError(t('fileUpload.fileEncryptedError'))
+        setErrorA11y(a11yLabelVA(t('fileUpload.fileEncryptedError')))
+        return
+      }
+
       setFilesEmptyError(false)
       setError('')
+      setErrorA11y('')
       setFilesList([document])
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
@@ -308,6 +323,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     navigation.dispatch(StackActions.pop(2))
   }
 
+  const fileSelectStyle = {
+    padding: spacing.vadsSpaceSm,
+    backgroundColor: 'transparent',
+    borderRadius: 4,
+    borderWidth: 2,
+    borderColor: theme.colors.border.photoAdd,
+    textAlign: 'center',
+  }
+
+  const a11yErrorLabel = t('error', { error: t('fileUpload.requiredFile') })
+
   return (
     <VAScrollView scrollViewRef={scrollViewRef}>
       <SubtaskTitle title={t('fileUpload.uploadFiles')} />
@@ -319,7 +345,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
           <Box flex={1}>
             {!!error && (
               <Box mb={theme.dimensions.standardMarginBetween}>
-                <AlertWithHaptics variant="error" description={error} scrollViewRef={scrollViewRef} />
+                <AlertWithHaptics
+                  variant="error"
+                  description={error}
+                  descriptionA11yLabel={errorA11y}
+                  scrollViewRef={scrollViewRef}
+                />
               </Box>
             )}
             {request && (
@@ -335,16 +366,19 @@ function UploadFile({ navigation, route }: UploadFileProps) {
               <FileList files={filesList} onDelete={onFileDelete} />
             ) : (
               <Box mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween}>
-                {filesEmptyError && (
-                  <TextView variant="MobileBodyBold" color="error" mb={3}>
-                    {t('fileUpload.requiredFile')}
-                  </TextView>
-                )}
-                <Button
-                  buttonType={ButtonVariants.Secondary}
-                  onPress={onSelectFile}
-                  label={t('fileUpload.selectAFile')}
-                />
+                <Pressable onPress={onSelectFile} accessibilityRole="button">
+                  <Box>
+                    {filesEmptyError && (
+                      // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+                      <TextView variant="MobileBodyBold" color="error" mb={3} accessibilityLabel={a11yErrorLabel}>
+                        {t('fileUpload.requiredFile')}
+                      </TextView>
+                    )}
+                    <TextView variant="MobileBodyBold" color="link" style={fileSelectStyle}>
+                      {t('fileUpload.selectAFile')}
+                    </TextView>
+                  </Box>
+                </Pressable>
               </Box>
             )}
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>

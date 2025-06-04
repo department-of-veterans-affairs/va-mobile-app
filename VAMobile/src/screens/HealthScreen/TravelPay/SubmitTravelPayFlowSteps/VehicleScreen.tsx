@@ -9,6 +9,7 @@ import { Box, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 function VehicleScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -30,22 +31,11 @@ function VehicleScreen() {
     }
   }
 
+  const commonProps = getCommonSubtaskProps(t, navigateTo, 'MileageScreen', 'AddressScreen')
+
   useSubtaskProps({
-    leftButtonText: t('back'),
-    onLeftButtonPress: () => navigateTo('MileageScreen'),
-    leftButtonTestID: 'leftBackTestID',
-    rightButtonText: t('help'),
-    rightButtonTestID: 'rightHelpTestID',
-    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
-    rightIconProps: {
-      name: 'Help',
-      fill: 'default',
-    },
-    primaryContentButtonText: t('yes'),
-    primaryButtonTestID: 'yesTestID',
+    ...commonProps,
     onPrimaryContentButtonPress,
-    secondaryContentButtonText: t('no'),
-    onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
   })
 
   return (
