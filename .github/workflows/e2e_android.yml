@@ -23,7 +23,7 @@ on:
       run_full_test:
         description: "Run full e2e test?"
         type: boolean
-        required: false
+        required: true
       tests_to_run:
         description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
