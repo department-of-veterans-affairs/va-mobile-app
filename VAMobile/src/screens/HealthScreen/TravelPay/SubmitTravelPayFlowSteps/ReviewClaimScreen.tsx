@@ -61,11 +61,11 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
   const submitTravelClaim = async () => {
-    logAnalyticsEvent(Events.vama_smoc_submit_click(isCheckboxChecked))
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
       return
     }
+    logAnalyticsEvent(Events.vama_smoc_button_click('review', 'submit'))
 
     if (!attributes.location.id) {
       navigateTo('ErrorScreen', { error: 'error' })
