@@ -1,5 +1,47 @@
 [
   {
+    "title": "v2.52.0",
+    "due_on": "2025-06-17T07:00:00Z",
+    "issues": [
+      {
+        "title": "(FE) Refill Request Floating Button",
+        "number": 10945,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10945",
+        "isPR": false
+      },
+      {
+        "title": "Appeals status -- issues explanation",
+        "number": 10850,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10850",
+        "isPR": false
+      },
+      {
+        "title": "Post MVP Design - Read Receipt in Message List View",
+        "number": 10826,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10826",
+        "isPR": false
+      },
+      {
+        "title": "MVP - Read Receipt on Message Detail page",
+        "number": 10825,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10825",
+        "isPR": false
+      },
+      {
+        "title": "Show Alert when Doc Upload fails",
+        "number": 10820,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10820",
+        "isPR": false
+      },
+      {
+        "title": "Issues showing on VA.gov but not Mobile",
+        "number": 10803,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10803",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.51.0",
     "due_on": "2025-06-03T07:00:00Z",
     "issues": [
