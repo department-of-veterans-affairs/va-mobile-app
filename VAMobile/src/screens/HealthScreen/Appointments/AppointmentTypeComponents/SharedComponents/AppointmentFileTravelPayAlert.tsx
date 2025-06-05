@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
 
 import { AppointmentData } from 'api/types'
 import { Box } from 'components'
@@ -42,7 +43,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
             navigateTo('SubmitTravelPayClaimScreen', {
               appointment,
               appointmentRouteKey,
-              smocFlowStartDate: new Date().toISOString(),
+              smocFlowStartDate: DateTime.now().toISO(),
             })
           },
         }}
