@@ -20,8 +20,10 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
 
@@ -30,14 +32,14 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey } = route.params
+  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'review', 'AddressScreen', undefined, false))
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
   const [checkBoxError, setCheckBoxError] = useState<string>('')
@@ -63,11 +65,15 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       setCheckBoxError(t('required'))
       return
     }
+    logAnalyticsEvent(Events.vama_smoc_button_click('review', 'submit'))
 
     if (!attributes.location.id) {
       navigateTo('ErrorScreen', { error: 'error' })
       return
     }
+
+    const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+    logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
 
     submitClaim(
       {
@@ -142,11 +148,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.where')}
             </TextView>
             {address.map((line: TextLine) => (
-              <>
-                <TextView key={line.text} variant="MobileBody">
-                  {line.text}
-                </TextView>
-              </>
+              <TextView key={line.text} variant="MobileBody">
+                {line.text}
+              </TextView>
             ))}
           </Box>
         </TextArea>

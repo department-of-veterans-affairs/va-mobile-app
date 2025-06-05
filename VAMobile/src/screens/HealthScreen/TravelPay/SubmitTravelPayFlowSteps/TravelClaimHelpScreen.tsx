@@ -4,12 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
 function TravelClaimHelpScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  useSMOCAnalyticsPageView('help')
 
   return (
     <LargePanel

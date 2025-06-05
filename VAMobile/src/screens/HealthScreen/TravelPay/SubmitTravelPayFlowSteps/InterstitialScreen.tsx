@@ -5,10 +5,13 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
@@ -19,12 +22,15 @@ type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackPar
 function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  useSMOCAnalyticsPageView('intro')
+
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useDestructiveActionSheet()
 
   const onLeftButtonPress = () => {
+    logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'cancel'))
     confirmAlert({
       title: t('travelPay.cancelClaim.title'),
       cancelButtonIndex: 0,
@@ -32,10 +38,14 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       buttons: [
         {
           text: t('travelPay.cancelClaim.continue'),
+          onPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'keep going'))
+          },
         },
         {
           text: t('travelPay.cancelClaim.cancel'),
           onPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'cancel claim'))
             navigation.goBack()
           },
         },
@@ -49,7 +59,10 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: () => navigateTo('MileageScreen'),
+    onPrimaryContentButtonPress: () => {
+      logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'continue'))
+      navigateTo('MileageScreen')
+    },
   })
 
   return (
