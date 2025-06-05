@@ -73,7 +73,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const [page, setPage] = useState(1)
   const { perPage, totalEntries } = {
     perPage: 10,
-    totalEntries: 14, // TODO: Update to this - pageMetaData?.totalEntries || 0,
+    totalEntries: decisionLettersData?.data.length || 0, // TODO: Update to this - pageMetaData?.totalEntries || 0,
   }
   const [lettersToShow, setLettersToShow] = useState<DecisionLettersList>([])
 
