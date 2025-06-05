@@ -114,6 +114,7 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
+  vadsFontHeadingXsmall: string
 }
 
 export type VABackgroundColors = {
@@ -231,6 +232,7 @@ export type VATheme = {
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
     fullScreenContentButtonHeight: number
+    floatingButtonOffset: number
   }
   fontFace: {
     regular: string
