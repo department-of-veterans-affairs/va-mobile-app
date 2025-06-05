@@ -40,6 +40,8 @@ export type HomeStackParamList = WebviewStackParams & {
   OverrideAPI: undefined
   RemoteConfig: undefined
   Settings: undefined
+  GiveFeedback: undefined
+  SendUsFeedback: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
 }

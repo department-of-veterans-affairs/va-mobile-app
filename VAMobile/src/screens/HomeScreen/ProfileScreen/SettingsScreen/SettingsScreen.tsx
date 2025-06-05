@@ -115,7 +115,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     {
       text: t('giveFeedback'),
       a11yHintText: t('giveFeedback.a11yHint'),
-      onPress: () => navigateTo('InAppRecruitment'),
+      onPress: () => navigateTo('GiveFeedback'),
       detoxTestID: 'inAppRecruitmentID',
     },
     {

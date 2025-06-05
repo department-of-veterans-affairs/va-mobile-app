@@ -68,6 +68,8 @@ import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/Acco
 import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import GiveFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
+import SendUsFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
@@ -670,6 +672,17 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="GiveFeedback"
+        component={GiveFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="SendUsFeedback"
+        component={SendUsFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+
       <HomeScreenStack.Screen
         name="AccountSecurity"
         component={AccountSecurity}
