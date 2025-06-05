@@ -79,7 +79,7 @@ context('AppointmentsScreen', () => {
     it('should be a clickable webview that navigates to the scheduling weblink flow', async () => {
       when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('link', { name: t('appointments.startScheduling') }))
+      fireEvent.press(screen.getByRole('button', { name: t('appointments.startScheduling') }))
       const expectNavArgs = {
         url: 'https://va.gov/my-health/appointments/schedule/type-of-care',
         displayTitle: t('webview.vagov'),
