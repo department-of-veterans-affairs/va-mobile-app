@@ -51,6 +51,7 @@ export type HealthStackParamList = WebviewStackParams & {
   SubmitTravelPayClaimScreen: {
     appointment: AppointmentData
     appointmentRouteKey: string
+    smocFlowStartDate: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined

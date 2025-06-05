@@ -32,7 +32,7 @@ import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPa
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey } = route.params
+  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -71,6 +71,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       navigateTo('ErrorScreen', { error: 'error' })
       return
     }
+
+    const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+    logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
 
     submitClaim(
       {

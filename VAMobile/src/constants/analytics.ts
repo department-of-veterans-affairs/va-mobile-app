@@ -1251,6 +1251,14 @@ export const Events = {
       },
     }
   },
+  vama_smoc_submit_time: (totalTime: number): Event => {
+    return {
+      name: 'vama_smoc_submit_time',
+      params: {
+        totalTime,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {

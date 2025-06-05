@@ -39,7 +39,11 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
             logAnalyticsEvent(Events.vama_smoc_button_click('past_appointment', 'file smoc'))
-            navigateTo('SubmitTravelPayClaimScreen', { appointment, appointmentRouteKey })
+            navigateTo('SubmitTravelPayClaimScreen', {
+              appointment,
+              appointmentRouteKey,
+              smocFlowStartDate: new Date().toISOString(),
+            })
           },
         }}
         testID="appointmentFileTravelPayAlert"
