@@ -27,7 +27,7 @@ const getLabsAndTests = ({ dateRange, page = '1' }: LabsAndTestQuery): Promise<L
 }
 
 /**
- * Returns a query for user Labs and  Tests
+ * Returns a query for user Labs  and Tests
  */
 export const useLabsAndTests = ({ dateRange, timeFrame }: LabsAndTestQuery, options?: { enabled?: boolean }) => {
   return useQuery({
