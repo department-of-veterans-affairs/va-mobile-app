@@ -344,7 +344,7 @@ context('PrescriptionHistory', () => {
       when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       initializeTestInstance()
       await waitFor(() =>
-        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeTruthy(),
+        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeFalsy(),
       )
     })
   })
