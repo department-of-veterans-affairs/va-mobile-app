@@ -1,17 +1,18 @@
 import { DateTime } from 'luxon'
 
 import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
+import { getDateMonthsAgo } from 'utils/dateUtils'
 
 import { Params } from '..'
 import { DemoStore } from './store'
 
 function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoStore): LabsAndTestsListPayload {
   const todaysDate = DateTime.local()
-  const threeMonthsEarlier = todaysDate.minus({ months: 3 }).endOf('month').endOf('day')
-  const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-  const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-  const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-  const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
+  const threeMonthsEarlier = getDateMonthsAgo(2, 'start', 'start')
+  const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
+  const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
+  const elevenMonthsEarlier = getDateMonthsAgo(11, 'start', 'start')
+  const fourteenMonthsEarlier = getDateMonthsAgo(14, 'start', 'start')
 
   if (endDate >= threeMonthsEarlier.toJSDate()) {
     return store['/v1/health/labs-and-tests'].PAST_THREE_MONTHS

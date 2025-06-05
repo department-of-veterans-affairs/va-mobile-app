@@ -25,6 +25,7 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameDropDownItem, TimeFrameTypeConstants } from 'constants/timeframes'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -36,8 +37,9 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import NoLabsAndTestsRecords from '../NoLabsAndTestsRecords/NoLabsAndTestsRecords'
-import { TimeFrameDropDownItem } from './TimeFrameType'
-import { TimeFrameTypeConstants } from './constants'
+
+// import { TimeFrameDropDownItem } from './TimeFrameType'
+// import { TimeFrameTypeConstants } from './constants'
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
