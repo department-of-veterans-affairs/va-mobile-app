@@ -1251,9 +1251,9 @@ export const Events = {
       },
     }
   },
-  vama_smoc_submit_time: (totalTime: number): Event => {
+  vama_smoc_time_taken: (totalTime: number): Event => {
     return {
-      name: 'vama_smoc_submit_time',
+      name: 'vama_smoc_time_taken',
       params: {
         totalTime,
       },
