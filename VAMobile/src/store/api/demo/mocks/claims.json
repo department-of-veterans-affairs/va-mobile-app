@@ -5469,11 +5469,11 @@
       }
     }
   },
-  "/v0/efolder/documents": {
+  "/v0/claim-letter/documents": {
     "data": [
       {
         "id": "X121",
-        "type": "efolder_document",
+        "type": "claim_letter_document",
         "attributes": {
           "doc_type": 1215,
           "type_description": "DMC - Debt Increase Letter",
@@ -5482,7 +5482,7 @@
       },
       {
         "id": "X122",
-        "type": "efolder_document",
+        "type": "claim_letter_document",
         "attributes": {
           "doc_type": 1215,
           "type_description": "DMC - Debt Increase Letter",
@@ -5491,7 +5491,7 @@
       },
       {
         "id": "X123",
-        "type": "efolder_document",
+        "type": "claim_letter_document",
         "attributes": {
           "doc_type": 1215,
           "type_description": "DMC - Debt Increase Letter",
@@ -5500,7 +5500,7 @@
       },
       {
         "id": "X124",
-        "type": "efolder_document",
+        "type": "claim_letter_document",
         "attributes": {
           "doc_type": 1215,
           "type_description": "DMC - Debt Increase Letter",
@@ -5509,7 +5509,7 @@
       },
       {
         "id": "X125",
-        "type": "efolder_document",
+        "type": "claim_letter_document",
         "attributes": {
           "doc_type": 1215,
           "type_description": "DMC - Debt Increase Letter",

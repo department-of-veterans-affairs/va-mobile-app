@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useClaim, useDownloadEFolderDocument, useEFolderDocuments } from 'api/claimsAndAppeals'
+import { useClaim, useClaimLetterDocuments, useDownloadClaimLetterDocument } from 'api/claimsAndAppeals'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { useDecisionLetters } from 'api/decisionLetters'
 import { ClaimAttributesData, ClaimData } from 'api/types'
@@ -59,8 +59,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   const controlIDs = ['claimsStatusID', 'claimsFilesID']
   const controlLabels = [t('claimDetails.status'), t('files')]
   const [selectedTab, setSelectedTab] = useState(0)
-  const [eFolderDocumentID, setEFolderDocumentID] = useState('')
-  const [eFolderFileName, setEFolderFileName] = useState('')
+  const [claimLetterDocumentID, setClaimLetterDocumentID] = useState('')
+  const [claimLetterFileName, setClaimLetterFileName] = useState('')
   const [downloadFile, setDownloadFile] = useState(false)
 
   const { claimID, claimType } = route.params
@@ -73,14 +73,14 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
     refetch: refetchClaim,
   } = useClaim(claimID, { enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
   const {
-    data: eFolderDocuments,
-    isFetching: loadingEFolder,
-    error: claimEfolderError,
-    refetch: refetchEfolder,
-  } = useEFolderDocuments({ enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
-  const { isFetching: downloading, refetch: refetchEFolderDocument } = useDownloadEFolderDocument(
-    eFolderDocumentID,
-    eFolderFileName,
+    data: claimLetterDocuments,
+    isFetching: loadingClaimLetterDocs,
+    error: claimLetterDocsError,
+    refetch: refetchClaimLetterDocs,
+  } = useClaimLetterDocuments({ enabled: screenContentAllowed('WG_ClaimDetailsScreen') })
+  const { isFetching: downloading, refetch: refetchClaimLetterDocument } = useDownloadClaimLetterDocument(
+    claimLetterDocumentID,
+    claimLetterFileName,
   )
   const { data: decisionLetterData } = useDecisionLetters()
   const { data: userAuthorizedServices } = useAuthorizedServices()
@@ -111,10 +111,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
   useEffect(() => {
     if (downloadFile) {
       logAnalyticsEvent(Events.vama_claim_file_view())
-      refetchEFolderDocument()
+      refetchClaimLetterDocument()
       setDownloadFile(false)
     }
-  }, [downloadFile, refetchEFolderDocument])
+  }, [downloadFile, refetchClaimLetterDocument])
 
   useEffect(() => {
     if (claim && !loadingClaim && !claimError) {
@@ -322,13 +322,13 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen"
       backLabelTestID="claimsDetailsBackTestID">
-      {loadingClaim || loadingEFolder || downloading ? (
+      {loadingClaim || loadingClaimLetterDocs || downloading ? (
         <LoadingComponent text={downloading ? t('claimFile.loading') : t('claimInformation.loading')} />
-      ) : claimError || claimEfolderError ? (
+      ) : claimError || claimLetterDocsError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}
-          error={claimError || claimEfolderError}
-          onTryAgain={claimError ? refetchClaim : refetchEfolder}
+          error={claimError || claimLetterDocsError}
+          onTryAgain={claimError ? refetchClaim : refetchClaimLetterDocs}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
@@ -362,10 +362,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             {claim && selectedTab === 1 && (
               <ClaimFiles
                 claim={claim}
-                eFolderDocuments={eFolderDocuments}
+                claimLetterDocuments={claimLetterDocuments}
                 setDownloadFile={setDownloadFile}
-                setDocumentID={setEFolderDocumentID}
-                setFileName={setEFolderFileName}
+                setDocumentID={setClaimLetterDocumentID}
+                setFileName={setClaimLetterFileName}
               />
             )}
           </Box>
