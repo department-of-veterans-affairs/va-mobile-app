@@ -7,7 +7,6 @@ import { Params } from '..'
 import { DemoStore } from './store'
 
 function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoStore): LabsAndTestsListPayload {
-  const todaysDate = DateTime.local()
   const threeMonthsEarlier = getDateMonthsAgo(2, 'start', 'start')
   const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
   const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
