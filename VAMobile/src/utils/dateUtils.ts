@@ -17,7 +17,6 @@ export const getDateMonthsAgo = (
   position: 'start' | 'end' = 'start',
   timePosition: 'start' | 'end' = 'start',
 ): DateTime => {
-  // const todaysDate = DateTime.local()
   const dateMonthsAgo = todaysDate.minus({ months: monthsAgo })
 
   const positionedDate = position === 'start' ? dateMonthsAgo.startOf('month') : dateMonthsAgo.endOf('month')

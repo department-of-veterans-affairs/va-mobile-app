@@ -1,7 +1,7 @@
 import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
 
-import { getDateMonthsAgo } from '../../src/utils/dateUtils'
+import { getDateMonthsAgo, getFormattedDate } from '../../src/utils/dateUtils'
 import {
   loginToDemoMode,
   openHealth,
@@ -31,10 +31,17 @@ const resetDateRangeToDefault = async () => {
   await element(by.text('Past 3 months')).tap()
   await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
 }
+// These dates must match the dates in the demo data
+// Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
+// CH test data with id: e9513940-bf84-4120-ac9c-718f537b00e0
+const oneMonthAgo = todaysDate.minus({ months: 1 })
+const surgicalPathologyTestDate = getFormattedDate(oneMonthAgo.toISO(), 'MMMM dd, yyyy')
+const fortyFiveDaysAgo = todaysDate.minus({ days: 45 })
+const chemHemTestDate = getFormattedDate(fortyFiveDaysAgo.toISO(), 'MMMM dd, yyyy')
 const TEST_IDS = {
   LIST_ID: 'LabsAndTestsButtonsListTestID',
-  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology March 14, 2025',
-  CHEM_HEM_TEST_ID: 'CH January 23, 2025',
+  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology ' + surgicalPathologyTestDate,
+  CHEM_HEM_TEST_ID: 'CH ' + chemHemTestDate,
   BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
 }
 const HEADER_TEXT = 'Labs and tests'
@@ -137,7 +144,7 @@ describe('Labs And Test Screen', () => {
 
     // the page should have the correct data
     await expect(element(by.text('Surgical Pathology'))).toExist()
-    await expect(element(by.text('March 14, 2025'))).toExist()
+    await expect(element(by.text(surgicalPathologyTestDate))).toExist()
     await expect(element(by.text('Bone Marrow'))).toExist()
     await expect(element(by.text('Left leg'))).toExist()
     await expect(element(by.text('VA TEST LAB'))).toExist()
@@ -167,7 +174,7 @@ describe('Labs And Test Details Screen with Observations', () => {
     await expect(element(by.text('Details'))).toExist()
 
     await expect(element(by.text('CH'))).toExist()
-    await expect(element(by.text('January 23, 2025'))).toExist()
+    await expect(element(by.text(chemHemTestDate))).toExist()
     await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
 
     await testForOneOrManyOccurancesOf('None noted')
