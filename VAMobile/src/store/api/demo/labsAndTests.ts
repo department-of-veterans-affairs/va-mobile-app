@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon'
-
 import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
 import { getDateMonthsAgo } from 'utils/dateUtils'
 
