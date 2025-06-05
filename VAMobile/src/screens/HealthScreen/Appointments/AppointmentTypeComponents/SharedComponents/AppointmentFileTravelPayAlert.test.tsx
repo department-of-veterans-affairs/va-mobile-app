@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 import {
   AppointmentAttributes,
@@ -262,6 +262,9 @@ context('AppointmentFileTravelPayAlert', () => {
   })
 
   it('should navigate to the travel pay flow when the "File claim" button is clicked', async () => {
+    const originalNow = Settings.now
+    const expectedNow = DateTime.fromISO('2024-01-15T12:00:00.000Z')
+    Settings.now = () => expectedNow.toMillis()
     const attributes = createTestAppointmentAttributes({
       status: AppointmentStatusConstants.BOOKED,
       appointmentType: AppointmentTypeConstants.VA,
@@ -277,7 +280,9 @@ context('AppointmentFileTravelPayAlert', () => {
         attributes,
       },
       appointmentRouteKey: 'key',
+      smocFlowStartDate: expectedNow.toISO(),
     })
+    Settings.now = originalNow
   })
 
   it('should not render if a claim has already been filed', async () => {
