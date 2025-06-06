@@ -4,10 +4,9 @@ import { Pressable, PressableProps, View } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, BoxProps, TextArea } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-
-import { Box, BoxProps, TextArea } from './index'
 
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */

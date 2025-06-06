@@ -3,13 +3,10 @@ import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import Box from './Box'
-import LinkWithAnalytics from './LinkWithAnalytics'
-import TextView from './TextView'
 
 export type AttachmentLinkProps = {
   /** Name of link/attachment */
