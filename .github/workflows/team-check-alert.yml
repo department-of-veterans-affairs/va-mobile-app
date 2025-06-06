@@ -71,12 +71,11 @@ jobs:
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Map GitHub usernames to Slack IDs
         id: map_slack_ids
         run: |
-          sudo apt update -y
-          sudo apt upgrade -y
-          sudo apt install -y gettext
           declare -A GITHUB_TO_SLACK_MAP
           GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
           GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
@@ -94,19 +93,3 @@ jobs:
         with:
           channel_name: va-mobile-sandbox
           message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light: $SLACK_becca $SLACK_brocha PR Author: $PR_AUTHOR_PREVIOUS"
-        # run: |
-        #   SLACK_MESSAGE=$(cat <<EOF
-        #   {
-        #    "channel": "va-mobile-sandbox",
-        #    "text": ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:\n
-        #    <@${SLACK_becca}>
-        #    <@${SLACK_brocha}>
-        #    PR Author: "\${PR_AUTHOR_PREVIOUS}\"
-        #   }
-        #   EOF
-        #   )
-        #   echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
-        #   -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-        #   -H 'Content-type: application/json' \
-        #   -d @- \
-        #   https://slack.com/api/chat.postMessage
