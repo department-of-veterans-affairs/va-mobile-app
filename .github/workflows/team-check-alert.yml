@@ -8,8 +8,9 @@ on:
       - synchronize
       - ready_for_review #leaving draft state
       - converted_to_draft #draft state
-    branches:
-      - develop #targeting develop
+
+  branches:
+    - develop #targeting develop
 
   paths:
     - "VAMobile/src/**" #Only affecting app code
