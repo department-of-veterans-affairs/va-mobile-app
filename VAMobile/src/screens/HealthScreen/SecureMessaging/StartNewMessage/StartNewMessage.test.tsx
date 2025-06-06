@@ -90,7 +90,7 @@ context('StartNewMessage', () => {
   describe('when no recipients are returned', () => {
     it('should display an AlertBox', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue({
           data: [],
           meta: {
@@ -115,7 +115,7 @@ context('StartNewMessage', () => {
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockRejectedValue({ networkError: true } as api.APIError)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockRejectedValue({ networkError: true } as api.APIError)
@@ -127,7 +127,7 @@ context('StartNewMessage', () => {
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
@@ -144,7 +144,7 @@ context('StartNewMessage', () => {
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
@@ -155,7 +155,7 @@ context('StartNewMessage', () => {
 
     it('should ask for confirmation if any field filled in', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
@@ -172,7 +172,7 @@ context('StartNewMessage', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
         when(api.get as jest.Mock)
-          .calledWith('/v0/messaging/health/recipients')
+          .calledWith('/v0/messaging/health/allrecipients')
           .mockResolvedValue(recipients)
           .calledWith('/v0/messaging/health/messages/signature')
           .mockResolvedValue(signature)
@@ -193,7 +193,7 @@ context('StartNewMessage', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
         when(api.get as jest.Mock)
-          .calledWith('/v0/messaging/health/recipients')
+          .calledWith('/v0/messaging/health/allrecipients')
           .mockResolvedValue(recipients)
           .calledWith('/v0/messaging/health/messages/signature')
           .mockResolvedValue(signature)
@@ -213,7 +213,7 @@ context('StartNewMessage', () => {
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
@@ -226,7 +226,7 @@ context('StartNewMessage', () => {
   describe('when displaying the form', () => {
     it('should display an alert about urgent messages', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)

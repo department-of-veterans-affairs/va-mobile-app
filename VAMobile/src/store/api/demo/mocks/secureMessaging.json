@@ -2353,6 +2353,20 @@
           "suggestedNameDisplay": null,
           "healthCareSystemName": null
         }
+      },
+      {
+        "id": "1918816",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1918816,
+          "name": "UAT_Reg_Jun5 ++",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
       }
     ],
     "meta": {

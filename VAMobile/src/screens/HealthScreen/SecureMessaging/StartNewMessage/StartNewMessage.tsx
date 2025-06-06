@@ -38,7 +38,6 @@ import {
   LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
-  PickerItem,
   TextArea,
   TextView,
 } from 'components'
@@ -64,7 +63,7 @@ import {
 import {
   SubjectLengthValidationFn,
   getStartNewMessageCategoryPickerOptions,
-  saveDraftWithAttachmentAlert,
+  saveDraftWithAttachmentAlert, getCareSystemPickerOptions,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -139,6 +138,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
+
+
+  console.log('recipients: ', recipients)
+  console.log('careSystem: ', careSystem)
+  console.log('to.value: ', to?.value)
 
   const messageData = {
     recipient_id: parseInt(to?.value || '', 10),
@@ -216,15 +220,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
-  const getCareSystemPickerOptions = (): Array<PickerItem> => {
-    return (facilitiesInfo || []).map((facility) => {
-      return {
-        label: facility.name,
-        value: facility.id,
-      }
-    })
-  }
-
   type RecentRecipient = {
     label: string
     value?: string
@@ -263,7 +258,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       recipients || [],
       (recipient) => recipient.attributes.stationNumber === careSystem,
     )
-    const allRecipients = (careSystemRecipients || []).map((recipient) => {
+    const allRecipients = careSystemRecipients.map((recipient) => {
       return {
         label: recipient.attributes.name,
         value: recipient.id,
@@ -289,11 +284,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         labelKey: 'secureMessaging.formMessage.careSystem',
         selectedValue: careSystem,
         onSelectionChange: setCareSystem,
-        pickerOptions: getCareSystemPickerOptions(),
+        pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'care system field',
-        confirmTestID: 'messagePickerConfirmID',
+        confirmTestID: 'careSystemPickerConfirmID',
       },
       fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
     },
@@ -307,9 +302,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'to field',
-        confirmTestID: 'messagePickerConfirmID',
-        disabled: !careSystem,
+        confirmTestID: 'toComboBoxConfirmID',
       },
+      hideField: !careSystem,
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
     {
