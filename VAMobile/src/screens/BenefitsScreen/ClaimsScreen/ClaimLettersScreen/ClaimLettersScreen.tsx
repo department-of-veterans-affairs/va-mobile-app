@@ -24,6 +24,7 @@ import {
 } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -72,7 +73,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   }
   const [page, setPage] = useState(1)
   const { perPage, totalEntries } = {
-    perPage: 10,
+    perPage: DEFAULT_PAGE_SIZE,
     totalEntries: decisionLettersData?.data.length || 0,
   }
   const [lettersToShow, setLettersToShow] = useState<DecisionLettersList>([])
@@ -90,9 +91,9 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
+    const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
     lettersToShow?.forEach((letter, index) => {
       const { typeDescription, receivedAt } = letter.attributes
-      const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
       const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
       const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
       const onPress = () => {
