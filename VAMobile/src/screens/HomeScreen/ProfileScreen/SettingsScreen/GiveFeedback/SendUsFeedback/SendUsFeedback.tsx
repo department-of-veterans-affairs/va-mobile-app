@@ -6,19 +6,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import {
-  Box,
-  FeatureLandingTemplate,
-  LinkWithAnalytics,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  VABulletList,
-} from 'components'
+import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type SendUsFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'SendUsFeedback'>
 
@@ -26,20 +18,6 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  //   const openAppStore = useOpenAppStore()
-
-  //   const items: Array<SimpleListItemObj> = _.flatten([
-  //     {
-  //     text: t('giveFeedback.send'),
-  //     onPress: () => navigateTo('InAppRecruitment'),
-  //     detoxTestID: 'inAppRecruitmentID',
-  //     },
-  //     {
-  //     text: t('giveFeedback.leaveAppReview'),
-  //     onPress: openAppStore,
-  //     detoxTestID: 'leaveAppReviewID',
-  //     },
-  //     ])
 
   const bulletedListOfText = [
     { text: t('giveFeedback.send.bodyText.bullet.1') },

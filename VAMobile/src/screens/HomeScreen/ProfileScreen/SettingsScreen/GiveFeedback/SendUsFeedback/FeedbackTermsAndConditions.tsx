@@ -4,24 +4,11 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import _ from 'underscore'
-
-import {
-  Box,
-  FeatureLandingTemplate,
-  LargePanel,
-  LinkWithAnalytics,
-  SimpleList,
-  SimpleListItemObj,
-  TextView,
-  VABulletList,
-} from 'components'
+import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useExternalLink, useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
@@ -29,23 +16,8 @@ type FeedbackTermsAndConditionsScreenProps = StackScreenProps<HomeStackParamList
 
 function FeedbackTermsAndConditionsScreen({}: FeedbackTermsAndConditionsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  //   const openAppStore = useOpenAppStore()
-
-  //   const items: Array<SimpleListItemObj> = _.flatten([
-  //     {
-  //     text: t('giveFeedback.send'),
-  //     onPress: () => navigateTo('InAppRecruitment'),
-  //     detoxTestID: 'inAppRecruitmentID',
-  //     },
-  //     {
-  //     text: t('giveFeedback.leaveAppReview'),
-  //     onPress: openAppStore,
-  //     detoxTestID: 'leaveAppReviewID',
-  //     },
-  //     ])
 
   return (
     <LargePanel title={t('giveFeedback.send')} rightButtonText={t('close')} testID="sendUsFeedbackID">
