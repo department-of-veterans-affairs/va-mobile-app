@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -11,8 +11,10 @@ import _ from 'underscore'
 
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
-  secureMessagingKeys, useAllMessageRecipients,
-  useDeleteMessage, useFolderMessages,
+  secureMessagingKeys,
+  useAllMessageRecipients,
+  useDeleteMessage,
+  useFolderMessages,
   useMessage,
   useSaveDraft,
   useSendMessage,
@@ -31,7 +33,9 @@ import {
 } from 'api/types'
 import {
   AlertWithHaptics,
-  Box, ComboBoxItem, ComboBoxOptions,
+  Box,
+  ComboBoxItem,
+  ComboBoxOptions,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -64,8 +68,9 @@ import {
 import {
   SubjectLengthValidationFn,
   formatSubject,
+  getCareSystemPickerOptions,
   getStartNewMessageCategoryPickerOptions,
-  saveDraftWithAttachmentAlert, getCareSystemPickerOptions,
+  saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -196,7 +201,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     message?.subject,
     message.recipientId,
     message.recipientName,
-    messageRecipient?.attributes.stationNumber
+    messageRecipient?.attributes.stationNumber,
   ])
 
   useEffect(() => {
@@ -769,9 +774,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
                   ? refetchMessage
                   : facilitiesError
                     ? refetchFacilities
-                      : folderMessagesError
+                    : folderMessagesError
                       ? refetchFolderMessages
-                        : undefined
+                      : undefined
           }
         />
       ) : (

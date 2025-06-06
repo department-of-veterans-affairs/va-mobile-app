@@ -62,8 +62,9 @@ import {
 } from 'utils/hooks'
 import {
   SubjectLengthValidationFn,
+  getCareSystemPickerOptions,
   getStartNewMessageCategoryPickerOptions,
-  saveDraftWithAttachmentAlert, getCareSystemPickerOptions,
+  saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -138,7 +139,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
-
 
   console.log('recipients: ', recipients)
   console.log('careSystem: ', careSystem)
