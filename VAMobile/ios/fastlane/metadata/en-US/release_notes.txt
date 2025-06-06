@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+We added an explanation to the Claim Issues tab and updated the listed issues to match the web version. Read receipts now appear in the message list and detail views. Users will see an alert if they try to upload an encrypted or password-protected document. Bugs with the "Start refill request" button on the Prescriptions page have been fixed.
