@@ -87,4 +87,3 @@ jobs:
           message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
         secrets:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-        # secrets: inherit
