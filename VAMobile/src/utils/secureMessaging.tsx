@@ -10,7 +10,13 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  Facility,
+  SecureMessagingFolderList,
+  SecureMessagingMessageList,
+} from 'api/types'
 import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
@@ -656,4 +662,13 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
       {textReconstructedBody}
     </Box>
   )
+}
+
+export const getCareSystemPickerOptions = (facilitiesInfo: Array<Facility>): Array<PickerItem> => {
+  return (facilitiesInfo || []).map((facility) => {
+    return {
+      label: facility.name,
+      value: facility.id,
+    }
+  })
 }

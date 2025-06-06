@@ -227,7 +227,7 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue({
           data: [],
           meta: {
@@ -253,7 +253,7 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: "The app can't be loaded." })).toBeTruthy())
@@ -269,7 +269,7 @@ context('EditDraft', () => {
         .mockResolvedValue(oldThread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
       initializeTestInstance()
       await waitFor(() =>
@@ -289,7 +289,7 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
@@ -306,7 +306,7 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
       initializeTestInstance()
       await waitFor(() => fireEvent.changeText(screen.getByTestId('messageText'), 'Random String'))
@@ -325,7 +325,7 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Add Files' })))
