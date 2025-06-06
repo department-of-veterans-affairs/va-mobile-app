@@ -4,7 +4,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -33,6 +33,7 @@ import {
   PaginationProps,
   TextView,
 } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -45,6 +46,7 @@ import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -53,7 +55,7 @@ import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
-const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
+const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -117,6 +119,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
@@ -390,6 +393,42 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
   const hasNoItems = filteredPrescriptions?.length === 0
 
+  const getNonVAMedsAlert = () => {
+    const pressableProps: PressableProps = {
+      accessibilityRole: 'link',
+      accessibilityLabel: a11yLabelVA(
+        t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
+      ),
+      onPress: (): void => {
+        logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
+        navigateTo('Webview', {
+          url: LINK_URL_MHV_VA_MEDICATIONS,
+          displayTitle: t('webview.vagov'),
+          loadingMessage: t('loading.vaWebsite'),
+          useSSO: true,
+        })
+      },
+    }
+
+    return (
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <AlertWithHaptics
+          variant="info"
+          expandable={true}
+          header={t('prescription.history.nonVAMeds.header')}
+          headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
+          testID="nonVAMedsAlertTestID">
+          <Pressable {...pressableProps}>
+            <TextView>
+              <TextView variant="MobileBody">{t('prescription.history.nonVAMeds.message')}</TextView>
+              <TextView variant="MobileBodyLink">{t('prescription.history.nonVAMeds.link.text')}</TextView>
+            </TextView>
+          </Pressable>
+        </AlertWithHaptics>
+      </Box>
+    )
+  }
+
   const getTransferAlert = () => {
     if (!hasTransferred) {
       return <></>
@@ -405,7 +444,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
+      <Box mx={theme.dimensions.gutter}>
         <AlertWithHaptics
           variant="warning"
           expandable={true}
@@ -430,17 +469,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getRequestRefillButton = () => {
-    return (
-      <Box mx={theme.dimensions.buttonPadding}>
-        <Button
-          testID="refillRequestTestID"
-          label={t('prescription.history.startRefillRequest')}
-          onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-        />
-      </Box>
-    )
-  }
+  const getRequestRefillButton = () => (
+    <FloatingButton
+      testID="refillRequestTestID"
+      label={t('prescription.history.startRefillRequest')}
+      onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+    />
+  )
 
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
@@ -509,7 +544,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.floatingButtonOffset} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
@@ -542,7 +577,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
-      testID="PrescriptionHistory">
+      testID="PrescriptionHistory"
+      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
@@ -565,8 +601,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <PrescriptionHistoryNoPrescriptions />
       ) : (
         <>
-          {getRequestRefillButton()}
+          {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
+          {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}

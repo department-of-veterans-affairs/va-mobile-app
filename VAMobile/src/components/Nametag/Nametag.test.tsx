@@ -8,6 +8,9 @@ import { QueriesData, context, render } from 'testUtils'
 
 import Nametag from './Nametag'
 
+const BRANCH_REGEX =
+  /United States (Air Force|Army|Coast Guard|Marine Corps|Navy|DoD|Public Health Service|NOAA|Space Force)/i
+
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -60,6 +63,7 @@ context('Nametag', () => {
 
   it('does not display branch when service history is empty', () => {
     renderWithBranch({} as ServiceHistoryAttributes)
-    expect(screen.queryByRole('link')).toBeFalsy()
+    expect(screen.queryByRole('link')).toBeTruthy()
+    expect(screen.queryByText(BRANCH_REGEX)).toBeNull()
   })
 })

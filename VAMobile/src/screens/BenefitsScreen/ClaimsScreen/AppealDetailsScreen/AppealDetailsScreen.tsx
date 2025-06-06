@@ -4,16 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
-import { filter, pluck } from 'underscore'
 
 import { useAppeal } from 'api/claimsAndAppeals'
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
@@ -57,15 +54,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   const onTabChange = (tab: number) => {
     setSelectedTab(tab)
-    if (selectedTab !== tab) {
-      logAnalyticsEvent(Events.vama_segcontrol_click(controlLabels[tab]))
-    }
-  }
-
-  const getFilteredIssues = (): Array<string> => {
-    // Only show issues with a lastAction of null, this signifies the issue is active
-    const filteredIssues = filter(issues, (issue) => issue.lastAction == null)
-    return pluck(filteredIssues, 'description')
   }
 
   const getDisplayType = (): string => {
@@ -148,11 +136,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 programArea={programArea}
               />
             )}
-            {appeal && selectedTab === 1 && <AppealIssues issues={getFilteredIssues()} />}
+            {appeal && selectedTab === 1 && <AppealIssues issues={issues} />}
           </Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <NeedHelpData appealId={appealID} />
-          </Box>
+          <NeedHelpData appealId={appealID} />
         </Box>
       )}
     </FeatureLandingTemplate>
