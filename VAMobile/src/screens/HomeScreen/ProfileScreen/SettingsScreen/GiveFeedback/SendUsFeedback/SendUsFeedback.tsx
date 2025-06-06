@@ -74,7 +74,7 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
         <LinkWithAnalytics
           type="custom"
           text={t('giveFeedback.termsAndConditions')}
-          onPress={() => navigateTo('TermsAndConditions')}
+          onPress={() => navigateTo('FeedbackTermsAndConditions')}
           testID="termsAndConditionsID"
         />
       </Box>

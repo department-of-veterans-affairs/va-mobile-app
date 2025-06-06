@@ -815,6 +815,7 @@
   "forward.a11yHint": "Navigates to the next page",
   "giveFeedback": "Give feedback",
   "giveFeedback.termsAndConditions": "Terms and Conditions",
+  "giveFeedback.termsAndConditions.lowercase": "Terms and conditions",
   "giveFeedback.send": "Send us feedback",
   "giveFeedback.send.bodyText": "We use your feedback to make this app better for you and all Veterans. We keep your feedback confidential. Only give us feedback here if you don't need a response. If you need a response, use one of these options:",
   "giveFeedback.send.bodyText.bullet.1": "If you're in crisis or having thoughts of suicide, call the Veterans Crisis Line at 988. Then select 1. Or you can text 838255 or visit the Veterans Crisis Line website.",
