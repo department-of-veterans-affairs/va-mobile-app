@@ -2,15 +2,12 @@ name: "Check if PR is from mobile team"
 
 on:
   # Trigger on pull request events
-  # NOTE: remove when testing completed
-  push:
-  # NOTE: commenting for testing
-  # pull_request:
-  #   types:
-  #     - opened
-  #     - synchronize
-  #     - ready_for_review #leaving draft state
-  #     - converted_to_draft #draft state
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - ready_for_review #leaving draft state
+      - converted_to_draft #draft state
   #   branches:
   #     - develop #targeting develop
 
