@@ -81,8 +81,6 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
       - name: Notify Slack of non mobile team member creating a PR
-        needs: [check_team_and_alert]
-        runs-on: ubuntu-latest
         uses: ./.github/workflows/start_slack_thread.yml
         with:
           channel_name: va-mobile-sandbox
