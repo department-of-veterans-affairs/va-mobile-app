@@ -1,8 +1,7 @@
 import React from 'react'
 
+import BasicError from 'components/CommonErrorComponents/BasicError'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import BasicError from './BasicError'
 
 import Mock = jest.Mock
 
