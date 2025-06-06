@@ -71,8 +71,6 @@ jobs:
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Map GitHub usernames to Slack IDs
         id: map_slack_ids
         run: |
@@ -83,13 +81,12 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
       - name: Notify Slack of non mobile team member creating a PR
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_brocha: $b-rocha
-          SLACK_becca: $becca
-          PR_AUTHOR_PREVIOUS: ${{ needs.check_team_and_alert.outputs.pr_author }}
+        needs: [check_team_and_alert]
+        runs-on: ubuntu-latest
         uses: ./.github/workflows/start_slack_thread.yml
-        # secrets: inherit
         with:
           channel_name: va-mobile-sandbox
-          message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light: $SLACK_becca $SLACK_brocha PR Author: $PR_AUTHOR_PREVIOUS"
+          message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
+        secrets:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+        # secrets: inherit
