@@ -8,68 +8,68 @@ describe('formattingUtils', () => {
       jest.setSystemTime(new Date('2025-05-28T12:00:00.000Z'))
     })
 
-    it('should return date 3 months ago at start of month and start of day', () => {
-      const result = getDateMonthsAgo(3, 'start', 'start')
+    it('should return date 2 months ago at start of month and start of day', () => {
+      const result = getDateMonthsAgo(2, 'start', 'start')
 
       // Test the full DateTime object properties instead of string formatting
       expect(result.year).toBe(2025)
-      expect(result.month).toBe(2) // February
+      expect(result.month).toBe(3) // March
       expect(result.day).toBe(1)
       expect(result.hour).toBe(0)
       expect(result.minute).toBe(0)
       expect(result.second).toBe(0)
     })
 
-    it('should return date 3 months ago at end of month and end of day', () => {
-      const result = getDateMonthsAgo(3, 'end', 'end')
+    it('should return date 2 months ago at end of month and end of day', () => {
+      const result = getDateMonthsAgo(2, 'end', 'end')
 
       expect(result.year).toBe(2025)
-      expect(result.month).toBe(2) // February
-      expect(result.day).toBe(28) // Last day of February 2025
+      expect(result.month).toBe(3) // March
+      expect(result.day).toBe(31) // Last day of March 2025
       expect(result.hour).toBe(23)
       expect(result.minute).toBe(59)
       expect(result.second).toBe(59)
     })
 
-    it('should return date 6 months ago at start of month and start of day', () => {
-      const result = getDateMonthsAgo(6, 'start', 'start')
+    it('should return date 5 months ago at start of month and start of day', () => {
+      const result = getDateMonthsAgo(5, 'start', 'start')
 
       expect(result.year).toBe(2024)
-      expect(result.month).toBe(11) // November
+      expect(result.month).toBe(12) // December
       expect(result.day).toBe(1)
       expect(result.hour).toBe(0)
       expect(result.minute).toBe(0)
       expect(result.second).toBe(0)
     })
 
-    it('should return date 6 months ago at end of month and end of day', () => {
-      const result = getDateMonthsAgo(6, 'end', 'end')
+    it('should return date 5 months ago at end of month and end of day', () => {
+      const result = getDateMonthsAgo(5, 'end', 'end')
 
       expect(result.year).toBe(2024)
-      expect(result.month).toBe(11) // November
-      expect(result.day).toBe(30) // Last day of November
+      expect(result.month).toBe(12) // December
+      expect(result.day).toBe(31) // Last day of Decemeber 2024
       expect(result.hour).toBe(23)
       expect(result.minute).toBe(59)
       expect(result.second).toBe(59)
     })
 
-    it('should return date 12 months ago at start of month and start of day', () => {
-      const result = getDateMonthsAgo(12, 'start', 'start')
+    it('should return date 11 months ago at start of month and start of day', () => {
+      const result = getDateMonthsAgo(11, 'start', 'start')
 
       expect(result.year).toBe(2024)
-      expect(result.month).toBe(5) // May
+      expect(result.month).toBe(6) // June
       expect(result.day).toBe(1)
       expect(result.hour).toBe(0)
       expect(result.minute).toBe(0)
       expect(result.second).toBe(0)
     })
 
-    it('should return date 12 months ago at end of month and end of day', () => {
-      const result = getDateMonthsAgo(12, 'end', 'end')
+    it('should return date 11 months ago at end of month and end of day', () => {
+      const result = getDateMonthsAgo(11, 'end', 'end')
 
       expect(result.year).toBe(2024)
-      expect(result.month).toBe(5) // May
-      expect(result.day).toBe(31) // Last day of May
+      expect(result.month).toBe(6) // June
+      expect(result.day).toBe(30) // Last day of June
       expect(result.hour).toBe(23)
       expect(result.minute).toBe(59)
       expect(result.second).toBe(59)
