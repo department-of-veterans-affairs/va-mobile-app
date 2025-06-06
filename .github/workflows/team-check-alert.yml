@@ -1,4 +1,4 @@
-name: "Check if PR is from mobile team"
+name: "[Admin] Check if PR is from mobile team"
 
 on:
   # Trigger on pull request events
@@ -54,6 +54,7 @@ jobs:
           echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
   slack:
     name: slack steps
+    if: needs.check_team_and_alert.outputs.is_team_member == 'true'
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
     steps:
@@ -73,4 +74,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
+      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.fetch_and_check_team.outputs.pr_author }}"
