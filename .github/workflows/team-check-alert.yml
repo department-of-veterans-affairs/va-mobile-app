@@ -1,0 +1,113 @@
+name: "Check if PR is from mobile team"
+
+on:
+  # Trigger on pull request events
+  # NOTE: remove when testing completed
+  push:
+  # NOTE: commenting for testing
+  # pull_request:
+  #   types:
+  #     - opened
+  #     - synchronize
+  #     - ready_for_review #leaving draft state
+  #     - converted_to_draft #draft state
+  #   branches:
+  #     - develop #targeting develop
+
+  # NOTE: This needs to be reverted for prod
+  # paths:
+  #   - "VAMobile/src/**" #Only affecting app code
+  #
+permissions:
+  contents: read
+  teams: read
+
+jobs:
+  check_team_and_alert:
+    runs-on: ubuntu-latest
+    outputs:
+      is_team_member: ${{ steps.fetch_and_check_team.outputs.is_team_member }}
+      team_members_list: ${{ steps.fetch_and_check_team.outputs.team_members_output }}
+      pr_author: ${{ steps.fetch_and_check_team.outputs.pr_author }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # NOTE: This is only needed for act
+      # - name: Install Packages
+      #   run: |
+      #     type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)
+      #     sudo mkdir -p -m 755 /etc/apt/keyrings
+      #     wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+      #     sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      #     sudo apt update -y
+      #     sudo apt upgrade -y
+      #     sudo apt install -y gh gettext
+      - name: fetch team members and check author of PR
+        id: fetch_and_check_team
+        env:
+          TEAM_NAME: "flagship-mobile-team"
+        run: |
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-team/members --jq 'map(.login) | join(",")')
+
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          echo "PR Author: $PR_AUTHOR"
+
+          if [[ ",${TEAM_MEMBERS}," == *",${PR_AUTHOR},"* ]]; then
+            IS_TEAM_MEMBER="true"
+            echo "User '$PR_AUTHOR' is a member of $TEAM_NAME"
+          else
+            IS_TEAM_MEMBER="false"
+            echo "User '$PR_AUTHOR' is not a member of $TEAM_NAME"
+          fi
+
+          echo Team Member: $IS_TEAM_MEMBER
+          echo "is_team_member=$IS_TEAM_MEMBER" >> "$GITHUB_OUTPUT"
+          echo "team_members_output=$TEAM_MEMBERS" >> "$GITHUB_OUTPUT"
+          echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
+  send_slack_message:
+    name: slack steps
+    needs: [check_team_and_alert]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          sudo apt update -y
+          sudo apt upgrade -y
+          sudo apt install -y gettext
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
+          GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
+      - name: Notify Slack of non mobile team member creating a PR
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          SLACK_brocha: $b-rocha
+          SLACK_becca: $becca
+          PR_AUTHOR_PREVIOUS: ${{ needs.check_team_and_alert.outputs.pr_author }}
+        uses: ./.github/workflows/start_slack_thread.yml
+        # secrets: inherit
+        with:
+          channel_name: va-mobile-sandbox
+          message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light: $SLACK_becca $SLACK_brocha PR Author: $PR_AUTHOR_PREVIOUS"
+        # run: |
+        #   SLACK_MESSAGE=$(cat <<EOF
+        #   {
+        #    "channel": "va-mobile-sandbox",
+        #    "text": ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:\n
+        #    <@${SLACK_becca}>
+        #    <@${SLACK_brocha}>
+        #    PR Author: "\${PR_AUTHOR_PREVIOUS}\"
+        #   }
+        #   EOF
+        #   )
+        #   echo "$SLACK_MESSAGE" | envsubst | curl -X POST \
+        #   -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+        #   -H 'Content-type: application/json' \
+        #   -d @- \
+        #   https://slack.com/api/chat.postMessage
