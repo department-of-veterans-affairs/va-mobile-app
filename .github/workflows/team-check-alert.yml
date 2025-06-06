@@ -33,17 +33,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      # NOTE: This is only needed for act
-      # - name: Install Packages
-      #   run: |
-      #     type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)
-      #     sudo mkdir -p -m 755 /etc/apt/keyrings
-      #     wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
-      #     sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
-      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-      #     sudo apt update -y
-      #     sudo apt upgrade -y
-      #     sudo apt install -y gh gettext
       - name: fetch team members and check author of PR
         id: fetch_and_check_team
         env:
@@ -81,10 +70,9 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
   send_message:
+    needs: [slack]
     name: Notify Slack of non mobile team member creating a PR
     uses: ./.github/workflows/start_slack_thread.yml
     with:
       channel_name: va-mobile-sandbox
       message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
-    # secrets:
-    #   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
