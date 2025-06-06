@@ -1,36 +1,20 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Pressable } from 'react-native'
+import { Alert } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-
-import {
-  BorderColorVariant,
-  Box,
-  FullScreenSubtask,
-  LargePanel,
-  RadioGroup,
-  RadioGroupProps,
-  TextView,
-  VATextInput,
-} from 'components'
+import { Box, FullScreenSubtask, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { checkStringForPII } from 'utils/common'
-import getEnv from 'utils/env'
-import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
-
-const { LINK_URL_OMB_PAGE } = getEnv()
+import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type InAppFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'InAppFeedback'>
 
 function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
-  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
@@ -38,7 +22,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const [easyToUse, setEasyToUse] = useState('')
   const [task, setTaskOverride] = useState('')
   let submittedCheck = false
-  const launchExternalLink = useExternalLink()
+  const navigateTo = useRouteNavigation()
 
   useBeforeNavBackListener(navigation, () => {
     if (submittedCheck === true) {
@@ -58,19 +42,17 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
         {
           text: t('inAppFeedback.personalInfo.submit'),
           onPress: () => {
-            logAnalyticsEvent(Events.vama_feedback_submitted(newText, satisfaction))
+            logAnalyticsEvent(Events.vama_feedback(satisfaction, meetMyNeeds, easyToUse, newText))
             submittedCheck = true
-            navigation.goBack()
-            snackbar.show(t('inAppFeedback.snackbar.success'))
+            navigateTo('FeedbackSent')
           },
           style: 'default',
         },
       ])
     } else {
-      logAnalyticsEvent(Events.vama_feedback_submitted(task, satisfaction))
+      logAnalyticsEvent(Events.vama_feedback(satisfaction, meetMyNeeds, easyToUse, task))
       submittedCheck = true
-      navigation.goBack()
-      snackbar.show(t('inAppFeedback.snackbar.success'))
+      navigateTo('FeedbackSent')
     }
   }
 
@@ -166,7 +148,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
       onPrimaryContentButtonPress={onSubmit}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box>
-          <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+          <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.overallSatisfaction.header')}
           </TextView>
           <RadioGroup {...radioGroupProps} />
@@ -183,10 +165,10 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
             {t('inAppFeedback.easyToUse.header')}
           </TextView>
           <RadioGroup {...easyToUseProps} />
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.whatTask.header')}
           </TextView>
-          <TextView variant="HelperText" mb={theme.dimensions.alertBorderWidth}>
+          <TextView mb={theme.dimensions.standardMarginBetween} variant="HelperText">
             {t('inAppFeedback.whatTask.body')}
           </TextView>
           <VATextInput

@@ -34,6 +34,7 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
       text: t('giveFeedback.send'),
       onPress: () => navigateTo('SendUsFeedback'),
       detoxTestID: 'inAppRecruitmentID',
+      decorator: ButtonDecoratorType.Navigation,
     },
     {
       text: t('giveFeedback.leaveAppReview'),

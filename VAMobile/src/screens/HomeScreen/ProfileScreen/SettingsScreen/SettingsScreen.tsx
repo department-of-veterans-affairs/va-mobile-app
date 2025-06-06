@@ -154,9 +154,9 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
       ) : (
         <>
           <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
-            <Box mb={theme.dimensions.standardMarginBetween}>
+            <Box mb={50}>
               <SimpleList items={items} />
-              {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
+              {/* {(SHOW_DEBUG_MENU || demoMode) && debugMenu()} */}
             </Box>
             <Box px={theme.dimensions.gutter}>
               <Button

@@ -69,6 +69,7 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import GiveFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
+import FeedbackSentScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
 import SendUsFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
@@ -682,7 +683,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         component={SendUsFeedbackScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-
+      <HomeScreenStack.Screen
+        name="FeedbackSent"
+        component={FeedbackSentScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="AccountSecurity"
         component={AccountSecurity}
