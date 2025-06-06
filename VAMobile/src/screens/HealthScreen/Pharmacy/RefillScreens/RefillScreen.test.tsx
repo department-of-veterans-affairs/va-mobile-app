@@ -35,6 +35,7 @@ context('RefillScreen', () => {
         unknown: 0,
         total: 0,
       },
+      hasNonVaMeds: false,
     },
     links: {
       self: '',
@@ -66,6 +67,7 @@ context('RefillScreen', () => {
         unknown: 0,
         total: 0,
       },
+      hasNonVaMeds: false,
     },
     links: {
       self: '',
