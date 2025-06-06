@@ -8,13 +8,12 @@ on:
       - synchronize
       - ready_for_review #leaving draft state
       - converted_to_draft #draft state
-  #   branches:
-  #     - develop #targeting develop
+    branches:
+      - develop #targeting develop
 
-  # NOTE: This needs to be reverted for prod
-  # paths:
-  #   - "VAMobile/src/**" #Only affecting app code
-  #
+  paths:
+    - "VAMobile/src/**" #Only affecting app code
+
 permissions:
   contents: read
 
@@ -54,7 +53,7 @@ jobs:
           echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
   slack:
     name: slack steps
-    if: needs.check_team_and_alert.outputs.is_team_member == 'true'
+    if: needs.check_team_and_alert.outputs.is_team_member == 'false'
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
     steps:
