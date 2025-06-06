@@ -119,7 +119,7 @@ export const getHomeScreens = () => {
       key={'FeedbackTermsAndConditions'}
       name="FeedbackTermsAndConditions"
       component={FeedbackTermsAndConditionsScreen}
-      options={LARGE_PANEL_OPTIONS}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
     <HomeStack.Screen
       key={'InAppFeedback'}

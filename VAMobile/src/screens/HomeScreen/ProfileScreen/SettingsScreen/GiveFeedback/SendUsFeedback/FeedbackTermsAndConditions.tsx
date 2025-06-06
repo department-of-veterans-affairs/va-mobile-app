@@ -4,7 +4,7 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, LargePanel, TextView } from 'components'
+import { Box, FullScreenSubtask, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import getEnv from 'utils/env'
@@ -14,13 +14,17 @@ const { LINK_URL_OMB_PAGE } = getEnv()
 
 type FeedbackTermsAndConditionsScreenProps = StackScreenProps<HomeStackParamList, 'FeedbackTermsAndConditions'>
 
-function FeedbackTermsAndConditionsScreen({}: FeedbackTermsAndConditionsScreenProps) {
+function FeedbackTermsAndConditionsScreen({ navigation }: FeedbackTermsAndConditionsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
 
   return (
-    <LargePanel title={t('giveFeedback.send')} rightButtonText={t('close')} testID="sendUsFeedbackID">
+    <FullScreenSubtask
+      title={t('giveFeedback.send')}
+      testID="sendUsFeedbackID"
+      primaryContentButtonText={t('back')}
+      onPrimaryContentButtonPress={navigation.goBack}>
       <Box mx={theme.dimensions.gutter}>
         <TextView variant="HelperTextBold">{t('giveFeedback.termsAndConditions.lowercase')}</TextView>
         <TextView variant="HelperText" mt={theme.dimensions.condensedMarginBetween}>
@@ -35,7 +39,7 @@ function FeedbackTermsAndConditionsScreen({}: FeedbackTermsAndConditionsScreenPr
           {t('inAppFeedback.legalReqs.paragraph.2')}
         </TextView>
       </Box>
-    </LargePanel>
+    </FullScreenSubtask>
   )
 }
 export default FeedbackTermsAndConditionsScreen
