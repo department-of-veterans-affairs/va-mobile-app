@@ -54,7 +54,7 @@ jobs:
           echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
   slack:
     name: slack steps
-    if: needs.check_team_and_alert.outputs.is_team_member == 'true'
+    if: needs.check_team_and_alert.outputs.is_team_member == 'false'
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
     steps:
