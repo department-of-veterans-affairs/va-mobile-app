@@ -66,7 +66,7 @@ jobs:
           echo "is_team_member=$IS_TEAM_MEMBER" >> "$GITHUB_OUTPUT"
           echo "team_members_output=$TEAM_MEMBERS" >> "$GITHUB_OUTPUT"
           echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
-  send_slack_message:
+  slack:
     name: slack steps
     needs: [check_team_and_alert]
     runs-on: ubuntu-latest
@@ -80,10 +80,11 @@ jobs:
           for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
-      - name: Notify Slack of non mobile team member creating a PR
-        uses: ./.github/workflows/start_slack_thread.yml
-        with:
-          channel_name: va-mobile-sandbox
-          message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
-        secrets:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  send_message:
+    - name: Notify Slack of non mobile team member creating a PR
+      uses: ./.github/workflows/start_slack_thread.yml
+      with:
+        channel_name: va-mobile-sandbox
+        message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
+      secrets:
+        SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
