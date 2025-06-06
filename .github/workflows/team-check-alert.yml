@@ -74,4 +74,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: @${{ github.event.pull_request.user.login }} | Link: ${{ github.event.pull_request.html_url }}"
+      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ github.event.pull_request.user.login }} | <${{ github.event.pull_request.html_url }}Click here to view the Pull Request>"
