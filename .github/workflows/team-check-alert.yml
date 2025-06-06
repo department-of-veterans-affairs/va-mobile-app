@@ -73,6 +73,7 @@ jobs:
     needs: [slack]
     name: Notify Slack of non mobile team member creating a PR
     uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
     with:
       channel_name: va-mobile-sandbox
       message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
