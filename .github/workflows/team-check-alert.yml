@@ -81,10 +81,10 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
   send_message:
-    - name: Notify Slack of non mobile team member creating a PR
-      uses: ./.github/workflows/start_slack_thread.yml
-      with:
-        channel_name: va-mobile-sandbox
-        message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
-      secrets:
-        SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+    name: Notify Slack of non mobile team member creating a PR
+    uses: ./.github/workflows/start_slack_thread.yml
+    with:
+      channel_name: va-mobile-sandbox
+      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ needs.check_team_and_alert.outputs.pr_author }}"
+    secrets:
+      SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
