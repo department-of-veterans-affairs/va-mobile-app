@@ -20,7 +20,6 @@ on:
   #
 permissions:
   contents: read
-  teams: read
 
 jobs:
   check_team_and_alert:
