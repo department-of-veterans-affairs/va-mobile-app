@@ -29,7 +29,7 @@ jobs:
       team_members_list: ${{ steps.fetch_and_check_team.outputs.team_members_output }}
       pr_author: ${{ steps.fetch_and_check_team.outputs.pr_author }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
