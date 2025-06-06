@@ -47,7 +47,7 @@ import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetails
 import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
-import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/InAppFeedbackScreen/InAppFeedbackScreen'
 import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
@@ -109,7 +109,6 @@ export type RootNavStackParamList = WebviewStackParams & {
   SubmitEvidenceSubtask: {
     claimID: string
   }
-  InAppFeedback: { screen: string }
   Tabs: undefined
 }
 
@@ -468,7 +467,6 @@ export function AuthedApp() {
           component={FileRequestSubtask}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
-        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

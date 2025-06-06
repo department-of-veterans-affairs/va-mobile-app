@@ -630,12 +630,9 @@ export const Events = {
       },
     }
   },
-  vama_feedback_closed: (screen: string): Event => {
+  vama_feedback_closed: (): Event => {
     return {
       name: 'vama_feedback_closed',
-      params: {
-        screen,
-      },
     }
   },
   vama_feedback_submitted: (screen: string, taskCompleted: string, satisfaction: string): Event => {

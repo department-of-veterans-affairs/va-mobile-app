@@ -15,6 +15,7 @@ import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoI
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
 import FeedbackTermsAndConditionsScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackTermsAndConditions'
+import InAppFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/InAppFeedbackScreen/InAppFeedbackScreen'
 import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -43,6 +44,7 @@ export type HomeStackParamList = WebviewStackParams & {
   Settings: undefined
   GiveFeedback: undefined
   SendUsFeedback: undefined
+  InAppFeedback: undefined
   FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
@@ -117,6 +119,12 @@ export const getHomeScreens = () => {
       name="FeedbackTermsAndConditions"
       component={FeedbackTermsAndConditionsScreen}
       options={LARGE_PANEL_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'InAppFeedback'}
+      name="InAppFeedback"
+      component={InAppFeedbackScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
   ]
 }
