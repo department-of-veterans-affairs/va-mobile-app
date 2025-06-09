@@ -39,7 +39,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('past_appointment', 'file smoc'))
+            logAnalyticsEvent(Events.vama_smoc_button_click('past_appointment', 'start claim'))
             navigateTo('SubmitTravelPayClaimScreen', {
               appointment,
               appointmentRouteKey,

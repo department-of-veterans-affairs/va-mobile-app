@@ -27,7 +27,6 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
   useSubtaskProps({
     rightButtonText: t('close'),
     onRightButtonPress: () => {
-      logAnalyticsEvent(Events.vama_smoc_button_click('success', 'close'))
       navigation.getParent()?.goBack()
     },
     rightButtonTestID: 'rightCloseTestID',
@@ -65,9 +64,6 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
               navigation.getParent()?.goBack()
             }}
             testID="goToAppointmentLinkID"
-            analyticsOnPress={() => {
-              logAnalyticsEvent(Events.vama_smoc_button_click('success', 'Back to your appointment'))
-            }}
           />
         </Box>
         <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>

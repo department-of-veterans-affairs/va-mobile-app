@@ -30,7 +30,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const confirmAlert = useDestructiveActionSheet()
 
   const onLeftButtonPress = () => {
-    logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'cancel'))
     confirmAlert({
       title: t('travelPay.cancelClaim.title'),
       cancelButtonIndex: 0,
@@ -38,9 +37,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       buttons: [
         {
           text: t('travelPay.cancelClaim.continue'),
-          onPress: () => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'keep going'))
-          },
         },
         {
           text: t('travelPay.cancelClaim.cancel'),
