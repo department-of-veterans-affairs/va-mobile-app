@@ -73,5 +73,5 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app
       message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ github.event.pull_request.user.login }} | <${{ github.event.pull_request.html_url }}|Click here to view the Pull Request>"
