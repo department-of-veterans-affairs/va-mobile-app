@@ -35,6 +35,7 @@ const mockOverrides = {
   shareMyHealthDataLink: true,
   submitEvidenceExpansion: true,
   sso: true,
+  startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
   useOldLinkComponent: false,
