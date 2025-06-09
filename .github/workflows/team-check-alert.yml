@@ -1,13 +1,28 @@
-name: "[Admin] Check if PR is from mobile team"
+name: "[Admin] Check if PR is from an experience team"
 
 on:
   # Trigger on pull request events
   pull_request:
     types:
       - opened
+      - reopened
       - synchronize
-      - ready_for_review #leaving draft state
-      - converted_to_draft #draft state
+      - closed
+      - assigned
+      - unassigned
+      - labeled
+      - unlabeled
+      - review_requested
+      - review_request_removed
+      - ready_for_review
+      - converted_to_draft
+      - locked
+      - unlocked
+      - edited
+      - auto_merge_enabled
+      - auto_merge_disabled
+      - milestoned
+      - demilestoned
 
     branches:
       - develop #targeting develop
@@ -74,4 +89,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app
-      message: ":rotating_light: Non Mobile Team Member PR incoming :rotating_light:  <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ github.event.pull_request.user.login }} | <${{ github.event.pull_request.html_url }}|Click here to view the Pull Request>"
+      message: "An experience team member PR has been opened in va-mobile-app <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ github.event.pull_request.user.login }} | <${{ github.event.pull_request.html_url }}|Click here to view the Pull Request>"
