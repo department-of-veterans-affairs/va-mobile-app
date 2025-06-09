@@ -7,10 +7,8 @@ import { DateTime } from 'luxon'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useOrientation, useTheme } from 'utils/hooks'
 
