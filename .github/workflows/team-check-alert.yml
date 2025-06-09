@@ -3,27 +3,6 @@ name: "[Admin] Check if PR is from an experience team"
 on:
   # Trigger on pull request events
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
-      - assigned
-      - unassigned
-      - labeled
-      - unlabeled
-      - review_requested
-      - review_request_removed
-      - ready_for_review
-      - converted_to_draft
-      - locked
-      - unlocked
-      - edited
-      - auto_merge_enabled
-      - auto_merge_disabled
-      - milestoned
-      - demilestoned
-
     branches:
       - develop #targeting develop
 
