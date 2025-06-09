@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { decisionLettersKeys, useDecisionLetters, useDownloadDecisionLetter } from 'api/decisionLetters'
+import { useDecisionLetters, useDownloadDecisionLetter } from 'api/decisionLetters'
 import { DecisionLettersList } from 'api/types'
 import {
   Box,

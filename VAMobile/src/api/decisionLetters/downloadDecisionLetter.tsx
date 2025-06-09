@@ -31,7 +31,6 @@ const downloadDecisionLetter = async (
 ): Promise<boolean | undefined> => {
   const escapedId = encodeURI(id) // escape chars like {} in document ID
   const decisionLettersEndpoint = `${API_ROOT}/v0/claims/decision-letters/${escapedId}/download`
-  console.log(store.getState().demo.demoMode)
   const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
     : await downloadFile('GET', decisionLettersEndpoint, createDecisionLetterFileName(receivedAt), undefined, 3)
