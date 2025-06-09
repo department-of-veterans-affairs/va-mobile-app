@@ -6,27 +6,23 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
-import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView } from 'components'
+import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { a11yLabelVA } from 'utils/a11yLabel'
+import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type SendUsFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'SendUsFeedback'>
+
+const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
 function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-
-  const bulletedListOfText = [
-    { text: t('giveFeedback.send.bodyText.bullet.1') },
-    { text: t('giveFeedback.send.bodyText.bullet.2') },
-    {
-      text: t('giveFeedback.send.bodyText.bullet.3'),
-      a11yLabel: a11yLabelVA(t('giveFeedback.send.bodyText.bullet.3')),
-    },
-  ]
 
   return (
     <FeatureLandingTemplate
@@ -46,8 +42,20 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       }>
       <Box mx={theme.dimensions.gutter}>
         <TextView>{t('giveFeedback.send.bodyText')}</TextView>
-        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <VABulletList listOfText={bulletedListOfText} />
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <VeteransCrisisLineNumbers />
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('veteransCrisisLine.getMoreResources')}
+          </TextView>
+          <LinkWithAnalytics
+            type="url"
+            url={LINK_URL_VETERANS_CRISIS_LINE}
+            text={t('veteransCrisisLine.urlDisplayed')}
+            a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
+            a11yHint={t('veteransCrisisLine.urlA11yHint')}
+            analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
+            testID="veteransCrisisLineGetMoreResourcesTestID"
+          />
         </Box>
         <LinkWithAnalytics
           type="custom"
