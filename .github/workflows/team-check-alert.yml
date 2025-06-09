@@ -3,6 +3,10 @@ name: "[Admin] Check if PR is from an experience team"
 on:
   # Trigger on pull request events
   pull_request:
+    types:
+      - opened
+      - ready_for_review
+
     branches:
       - develop #targeting develop
 
