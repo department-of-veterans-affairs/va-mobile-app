@@ -27,9 +27,6 @@ on:
     branches:
       - develop #targeting develop
 
-    paths:
-      - "VAMobile/src/**" #Only affecting app code
-
 permissions:
   contents: read
 
