@@ -291,9 +291,5 @@ export function isDisabilityCompensationClaim(claimTypeCode: string) {
  * @param rating - disability rating value
  */
 export function isValidDisabilityRating(rating: number | undefined) {
-  if (rating === 0) {
-    return true
-  } else {
-    return !!rating
-  }
+  return rating === 0 || !!rating
 }
