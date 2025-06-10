@@ -115,18 +115,30 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     return listItems
   }
 
-  const paginationProps: PaginationProps = {
-    onNext: () => {
-      setPage(page + 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-    },
-    onPrev: () => {
-      setPage(page - 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-    },
-    totalEntries: totalEntries,
-    pageSize: perPage,
-    page,
+  function renderPagination() {
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      onPrev: () => {
+        setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      totalEntries: totalEntries,
+      pageSize: perPage,
+      page,
+    }
+
+    return (
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
+    )
   }
 
   return (
@@ -153,10 +165,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
           </TextView>
           <Box mb={theme.dimensions.contentMarginBottom}>
             <DefaultList items={getListItemVals()} />
-            <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-              <Pagination {...paginationProps} />
-            </Box>
           </Box>
+          {renderPagination()}
         </>
       )}
     </FeatureLandingTemplate>
