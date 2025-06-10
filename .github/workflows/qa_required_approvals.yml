@@ -1,20 +1,17 @@
-
-#
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
-#
 
-name: '[Utils] QA required approval'
+name: "[Utils] QA required approval"
 
 on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - 'VAMobile/src'
-      - 'VAMobile/e2e'
-      - 'VAMobile/package.json'
-      - 'VAMobile/.detoxrc.json'
-      - '!VAMobile/src/*.test.tsx'
-      - '!.github/**'
+      - "VAMobile/src"
+      - "VAMobile/e2e"
+      - "VAMobile/package.json"
+      - "VAMobile/.detoxrc.json"
+      - "!VAMobile/src/*.test.tsx"
+      - "!.github/**"
   pull_request_review:
     types: [submitted, dismissed]
 
@@ -47,7 +44,7 @@ jobs:
 
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
- 
+
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
               if [[ $(jq '[.[] | select(. | IN("timwright12", "dumathane", "jmarchi", "keli13", "dftony", "df-troiano"))] | length' <<< "$approvals") -gt 0 ]]
@@ -68,4 +65,4 @@ jobs:
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
-          fi 
+          fi

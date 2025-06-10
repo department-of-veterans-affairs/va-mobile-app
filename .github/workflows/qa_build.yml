@@ -1,12 +1,12 @@
 # Daily QA Build workflow that runs the reusable build_ios and build_android workflows
 # with default inputs for QA builds
 
-name: '[Build] Daily QA Build'
+name: "[Build] Daily QA Build"
 
 on:
   # Run on weekdays 4:00 AM UTC
   schedule:
-    - cron: '0 4 * * 1,2,3,4,5'
+    - cron: "0 4 * * 1,2,3,4,5"
 
 jobs:
   queue_build:
@@ -19,7 +19,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      message: 'QA build process starting. Please see :thread: for results. This process may take a while.'
+      message: "QA build process starting. Please see :thread: for results. This process may take a while."
   ios:
     name: iOS QA Build
     needs: start_slack_thread
@@ -34,4 +34,3 @@ jobs:
     secrets: inherit
     with:
       slack_thread_ts: ${{needs.start_slack_thread.outputs.thread_ts}}
-

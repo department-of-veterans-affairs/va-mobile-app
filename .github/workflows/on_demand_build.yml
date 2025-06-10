@@ -1,7 +1,7 @@
 # On demand builds that can be run via GitHub UI at
 # https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml
 
-name: '[Build] On Demand Build'
+name: "[Build] On Demand Build"
 
 on:
   workflow_dispatch:
