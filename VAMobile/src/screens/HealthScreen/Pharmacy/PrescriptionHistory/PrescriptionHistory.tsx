@@ -4,7 +4,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -33,6 +33,7 @@ import {
   PaginationProps,
   TextView,
 } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -118,6 +119,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
@@ -467,17 +469,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getRequestRefillButton = () => {
-    return (
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
-        <Button
-          testID="refillRequestTestID"
-          label={t('prescription.history.startRefillRequest')}
-          onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-        />
-      </Box>
-    )
-  }
+  const getRequestRefillButton = () => (
+    <FloatingButton
+      testID="refillRequestTestID"
+      label={t('prescription.history.startRefillRequest')}
+      onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+    />
+  )
 
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
@@ -546,7 +544,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.floatingButtonOffset} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
@@ -580,7 +578,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={getRequestRefillButton()}>
+      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
@@ -605,6 +603,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <>
           {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
+          {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { View, ViewStyle } from 'react-native'
+import { Modal, View, ViewStyle } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -44,6 +44,8 @@ export type LargePanelProps = {
   dividerMarginBypass?: boolean
   /** scrollview insets removal - used for when wanting to extend background color when in landscape mode across the screen, default is false */
   removeInsets?: boolean
+  /** hides modal */
+  hideModal?: boolean
 }
 
 export const LargePanel: FC<LargePanelProps> = ({
@@ -61,6 +63,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   testID,
   dividerMarginBypass,
   removeInsets,
+  hideModal,
 }) => {
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -118,7 +121,8 @@ export const LargePanel: FC<LargePanelProps> = ({
 
   const fillStyle: ViewStyle = {
     backgroundColor: theme.colors.background.main,
-    flex: 1,
+    height: '85%',
+    top: '15%',
   }
 
   const containerStyle: ViewStyle = {
@@ -128,7 +132,8 @@ export const LargePanel: FC<LargePanelProps> = ({
   }
 
   return (
-    <>
+    // Modal to ensure keyboard navigation is confined to focusable elements within panel
+    <Modal visible={!hideModal} transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
         <VAScrollView
@@ -143,7 +148,7 @@ export const LargePanel: FC<LargePanelProps> = ({
           </WaygateWrapper>
         </VAScrollView>
       </View>
-    </>
+    </Modal>
   )
 }
 

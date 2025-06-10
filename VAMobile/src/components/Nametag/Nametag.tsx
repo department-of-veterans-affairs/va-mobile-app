@@ -17,7 +17,6 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 export const Nametag = () => {
   const { data: personalInfo } = usePersonalInformation()
   const { data: serviceHistory } = useServiceHistory({ enabled: false })
-  const hasServiceHistory = serviceHistory?.serviceHistory != null
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -66,34 +65,32 @@ export const Nametag = () => {
 
   return (
     <Box>
-      {hasServiceHistory && (
-        <Pressable {...pressableProps} testID="veteranStatusButtonID">
-          <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
-            <MilitaryBranchEmblem branch={branch as BranchOfService} width={40} height={40} />
-            <Box ml={theme.dimensions.buttonPadding} flex={1}>
-              {branch && (
-                <TextView variant="VeteranStatusBranch" pb={4}>
-                  {branch}
-                </TextView>
-              )}
-              <Box flexDirection="row" alignItems="center">
-                <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
-                  {t('veteranStatus.title')}
-                </TextView>
-              </Box>
-            </Box>
-            <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
-              <Icon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.linkRow}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-                preventScaling={true}
-              />
+      <Pressable {...pressableProps} testID="veteranStatusButtonID">
+        <Box py={theme.dimensions.buttonPadding} pr={8} flexDirection="row" alignItems="center">
+          <MilitaryBranchEmblem branch={branch as BranchOfService} width={40} height={40} />
+          <Box ml={theme.dimensions.buttonPadding} flex={1}>
+            {branch && (
+              <TextView variant="VeteranStatusBranch" pb={4}>
+                {branch}
+              </TextView>
+            )}
+            <Box flexDirection="row" alignItems="center">
+              <TextView variant="VeteranStatusProof" mr={theme.dimensions.textIconMargin}>
+                {t('veteranStatus.title')}
+              </TextView>
             </Box>
           </Box>
-        </Pressable>
-      )}
+          <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+            <Icon
+              name={'ChevronRight'}
+              fill={theme.colors.icon.linkRow}
+              width={theme.dimensions.chevronListItemWidth}
+              height={theme.dimensions.chevronListItemHeight}
+              preventScaling={true}
+            />
+          </Box>
+        </Box>
+      </Pressable>
     </Box>
   )
 }
