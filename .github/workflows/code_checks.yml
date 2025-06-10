@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: ./.github/workflows/get-changed-files
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -44,7 +45,10 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-      - run: yarn lint:changed:ci
+      - run: | 
+          if [ ${{ steps.get-changed-files.outputs.changed_files }} ]; then
+            eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js ${{ steps.get-changed-files.outputs.changed_files }} && yarn run tsc:compile; 
+          fi
   test:
     runs-on: ubuntu-4-cores-latest
     strategy:
