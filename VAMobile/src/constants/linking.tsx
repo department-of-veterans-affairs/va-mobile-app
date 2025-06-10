@@ -95,6 +95,25 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'pastAppointments') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    // The ID from the notification payload is sent encoded, so it needs to be decoded
+                    routes: [{ name: 'Health' }, { name: 'Appointments', params: { tab: 1 } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     } else if (pathParts[0] === 'prescriptions') {
       return {
         routes: [

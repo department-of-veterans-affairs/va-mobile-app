@@ -367,14 +367,23 @@ export function HomeScreen({}: HomeScreenProps) {
               {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
                 !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
                   <ActivityButton
-                    title={t('appointments')}
-                    subText={t('appointments.activityButton.subText', {
+                    title={t('upcomingAppointments')}
+                    subText={t('upcomingAppointments.activityButton.subText', {
                       count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
                       dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
                     })}
                     deepLink={'appointments'}
                   />
                 )}
+              {!!appointmentsQuery.data?.meta?.travelPayEligibleCount && (
+                <ActivityButton
+                  title={t('pastAppointments')}
+                  subText={t('pastAppointments.activityButton.subText', {
+                    count: appointmentsQuery.data.meta.travelPayEligibleCount,
+                  })}
+                  deepLink={'pastAppointments'}
+                />
+              )}
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
