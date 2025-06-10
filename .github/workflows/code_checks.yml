@@ -43,7 +43,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install yamllint
-        run: pip install yamllint -y
+        run: pip install yamllint
 
       - name: Run yamllint
         # Overriding the default working directory to scan the entire repo from the root
