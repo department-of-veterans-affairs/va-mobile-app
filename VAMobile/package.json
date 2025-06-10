@@ -20,7 +20,7 @@
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
-    "lint:changed:ci": "CHANGED_FILES=`git diff --relative --name-only develop -- \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"`; if [ \"$CHANGED_FILES\" ]; then eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js $CHANGED_FILES && yarn run tsc:compile; fi",
+    "lint:changed:ci": "CHANGED_FILES=`git diff --relative --name-only origin/develop -- \"./**/*.ts\" \"./**/*.tsx\" \"./**/*.js\" \"./**/*.jsx\"`; if [ \"$CHANGED_FILES\" ]; then eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js $CHANGED_FILES && yarn run tsc:compile; fi",
     "lint:ci": "eslint --max-warnings 0 --rule 'deprecate/import: off' ./src --ext .js,.jsx,.ts,.tsx && yarn run tsc:compile",
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache",
