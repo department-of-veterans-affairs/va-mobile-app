@@ -1,12 +1,16 @@
 import React from 'react'
 
+import { CommonActions } from '@react-navigation/native'
+
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
+import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { appendClaimDataToAppointment } from 'utils/travelPay'
 
 import ReviewClaimScreen from './ReviewClaimScreen'
 
@@ -32,16 +36,24 @@ const params = {
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
       startDateLocal: '2021-02-06T18:53:14.000-01:00',
       location: {
-        id: '123',
-        name: 'Test Facility',
+        id: '442',
+        name: 'Tomah VA Medical Center',
       },
     },
   },
   appointmentRouteKey: 'key',
 }
 
+const MOCK_TRAVEL_PAY_CLAIM_RESPONSE = submitAppointmentClaim({
+  appointmentDateTime: params.appointment.attributes.startDateLocal,
+  facilityStationNumber: params.appointment.attributes.location.id,
+  appointmentType: 'Other',
+  isComplete: false,
+})
+
 const mockNavigationSpy = jest.fn()
 const mockSubmitClaimSpy = jest.fn()
+const mockDispatchSpy = jest.fn()
 let mockIsPending = false
 
 jest.mock('utils/hooks', () => {
@@ -73,7 +85,7 @@ jest.mock('components/Templates/MultiStepSubtask', () => {
 })
 
 context('ReviewClaimScreen', () => {
-  const props = mockNavProps(undefined, undefined, { params })
+  const props = mockNavProps(undefined, { dispatch: mockDispatchSpy }, { params })
 
   const initializeTestInstance = (contactInformation?: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
@@ -140,7 +152,56 @@ context('ReviewClaimScreen', () => {
     })
   })
 
-  describe('when the submission is successful', () => {})
+  describe('when the submission is successful', () => {
+    it('should navigate to the SubmitSuccessScreen', async () => {
+      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
+        if (options && options.onSuccess) {
+          options.onSuccess(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
+        }
+      })
+      initializeTestInstance({ residentialAddress })
+      const checkbox = screen.getByTestId('checkboxTestID')
+      fireEvent.press(checkbox)
+      const button = screen.getByTestId('submitTestID')
+      fireEvent.press(button)
+
+      await waitFor(() => {
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
+          appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
+          facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
+        })
+      })
+    })
+
+    it('should update the navigation params', async () => {
+      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
+        if (options && options.onSuccess) {
+          options.onSuccess(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
+        }
+      })
+      initializeTestInstance({ residentialAddress })
+      const checkbox = screen.getByTestId('checkboxTestID')
+      fireEvent.press(checkbox)
+      const button = screen.getByTestId('submitTestID')
+      fireEvent.press(button)
+
+      await waitFor(() => {
+        expect(mockDispatchSpy).toHaveBeenCalledWith({
+          ...CommonActions.setParams({
+            appointment: appendClaimDataToAppointment(
+              params.appointment,
+              MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes,
+            ),
+          }),
+          source: params.appointmentRouteKey,
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
+          appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
+          facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
+        })
+      })
+    })
+  })
 
   describe('when the submission fails', () => {
     it('should navigate to the ErrorScreen', async () => {
