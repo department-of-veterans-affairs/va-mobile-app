@@ -66,9 +66,11 @@ import {
   useTheme,
 } from 'utils/hooks'
 import {
+  RecentRecipient,
   SubjectLengthValidationFn,
   formatSubject,
   getCareSystemPickerOptions,
+  getRecentRecipients,
   getStartNewMessageCategoryPickerOptions,
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
@@ -155,7 +157,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
-  // const [to, setTo] = useState((message?.recipientId || '').toString())
   const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -399,36 +400,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
   }
 
-  type RecentRecipient = {
-    label: string
-    value?: string
-    date: string
-  }
-
-  // use memo here so we don't rebuild recentRecipients more than we need to
-  // we might want to move this to the backend, but didn't want to put up a nonfunctional pr
-  // modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
-    const recentList: Record<string, RecentRecipient> = {}
-    _.each(folderMessagesData?.data || [], (sentMessage) => {
-      const currentRecipientId = sentMessage?.attributes?.recipientId
-      const recentRecipient: RecentRecipient = {
-        label: sentMessage?.attributes?.recipientName,
-        value: String(sentMessage?.attributes?.recipientId),
-        date: sentMessage?.attributes?.sentDate,
-      }
-      if (currentRecipientId) {
-        if (!recentList[currentRecipientId]) {
-          recentList[currentRecipientId] = recentRecipient
-        } else {
-          if (new Date(recentRecipient.date) > new Date(recentList[currentRecipientId].date)) {
-            recentList[currentRecipientId] = recentRecipient
-          }
-        }
-      }
-    })
-
-    return _.values(recentList)
+    return getRecentRecipients(folderMessagesData?.data || [])
   }, [folderMessagesData?.data])
 
   const getToComboBoxOptions = (): ComboBoxOptions => {

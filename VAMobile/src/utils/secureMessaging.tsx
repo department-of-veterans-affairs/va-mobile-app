@@ -44,6 +44,42 @@ import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hoo
 
 const MAX_SUBJECT_LENGTH = 50
 
+export type RecentRecipient = {
+  label: string
+  value?: string
+  date: string
+}
+
+/**
+ * Returns recent recipients based on the SecureMessagingMessageList data
+ * Modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
+ * might want to move this to the backend, but didn't want to put up a nonfunctional pr
+ *
+ * @param data - SecureMessagingMessageList data
+ */
+export const getRecentRecipients = (data: SecureMessagingMessageList) => {
+  const recentList: Record<string, RecentRecipient> = {}
+  _.each(data, (sentMessage) => {
+    const currentRecipientId = sentMessage?.attributes?.recipientId
+    const recentRecipient: RecentRecipient = {
+      label: sentMessage?.attributes?.recipientName,
+      value: String(sentMessage?.attributes?.recipientId),
+      date: sentMessage?.attributes?.sentDate,
+    }
+    if (currentRecipientId) {
+      if (!recentList[currentRecipientId]) {
+        recentList[currentRecipientId] = recentRecipient
+      } else {
+        if (new Date(recentRecipient.date) > new Date(recentList[currentRecipientId].date)) {
+          recentList[currentRecipientId] = recentRecipient
+        }
+      }
+    }
+  })
+
+  return _.values(recentList)
+}
+
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
@@ -665,7 +701,7 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
 }
 
 export const getCareSystemPickerOptions = (facilitiesInfo: Array<Facility>): Array<PickerItem> => {
-  return (facilitiesInfo || []).map((facility) => {
+  return facilitiesInfo.map((facility) => {
     return {
       label: facility.name,
       value: facility.id,

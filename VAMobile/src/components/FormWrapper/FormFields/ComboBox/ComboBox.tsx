@@ -48,8 +48,6 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   const containerStyle: BoxProps = {
     backgroundColor: 'menu',
     flex: 1,
-    // borderRadius: 8,
-    // borderTopWidth: 1,
   }
 
   const scrollContainerStyle: ViewStyle = {

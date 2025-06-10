@@ -42,7 +42,7 @@ export type ComboBoxInputProps = {
   error?: string
   /** If true, will include a blank option at the top of the list with a blank value */
   includeBlankPlaceholder?: boolean
-  /** list of items of containing types label and value for each option in the picker */
+  /** list of items of containing types label and value for each option in the combobox */
   comboBoxOptions: ComboBoxOptions
 }
 
@@ -83,6 +83,8 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   const insets = useSafeAreaInsets()
   const wrapperProps = getInputWrapperProps(theme, error, false)
   const [modalVisible, setModalVisible] = useState(false)
+
+  console.log('comboBoxOptions: ', comboBoxOptions)
 
   const renderSelectionBox = () => {
     return (

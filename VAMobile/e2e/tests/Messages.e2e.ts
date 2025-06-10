@@ -31,6 +31,7 @@ export const MessagesE2eIdConstants = {
   SEND_BUTTON_ID: 'sendButtonTestID',
   SELECT_A_FILE_ID: 'messagesSelectAFileID',
   REPLY_PAGE_TEST_ID: 'replyPageTestID',
+  START_NEW_MESSAGE_CARE_SYSTEM_ID: 'care system field',
   START_NEW_MESSAGE_TO_ID: 'to field',
   START_NEW_MESSAGE_CATEGORY_ID: 'picker',
   START_NEW_MESSAGE_SUBJECT_ID: 'startNewMessageSubjectTestID',
@@ -329,6 +330,7 @@ describe('Messages Screen', () => {
   it(':ios: tap start new message and verify information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
+    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()

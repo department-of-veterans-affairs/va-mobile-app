@@ -61,8 +61,10 @@ import {
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import {
+  RecentRecipient,
   SubjectLengthValidationFn,
   getCareSystemPickerOptions,
+  getRecentRecipients,
   getStartNewMessageCategoryPickerOptions,
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
@@ -87,7 +89,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isError: sendMessageError,
     error: sendMessageErrorDetails,
   } = useSendMessage()
-
   const {
     data: facilitiesInfo,
     isFetched: hasLoadedFacilities,
@@ -139,10 +140,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [errorList, setErrorList] = useState<{ [key: number]: string }>([])
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
-
-  console.log('recipients: ', recipients)
-  console.log('careSystem: ', careSystem)
-  console.log('to.value: ', to?.value)
 
   const messageData = {
     recipient_id: parseInt(to?.value || '', 10),
@@ -220,36 +217,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
-  type RecentRecipient = {
-    label: string
-    value?: string
-    date: string
-  }
-
-  // use memo here so we don't rebuild recentRecipients more than we need to
-  // we might want to move this to the backend, but didn't want to put up a nonfunctional pr
-  // modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
-    const recentList: Record<string, RecentRecipient> = {}
-    _.each(folderMessagesData?.data || [], (sentMessage) => {
-      const currentRecipientId = sentMessage?.attributes?.recipientId
-      const recentRecipient: RecentRecipient = {
-        label: sentMessage?.attributes?.recipientName,
-        value: String(sentMessage?.attributes?.recipientId),
-        date: sentMessage?.attributes?.sentDate,
-      }
-      if (currentRecipientId) {
-        if (!recentList[currentRecipientId]) {
-          recentList[currentRecipientId] = recentRecipient
-        } else {
-          if (new Date(recentRecipient.date) > new Date(recentList[currentRecipientId].date)) {
-            recentList[currentRecipientId] = recentRecipient
-          }
-        }
-      }
-    })
-
-    return _.values(recentList)
+    return getRecentRecipients(folderMessagesData?.data || [])
   }, [folderMessagesData?.data])
 
   const getToComboBoxOptions = (): ComboBoxOptions => {
@@ -496,6 +465,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   }
 
   const hasError = recipientsError || signatureError || folderMessagesError || facilitiesError
+
   const isLoading =
     !hasLoadedRecipients ||
     savingDraft ||
