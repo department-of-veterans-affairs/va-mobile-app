@@ -9,6 +9,7 @@ import { useTheme } from 'utils/hooks'
 
 import { Box, BoxProps, TextArea } from './index'
 
+console.log('test')
 export type AccordionCollapsibleProps = {
   /** component to display as header of accordion */
   header: ReactNode

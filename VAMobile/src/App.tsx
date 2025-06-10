@@ -481,3 +481,4 @@ export function AuthedApp() {
 const App = connectActionSheet(MainApp)
 
 export default App
+console.log('test')
