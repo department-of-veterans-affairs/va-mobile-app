@@ -469,13 +469,26 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getRequestRefillButton = () => (
-    <FloatingButton
-      testID="refillRequestTestID"
-      label={t('prescription.history.startRefillRequest')}
-      onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-    />
-  )
+  const getRequestRefillButton = () => {
+    if (
+      prescriptionInDowntime ||
+      loadingHistory ||
+      loadingUserAuthorizedServices ||
+      getUserAuthorizedServicesError ||
+      !userAuthorizedServices?.prescriptions ||
+      hasError ||
+      !allPrescriptions?.length
+    )
+      return <></>
+
+    return (
+      <FloatingButton
+        testID="refillRequestTestID"
+        label={t('prescription.history.startRefillRequest')}
+        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+      />
+    )
+  }
 
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)
