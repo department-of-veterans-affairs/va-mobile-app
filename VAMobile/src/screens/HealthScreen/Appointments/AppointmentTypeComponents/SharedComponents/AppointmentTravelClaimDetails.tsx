@@ -13,8 +13,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
-  AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
+  AppointmentDetailsSubTypeConstants, // appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -119,7 +118,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    if (!claim && attributes.travelPayEligible && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}

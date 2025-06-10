@@ -185,6 +185,7 @@ export type AppointmentAttributes = {
   vetextId: string
   physicalLocation?: string
   travelPayClaim?: AppointmentTravelPayClaim
+  travelPayEligible?: boolean
 }
 
 export type AppointmentData = {
