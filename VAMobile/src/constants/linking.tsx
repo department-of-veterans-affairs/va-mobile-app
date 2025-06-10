@@ -105,7 +105,6 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    // The ID from the notification payload is sent encoded, so it needs to be decoded
                     routes: [{ name: 'Health' }, { name: 'Appointments', params: { tab: 1 } }],
                   },
                 },
