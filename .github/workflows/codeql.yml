@@ -1,3 +1,7 @@
+#
+# Code QL Checks
+#
+
 name: "[Code Quality] CodeQL"
 
 on:
@@ -32,4 +36,3 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
-# comment
