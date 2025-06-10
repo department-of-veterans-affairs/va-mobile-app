@@ -22,13 +22,13 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import { isValidDisabilityRating } from '../../../utils/claims'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 function DisabilityRatingsScreen() {
