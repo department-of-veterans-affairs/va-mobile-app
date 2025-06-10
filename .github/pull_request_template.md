@@ -22,7 +22,7 @@ Acceptance Criteria
 - [ ] AC 1
 - [ ] AC 2
 
-Test Users
+Test User(s)
 <!-- What test users should be used to test test this feature? Please specify what each test user should test. -->
 
 - [ ] Test User 1
@@ -32,13 +32,26 @@ Test Users
 <!-- PR Submitter should make sure all of these items are checked off before requesting a review -->
   **PR Reviewer:** Confirm the items below as you review
 
+### Administrative and documentation
+
 - [ ] PR is connected to issue(s)
-- [ ] Code is attached to a feature flag, or reason is given for no feature flag
-- [ ] AC and Tests are included to cover this change (when possible)
-- [ ] No magic strings (All string unions follow the [Union -> Constant](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/src/constants/common.ts) type pattern)
-- [ ] No secrets or API keys are checked in
+- [ ] Acceptance criteria is added on this PR or referenced from the attached issue
+
+### Code testing
+
+- [ ] Unit tests have been created or updated to cover this change
+- [ ] End to end (Detox) tests have been created or updated to cover this change
+
+### Code implementation
+
 - [ ] All imports are absolute (no relative imports)
-- [ ] New functions and Redux work have proper TSDoc annotations
+- [ ] No magic strings (All string unions follow the [Union -> Constant](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/src/constants/common.ts) type pattern)
+- [ ] No secrets or API keys are checked present in the code
+
+### New features
+
+- [ ] Code is attached to a feature flag, or reason is given for no feature flag
+- [ ] Design and UX has been approved by the code mobile team (documented on the PR or attached issue)
 
 ## Checklist for QA
 <!-- This checklist is for the QA to complete. -->
@@ -46,4 +59,5 @@ Test Users
 
 - [ ] Tested on iOS
 - [ ] Tested on Android
-- [ ] [Run a build for this branch](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml)
+
+[Run a build for this branch](https://github.com/department-of-veterans-affairs/va-mobile-app/actions/workflows/on_demand_build.yml)
