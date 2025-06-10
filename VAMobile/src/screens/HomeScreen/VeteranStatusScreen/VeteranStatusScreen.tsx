@@ -34,6 +34,7 @@ import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 
+import { isValidDisabilityRating } from '../../../utils/claims'
 import { displayedTextPhoneNumber } from '../../../utils/formattingUtils'
 import VeteranStatusCard from './VeteranStatusCard/VeteranStatusCard'
 
@@ -61,7 +62,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
   const ratingPercent = ratingData?.combinedDisabilityRating
-  const ratingIsDefined = ratingPercent !== undefined && ratingPercent !== null
+  const ratingIsDefined = isValidDisabilityRating(ratingPercent)
   const percentText = ratingIsDefined ? t('disabilityRating.percent', { combinedPercent: ratingPercent }) : undefined
   const combinedPercentText = ratingIsDefined
     ? t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })

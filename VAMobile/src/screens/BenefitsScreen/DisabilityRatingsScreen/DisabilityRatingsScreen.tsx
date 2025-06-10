@@ -28,6 +28,7 @@ import { useDowntime, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
+import { isValidDisabilityRating } from '../../../utils/claims'
 import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 function DisabilityRatingsScreen() {
@@ -125,10 +126,9 @@ function DisabilityRatingsScreen() {
 
   const getCombinedTotalSection = () => {
     // must check only for null or undefined. 0 is a valid rating
-    const combinedPercentText =
-      totalCombinedRating !== undefined && totalCombinedRating !== null
-        ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
-        : undefined
+    const combinedPercentText = isValidDisabilityRating(totalCombinedRating)
+      ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
+      : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (

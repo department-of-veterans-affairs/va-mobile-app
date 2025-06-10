@@ -56,6 +56,7 @@ import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
+import { isValidDisabilityRating } from '../../utils/claims'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
 import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
@@ -199,7 +200,7 @@ export function HomeScreen({}: HomeScreenProps) {
   }
 
   const hasRecurringPaymentInfo = !!recurringPayment.amount && !!recurringPayment.date
-  const hasDisabilityRating = !!disabilityRatingQuery.data?.combinedDisabilityRating
+  const hasDisabilityRating = isValidDisabilityRating(disabilityRatingQuery.data?.combinedDisabilityRating)
 
   const activityFeatureInDowntime = !!(
     (authorizedServicesQuery.data?.appointments && appointmentsInDowntime) ||
