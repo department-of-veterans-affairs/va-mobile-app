@@ -50,9 +50,12 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-      - run: | 
-          if [ ${{ steps.get-changed-files.outputs.changed_files }} ]; then
-            eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js ${{ steps.get-changed-files.outputs.changed_files }} && yarn run tsc:compile; 
+      - name: lint-changed-files
+        env:
+          CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
+        run: | 
+          if [ "$CHANGED_FILES" ]; then
+            eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js "$CHANGED_FILES" && yarn run tsc:compile; 
           fi
   test:
     runs-on: ubuntu-4-cores-latest
