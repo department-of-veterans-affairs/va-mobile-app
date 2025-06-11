@@ -34,9 +34,14 @@ jobs:
   lint-changed:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/workflows/get-changed-files
-      - uses: actions/setup-node@v3
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        uses: ./.github/workflows/get-changed-files
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
