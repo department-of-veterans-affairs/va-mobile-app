@@ -22,15 +22,13 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const getStartSurveyButton = () => (
-    <Box py={theme.dimensions.standardMarginBetween}>
-      <FloatingButton
-        testID="startSurveyTestID"
-        label={t('giveFeedback.startSurvey')}
-        onPress={() => {
-          navigateTo('InAppFeedback', { task: 'static' })
-        }}
-      />
-    </Box>
+    <FloatingButton
+      testID="startSurveyTestID"
+      label={t('giveFeedback.startSurvey')}
+      onPress={() => {
+        navigateTo('InAppFeedback', { task: 'static' })
+      }}
+    />
   )
 
   return (
@@ -40,20 +38,20 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
       footerContent={screenReaderEnabled ? undefined : getStartSurveyButton()}>
-      <Box mx={theme.dimensions.gutter}>
-        <TextView>{t('giveFeedback.send.bodyText')}</TextView>
+      <Box>
+        <TextView mx={theme.dimensions.gutter}>{t('giveFeedback.send.bodyText')}</TextView>
         {screenReaderEnabled ? getStartSurveyButton() : undefined}
-        <LinkWithAnalytics
-          type="custom"
-          text={t('giveFeedback.termsAndConditions')}
-          onPress={() => navigateTo('FeedbackTermsAndConditions')}
-          testID="termsAndConditionsID"
-        />
-        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-          {t('giveFeedback.needHelp')}
-        </TextView>
-        <TextView>{t('giveFeedback.send.bodyText.2')}</TextView>
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.floatingButtonOffset}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('giveFeedback.termsAndConditions')}
+            onPress={() => navigateTo('FeedbackTermsAndConditions')}
+            testID="termsAndConditionsID"
+          />
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+            {t('giveFeedback.needHelp')}
+          </TextView>
+          <TextView>{t('giveFeedback.send.bodyText.2')}</TextView>
           <VeteransCrisisLineNumbers />
         </Box>
       </Box>
