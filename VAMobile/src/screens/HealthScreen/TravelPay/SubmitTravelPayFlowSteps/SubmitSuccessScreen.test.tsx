@@ -3,37 +3,120 @@ import React from 'react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { context, mockNavProps, render, screen } from 'testUtils'
+import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import SubmitSuccessScreen from './SubmitSuccessScreen'
+
+const mockNavigateToTravelPayWebsiteSpy = jest.fn()
+jest.mock('utils/travelPay', () => {
+  const original = jest.requireActual('utils/travelPay')
+  return {
+    ...original,
+    navigateToTravelPayWebsite: () => mockNavigateToTravelPayWebsiteSpy(),
+  }
+})
 
 const params = {
   facilityName: 'Test Facility',
   appointmentDateTime: '2021-01-01T00:00:00Z',
+  status: 'In Progress',
 }
 
+const mockNavigationSpy = jest.fn()
+const mockGoBackSpy = jest.fn()
+const mockParentSpy = jest.fn().mockReturnValue({ goBack: mockGoBackSpy })
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('SubmitSuccessScreen', () => {
-  const initializeTestInstance = () => {
-    const props = mockNavProps(undefined, undefined, { params })
+  const initializeTestInstance = (status: string = 'In Progress') => {
+    const props = mockNavProps(undefined, { getParent: mockParentSpy }, { params: { ...params, status } })
     render(<SubmitSuccessScreen {...props} />)
   }
 
-  it('initializes correctly', () => {
-    initializeTestInstance()
-    expect(screen.getByText(t('travelPay.success.title'))).toBeTruthy()
-    expect(
-      screen.getByText(
-        t('travelPay.success.text', {
-          facilityName: params.facilityName,
-          date: DateTime.fromISO(params.appointmentDateTime).toFormat('LLLL dd, yyyy'),
-          time: DateTime.fromISO(params.appointmentDateTime).toFormat('h:mm a'),
-        }),
-      ),
-    ).toBeTruthy()
-    expect(screen.getByText(t('travelPay.success.nextTitle'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.success.nextText'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.success.nextText2'))).toBeTruthy()
-    expect(screen.getByTestId('goToAppointmentLinkID')).toBeTruthy()
-    expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
+  describe('when status is In Progress', () => {
+    it('initializes correctly', () => {
+      initializeTestInstance('In Progress')
+      expect(screen.getByText(t('travelPay.success.title'))).toBeTruthy()
+      expect(
+        screen.getByText(
+          t('travelPay.success.text', {
+            facilityName: params.facilityName,
+            date: DateTime.fromISO(params.appointmentDateTime).toFormat('LLLL dd, yyyy'),
+            time: DateTime.fromISO(params.appointmentDateTime).toFormat('h:mm a'),
+          }),
+        ),
+      ).toBeTruthy()
+      expect(screen.getByText(t('travelPay.success.nextTitle'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.success.nextText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.setUpDirectDeposit.eligible'))).toBeTruthy()
+      expect(screen.getByTestId('goToAppointmentLinkID')).toBeTruthy()
+      expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
+    })
+
+    describe('when the user clicks the link', () => {
+      it('navigates back and closes the subtask', () => {
+        initializeTestInstance('In Progress')
+        fireEvent.press(screen.getByTestId('goToAppointmentLinkID'))
+        expect(mockGoBackSpy).toHaveBeenCalledTimes(1)
+      })
+    })
+  })
+
+  describe('when status is Incomplete', () => {
+    it('initializes correctly', () => {
+      initializeTestInstance('Incomplete')
+      expect(screen.getByText(t('travelPay.partialSuccess.title'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.text'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.success.nextTitle'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.setUpDirectDeposit.eligible'))).toBeTruthy()
+      expect(screen.getByTestId('finishTravelClaimLinkID')).toBeTruthy()
+      expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
+    })
+
+    describe('when the user clicks the link', () => {
+      it('calls the navigateToTravelPayWebsite function', () => {
+        initializeTestInstance('Incomplete')
+        fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
+        expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('when status is Saved', () => {
+    it('initializes correctly', () => {
+      initializeTestInstance('Saved')
+      expect(screen.getByText(t('travelPay.partialSuccess.title'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.text'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.success.nextTitle'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.setUpDirectDeposit.eligible'))).toBeTruthy()
+      expect(screen.getByTestId('finishTravelClaimLinkID')).toBeTruthy()
+      expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
+    })
+
+    describe('when the user clicks the link', () => {
+      it('calls the navigateToTravelPayWebsite function', () => {
+        initializeTestInstance('Saved')
+        fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
+        expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('when status is unknown', () => {
+    it('defaults to success content', () => {
+      initializeTestInstance('Unknown Status')
+      expect(screen.getByText(t('travelPay.success.title'))).toBeTruthy()
+      expect(screen.getByTestId('goToAppointmentLinkID')).toBeTruthy()
+    })
   })
 })
