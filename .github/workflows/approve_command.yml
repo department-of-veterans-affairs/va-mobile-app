@@ -22,14 +22,14 @@ jobs:
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
   run_prs:
-    needs: get-workflow-environment
+    needs: indicate_start
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
     secrets:
       GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
   comment_complete:
-    needs: [get-workflow-environment, runs_prs]
+    needs: [indicate_start, run_prs]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repo"
