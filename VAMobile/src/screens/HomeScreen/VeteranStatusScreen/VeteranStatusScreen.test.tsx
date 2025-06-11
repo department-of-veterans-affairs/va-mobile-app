@@ -31,8 +31,8 @@ context('VeteranStatusScreen', () => {
     },
   }
 
-  const zeroPercentRating = {
-    combinedDisabilityRating: 0,
+  const noPercentRating = {
+    combinedDisabilityRating: undefined,
     combinedEffectiveDate: '2022-06-15',
     legalEffectiveDate: '2022-05-01',
     individualRatings: [
@@ -222,7 +222,7 @@ context('VeteranStatusScreen', () => {
         },
         {
           queryKey: disabilityRatingKeys.disabilityRating,
-          data: zeroPercentRating,
+          data: noPercentRating,
         },
       ])
 
@@ -262,7 +262,7 @@ context('VeteranStatusScreen', () => {
         },
         {
           queryKey: disabilityRatingKeys.disabilityRating,
-          data: zeroPercentRating,
+          data: noPercentRating,
         },
       ])
 
