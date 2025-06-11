@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
@@ -12,13 +13,18 @@ import { DecisionLettersList } from 'api/types'
 import {
   Box,
   DefaultList,
+  DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
   LoadingComponent,
+  Pagination,
+  PaginationProps,
   TextLine,
   TextView,
 } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -62,42 +68,87 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
   const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+  const [page, setPage] = useState(1)
+  const { perPage, totalEntries } = {
+    perPage: DEFAULT_PAGE_SIZE,
+    totalEntries: decisionLettersData?.data.length || 0,
+  }
+  const [lettersToShow, setLettersToShow] = useState<DecisionLettersList>([])
+
+  useEffect(() => {
+    const lettersList = decisionLettersData?.data?.slice((page - 1) * perPage, page * perPage)
+    setLettersToShow(lettersList || [])
+  }, [decisionLettersData, page, perPage])
+
   useEffect(() => {
     if (downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
       snackbar.show(t('claimLetters.download.error'), { isError: true, onActionPressed: refetchLetter })
     }
   }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter, snackbar])
 
-  const letterButtons = decisionLetters.map((letter, index) => {
-    const { typeDescription, receivedAt } = letter.attributes
+  const getListItemVals = (): Array<DefaultListItemObj> => {
+    const listItems: Array<DefaultListItemObj> = []
     const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
-    const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
-    const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
-    const onPress = () => {
-      logAnalyticsEvent(Events.vama_ddl_letter_view())
-      if (letterID === letter.id) {
-        refetchLetter()
-      } else {
-        setLetterID(letter.id)
-        setLetterReceivedAt(receivedAt.toString())
+    lettersToShow?.forEach((letter, index) => {
+      const { typeDescription, receivedAt } = letter.attributes
+      const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
+      const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
+      const onPress = () => {
+        logAnalyticsEvent(Events.vama_ddl_letter_view())
+        if (letterID === letter.id) {
+          refetchLetter()
+        } else {
+          setLetterID(letter.id)
+          setLetterReceivedAt(receivedAt.toString())
+        }
       }
+
+      listItems.push({
+        textLines,
+        onPress,
+        a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
+        testId: getA11yLabelText(textLines), // read by screen reader
+      })
+    })
+    return listItems
+  }
+
+  function renderPagination() {
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      onPrev: () => {
+        setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      totalEntries: totalEntries,
+      pageSize: perPage,
+      page,
     }
 
-    const letterButton = {
-      textLines,
-      onPress,
-      a11yValue: t('listPosition', { position: index + 1, total: decisionLetters.length }),
-      testId: getA11yLabelText(textLines), // read by screen reader
-    }
-
-    return letterButton
-  })
+    return (
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
+    )
+  }
 
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('claimLetters.title')}
+      scrollViewProps={scrollViewProps}
       backLabelTestID="claimLettersBackTestID">
       {loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
@@ -115,8 +166,9 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
             {t('claimLetters.overview')}
           </TextView>
           <Box mb={theme.dimensions.contentMarginBottom}>
-            <DefaultList items={letterButtons} />
+            <DefaultList items={getListItemVals()} />
           </Box>
+          {renderPagination()}
         </>
       )}
     </FeatureLandingTemplate>

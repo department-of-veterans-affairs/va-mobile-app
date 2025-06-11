@@ -4,7 +4,6 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
 import { DecisionLettersList } from 'api/types'
 import ClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
-import { RootState } from 'store'
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
 import getEnv from 'utils/env'
@@ -31,14 +30,14 @@ jest.mock('utils/filesystem', () => {
 })
 
 context('ClaimLettersScreen', () => {
-  const initializeTestInstance = (decisionLetters: DecisionLettersList, preloadedState?: Partial<RootState>) => {
+  const initializeTestInstance = (decisionLetters: DecisionLettersList) => {
     when(api.get as jest.Mock)
       .calledWith(`/v0/claims/decision-letters`)
       .mockResolvedValue({
         data: decisionLetters,
       })
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<ClaimLettersScreen {...props} />, { preloadedState })
+    render(<ClaimLettersScreen {...props} />)
   }
 
   it('displays active claims count when veteran has active claims', async () => {
