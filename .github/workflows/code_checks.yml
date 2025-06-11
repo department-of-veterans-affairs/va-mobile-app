@@ -56,7 +56,7 @@ jobs:
           CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
         run: | 
           if [ "$CHANGED_FILES" ]; then
-            eslint --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js "$CHANGED_FILES" && yarn run tsc:compile; 
+            yarn run lint:changed:ci; 
           fi
   test:
     runs-on: ubuntu-4-cores-latest
