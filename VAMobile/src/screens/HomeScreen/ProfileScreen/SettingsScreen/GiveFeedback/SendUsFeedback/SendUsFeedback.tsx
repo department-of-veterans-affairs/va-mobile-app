@@ -11,12 +11,9 @@ import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
-import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type SendUsFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'SendUsFeedback'>
-
-const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
 function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -45,6 +42,7 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       footerContent={screenReaderEnabled ? undefined : getStartSurveyButton()}>
       <Box mx={theme.dimensions.gutter}>
         <TextView>{t('giveFeedback.send.bodyText')}</TextView>
+        {screenReaderEnabled ? getStartSurveyButton() : undefined}
         <LinkWithAnalytics
           type="custom"
           text={t('giveFeedback.termsAndConditions')}
