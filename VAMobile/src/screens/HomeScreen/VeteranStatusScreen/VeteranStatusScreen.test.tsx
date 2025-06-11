@@ -210,7 +210,7 @@ context('VeteranStatusScreen', () => {
   })
 
   describe('Veteran Status Card', () => {
-    it('does NOT show the disability rating if combined disability rating is 0', async () => {
+    it('does NOT show the disability rating if combined disability rating does not exist', async () => {
       renderWithOptions([
         {
           queryKey: veteranStatusKeys.verification,
