@@ -159,7 +159,8 @@
     "watch/**/merge": "^2.1.1"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json}": "prettier --write",
+    "./src/**/*.{js,jsx,ts,tsx}": "eslint --fix -c ./.eslintrc.changed.js"
   },
   "engines": {
     "node": ">=18.0.0"
