@@ -884,7 +884,7 @@
   "inAppFeedback.popup.body": "We'll use your feedback to improve the app. Your feedback stays confidential.",
   "inAppFeedback.popup.notNow": "Not now",
   "inAppFeedback.taskSelection.header": "What task were you trying to do today?",
-  "inAppFeedback.whatTask.header": "3. What feedback, if any, do you have about your experience with the app? (Optional)",
+  "inAppFeedback.whatTask.header": "3. What feedback, if any, do you have about your experience with the app?",
   "inAppFeedback.whatTask.body": "Please don't enter personal information such as name, Social Security number, medical information, or anything else someone could use to identify you.",
   "inAppFeedback.submitFeedback": "Submit feedback",
   "inAppFeedback.personalInfo.title": "Submit your feedback with personal information?",

@@ -144,6 +144,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     <FullScreenSubtask
       title={t('giveFeedback.send')}
       leftButtonText={t('cancel')}
+      onLeftButtonPress={navigation.goBack}
       primaryContentButtonText={t('inAppFeedback.submitFeedback')}
       onPrimaryContentButtonPress={onSubmit}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
