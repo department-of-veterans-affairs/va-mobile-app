@@ -8,6 +8,10 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: Log changed files
+      id: get-changed-files
+      shell: bash
+      run: git diff --relative --name-only origin/develop... -- "./**/*.ts" "./**/*.tsx" "./**/*.js" "./**/*.jsx"
     - name: Get paths of changed files
       id: get-changed-files
       shell: bash
