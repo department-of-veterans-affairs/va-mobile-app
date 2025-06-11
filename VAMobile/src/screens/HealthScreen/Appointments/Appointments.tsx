@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -42,7 +42,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
   const initialTab = route?.params?.tab
-  const [selectedTab, setSelectedTab] = useState(initialTab ? initialTab : 0)
+  const [selectedTab, setSelectedTab] = useState(0)
   const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
   const [page, setPage] = useState(1)
@@ -82,6 +82,13 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
     }
     setSelectedTab(tab)
   }
+
+  // We want this to run only once, hence the empty dependency array
+  useEffect(() => {
+    if (initialTab !== selectedTab) {
+      onTabChange(initialTab || 0)
+    }
+  }, [])
 
   function serviceErrorAlert() {
     const appointmentsMetaErrors = apptsData?.meta?.errors
