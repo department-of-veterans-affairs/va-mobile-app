@@ -3,15 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView } from 'components'
-import { UserAnalytics } from 'constants/analytics'
+import FloatingButton from 'components/FloatingButton'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
-import { setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -23,6 +22,19 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const screenReaderEnabled = useIsScreenReaderEnabled()
+
+  const getStartSurveyButton = () => (
+    <Box py={theme.dimensions.standardMarginBetween}>
+      <FloatingButton
+        testID="startSurveyTestID"
+        label={t('giveFeedback.startSurvey')}
+        onPress={() => {
+          navigateTo('InAppFeedback', { task: 'static' })
+        }}
+      />
+    </Box>
+  )
 
   return (
     <FeatureLandingTemplate
@@ -30,39 +42,22 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
-      footerContent={
-        <Box mx={theme.dimensions.gutter} py={theme.dimensions.standardMarginBetween}>
-          <Button
-            label={t('giveFeedback.startSurvey')}
-            onPress={() => {
-              navigateTo('InAppFeedback', { task: 'static' })
-            }}
-          />
-        </Box>
-      }>
+      footerContent={screenReaderEnabled ? undefined : getStartSurveyButton()}>
       <Box mx={theme.dimensions.gutter}>
         <TextView>{t('giveFeedback.send.bodyText')}</TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VeteransCrisisLineNumbers />
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('veteransCrisisLine.getMoreResources')}
-          </TextView>
-          <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_VETERANS_CRISIS_LINE}
-            text={t('veteransCrisisLine.urlDisplayed')}
-            a11yLabel={t('veteransCrisisLine.urlA11yLabel')}
-            a11yHint={t('veteransCrisisLine.urlA11yHint')}
-            analyticsOnPress={() => setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())}
-            testID="veteransCrisisLineGetMoreResourcesTestID"
-          />
-        </Box>
         <LinkWithAnalytics
           type="custom"
           text={t('giveFeedback.termsAndConditions')}
           onPress={() => navigateTo('FeedbackTermsAndConditions')}
           testID="termsAndConditionsID"
         />
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+          {t('giveFeedback.needHelp')}
+        </TextView>
+        <TextView>{t('giveFeedback.send.bodyText.2')}</TextView>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <VeteransCrisisLineNumbers />
+        </Box>
       </Box>
     </FeatureLandingTemplate>
   )
