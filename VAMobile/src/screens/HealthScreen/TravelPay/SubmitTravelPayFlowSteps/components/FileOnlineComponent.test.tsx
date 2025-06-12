@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { context, render } from 'testUtils'
+import { context, mockNavProps, render } from 'testUtils'
 import getEnv from 'utils/env'
 
 import FileOnlineComponent from './FileOnlineComponent'
