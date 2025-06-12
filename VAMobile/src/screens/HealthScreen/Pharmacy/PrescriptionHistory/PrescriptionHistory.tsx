@@ -470,19 +470,19 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }
 
   const getRequestRefillButton = () => {
-    if (
+    // Hide the refill request button on loading, error, and no prescription states
+    const hideRefillRequestButton =
       prescriptionInDowntime ||
       loadingHistory ||
       loadingUserAuthorizedServices ||
-      getUserAuthorizedServicesError ||
+      !!getUserAuthorizedServicesError ||
       !userAuthorizedServices?.prescriptions ||
-      hasError ||
+      !!hasError ||
       !allPrescriptions?.length
-    )
-      return <></>
 
     return (
       <FloatingButton
+        isHidden={hideRefillRequestButton}
         testID="refillRequestTestID"
         label={t('prescription.history.startRefillRequest')}
         onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
