@@ -13,18 +13,17 @@ import { claimsAndAppealsKeys } from './queryKeys'
 const { API_ROOT } = getEnv()
 
 /**
- * Fetch user E Folder Document
+ * Fetch user Claim Letter Document
  */
-const downloadEFolderDocument = async (
+const downloadClaimLetterDocument = async (
   id: string,
   fileName: string,
   func: () => Promise<void>,
 ): Promise<boolean | undefined> => {
-  const eFolderDocumentAPI = `${API_ROOT}/v0/efolder/documents/${id}/download?file_name=${fileName}}`
-
+  const claimLetterDocumentAPI = `${API_ROOT}/v0/claim-letter/documents/${id}/download?file_name=${fileName}}`
   const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, fileName)
-    : await downloadFile('POST', eFolderDocumentAPI, fileName, undefined, 1)
+    : await downloadFile('POST', claimLetterDocumentAPI, fileName, undefined, 1)
   if (filePath) {
     await FileViewer.open(filePath, { onDismiss: () => func() })
     return true
@@ -32,16 +31,16 @@ const downloadEFolderDocument = async (
 }
 
 /**
- * Returns a query for a user E Folder Document
+ * Returns a query for a user Claim Letter Document
  */
-export const useDownloadEFolderDocument = (id: string, fileName: string) => {
+export const useDownloadClaimLetterDocument = (id: string, fileName: string) => {
   const registerReviewEvent = useReviewEvent(false)
   return useQuery({
     enabled: false,
-    queryKey: [claimsAndAppealsKeys.eFolderDownloadDoc, id, fileName],
-    queryFn: () => downloadEFolderDocument(id, fileName, registerReviewEvent),
+    queryKey: [claimsAndAppealsKeys.claimLetterDownloadDoc, id, fileName],
+    queryFn: () => downloadClaimLetterDocument(id, fileName, registerReviewEvent),
     meta: {
-      errorName: 'downloadEFolderDocument: Service error',
+      errorName: 'downloadClaimLetterDocument: Service error',
     },
   })
 }
