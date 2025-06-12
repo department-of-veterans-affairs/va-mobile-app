@@ -84,7 +84,6 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   const wrapperProps = getInputWrapperProps(theme, error, false)
   const [modalVisible, setModalVisible] = useState(false)
 
-  console.log('comboBoxOptions: ', comboBoxOptions)
 
   const renderSelectionBox = () => {
     return (
@@ -94,8 +93,8 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
         <Pressable
           onPress={showModal}
           accessible={true}
-          accessibilityLabel={'no idea'}
-          accessibilityHint={'god help you'}>
+          accessibilityLabel={t('secureMessaging.startNewMessage.combobox.selection')}
+          accessibilityHint={t('secureMessaging.startNewMessage.combobox.selection.a11y')}>
           <Box {...wrapperProps}>
             <Box
               width="100%"

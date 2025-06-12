@@ -4,15 +4,16 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
 import {
-  CategoryTypeFields,
+  CategoryTypeFields, FacilitiesPayload, SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
-  SecureMessagingRecipients,
+  SecureMessagingRecipients, SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
 import EditDraft from './EditDraft'
+import {LARGE_PAGE_SIZE} from "../../../../constants/common";
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -210,6 +211,70 @@ context('EditDraft', () => {
       },
     },
   }
+  const facilities: FacilitiesPayload = {
+    data: {
+      attributes: {
+        facilities: [
+          {
+            id: '357',
+            name: 'Cary VA Medical Center',
+            city: 'Cary',
+            state: 'WY',
+            cerner: false,
+            miles: '3.63',
+          },
+          {
+            id: '358',
+            name: 'Cheyenne VA Medical Center',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: false,
+            miles: '3.17',
+          },
+        ],
+      },
+    },
+  }
+  const folderMessages: SecureMessagingFolderMessagesGetData = {
+    data: [
+      {
+        type: 'test',
+        id: 1,
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'test',
+          body: 'test',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1-1-21',
+          senderId: 2,
+          senderName: 'mock sender',
+          recipientId: 3,
+          recipientName: 'mock recipient name',
+          readReceipt: 'mock read receipt',
+        },
+      },
+    ],
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+    meta: {
+      sort: {
+        sentDate: 'DESC',
+      },
+      pagination: {
+        currentPage: 1,
+        perPage: 1,
+        totalPages: 3,
+        totalEntries: 5,
+      },
+    },
+  }
 
   const initializeTestInstance = () => {
     goBack = jest.fn()
@@ -244,6 +309,14 @@ context('EditDraft', () => {
             },
           },
         })
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       expect(screen.getByText('Loading your draft...')).toBeTruthy()
       await waitFor(() => expect(screen.getByText("We can't match you with a provider")).toBeTruthy())
@@ -261,6 +334,14 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
@@ -279,6 +360,14 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() =>
         expect(screen.getByRole('heading', { name: 'This conversation is too old for new replies' })).toBeTruthy(),
@@ -299,6 +388,14 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -316,6 +413,14 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() => fireEvent.changeText(screen.getByTestId('messageText'), 'Random String'))
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Cancel' })))
@@ -335,6 +440,14 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'Add Files' })))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())

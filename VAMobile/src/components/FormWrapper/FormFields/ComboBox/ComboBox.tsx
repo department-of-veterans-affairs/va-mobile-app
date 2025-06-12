@@ -119,32 +119,43 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
     const updatedFilteredOpts: ComboBoxOptions = {}
     _.each(comboBoxOptions, (options, groupName) => {
       updatedFilteredOpts[groupName] = _.filter(options, (opt: ComboBoxItem) =>
-        String(opt.label).toLowerCase().startsWith(filterStr.toLowerCase()),
+        String(opt.label).toLowerCase().includes(filterStr.toLowerCase()),
       )
     })
     setFilteredOptions(updatedFilteredOpts)
   }, [comboBoxOptions, filterStr])
 
+  // Apply bold and underline to searched item
   const renderFilterableItem = (label: string) => {
-    const filteredStr = label.substring(0, filterStr.length)
-    const nonFilteredSubstr = label.substring(filterStr.length)
+    const lowerCaseLabel = label.toLowerCase()
+    const lowerCaseFilterStr = filterStr.toLowerCase()
+
+    const matchedIndex = lowerCaseLabel.indexOf(lowerCaseFilterStr)
+    const before = label.slice(0, matchedIndex)
+    const match = label.slice(matchedIndex, matchedIndex + filterStr.length)
+    const after = label.slice(matchedIndex + filterStr.length)
+
     return (
       <TextView variant={'MobileBody'}>
+        {before}
         <TextView variant={'MobileBodyBold'} textDecoration={'underline'}>
-          {filteredStr}
+          {match}
         </TextView>
-        {nonFilteredSubstr}
+        {after}
       </TextView>
     )
   }
 
   const renderItems = () => {
     return _.map(filteredOptions, (items, groupName) => {
+      if (!items.length) {
+        return <></>
+      }
       return (
         <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
-          <Box {...listGroupHeaderStyle}>
-            <TextView variant={'MobileBodyBold'}>{groupName}</TextView>
-          </Box>
+            <Box {...listGroupHeaderStyle}>
+              <TextView variant={'MobileBodyBold'}>{groupName + 'test'}</TextView>
+            </Box>
           {_.map(items, ({ value, label }) => {
             const handleSelection = () => {
               onSelectionChange({ value, label })

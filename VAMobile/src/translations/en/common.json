@@ -1397,6 +1397,8 @@
   "secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled": "We're sorry. To send a Secure Message, both you and your VA primary care provider must be enrolled in the Secure Messaging program. Please contact your primary care provider to see if they are enrolled and can enroll you in the program.",
   "secureMessaging.startNewMessage.category": "Category",
   "secureMessaging.startNewMessage.category.fieldError": "Select a category",
+  "secureMessaging.startNewMessage.combobox.selection": "Select recipient",
+  "secureMessaging.startNewMessage.combobox.selection.a11y": "Open combobox selector to select a recipient",
   "secureMessaging.startNewMessage.covid": "COVID",
   "secureMessaging.startNewMessage.education": "Education",
   "secureMessaging.startNewMessage.general": "General",

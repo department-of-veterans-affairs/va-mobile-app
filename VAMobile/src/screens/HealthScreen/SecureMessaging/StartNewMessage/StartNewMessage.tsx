@@ -217,6 +217,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
+  const handleSetCareSystem = (cs: string) => {
+    setCareSystem(cs)
+    // Clear to recipient
+    setTo(undefined)
+  }
+
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
     return getRecentRecipients(folderMessagesData?.data || [])
   }, [folderMessagesData?.data])
@@ -252,7 +258,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       fieldProps: {
         labelKey: 'secureMessaging.formMessage.careSystem',
         selectedValue: careSystem,
-        onSelectionChange: setCareSystem,
+        onSelectionChange: handleSetCareSystem,
         pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
         includeBlankPlaceholder: true,
         isRequiredField: true,
