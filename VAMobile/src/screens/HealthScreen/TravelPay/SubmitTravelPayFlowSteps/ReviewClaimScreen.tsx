@@ -91,7 +91,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
             source: appointmentRouteKey,
           })
           navigateTo('SubmitSuccessScreen', {
-            appointmentDateTime: attributes.startDateUtc,
+            appointmentDateTime: attributes.startDateLocal,
             facilityName: attributes.location.name,
           })
         },

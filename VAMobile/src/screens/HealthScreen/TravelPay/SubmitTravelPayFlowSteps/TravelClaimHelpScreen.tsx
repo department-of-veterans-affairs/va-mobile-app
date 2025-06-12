@@ -1,14 +1,19 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
+import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
-function TravelClaimHelpScreen() {
+type TravelClaimHelpScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'TravelClaimHelpScreen'>
+
+function TravelClaimHelpScreen({ navigation }: TravelClaimHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -37,7 +42,12 @@ function TravelClaimHelpScreen() {
               ]}
             />
           </Box>
-          <FileOnlineComponent />
+          <FileOnlineComponent
+            onBeforeOpenTravelPayWebview={() => {
+              // Dismiss the help screen when opening the travel pay webview
+              navigation.pop()
+            }}
+          />
           <TravelPayHelp />
         </Box>
       }

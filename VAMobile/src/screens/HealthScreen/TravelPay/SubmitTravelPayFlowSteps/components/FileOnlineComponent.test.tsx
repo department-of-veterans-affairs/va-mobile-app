@@ -22,8 +22,9 @@ jest.mock('utils/hooks', () => {
 })
 
 context('FileOnlineComponent', () => {
-  const initializeTestInstance = () => {
-    render(<FileOnlineComponent />)
+  const initializeTestInstance = (onPress?: () => void) => {
+    const navProps = mockNavProps()
+    render(<FileOnlineComponent {...navProps} onBeforeOpenTravelPayWebview={onPress} />)
   }
   it('should initialize correctly', () => {
     initializeTestInstance()
@@ -44,5 +45,13 @@ context('FileOnlineComponent', () => {
       loadingMessage: t('loading.vaWebsite'),
       useSSO: true,
     })
+  })
+
+  it('should call onBeforeOpenTravelPayWebview when the file online link is tapped', () => {
+    const onBeforeOpenTravelPayWebview = jest.fn()
+    initializeTestInstance(onBeforeOpenTravelPayWebview)
+
+    fireEvent.press(screen.getByTestId('fileOnlineBTSSSLink'))
+    expect(onBeforeOpenTravelPayWebview).toHaveBeenCalled()
   })
 })
