@@ -4,7 +4,7 @@
       "id": "0",
       "type": "disabilityRating",
       "attributes": {
-        "combinedDisabilityRating": 100,
+        "combinedDisabilityRating": 0,
         "individualRatings": [
           {
             "decision": "Service Connected",
