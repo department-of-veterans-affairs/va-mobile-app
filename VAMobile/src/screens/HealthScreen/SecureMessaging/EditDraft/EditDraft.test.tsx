@@ -15,7 +15,7 @@ import {
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-import { LARGE_PAGE_SIZE } from '../../../../constants/common'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import EditDraft from './EditDraft'
 
 const mockNavigationSpy = jest.fn()

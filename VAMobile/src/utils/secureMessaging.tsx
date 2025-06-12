@@ -53,7 +53,7 @@ export type RecentRecipient = {
 /**
  * Returns recent recipients based on the SecureMessagingMessageList data
  * Modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
- * might want to move this to the backend, but didn't want to put up a nonfunctional pr
+ * might want to move this to the backend
  *
  * @param data - SecureMessagingMessageList data
  */
