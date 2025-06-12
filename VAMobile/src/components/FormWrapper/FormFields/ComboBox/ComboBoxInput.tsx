@@ -84,7 +84,6 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   const wrapperProps = getInputWrapperProps(theme, error, false)
   const [modalVisible, setModalVisible] = useState(false)
 
-
   const renderSelectionBox = () => {
     return (
       <Box>

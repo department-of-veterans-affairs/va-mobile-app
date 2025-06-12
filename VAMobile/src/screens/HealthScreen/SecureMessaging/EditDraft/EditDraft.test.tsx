@@ -4,16 +4,19 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
 import {
-  CategoryTypeFields, FacilitiesPayload, SecureMessagingFolderMessagesGetData,
+  CategoryTypeFields,
+  FacilitiesPayload,
+  SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
-  SecureMessagingRecipients, SecureMessagingSystemFolderIdConstants,
+  SecureMessagingRecipients,
+  SecureMessagingSystemFolderIdConstants,
   SecureMessagingThreadGetData,
 } from 'api/types'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
+import { LARGE_PAGE_SIZE } from '../../../../constants/common'
 import EditDraft from './EditDraft'
-import {LARGE_PAGE_SIZE} from "../../../../constants/common";
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
