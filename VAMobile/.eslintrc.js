@@ -3,7 +3,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc', 'jest'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc', 'jest', 'yaml'],
   extends: [
     '@react-native',
     'plugin:@typescript-eslint/recommended',
@@ -54,4 +54,18 @@ module.exports = {
     ],
     'react-native-a11y/has-accessibility-hint': 1,
   },
+  overrides: [
+    {
+      files: ['*.yaml', '*.yml'], // Apply this configuration to .yaml and .yml files
+      parser: 'yaml-eslint-parser', // Use the specialized parser for YAML
+      extends: ['plugin:yml/recommended'], // Extend recommended YAML rules
+      // You can add specific YAML rules here if you need more granular control, for example:
+      rules: {
+        'max-len': 'off',
+        'yml/spaced-comment': 'off',
+        'yml/no-empty-mapping': 'error',
+        'yml/no-empty-sequence': 'error',
+      },
+    },
+  ],
 }
