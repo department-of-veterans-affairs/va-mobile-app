@@ -43,8 +43,12 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
   const initialTab = route?.params?.tab
   const [selectedTab, setSelectedTab] = useState(initialTab ? initialTab : 0)
-  const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
-  const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
+  const [dateRange, setDateRange] = useState(
+    initialTab ? getPastAppointmentDateRange : getUpcomingAppointmentDateRange(),
+  )
+  const [timeFrame, setTimeFrame] = useState(
+    initialTab ? TimeFrameTypeConstants.PAST_THREE_MONTHS : TimeFrameTypeConstants.UPCOMING,
+  )
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
 
