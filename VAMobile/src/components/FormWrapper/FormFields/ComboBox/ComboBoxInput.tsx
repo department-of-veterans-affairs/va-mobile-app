@@ -46,30 +46,6 @@ export type ComboBoxInputProps = {
   comboBoxOptions: ComboBoxOptions
 }
 
-/*
-todo:
-  add this to EditDraft.tsx
-  should we back out all references to old endpoint? /v0/messaging/health/recipients
-  a11y
-  make sure validation is complete
-    do we show validation error when they try to tap the disabled ComboBoxInput?
-  clean up props/comments for both combobox files - copied picker
-  demo behavior to stakeholders to see where off - AC not all there
-    keyboard behavior
-    search behavior - allow middle of string match?
-    everything filtered out when you edit selection
-    group headers always show
-  android spot test
-  tests
-
-  Ask silvio to look into why preferred_team is not coming back from /allrecipients
-
-todo design:
-  border radius
-  red astrix for required? (do we do this anywhere else?)
-
- */
-
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
   selectedValue,
   onSelectionChange,
