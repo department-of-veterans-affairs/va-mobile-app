@@ -31,7 +31,8 @@ const FloatingButton: FC<ButtonProps> = (props: ButtonProps) => {
   return (
     <Box
       mx={theme.dimensions.gutter}
-      my={theme.dimensions.standardMarginBetween}
+      mt={screenReaderEnabled ? theme.dimensions.standardMarginBetween : 0}
+      mb={theme.dimensions.standardMarginBetween}
       style={!screenReaderEnabled ? floatingButtonStyle : {}}>
       <Button {...props} />
     </Box>

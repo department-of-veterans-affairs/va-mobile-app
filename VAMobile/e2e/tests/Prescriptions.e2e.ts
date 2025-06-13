@@ -57,7 +57,7 @@ export const PrescriptionsE2eIdConstants = {
 
 let tempPath
 
-const trackingIndex = 0
+const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
@@ -114,11 +114,14 @@ export async function validateSort(
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
