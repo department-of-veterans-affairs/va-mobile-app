@@ -5,19 +5,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import _ from 'underscore'
 
-import {
-  AnnouncementBanner,
-  Box,
-  ButtonDecoratorType,
-  FeatureLandingTemplate,
-  SimpleList,
-  SimpleListItemObj,
-} from 'components'
+import { Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import getEnv from 'utils/env'
 import { useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
 
 type GiveFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'GiveFeedback'>
 
@@ -26,8 +17,6 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const openAppStore = useOpenAppStore()
-  const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
-  const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
 
   const items: Array<SimpleListItemObj> = _.flatten([
     {
