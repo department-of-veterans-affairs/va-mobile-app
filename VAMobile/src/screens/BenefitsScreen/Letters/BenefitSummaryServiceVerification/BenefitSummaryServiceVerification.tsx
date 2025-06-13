@@ -149,24 +149,28 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       hasServiceConnectedDisabilities,
     } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
-    const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-      monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
-      date: awardEffectiveDate
-        ? formatDateMMMMDDYYYY(awardEffectiveDate)
-        : t('letters.benefitService.effectiveDateInvalid'),
-    })
-
-    toggleListItems.push({
-      text: text,
-      testId: text.replace(',', ''),
-      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: monthlyAwardToggle,
-        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-        testID: 'monthly-award',
-      },
-    })
+    if (monthlyAwardAmount || monthlyAwardAmount === 0) {
+      const effectiveDateText = awardEffectiveDate
+        ? t('letters.benefitService.effectiveDate', {
+            date: formatDateMMMMDDYYYY(awardEffectiveDate),
+          })
+        : ''
+      const monthlyAwardAndEffectiveDateText =
+        t('letters.benefitService.monthlyAward', {
+          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
+        }) + effectiveDateText
+      toggleListItems.push({
+        text: monthlyAwardAndEffectiveDateText,
+        testId: monthlyAwardAndEffectiveDateText.replace(',', ''),
+        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: monthlyAwardToggle,
+          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+          testID: 'monthly-award',
+        },
+      })
+    }
 
     if (serviceConnectedPercentage) {
       const percentText = t('letters.benefitService.combinedServiceConnectingRating', {
