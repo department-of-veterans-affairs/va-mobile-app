@@ -427,7 +427,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     const handleDismiss = (): void => {
-      AsyncStorage.setItem(NON_VA_MEDS_ALERT_DISMISSED, '')
+      AsyncStorage.setItem(NON_VA_MEDS_ALERT_DISMISSED, 'true')
       setDisplayNonVaMedsAlert(false)
     }
 
