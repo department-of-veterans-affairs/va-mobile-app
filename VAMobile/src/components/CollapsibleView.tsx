@@ -4,8 +4,7 @@ import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
-import { Box, ColorVariant, TextArea, TextView } from 'components'
-import { BoxProps } from 'components/Box'
+import { Box, BoxProps, ColorVariant, TextArea, TextView } from 'components'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 

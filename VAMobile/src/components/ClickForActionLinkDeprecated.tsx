@@ -4,8 +4,7 @@ import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackP
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
 
-import { Box, TextView } from 'components'
-import { ColorVariant, TextViewProps } from 'components/TextView'
+import { Box, ColorVariant, TextView, TextViewProps } from 'components'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 
