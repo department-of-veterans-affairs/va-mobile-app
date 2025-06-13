@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import AnnouncementBanner from 'components/AnnouncementBanner'
 import { context, render } from 'testUtils'
-
-import AnnouncementBanner from './AnnouncementBanner'
 
 const mockExternalLinkSpy = jest.fn()
 

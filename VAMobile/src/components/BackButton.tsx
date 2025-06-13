@@ -4,13 +4,11 @@ import { TouchableWithoutFeedback } from 'react-native'
 
 import { useFocusEffect } from '@react-navigation/native'
 
+import { Box, TextView } from 'components'
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-
-import Box from './Box'
-import TextView from './TextView'
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}

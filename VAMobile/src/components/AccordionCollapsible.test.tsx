@@ -1,9 +1,7 @@
 import React from 'react'
 
+import { AccordionCollapsible, TextView } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import AccordionCollapsible from './AccordionCollapsible'
-import TextView from './TextView'
 
 import Mock = jest.Mock
 
