@@ -31,6 +31,33 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
+  lint-changed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+      - name: Get changed files
+        id: get-changed-apps
+        uses: ./.github/workflows/get-changed-files
+      - name: lint-changed-files
+        env:
+          CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
+        run: | 
+          if [ "$CHANGED_FILES" ]; then
+            yarn run lint:changed:ci; 
+          fi
   test:
     runs-on: ubuntu-4-cores-latest
     strategy:
