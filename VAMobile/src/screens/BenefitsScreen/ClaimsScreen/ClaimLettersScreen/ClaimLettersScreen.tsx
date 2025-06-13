@@ -48,6 +48,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
   const [letterID, setLetterID] = useState<string>('')
+  const [letterReceivedAt, setLetterReceivedAt] = useState<string>('')
   const {
     data: decisionLettersData,
     isFetching: loading,
@@ -60,8 +61,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     isFetching: downloading,
     error: downloadLetterErrorDetails,
     refetch: refetchLetter,
-  } = useDownloadDecisionLetter(letterID, {
-    enabled: letterID.length > 0,
+  } = useDownloadDecisionLetter(letterID, letterReceivedAt, {
+    enabled: letterID.length > 0 && letterReceivedAt.length > 0,
   })
   // This screen is reachable from two different screens, so adjust back button label
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
@@ -102,6 +103,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
           refetchLetter()
         } else {
           setLetterID(letter.id)
+          setLetterReceivedAt(receivedAt.toString())
         }
       }
 
