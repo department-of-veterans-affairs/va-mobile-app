@@ -22,6 +22,7 @@ export type FeatureToggleType =
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
+  | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
   | 'inAppReview'
@@ -48,6 +49,7 @@ type FeatureToggleValues = {
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
+  hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
   inAppReview: boolean
@@ -75,6 +77,7 @@ export const defaults: FeatureToggleValues = {
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
+  hsScrollAnalytics: false,
   inAppRecruitment: false,
   inAppFeedback: false,
   inAppReview: true,

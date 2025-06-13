@@ -55,6 +55,7 @@ import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
@@ -322,7 +323,11 @@ export function HomeScreen({}: HomeScreenProps) {
       <Box>
         <EncourageUpdateAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_activity)}>
+          <InView
+            triggerOnce={true}
+            onChange={() => {
+              if (featureEnabled('hsScrollAnalytics')) logAnalyticsEvent(Events.vama_hs_scroll_activity)
+            }}>
             <TextView
               mx={theme.dimensions.gutter}
               mb={theme.dimensions.standardMarginBetween}
@@ -587,7 +592,11 @@ export function HomeScreen({}: HomeScreenProps) {
           )}
         </Box>
         <Box mt={theme.dimensions.formMarginBetween} mb={theme.dimensions.formMarginBetween}>
-          <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_resources)}>
+          <InView
+            triggerOnce={true}
+            onChange={() => {
+              if (featureEnabled('hsScrollAnalytics')) logAnalyticsEvent(Events.vama_hs_scroll_resources)
+            }}>
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               mx={theme.dimensions.gutter}
@@ -607,7 +616,11 @@ export function HomeScreen({}: HomeScreenProps) {
             />
           </Box>
         </Box>
-        <InView triggerOnce={true} onChange={() => logAnalyticsEvent(Events.vama_hs_scroll_banner)}>
+        <InView
+          triggerOnce={true}
+          onChange={() => {
+            if (featureEnabled('hsScrollAnalytics')) logAnalyticsEvent(Events.vama_hs_scroll_banner)
+          }}>
           <Box mb={theme.dimensions.contentMarginBottom}>
             <AnnouncementBanner
               title={t('learnAboutPACT')}
