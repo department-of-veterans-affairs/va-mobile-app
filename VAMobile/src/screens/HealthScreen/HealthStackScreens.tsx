@@ -35,7 +35,9 @@ import SubmitMileageTravelPayScreen from './TravelPay'
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
   MedicalRecordsList: undefined
-  Appointments: undefined
+  Appointments: {
+    tab?: number
+  }
   UpcomingAppointmentDetails: {
     appointment?: AppointmentData
     vetextID?: string
