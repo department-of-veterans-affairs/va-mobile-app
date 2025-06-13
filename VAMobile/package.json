@@ -35,7 +35,7 @@
     "e2e:android-test": "yarn jest:clear && detox test -c android --cleanup",
     "e2e:attached-build": "yarn run bundle:android && detox build -c attached",
     "e2e:attached-test": "yarn jest:clear && detox test -c attached --cleanup",
-    "docs": "yarn && cd documentation && yarn && yarn start",
+    "docs": "yarn && cd documentation && yarn && yarn build && yarn start",
     "nodes": "rm -rf node_modules && yarn install",
     "pods": "cd ios && pod install && cd .."
   },
