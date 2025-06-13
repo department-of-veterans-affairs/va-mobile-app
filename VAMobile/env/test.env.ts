@@ -44,6 +44,7 @@ export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
 export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
   'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/'
 export const LINK_URL_TRAVEL_PAY_WEB_DETAILS = 'https://www.va.gov/my-health/travel-pay/claims/'
+export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule/type-of-care'
 export const ENVIRONMENT = 'test'
 export const CARRIER_TRACKING_URL_USPS = 'https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum='
 export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums='

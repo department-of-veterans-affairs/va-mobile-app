@@ -34,6 +34,7 @@ export type FeatureToggleType =
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
   | 'sso'
+  | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
   | 'useOldLinkComponent'
@@ -59,6 +60,7 @@ type FeatureToggleValues = {
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
+  startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
   useOldLinkComponent: boolean
@@ -85,6 +87,7 @@ export const defaults: FeatureToggleValues = {
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: false,
   sso: true,
+  startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
   useOldLinkComponent: true,

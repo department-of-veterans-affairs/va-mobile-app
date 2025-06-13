@@ -426,6 +426,7 @@ export function HomeScreen({}: HomeScreenProps) {
             accessibilityRole="header">
             {t('aboutYou')}
           </TextView>
+          <Nametag />
           {loadingAboutYou ? (
             <Box mx={theme.dimensions.standardMarginBetween}>
               <MemoizedLoadingComponent
@@ -442,7 +443,6 @@ export function HomeScreen({}: HomeScreenProps) {
             </Box>
           ) : (
             <Box>
-              <Nametag />
               <Box backgroundColor={theme.colors.background.veteranStatusHome as BackgroundVariant} {...boxProps}>
                 {hasDisabilityRating && (
                   <Box
