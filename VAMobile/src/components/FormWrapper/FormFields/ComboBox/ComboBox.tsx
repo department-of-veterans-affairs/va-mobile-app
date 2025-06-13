@@ -154,7 +154,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
       return (
         <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
           <Box {...listGroupHeaderStyle}>
-            <TextView variant={'MobileBodyBold'}>{groupName + 'test'}</TextView>
+            <TextView variant={'MobileBodyBold'}>{groupName}</TextView>
           </Box>
           {_.map(items, ({ value, label }) => {
             const handleSelection = () => {

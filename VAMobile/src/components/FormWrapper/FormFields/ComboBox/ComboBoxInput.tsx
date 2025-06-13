@@ -44,6 +44,8 @@ export type ComboBoxInputProps = {
   includeBlankPlaceholder?: boolean
   /** list of items of containing types label and value for each option in the combobox */
   comboBoxOptions: ComboBoxOptions
+  /** Optional TestID */
+  testID?: string
 }
 
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
@@ -53,6 +55,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   disabled,
   error,
   labelKey,
+  testID,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -77,7 +80,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
               flexDirection={'row'}
               justifyContent={'space-between'}
               alignItems={'center'}>
-              <TextView variant="MobileBody" flex={1}>
+              <TextView testID={testID} variant="MobileBody" flex={1}>
                 {selectedValue?.label}
               </TextView>
               {selectedValue && (

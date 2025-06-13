@@ -331,7 +331,6 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)).tap()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID))).toExist()
-    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
@@ -356,9 +355,11 @@ describe('Messages Screen', () => {
   })
 
   it(':ios: should tap the to field and select a name', async () => {
+    await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID)).tap()
+    await element(by.text('Cary VA Medical Center')).tap()
+    await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
-    await element(by.text('VA Flagship mobile applications interface_DAYT29')).tap()
-    await element(by.id(MessagesE2eIdConstants.MESSAGE_PICKER_CONFIRM_ID)).tap()
+    await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()
   })
 
   it(':ios: should tap the category field and select a category', async () => {
@@ -391,7 +392,7 @@ describe('Messages Screen', () => {
 
   it(':ios: verify the previous made fields are filled on keep editing', async () => {
     await element(by.text(CommonE2eIdConstants.CANCEL_KEEP_EDITING_TEXT)).tap()
-    await expect(element(by.text('VA Flagship mobile applications interface_DAYT29'))).toExist()
+    await expect(element(by.text('VA Flagship mobile applications interface 2_DAYT29'))).toExist()
     await expect(element(by.text('Medication'))).toExist()
   })
 
