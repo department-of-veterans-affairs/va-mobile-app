@@ -5,10 +5,9 @@ import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
 
+import { CarouselScreen, TextView } from 'components'
+import CarouselTabBar from 'components/Carousel/CarouselTabBar'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import { CarouselScreen, TextView } from '../index'
-import CarouselTabBar from './CarouselTabBar'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

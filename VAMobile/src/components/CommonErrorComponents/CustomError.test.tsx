@@ -1,8 +1,7 @@
 import React from 'react'
 
+import CustomError from 'components/CommonErrorComponents/CustomError'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import CustomError from './CustomError'
 
 const onTryAgainSpy = jest.fn(() => {})
 

@@ -1,8 +1,10 @@
 import React from 'react'
 
+import ClickForActionLinkDeprecated, {
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+} from 'components/ClickForActionLinkDeprecated'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import ClickForActionLinkDeprecated, { LinkTypeOptionsConstants, LinkUrlIconType } from './ClickForActionLinkDeprecated'
 
 import Mock = jest.Mock
 
