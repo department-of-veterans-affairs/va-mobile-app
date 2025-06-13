@@ -141,6 +141,26 @@ context('ReviewClaimScreen', () => {
         expect(screen.getByText(t('required'))).toBeTruthy()
       })
     })
+
+    describe('when the user has checked the checkbox', () => {
+      it('should submit the claim', async () => {
+        initializeTestInstance({ residentialAddress })
+        const checkbox = screen.getByTestId('checkboxTestID')
+        fireEvent.press(checkbox)
+        const button = screen.getByTestId('submitTestID')
+        fireEvent.press(button)
+
+        expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
+          {
+            appointmentDateTime: params.appointment.attributes.startDateLocal,
+            facilityStationNumber: params.appointment.attributes.location.id,
+            appointmentType: 'Other',
+            isComplete: false,
+          },
+          expect.any(Object),
+        )
+      })
+    })
   })
 
   describe('when the submission is pending', () => {
@@ -169,6 +189,7 @@ context('ReviewClaimScreen', () => {
         expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
           appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
           facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
+          status: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.claimStatus,
         })
       })
     })
@@ -198,6 +219,7 @@ context('ReviewClaimScreen', () => {
         expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
           appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
           facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
+          status: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.claimStatus,
         })
       })
     })
@@ -222,23 +244,5 @@ context('ReviewClaimScreen', () => {
         })
       })
     })
-  })
-
-  it('should submit the claim', async () => {
-    initializeTestInstance({ residentialAddress })
-    const checkbox = screen.getByTestId('checkboxTestID')
-    fireEvent.press(checkbox)
-    const button = screen.getByTestId('submitTestID')
-    fireEvent.press(button)
-
-    expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
-      {
-        appointmentDateTime: params.appointment.attributes.startDateLocal,
-        facilityStationNumber: params.appointment.attributes.location.id,
-        appointmentType: 'Other',
-        isComplete: false,
-      },
-      expect.any(Object),
-    )
   })
 })
