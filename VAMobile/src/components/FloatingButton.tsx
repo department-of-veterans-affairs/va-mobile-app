@@ -8,9 +8,17 @@ import { Box } from 'components'
 import { useTheme } from 'utils/hooks'
 
 /**
+ *  Signifies the props that need to be passed in to {@link FloatingButton}
+ */
+export type FloatingButtonProps = {
+  /** boolean to specify if the floating button should be displayed */
+  isHidden: boolean
+} & ButtonProps
+
+/**
  * Button that sticks to the bottom of its container when the screen reader is disabled and renders in-place otherwise
  */
-const FloatingButton: FC<ButtonProps> = (props: ButtonProps) => {
+const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: FloatingButtonProps) => {
   const theme = useTheme()
   const screenReaderEnabled = useIsScreenReaderEnabled()
 
@@ -28,12 +36,16 @@ const FloatingButton: FC<ButtonProps> = (props: ButtonProps) => {
     elevation: 5,
   }
 
+  if (isHidden) {
+    return <></>
+  }
+
   return (
     <Box
       mx={theme.dimensions.gutter}
       my={theme.dimensions.standardMarginBetween}
       style={!screenReaderEnabled ? floatingButtonStyle : {}}>
-      <Button {...props} />
+      <Button {...buttonProps} />
     </Box>
   )
 }
