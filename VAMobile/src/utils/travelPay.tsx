@@ -1,9 +1,13 @@
+import { useEffect } from 'react'
+
 import { ParamListBase } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
 
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { Events } from 'constants/analytics'
 
+import { logAnalyticsEvent } from './analytics'
 import { RouteNavigationFunction } from './hooks'
 
 /**
@@ -50,13 +54,21 @@ export function appendClaimDataToAppointment(
  * Returns the subtask props for displaying the header help button
  * @param t - The translation function
  * @param navigateTo - The navigation function
+ * @param currentScreenName - The name of the current screen
  * @returns The props for the help button in the header
  */
-export const getTravelPayHelpSubtaskProps = (t: TFunction, navigateTo: RouteNavigationFunction<ParamListBase>) => {
+export const getTravelPayHelpSubtaskProps = (
+  t: TFunction,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  currentScreenName: string,
+) => {
   return {
     rightButtonText: t('help'),
     rightButtonTestID: 'rightHelpTestID',
-    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
+    onRightButtonPress: () => {
+      logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'help'))
+      navigateTo('TravelClaimHelpScreen')
+    },
     rightIconProps: {
       name: 'Help' as const,
       fill: 'default',
@@ -76,20 +88,27 @@ export const getTravelPayHelpSubtaskProps = (t: TFunction, navigateTo: RouteNavi
 export const getCommonSubtaskProps = (
   t: TFunction,
   navigateTo: RouteNavigationFunction<ParamListBase>,
+  currentScreenName: string,
   previousStepScreen: string,
   nextStepScreen?: string,
   hasErrorScreen: boolean = true,
 ) => {
-  const helpProps = getTravelPayHelpSubtaskProps(t, navigateTo)
+  const helpProps = getTravelPayHelpSubtaskProps(t, navigateTo, currentScreenName)
   const props = {
     ...helpProps,
     leftButtonText: t('back'),
-    onLeftButtonPress: () => navigateTo(previousStepScreen),
+    onLeftButtonPress: () => {
+      logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'back'))
+      navigateTo(previousStepScreen)
+    },
     leftButtonTestID: 'leftBackTestID',
     ...(hasErrorScreen
       ? {
           secondaryContentButtonText: t('no'),
-          onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
+          onSecondaryContentButtonPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'no'))
+            navigateTo('ErrorScreen', { error: 'unsupportedType' })
+          },
         }
       : {}),
   }
@@ -99,9 +118,18 @@ export const getCommonSubtaskProps = (
       ...props,
       primaryContentButtonText: t('yes'),
       primaryButtonTestID: 'yesTestID',
-      onPrimaryContentButtonPress: () => navigateTo(nextStepScreen),
+      onPrimaryContentButtonPress: () => {
+        logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'yes'))
+        navigateTo(nextStepScreen)
+      },
     }
   }
 
   return props
+}
+
+export const useSMOCAnalyticsPageView = (currentScreenName: string) => {
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_smoc_pageview(currentScreenName))
+  }, [currentScreenName])
 }

@@ -73,9 +73,6 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
             url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
             text={t('travelPay.setUpDirectDeposit.link')}
             a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
-            onPress={() => {
-              navigation.getParent()?.goBack()
-            }}
             testID="setUpDirectDepositLinkID"
           />
         </Box>
