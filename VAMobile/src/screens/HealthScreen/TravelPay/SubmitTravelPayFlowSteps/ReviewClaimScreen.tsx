@@ -73,6 +73,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       {
         appointmentDateTime: attributes.startDateLocal,
         facilityStationNumber: attributes.location.id,
+        facilityName: attributes.location.name,
         appointmentType: 'Other',
         isComplete: false,
       },
