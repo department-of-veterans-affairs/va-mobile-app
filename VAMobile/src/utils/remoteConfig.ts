@@ -36,6 +36,7 @@ export type FeatureToggleType =
   | 'sso'
   | 'startScheduling'
   | 'testFeature'
+  | 'travelPaySMOC'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
@@ -61,6 +62,7 @@ type FeatureToggleValues = {
   sso: boolean
   startScheduling: boolean
   testFeature: boolean
+  travelPaySMOC: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
@@ -87,6 +89,7 @@ export const defaults: FeatureToggleValues = {
   sso: true,
   startScheduling: false,
   testFeature: false,
+  travelPaySMOC: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
