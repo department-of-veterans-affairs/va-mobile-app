@@ -1,0 +1,72 @@
+name: "[Admin] Check if PR is from an experience team"
+
+on:
+  # Trigger on pull request events
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+
+    branches:
+      - develop #targeting develop
+
+permissions:
+  contents: read
+
+jobs:
+  check_team_and_alert:
+    runs-on: ubuntu-latest
+    outputs:
+      is_team_member: ${{ steps.fetch_and_check_team.outputs.is_team_member }}
+      team_members_list: ${{ steps.fetch_and_check_team.outputs.team_members_output }}
+      pr_author: ${{ steps.fetch_and_check_team.outputs.pr_author }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: fetch team members and check author of PR
+        id: fetch_and_check_team
+        env:
+          TEAM_NAME: "flagship-mobile-team"
+        run: |
+          TEAM_MEMBERS=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-team/members --jq 'map(.login) | join(",")')
+
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          echo "PR Author: $PR_AUTHOR"
+
+          if [[ ",${TEAM_MEMBERS}," == *",${PR_AUTHOR},"* ]]; then
+            IS_TEAM_MEMBER="true"
+            echo "User '$PR_AUTHOR' is a member of $TEAM_NAME"
+          else
+            IS_TEAM_MEMBER="false"
+            echo "User '$PR_AUTHOR' is not a member of $TEAM_NAME"
+          fi
+
+          echo Team Member: $IS_TEAM_MEMBER
+          echo "is_team_member=$IS_TEAM_MEMBER" >> "$GITHUB_OUTPUT"
+          echo "team_members_output=$TEAM_MEMBERS" >> "$GITHUB_OUTPUT"
+          echo "pr_author=$PR_AUTHOR" >> "$GITHUB_OUTPUT"
+  slack:
+    name: slack steps
+    if: needs.check_team_and_alert.outputs.is_team_member == 'false'
+    needs: [check_team_and_alert]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
+          GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
+  send_message:
+    needs: [slack]
+    name: Notify Slack of non mobile team member creating a PR
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-app
+      message: "An experience team member PR has been opened in va-mobile-app <@U01AWJEH5UJ> <@U08AWC7DQA2> PR Author: ${{ github.event.pull_request.user.login }} | <${{ github.event.pull_request.html_url }}|Click here to view the Pull Request>"
