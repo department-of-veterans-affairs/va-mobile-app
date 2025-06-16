@@ -14,6 +14,7 @@ export type TravelPayClaimSummary = {
 export type SubmitSMOCTravelPayClaimParameters = {
   appointmentDateTime: string
   facilityStationNumber: string
+  facilityName: string
   appointmentType: string
   isComplete: boolean
 }
