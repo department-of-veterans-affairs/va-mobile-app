@@ -46,7 +46,7 @@ jobs:
 
             // Get on-call user for today
             const response = await axios.get(
-              \`https://api.pagerduty.com/schedules/\${PAGERDUTY_SCHEDULE_ID}/users\`,
+              `https://api.pagerduty.com/schedules/\${PAGERDUTY_SCHEDULE_ID}/users`,
               {
                 headers: {
                   Authorization: \`Token token=\${PAGERDUTY_API_TOKEN}\`,
