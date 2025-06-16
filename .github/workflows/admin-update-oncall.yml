@@ -6,6 +6,12 @@ on:
   # workflow_dispatch:
   push:
 
+env:
+  PAGERDUTY_API_TOKEN: ${{ secrets.PD_KEY }}
+  PAGERDUTY_SCHEDULE_ID: "P841QDE"
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  SLACK_CHANNEL_ID: "C07JWHB0U86"
+
 jobs:
   update-slack-description:
     runs-on: ubuntu-latest
@@ -87,9 +93,4 @@ jobs:
           EOF
 
       - name: Run update script
-        env:
-          PAGERDUTY_API_TOKEN: ${{ secrets.PD_KEY }}
-          PAGERDUTY_SCHEDULE_ID: "P841QDE"
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_CHANNEL_ID: "C07JWHB0U86"
         run: node scripts/updateSlackFromPagerDuty.js
