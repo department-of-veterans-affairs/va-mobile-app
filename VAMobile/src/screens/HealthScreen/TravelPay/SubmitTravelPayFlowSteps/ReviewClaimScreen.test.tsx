@@ -156,6 +156,7 @@ context('ReviewClaimScreen', () => {
             appointmentDateTime: params.appointment.attributes.startDateLocal,
             facilityStationNumber: params.appointment.attributes.location.id,
             appointmentType: 'Other',
+            facilityName: params.appointment.attributes.location.name,
             isComplete: false,
           },
           expect.any(Object),
