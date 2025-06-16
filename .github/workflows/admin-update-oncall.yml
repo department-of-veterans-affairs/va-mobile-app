@@ -1,0 +1,28 @@
+name: "[Admin] Add pull request to project board"
+on:
+    push:
+env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_API_TOKEN }} # Use the secret token
+
+jobs:
+    update-slack-description:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4 # Checkout your code
+            - name: Update Slack Channel Description
+              uses: slackapi/slack-github-action@v1.24.0 # Use the Slack action
+              with:
+                channel-id: 'C07JWHB0U86' # Replace with your channel ID
+                slack-message: 'Updating channel description...' # Optional message
+                payload: |
+                  {
+                    "method": "chat.update",
+                    "channel": "C07JWHB0U86",
+                    "description": "New channel description from GitHub Actions!"
+                  }
+    
+
+
+
+
+
