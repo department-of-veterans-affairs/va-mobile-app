@@ -160,7 +160,7 @@ export function VeteranStatusCard({ fullName, edipi, percentText, getLatestPerio
             </TextView>
           </Box>
 
-          {percentText && percentText !== '0%' && (
+          {percentText && (
             <Box flex={isLandscape ? 1 : undefined}>
               <TextView color="primaryContrast" variant={headerVariant} mt={8}>
                 {t('veteranStatus.disabilityRating')}

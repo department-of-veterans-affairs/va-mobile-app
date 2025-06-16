@@ -47,6 +47,7 @@ const params = {
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE = submitAppointmentClaim({
   appointmentDateTime: params.appointment.attributes.startDateLocal,
   facilityStationNumber: params.appointment.attributes.location.id,
+  facilityName: params.appointment.attributes.location.name,
   appointmentType: 'Other',
   isComplete: false,
 })
