@@ -9,3 +9,5 @@ VAMobile/.detoxrc.json @department-of-veterans-affairs/flagship-mobile-reviewers
 VAMobile/documentation/docs/QA @department-of-veterans-affairs/flagship-mobile-qa
 VAMobile/documentation/docs/Engineering/BackEnd @department-of-veterans-affairs/mobile-api-team
 VAMobile/documentation/static/img/backend @department-of-veterans-affairs/mobile-api-team
+
+.github/ @department-of-veterans-affairs/flagship-mobile-devops
