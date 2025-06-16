@@ -518,7 +518,7 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 
-  it('shows the partial success screen when the travel pay claim status is not In Progress', async () => {
+  it('shows partial success if status is Incomplete or Saved', async () => {
     await element(by.text('Appointments')).tap()
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
     // go to the next page
