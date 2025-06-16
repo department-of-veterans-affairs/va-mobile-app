@@ -7,6 +7,32 @@ export const AppointmentsExpandede2eConstants = {
   VIDEO_VISIT_PREP_LINK_ID: 'prepareForVideoVisitTestID',
   APPT_DIRECTIONS_ID: 'directionsTestID',
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
+  TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
+  TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
+}
+
+const checkTravelClaimAvailability = async (
+  appointmentType: string,
+  appointmentStatus: string,
+  pastAppointment: boolean,
+  travelClaimId?: string,
+  daysSinceAppointmentStart: number = 0,
+  claimError: boolean = false,
+) => {
+  const isAllowed =
+    appointmentType === 'ATLAS' ||
+    appointmentType === 'Onsite' ||
+    appointmentType === 'Claim' ||
+    appointmentType === 'VA'
+  if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId && !claimError) {
+    if (daysSinceAppointmentStart < 30) {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
+    } else {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
+    }
+  } else {
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).not.toExist()
+  }
 }
 
 const checkMedicationWording = async ({
@@ -100,6 +126,8 @@ const checkUpcomingApptDetails = async (
   otherDetails?: string,
   locationName?: string,
   locationAddress?: string,
+  travelClaimId?: string,
+  daysSinceAppointmentStart?: number,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -338,6 +366,31 @@ const checkUpcomingApptDetails = async (
     }
   }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
+  await checkTravelClaimAvailability(
+    appointmentType,
+    appointmentStatus,
+    pastAppointment,
+    travelClaimId,
+    daysSinceAppointmentStart,
+  )
+
+  if (travelClaimId && pastAppointment) {
+    if (!daysSinceAppointmentStart || daysSinceAppointmentStart < 30) {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    } else {
+      await expect(
+        element(
+          by.text(
+            'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+          ),
+        ),
+      ).toExist()
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+    }
+  } else {
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+  }
 
   await element(by.text('Appointments')).tap()
 }
@@ -420,6 +473,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123',
       undefined,
       '2341 North Ave',
+      '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
     )
   })
 
@@ -754,7 +808,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     }
     await checkUpcomingApptDetails(
       'Claim',
-      'Upcoming',
+      'Confirmed',
       pastAppointment,
       undefined,
       undefined,
@@ -788,6 +842,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'San Francisco VA Health Care System',
       '2360 East Pershing Boulevard',
+      '20d73591-ff18-4b66-9838-1429ebbf1b6e',
     )
   })
 
@@ -826,6 +881,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Central California VA Health Care System',
       '2360 East Pershing Boulevard',
+      undefined,
+      31,
     )
   })
 
@@ -1098,6 +1155,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
