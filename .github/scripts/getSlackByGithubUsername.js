@@ -7,7 +7,7 @@ if (!githubUsername) {
   process.exit(1);
 }
 
-const users = JSON.parse(fs.readFileSync('./github-users.json', 'utf8'));
+const users = JSON.parse(fs.readFileSync('.github/scripts/github-users.json', 'utf8'));
 const user = users[githubUsername];
 
 if (!user) {
