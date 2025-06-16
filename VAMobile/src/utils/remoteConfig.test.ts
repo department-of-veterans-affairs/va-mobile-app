@@ -23,6 +23,7 @@ const mockOverrides = {
   decisionLettersWaygate: false,
   haptics: false,
   homeScreenPrefetch: false,
+  hsScrollAnalytics: false,
   inAppFeedback: false,
   inAppRecruitment: false,
   inAppReview: true,
