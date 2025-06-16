@@ -12,7 +12,11 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS, LINK_URL_VA_FORM_10_3542 } = getEnv()
 
-function FileOnlineComponent() {
+type FileOnlineComponentProps = {
+  onBeforeOpenTravelPayWebview?: () => void
+}
+
+function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineComponentProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -32,6 +36,7 @@ function FileOnlineComponent() {
             text={t('travelPay.otherWaysToFile.method1.link')}
             testID="fileOnlineBTSSSLink"
             onPress={() => {
+              onBeforeOpenTravelPayWebview?.()
               logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS))
               navigateTo('Webview', {
                 url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,

@@ -580,7 +580,7 @@ context('HomeScreen', () => {
     it('does not display disability rating percentage when veteran does not have disability rating', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
-        .mockResolvedValue(getDisabilityRatingPayload(0))
+        .mockResolvedValue(getDisabilityRatingPayload(undefined))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByText(t('disabilityRating.title'))).toBeFalsy())
@@ -644,7 +644,7 @@ context('HomeScreen', () => {
     it("displays message when no 'About you' info exists", async () => {
       when(get as jest.Mock)
         .calledWith('/v0/disability-rating')
-        .mockResolvedValue(getDisabilityRatingPayload(0))
+        .mockResolvedValue(getDisabilityRatingPayload(undefined))
         .calledWith('/v0/payment-history', {})
         .mockResolvedValue(getPaymentHistoryPayload('', ''))
         .calledWith('/v0/military-service-history')
