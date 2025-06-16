@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -9,7 +9,12 @@ import { Box, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-import { getInputWrapperProps, renderInputError, renderInputLabelSection } from '../formFieldUtils'
+import {
+  getInputWrapperProps,
+  removeInputErrorMessage,
+  renderInputError,
+  renderInputLabelSection,
+} from '../formFieldUtils'
 import ComboBox, { ComboBoxProps } from './ComboBox'
 
 export type ComboBoxItem = {
@@ -53,6 +58,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   onSelectionChange,
   comboBoxOptions,
   disabled,
+  setError,
   error,
   labelKey,
   testID,
@@ -62,6 +68,12 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   const insets = useSafeAreaInsets()
   const wrapperProps = getInputWrapperProps(theme, error, false)
   const [modalVisible, setModalVisible] = useState(false)
+  const [focusUpdated, setFocusUpdated] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
+
+  useEffect(() => {
+    removeInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
+  }, [isFocused, selectedValue, error, setError, focusUpdated])
 
   const renderSelectionBox = () => {
     return (
@@ -104,12 +116,18 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
     selectedValue,
     comboBoxOptions,
     onSelectionChange,
-    onClose: () => setModalVisible(false),
+    onClose: () => {
+      setModalVisible(false)
+      setFocusUpdated(true)
+      setIsFocused(false)
+    },
   }
 
   const showModal = () => {
     if (!disabled) {
       setModalVisible(true)
+      setFocusUpdated(true)
+      setIsFocused(true)
     }
   }
 
