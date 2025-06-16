@@ -1,17 +1,22 @@
 import React, { RefObject, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
-import { Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { ErrorsState } from 'store/slices'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -48,6 +53,12 @@ function PastAppointments({
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
+
+  const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const endTime =
+    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const pagination = {
     currentPage: page,
@@ -229,7 +240,25 @@ function PastAppointments({
           cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
-      {getGroupedAppointments(appointmentsToShow, theme, { t }, onPastAppointmentPress, true, pagination)}
+      {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
+        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <AlertWithHaptics
+            variant="warning"
+            header={t('travelPay.downtime.apptsTitle')}
+            description={t('travelPay.downtime.message', { endTime })}
+            descriptionA11yLabel={t('travelPay.downtime.message', { endTime })}
+          />
+        </Box>
+      )}
+      {getGroupedAppointments(
+        appointmentsToShow,
+        theme,
+        { t },
+        onPastAppointmentPress,
+        true,
+        pagination,
+        includeTravelClaims,
+      )}
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
