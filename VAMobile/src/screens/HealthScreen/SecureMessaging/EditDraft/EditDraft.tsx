@@ -395,6 +395,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
+  const handleSetCareSystem = (cs: string) => {
+    setCareSystem(cs)
+    // Clear to recipient
+    setTo(undefined)
+  }
+
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
@@ -434,7 +440,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         fieldProps: {
           labelKey: 'secureMessaging.formMessage.careSystem',
           selectedValue: careSystem,
-          onSelectionChange: setCareSystem,
+          onSelectionChange: handleSetCareSystem,
           pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
           includeBlankPlaceholder: true,
           isRequiredField: true,
