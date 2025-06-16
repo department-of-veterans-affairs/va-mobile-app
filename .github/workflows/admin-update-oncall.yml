@@ -17,6 +17,7 @@ jobs:
                 payload: |
                   {
                     "method": "chat.update",
+                    "ts": "",
                     "channel": "C07JWHB0U86",
                     "description": "New channel description from GitHub Actions!"
                   }
