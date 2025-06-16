@@ -19,7 +19,7 @@ jobs:
       - name: Lookup Slack username by GitHub handle
         id: lookup
         run: |
-          SLACK_USERNAME=$(node scripts/getSlackByGithubUsername.js)
+          SLACK_USERNAME=$(node .github/scripts/getSlackByGithubUsername.js)
           echo "slack_username=$SLACK_USERNAME" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_USERNAME: ${{ github.actor }}
