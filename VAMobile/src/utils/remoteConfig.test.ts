@@ -38,6 +38,7 @@ const mockOverrides = {
   sso: true,
   startScheduling: false,
   testFeature: false,
+  travelPaySMOC: false,
   useOldLinkComponent: false,
   whatsNewUI: false,
   veteranStatusCardRedesign: true,
