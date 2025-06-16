@@ -1,0 +1,30 @@
+name: Lookup Slack Username
+
+on:
+  push:
+
+jobs:
+  get-slack-name:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Lookup Slack username by GitHub handle
+        id: lookup
+        run: |
+          SLACK_USERNAME=$(node scripts/getSlackByGithubUsername.js)
+          echo "slack_username=$SLACK_USERNAME" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+
+      - name: Use Slack username
+        id: output-slack-user-id
+        run: | 
+          echo "Slack username is: ${{ steps.lookup.outputs.slack_username }}"

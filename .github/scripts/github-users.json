@@ -1,0 +1,10 @@
+{
+  "timwright": {
+    "slack": "tim.slack",
+    "fullname": "Tim Wright"
+  },
+  "janedoe": {
+    "slack": "jane.doe",
+    "fullname": "Jane Doe"
+  }
+}
