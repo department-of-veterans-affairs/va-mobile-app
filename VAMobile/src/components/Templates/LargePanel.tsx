@@ -133,7 +133,7 @@ export const LargePanel: FC<LargePanelProps> = ({
 
   return (
     // Modal to ensure keyboard navigation is confined to focusable elements within panel
-    <Modal visible={!hideModal} transparent={true}>
+    <Modal visible={!hideModal} animationType="slide" transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
         <VAScrollView
