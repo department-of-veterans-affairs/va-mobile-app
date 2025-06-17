@@ -30,7 +30,7 @@ jobs:
 
       - name: Install and run actionlint
         run: |
-          pip install "actionlint-python>=1.7.1"
+          pip install "actionlint-py"
           # The '-config-file' flag specifies the config. The glob pattern targets all workflow files.
           actionlint -color -config-file .github/actionlint.yml .github/workflows/*.yml
         shell: bash
