@@ -22,7 +22,7 @@ jobs:
         with:
           config_file: .github/.yamllint.yml
 
-      - name: Check workflow files
+      - name: Run ActionLint
         run: |
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
           ./actionlint -ignore 'action is too old' -ignore 'globbing and word splitting' -ignore 'shellcheck reported' -ignore 'property .+ is not defined' -color
