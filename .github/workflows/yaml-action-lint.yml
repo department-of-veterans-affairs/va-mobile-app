@@ -34,3 +34,4 @@ jobs:
           # The '-config-file' flag specifies the config. The glob pattern targets all workflow files.
           actionlint -color -ignore 'shellcheck reported' -ignore 'action is too old to run' -ignore 'gobbing and word splitting' -ignore 'property .+ is not defined' .github/workflows/*.yml
         shell: bash
+# adding commit
