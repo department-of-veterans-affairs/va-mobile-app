@@ -1,0 +1,7 @@
+# Native configuration for yamllint
+rules:
+  document-start: disable
+  truthy: disable
+  trailing-spaces: disable
+  comments-indentation: disable
+  line-length: disable
