@@ -13,7 +13,6 @@ import { TravelPayError } from 'constants/travelPay'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
@@ -23,7 +22,6 @@ type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList,
 function ErrorScreen({ route, navigation }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { error = 'error' } = route.params
-  useSMOCAnalyticsPageView(error)
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()

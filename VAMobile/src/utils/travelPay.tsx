@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import { ParamListBase } from '@react-navigation/native'
 
 import { TFunction } from 'i18next'
@@ -126,10 +124,4 @@ export const getCommonSubtaskProps = (
   }
 
   return props
-}
-
-export const useSMOCAnalyticsPageView = (currentScreenName: string) => {
-  useEffect(() => {
-    logAnalyticsEvent(Events.vama_smoc_pageview(currentScreenName))
-  }, [currentScreenName])
 }

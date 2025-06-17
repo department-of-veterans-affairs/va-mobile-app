@@ -9,12 +9,10 @@ import AddressSummary, {
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getCommonSubtaskProps, useSMOCAnalyticsPageView } from 'utils/travelPay'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 function AddressScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  useSMOCAnalyticsPageView('address')
 
   const navigateTo = useRouteNavigation()
 

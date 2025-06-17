@@ -11,13 +11,11 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { getCommonSubtaskProps, useSMOCAnalyticsPageView } from 'utils/travelPay'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 function VehicleScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const queryClient = useQueryClient()
-
-  useSMOCAnalyticsPageView('vehicle')
 
   const theme = useTheme()
   const isPortrait = useOrientation()

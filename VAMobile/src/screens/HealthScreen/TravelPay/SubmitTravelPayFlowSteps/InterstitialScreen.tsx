@@ -11,7 +11,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
@@ -21,8 +20,6 @@ type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackPar
 
 function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  useSMOCAnalyticsPageView('intro')
 
   const theme = useTheme()
   const isPortrait = useOrientation()

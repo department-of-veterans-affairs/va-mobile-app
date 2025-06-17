@@ -1234,14 +1234,6 @@ export const Events = {
       name: 'vama_goto_payment_hist',
     }
   },
-  vama_smoc_pageview: (page: string): Event => {
-    return {
-      name: 'vama_smoc_pageview',
-      params: {
-        page,
-      },
-    }
-  },
   vama_smoc_button_click: (page: string, event: string): Event => {
     return {
       name: 'vama_smoc_button_click',

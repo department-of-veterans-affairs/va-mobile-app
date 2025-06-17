@@ -6,7 +6,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-import { useSMOCAnalyticsPageView } from 'utils/travelPay'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
@@ -16,8 +15,6 @@ type TravelClaimHelpScreenProps = StackScreenProps<SubmitTravelPayFlowModalStack
 function TravelClaimHelpScreen({ navigation }: TravelClaimHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-
-  useSMOCAnalyticsPageView('help')
 
   return (
     <LargePanel
