@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   lint:
-    name: Run Linters
+    name: Let the Linting begin
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -20,11 +20,9 @@ jobs:
       - name: Run yamllint
         uses: ibiqlik/action-yamllint@v3
         with:
-          config_file: .github/.yamllint.yml
+          config_file: .github/yamllint.yml
 
       - name: Run ActionLint
-        run: |
-          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -ignore 'action is too old' -ignore 'globbing and word splitting' -ignore 'shellcheck reported' -ignore 'property .+ is not defined' -color
-        shell: bash
-# Adding commit
+        uses: rhysd/actionlint@v1.7.7
+        with:
+          config_file: .github/actionlint.yml

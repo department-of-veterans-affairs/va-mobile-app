@@ -1,0 +1,4 @@
+# Native configuration for actionlint
+disable:
+  - action # Disables the check for outdated actions like checkout@v3
+  - shellcheck # Disables all shellcheck warnings
