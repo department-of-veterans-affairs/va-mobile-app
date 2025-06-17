@@ -5,6 +5,7 @@ import {
   PaymentAccountData,
   PreferredNameUpdatePayload,
   SecureMessagingSystemFolderIdConstants,
+  SubmitSMOCTravelPayClaimParameters,
 } from 'api/types'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -33,6 +34,7 @@ import {
   validateAddress,
 } from './profile'
 import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
+import { TravelPayDemoReturnTypes, submitAppointmentClaim } from './travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
 
 /**
@@ -71,6 +73,7 @@ type DemoApiReturns =
   | DemographicsDemoApiReturnTypes
   | AllergyDemoReturnTypes
   | LabsAndTestsDemoReturnTypes
+  | TravelPayDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -269,6 +272,12 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     }
     case '/v0/user/addresses': {
       return updateAddress(store, params as unknown as AddressData)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return submitAppointmentClaim(params as unknown as SubmitSMOCTravelPayClaimParameters)
     }
     default: {
       return undefined

@@ -1,8 +1,7 @@
 {
   "directory": {
     "allergies": ["Allergies"],
-    "labsAndTests": ["LabsAndTests"],
-    "appointments": ["Appointments", "AppointmentsExpanded"],
+    "appointments": ["Appointments", "AppointmentsExpanded", "TravelPay"],
     "authorizedServices": [
       "Appeals",
       "AppealsExpanded",
@@ -26,6 +25,7 @@
     "directDeposit": ["DirectDeposit"],
     "disabilityRating": ["DisabilityRatings", "VeteranStatusCard"],
     "facilities": ["Cerner"],
+    "labsAndTests": ["LabsAndTests"],
     "letters": ["VALetters"],
     "militaryService": ["MilitaryInformation", "VeteranStatusCard"],
     "notifications": ["SettingsScreen", "PushNotifications"],
@@ -196,6 +196,7 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
+    "travelPay": ["TravelPay"],
     "utils": [
       "Allergies",
       "LabsAndTests",
@@ -230,13 +231,14 @@
     "BiometricsPreferenceScreen": [],
     "SyncScreen": [],
     "WebviewScreen": [],
-    "styles": []
+    "styles": [],
+    "TravelPay": ["TravelPay"]
   },
   "files": {
     "allergies.ts": ["Allergies"],
     "labsAndTests.ts": ["LabsAndTests"],
     "accounts.ts": ["DirectDeposit"],
-    "appointments.ts": ["Appointments", "AppointmentsExpanded"],
+    "appointments.ts": ["Appointments", "AppointmentsExpanded", "TravelPay"],
     "claims.ts": ["Claims", "Appeals", "AppealsExpanded"],
     "common.ts": [
       "Allergies",
@@ -355,6 +357,7 @@
       "VALetters",
       "Payments"
     ],
+    "travelPay.ts": ["TravelPay"],
     "vaccine.ts": ["VaccineRecords"],
     "api.ts": [
       "Appeals",
@@ -407,6 +410,7 @@
       "Prescriptions",
       "ProfileScreen",
       "SettingsScreen",
+      "TravelPay",
       "VaccineRecords",
       "VALetters",
       "VeteransCrisisLine",

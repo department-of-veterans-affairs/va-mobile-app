@@ -22,6 +22,7 @@ export type FeatureToggleType =
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
+  | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
   | 'inAppReview'
@@ -37,6 +38,7 @@ export type FeatureToggleType =
   | 'sso'
   | 'startScheduling'
   | 'testFeature'
+  | 'travelPaySMOC'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
@@ -48,6 +50,7 @@ type FeatureToggleValues = {
   decisionLettersWaygate: boolean
   haptics: boolean
   homeScreenPrefetch: boolean
+  hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
   inAppReview: boolean
@@ -63,6 +66,7 @@ type FeatureToggleValues = {
   sso: boolean
   startScheduling: boolean
   testFeature: boolean
+  travelPaySMOC: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
@@ -75,6 +79,7 @@ export const defaults: FeatureToggleValues = {
   decisionLettersWaygate: true,
   haptics: true,
   homeScreenPrefetch: true,
+  hsScrollAnalytics: false,
   inAppRecruitment: false,
   inAppFeedback: false,
   inAppReview: true,
@@ -90,6 +95,7 @@ export const defaults: FeatureToggleValues = {
   sso: true,
   startScheduling: false,
   testFeature: false,
+  travelPaySMOC: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
