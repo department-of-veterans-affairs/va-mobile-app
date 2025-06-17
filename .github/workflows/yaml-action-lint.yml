@@ -1,5 +1,4 @@
 name: Lint Github Action files
-
 on:
   push:
   # pull_request:
@@ -11,18 +10,27 @@ concurrency:
 
 jobs:
   lint:
-    name: Let the Linting begin
+    name: Run Linters
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Run yamllint
-        uses: ibiqlik/action-yamllint@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          config_file: .github/yamllint.yml
+          python-version: "3.x"
 
-      - name: Run actionlint
-        uses: rhysd/actionlint@v1.7.7
-        with:
-          args: -color -config-file .github/actionlint.yml
+      - name: Install and run yamllint
+        run: |
+          pip install yamllint
+          # The '-c' flag specifies the config file. '.' tells it to lint the current directory.
+          yamllint -c .github/yamllint.yml .
+        shell: bash
+
+      - name: Install and run actionlint
+        run: |
+          pip install "actionlint-python>=1.7.1"
+          # The '-config-file' flag specifies the config. The glob pattern targets all workflow files.
+          actionlint -color -config-file .github/actionlint.yml .github/workflows/*.yml
+        shell: bash
