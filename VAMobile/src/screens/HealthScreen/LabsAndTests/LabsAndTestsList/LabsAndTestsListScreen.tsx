@@ -72,7 +72,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: t('labsAndTests.list.pastThreeMonths'),
         value: t('labsAndTests.list.pastThreeMonths'),
-        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+        testID: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getAccessibleDate(twoMonthsEarlier),
           date2: getAccessibleDate(todaysDate),
         }),
@@ -85,7 +85,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
         value: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
-        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+        testID: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getAccessibleDate(fiveMonthsEarlier),
           date2: getAccessibleDate(threeMonthsEarlier),
         }),
@@ -98,7 +98,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
-        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+        testID: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getAccessibleDate(eightMonthsEarlier),
           date2: getAccessibleDate(sixMonthsEarlier),
         }),
@@ -111,7 +111,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
-        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+        testID: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getAccessibleDate(elevenMonthsEarlier),
           date2: getAccessibleDate(nineMonthsEarlier),
         }),
@@ -124,7 +124,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       {
         label: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
         value: getDateRange(fourteenMonthsEarlier, twelveMonthsEarlier),
-        a11yLabel: t('labsAndTests.list.dateRangeA11yLabel', {
+        testID: t('labsAndTests.list.dateRangeA11yLabel', {
           date1: getAccessibleDate(fourteenMonthsEarlier),
           date2: getAccessibleDate(twelveMonthsEarlier),
         }),
@@ -184,7 +184,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     if (typeof count !== 'number') {
       return
     }
-    logAnalyticsEvent(Events.vama_lab_or_test_list({ timeFrame, count }))
+    logAnalyticsEvent(Events.vama_lab_or_test_list(timeFrame, count))
   }, [datePickerOption, labsAndTests])
 
   useEffect(() => {
@@ -272,7 +272,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             onSelectionChange={onTimeRangeSelectionChange}
             pickerOptions={timeRangeOptions.map((option) => ({
               ...option,
-              testID: option.a11yLabel,
+              testID: option.testID,
             }))}
             labelKey={'labsAndTests.list.selectADateRange'}
             testID="labsAndTestDataRangeTestID"

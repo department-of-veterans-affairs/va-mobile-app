@@ -38,8 +38,8 @@ export type PickerItem = {
   value: string
   /** icon to show */
   icon?: IconProps
-  /** accessibility label for the item */
-  a11yLabel?: string
+  /** Test ID for the item */
+  testID?: string
 }
 
 export type VAModalPickerProps = {
@@ -166,7 +166,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       },
       isSelected: currentSelectedValue === pickerOption.value,
       icon: pickerOption.icon,
-      testId: pickerOption.a11yLabel,
+      testId: pickerOption.testID,
     }
   })
 

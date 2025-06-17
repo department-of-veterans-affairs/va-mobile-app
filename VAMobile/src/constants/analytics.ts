@@ -30,7 +30,7 @@ export const Events = {
       name: 'vama_allergy_list',
     }
   },
-  vama_lab_or_test_list: ({ timeFrame, count }: { timeFrame: string; count: number | undefined }): Event => {
+  vama_lab_or_test_list: (timeFrame: string, count?: number): Event => {
     return {
       name: 'vama_lab_or_test_list',
       params: {
@@ -39,7 +39,7 @@ export const Events = {
       },
     }
   },
-  vama_lab_or_test_details: ({ labType }: { labType: string }): Event => {
+  vama_lab_or_test_details: (labType: string): Event => {
     return {
       name: 'vama_lab_or_test_details',
       params: {

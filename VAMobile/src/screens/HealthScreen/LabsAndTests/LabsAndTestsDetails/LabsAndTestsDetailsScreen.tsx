@@ -57,11 +57,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   // analytics
   useEffect(() => {
-    logAnalyticsEvent(
-      Events.vama_lab_or_test_details({
-        labType: labOrTest.attributes?.display || 'unknown',
-      }),
-    )
+    logAnalyticsEvent(Events.vama_lab_or_test_details(labOrTest.attributes?.display || 'unknown'))
   }, [dispatch, labOrTest])
 
   if (!labOrTest) {
@@ -211,7 +207,7 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
       )}
       <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
         {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
-        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis.a11yLabel'))}>
+        <TextView variant="HelperText" accessibilityLabel={a11yLabelVA(t('health.details.weBaseThis'))}>
           {t('health.details.weBaseThis')}
         </TextView>
       </Box>

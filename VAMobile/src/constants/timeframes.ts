@@ -26,7 +26,7 @@ export const DEFAULT_UPCOMING_DAYS_LIMIT = 7
 export type TimeFrameDropDownItem = {
   label: string
   value: string
-  a11yLabel: string
+  testID: string
   dates: {
     startDate: DateTime
     endDate: DateTime
