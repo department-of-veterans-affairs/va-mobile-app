@@ -9,12 +9,10 @@ import { TFunction } from 'i18next'
 import styled from 'styled-components'
 import _ from 'underscore'
 
+import { Box, BoxProps, CarouselScreen, TextView } from 'components'
 import { a11yHintProp } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-
-import { Box, BoxProps, TextView } from '../index'
-import { CarouselScreen } from './Carousel'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.carousel)};

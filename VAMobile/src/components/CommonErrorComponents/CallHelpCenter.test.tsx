@@ -1,8 +1,7 @@
 import React from 'react'
 
+import CallHelpCenter from 'components/CommonErrorComponents/CallHelpCenter'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import CallHelpCenter from './CallHelpCenter'
 
 const onTryAgainSpy = jest.fn(() => {})
 
