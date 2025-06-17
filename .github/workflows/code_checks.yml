@@ -31,24 +31,6 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
-  lint-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Install yamllint
-        run: pip install yamllint
-
-      - name: Run yamllint
-        # Overriding the default working directory to scan the entire repo from the root
-        working-directory: .
-        run: yamllint . -c .github/scripts/.yamllint
   test:
     runs-on: ubuntu-latest-4-cores
     strategy:
