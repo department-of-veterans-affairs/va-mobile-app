@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { TFunction } from 'i18next'
