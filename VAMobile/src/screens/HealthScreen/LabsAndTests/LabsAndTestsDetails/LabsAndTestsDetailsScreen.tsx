@@ -4,6 +4,7 @@ import { atob } from 'react-native-quick-base64'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { Observation } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -23,7 +24,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 
-import { Observation } from '../../../../api/types'
 import { HealthStackParamList } from '../../HealthStackScreens'
 
 type LabsAndTestsDetailsScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsDetailsScreen'>
