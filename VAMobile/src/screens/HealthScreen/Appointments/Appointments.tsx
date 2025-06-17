@@ -44,7 +44,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const initialTab = route?.params?.tab
   const [selectedTab, setSelectedTab] = useState(initialTab ? initialTab : 0)
   const [dateRange, setDateRange] = useState(
-    initialTab ? getPastAppointmentDateRange : getUpcomingAppointmentDateRange(),
+    initialTab ? getPastAppointmentDateRange() : getUpcomingAppointmentDateRange(),
   )
   const [timeFrame, setTimeFrame] = useState(
     initialTab ? TimeFrameTypeConstants.PAST_THREE_MONTHS : TimeFrameTypeConstants.UPCOMING,
