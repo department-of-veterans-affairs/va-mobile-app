@@ -240,8 +240,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
-    // not crazy about the keys here being the labels we eventually display in the combobox
-    // open to suggestions here
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
       [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,

@@ -76,8 +76,6 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   }
 
   const listGroupHeaderStyle: BoxProps = {
-    // this color var doesn't really make sense
-    // if we add a new one, what is the dark mode equivalent - does it matter?
     backgroundColor: 'navButton',
     p: 12,
     borderColor: 'primary',
