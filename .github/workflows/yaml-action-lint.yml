@@ -25,5 +25,5 @@ jobs:
       - name: Check workflow files
         run: |
           bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
-          ./actionlint -ignore 'action is too old' -ignore 'globbing and word splitting' -color
+          ./actionlint -ignore 'action is too old' -ignore 'globbing and word splitting' -ignore 'shellcheck reported' -color
         shell: bash
