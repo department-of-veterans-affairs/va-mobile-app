@@ -6,8 +6,9 @@ import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { navigateToTravelPayWebsite } from 'utils/travelPay'
+import { useTheme } from 'utils/hooks'
+
+import FileOnBTSSSLink from './FileOnBTSSSLink'
 
 const { LINK_URL_VA_FORM_10_3542 } = getEnv()
 
@@ -17,7 +18,6 @@ type FileOnlineComponentProps = {
 
 function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineComponentProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
   return (
@@ -30,14 +30,10 @@ function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineCompone
           {t('travelPay.otherWaysToFile.method1')}
         </TextView>
         <Box my={theme.dimensions.condensedMarginBetween}>
-          <LinkWithAnalytics
-            type="custom"
+          <FileOnBTSSSLink
             text={t('travelPay.otherWaysToFile.method1.link')}
             testID="fileOnlineBTSSSLink"
-            onPress={() => {
-              onBeforeOpenTravelPayWebview?.()
-              navigateToTravelPayWebsite(t, navigateTo)
-            }}
+            onBeforeOpenWebview={onBeforeOpenTravelPayWebview}
           />
         </Box>
         <TextView testID="fileOnlineComponentMethod2ID" variant="MobileBody">
