@@ -50,7 +50,7 @@ jobs:
         working-directory: .
         run: yamllint . -c .github/scripts/.yamllint
   test:
-    runs-on: ubuntu-4-cores-latest
+    runs-on: ubuntu-latest-4-cores
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
