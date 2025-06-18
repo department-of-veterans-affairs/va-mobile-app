@@ -345,9 +345,11 @@ context('PrescriptionHistory', () => {
           a11yLabelVA(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
         ),
       ).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('dismiss') })).toBeTruthy()
     })
 
     it('should open a webview that navigates to va.gov when link is clicked', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
       await waitFor(() =>
         fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
       )
@@ -358,6 +360,17 @@ context('PrescriptionHistory', () => {
         loadingMessage: t('loading.vaWebsite'),
         useSSO: true,
       })
+    })
+
+    it('should hide the alert when the dismiss button is clicked', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      fireEvent.press(screen.getByRole('button', { name: t('dismiss') }))
+      await waitFor(() =>
+        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeFalsy(),
+      )
     })
   })
 
