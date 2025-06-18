@@ -4,7 +4,7 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Box, FullScreenSubtask, LargePanel, TextView } from 'components'
+import { Box, FullScreenSubtask, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import getEnv from 'utils/env'

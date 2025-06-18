@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
-import _ from 'underscore'
 
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextView } from 'components'
 import FloatingButton from 'components/FloatingButton'

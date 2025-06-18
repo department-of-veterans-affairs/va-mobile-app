@@ -28,7 +28,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     if (submittedCheck === true) {
       return
     }
-    logAnalyticsEvent(Events.vama_feedback_closed())
+    logAnalyticsEvent(Events.vama_feedback_closed('GiveFeedback'))
   })
 
   const onSubmit = (): void => {

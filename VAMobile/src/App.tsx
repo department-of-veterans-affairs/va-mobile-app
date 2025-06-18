@@ -47,7 +47,7 @@ import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetails
 import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
-import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/InAppFeedbackScreen/InAppFeedbackScreen'
+import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen'
 import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
@@ -109,6 +109,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   SubmitEvidenceSubtask: {
     claimID: string
   }
+  FeedbackIntercept: { screen: string }
   Tabs: undefined
 }
 
@@ -466,6 +467,11 @@ export function AuthedApp() {
           name="FileRequestSubtask"
           component={FileRequestSubtask}
           options={FULLSCREEN_SUBTASK_OPTIONS}
+        />
+        <RootNavStack.Screen
+          name="FeedbackIntercept"
+          component={FeedbackInterceptScreen}
+          options={LARGE_PANEL_OPTIONS}
         />
         {homeScreens}
         {paymentsScreens}
