@@ -270,7 +270,6 @@ const checkSubmitSuccessScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
-  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()
 }
 
