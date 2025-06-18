@@ -3,7 +3,7 @@ name: Lint Them All
 
 on: # yamllint disable-line rule:truthy
   push:
-  # pull_request: null
+  # pull_request:
 
 defaults:
   run:
@@ -12,15 +12,9 @@ permissions:
   contents: read
 
 jobs:
-  # lint:
-  # Super-linter workflow running in check only mode
-  # See https://github.com/super-linter/super-linter#get-started
-
-  fix-lint-issues:
+  linting:
     permissions:
-      # To write linting fixes
       contents: write
-      # To write Super-linter status checks
       statuses: write
     runs-on: ubuntu-latest
     steps:
