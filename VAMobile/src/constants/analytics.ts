@@ -1242,6 +1242,14 @@ export const Events = {
       },
     }
   },
+  vama_smoc_error: (error: string): Event => {
+    return {
+      name: 'vama_smoc_error',
+      params: {
+        error,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {

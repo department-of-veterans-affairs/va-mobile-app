@@ -60,6 +60,11 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const contactInformationQuery = useContactInformation({ enabled: true })
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
+  const navigateToErrorScreen = (error: string) => {
+    logAnalyticsEvent(Events.vama_smoc_error(error))
+    navigateTo('SMOCErrorScreen', { error })
+  }
+
   const submitTravelClaim = async () => {
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
@@ -67,7 +72,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
     }
 
     if (!attributes.location.id) {
-      navigateTo('ErrorScreen', { error: 'error' })
+      navigateToErrorScreen('error')
       return
     }
 
@@ -94,9 +99,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
             facilityName: attributes.location.name,
           })
         },
-        onError: () => {
-          navigateTo('ErrorScreen', { error: 'error' })
-        },
+        onError: () => navigateToErrorScreen('error'),
       },
     )
   }

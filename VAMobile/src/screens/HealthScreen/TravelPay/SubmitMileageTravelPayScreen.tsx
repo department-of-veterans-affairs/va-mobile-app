@@ -13,10 +13,10 @@ import {
   AddressScreen,
   BeneficiaryTravelAgreement,
   BurdenStatement,
-  ErrorScreen,
   InterstitialScreen,
   MileageScreen,
   ReviewClaimScreen,
+  SMOCErrorScreen,
   SubmitSuccessScreen,
   TravelClaimHelpScreen,
   VehicleScreen,
@@ -36,14 +36,14 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
     appointmentDateTime: string
     facilityName: string
   }
-  ErrorScreen: {
+  SMOCErrorScreen: {
     error: TravelPayError
   }
   TravelClaimHelpScreen: undefined
 }
 
 export type TravelPayStack = WebviewStackParams & {
-  FlowSteps: {
+  SMOCFlowSteps: {
     appointment: AppointmentData
     appointmentRouteKey: string
     smocFlowStartDate: string
@@ -58,7 +58,7 @@ type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 
 const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
-const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
+const SMOCFlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'SMOCFlowSteps'>) => {
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
 
@@ -86,7 +86,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         component={SubmitSuccessScreen}
         initialParams={{ appointmentDateTime: attributes.startDateUtc, facilityName: attributes.location.name }}
       />
-      <TravelPayMultiStepStack.Screen key="ErrorScreen" name="ErrorScreen" component={ErrorScreen} />
+      <TravelPayMultiStepStack.Screen key="SMOCErrorScreen" name="SMOCErrorScreen" component={SMOCErrorScreen} />
     </MultiStepSubtask>
   )
 }
@@ -95,10 +95,10 @@ function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenPro
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
 
   return (
-    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
+    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SMOCFlowSteps">
       <TravelPayStack.Screen
-        name="FlowSteps"
-        component={FlowSteps}
+        name="SMOCFlowSteps"
+        component={SMOCFlowSteps}
         initialParams={{ appointment, appointmentRouteKey, smocFlowStartDate }}
       />
       <TravelPayStack.Screen

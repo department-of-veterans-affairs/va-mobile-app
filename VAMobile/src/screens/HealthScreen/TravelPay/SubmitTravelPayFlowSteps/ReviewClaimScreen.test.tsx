@@ -204,7 +204,7 @@ context('ReviewClaimScreen', () => {
   })
 
   describe('when the submission fails', () => {
-    it('should navigate to the ErrorScreen', async () => {
+    it('should navigate to the SMOCErrorScreen', async () => {
       mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
         if (options && options.onError) {
           options.onError(new Error('Failed to submit travel claim'), {}, undefined)
@@ -217,7 +217,7 @@ context('ReviewClaimScreen', () => {
       fireEvent.press(button)
 
       await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', {
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SMOCErrorScreen', {
           error: 'error',
         })
       })
