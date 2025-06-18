@@ -31,6 +31,7 @@ jobs:
         uses: super-linter/super-linter@v7.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          LOG_LEVEL: DEBUG
           LINTER_RULES_PATH: ".github/linters/"
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_CHECKOV: false
