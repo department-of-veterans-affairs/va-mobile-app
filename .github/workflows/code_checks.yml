@@ -81,6 +81,7 @@ jobs:
           VALIDATE_DOCKER_HADOLINT: false
           VALIDATE_XML: false
           VALIDATE_YAML_PRETTIER: false
+        run: working-directory: va-mobile-app
   test:
     runs-on: ubuntu-latest-4-cores
     strategy:
