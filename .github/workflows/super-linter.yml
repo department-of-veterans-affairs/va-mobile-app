@@ -29,9 +29,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           # Set your fix mode variables to true
+          GITHUB_ACTIONS_CONFIG_FILE: .github/linters/actionlint.yml
           FIX_SHELL_SHFMT: true
           FIX_YAML_PRETTIER: true
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_PYTHON_PYINK: false
+          VALIDATE_CHEKOV: false
+          VALIDATE_CLANG_FORMAT: false
+          VALIDATE_CPP: false
+          VALIDATE_CSS: false
+          VALIDATE_CSS_PRETTIER: false
+          VALIDATE_ENV: false
+          VALIDATE_GITLEAKS: false
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
+          VALIDATE_GROOVY: false
+          VALIDATE_JAVASDCRIPT_ES: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_JAVA: false
           LINTER_RULES_PATH: .github/linters
 
           # To reuse the same Super-linter configuration that you use in the
