@@ -28,6 +28,9 @@ jobs:
         uses: super-linter/super-linter@v7.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          LINTER_RULES_PATH: .github/linters
+          GITHUB_ACTIONS_CONFIG_FILE: .github/linters/.actionlint.yml
+          YAML_CONFIG_FILE: .github/linters/.yamllint.yml
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_CHECKOV: false
           VALIDATE_CLANG_FORMAT: false
@@ -45,7 +48,7 @@ jobs:
           VALIDATE_BASH: false
           VALIDATE_JSCPD: false
           VALIDATE_JSON: false
-          VALIDATE_JSONPRETTIER: false
+          VALIDATE_JSON_PRETTIER: false
           VALIDATE_KOTLIN: false
           VALIDATE_MARKDOWN: false
           VALIDATE_MARKDOWN_PRETTIER: false
@@ -56,13 +59,16 @@ jobs:
           VALIDATE_PYTHON_ISORT: false
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_PYTHON_RUFF: false
-          VALIDATE_PYHTON_PYINK: false
+          VALIDATE_PYTHON_PYINK: false
           VALIDATE_RUBY: false
           VALIDATE_SHELL_SHFMT: false
           VALIDATE_TSX: false
           VALIDATE_TYPESCRIPT_ES: false
           VALIDATE_TYPESCRIPT_PRETTIER: false
           VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_DOCKER_HADOLINT: false
+          VALIDATE_XML: false
+          VALIDATE_YAML_PRETTIER: false
 
           # Set your fix mode variables to true
           # LINTER_RULES_PATH: .github/linters
