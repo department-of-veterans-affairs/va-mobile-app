@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import {
   Allergy,
   AppointmentData,
+  LabsAndTests,
   PrescriptionData,
   RefillRequestSummaryItems,
   RefillStatus,
@@ -116,6 +117,10 @@ export type HealthStackParamList = WebviewStackParams & {
   AllergyList: undefined
   AllergyDetails: {
     allergy: Allergy
+  }
+  LabsAndTestsList: undefined
+  LabsAndTestsDetailsScreen: {
+    labOrTest: LabsAndTests
   }
   GeneralHelpScreen: {
     title: string
