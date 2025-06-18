@@ -4,9 +4,10 @@
 # This variable tells Super-Linter to look in the specified directory
 # within your repository for custom configuration files like .actionlint.yml
 linter_rules_path: .github/linters/
-
+github_actions_config_file: .github/linters/.actionlint.yml
+yaml_config_file: .github/linters/.yamllint.yml
 # You can also disable entire linters here if they are creating too much noise
-disable_linters:
-  - REPOSITORY_CHECKOV
-  - REPOSITORY_KICS
-  - PYTHON_PYINK
+# disable_linters:
+#   - REPOSITORY_CHECKOV
+#   - REPOSITORY_KICS
+#   - PYTHON_PYINK
