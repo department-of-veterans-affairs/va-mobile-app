@@ -1,6 +1,4 @@
-#
-# Code QL Checks
-#
+#Code QL Checks
 
 name: "[Code Quality] CodeQL"
 
