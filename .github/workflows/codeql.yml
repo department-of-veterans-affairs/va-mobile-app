@@ -1,5 +1,4 @@
-#Code QL Checks
-
+---
 name: "[Code Quality] CodeQL"
 
 on:
@@ -14,7 +13,6 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
