@@ -56,9 +56,7 @@ export const getTravelPayHelpSubtaskProps = (t: TFunction, navigateTo: RouteNavi
   return {
     rightButtonText: t('help'),
     rightButtonTestID: 'rightHelpTestID',
-    onRightButtonPress: () => {
-      navigateTo('TravelClaimHelpScreen')
-    },
+    onRightButtonPress: () => navigateTo('TravelClaimHelpScreen'),
     rightIconProps: {
       name: 'Help' as const,
       fill: 'default',
@@ -86,9 +84,7 @@ export const getCommonSubtaskProps = (
   const props = {
     ...helpProps,
     leftButtonText: t('back'),
-    onLeftButtonPress: () => {
-      navigateTo(previousStepScreen)
-    },
+    onLeftButtonPress: () => navigateTo(previousStepScreen),
     leftButtonTestID: 'leftBackTestID',
     ...(hasErrorScreen
       ? {
@@ -105,9 +101,7 @@ export const getCommonSubtaskProps = (
       ...props,
       primaryContentButtonText: t('yes'),
       primaryButtonTestID: 'yesTestID',
-      onPrimaryContentButtonPress: () => {
-        navigateTo(nextStepScreen)
-      },
+      onPrimaryContentButtonPress: () => navigateTo(nextStepScreen),
     }
   }
 

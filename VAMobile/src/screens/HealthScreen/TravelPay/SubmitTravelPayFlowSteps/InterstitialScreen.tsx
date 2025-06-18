@@ -49,9 +49,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: () => {
-      navigateTo('MileageScreen')
-    },
+    onPrimaryContentButtonPress: () => navigateTo('MileageScreen'),
   })
 
   return (

@@ -17,7 +17,7 @@ import { FileOnlineComponent, TravelPayHelp } from './components'
 
 type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
 
-function ErrorScreen({ route, navigation }: ErrorScreenProps) {
+function ErrorScreen({ route }: ErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { error = 'error' } = route.params
   const theme = useTheme()
@@ -29,10 +29,6 @@ function ErrorScreen({ route, navigation }: ErrorScreenProps) {
   useSubtaskProps({
     rightButtonText: t('close'),
     rightButtonTestID: 'rightCloseTestID',
-    onRightButtonPress: () => {
-      // This screen lives in a FullScreenSubtask, so we need to grab the parent to go back one screen and exit the subtask
-      navigation.getParent()?.goBack()
-    },
   })
 
   useFocusEffect(
