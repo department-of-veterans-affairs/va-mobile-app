@@ -379,6 +379,7 @@ context('PrescriptionHistory', () => {
           a11yLabelVA(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
         ),
       ).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('dismiss') })).toBeTruthy()
     })
 
     it('should open a webview that navigates to va.gov when link is clicked', async () => {
@@ -409,6 +410,32 @@ context('PrescriptionHistory', () => {
         useSSO: true,
       })
     })
+
+    it('should hide the alert when the dismiss button is clicked', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', params)
+        .mockResolvedValue({
+          ...prescriptionData,
+          meta: {
+            ...prescriptionData.meta,
+            hasNonVaMeds: true,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      fireEvent.press(screen.getByRole('button', { name: t('dismiss') }))
+      await waitFor(() =>
+        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeFalsy(),
+      )
+    })
   })
 
   describe('When nonVAMedsLink feature toggle is true and user does not have non-VA meds', () => {
@@ -425,7 +452,7 @@ context('PrescriptionHistory', () => {
           ...prescriptionData,
           meta: {
             ...prescriptionData.meta,
-            hasNonVaMeds: true,
+            hasNonVaMeds: false,
           },
         })
       initializeTestInstance()
