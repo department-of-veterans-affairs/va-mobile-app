@@ -24,9 +24,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: where am i
-        run: pwd
-        shell: bash
       - name: Super-Linter
         uses: super-linter/super-linter@v7.4.0
         env:
