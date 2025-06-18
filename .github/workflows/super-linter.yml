@@ -25,7 +25,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: where am i
-        uses: "composite"
         run: pwd
         shell: bash
       - name: Super-Linter
