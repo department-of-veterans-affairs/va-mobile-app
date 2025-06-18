@@ -32,8 +32,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           LINTER_RULES_PATH: ".github/linters"
-          GITHUB_ACTIONS_CONFIG_FILE: ".github/linters/.actionlint.yml"
-          YAML_CONFIG_FILE: ".github/linters/.yamllint.yml"
+          # GITHUB_ACTIONS_CONFIG_FILE: ".github/linters/.actionlint.yml"
+          # YAML_CONFIG_FILE: ".github/linters/.yamllint.yml"
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_CHECKOV: false
           VALIDATE_CLANG_FORMAT: false
