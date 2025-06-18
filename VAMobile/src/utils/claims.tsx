@@ -285,3 +285,11 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
 export function isDisabilityCompensationClaim(claimTypeCode: string) {
   return DISABILITY_COMPENSATION_CLAIM_TYPE_CODES.includes(claimTypeCode)
 }
+
+/**
+ * Evaluates the disability rating response for existence including the 0 value
+ * @param rating - disability rating value
+ */
+export function isValidDisabilityRating(rating: number | undefined) {
+  return rating === 0 || !!rating
+}

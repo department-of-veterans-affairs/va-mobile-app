@@ -26,7 +26,7 @@ title: Push Notifications
 The "data" field should include any variable data for the alert title or body, and the necessary metadata from the app to deeplink to the correct location.
 :::
 
-1. Connect your system to VANotify API to trigger push and test pre-app triggering in staging. [General VANotify Docs](https://notifications.va.gov/)
+1. Connect your system to VANotify API to trigger push and test pre-app triggering in staging. [General VANotify Docs](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-notify/README.md)
 2. Get access to testflight app from mobile team to test notifications and notification preferences in staging. [Testflight & App Tester](../../../QA/QualityAssuranceProcess/Resources.md#testflight--apptester)
 3. Do a Prod test if possible
 4. Mobile will update store info to acknowledge new notifications if necessary

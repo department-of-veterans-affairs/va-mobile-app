@@ -2,10 +2,13 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
-import { context, mockNavProps, render } from 'testUtils'
-import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { ErrorsState } from 'store/slices'
+import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 import PastAppointments from './PastAppointments'
 
@@ -28,6 +31,8 @@ jest.mock('../../../../utils/platform', () => {
   }
 })
 
+jest.mock('utils/remoteConfig')
+
 context('PastAppointments', () => {
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
@@ -35,7 +40,7 @@ context('PastAppointments', () => {
   ): AppointmentsList => {
     return [
       {
-        ...defaultAppoinment,
+        ...defaultAppointment,
         attributes: {
           ...defaultAppointmentAttributes,
           healthcareService: undefined,
@@ -46,7 +51,15 @@ context('PastAppointments', () => {
     ]
   }
 
-  const initializeTestInstance = (appointmentsData?: AppointmentsGetData, loading = false) => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
+
+  const initializeTestInstance = (
+    appointmentsData?: AppointmentsGetData,
+    loading = false,
+    travelPaySMOCEnabled = false,
+    options?: RenderParams,
+  ) => {
+    when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     const props = mockNavProps()
 
     render(
@@ -57,6 +70,7 @@ context('PastAppointments', () => {
         setPage={jest.fn()}
         loading={loading}
       />,
+      { ...options },
     )
   }
 
@@ -113,6 +127,52 @@ context('PastAppointments', () => {
     it('renders NoAppointments', () => {
       initializeTestInstance()
       expect(screen.getByText(t('noAppointments.youDontHave'))).toBeTruthy()
+    })
+  })
+
+  describe('when travel pay is in downtime', () => {
+    it('shows downtime alert when feature flag is enabled', () => {
+      initializeTestInstance({ data: appointmentData() }, false, true, {
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              travel_pay_features: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ hours: 1 }),
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+      expect(screen.getByText(t('travelPay.downtime.apptsTitle'))).toBeTruthy()
+      // Verify that the rest of the component is still rendered
+      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+      expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
+      expect(
+        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
+      ).toBeTruthy()
+    })
+
+    it('does not show downtime alert when feature flag is not enabled', () => {
+      initializeTestInstance({ data: appointmentData() }, false, false, {
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              travel_pay_features: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ hours: 1 }),
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+      expect(screen.queryByText(t('travelPay.downtime.apptsTitle'))).toBeNull()
+      // Verify that the rest of the component is still rendered
+      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
+      expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
+      expect(
+        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
+      ).toBeTruthy()
     })
   })
 })

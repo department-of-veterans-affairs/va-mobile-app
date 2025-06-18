@@ -61,16 +61,16 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   vetextId: '600;3210206',
 }
 
-export const defaultAppoinment: AppointmentData = {
+export const defaultAppointment: AppointmentData = {
   type: 'appointment',
   id: '1',
   attributes: defaultAppointmentAttributes,
 }
 
 export const bookedAppointmentsList: AppointmentsList = [
-  { ...defaultAppoinment },
+  { ...defaultAppointment },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '2',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -84,7 +84,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '3',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -93,7 +93,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '4',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -103,7 +103,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '5',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -117,7 +117,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '6',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -133,7 +133,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '7',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -141,7 +141,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '8',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -154,7 +154,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '9',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -171,7 +171,7 @@ export const bookedAppointmentsList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '10',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -190,7 +190,7 @@ export const bookedAppointmentsList: AppointmentsList = [
 
 export const canceledAppointmentList: AppointmentsList = [
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '7',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -202,7 +202,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '8',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -214,7 +214,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '9',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -225,7 +225,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '10',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -237,7 +237,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '11',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -249,7 +249,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '12',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -262,7 +262,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '13',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -274,7 +274,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '14',
     attributes: {
       ...defaultAppointmentAttributes,
@@ -286,7 +286,7 @@ export const canceledAppointmentList: AppointmentsList = [
     },
   },
   {
-    ...defaultAppoinment,
+    ...defaultAppointment,
     id: '15',
     attributes: {
       ...defaultAppointmentAttributes,

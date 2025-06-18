@@ -1,17 +1,30 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import Appointments from './Appointments'
 
+const mockNavigationSpy = jest.fn()
+
 jest.mock('utils/remoteConfig')
 
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useBeforeNavBackListener: jest.fn(),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('AppointmentsScreen', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = () => {
     render(<Appointments {...mockNavProps()} />)
   }
@@ -53,6 +66,43 @@ context('AppointmentsScreen', () => {
         .mockRejectedValue({ networkError: true } as api.APIError)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('errors.networkConnection.header'))).toBeTruthy())
+    })
+  })
+
+  describe('when startScheduling is true', () => {
+    it('should show the Start Scheduling link', async () => {
+      when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appointments`, expect.anything())
+        .mockResolvedValue({
+          data: [],
+          meta: {
+            errors: null,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText(t('appointments.startScheduling'))).toBeTruthy())
+    })
+
+    it('should be a clickable webview that navigates to the scheduling weblink flow', async () => {
+      when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appointments`, expect.anything())
+        .mockResolvedValue({
+          data: [],
+          meta: {
+            errors: null,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('appointments.startScheduling') })))
+      const expectNavArgs = {
+        url: 'https://va.gov/my-health/appointments/schedule/type-of-care',
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('webview.appointments.loading'),
+        useSSO: true,
+      }
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
     })
   })
 })
