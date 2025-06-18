@@ -15,9 +15,9 @@ import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from './components'
 
-type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
+type SMOCErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SMOCErrorScreen'>
 
-function ErrorScreen({ route }: ErrorScreenProps) {
+function SMOCErrorScreen({ route }: SMOCErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { error = 'error' } = route.params
   const theme = useTheme()
@@ -76,7 +76,7 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const { title, textLines, content } = getErrorContent(error)
 
   return (
-    <VAScrollView testID="ErrorScreen">
+    <VAScrollView testID="SMOCErrorScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
@@ -100,4 +100,4 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   )
 }
 
-export default ErrorScreen
+export default SMOCErrorScreen

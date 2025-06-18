@@ -6,7 +6,7 @@ import { TravelPayError } from 'constants/travelPay'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
-import ErrorScreen from './ErrorScreen'
+import SMOCErrorScreen from './SMOCErrorScreen'
 
 const mockNavigationSpy = jest.fn()
 
@@ -18,10 +18,10 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('ErrorScreen', () => {
+context('SMOCErrorScreen', () => {
   const initializeTestInstance = (error?: TravelPayError) => {
     const props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { error } })
-    render(<ErrorScreen {...props} />)
+    render(<SMOCErrorScreen {...props} />)
   }
 
   it('initializes correctly', () => {

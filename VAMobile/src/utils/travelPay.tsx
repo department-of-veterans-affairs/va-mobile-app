@@ -3,7 +3,9 @@ import { ParamListBase } from '@react-navigation/native'
 import { TFunction } from 'i18next'
 
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { Events } from 'constants/analytics'
 
+import { logAnalyticsEvent } from './analytics'
 import { RouteNavigationFunction } from './hooks'
 
 /**
@@ -89,7 +91,10 @@ export const getCommonSubtaskProps = (
     ...(hasErrorScreen
       ? {
           secondaryContentButtonText: t('no'),
-          onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
+          onSecondaryContentButtonPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_error('unsupportedType'))
+            navigateTo('SMOCErrorScreen', { error: 'unsupportedType' })
+          },
         }
       : {}),
   }
