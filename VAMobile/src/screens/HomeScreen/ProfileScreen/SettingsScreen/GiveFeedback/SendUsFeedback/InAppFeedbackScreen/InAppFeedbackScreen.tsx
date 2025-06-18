@@ -61,24 +61,24 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     onChange: setSatisfaction,
     options: [
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-      },
-      {
-        labelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-      },
-      {
-        labelKey: t('inAppFeedback.overallSatisfaction.neither'),
-        value: t('inAppFeedback.overallSatisfaction.neither'),
+        labelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
+        value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
       },
       {
         labelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
         value: t('inAppFeedback.overallSatisfaction.satisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
+        labelKey: t('inAppFeedback.overallSatisfaction.neither'),
+        value: t('inAppFeedback.overallSatisfaction.neither'),
+      },
+      {
+        labelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
+        value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
+      },
+      {
+        labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
+        value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
       },
     ],
     value: satisfaction,
