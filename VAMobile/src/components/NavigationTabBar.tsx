@@ -133,6 +133,11 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               iconProps.name = 'Home'
           }
 
+          // Hide the Forms tab
+          if (routeName === 'Forms') {
+            return <></>
+          }
+
           return (
             <TouchableWithoutFeedback
               accessibilityLabel={translatedName}

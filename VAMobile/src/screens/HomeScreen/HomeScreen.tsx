@@ -403,6 +403,13 @@ export function HomeScreen({}: HomeScreenProps) {
               {(hasActivityError || activityFeatureInDowntime) && (
                 <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
               )}
+              <Button
+                buttonType={ButtonVariants.Primary}
+                label={'Go to forms'}
+                onPress={() => {
+                  navigateTo('FormsTab')
+                }}
+              />
             </Box>
           )}
           {!!cernerFacilities.length && (
