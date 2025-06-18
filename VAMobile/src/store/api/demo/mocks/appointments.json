@@ -2198,7 +2198,8 @@
             "patientEmail": "Judy.morrison@id.me",
             "bestTimeToCall": ["Evening"],
             "friendlyLocationName": null,
-            "serviceCategoryName": null
+            "serviceCategoryName": null,
+            "showScheduleLink": true
           }
         },
         {

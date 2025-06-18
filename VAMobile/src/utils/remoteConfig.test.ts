@@ -34,6 +34,7 @@ const mockOverrides = {
   preferredNameGenderWaygate: false,
   prescriptions: true,
   shareMyHealthDataLink: true,
+  showScheduleLink: true,
   submitEvidenceExpansion: true,
   sso: true,
   startScheduling: false,
