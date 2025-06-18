@@ -39,7 +39,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const { setSubtaskProps } = useContext(SubtaskContext)
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'review', 'AddressScreen', undefined, false))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
 
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
   const [checkBoxError, setCheckBoxError] = useState<string>('')
@@ -65,7 +65,6 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       setCheckBoxError(t('required'))
       return
     }
-    logAnalyticsEvent(Events.vama_smoc_button_click('review', 'submit'))
 
     if (!attributes.location.id) {
       navigateTo('ErrorScreen', { error: 'error' })

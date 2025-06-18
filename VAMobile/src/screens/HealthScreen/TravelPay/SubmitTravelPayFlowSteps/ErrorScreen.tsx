@@ -7,11 +7,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useContactInformation } from 'api/contactInformation'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
@@ -32,7 +30,6 @@ function ErrorScreen({ route, navigation }: ErrorScreenProps) {
     rightButtonText: t('close'),
     rightButtonTestID: 'rightCloseTestID',
     onRightButtonPress: () => {
-      logAnalyticsEvent(Events.vama_smoc_button_click(error, 'close'))
       // This screen lives in a FullScreenSubtask, so we need to grab the parent to go back one screen and exit the subtask
       navigation.getParent()?.goBack()
     },
@@ -58,7 +55,6 @@ function ErrorScreen({ route, navigation }: ErrorScreenProps) {
               text={t('travelPay.error.noAddress.link')}
               testID="updateAddressLink"
               onPress={() => {
-                logAnalyticsEvent(Events.vama_smoc_button_click('noAddress', 'update address'))
                 navigateTo('EditAddress', {
                   displayTitle: t('contactInformation.residentialAddress'),
                   addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,

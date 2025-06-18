@@ -6,9 +6,7 @@ import { DateTime } from 'luxon'
 
 import { AppointmentData } from 'api/types'
 import { Box } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -39,7 +37,6 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('past_appointment', 'start claim'))
             navigateTo('SubmitTravelPayClaimScreen', {
               appointment,
               appointmentRouteKey,

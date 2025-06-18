@@ -5,10 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -38,7 +36,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
         {
           text: t('travelPay.cancelClaim.cancel'),
           onPress: () => {
-            logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'cancel claim'))
             navigation.goBack()
           },
         },
@@ -53,7 +50,6 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
     onPrimaryContentButtonPress: () => {
-      logAnalyticsEvent(Events.vama_smoc_button_click('intro', 'continue'))
       navigateTo('MileageScreen')
     },
   })

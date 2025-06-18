@@ -7,9 +7,7 @@ import { contactInformationKeys } from 'api/contactInformation'
 import { UserContactInformation } from 'api/types'
 import { Box, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { getCommonSubtaskProps } from 'utils/travelPay'
 
@@ -27,14 +25,13 @@ function VehicleScreen() {
     )
     const residentialAddress = contactInformation?.residentialAddress
     if (residentialAddress) {
-      logAnalyticsEvent(Events.vama_smoc_button_click('vehicle', 'yes'))
       navigateTo('AddressScreen')
     } else {
       navigateTo('ErrorScreen', { error: 'noAddress' })
     }
   }
 
-  const commonProps = getCommonSubtaskProps(t, navigateTo, 'vehicle', 'MileageScreen', 'AddressScreen')
+  const commonProps = getCommonSubtaskProps(t, navigateTo, 'MileageScreen', 'AddressScreen')
 
   useSubtaskProps({
     ...commonProps,

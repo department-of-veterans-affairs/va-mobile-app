@@ -16,7 +16,7 @@ function AddressScreen() {
 
   const navigateTo = useRouteNavigation()
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'address', 'VehicleScreen', 'ReviewClaimScreen'))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'VehicleScreen', 'ReviewClaimScreen'))
 
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: undefined },

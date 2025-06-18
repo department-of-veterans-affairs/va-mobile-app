@@ -14,7 +14,7 @@ function MileageScreen() {
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
 
-  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'mileage', 'InterstitialScreen', 'VehicleScreen'))
+  useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'InterstitialScreen', 'VehicleScreen'))
 
   return (
     <VAScrollView>

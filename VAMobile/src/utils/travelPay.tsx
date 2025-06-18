@@ -3,9 +3,7 @@ import { ParamListBase } from '@react-navigation/native'
 import { TFunction } from 'i18next'
 
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
-import { Events } from 'constants/analytics'
 
-import { logAnalyticsEvent } from './analytics'
 import { RouteNavigationFunction } from './hooks'
 
 /**
@@ -52,19 +50,13 @@ export function appendClaimDataToAppointment(
  * Returns the subtask props for displaying the header help button
  * @param t - The translation function
  * @param navigateTo - The navigation function
- * @param currentScreenName - The name of the current screen
  * @returns The props for the help button in the header
  */
-export const getTravelPayHelpSubtaskProps = (
-  t: TFunction,
-  navigateTo: RouteNavigationFunction<ParamListBase>,
-  currentScreenName: string,
-) => {
+export const getTravelPayHelpSubtaskProps = (t: TFunction, navigateTo: RouteNavigationFunction<ParamListBase>) => {
   return {
     rightButtonText: t('help'),
     rightButtonTestID: 'rightHelpTestID',
     onRightButtonPress: () => {
-      logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'help'))
       navigateTo('TravelClaimHelpScreen')
     },
     rightIconProps: {
@@ -86,17 +78,15 @@ export const getTravelPayHelpSubtaskProps = (
 export const getCommonSubtaskProps = (
   t: TFunction,
   navigateTo: RouteNavigationFunction<ParamListBase>,
-  currentScreenName: string,
   previousStepScreen: string,
   nextStepScreen?: string,
   hasErrorScreen: boolean = true,
 ) => {
-  const helpProps = getTravelPayHelpSubtaskProps(t, navigateTo, currentScreenName)
+  const helpProps = getTravelPayHelpSubtaskProps(t, navigateTo)
   const props = {
     ...helpProps,
     leftButtonText: t('back'),
     onLeftButtonPress: () => {
-      logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'back'))
       navigateTo(previousStepScreen)
     },
     leftButtonTestID: 'leftBackTestID',
@@ -104,7 +94,6 @@ export const getCommonSubtaskProps = (
       ? {
           secondaryContentButtonText: t('no'),
           onSecondaryContentButtonPress: () => {
-            logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'no'))
             navigateTo('ErrorScreen', { error: 'unsupportedType' })
           },
         }
@@ -117,7 +106,6 @@ export const getCommonSubtaskProps = (
       primaryContentButtonText: t('yes'),
       primaryButtonTestID: 'yesTestID',
       onPrimaryContentButtonPress: () => {
-        logAnalyticsEvent(Events.vama_smoc_button_click(currentScreenName, 'yes'))
         navigateTo(nextStepScreen)
       },
     }
