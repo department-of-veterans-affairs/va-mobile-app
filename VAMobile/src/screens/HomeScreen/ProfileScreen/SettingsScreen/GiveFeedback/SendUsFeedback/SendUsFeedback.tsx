@@ -23,6 +23,7 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
   const getStartSurveyButton = () => (
     <FloatingButton
       testID="startSurveyTestID"
+      isHidden={false}
       label={t('giveFeedback.startSurvey')}
       onPress={() => {
         navigateTo('InAppFeedback', { task: 'static' })
