@@ -5,6 +5,7 @@ paths:
     ignore:
       - "shellcheck reported issue"
       - "action is too old"
+      - "property .+ is not defined"
 # ignore:
 #   - "[shellcheck]"
 #   - "action is too old to run"

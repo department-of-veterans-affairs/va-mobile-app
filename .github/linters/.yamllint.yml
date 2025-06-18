@@ -1,4 +1,6 @@
-# Native configuration for yamllint
+---
+extends: default
+
 rules:
   document-start: disable
   truthy: disable
