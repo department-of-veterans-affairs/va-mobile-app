@@ -1,16 +1,7 @@
-# Native configuration for actionlint
-
+---
 paths:
   .github/workflows/**/*.{yml,yaml}:
     ignore:
       - "shellcheck reported issue"
       - "action is too old"
       - "property .+ is not defined"
-# ignore:
-#   - "[shellcheck]"
-#   - "action is too old to run"
-#
-# disable:
-#   - action # Disables the check for outdated actions like checkout@v3
-#   - shellcheck # Disables all shellcheck warnings
-#   - syntax-check
