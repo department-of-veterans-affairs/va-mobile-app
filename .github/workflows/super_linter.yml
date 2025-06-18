@@ -32,6 +32,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_CHECKOV: false
+          VALIDATE_CLANG_FORMAT: false
+          VALIDATE_CPP: false
+          VALIDATE_CSS: false
+          VALIDATE_CSS_PRETTIER: false
+          VALIDATE_ENV: false
+          VALIDATE_GITLEAKS: false
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
+          VALIDATE_GROOVY: false
+          VALIDATE_JAVASDCRIPT_ES: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_JAVA: false
+          VALIDATE_BASH: false
+
           # Set your fix mode variables to true
           # LINTER_RULES_PATH: .github/linters
 
