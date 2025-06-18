@@ -5,6 +5,9 @@ on: # yamllint disable-line rule:truthy
   push:
   # pull_request: null
 
+defaults:
+  run:
+    working-directory: va-mobile-app
 permissions:
   contents: read
 
@@ -28,9 +31,9 @@ jobs:
         uses: super-linter/super-linter@v7.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
-          LINTER_RULES_PATH: "${{ github.workspace }}/.github/linters"
-          GITHUB_ACTIONS_CONFIG_FILE: "${{ github.workspace }}/.github/linters/.actionlint.yml"
-          YAML_CONFIG_FILE: "${{ github.workspace }}/.github/linters/.yamllint.yml"
+          LINTER_RULES_PATH: ".github/linters"
+          GITHUB_ACTIONS_CONFIG_FILE: ".github/linters/.actionlint.yml"
+          YAML_CONFIG_FILE: ".github/linters/.yamllint.yml"
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_CHECKOV: false
           VALIDATE_CLANG_FORMAT: false
