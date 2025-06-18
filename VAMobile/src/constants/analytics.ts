@@ -74,12 +74,6 @@ export const Events = {
       },
     }
   },
-  // Issue#2273 Track appointment pagination discrepancies
-  vama_appts_page_warning: (): Event => {
-    return {
-      name: 'vama_appts_page_warning',
-    }
-  },
   vama_apt_add_cal: (apt_id: string, apt_status: string | undefined, apt_type: string, days_to_apt: number): Event => {
     return {
       name: 'vama_apt_add_cal',
@@ -132,16 +126,6 @@ export const Events = {
   vama_be_af_shown: (): Event => {
     return {
       name: 'vama_be_af_shown',
-    }
-  },
-  vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
-    return {
-      name: 'vama_claim_call',
-      params: {
-        claim_id,
-        claim_type,
-        claim_step,
-      },
     }
   },
   vama_claim_details_exp: (
@@ -358,22 +342,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_upload_fail: (
-    claim_id: string,
-    claim_request_id: number | null,
-    claim_request_type: string,
-    evidence_method: string,
-  ): Event => {
-    return {
-      name: 'vama_claim_upload_fail',
-      params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
-      },
-    }
-  },
   vama_claim_upload_start: (
     claim_id: string,
     claim_request_id: number | null,
@@ -408,11 +376,6 @@ export const Events = {
         screen_name,
         additional_details,
       },
-    }
-  },
-  vama_ddl_button_shown: (): Event => {
-    return {
-      name: 'vama_ddl_button_shown',
     }
   },
   vama_ddl_landing_click: (): Event => {
@@ -964,19 +927,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_sort: (): Event => {
-    return {
-      name: 'vama_rx_sort',
-    }
-  },
-  vama_rx_sort_sel: (sort: string): Event => {
-    return {
-      name: 'vama_rx_sort_sel',
-      params: {
-        sort,
-      },
-    }
-  },
   vama_rx_status: (status: string, ttv: number): Event => {
     return {
       name: 'vama_rx_status',
@@ -1118,14 +1068,6 @@ export const Events = {
         toggle_name,
         status,
         screen_name,
-      },
-    }
-  },
-  vama_ttv_appt_details: (totalTime: number): Event => {
-    return {
-      name: 'vama_ttv_appt_details',
-      params: {
-        totalTime,
       },
     }
   },
