@@ -5,9 +5,7 @@ import { Pressable, PressableProps } from 'react-native'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { mapObject, values } from 'underscore'
 
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 import Box, { BoxProps } from '../Box'
@@ -67,7 +65,6 @@ const SelectionList: FC<SelectionListProps> = ({ items, onSelectionChange }) => 
 
   const onSelectAll = () => {
     let newSelectionVals
-    logAnalyticsEvent(Events.vama_select_all())
     if (numSelected < items.length) {
       newSelectionVals = mapObject(selectionVals, () => {
         return true
