@@ -85,7 +85,8 @@ type draftFolderMessages = {
   '/v1/messaging/health/messages/2113141/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v1/messaging/health/messages/2092803/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
-  '"/v0/messaging/health/recipients"': SecureMessagingRecipientData
+  '/v0/messaging/health/recipients': SecureMessagingRecipientData
+  '/v0/messaging/health/allrecipients': SecureMessagingRecipientData
 }
 
 /**
