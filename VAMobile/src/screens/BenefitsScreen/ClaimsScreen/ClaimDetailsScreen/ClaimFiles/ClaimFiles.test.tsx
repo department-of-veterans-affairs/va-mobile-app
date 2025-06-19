@@ -15,7 +15,7 @@ context('ClaimDetailsScreen', () => {
     render(
       <ClaimFiles
         claim={claim}
-        eFolderDocuments={undefined}
+        claimLetterDocuments={undefined}
         setDownloadFile={jest.fn()}
         setDocumentID={jest.fn()}
         setFileName={jest.fn()}
