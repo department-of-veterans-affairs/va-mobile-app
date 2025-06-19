@@ -2355,6 +2355,20 @@
         }
       },
       {
+        "id": "1918817",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1918817,
+          "name": "UAT_Reg_Jun19 ++ Testing long string. Demo Testing Multiple Clinics UAT",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
         "id": "1918816",
         "type": "all_triage_teams",
         "attributes": {
