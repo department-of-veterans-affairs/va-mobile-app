@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps, ScrollView } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -33,6 +34,7 @@ import {
   PaginationProps,
   TextView,
 } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
@@ -55,6 +57,8 @@ import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescript
 import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
+
+const NON_VA_MEDS_ALERT_DISMISSED = '@non_va_medications_alert_dismissed'
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -118,6 +122,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   )
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
+  const screenReaderEnabled = useIsScreenReaderEnabled()
+  const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
@@ -130,6 +136,16 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_cerner_alert())
     }
   }, [hasTransferred])
+
+  useEffect(() => {
+    const checkNonVAMedsAlertDismissed = async () => {
+      const dismissed = await AsyncStorage.getItem(NON_VA_MEDS_ALERT_DISMISSED)
+      if (!dismissed) {
+        setDisplayNonVaMedsAlert(true)
+      }
+    }
+    checkNonVAMedsAlertDismissed()
+  }, [])
 
   useEffect(() => {
     if (startingFilter) {
@@ -392,6 +408,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasNoItems = filteredPrescriptions?.length === 0
 
   const getNonVAMedsAlert = () => {
+    if (!displayNonVAMedsAlert) return <></>
+
     const pressableProps: PressableProps = {
       accessibilityRole: 'link',
       accessibilityLabel: a11yLabelVA(
@@ -408,6 +426,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       },
     }
 
+    const handleDismiss = (): void => {
+      AsyncStorage.setItem(NON_VA_MEDS_ALERT_DISMISSED, 'true')
+      setDisplayNonVaMedsAlert(false)
+    }
+
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
@@ -415,6 +438,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
+          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}
           testID="nonVAMedsAlertTestID">
           <Pressable {...pressableProps}>
             <TextView>
@@ -468,14 +492,23 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }
 
   const getRequestRefillButton = () => {
+    // Hide the refill request button on loading, error, and no prescription states
+    const hideRefillRequestButton =
+      prescriptionInDowntime ||
+      loadingHistory ||
+      loadingUserAuthorizedServices ||
+      !!getUserAuthorizedServicesError ||
+      !userAuthorizedServices?.prescriptions ||
+      !!hasError ||
+      !allPrescriptions?.length
+
     return (
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.condensedMarginBetween}>
-        <Button
-          testID="refillRequestTestID"
-          label={t('prescription.history.startRefillRequest')}
-          onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-        />
-      </Box>
+      <FloatingButton
+        isHidden={hideRefillRequestButton}
+        testID="refillRequestTestID"
+        label={t('prescription.history.startRefillRequest')}
+        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+      />
     )
   }
 
@@ -546,7 +579,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
           {filterModal()}
 
-          <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <Box mb={theme.dimensions.floatingButtonOffset} mx={theme.dimensions.gutter}>
             {prescriptionItems()}
             <Box mt={theme.dimensions.paginationTopPadding}>{renderPagination()}</Box>
           </Box>
@@ -580,7 +613,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       backLabelOnPress={navigation.goBack}
       title={t('prescription.title')}
       testID="PrescriptionHistory"
-      footerContent={getRequestRefillButton()}>
+      footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingHistory || loadingUserAuthorizedServices ? (
@@ -605,6 +638,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         <>
           {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
           {getTransferAlert()}
+          {screenReaderEnabled ? getRequestRefillButton() : undefined}
           {getContent()}
         </>
       )}

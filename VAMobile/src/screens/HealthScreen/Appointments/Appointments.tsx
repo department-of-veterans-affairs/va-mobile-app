@@ -4,19 +4,24 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
+import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
 import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate } from 'components'
+import FloatingButton from 'components/FloatingButton'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
-import { useDowntime, useTheme } from 'utils/hooks'
+import getEnv from 'utils/env'
+import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 import CernerAlert from '../CernerAlert'
@@ -25,11 +30,14 @@ import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
+const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
+
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
 function Appointments({ navigation }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
@@ -37,6 +45,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
   const [dateRange, setDateRange] = useState(getUpcomingAppointmentDateRange())
   const [timeFrame, setTimeFrame] = useState(TimeFrameTypeConstants.UPCOMING)
   const [page, setPage] = useState(1)
+  const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const {
     data: userAuthorizedServices,
@@ -103,6 +112,34 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
+  const getStartSchedulingButton = () => {
+    // Hide the start scheduling button during loading and error states
+    const hideStartSchedulingButton =
+      !apptsNotInDowntime ||
+      !!getUserAuthorizedServicesError ||
+      fetchingAuthServices ||
+      !userAuthorizedServices?.appointments ||
+      !!appointmentsHasError ||
+      loadingAppointments
+
+    return (
+      <FloatingButton
+        isHidden={hideStartSchedulingButton}
+        testID="startSchedulingTestID"
+        label={t('appointments.startScheduling')}
+        onPress={() => {
+          logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
+          navigateTo('Webview', {
+            url: LINK_URL_SCHEDULE_APPOINTMENTS,
+            displayTitle: t('webview.vagov'),
+            loadingMessage: t('webview.appointments.loading'),
+            useSSO: true,
+          })
+        }}
+      />
+    )
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -110,6 +147,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
       title={t('appointments')}
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
+      footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID">
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
@@ -129,6 +167,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
         />
       ) : (
         <Box>
+          {featureEnabled('startScheduling') && screenReaderEnabled ? getStartSchedulingButton() : undefined}
           <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
             <SegmentedControl
               labels={controlLabels}
@@ -140,7 +179,7 @@ function Appointments({ navigation }: AppointmentsScreenProps) {
           </Box>
           {serviceErrorAlert()}
           <CernerAlert />
-          <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mb={theme.dimensions.floatingButtonOffset}>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}

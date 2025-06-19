@@ -414,6 +414,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify a message threads', async () => {
+    await expect(element(by.text('Opened by your care team'))).toExist()
     await element(by.text('Va Flagship Mobile Applications Interface 2_dayt29')).atIndex(0).tap()
     await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
     await expect(element(by.text('Opened by your care team'))).toExist()
