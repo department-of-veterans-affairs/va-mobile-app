@@ -2,10 +2,9 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import BackButton from 'components/BackButton'
 import { BackButtonLabel, BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { context, render } from 'testUtils'
-
-import BackButton from './BackButton'
 
 context('BackButton', () => {
   const onPressSpy = jest.fn()
