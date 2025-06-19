@@ -1,5 +1,77 @@
 [
   {
+    "title": "v2.53.0",
+    "due_on": "2025-07-01T07:00:00Z",
+    "issues": [
+      {
+        "title": "Make Homescreen Scroll Analytics Toggleable",
+        "number": 11094,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11094",
+        "isPR": false
+      },
+      {
+        "title": "BUG - Sev-3 - All - Hide Rx Refill request floating button on error screens or no prescriptions",
+        "number": 11051,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11051",
+        "isPR": false
+      },
+      {
+        "title": "BUG - Sev 3 - All - Large Panel is missing slide animation",
+        "number": 11039,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11039",
+        "isPR": false
+      },
+      {
+        "title": "[FE] Add \"Reset async storage\" to developer mode",
+        "number": 11025,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11025",
+        "isPR": false
+      },
+      {
+        "title": "Travel Pay / Add facility name",
+        "number": 11024,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11024",
+        "isPR": true
+      },
+      {
+        "title": "BUG - SEV-2 - All - Disability rating 0 not displaying in the app",
+        "number": 10975,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10975",
+        "isPR": false
+      },
+      {
+        "title": "Simple Mileage-Only Claim in VAHB",
+        "number": 10944,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10944",
+        "isPR": true
+      },
+      {
+        "title": "Review Letters detail page -  Current Monthly Payment toggle ",
+        "number": 10902,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10902",
+        "isPR": false
+      },
+      {
+        "title": "Update Decision Letter file names",
+        "number": 10891,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10891",
+        "isPR": false
+      },
+      {
+        "title": "\"Start Scheduling\" button on Appointments list page",
+        "number": 10796,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10796",
+        "isPR": false
+      },
+      {
+        "title": "Add Pagination to Claim Letters page",
+        "number": 10791,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10791",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.52.0",
     "due_on": "2025-06-17T07:00:00Z",
     "issues": [
