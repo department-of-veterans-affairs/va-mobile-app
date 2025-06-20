@@ -19,19 +19,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-        python-version: "3.x"
+          python-version: "3.x"
 
       - name: Install and run yamllint
         run: |
-        pip install yamllint
-          # The '-c' flag specifies the config file. '.' tells it to lint the current directory.
+          pip install yamllint
           yamllint -c .github/yamllint.yml .
         shell: bash
 
       - name: Install and run actionlint
         run: |
           pip install "actionlint-py"
-          # The '-config-file' flag specifies the config. The glob pattern targets all workflow files.
-         actionlint -color -ignore 'shellcheck reported' -ignore 'action is too old to run' -ignore 'gobbing and word splitting' -ignore 'property .+ is not defined' .github/workflows/*.yml
+          actionlint -color -ignore 'shellcheck reported' -ignore 'action is too old to run' -ignore 'gobbing and word splitting' -ignore 'property .+ is not defined' .github/workflows/*.yml
         shell: bash
-# adding commit
