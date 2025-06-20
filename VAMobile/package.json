@@ -17,7 +17,6 @@
     "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
-    "lint:yaml": "cd .. && eslint -c VAMobile/.eslintrc.js \".github/**/*.{yml,yaml}\"",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
@@ -162,7 +161,9 @@
     "watch/**/merge": "^2.1.1"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json}": "prettier --write",
+    "*.{yml,yaml}": "yamllint --strict -c ../.github/linters/.yaml-lint.yml",
+    ".github/workflows/*.{yml,yaml}": "actionlint -c ../.github/linters/actionlint.yml"
   },
   "engines": {
     "node": ">=18.0.0"
