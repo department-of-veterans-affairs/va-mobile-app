@@ -1,6 +1,7 @@
 name: "[Documentation] Accessibility Check"
 
 on:
+  push:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
@@ -58,7 +59,7 @@ jobs:
             echo "${output}"
 
             # regex number of issues NOTE: grep exits 1 if it finds no match. GH Actions exits the runner if anything exits 1 so we add the || true to overcome that
-            issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
+            issues=$(echo "${output}" | grep -o '\d+(?= Accessibility issues detected)' || true)
 
             # If issues is not an empty string, there were issues
             if [[ ! -z "$issues" ]]
