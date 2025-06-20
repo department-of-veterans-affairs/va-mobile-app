@@ -67,7 +67,7 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
   }
 
   const renderActiveForms = () => {
-    if (activeForms.length === 0) return <FormEmptyPlaceHolder text={'You do not have any in-progress forms.'} />
+    if (activeForms.length === 0) return <FormEmptyPlaceHolder text={'You do not have any active forms.'} />
     return activeForms.map((s, index) => {
       return <FormsCardItem data={s} onFormClose={updateForm} key={index} />
     })
