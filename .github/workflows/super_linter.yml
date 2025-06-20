@@ -2,8 +2,7 @@
 name: Lint Them All
 
 on: # yamllint disable-line rule:truthy
-  push:
-  # pull_request:
+  workflow_call:
 
 defaults:
   run:
