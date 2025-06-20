@@ -115,7 +115,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     {
       text: t('giveFeedback'),
       a11yHintText: t('giveFeedback.a11yHint'),
-      onPress: () => navigateTo('InAppRecruitment'),
+      onPress: () => navigateTo('GiveFeedback'),
       detoxTestID: 'inAppRecruitmentID',
     },
     {
@@ -154,7 +154,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
       ) : (
         <>
           <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
-            <Box mb={theme.dimensions.standardMarginBetween}>
+            <Box mb={50}>
               <SimpleList items={items} />
               {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
             </Box>

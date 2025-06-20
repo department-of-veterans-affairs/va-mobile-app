@@ -4,9 +4,9 @@ import { Alert } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { waitFor } from '@testing-library/react-native'
-import { RootNavStackParamList } from 'App'
 import { t } from 'i18next'
 
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { context, fireEvent, render, screen } from 'testUtils'
 
 import InAppFeedbackScreen from './InAppFeedbackScreen'
@@ -32,7 +32,7 @@ context('InAppFeedbackScreen', () => {
           screen: 'InAppFeedback',
         },
       },
-    } as unknown as StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
+    } as unknown as StackScreenProps<HomeStackParamList, 'InAppFeedback'>
 
     render(<InAppFeedbackScreen {...props} />)
     return props

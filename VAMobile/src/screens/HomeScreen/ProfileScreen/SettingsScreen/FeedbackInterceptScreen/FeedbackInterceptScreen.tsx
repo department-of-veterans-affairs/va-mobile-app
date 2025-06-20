@@ -18,9 +18,9 @@ import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
-type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
+type FeedbackInterceptScreenProps = StackScreenProps<RootNavStackParamList, 'FeedbackIntercept'>
 
-function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
+function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -142,4 +142,4 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   )
 }
 
-export default InAppFeedbackScreen
+export default FeedbackInterceptScreen

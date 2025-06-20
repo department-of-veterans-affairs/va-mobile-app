@@ -35,6 +35,8 @@ export enum ButtonDecoratorType {
   CheckBoxEmpty = 'CheckBoxOutlineBlank',
   /** Filled check box button decorator */
   CheckBoxFilled = 'CheckBox',
+  /** Launch to external site decorator */
+  Launch = 'Launch',
 }
 
 export type ListItemDecoratorProps = Partial<IconProps> | Partial<SwitchProps>
@@ -145,6 +147,15 @@ export const ButtonDecorator: FC<{
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
+        />
+      )
+    case ButtonDecoratorType.Launch:
+      return (
+        <Icon
+          name={'Launch'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.announcementBanner}
         />
       )
 

@@ -14,6 +14,8 @@ import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/Inco
 import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
 import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
+import FeedbackTermsAndConditionsScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackTermsAndConditions'
+import InAppFeedbackScreen from './ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/InAppFeedbackScreen/InAppFeedbackScreen'
 import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -40,6 +42,11 @@ export type HomeStackParamList = WebviewStackParams & {
   OverrideAPI: undefined
   RemoteConfig: undefined
   Settings: undefined
+  GiveFeedback: undefined
+  SendUsFeedback: undefined
+  FeedbackSent: undefined
+  InAppFeedback: undefined
+  FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
 }
@@ -106,6 +113,18 @@ export const getHomeScreens = () => {
       key={'WaygateEdit'}
       name="WaygateEdit"
       component={WaygateEditScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'FeedbackTermsAndConditions'}
+      name="FeedbackTermsAndConditions"
+      component={FeedbackTermsAndConditionsScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'InAppFeedback'}
+      name="InAppFeedback"
+      component={InAppFeedbackScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
   ]
