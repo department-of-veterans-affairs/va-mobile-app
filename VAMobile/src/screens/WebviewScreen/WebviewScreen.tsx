@@ -167,6 +167,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const styleElement = document.createElement('style');
   styleElement.innerHTML = \`${css}\`;
   document.head.appendChild(styleElement);
+  setTimeout(function() {
+    document.documentElement.style.overflow = 'auto';
+    document.body.style.overflow = 'auto';
+  }, 1000);
 })();`
 
   const controlProps: WebviewControlsProps = {
