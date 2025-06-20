@@ -107,6 +107,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const navigateTo = useRouteNavigation()
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
+  const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -408,7 +409,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasNoItems = filteredPrescriptions?.length === 0
 
   const getNonVAMedsAlert = () => {
-    if (!displayNonVAMedsAlert) return <></>
+    if (!hasNonVaMeds || !displayNonVAMedsAlert) return <></>
 
     const pressableProps: PressableProps = {
       accessibilityRole: 'link',
