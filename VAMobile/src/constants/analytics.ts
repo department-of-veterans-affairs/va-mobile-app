@@ -109,11 +109,6 @@ export const Events = {
       },
     }
   },
-  vama_auth_completed: (): Event => {
-    return {
-      name: 'vama_auth_completed',
-    }
-  },
   vama_cerner_alert: (): Event => {
     return {
       name: 'vama_cerner_alert',
@@ -851,14 +846,6 @@ export const Events = {
       name: 'vama_prof_update_phone',
     }
   },
-  vama_react_query_retry: (status: string): Event => {
-    return {
-      name: 'vama_react_query_retry',
-      params: {
-        status,
-      },
-    }
-  },
   vama_review_prompt: (): Event => {
     return {
       name: 'vama_review_prompt',
@@ -1000,11 +987,6 @@ export const Events = {
       params: {
         rx_id: rx_id,
       },
-    }
-  },
-  vama_select_all: (): Event => {
-    return {
-      name: 'vama_select_all',
     }
   },
   vama_sm_attach: (type: string): Event => {

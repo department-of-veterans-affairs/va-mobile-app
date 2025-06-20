@@ -719,7 +719,6 @@ export const handleTokenCallbackUrl =
   (url: string): AppThunk =>
   async (dispatch, getState) => {
     try {
-      await logAnalyticsEvent(Events.vama_auth_completed())
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)

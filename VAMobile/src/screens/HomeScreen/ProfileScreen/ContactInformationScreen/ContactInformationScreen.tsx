@@ -143,23 +143,10 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     isFetching: loadingContactInformation,
     error: contactInformationError,
     refetch: refetchContactInformation,
-    failureCount,
   } = useContactInformation({ enabled: screenContentAllowed('WG_ContactInformation') })
   const registerReviewEvent = useReviewEvent(true)
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
-  const [retried, setRetried] = useState(false)
-
-  useEffect(() => {
-    if (failureCount > 0) {
-      setRetried(true)
-    }
-
-    if (retried && !loadingContactInformation) {
-      const retryStatus = contactInformationError ? 'fail' : 'success'
-      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
-    }
-  }, [failureCount, contactInformationError, loadingContactInformation, retried])
 
   useEffect(() => {
     if (!userAuthorizedServices?.userProfileUpdate && !loadingUserAuthorizedServices) {
