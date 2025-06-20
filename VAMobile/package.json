@@ -163,7 +163,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "prettier --write",
     "*.{yml,yaml}": "yamllint --strict -c ../.github/linters/.yaml-lint.yml",
-    "*.{yml,yaml}": "actionlint -c ../.github/linters/actionlint.yml"
+    ".github/workflows/*.{yml,yaml}": "actionlint -c ../.github/linters/actionlint.yml"
   },
   "engines": {
     "node": ">=18.0.0"
