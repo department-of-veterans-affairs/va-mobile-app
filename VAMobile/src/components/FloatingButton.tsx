@@ -43,7 +43,7 @@ const FloatingButton: FC<FloatingButtonProps> = ({ isHidden, ...buttonProps }: F
   return (
     <Box
       mx={theme.dimensions.gutter}
-      mt={screenReaderEnabled ? theme.dimensions.standardMarginBetween : 0}
+      mt={!screenReaderEnabled ? 0 : theme.dimensions.standardMarginBetween}
       mb={theme.dimensions.standardMarginBetween}
       style={!screenReaderEnabled ? floatingButtonStyle : {}}>
       <Button {...buttonProps} />
