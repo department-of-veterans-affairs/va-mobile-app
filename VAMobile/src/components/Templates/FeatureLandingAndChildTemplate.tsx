@@ -143,10 +143,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
         {...scrollViewProps}>
-        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-        <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
-          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
-        </View>
+        {!screenReaderEnabled ? (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+          <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
+            <TextView {...subtitleProps}>{title}</TextView>
+          </View>
+        ) : null}
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
