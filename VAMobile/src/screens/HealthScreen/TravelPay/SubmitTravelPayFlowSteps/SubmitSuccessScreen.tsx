@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
+import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { navigateToTravelPayWebsite } from 'utils/travelPay'
 
@@ -70,7 +71,9 @@ const getContent = (
   facilityName: string,
   appointmentDateTime: string,
 ): SuccessScreenContent => {
-  const isPartialSuccess = status === 'Incomplete' || status === 'Saved'
+  const isPartialSuccess =
+    status === TravelPayPartialSuccessStatusConstants.INCOMPLETE ||
+    status === TravelPayPartialSuccessStatusConstants.SAVED
   if (isPartialSuccess) {
     return {
       title: t('travelPay.partialSuccess.title'),

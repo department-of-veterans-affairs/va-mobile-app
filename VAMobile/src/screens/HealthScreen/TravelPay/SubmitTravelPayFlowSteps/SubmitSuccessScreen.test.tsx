@@ -3,6 +3,7 @@ import React from 'react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
+import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import SubmitSuccessScreen from './SubmitSuccessScreen'
@@ -70,7 +71,7 @@ context('SubmitSuccessScreen', () => {
 
   describe('when status is Incomplete', () => {
     it('initializes correctly', () => {
-      initializeTestInstance('Incomplete')
+      initializeTestInstance(TravelPayPartialSuccessStatusConstants.INCOMPLETE)
       expect(screen.getByText(t('travelPay.partialSuccess.title'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.partialSuccess.text'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
@@ -83,7 +84,7 @@ context('SubmitSuccessScreen', () => {
 
     describe('when the user clicks the link', () => {
       it('calls the navigateToTravelPayWebsite function', () => {
-        initializeTestInstance('Incomplete')
+        initializeTestInstance(TravelPayPartialSuccessStatusConstants.INCOMPLETE)
         fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
         expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
       })
@@ -92,7 +93,7 @@ context('SubmitSuccessScreen', () => {
 
   describe('when status is Saved', () => {
     it('initializes correctly', () => {
-      initializeTestInstance('Saved')
+      initializeTestInstance(TravelPayPartialSuccessStatusConstants.SAVED)
       expect(screen.getByText(t('travelPay.partialSuccess.title'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.partialSuccess.text'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.partialSuccess.nextText'))).toBeTruthy()
@@ -105,7 +106,7 @@ context('SubmitSuccessScreen', () => {
 
     describe('when the user clicks the link', () => {
       it('calls the navigateToTravelPayWebsite function', () => {
-        initializeTestInstance('Saved')
+        initializeTestInstance(TravelPayPartialSuccessStatusConstants.SAVED)
         fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
         expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
       })
