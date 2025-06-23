@@ -78,3 +78,36 @@ export const getAccessibleDate = (date: string | DateTime | null): string => {
 export const getDateRange = (startDate: DateTime, endDate: DateTime, formatBy: string = 'MMM yyyy'): string => {
   return `${getFormattedDate(startDate.toISO(), formatBy)} - ${getFormattedDate(endDate.toISO(), formatBy)}`
 }
+
+export const getListOfYearsSinceYear = (startingYear: number): string[] => {
+  const years = []
+  const currentYear = DateTime.local().year
+  for (let year = currentYear; year >= startingYear; year--) {
+    years.push(year.toString())
+  }
+  return years
+}
+
+export const getCurrentMonth = (): string => {
+  return DateTime.local().toFormat('MMMM')
+}
+export const getMonthNumber = (month: string): number => {
+  const months = MONTHS
+  const monthIndex = months.indexOf(month)
+  return monthIndex !== -1 ? monthIndex + 1 : -1 // Months are
+}
+
+export const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
