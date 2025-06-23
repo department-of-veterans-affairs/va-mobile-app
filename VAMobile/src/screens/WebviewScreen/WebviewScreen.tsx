@@ -157,7 +157,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   // The following two consts are an effort to reduce the 'noise' of the websites we are linking to
   // via webview and make them a more specific path for the user to experience. This code ignores headers,
   // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
+  // VA website does not allow scroll when the feedback screen is up
+  // Only visually hiding the screen, so adjust overflow style to enable scrolling
   const css = `
+  body.merger { overflow: scroll !important; }
   header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
   nav[aria-label="My HealtheVet"] { display: none; }
 `
@@ -167,10 +170,6 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const styleElement = document.createElement('style');
   styleElement.innerHTML = \`${css}\`;
   document.head.appendChild(styleElement);
-  setTimeout(function() {
-    document.documentElement.style.overflow = 'auto';
-    document.body.style.overflow = 'auto';
-  }, 1000);
 })();`
 
   const controlProps: WebviewControlsProps = {
