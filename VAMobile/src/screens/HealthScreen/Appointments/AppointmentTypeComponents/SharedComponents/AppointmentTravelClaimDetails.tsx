@@ -119,11 +119,42 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    // Temporarily disabled: API returns only claims for the last 30 days, so for
+    // appointments > 30 days old we can’t tell if a claim exists and this
+    // “No claim” message could be misleading. Users are now sent to the
+    // Travel Claim Status page instead. (This is temporary until we can get
+    // the API to return all claims.)
+    // if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    //   return (
+    //     <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+    //       {t('travelPay.travelClaimFiledDetails.noClaim')}
+    //     </TextView>
+    //   )
+    // }
+
+    // Remove this when we can get the API to return all claims.
+    if (appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {t('travelPay.travelClaimFiledDetails.noClaim')}
-        </TextView>
+        <>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
+          </TextView>
+          <LinkWithAnalytics
+            type="custom"
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+              navigateTo('Webview', {
+                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+                useSSO: true,
+              })
+            }}
+            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
+            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            testID={`goToVAGovTravelClaimStatus`}
+          />
+        </>
       )
     }
 

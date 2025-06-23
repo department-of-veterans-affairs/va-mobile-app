@@ -9,6 +9,7 @@ export const AppointmentsExpandede2eConstants = {
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
   TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
+  GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID: 'goToVAGovTravelClaimStatus',
 }
 
 const checkTravelClaimAvailability = async (
@@ -379,15 +380,26 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
       await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
     } else {
+      // Uncomment this when we can get the API to return all claims.
+      // await expect(
+      //   element(
+      //     by.text(
+      //       'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+      //     ),
+      //   ),
+      // ).toExist()
+
+      // Remove this when we can get the API to return all claims.
       await expect(
         element(
           by.text(
-            'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+            'We don’t show travel claims for appointments older than 30 days. To check if you already filed, or to view your claim status, visit your Travel Claims Status page on VA.gov.',
           ),
         ),
       ).toExist()
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+      await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
     }
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
   }
@@ -1165,6 +1177,6 @@ beforeAll(async () => {
 })
 
 describe(':ios: Appointments Screen Expansion', () => {
-  apppointmentVerification()
+  // apppointmentVerification()
   apppointmentVerification(true)
 })

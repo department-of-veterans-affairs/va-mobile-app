@@ -285,7 +285,22 @@ describe('AppointmentTravelClaimDetails', () => {
         })
       })
       describe('when the appointment is past the 30 day window', () => {
-        it('should render the no claim message when appointment meets travel pay criteria', () => {
+        // Disabled: API now returns only claims for the last 30 days, so for appointments > 30 days old
+        // we can't tell if a claim exists. Users are now sent to the Travel Claim Status page instead.
+        // it('should render the no claim message when appointment meets travel pay criteria', () => {
+        //   const missedClaimDeadlineData = createTestAppointmentAttributes({
+        //     startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+        //     appointmentType: AppointmentTypeConstants.VA,
+        //     travelPayClaim: {
+        //       ...travelPayClaimData,
+        //       claim: undefined,
+        //     },
+        //   })
+        //   initializeTestInstance('Past', { ...missedClaimDeadlineData })
+        //   expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
+        // })
+
+        it('should render the visit claim status page message when appointment is more than 30 days old', () => {
           const missedClaimDeadlineData = createTestAppointmentAttributes({
             startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
             appointmentType: AppointmentTypeConstants.VA,
@@ -295,7 +310,8 @@ describe('AppointmentTravelClaimDetails', () => {
             },
           })
           initializeTestInstance('Past', { ...missedClaimDeadlineData })
-          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
+          expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
         })
       })
 
