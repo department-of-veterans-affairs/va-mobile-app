@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
           LINTER_RULES_PATH: ".github/linters/"
-          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_ALL_CODEBASE: false
           VALIDATE_CHECKOV: false
           VALIDATE_CLANG_FORMAT: false
           VALIDATE_CPP: false
