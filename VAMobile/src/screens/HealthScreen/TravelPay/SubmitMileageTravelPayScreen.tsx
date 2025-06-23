@@ -43,7 +43,7 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
 }
 
 export type TravelPayStack = WebviewStackParams & {
-  SMOCFlowSteps: {
+  FlowSteps: {
     appointment: AppointmentData
     appointmentRouteKey: string
     smocFlowStartDate: string
@@ -58,7 +58,7 @@ type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 
 const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
-const SMOCFlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'SMOCFlowSteps'>) => {
+const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
 
@@ -95,10 +95,10 @@ function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenPro
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
 
   return (
-    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SMOCFlowSteps">
+    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
       <TravelPayStack.Screen
-        name="SMOCFlowSteps"
-        component={SMOCFlowSteps}
+        name="FlowSteps"
+        component={FlowSteps}
         initialParams={{ appointment, appointmentRouteKey, smocFlowStartDate }}
       />
       <TravelPayStack.Screen
