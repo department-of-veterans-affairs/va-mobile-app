@@ -95,5 +95,6 @@ export const getPrescriptionsPayload = (refillablePrescriptionsCount: number): P
       unknown: 0,
       total: 20,
     },
+    hasNonVaMeds: false,
   },
 })

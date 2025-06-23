@@ -117,21 +117,33 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const getStartSchedulingButton = () => (
-    <FloatingButton
-      testID="startSchedulingTestID"
-      label={t('appointments.startScheduling')}
-      onPress={() => {
-        logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
-        navigateTo('Webview', {
-          url: LINK_URL_SCHEDULE_APPOINTMENTS,
-          displayTitle: t('webview.vagov'),
-          loadingMessage: t('webview.appointments.loading'),
-          useSSO: true,
-        })
-      }}
-    />
-  )
+  const getStartSchedulingButton = () => {
+    // Hide the start scheduling button during loading and error states
+    const hideStartSchedulingButton =
+      !apptsNotInDowntime ||
+      !!getUserAuthorizedServicesError ||
+      fetchingAuthServices ||
+      !userAuthorizedServices?.appointments ||
+      !!appointmentsHasError ||
+      loadingAppointments
+
+    return (
+      <FloatingButton
+        isHidden={hideStartSchedulingButton}
+        testID="startSchedulingTestID"
+        label={t('appointments.startScheduling')}
+        onPress={() => {
+          logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
+          navigateTo('Webview', {
+            url: LINK_URL_SCHEDULE_APPOINTMENTS,
+            displayTitle: t('webview.vagov'),
+            loadingMessage: t('webview.appointments.loading'),
+            useSSO: true,
+          })
+        }}
+      />
+    )
+  }
 
   return (
     <FeatureLandingTemplate
