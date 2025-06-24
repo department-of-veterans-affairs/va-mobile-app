@@ -11,7 +11,7 @@ export const HomeE2eIdConstants = {
   CONTACT_VA_BODY:
     'My V-A 4 1 1 is our main V-A information line. We can help connect you to any of our V-A contact centers.',
   WEBVIEW_ID: 'Webview-web',
-  APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '3 in the next 7 days',
+  APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '6 in the next 30 days',
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
   PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
