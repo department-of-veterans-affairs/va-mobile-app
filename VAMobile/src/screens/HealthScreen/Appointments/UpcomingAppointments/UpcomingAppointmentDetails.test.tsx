@@ -186,7 +186,7 @@ context('UpcomingAppointmentDetails', () => {
         .calledWith('/v0/appointments/cancel/123', expect.anything())
         .mockResolvedValueOnce('success')
       // start date is outside default date range
-      defaultAppointments[0].attributes.startDateUtc = DateTime.utc().plus({ days: 10 }).toISO()
+      defaultAppointments[0].attributes.startDateUtc = DateTime.utc().plus({ days: 31 }).toISO()
       const { queryClient } = initializeTestInstance(defaultAppointments, 2)
 
       // Press cancel request button
