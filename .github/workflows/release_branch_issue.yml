@@ -72,20 +72,21 @@ jobs:
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
-  update_ticket:
-    runs-on: ubuntu-latest
-    needs: [release_ticket, create_testrail_milestone, start_testrail_run]
-    steps:
-      - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - run: gh auth login --with-token < token.txt
-      - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
-      - run: |
-          TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
-          RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-          OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
-          NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
-          gh issue edit $TICKET_NUM -b $NEW_BODY
+  # NOTE: Copying out until we fix issue # 6354
+  # update_ticket:
+  #   runs-on: ubuntu-latest
+  #   needs: [release_ticket, create_testrail_milestone, start_testrail_run]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+  #     - run: gh auth login --with-token < token.txt
+  #     - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
+  #     - run: |
+  #         TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
+  #         RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
+  #         OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
+  #         NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
+  #         gh issue edit $TICKET_NUM -b $NEW_BODY
   close_milestone:
     runs-on: ubuntu-latest
     needs: [release_ticket]
