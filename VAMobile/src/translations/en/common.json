@@ -640,6 +640,7 @@
   "disabilityRatingDetails.percentage.obfuscated": "•••••%",
   "disabilityRatingDetails.serviceConnected": "Service-connected disability?  {{yesOrNo}}",
   "disabilityRatingDetails.title": "Disability rating",
+  "dismiss": "Dismiss",
   "done": "Done",
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "done.picker.a11yHint": "confirms selection and closes the menu",
