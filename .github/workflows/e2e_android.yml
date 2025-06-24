@@ -156,10 +156,13 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Set git config
+      - name: Install LibPulse
         run: |
           sudo apt-get update
           sudo apt-get install -y libpulse-dev
+
+      - name: Set git config
+        run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
 
