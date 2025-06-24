@@ -153,7 +153,7 @@ const phoneFacilitySchedulingLink = (
           a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
         />
       ) : undefined}
-      {featureEnabled('showScheduleLink') && showScheduleLink && !useFacilityLocatorFallback && (
+      {featureEnabled('rescheduleLink') && showScheduleLink && !useFacilityLocatorFallback && (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}
@@ -330,7 +330,7 @@ function AppointmentCancelReschedule({
           t,
           theme,
         )
-      ) : featureEnabled('showScheduleLink') &&
+      ) : featureEnabled('rescheduleLink') &&
         showScheduleLink &&
         subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics

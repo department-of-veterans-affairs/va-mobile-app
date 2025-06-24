@@ -32,8 +32,8 @@ export type FeatureToggleType =
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
+  | 'rescheduleLink'
   | 'shareMyHealthDataLink'
-  | 'showScheduleLink'
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'startScheduling'
@@ -60,8 +60,8 @@ type FeatureToggleValues = {
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
+  rescheduleLink: boolean
   shareMyHealthDataLink: boolean
-  showScheduleLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
   startScheduling: boolean
@@ -89,9 +89,9 @@ export const defaults: FeatureToggleValues = {
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
+  rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: false,
-  showScheduleLink: true,
   sso: true,
   startScheduling: false,
   testFeature: false,
