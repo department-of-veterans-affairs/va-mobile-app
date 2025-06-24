@@ -23,7 +23,7 @@ on:
       run_full_test:
         description: "Run full e2e test?"
         type: boolean
-        required: true
+        required: false
       tests_to_run:
         description: 'List tests to test in ["test name", "test name"] format.  Leave blank if running full e2e test.'
         type: string
@@ -101,7 +101,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 1
       - name: "Get Matrix Value"
         id: matrix_value
         run: |
@@ -293,7 +292,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-          fetch-depth: 1
 
       - name: Download results
         uses: actions/download-artifact@v4
@@ -399,8 +397,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
       - name: update-test-names
         run: |
           for ((i=0; ; i+=250)); do
