@@ -312,6 +312,7 @@ describe('AppointmentTravelClaimDetails', () => {
           initializeTestInstance('Past', { ...missedClaimDeadlineData })
           expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
           expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
+          expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
         })
       })
 

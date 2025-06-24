@@ -380,7 +380,7 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
       await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
     } else {
-      // Uncomment this when we can get the API to return all claims.
+      // Uncomment this when we can get the Travel Pay API to return all claims.
       // await expect(
       //   element(
       //     by.text(
@@ -389,7 +389,7 @@ const checkUpcomingApptDetails = async (
       //   ),
       // ).toExist()
 
-      // Remove this when we can get the API to return all claims.
+      // Remove this when we can get the Travel Pay API to return all claims.
       await expect(
         element(
           by.text(
@@ -398,6 +398,7 @@ const checkUpcomingApptDetails = async (
         ),
       ).toExist()
       await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
+      await expect(element(by.id('travelPayHelp'))).toExist()
     }
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
   } else {
