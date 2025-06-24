@@ -154,6 +154,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
             testID={`goToVAGovTravelClaimStatus`}
           />
+          <TravelPayHelp />
         </>
       )
     }
