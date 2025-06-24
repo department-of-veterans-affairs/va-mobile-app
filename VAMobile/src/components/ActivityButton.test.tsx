@@ -3,9 +3,8 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import ActivityButton from 'components/ActivityButton'
 import { context, render } from 'testUtils'
-
-import ActivityButton from './ActivityButton'
 
 context('ActivityButton', () => {
   beforeEach(() => {
