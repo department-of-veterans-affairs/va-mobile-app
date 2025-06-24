@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 
+import { List, ListItemObj, ListProps } from 'components'
+import { TextLines } from 'components/TextLines'
 import { generateTestIDForTextList } from 'utils/common'
 
-import { TextLines } from './TextLines'
-import { List, ListItemObj, ListProps } from './index'
 import { TextLine } from './types'
 
 /**
