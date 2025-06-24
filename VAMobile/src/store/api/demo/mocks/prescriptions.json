@@ -679,7 +679,8 @@
         "hold": 1,
         "unknown": 1,
         "total": 31
-      }
+      },
+      "hasNonVaMeds": true
     }
   },
   "/v0/health/rx/prescriptions/21142592/tracking": {
