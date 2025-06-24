@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import AttachmentLink from 'components/AttachmentLink'
 import { context, render } from 'testUtils'
-
-import AttachmentLink from './AttachmentLink'
 
 context('AttachmentLink', () => {
   const onPressSpy = jest.fn()

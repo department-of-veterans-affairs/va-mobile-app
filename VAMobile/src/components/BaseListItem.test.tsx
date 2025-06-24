@@ -1,10 +1,9 @@
 import React from 'react'
 
+import BaseListItem from 'components/BaseListItem'
+import { BackgroundVariant } from 'components/Box'
+import { TextLines } from 'components/TextLines'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import BaseListItem from './BaseListItem'
-import { BackgroundVariant } from './Box'
-import { TextLines } from './TextLines'
 
 import Mock = jest.Mock
 
