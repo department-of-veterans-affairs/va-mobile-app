@@ -2178,13 +2178,12 @@ SPEC CHECKSUMS:
   React-CoreModules: 2d68c251bc4080028f2835fa47504e8f20669a21
   React-cxxreact: 5f233f8ac7ea4772e49462e0ab2b0a15a4f80ab7
   React-debug: fd0ed8ecd5f8a23c7daf5ceaca8aa722a4d083fd
-  React-defaultsnativemodule: 33038152921d2f3fdef66ba1f8ef32e9ee68a834
-  React-domnativemodule: 6e79b766cda4b3a447aa59aaf04473d257b0c5bb
-  React-Fabric: da5caca65022dcbbb95d12cebcde7770fdd44ff0
-  React-FabricComponents: 19e0eb8be8d8f2afa1a921705a87d8818eba14cf
-  React-FabricImage: 50df9e6aace1781cf23e130171631d7674b4072c
+  React-defaultsnativemodule: 10f0f8bc38d8dc7d2273572cd85ed0b71298ecdd
+  React-domnativemodule: bfef3dda59e7030b498d0d78628f4adf414ab8e4
+  React-Fabric: 3d0f5e2735d2f77a897ee684edeff7bb0e061919
+  React-FabricComponents: 68032a85a3c25c9c8d6ce676d8af9a85e2370f24
+  React-FabricImage: f8ac2df576703097b5b2f8d972b162cdca855aa3
   React-featureflags: cf78861db9318ae29982fa8953c92d31b276c9ac
-   React-featureflags: cf78861db9318ae29982fa8953c92d31b276c9ac
   React-featureflagsnativemodule: d04eb5c3f0ac33fe70b060d97e8649bfd69c5f1e
   React-graphics: 7572851bca7242416b648c45d6af87d93d29281e
   React-hermes: 95c27801c60615345ee6256eafa6d597ce983b8b
