@@ -72,14 +72,30 @@ context('AppointmentsScreen', () => {
   describe('when startScheduling is true', () => {
     it('should show the Start Scheduling link', async () => {
       when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appointments`, expect.anything())
+        .mockResolvedValue({
+          data: [],
+          meta: {
+            errors: null,
+          },
+        })
       initializeTestInstance()
-      expect(screen.getByText(t('appointments.startScheduling'))).toBeTruthy()
+      await waitFor(() => expect(screen.getByText(t('appointments.startScheduling'))).toBeTruthy())
     })
 
     it('should be a clickable webview that navigates to the scheduling weblink flow', async () => {
       when(mockFeatureEnabled).calledWith('startScheduling').mockReturnValue(true)
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/appointments`, expect.anything())
+        .mockResolvedValue({
+          data: [],
+          meta: {
+            errors: null,
+          },
+        })
       initializeTestInstance()
-      fireEvent.press(screen.getByRole('button', { name: t('appointments.startScheduling') }))
+      await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('appointments.startScheduling') })))
       const expectNavArgs = {
         url: 'https://va.gov/my-health/appointments/schedule/type-of-care',
         displayTitle: t('webview.vagov'),

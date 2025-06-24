@@ -35,11 +35,11 @@ You can also consider [using our codespaces setup](https://github.com/features/c
 
 If you are using zsh on Mac you will need to create the `.zprofile` and `.zshrc` files if they do not exists.
 
-In your `bash_profile` or `.zprofile` add the following:
+In your `bash_profile` or `.zprofile` add the following (updated JAVA_HOME with your Java version after the installation above):
 
 ```bash
 # JAVA_HOME` variable pointing to the java installed above example
-export JAVA_HOME=$(/usr/libexec/java_home -v 15.0.2)
+export JAVA_HOME=$(/usr/libexec/java_home -v 23.0.2)
 
 # `NODE_OPTIONS` this is to manage the node memory space
 export NODE_OPTIONS=--max_old_space_size=8192
