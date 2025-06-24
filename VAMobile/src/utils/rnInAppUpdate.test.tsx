@@ -1,6 +1,6 @@
 import { NativeModules } from 'react-native'
 
-import { requestStorePopup, requestStoreVersion } from './rnInAppUpdate'
+import { requestStorePopup, requestStoreVersion } from 'utils/rnInAppUpdate'
 
 const inAppUpdate = NativeModules.RNInAppUpdate
 
