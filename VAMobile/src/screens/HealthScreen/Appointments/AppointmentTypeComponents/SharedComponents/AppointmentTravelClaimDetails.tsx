@@ -136,7 +136,11 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     if (appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <>
-          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
+            mb={theme.dimensions.condensedMarginBetween}
+            variant="MobileBody">
             {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
           </TextView>
           <LinkWithAnalytics
