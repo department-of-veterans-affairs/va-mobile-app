@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions, View } from 'react-native'
 import { ScaledSize } from 'react-native/Libraries/Utilities/Dimensions'
 
-import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import MenuView from 'components/Menu/MenuView'
@@ -17,7 +17,7 @@ const defaultScreenSize = {
 
 context('Menu', () => {
   const actionText = ' actionText'
-  const initializeTestInstance = (screenSize: ScaledSize = defaultScreenSize) => {
+  const initializeTestInstance = async (screenSize: ScaledSize = defaultScreenSize) => {
     Dimensions.get = jest.fn().mockReturnValue(screenSize)
     const actions = [
       {
@@ -27,6 +27,18 @@ context('Menu', () => {
       },
     ]
     render(<MenuView actions={actions} />)
+
+    // Menu should be hidden
+    expect(screen.queryByText(actionText)).toBeNull()
+
+    // Click on button to open menu
+    const moreIcon = screen.getByText(t('more'))
+    await act(() => {
+      fireEvent.press(moreIcon)
+    })
+
+    // Menu should be visible with action items
+    await waitFor(() => expect(screen.queryByText(actionText)).not.toBeNull())
   }
 
   describe('MenuView', () => {
@@ -36,25 +48,8 @@ context('Menu', () => {
       })
       initializeTestInstance()
     })
-    it('should show menu on icon click', async () => {
-      // Menu should be hidden
-      expect(screen.queryByText(actionText)).toBeNull()
-
-      // Click on button to open menu
-      const moreIcon = screen.getByText(t('more'))
-      fireEvent.press(moreIcon)
-
-      // Menu should be visible with action items
-      await waitFor(() => expect(screen.queryByText(actionText)).not.toBeNull())
-    })
 
     it('should hide menu when dimensions change', async () => {
-      // Open the menu
-      expect(screen.queryByText(actionText)).toBeNull()
-      const moreIcon = screen.getByText(t('more'))
-      fireEvent.press(moreIcon)
-      await waitFor(() => expect(screen.queryByText(actionText)).not.toBeNull())
-
       // Change the dimensions
       Dimensions.set({ screen: { width: 600, height: 500 }, window: { width: 600, height: 500 } })
 
@@ -63,12 +58,6 @@ context('Menu', () => {
     })
 
     it('should hide menu on action press', async () => {
-      // Open the menu
-      expect(screen.queryByText(actionText)).toBeNull()
-      const moreIcon = screen.getByText(t('more'))
-      fireEvent.press(moreIcon)
-      await waitFor(() => expect(screen.getByText(actionText)).not.toBeNull())
-
       // Press the action button
       const action = screen.getByText(actionText)
       fireEvent.press(action)
@@ -86,12 +75,6 @@ context('Menu', () => {
     })
 
     it('should be visible after layout change', async () => {
-      // Open the menu
-      expect(screen.queryByText(actionText)).toBeNull()
-      const moreIcon = screen.getByText(t('more'))
-      fireEvent.press(moreIcon)
-      await waitFor(() => expect(screen.getByText(actionText)).not.toBeNull())
-
       // Manually trigger layout change
       const view = screen.getByTestId('menu-modal-content')
       view.props.onLayout({ nativeEvent: { layout: { x: 0, y: 0, width: 100, height: 100 } } })
@@ -100,12 +83,7 @@ context('Menu', () => {
     })
 
     it('should hide menu on Close Menu button press', async () => {
-      initializeTestInstance({ width: 0, height: 0, fontScale: 0, scale: 0 })
-      // Open the menu
-      expect(screen.queryByText(actionText)).toBeNull()
-      const moreIcon = screen.getByText(t('more'))
-      fireEvent.press(moreIcon)
-      await waitFor(() => expect(screen.getByText(actionText)).not.toBeNull())
+      await initializeTestInstance({ width: 0, height: 0, fontScale: 0, scale: 0 })
 
       const view = screen.getByTestId('menu-modal-content')
       view.props.onLayout({ nativeEvent: { layout: { x: 0, y: 0, width: -6, height: -6 } } })
