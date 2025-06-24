@@ -72,7 +72,7 @@ jobs:
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
-  # NOTE: Copying out until we fix issue # 6354
+  # NOTE: Commenting out until we fix issue # 6354
   # update_ticket:
   #   runs-on: ubuntu-latest
   #   needs: [release_ticket, create_testrail_milestone, start_testrail_run]
