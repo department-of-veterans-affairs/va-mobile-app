@@ -1545,7 +1545,7 @@
   "travelPay.travelClaimFiledDetails.goToVAGov": "View claim details on VA.gov",
   "travelPay.webview.claims.displayTitle": "Travel Claim Details",
   "travelPay.travelClaimFiledDetails.noClaim": "You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.",
-  "travelPay.travelClaimFiledDetails.visitClaimStatusPage": "Your appointment is older than 30 days. You can still view your travel claim status or file for travel reimbursement on VA.gov.",
+  "travelPay.travelClaimFiledDetails.visitClaimStatusPage": "Your appointment is older than 30 days. You can still view your travel claim status on VA.gov.",
   "travelPay.travelClaimFiledDetails.visitClaimStatusPage.link": "View travel claim details on VA.gov",
   "travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle": "Travel Claims Status",
   "travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading": "Loading the travel claims status page...",

@@ -392,9 +392,7 @@ const checkUpcomingApptDetails = async (
       // Remove this when we can get the Travel Pay API to return all claims.
       await expect(
         element(
-          by.text(
-            'We don’t show travel claims for appointments older than 30 days. To check if you already filed, or to view your claim status, visit your Travel Claims Status page on VA.gov.',
-          ),
+          by.text('Your appointment is older than 30 days. You can still view your travel claim status on VA.gov.'),
         ),
       ).toExist()
       await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
