@@ -159,6 +159,8 @@ jobs:
 
       - name: Set git config
         run: |
+          sudo apt-get update
+          sudo apt-get install -y libpulse-dev
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
 
