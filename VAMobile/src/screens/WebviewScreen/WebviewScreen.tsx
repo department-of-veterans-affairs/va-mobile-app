@@ -84,6 +84,8 @@ export type WebviewStackParams = {
     loadingMessage?: string
     /** Use SSO to authenticate webview */
     useSSO?: boolean
+    /** Test ID for the webview back button */
+    backButtonTestID?: string
   }
 }
 
@@ -93,7 +95,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
-  const { url, displayTitle, loadingMessage, useSSO } = route.params
+  const { url, displayTitle, loadingMessage, useSSO, backButtonTestID } = route.params
   const isSSOSession = featureEnabled('sso') && useSSO
 
   const theme = useTheme()
@@ -122,6 +124,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           onPress={props.onPress}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.done}
+          backButtonTestID={backButtonTestID}
         />
       ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
