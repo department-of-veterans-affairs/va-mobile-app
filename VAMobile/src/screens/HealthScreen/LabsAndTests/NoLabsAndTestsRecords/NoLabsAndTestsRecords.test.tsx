@@ -12,8 +12,8 @@ context('NoLabsAndTestsRecords', () => {
   }
 
   it('renders the NoLabsAndTestsRecords component', () => {
-    const { getByTestId } = initializeTestInstance()
-    expect(getByTestId('NoLabsAndTestsRecords')).toBeTruthy()
+    initializeTestInstance()
+    expect(screen.getByTestId('NoLabsAndTestsRecords')).toBeTruthy()
   })
 
   it('displays the correct alert title', () => {

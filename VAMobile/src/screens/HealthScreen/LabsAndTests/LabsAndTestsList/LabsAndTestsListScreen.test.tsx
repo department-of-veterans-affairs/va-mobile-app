@@ -36,8 +36,8 @@ context('LabsAndTestsListScreen', () => {
   }
 
   it('renders the LabsAndTestsListScreen', () => {
-    const { getByTestId } = initializeTestInstance()
-    expect(getByTestId('labs-and-tests-list-screen')).toBeTruthy()
+    initializeTestInstance()
+    expect(screen.getByTestId('labs-and-tests-list-screen')).toBeTruthy()
   })
 
   it('only calls the api once', async () => {
@@ -53,14 +53,16 @@ context('LabsAndTestsListScreen', () => {
   })
 
   it('defaults to 3 months in date picker', async () => {
-    const { getByTestId } = initializeTestInstance()
-    expect(getByTestId('labsAndTestDataRangeTestID')).toBeTruthy()
-    expect(getByTestId('labsAndTestDataRangeTestID').children[0]).toEqual('Past 3 months')
+    initializeTestInstance()
+    expect(screen.getByTestId('labsAndTestDataRangeTestID')).toBeTruthy()
+    expect(screen.getByTestId('labsAndTestDataRangeTestID').children[0]).toEqual('Past 3 months')
   })
 
   it('renders the correct availability timing', async () => {
-    const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'))
+    initializeTestInstance()
+    await waitFor(() =>
+      expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
+    )
   })
 
   it('renders the expected data in the list of Labs and Tests', async () => {
@@ -115,8 +117,8 @@ context('LabsAndTestsListScreen', () => {
     when(api.get as jest.Mock)
       .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: sampleData })
-    const { getByTestId } = initializeTestInstance()
-    await waitFor(() => expect(getByTestId('NoLabsAndTestsRecords')).toBeTruthy()).then(() => {
+    initializeTestInstance()
+    await waitFor(() => expect(screen.getByTestId('NoLabsAndTestsRecords')).toBeTruthy()).then(() => {
       expect(screen.queryAllByText('Sugical Pathology')).toHaveLength(0)
     })
     await waitFor(() =>
@@ -281,14 +283,14 @@ context('LabsAndTestsListScreen', () => {
     when(api.get as jest.Mock)
       .calledWith('/v1/health/labs-and-tests', expect.anything())
       .mockResolvedValue({ data: combinedData })
-    const { getByTestId } = initializeTestInstance()
+    initializeTestInstance()
     await waitFor(() => expect(screen.queryAllByText('Surgical Pathology')).toHaveLength(10))
     await waitFor(() => expect(screen.queryAllByText('1 to 10 of 11')).toHaveLength(1))
 
-    await waitFor(() => expect(getByTestId('next-page')).toBeTruthy())
-    await waitFor(() => expect(getByTestId('previous-page')).toBeTruthy())
+    await waitFor(() => expect(screen.getByTestId('next-page')).toBeTruthy())
+    await waitFor(() => expect(screen.getByTestId('previous-page')).toBeTruthy())
 
-    fireEvent.press(getByTestId('next-page'))
+    fireEvent.press(screen.getByTestId('next-page'))
     await waitFor(() => expect(screen.queryAllByText('Surgical Pathology')).toHaveLength(1))
     await waitFor(() => expect(screen.queryAllByText('11 to 11 of 11')).toHaveLength(1))
   })
