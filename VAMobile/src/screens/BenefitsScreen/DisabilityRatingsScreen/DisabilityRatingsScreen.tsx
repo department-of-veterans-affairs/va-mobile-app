@@ -22,6 +22,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useDowntime, useTheme } from 'utils/hooks'
@@ -125,10 +126,9 @@ function DisabilityRatingsScreen() {
 
   const getCombinedTotalSection = () => {
     // must check only for null or undefined. 0 is a valid rating
-    const combinedPercentText =
-      totalCombinedRating !== undefined && totalCombinedRating !== null
-        ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
-        : undefined
+    const combinedPercentText = isValidDisabilityRating(totalCombinedRating)
+      ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
+      : undefined
     const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (

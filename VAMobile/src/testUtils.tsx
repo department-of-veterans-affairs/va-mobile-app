@@ -175,16 +175,18 @@ export type RenderParams = {
 
 //@ts-ignore
 function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  })
+
   //@ts-ignore
   function Wrapper({ children }) {
     const store = mockStore(preloadedState)
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    })
+
     queryClient.setQueryData(authorizedServicesKeys.authorizedServices, {
       appeals: true,
       appointments: true,
@@ -238,7 +240,9 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       </QueryClientProvider>
     )
   }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
+
+  // Return queryClient to validate client state changes not present in the ui
+  return { queryClient, screen: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
 // re-export everything

@@ -7,7 +7,7 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes, AppointmentLocation } from 'api/types'
-import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
@@ -33,20 +33,6 @@ type AppointmentCancelRescheduleProps = {
   type: AppointmentDetailsScreenType
   goBack: () => void
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>
-}
-
-const spacer = (theme: VATheme) => {
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    height: theme.dimensions.standardMarginBetween,
-    backgroundColor: 'main',
-    mx: -theme.dimensions.gutter,
-  }
-  return <Box {...boxProps} />
 }
 
 const cancelButton = (
@@ -322,7 +308,7 @@ function AppointmentCancelReschedule({
 
   return (
     <Box>
-      {spacer(theme)}
+      <TextAreaSpacer />
       <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
         {header}
       </TextView>

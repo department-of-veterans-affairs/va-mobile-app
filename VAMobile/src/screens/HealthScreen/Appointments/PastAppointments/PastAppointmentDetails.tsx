@@ -7,8 +7,11 @@ import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, App
 import { FeatureLandingTemplate } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { useDowntime } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 
 import {
   AppointmentDetailsSubTypeConstants,
@@ -27,6 +30,7 @@ import {
   VideoHomeAppointment,
   VideoVAAppointment,
 } from '../AppointmentTypeComponents'
+import AppointmentFileTravelPayAlert from '../AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
@@ -39,6 +43,9 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const { appointmentType, status, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const pendingAppointment = isAPendingAppointment(attributes)
+
+  const travelPayEnabled =
+    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
 
   useEffect(() => {
     if (attributes) {
@@ -81,6 +88,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
       title={t('details')}>
+      {travelPayEnabled && <AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey={route.key} />}
       {isPhoneAppointment ? (
         <PhoneAppointment
           appointmentID={appointment.id}
