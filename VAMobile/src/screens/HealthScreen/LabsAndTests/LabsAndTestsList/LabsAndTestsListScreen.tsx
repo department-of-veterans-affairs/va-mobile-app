@@ -279,10 +279,17 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             onPress={() => {
               applyNewDateFilters()
             }}
-            label={'apply'}
+            label={t('labsAndTests.list.dateFilter.buttonText')}
             testID={'updateLabsAndTestsButtonTestID'}
             buttonType={ButtonVariants.Primary}
           />
+        </Box>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextView testID="labsAndTestsDateRangeTestID">
+            {t('labsAndTests.list.dateFilter.displayLabel', {
+              timeFrame: selectedDateRange.timeFrame.replace('-', ' '),
+            })}
+          </TextView>
         </Box>
       </Box>
       {loading ? (
