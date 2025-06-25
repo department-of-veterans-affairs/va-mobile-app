@@ -7,7 +7,7 @@ import { Events } from 'constants/analytics'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
@@ -43,9 +43,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
 
     if (isInDowntime) {
       if (featureEnabled('logDowntimeAnalytics') && logDowntimeAnalytics) {
-        console.log('features: ', JSON.stringify(features, undefined, 2))
         features.forEach((feature) => {
-          const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+          const downtimeWindow = downtimeWindowsByFeature[feature]
           if (downtimeWindow)
             logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
         })
