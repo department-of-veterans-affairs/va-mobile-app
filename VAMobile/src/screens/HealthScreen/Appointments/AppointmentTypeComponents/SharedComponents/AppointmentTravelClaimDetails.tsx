@@ -14,7 +14,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -133,7 +132,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // }
 
     // Remove this when we can get the API to return all claims.
-    if (appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    if (daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
