@@ -2,10 +2,8 @@ import React from 'react'
 
 import { TFunction } from 'i18next'
 
+import { Carousel, TextView } from 'components'
 import { context, render, screen } from 'testUtils'
-
-import { TextView } from '../index'
-import Carousel from './Carousel'
 
 context('Carousel', () => {
   const t = jest.fn(() => {})
