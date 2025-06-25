@@ -1,17 +1,20 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { CallHelpCenter, CustomError, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
+import { Events } from 'constants/analytics'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -32,12 +35,22 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const features = ScreenIDToDowntimeFeatures[props.screenID]
   const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  const [logDowntimeAnalytics, setLogDowntimeAnalytics] = useState(true)
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID, error }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
     if (isInDowntime) {
+      if (featureEnabled('logDowntimeAnalytics') && logDowntimeAnalytics) {
+        console.log('features: ', JSON.stringify(features, undefined, 2))
+        features.forEach((feature) => {
+          const downtimeWindow = downtimeWindowsByFeature[feature as DowntimeFeatureType]
+          if (downtimeWindow)
+            logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
+        })
+        setLogDowntimeAnalytics(false)
+      }
       return <DowntimeError screenID={screenID} />
     }
 
