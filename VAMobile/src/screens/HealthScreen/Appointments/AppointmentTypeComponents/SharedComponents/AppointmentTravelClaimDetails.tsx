@@ -145,6 +145,8 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+              // we're using the same env variable for this link. Note: the const name refers to "DETAILS" but the base web URL is actually /claims
               logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
               navigateTo('Webview', {
                 url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
