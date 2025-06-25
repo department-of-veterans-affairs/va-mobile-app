@@ -84,7 +84,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
-  labsAndTests: true,
+  labsAndTests: false,
   nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
