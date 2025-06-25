@@ -3,12 +3,11 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import { logout } from 'store/slices'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
 import { devConfig, setDebugConfig } from 'utils/remoteConfig'
-
-import RemoteConfigScreen from './RemoteConfigScreen'
 
 jest.mock('store/slices/authSlice', () => {
   const actual = jest.requireActual('store/slices/authSlice')
