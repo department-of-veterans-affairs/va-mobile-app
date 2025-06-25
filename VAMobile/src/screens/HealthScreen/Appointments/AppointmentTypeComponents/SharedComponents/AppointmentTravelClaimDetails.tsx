@@ -14,6 +14,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
+  appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
@@ -118,21 +119,25 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    // Temporarily disabled: API returns only claims for the last 30 days, so for
-    // appointments > 30 days old we can’t tell if a claim exists and this
-    // “No claim” message could be misleading. Users are now sent to the
-    // Travel Claim Status page instead. (This is temporary until we can get
-    // the API to return all claims.)
-    // if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
-    //   return (
-    //     <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-    //       {t('travelPay.travelClaimFiledDetails.noClaim')}
-    //     </TextView>
-    //   )
-    // }
+    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can’t tell if a claim exists.
+    // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
+    const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
 
-    // Remove this when we can get the API to return all claims.
-    if (daysLeftToFileTravelPay < 0 && !claimError) {
+    if (
+      apiReturnsFullHistory &&
+      !claim &&
+      appointmentMeetsTravelPayCriteria(attributes) &&
+      daysLeftToFileTravelPay < 0 &&
+      !claimError
+    ) {
+      return (
+        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+          {t('travelPay.travelClaimFiledDetails.noClaim')}
+        </TextView>
+      )
+    }
+
+    if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
