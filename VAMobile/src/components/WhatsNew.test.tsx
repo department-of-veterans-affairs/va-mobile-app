@@ -3,12 +3,11 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import WhatsNew from 'components/WhatsNew'
 import { InitialState } from 'store/slices'
 import { context, render, when } from 'testUtils'
 import { getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import WhatsNew from './WhatsNew'
 
 jest.mock('utils/remoteConfig')
 
