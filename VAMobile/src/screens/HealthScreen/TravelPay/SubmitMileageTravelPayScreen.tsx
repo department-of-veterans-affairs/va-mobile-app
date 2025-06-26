@@ -23,7 +23,9 @@ import {
 } from './SubmitTravelPayFlowSteps'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
-  InterstitialScreen: undefined
+  InterstitialScreen: {
+    flowStepsRouteKey: string
+  }
   MileageScreen: undefined
   VehicleScreen: undefined
   AddressScreen: undefined
@@ -47,7 +49,7 @@ export type TravelPayStack = WebviewStackParams & {
   FlowSteps: {
     appointment: AppointmentData
     appointmentRouteKey: string
-    smocFlowStartDate: string
+    smocFlowStartDate?: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
@@ -60,6 +62,7 @@ const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
 const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
+  const flowStepsRouteKey = route.key
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
 
@@ -71,6 +74,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="InterstitialScreen"
         name="InterstitialScreen"
         component={InterstitialScreen}
+        initialParams={{ flowStepsRouteKey }}
       />
       <TravelPayMultiStepStack.Screen key="MileageScreen" name="MileageScreen" component={MileageScreen} />
       <TravelPayMultiStepStack.Screen key="VehicleScreen" name="VehicleScreen" component={VehicleScreen} />
@@ -97,14 +101,14 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
 }
 
 function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenProps) {
-  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
+  const { appointment, appointmentRouteKey } = route.params
 
   return (
     <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
       <TravelPayStack.Screen
         name="FlowSteps"
         component={FlowSteps}
-        initialParams={{ appointment, appointmentRouteKey, smocFlowStartDate }}
+        initialParams={{ appointment, appointmentRouteKey }}
       />
       <TravelPayStack.Screen
         key={'TravelClaimHelpScreen'}

@@ -76,8 +76,10 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       return
     }
 
-    const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
-    logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
+    if (smocFlowStartDate) {
+      const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+      logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
+    }
 
     submitClaim(
       {
