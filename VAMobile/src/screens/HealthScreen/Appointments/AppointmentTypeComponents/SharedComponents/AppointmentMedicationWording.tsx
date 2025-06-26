@@ -28,11 +28,13 @@ const webViewLinkHelper = (
   text: string,
   navigateTo: RouteNavigationFunction<ParamListBase>,
   t: TFunction,
+  testID?: string,
 ) => {
   return (
     <LinkWithAnalytics
       type="custom"
       icon={{ name: 'Launch', fill: 'default' }}
+      testID={testID}
       onPress={() => {
         navigateTo('Webview', {
           url,
@@ -52,13 +54,15 @@ const getWebViewLink = (
 ) => {
   let text = t('appointmentsTab.medicationWording.whatToBringLink')
   let url = WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS
+  let testID = 'whatToBringLinkTestID'
 
   if (type === AppointmentDetailsTypeConstants.ClaimExam) {
     text = t('appointmentsTab.medicationWording.claimExam.webLink')
     url = WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE
+    testID = 'claimExamLinkTestID'
   }
 
-  return webViewLinkHelper(url, text, navigateTo, t)
+  return webViewLinkHelper(url, text, navigateTo, t, testID)
 }
 
 type AppointmentMedicationWordingProps = {
@@ -82,7 +86,13 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
     ].includes(type)
   ) {
     const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
-    videoHealthAppointmentsLink = webViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t)
+    videoHealthAppointmentsLink = webViewLinkHelper(
+      WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS,
+      text,
+      navigateTo,
+      t,
+      'prepareForVideoVisitTestID',
+    )
   }
   const getContent = () => {
     switch (type) {
