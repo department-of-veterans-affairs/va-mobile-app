@@ -39,9 +39,7 @@ context('WhatsNew', () => {
     when(getLocalVersion).mockReturnValue(Promise.resolve(localVersion))
     when(getVersionSkipped).mockReturnValue(Promise.resolve(skippedVersion))
 
-    // const BODY_PREFIX = `whatsNew.bodyCopy.${localVersion}`
-    // const body = t(BODY_PREFIX)
-    // body !== BODY_PREFIX -> requires us to mock out our own translation (t) so that we can render the component
+    // The component uses translation keys to hide and show its element, therefore we need to mock out translation to get it to render
     when(mockT)
       .calledWith('whatsNew.title')
       .mockReturnValue(t('whatsNew.title'))
