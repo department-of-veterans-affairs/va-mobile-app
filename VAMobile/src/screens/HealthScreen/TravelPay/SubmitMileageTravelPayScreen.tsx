@@ -34,6 +34,7 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   SubmitSuccessScreen: {
     appointmentDateTime: string
     facilityName: string
+    status: string
   }
   ErrorScreen: {
     error: TravelPayError
@@ -82,6 +83,10 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="SubmitSuccessScreen"
         name="SubmitSuccessScreen"
         component={SubmitSuccessScreen}
+        options={{
+          // Disable gesture navigation to prevent the user from going back to the previous screen
+          gestureEnabled: false,
+        }}
         initialParams={{ appointmentDateTime: attributes.startDateUtc, facilityName: attributes.location.name }}
       />
       <TravelPayMultiStepStack.Screen key="ErrorScreen" name="ErrorScreen" component={ErrorScreen} />
