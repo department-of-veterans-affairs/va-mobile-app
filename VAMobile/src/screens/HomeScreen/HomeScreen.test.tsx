@@ -17,6 +17,7 @@ import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { formatDateUtc } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -25,6 +26,8 @@ import {
 } from 'utils/tests/personalization'
 
 import { HomeScreen } from './HomeScreen'
+
+jest.mock('utils/remoteConfig')
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -94,6 +97,7 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
 })
 
 context('HomeScreen', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (options?: RenderParams) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     render(<HomeScreen {...props} />, { ...options })
@@ -277,6 +281,7 @@ context('HomeScreen', () => {
 
   describe('Past Appointments module', () => {
     it('displays travel pay reimbursement eligible appointments when they exist', async () => {
+      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))
@@ -294,6 +299,7 @@ context('HomeScreen', () => {
     })
 
     it('navigates to Appointments screen when pressed', async () => {
+      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 5))
