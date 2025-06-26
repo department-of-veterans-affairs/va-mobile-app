@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { navigateToTravelPayWebsite } from 'utils/travelPay'
 
-const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS, LINK_URL_VA_FORM_10_3542 } = getEnv()
+const { LINK_URL_VA_FORM_10_3542 } = getEnv()
 
 type FileOnlineComponentProps = {
   onBeforeOpenTravelPayWebview?: () => void
@@ -37,13 +36,7 @@ function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineCompone
             testID="fileOnlineBTSSSLink"
             onPress={() => {
               onBeforeOpenTravelPayWebview?.()
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
-                displayTitle: t('travelPay.webview.fileForTravelPay.title'),
-                loadingMessage: t('loading.vaWebsite'),
-                useSSO: true,
-              })
+              navigateToTravelPayWebsite(t, navigateTo)
             }}
           />
         </Box>

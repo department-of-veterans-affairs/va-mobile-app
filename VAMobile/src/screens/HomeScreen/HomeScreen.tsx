@@ -51,7 +51,7 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
@@ -102,6 +102,17 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: isFocused,
     },
   )
+
+  const pastAppointmentsRange = getPastAppointmentDateRange()
+  const pastAppointmentsQuery = useAppointments(
+    pastAppointmentsRange.startDate,
+    pastAppointmentsRange.endDate,
+    TimeFrameTypeConstants.PAST_THREE_MONTHS,
+    {
+      enabled: isFocused,
+    },
+  )
+
   const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
   const foldersQuery = useFolders({ enabled: isFocused })
   const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
@@ -223,6 +234,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const activityNotFetched =
     activityFeatureActive &&
     !appointmentsQuery.isFetched &&
+    !pastAppointmentsQuery.isFetched &&
     !claimsAndAppealsQuery.isFetched &&
     !foldersQuery.isFetched &&
     !prescriptionsQuery.isFetched
@@ -230,6 +242,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const loadingActivity =
     activityNotFetched ||
     appointmentsQuery.isFetching ||
+    pastAppointmentsQuery.isFetching ||
     claimsAndAppealsQuery.isFetching ||
     foldersQuery.isFetching ||
     prescriptionsQuery.isFetching
@@ -238,11 +251,13 @@ export function HomeScreen({}: HomeScreenProps) {
     !!appointmentsQuery.data?.meta?.upcomingAppointmentsCount ||
     !!claimsAndAppealsQuery.data?.meta.activeClaimsCount ||
     !!foldersQuery.data?.inboxUnreadCount ||
+    !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount ||
     !!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable
 
   const claimsError = claimsAndAppealsQuery.isError || !!claimsAndAppealsQuery.data?.meta.errors?.length
   const hasActivityError = !!(
     appointmentsQuery.isError ||
+    pastAppointmentsQuery.isError ||
     claimsError ||
     foldersQuery.isError ||
     prescriptionsQuery.isError
@@ -373,14 +388,23 @@ export function HomeScreen({}: HomeScreenProps) {
               {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
                 !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
                   <ActivityButton
-                    title={t('appointments')}
-                    subText={t('appointments.activityButton.subText', {
+                    title={t('upcomingAppointments')}
+                    subText={t('upcomingAppointments.activityButton.subText', {
                       count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
                       dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
                     })}
                     deepLink={'appointments'}
                   />
                 )}
+              {featureEnabled('travelPaySMOC') && !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
+                <ActivityButton
+                  title={t('pastAppointments')}
+                  subText={t('pastAppointments.activityButton.subText', {
+                    count: pastAppointmentsQuery.data.meta.travelPayEligibleCount,
+                  })}
+                  deepLink={'pastAppointments'}
+                />
+              )}
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
