@@ -61,7 +61,6 @@ export type WaygateToggleType =
   | 'WG_AllergyDetails'
   | 'WG_AllergyList'
   | 'WG_ViewMessage'
-  | 'WG_PrepareForVideoVisit'
   | 'WG_StartNewMessage'
   | 'WG_ReplyMessage'
   | 'WG_EditDraft'
@@ -143,7 +142,6 @@ type WaygateToggleValues = {
   WG_AllergyDetails: Waygate
   WG_AllergyList: Waygate
   WG_ViewMessage: Waygate
-  WG_PrepareForVideoVisit: Waygate
   WG_SubmitEvidence: Waygate
   WG_StartNewMessage: Waygate
   WG_ReplyMessage: Waygate
@@ -234,7 +232,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_AllergyDetails: { ...waygateDefault },
   WG_AllergyList: { ...waygateDefault },
   WG_ViewMessage: { ...waygateDefault },
-  WG_PrepareForVideoVisit: { ...waygateDefault },
   WG_StartNewMessage: { ...waygateDefault },
   WG_ReplyMessage: { ...waygateDefault },
   WG_EditDraft: { ...waygateDefault },

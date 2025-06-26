@@ -17,7 +17,6 @@ import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
-import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
 import HealthHelp from './HealthHelp/HealthHelp'
 import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
@@ -42,7 +41,6 @@ export type HealthStackParamList = WebviewStackParams & {
     appointment?: AppointmentData
     vetextID?: string
   }
-  PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
     appointment: AppointmentData
   }
@@ -155,12 +153,6 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = () => {
   return [
-    <HealthStack.Screen
-      key={'PrepareForVideoVisit'}
-      name="PrepareForVideoVisit"
-      component={PrepareForVideoVisit}
-      options={LARGE_PANEL_OPTIONS}
-    />,
     <HealthStack.Screen
       key={'StartNewMessage'}
       name="StartNewMessage"
