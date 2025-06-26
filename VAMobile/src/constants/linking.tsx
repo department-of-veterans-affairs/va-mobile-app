@@ -95,6 +95,24 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'pastAppointments') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'Appointments', params: { tab: 1 } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     } else if (pathParts[0] === 'prescriptions') {
       return {
         routes: [
