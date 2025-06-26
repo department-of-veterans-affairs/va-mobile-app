@@ -1,4 +1,4 @@
-import { Component, MutableRefObject } from 'react'
+import { MutableRefObject } from 'react'
 import {
   AccessibilityInfo,
   AccessibilityValue,
@@ -15,11 +15,7 @@ import _ from 'underscore'
 
 import { TextLine } from 'components/types'
 import { RootState } from 'store'
-import {
-  updateAccessibilityFocus,
-  updateCurrentFontScale,
-  updateCurrentIsVoiceOverTalkBackRunning,
-} from 'store/slices/accessibilitySlice'
+import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/slices/accessibilitySlice'
 import getEnv from 'utils/env'
 import { isAndroid } from 'utils/platform'
 
