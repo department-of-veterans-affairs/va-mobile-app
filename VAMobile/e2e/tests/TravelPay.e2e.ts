@@ -87,6 +87,7 @@ const TravelPayE2eIdConstants = {
   TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
   APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID: 'appointmentFileTravelPayAlert',
   ERROR_SCREEN_ID: 'SMOCErrorScreen',
+  FINISH_TRAVEL_CLAIM_LINK_ID: 'finishTravelClaimLinkID',
 }
 
 const fillHomeAddressFields = async () => {
@@ -262,13 +263,22 @@ const checkReviewClaimScreen = async () => {
   await element(by.id(TravelPayE2eIdConstants.CHECK_BOX_ID)).tap()
 }
 
-const checkSubmitSuccessScreen = async () => {
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
+const checkSubmitSuccessScreen = async (partialSuccess: boolean = false) => {
+  if (partialSuccess) {
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.FINISH_TRAVEL_CLAIM_LINK_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
+  } else {
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
+  }
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()
 }
@@ -508,8 +518,38 @@ describe('Travel Pay', () => {
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 
+  it('shows partial success if status is Incomplete or Saved', async () => {
+    await element(by.text('Appointments')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    // go to the next page
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await openAppointmentInList('At Fort Collins VA Clinic - Claim - Confirmed')
+    await startTravelPayFlow()
+    await element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID)).scrollTo('bottom')
+    await element(by.id(TravelPayE2eIdConstants.CHECK_BOX_ID)).tap()
+    await element(by.id(TravelPayE2eIdConstants.SUBMIT_BUTTON_ID)).tap()
+    await setTimeout(4000)
+    await checkSubmitSuccessScreen(true)
+  })
+
+  it('shows the travel claim details for the partial success claim', async () => {
+    await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
+    await waitFor(element(by.id('goToVAGovID-mock_id_partial_success')))
+      .toBeVisible()
+      .whileElement(by.id('PastApptDetailsTestID'))
+      .scroll(100, 'down', NaN, 0.8)
+    await expect(element(by.text('Status: Saved'))).toExist()
+  })
+
   it('shows the error screen when the travel pay claim fails to submit', async () => {
     await element(by.text('Appointments')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
     // Override the travel pay claim API to return a 500 error
     await toggleOverrideApi('/v0/travel-pay/claims', { otherStatus: '500' })

@@ -11,8 +11,9 @@ import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
 import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
+import { SetUpDirectDepositWebLink } from './components'
 
-const { LINK_URL_TRAVEL_PAY_ELIGIBILITY, LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
+const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 
 type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'InterstitialScreen'>
 
@@ -79,13 +80,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
         <TextView testID="directDepositDescriptionID" variant="MobileBody">
           {t('travelPay.setUpDirectDeposit.description')}
         </TextView>
-        <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
-          text={t('travelPay.setUpDirectDeposit.link')}
-          a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
-          testID="setUpDirectDepositLinkID"
-        />
+        <SetUpDirectDepositWebLink />
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
           {t('travelPay.burdenTime')}
         </TextView>

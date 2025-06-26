@@ -98,6 +98,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
           navigateTo('SubmitSuccessScreen', {
             appointmentDateTime: attributes.startDateLocal,
             facilityName: attributes.location.name,
+            status: data?.data.attributes.claimStatus,
           })
         },
         onError: () => navigateToErrorScreen('error'),
