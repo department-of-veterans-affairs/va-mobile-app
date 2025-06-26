@@ -1,4 +1,4 @@
-import { TravelPayClaimSummary } from './TravelPayClaimData'
+import { TravelPayClaimSummary } from 'api/types/TravelPayClaimData'
 
 export const AppointmentTimeZoneConstants: {
   PacificHonolulu: AppointmentTimeZone
