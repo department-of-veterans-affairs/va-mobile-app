@@ -9,13 +9,18 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
 } from 'api/types'
+import VideoVAAppointment from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/VideoVAAppointment'
 import { context, render } from 'testUtils'
+import { when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
+import { featureEnabled } from 'utils/remoteConfig'
 
-import VideoVAAppointment from './VideoVAAppointment'
+jest.mock('utils/remoteConfig')
 
 context('VideoVAAppointment', () => {
+  when(featureEnabled).calledWith('rescheduleLink').mockReturnValue(true)
+
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
     appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
@@ -61,8 +66,9 @@ context('VideoVAAppointment', () => {
     isCovidVaccine: false,
     isPending: false,
     vetextId: '600;3210206',
+    showScheduleLink: true,
   }
-  const initializeTestInstance = (attributes: AppointmentAttributes, subType: AppointmentDetailsSubType): void => {
+  const initializeTestInstance = (attributes: AppointmentAttributes, subType: AppointmentDetailsSubType) => {
     render(
       <VideoVAAppointment
         appointmentID={'1'}
