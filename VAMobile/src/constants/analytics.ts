@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
@@ -753,6 +755,16 @@ export const Events = {
       name: 'vama_login_token_store',
       params: {
         success,
+      },
+    }
+  },
+  vama_mw_shown: (feature: string, start: DateTime, end: DateTime): Event => {
+    return {
+      name: 'vama_mw_shown',
+      params: {
+        feature,
+        start,
+        end,
       },
     }
   },

@@ -55,7 +55,7 @@ context('HealthScreen', () => {
         queriesData: [
           {
             queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
-            data: getAppointmentsPayload(upcomingAppointmentsCount),
+            data: getAppointmentsPayload(upcomingAppointmentsCount, 5),
           },
         ],
       })
@@ -73,7 +73,7 @@ context('HealthScreen', () => {
         queriesData: [
           {
             queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
-            data: getAppointmentsPayload(upcomingAppointmentsCount),
+            data: getAppointmentsPayload(upcomingAppointmentsCount, 5),
           },
         ],
       })
@@ -199,7 +199,7 @@ context('HealthScreen', () => {
   it('displays error message when one of the API calls fail', async () => {
     when(get as jest.Mock)
       .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
+      .mockResolvedValue(getAppointmentsPayload(3, 5))
       .calledWith('/v0/messaging/health/folders')
       .mockResolvedValue(getFoldersPayload(3))
       .calledWith('/v0/health/rx/prescriptions', expect.anything())
@@ -218,7 +218,7 @@ context('HealthScreen', () => {
   it('displays error message when one of the health features are in downtime', async () => {
     when(get as jest.Mock)
       .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
+      .mockResolvedValue(getAppointmentsPayload(3, 5))
       .calledWith('/v0/messaging/health/folders')
       .mockResolvedValue(getFoldersPayload(3))
       .calledWith('/v0/health/rx/prescriptions', expect.anything())
