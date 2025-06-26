@@ -23,6 +23,7 @@ NativeModules.DeviceData = {
 NativeModules.RNInAppUpdate = {
   storeVersion: '2.0.0',
   requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
+  requestStorePopup: jest.fn(),
 }
 
 NativeModules.SettingsManager = {
