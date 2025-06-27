@@ -18,7 +18,7 @@ import {
   VASelectorProps,
   VATextInput,
   VATextInputProps,
-} from '../index'
+} from 'components/index'
 
 /** enum to determine field input type */
 export enum FieldType {

@@ -16,7 +16,7 @@ import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-import EditDraft from './EditDraft'
+import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

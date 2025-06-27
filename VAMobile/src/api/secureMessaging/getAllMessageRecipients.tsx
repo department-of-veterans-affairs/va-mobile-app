@@ -4,7 +4,7 @@ import { filter } from 'underscore'
 import { SecureMessagingRecipientDataList, SecureMessagingRecipients } from 'api/types'
 import { get } from 'store/api'
 
-import { secureMessagingKeys } from './queryKeys'
+import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 
 /**
  * Fetch user message recipients

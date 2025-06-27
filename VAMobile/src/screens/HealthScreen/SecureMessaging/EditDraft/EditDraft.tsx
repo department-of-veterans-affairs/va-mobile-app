@@ -76,8 +76,8 @@ import {
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { useComposeCancelConfirmation, useGoToDrafts } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 

@@ -37,10 +37,10 @@ import {
   stringToTitleCase,
 } from 'utils/formattingUtils'
 
-import Unread from '../components/VAIcon/svgs/Unread.svg'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
-import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from 'utils/hooks'
 
 const MAX_SUBJECT_LENGTH = 50
 

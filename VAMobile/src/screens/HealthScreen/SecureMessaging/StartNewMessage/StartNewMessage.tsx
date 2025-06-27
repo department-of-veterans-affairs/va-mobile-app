@@ -70,7 +70,7 @@ import {
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 

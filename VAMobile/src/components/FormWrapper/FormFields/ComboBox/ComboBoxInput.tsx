@@ -14,8 +14,8 @@ import {
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
-} from '../formFieldUtils'
-import ComboBox, { ComboBoxProps } from './ComboBox'
+} from 'components/FormWrapper/FormFields/formFieldUtils'
+import ComboBox, { ComboBoxProps } from 'components/FormWrapper/FormFields/ComboBox/ComboBox'
 
 export type ComboBoxItem = {
   /** label is the text displayed to the user for the item */

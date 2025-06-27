@@ -15,7 +15,7 @@ import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-import StartNewMessage from './StartNewMessage'
+import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {

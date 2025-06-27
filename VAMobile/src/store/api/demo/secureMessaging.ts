@@ -7,8 +7,8 @@ import {
   SecureMessagingThreadGetData,
 } from 'api/types'
 
-import { Params } from '../api'
-import { DemoStore } from './store'
+import { Params } from 'store/api'
+import { DemoStore } from 'store/api/demo/store'
 
 type MessagePageNumber = '1'
 

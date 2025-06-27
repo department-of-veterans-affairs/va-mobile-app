@@ -9,7 +9,7 @@ import { Box, BoxProps, ComboBoxItem, ComboBoxOptions, TextView, VAScrollView } 
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-import { getInputWrapperProps } from '../formFieldUtils'
+import { getInputWrapperProps } from 'components/FormWrapper/FormFields/formFieldUtils'
 
 export type ComboBoxProps = {
   selectedValue?: ComboBoxItem
