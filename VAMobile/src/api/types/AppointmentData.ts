@@ -224,6 +224,7 @@ export type AppointmentsMetaPagination = {
 export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
   pagination?: AppointmentsMetaPagination
+  travelPayEligibleCount?: number
   upcomingAppointmentsCount: number
   upcomingDaysLimit: number
 }

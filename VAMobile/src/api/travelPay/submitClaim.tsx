@@ -46,6 +46,7 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
 
       // Append the claim data to the appointments in the query data
       const newAppointmentsQueryData = validAppointmentQueries.map(([queryKey, queryData]) => {
+        const eligibleCount = queryData.meta?.travelPayEligibleCount ? queryData.meta?.travelPayEligibleCount : 1
         const newQueryData = {
           data: queryData?.data.map((appointment) => {
             if (appointment.id === appointmentId) {
@@ -53,7 +54,7 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
             }
             return { ...appointment }
           }),
-          meta: { ...queryData.meta },
+          meta: { ...queryData.meta, travelPayEligibleCount: eligibleCount - 1 },
         }
         return [queryKey, newQueryData] as [QueryKey, AppointmentsGetData]
       })
