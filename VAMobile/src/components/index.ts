@@ -111,4 +111,3 @@ export * from './MilitaryBranchEmblem'
 export { default as ObfuscatedTextView } from './ObfuscatedTextView'
 export * from './ObfuscatedTextView'
 export { default as TextAreaSpacer } from './TextAreaSpacer'
-console.log('testing ci')
