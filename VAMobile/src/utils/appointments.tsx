@@ -502,11 +502,12 @@ export const getTextLinesForAppointmentListItem = (
       getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
     ]
   } else {
+    const travelPayTag = includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween)
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween),
-      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      travelPayTag,
+      !travelPayTag && getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
       getModality(appointmentType, phoneOnly, location, theme, t),
