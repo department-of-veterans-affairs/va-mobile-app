@@ -110,7 +110,10 @@ context('saveAddress', () => {
       })
 
       expect(api.put).toBeCalledWith('/v0/user/addresses', addressData)
-      expect(mockLogNonFatalErrorToFirebase).toHaveBeenCalled()
+      expect(mockLogNonFatalErrorToFirebase).toHaveBeenCalledWith({
+        networkError: true,
+        status: 400,
+      })
     })
   })
 })
