@@ -19,6 +19,7 @@ import {
   toggleRemoteConfigFlag,
 } from './utils'
 
+console.log('this is to test ci')
 //Add any new letter type to the letter_types array here.
 export const LettersConstants = {
   MAILING_ADDRESS: '3101 N Fort Valley Rd',
