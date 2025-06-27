@@ -88,6 +88,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
           navigateTo('SubmitSuccessScreen', {
             appointmentDateTime: attributes.startDateLocal,
             facilityName: attributes.location.name,
+            status: data?.data.attributes.claimStatus,
           })
         },
         onError: () => {
@@ -143,11 +144,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.where')}
             </TextView>
             {address.map((line: TextLine) => (
-              <>
-                <TextView key={line.text} variant="MobileBody">
-                  {line.text}
-                </TextView>
-              </>
+              <TextView key={line.text} variant="MobileBody">
+                {line.text}
+              </TextView>
             ))}
           </Box>
         </TextArea>
