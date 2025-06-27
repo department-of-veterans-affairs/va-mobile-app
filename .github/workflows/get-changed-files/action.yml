@@ -11,4 +11,4 @@ runs:
     - name: Get paths of changed files
       id: get-changed-files
       shell: bash
-      run: cd VAMobile && echo changed_files=$(git diff --relative --name-only origin/develop... -- "./**/*.ts" "./**/*.tsx" "./**/*.js" "./**/*.jsx") >> $GITHUB_OUTPUT
+      run: cd VAMobile && echo changed_files=$(git diff --relative --name-only origin/develop... -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx") >> $GITHUB_OUTPUT
