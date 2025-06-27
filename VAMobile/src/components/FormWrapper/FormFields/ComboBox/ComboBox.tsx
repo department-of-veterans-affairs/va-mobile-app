@@ -4,7 +4,6 @@ import { Keyboard, Pressable, PressableProps, TextInput, TextInputProps, ViewSty
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import _ from 'underscore'
 
 import { Box, BoxProps, ComboBoxItem, ComboBoxOptions, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -32,6 +31,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
 
   const inputRef = useRef<TextInput>(null)
 
+  // Adds bottom padding to scroll container when keyboard is visible
   useEffect(() => {
     const showListener = Keyboard.addListener('keyboardWillShow', () => {
       setIsKeyboardVisible(true)
@@ -115,11 +115,15 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
 
   useEffect(() => {
     const updatedFilteredOpts: ComboBoxOptions = {}
-    _.each(comboBoxOptions, (options, groupName) => {
-      updatedFilteredOpts[groupName] = _.filter(options, (opt: ComboBoxItem) =>
-        String(opt.label).toLowerCase().includes(filterStr.toLowerCase()),
+
+    Object.entries(comboBoxOptions).forEach((keys) => {
+      const groupName = keys[0]
+      const options = keys[1]
+      updatedFilteredOpts[groupName] = (options as ComboBoxItem[]).filter((opt) =>
+        String(opt.label).toLowerCase().includes(filterStr.toLowerCase())
       )
     })
+
     setFilteredOptions(updatedFilteredOpts)
   }, [comboBoxOptions, filterStr])
 
@@ -145,7 +149,9 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   }
 
   const renderItems = () => {
-    return _.map(filteredOptions, (items, groupName) => {
+    return Object.entries(filteredOptions).map((keys) => {
+      const groupName = keys[0]
+      const items = keys[1] as ComboBoxItem[]
       if (!items.length) {
         return <></>
       }
@@ -154,7 +160,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
           <Box {...listGroupHeaderStyle}>
             <TextView variant={'MobileBodyBold'}>{groupName}</TextView>
           </Box>
-          {_.map(items, ({ value, label }) => {
+          {items.map(({ value, label }) => {
             const handleSelection = () => {
               onSelectionChange({ value, label })
               onClose()
