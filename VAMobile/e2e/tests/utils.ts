@@ -339,7 +339,7 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
   const mockDirectory = './src/store/api/demo/mocks/'
 
   try {
-    const data = await fs.readFileSync(mockDirectory + mockFileName, 'utf8')
+    const data = await fs.promises.readFile(mockDirectory + mockFileName, 'utf8')
     const jsonParsed = JSON.parse(data)
     let mockDataVariable
     let mockDataKeyValue
@@ -359,7 +359,7 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
         }
       }
     }
-    await fs.writeFileSync(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2))
+    await fs.promises.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2))
   } catch (ex) {
     console.log(ex)
     return
