@@ -1,4 +1,5 @@
 import React from 'react'
+import { Alert } from 'react-native'
 
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
@@ -8,6 +9,7 @@ import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 
 import SubmitSuccessScreen from './SubmitSuccessScreen'
 
+jest.spyOn(Alert, 'alert')
 const mockNavigateToTravelPayWebsiteSpy = jest.fn()
 jest.mock('utils/travelPay', () => {
   const original = jest.requireActual('utils/travelPay')
@@ -119,5 +121,12 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByText(t('travelPay.success.title'))).toBeTruthy()
       expect(screen.getByTestId('goToAppointmentLinkID')).toBeTruthy()
     })
+  })
+
+  it('should show alert when direct deposit link is clicked', () => {
+    initializeTestInstance()
+    const link = screen.getByTestId('setUpDirectDepositLinkID')
+    fireEvent.press(link)
+    expect(Alert.alert).toHaveBeenCalled()
   })
 })

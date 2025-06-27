@@ -2043,7 +2043,8 @@
           "perPage": 10,
           "totalPages": 4,
           "totalEntries": 36
-        }
+        },
+        "travelPayEligibleCount": 5
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
