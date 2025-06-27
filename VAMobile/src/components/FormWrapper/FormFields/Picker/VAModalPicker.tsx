@@ -17,7 +17,7 @@ import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-console.log('test for ci')
+
 import {
   generateA11yValue,
   generateInputA11yLabel,

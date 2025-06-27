@@ -161,7 +161,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "prettier --write",
-    "./src/**/*.{js,jsx,ts,tsx}": "eslint --fix -c ./.eslintrc.changed.js"
+    "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed"
   },
   "engines": {
     "node": ">=18.0.0"
