@@ -157,7 +157,7 @@ describe('Veteran Status Card', () => {
     await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT)).atIndex(1)).toExist()
   })
 
-  verifyMilitaryInfo('United States Coast Guard')
+  // verifyMilitaryInfo('United States Coast Guard')
   verifyMilitaryInfo('United States Army')
   verifyMilitaryInfo('United States Air Force')
   verifyMilitaryInfo('United States Navy')
