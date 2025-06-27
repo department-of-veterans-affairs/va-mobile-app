@@ -338,12 +338,8 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
   const mockDirectory = './src/store/api/demo/mocks/'
 
-  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-
+  try {
+    const data = await fs.readFileSync(mockDirectory + mockFileName, 'utf8')
     const jsonParsed = JSON.parse(data)
     let mockDataVariable
     let mockDataKeyValue
@@ -363,13 +359,11 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
         }
       }
     }
-
-    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-      if (err) {
-        return console.log(err)
-      }
-    })
-  })
+    await fs.writeFileSync(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2))
+  } catch (ex) {
+    console.log(ex)
+    return
+  }
 
   await device.uninstallApp()
   await setTimeout(1000)
