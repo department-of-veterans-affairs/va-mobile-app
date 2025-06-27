@@ -5,12 +5,11 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
-
-import PastAppointments from './PastAppointments'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {

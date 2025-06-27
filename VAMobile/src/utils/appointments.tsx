@@ -20,15 +20,14 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { LabelTagTypeConstants } from 'components/LabelTag'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
-
-import { LabelTagTypeConstants } from '../components/LabelTag'
-import { getTestIDFromTextLines } from './accessibility'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   getFormattedDate,
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
-} from './formattingUtils'
+} from 'utils/formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
