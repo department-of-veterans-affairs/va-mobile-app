@@ -4,6 +4,8 @@ import { Alert } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Box, FullScreenSubtask, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -144,9 +146,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     <FullScreenSubtask
       title={t('giveFeedback.send')}
       leftButtonText={t('cancel')}
-      onLeftButtonPress={navigation.goBack}
-      primaryContentButtonText={t('inAppFeedback.submitFeedback')}
-      onPrimaryContentButtonPress={onSubmit}>
+      onLeftButtonPress={navigation.goBack}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box>
           <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
@@ -179,6 +179,14 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
             testID="AppFeedbackTaskID"
             onChange={setTaskOverride}
           />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <Button
+              label={t('inAppFeedback.submitFeedback')}
+              onPress={() => {
+                onSubmit()
+              }}
+            />
+          </Box>
         </Box>
       </Box>
     </FullScreenSubtask>
