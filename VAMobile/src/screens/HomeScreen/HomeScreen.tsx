@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
@@ -46,6 +46,19 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import PaymentBreakdownModal from 'screens/HomeScreen/PaymentBreakdownModal/PaymentBreakdownModal'
+import ContactInformationScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen'
+import MilitaryInformationScreen from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen'
+import PersonalInformationScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from 'screens/HomeScreen/ProfileScreen/ProfileScreen'
+import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen'
+import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
+import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import NotificationsSettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
@@ -58,20 +71,6 @@ import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
-import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import { HomeStackParamList } from './HomeStackScreens'
-import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
-import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
-import ProfileScreen from './ProfileScreen/ProfileScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
-import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
-import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
-import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
-
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
 const MemoizedLoadingComponent = React.memo(LoadingComponent)
@@ -82,6 +81,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+  const ref = useRef(null)
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -597,15 +597,17 @@ export function HomeScreen({}: HomeScreenProps) {
                         testID={'showCompensationTestID'}
                       />
                       <Box mt={theme.dimensions.condensedMarginBetween} />
-                      <Button
-                        onPress={() => {
-                          setPaymentBreakdownVisible(true)
-                          logAnalyticsEvent(Events.vama_payment_bd_details())
-                        }}
-                        label={t('monthlyCompensationPayment.seeDetails')}
-                        buttonType={ButtonVariants.Secondary}
-                        testID={'seePaymentBreakdownButtonTestID'}
-                      />
+                      <View ref={ref} accessibilityRole="button">
+                        <Button
+                          onPress={() => {
+                            setPaymentBreakdownVisible(true)
+                            logAnalyticsEvent(Events.vama_payment_bd_details())
+                          }}
+                          label={t('monthlyCompensationPayment.seeDetails')}
+                          buttonType={ButtonVariants.Secondary}
+                          testID={'seePaymentBreakdownButtonTestID'}
+                        />
+                      </View>
                     </Box>
                   </Box>
                 )}
@@ -655,7 +657,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </Box>
         </InView>
       </Box>
-      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
+      <PaymentBreakdownModal ref={ref} visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }

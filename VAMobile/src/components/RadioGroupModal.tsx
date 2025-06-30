@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -7,6 +7,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 
 import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type RadioPickerGroup = {
@@ -59,6 +60,7 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
+  const ref = useRef(null)
 
   const showModal = () => {
     setModalVisible(true)
@@ -68,11 +70,13 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
   const onCancelPressed = () => {
     setModalVisible(false)
     onCancel && onCancel()
+    setAccessibilityFocus(ref)
   }
 
   const onApplyPressed = () => {
     setModalVisible(false)
     onApply()
+    setAccessibilityFocus(ref)
   }
 
   const getGroups = () =>
@@ -166,15 +170,13 @@ const RadioGroupModal: FC<RadioGroupModalProps> = ({
           </Box>
         </Box>
       </Modal>
-
-      <Button
-        onPress={showModal}
-        label={buttonText}
-        buttonType={ButtonVariants.Secondary}
-        a11yLabel={buttonA11yLabel}
-        a11yHint={buttonA11yHint}
-        testID={buttonTestID}
-      />
+      <View
+        ref={ref}
+        accessibilityRole="button"
+        accessibilityLabel={buttonA11yLabel}
+        accessibilityHint={buttonA11yHint}>
+        <Button onPress={showModal} label={buttonText} buttonType={ButtonVariants.Secondary} testID={buttonTestID} />
+      </View>
     </View>
   )
 }

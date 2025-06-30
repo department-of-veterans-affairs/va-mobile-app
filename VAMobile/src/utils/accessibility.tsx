@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react'
+import { Component, ForwardedRef, MutableRefObject } from 'react'
 import {
   AccessibilityInfo,
   AccessibilityValue,
@@ -84,8 +84,11 @@ export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
 /**
  * Sets focus point for screen reader.
  */
-export const setAccessibilityFocus = (ref: MutableRefObject<null>) => {
-  const focusPoint = findNodeHandle(ref.current)
+export const setAccessibilityFocus = (ref: MutableRefObject<null> | ForwardedRef<unknown>) => {
+  let focusPoint
+  if (ref != null && 'current' in ref) {
+    focusPoint = findNodeHandle(ref.current as Component)
+  }
   if (focusPoint) {
     if (isAndroid()) {
       // @ts-ignore: sendAccessibilityEvent is missing from @types/react-native
