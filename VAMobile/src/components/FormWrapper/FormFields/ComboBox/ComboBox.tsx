@@ -6,10 +6,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, ComboBoxItem, ComboBoxOptions, TextView, VAScrollView } from 'components'
+import { getInputWrapperProps } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-
-import { getInputWrapperProps } from 'components/FormWrapper/FormFields/formFieldUtils'
 
 export type ComboBoxProps = {
   selectedValue?: ComboBoxItem
@@ -60,13 +59,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    p: 16,
-  }
-
-  const closeIconStyle = {
-    fill: 'base',
-    width: 30,
-    height: 30,
+    p: theme.dimensions.lineItemSpacing,
   }
 
   const closeIconProps: PressableProps = {
@@ -77,22 +70,22 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
 
   const listGroupHeaderStyle: BoxProps = {
     backgroundColor: 'navButton',
-    p: 12,
+    p: theme.dimensions.headerButtonSpacing,
     borderColor: 'primary',
   }
 
   const listItemStyle: BoxProps = {
-    pl: 32,
-    py: 8,
+    pl: theme.dimensions.listItemComboBoxMarginLeft,
+    py: theme.dimensions.smallMarginBetween,
     borderColor: 'primary',
-    borderTopWidth: 1,
+    borderTopWidth: theme.dimensions.borderWidth,
   }
 
   const inputContainerStyle: BoxProps = {
-    px: 12,
-    pb: 16,
+    px: theme.dimensions.inputPadding,
+    pb: theme.dimensions.lineItemSpacing,
     borderColor: 'primary',
-    borderBottomWidth: 1,
+    borderBottomWidth: theme.dimensions.borderWidth,
   }
 
   const wrapperProps = getInputWrapperProps(theme, undefined, isInputFocused)
@@ -120,7 +113,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
       const groupName = keys[0]
       const options = keys[1]
       updatedFilteredOpts[groupName] = (options as ComboBoxItem[]).filter((opt) =>
-        String(opt.label).toLowerCase().includes(filterStr.toLowerCase())
+        String(opt.label).toLowerCase().includes(filterStr.toLowerCase()),
       )
     })
 
@@ -181,7 +174,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
       <Box {...headerStyle}>
         <TextView variant={'MobileBodyBold'}>{t('secureMessaging.formMessage.careTeam')}</TextView>
         <Pressable {...closeIconProps}>
-          <Icon name={'Close'} {...closeIconStyle} />
+          <Icon name={'Close'} width={30} height={30} fill={'base'} />
         </Pressable>
       </Box>
       <Box {...inputContainerStyle}>

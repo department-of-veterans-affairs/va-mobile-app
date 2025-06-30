@@ -1,4 +1,4 @@
-import { ColorSchemeTypes } from './themes/standardTheme'
+import { ColorSchemeTypes } from 'styles/themes/standardTheme'
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
@@ -211,6 +211,7 @@ export type VATheme = {
     standardMarginBetween: number
     condensedMarginBetween: number
     tinyMarginBetween: number
+    smallMarginBetween: number
     cardPadding: number
     buttonPadding: number
     alertBorderWidth: number
@@ -232,6 +233,9 @@ export type VATheme = {
     fullScreenNavigationBarOffset: number
     fullScreenContentButtonHeight: number
     floatingButtonOffset: number
+    listItemComboBoxMarginLeft: number
+    lineItemSpacing: number
+    inputPadding: number
   }
   fontFace: {
     regular: string
