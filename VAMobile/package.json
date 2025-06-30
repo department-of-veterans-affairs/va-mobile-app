@@ -125,7 +125,7 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "concurrently": "^8.2.2",
-    "detox": "^20.28.0",
+    "detox": "^20.39.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^27.9.0",
