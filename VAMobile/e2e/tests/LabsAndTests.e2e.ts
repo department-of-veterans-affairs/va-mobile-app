@@ -3,12 +3,14 @@ import { DateTime } from 'luxon'
 
 import { getDateMonthsAgo, getFormattedDate } from '../../src/utils/dateUtils'
 import {
+  CommonE2eIdConstants,
   loginToDemoMode,
   openHealth,
   openLabsAndTestRecords,
   openMedicalRecords,
   scrollToElement,
   testForOneOrManyOccurancesOf,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 const todaysDate = DateTime.local()
@@ -47,6 +49,7 @@ const TEST_IDS = {
 const HEADER_TEXT = 'Labs and tests'
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TEST_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
