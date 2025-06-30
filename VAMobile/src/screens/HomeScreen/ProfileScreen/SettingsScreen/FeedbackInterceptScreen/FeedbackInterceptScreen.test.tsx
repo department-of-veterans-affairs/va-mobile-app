@@ -7,9 +7,8 @@ import { waitFor } from '@testing-library/react-native'
 import { RootNavStackParamList } from 'App'
 import { t } from 'i18next'
 
+import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen/FeedbackInterceptScreen'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import FeedbackInterceptScreen from './FeedbackInterceptScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
