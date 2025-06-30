@@ -132,7 +132,7 @@ export function HealthScreen({}: HealthScreenProps) {
           showLoading={loadingAppointments}
           subText={
             upcomingAppointmentsCount && upcomingDaysLimit
-              ? t('appointments.activityButton.subText', {
+              ? t('upcomingAppointments.activityButton.subText', {
                   count: upcomingAppointmentsCount,
                   dayCount: upcomingDaysLimit,
                 })

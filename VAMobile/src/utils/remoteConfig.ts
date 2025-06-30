@@ -28,6 +28,7 @@ export type FeatureToggleType =
   | 'inAppReview'
   | 'inAppUpdates'
   | 'labsAndTests'
+  | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
@@ -56,6 +57,7 @@ type FeatureToggleValues = {
   inAppReview: boolean
   inAppUpdates: boolean
   labsAndTests: boolean
+  logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
@@ -85,6 +87,7 @@ export const defaults: FeatureToggleValues = {
   inAppReview: true,
   inAppUpdates: true,
   labsAndTests: false,
+  logDowntimeAnalytics: true,
   nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
