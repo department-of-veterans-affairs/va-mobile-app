@@ -624,6 +624,17 @@ export const Events = {
       },
     }
   },
+  vama_feedback: (satisfaction: string, meetsMyNeeds: string, easyToUse: string, task: string): Event => {
+    return {
+      name: 'vama_feedback',
+      params: {
+        satisfaction,
+        meetsMyNeeds,
+        easyToUse,
+        task,
+      },
+    }
+  },
   vama_hs_appts_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_appts_load_time',
