@@ -3,8 +3,8 @@ import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
-import { logNonFatalErrorToFirebase } from './analytics'
-import { overrideRemote, setOverrideRemote } from './remoteConfig'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { overrideRemote, setOverrideRemote } from 'utils/remoteConfig'
 
 const WAYGATE_OVERRIDES_KEY = '@store_waygate_overrides'
 

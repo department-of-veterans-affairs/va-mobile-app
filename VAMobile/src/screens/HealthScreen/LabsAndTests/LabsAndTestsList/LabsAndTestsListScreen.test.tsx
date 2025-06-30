@@ -3,10 +3,9 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { LabsAndTests } from 'api/types'
+import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import LabsAndTestsListScreen from './LabsAndTestsListScreen'
 
 context('LabsAndTestsListScreen', () => {
   afterEach(() => {

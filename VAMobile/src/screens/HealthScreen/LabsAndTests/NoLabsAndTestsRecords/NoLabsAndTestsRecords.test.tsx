@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import NoLabsAndTestsRecords from 'screens/HealthScreen/LabsAndTests/NoLabsAndTestsRecords/NoLabsAndTestsRecords'
 import { context, render } from 'testUtils'
-
-import NoLabsAndTestsRecords from './NoLabsAndTestsRecords'
 
 context('NoLabsAndTestsRecords', () => {
   const initializeTestInstance = () => {

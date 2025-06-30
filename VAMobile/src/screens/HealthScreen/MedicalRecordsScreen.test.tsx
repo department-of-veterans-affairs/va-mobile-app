@@ -4,11 +4,10 @@ import { Alert } from 'react-native'
 import { screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import MedicalRecordsScreen from 'screens/HealthScreen/MedicalRecordsScreen'
 import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
 import getEnv from 'utils/env'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import MedicalRecordsScreen from './MedicalRecordsScreen'
 
 const mockNavigationSpy = jest.fn()
 const mockExternalLinkSpy = jest.fn()

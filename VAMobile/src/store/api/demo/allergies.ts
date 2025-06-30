@@ -1,7 +1,6 @@
 import { AllergyListPayload } from 'api/types/AllergyData'
-
-import { Params } from '..'
-import { DemoStore } from './store'
+import { DemoStore } from 'store/api/demo/store'
+import { Params } from 'store/api/index'
 
 type AllergyPageNumber = '1'
 

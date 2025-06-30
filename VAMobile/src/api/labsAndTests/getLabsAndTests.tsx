@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { labsAndTestsKeys } from 'api/labsAndTests/queryKeys'
 import { LabsAndTestsListPayload } from 'api/types'
 import { get } from 'store/api'
-
-import { labsAndTestsKeys } from './queryKeys'
 
 export type LabsAndTestQuery = {
   dateRange: {

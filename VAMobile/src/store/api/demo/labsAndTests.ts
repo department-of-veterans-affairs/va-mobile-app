@@ -1,8 +1,7 @@
 import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
+import { DemoStore } from 'store/api/demo/store'
+import { Params } from 'store/api/index'
 import { getDateMonthsAgo } from 'utils/dateUtils'
-
-import { Params } from '..'
-import { DemoStore } from './store'
 
 function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoStore): LabsAndTestsListPayload {
   const threeMonthsEarlier = getDateMonthsAgo(2, 'start', 'start')

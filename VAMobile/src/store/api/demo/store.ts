@@ -7,20 +7,18 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SubmitSMOCTravelPayClaimParameters,
 } from 'api/types'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import { Params } from '../api'
-import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from './allergies'
-import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
-import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
-import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
-import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
-import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from './labsAndTests'
-import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
-import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
-import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
-import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
+import { Params } from 'store/api/api'
+import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from 'store/api/demo/allergies'
+import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from 'store/api/demo/appointments'
+import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from 'store/api/demo/claims'
+import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from 'store/api/demo/decisionLetters'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from 'store/api/demo/demographics'
+import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
+import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
+import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
+import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
+import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
 import {
   ProfileDemoReturnTypes,
   ProfileDemoStore,
@@ -32,10 +30,15 @@ import {
   updateEmail,
   updateUserPhone,
   validateAddress,
-} from './profile'
-import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from './travelPay'
-import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
+} from 'store/api/demo/profile'
+import {
+  SecureMessagingDemoApiReturnTypes,
+  SecureMessagingDemoStore,
+  getFolderMessages,
+} from 'store/api/demo/secureMessaging'
+import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
+import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Intersection type denoting the demo data store

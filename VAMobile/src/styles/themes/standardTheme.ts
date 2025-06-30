@@ -3,9 +3,8 @@ import { Appearance } from 'react-native'
 import { colors, font } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
+import { darkTheme, lightTheme, primaryTextColor } from 'styles/themes/colorSchemes'
 import { isIOS } from 'utils/platform'
-
-import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined

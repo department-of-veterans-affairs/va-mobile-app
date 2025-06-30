@@ -1,9 +1,8 @@
 import React from 'react'
 
 import { LabsAndTests } from 'api/types'
+import LabsAndTestsDetailsScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsDetails/LabsAndTestsDetailsScreen'
 import { context, mockNavProps, render, screen, waitFor } from 'testUtils'
-
-import LabsAndTestsDetailsScreen from './LabsAndTestsDetailsScreen'
 
 context('LabsAndTestsDetailsScreen', () => {
   const defaultLabsAndTests = {
