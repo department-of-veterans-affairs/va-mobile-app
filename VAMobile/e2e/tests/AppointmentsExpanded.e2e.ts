@@ -10,6 +10,9 @@ export const AppointmentsExpandede2eConstants = {
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
   TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
   WHAT_TO_BRING: 'Find out what to bring to your appointment',
+  CLAIM_EXAM_BULLET_1: 'You don’t need to bring anything to your exam',
+  CLAIM_EXAM_BULLET_2:
+    'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment',
 }
 
 const checkTravelClaimAvailability = async (
@@ -83,24 +86,12 @@ const checkMedicationWording = async ({
         await expect(element(by.text('Appointments help'))).toExist()
         await element(by.text('Close')).tap()
       } else if (appointmentType === 'Claim') {
-        await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
-        await expect(
-          element(
-            by.text(
-              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
-            ),
-          ),
-        ).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_1))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_2))).toExist()
         await expect(element(by.text('Learn more about claim exam appointments'))).toExist()
       } else {
-        await expect(element(by.text('You don’t need to bring anything to your exam.'))).not.toExist()
-        await expect(
-          element(
-            by.text(
-              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
-            ),
-          ),
-        ).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_1))).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_2))).not.toExist()
         await expect(element(by.text('Learn more about claim exam appointments'))).not.toExist()
         await expect(element(by.text('Get your device ready to join.'))).not.toExist()
         await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID))).not.toExist()
