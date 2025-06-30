@@ -22,12 +22,11 @@ import {
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 

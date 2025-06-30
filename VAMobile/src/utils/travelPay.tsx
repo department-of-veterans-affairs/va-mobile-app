@@ -4,10 +4,9 @@ import { TFunction } from 'i18next'
 
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
-
-import { logAnalyticsEvent } from './analytics'
-import getEnv from './env'
-import { RouteNavigationFunction } from './hooks'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
+import { RouteNavigationFunction } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 

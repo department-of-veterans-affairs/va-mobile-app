@@ -9,12 +9,11 @@ import { DateTime } from 'luxon'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { SetUpDirectDepositWebLink } from './components'
 
 const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 

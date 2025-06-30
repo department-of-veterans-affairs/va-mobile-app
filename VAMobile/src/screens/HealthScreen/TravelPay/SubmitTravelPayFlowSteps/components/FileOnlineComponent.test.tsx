@@ -3,10 +3,9 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { FileOnlineComponent } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { context, mockNavProps, render } from 'testUtils'
 import getEnv from 'utils/env'
-
-import FileOnlineComponent from './FileOnlineComponent'
 
 const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 

@@ -7,12 +7,11 @@ import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
+import ReviewClaimScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/ReviewClaimScreen'
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { appendClaimDataToAppointment } from 'utils/travelPay'
-
-import ReviewClaimScreen from './ReviewClaimScreen'
 
 const residentialAddress: AddressData = {
   id: 0,

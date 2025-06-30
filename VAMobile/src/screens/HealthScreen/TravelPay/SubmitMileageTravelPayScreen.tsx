@@ -6,9 +6,7 @@ import { AppointmentData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
-import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-
-import { HealthStackParamList } from '../HealthStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import {
   AddressScreen,
   BeneficiaryTravelAgreement,
@@ -20,7 +18,8 @@ import {
   SubmitSuccessScreen,
   TravelClaimHelpScreen,
   VehicleScreen,
-} from './SubmitTravelPayFlowSteps'
+} from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   InterstitialScreen: {
