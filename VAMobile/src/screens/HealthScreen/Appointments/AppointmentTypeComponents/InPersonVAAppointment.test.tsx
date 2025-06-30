@@ -9,11 +9,14 @@ import {
   AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
 } from 'api/types'
+import InPersonVAAppointment from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/InPersonVAAppointment'
 import { context, render } from 'testUtils'
+import { when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { AppointmentDetailsSubType, AppointmentDetailsSubTypeConstants } from 'utils/appointments'
+import { featureEnabled } from 'utils/remoteConfig'
 
-import InPersonVAAppointment from './InPersonVAAppointment'
+jest.mock('utils/remoteConfig')
 
 context('InPersonVAAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
@@ -61,8 +64,10 @@ context('InPersonVAAppointment', () => {
     isCovidVaccine: false,
     isPending: false,
     vetextId: '600;3210206',
+    showScheduleLink: true,
   }
   const initializeTestInstance = (attributes: AppointmentAttributes, subType: AppointmentDetailsSubType): void => {
+    when(featureEnabled).calledWith('rescheduleLink').mockReturnValue(true)
     render(
       <InPersonVAAppointment
         appointmentID={'1'}

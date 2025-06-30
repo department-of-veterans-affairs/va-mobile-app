@@ -171,6 +171,7 @@
             "bestTimeToCall": ["Evening"],
             "friendlyLocationName": null,
             "serviceCategoryName": null,
+            "showScheduleLink": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -2094,7 +2095,8 @@
             "vetextId": null,
             "reason": "Test",
             "isCovidVaccine": false,
-            "typeOfCare": "Podiatry"
+            "typeOfCare": "Podiatry",
+            "showScheduleLink": true
           }
         },
         {
@@ -2199,7 +2201,8 @@
             "patientEmail": "Judy.morrison@id.me",
             "bestTimeToCall": ["Evening"],
             "friendlyLocationName": null,
-            "serviceCategoryName": null
+            "serviceCategoryName": null,
+            "showScheduleLink": true
           }
         },
         {

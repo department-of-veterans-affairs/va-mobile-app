@@ -58,6 +58,9 @@ import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Acc
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
+import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
+import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
 import NotificationsSettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -710,6 +713,21 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="GiveFeedback"
+        component={GiveFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="SendUsFeedback"
+        component={SendUsFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="FeedbackSent"
+        component={FeedbackSentScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="AccountSecurity"
         component={AccountSecurity}
