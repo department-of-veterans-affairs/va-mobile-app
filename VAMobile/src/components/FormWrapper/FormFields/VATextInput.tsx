@@ -100,11 +100,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const onBlur = (): void => {
     setIsFocused(false)
     setFocusUpdated(true)
-    // if (ref && ref.current) {
-    //   ref.current.clear()
-    // }
-    // // @ts-ignore
-    // // ref.current.blur()
   }
 
   const onFocus = () => {
