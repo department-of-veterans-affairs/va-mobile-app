@@ -235,7 +235,10 @@ context('PastAppointments', () => {
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
     })
 
-    it('should show confirmed tag when travel pay metadata indicates error', () => {
+    it.each([
+      { status: 400, message: 'Bad request' },
+      { status: 500, message: 'Internal server error' },
+    ])('should show confirmed tag when travel pay metadata status is $status', ({ status, message }) => {
       const threeDaysAgo = new Date()
       threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
       const isoString = threeDaysAgo.toISOString()
@@ -251,8 +254,8 @@ context('PastAppointments', () => {
             startDateUtc: isoString,
             travelPayClaim: {
               metadata: {
-                status: 500,
-                message: 'Internal server error',
+                status,
+                message,
                 success: false,
               },
               claim: undefined,
