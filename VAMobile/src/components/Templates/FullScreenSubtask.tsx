@@ -10,11 +10,10 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
+import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
-import SubtaskTitle from './SubtaskTitle'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -66,6 +65,8 @@ export type FullScreenSubtaskProps = {
   showCrisisLineButton?: boolean
   /** Optional testID */
   testID?: string
+  /** isMultiStepSubtask */
+  isMultiStepSubtask?: boolean
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -91,6 +92,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineButton = false,
   testID,
+  isMultiStepSubtask,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -181,8 +183,8 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   }
   const titleMarginTop = showCrisisLineButton ? 0 : theme.dimensions.buttonPadding
 
-  return (
-    <Modal presentationStyle="fullScreen">
+  const fullScreenSubtaskContent = () => {
+    return (
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
         <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
@@ -225,8 +227,14 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
           )}
         </WaygateWrapper>
       </View>
-    </Modal>
-  )
+    )
+  }
+
+  if (isMultiStepSubtask) {
+    return fullScreenSubtaskContent()
+  }
+
+  return <Modal presentationStyle="fullScreen">{fullScreenSubtaskContent()}</Modal>
 }
 
 export default FullScreenSubtask

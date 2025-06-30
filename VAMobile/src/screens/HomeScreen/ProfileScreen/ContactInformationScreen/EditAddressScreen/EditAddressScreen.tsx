@@ -27,12 +27,11 @@ import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { States } from 'constants/states'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { GenerateAddressMessage } from 'translations/en/functions'
 import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
-
-import { profileAddressOptions } from '../AddressSummary'
-import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5

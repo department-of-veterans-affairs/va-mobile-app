@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useContext, useState } from 'react'
-import { ScreenContainer } from 'react-native-screens'
 
 import { ParamListBase, useFocusEffect } from '@react-navigation/native'
 import { TransitionPresets, createStackNavigator } from '@react-navigation/stack'
@@ -46,7 +45,7 @@ function MultiStepSubtask<T extends ParamListBase>({ ...props }: MultiStepSubtas
   const [subtaskProps, setSubtaskProps] = useState<FullScreenSubtaskProps>({})
 
   return (
-    <FullScreenSubtask {...subtaskProps}>
+    <FullScreenSubtask {...subtaskProps} isMultiStepSubtask>
       <SubtaskContext.Provider value={{ setSubtaskProps }}>
         <stackNavigator.Navigator
           screenOptions={subtaskScreenOptions}

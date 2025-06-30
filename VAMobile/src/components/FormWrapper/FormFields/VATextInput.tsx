@@ -2,10 +2,7 @@ import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 
 import { useTranslation } from 'react-i18next'
 import { KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
 
-import { useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
-
-import { Box, BoxProps } from '../../index'
+import { Box, BoxProps } from 'components'
 import {
   getInputBorderColor,
   getInputBorderWidth,
@@ -13,7 +10,9 @@ import {
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
-} from './formFieldUtils'
+} from 'components/FormWrapper/FormFields/formFieldUtils'
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 

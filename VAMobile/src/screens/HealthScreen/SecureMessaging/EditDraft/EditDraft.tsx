@@ -50,6 +50,11 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import {
+  useComposeCancelConfirmation,
+  useGoToDrafts,
+} from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -69,9 +74,6 @@ import {
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
