@@ -6,6 +6,7 @@ import { AppointmentAttributes } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
@@ -21,8 +22,6 @@ import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 

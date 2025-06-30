@@ -10,13 +10,12 @@ import {
   AppointmentType,
   AppointmentTypeConstants,
 } from 'api/types'
+import { AppointmentTravelClaimDetails } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import AppointmentTravelClaimDetails from './AppointmentTravelClaimDetails'
 
 jest.mock('utils/remoteConfig')
 
