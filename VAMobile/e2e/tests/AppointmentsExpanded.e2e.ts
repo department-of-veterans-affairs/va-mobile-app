@@ -9,6 +9,7 @@ export const AppointmentsExpandede2eConstants = {
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
   TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
+  WHAT_TO_BRING: 'Find out what to bring to your appointment',
 }
 
 const checkTravelClaimAvailability = async (
@@ -68,7 +69,7 @@ const checkMedicationWording = async ({
         appointmentType === 'GFE' ||
         appointmentType === 'Home'
       ) {
-        await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).toExist()
       }
 
       if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
@@ -106,11 +107,11 @@ const checkMedicationWording = async ({
       }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
-      await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+      await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).not.toExist()
     }
   } else {
     await expect(element(by.text('Prepare for your appointment'))).not.toExist()
-    await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+    await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).not.toExist()
   }
 }
 
