@@ -201,10 +201,67 @@ context('PastAppointments', () => {
       expect(screen.getByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeTruthy() // Travel pay tag should be present
     })
 
-    it('should show confirmed tag when travel pay is not eligible', () => {
+    it('should show confirmed tag when travel pay is not eligible due to old date', () => {
       const oldDate = '2023-12-01T00:00:00Z' // Date more than 30 days ago to make travel pay ineligible
 
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.BOOKED, false, oldDate) }, false, true)
+
+      expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
+      expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
+    })
+
+    it('should show confirmed tag when travel pay metadata is missing', () => {
+      const threeDaysAgo = new Date()
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
+      const isoString = threeDaysAgo.toISOString()
+
+      const appointmentWithNoMetadata = [
+        {
+          ...defaultAppointment,
+          attributes: {
+            ...defaultAppointmentAttributes,
+            healthcareService: undefined,
+            status: AppointmentStatusConstants.BOOKED,
+            isPending: false,
+            startDateUtc: isoString,
+            travelPayClaim: undefined, // No metadata
+          },
+        },
+      ]
+
+      initializeTestInstance({ data: appointmentWithNoMetadata }, false, true)
+
+      expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
+      expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
+    })
+
+    it('should show confirmed tag when travel pay metadata indicates error', () => {
+      const threeDaysAgo = new Date()
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
+      const isoString = threeDaysAgo.toISOString()
+
+      const appointmentWithErrorMetadata = [
+        {
+          ...defaultAppointment,
+          attributes: {
+            ...defaultAppointmentAttributes,
+            healthcareService: undefined,
+            status: AppointmentStatusConstants.BOOKED,
+            isPending: false,
+            startDateUtc: isoString,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Internal server error',
+                success: false,
+              },
+              claim: undefined,
+            },
+          },
+        },
+      ]
+
+      initializeTestInstance({ data: appointmentWithErrorMetadata }, false, true)
 
       expect(screen.getByText(t('appointments.confirmed'))).toBeTruthy() // Confirmed tag should be present
       expect(screen.queryByText(t('travelPay.daysToFile', { count: 27, days: 27 }))).toBeFalsy() // Travel pay tag should not be present
