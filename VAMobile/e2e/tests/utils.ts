@@ -669,7 +669,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
       await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Proof of Veteran status') {
+    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Veteran Status Card') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
