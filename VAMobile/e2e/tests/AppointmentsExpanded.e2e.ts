@@ -302,7 +302,6 @@ const checkUpcomingApptDetails = async (
         }
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1)).toExist()
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1)).toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.VA_APPT_CANCEL_ID))).toExist()
       }
     } else if (appointmentStatus === 'Pending') {
       if (appointmentType !== 'CC') {
