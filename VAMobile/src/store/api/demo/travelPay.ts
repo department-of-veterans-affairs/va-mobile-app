@@ -22,7 +22,16 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
 
 const createMockClaimResponse = (params: SubmitSMOCTravelPayClaimParameters): SubmitTravelPayClaimResponse => {
   const { appointmentDateTime, facilityStationNumber } = params
+
   const mockClaimResponse = { ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE }
+  if (facilityStationNumber === '983GC') {
+    mockClaimResponse.data.id = 'mock_id_partial_success'
+    mockClaimResponse.data.attributes.id = 'mock_id_partial_success'
+    mockClaimResponse.data.attributes.claimStatus = 'Saved'
+    mockClaimResponse.data.attributes.facilityId = facilityStationNumber
+    mockClaimResponse.data.attributes.facilityName = 'Fort Collins VA Clinic'
+    mockClaimResponse.data.attributes.totalCostRequested = undefined
+  }
   mockClaimResponse.data.attributes.appointmentDateTime = appointmentDateTime
   mockClaimResponse.data.attributes.facilityId = facilityStationNumber
   const mockDate = DateTime.fromISO(appointmentDateTime).toISO({ includeOffset: false })

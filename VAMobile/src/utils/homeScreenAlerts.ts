@@ -5,9 +5,9 @@ import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
 
 const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
-const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
+export const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
 const APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL = '@store_app_version_encourage_update_local_override'
-const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
+export const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
 
 export const FeatureConstants: {
   ENCOURAGEUPDATE: number

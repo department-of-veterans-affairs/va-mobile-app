@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { loadWaygateOverrides } from 'utils/waygateConfig'
-
-import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
@@ -27,11 +26,13 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
+  | 'rescheduleLink'
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
   | 'sso'
@@ -54,11 +55,13 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
+  rescheduleLink: boolean
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
@@ -82,11 +85,13 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  logDowntimeAnalytics: true,
   nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
+  rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: false,
   sso: true,
