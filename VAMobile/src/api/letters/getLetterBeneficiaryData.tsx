@@ -5,7 +5,6 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterMilitaryService } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { sortByDate } from 'utils/common'
 import { getSubstringBeforeChar } from 'utils/formattingUtils'
 import { useDowntime } from 'utils/hooks'
 
@@ -19,7 +18,6 @@ const getLetterBeneficiaryData = async (): Promise<LetterBeneficiaryData | undef
   if (response) {
     const attributes = response.data.attributes
     let mostRecentServices: Array<LetterMilitaryService> = [...(attributes?.militaryService || [])]
-    sortByDate(mostRecentServices, 'enteredDate')
     mostRecentServices = mostRecentServices.map((periodOfService) => {
       periodOfService.enteredDate = getSubstringBeforeChar(periodOfService.enteredDate, 'T')
       periodOfService.releasedDate = getSubstringBeforeChar(periodOfService.releasedDate, 'T')

@@ -68,11 +68,7 @@ export function renderMessages(
   thread: SecureMessagingMessageList,
   hideMessage = false,
 ) {
-  const threadMessages = thread.sort((message1, message2) =>
-    message1.attributes.sentDate > message2.attributes.sentDate ? -1 : 1,
-  )
-
-  return threadMessages.map(
+  return thread.map(
     (m) =>
       m &&
       m.attributes.messageId && (

@@ -46,14 +46,14 @@ export const getGroupedPayments = (
     return <></>
   }
 
-  const sortedDates = keys(paymentsGroupedByDate).sort()
+  const dates = keys(paymentsGroupedByDate)
   if (isReverseSort) {
-    sortedDates.reverse()
+    dates.reverse()
   }
 
   //track the start index for each grouping to get the current item position for a11yValue
   let groupIdx = 0
-  return map(sortedDates, (date) => {
+  return dates.map((date) => {
     const listOfPayments = paymentsGroupedByDate[date]
     const { listItems, totalAmount } = getListItemsForPayments(
       listOfPayments,

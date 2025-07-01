@@ -59,12 +59,8 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
   }
 
   useEffect(() => {
-    const filteredVaccines = vaccines?.data.sort((a, b) => {
-      const dateA = b.attributes?.date ? new Date(b.attributes.date) : new Date(0)
-      const dateB = a.attributes?.date ? new Date(a.attributes.date) : new Date(0)
-      return dateA.getTime() - dateB.getTime()
-    })
-    const vaccineList = filteredVaccines?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    const descending = (vaccines?.data || []).slice().reverse()
+    const vaccineList = descending.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setVaccinesToShow(vaccineList || [])
   }, [vaccines?.data, page])
 
