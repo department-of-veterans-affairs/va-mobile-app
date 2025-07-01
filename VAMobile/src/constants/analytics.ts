@@ -32,6 +32,23 @@ export const Events = {
       name: 'vama_allergy_list',
     }
   },
+  vama_lab_or_test_list: (timeFrame: string, count?: number): Event => {
+    return {
+      name: 'vama_lab_or_test_list',
+      params: {
+        timeFrame,
+        count,
+      },
+    }
+  },
+  vama_lab_or_test_details: (labType: string): Event => {
+    return {
+      name: 'vama_lab_or_test_details',
+      params: {
+        labType,
+      },
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,

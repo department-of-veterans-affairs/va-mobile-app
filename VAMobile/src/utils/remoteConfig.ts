@@ -26,6 +26,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'labsAndTests'
   | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
   | 'patientCheckIn'
@@ -39,6 +40,7 @@ export type FeatureToggleType =
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
+  | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
@@ -55,6 +57,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  labsAndTests: boolean
   logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
   patientCheckIn: boolean
@@ -68,6 +71,7 @@ type FeatureToggleValues = {
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
+  travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
@@ -85,6 +89,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  labsAndTests: false,
   logDowntimeAnalytics: true,
   nonVAMedsLink: false,
   patientCheckIn: false,
@@ -98,6 +103,7 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
+  travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
