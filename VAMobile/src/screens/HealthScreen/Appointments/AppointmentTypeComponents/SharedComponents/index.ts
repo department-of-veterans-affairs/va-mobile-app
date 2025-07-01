@@ -28,3 +28,5 @@ export { default as CommunityCarePendingLocation } from './CommunityCarePendingL
 export * from './CommunityCarePendingLocation'
 export { default as AppointmentTravelClaimDetails } from './AppointmentTravelClaimDetails'
 export * from './AppointmentTravelClaimDetails'
+export { default as AppointmentFileTravelPayAlert } from './AppointmentFileTravelPayAlert'
+export * from './AppointmentFileTravelPayAlert'
