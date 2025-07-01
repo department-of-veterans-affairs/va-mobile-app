@@ -67,6 +67,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travel_pay_eligible: true,
 }
 
 type createProps = {
@@ -76,6 +77,7 @@ type createProps = {
   isPending: AppointmentAttributes['isPending']
   appointmentType: AppointmentType
   phoneOnly: AppointmentAttributes['phoneOnly']
+  travel_pay_eligible?: boolean
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -87,12 +89,13 @@ const mockStartDateUtc = DateTime.utc().toISO()
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travel_pay_eligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travel_pay_eligible }
 }
 
 const claimExamAttributes = createTestAppointmentAttributes({
@@ -101,6 +104,7 @@ const claimExamAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: true,
 })
 
 const communityCareAttributes = createTestAppointmentAttributes({
@@ -109,6 +113,7 @@ const communityCareAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: false,
 })
 
 const inPersonVAAttributes = createTestAppointmentAttributes({
@@ -117,6 +122,7 @@ const inPersonVAAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: true,
 })
 
 const phoneAppointmentAttributes = createTestAppointmentAttributes({
@@ -125,6 +131,7 @@ const phoneAppointmentAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: true,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: false,
 })
 
 const videoAtlasAttributes = createTestAppointmentAttributes({
@@ -133,6 +140,7 @@ const videoAtlasAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: true,
 })
 
 const videoGFEAttributes = createTestAppointmentAttributes({
@@ -141,6 +149,7 @@ const videoGFEAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: false,
 })
 
 const videoHomeAttributes = createTestAppointmentAttributes({
@@ -149,6 +158,7 @@ const videoHomeAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: false,
 })
 
 const videoOnsiteAttributes = createTestAppointmentAttributes({
@@ -157,6 +167,7 @@ const videoOnsiteAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travel_pay_eligible: true,
 })
 
 const tests = [
@@ -195,6 +206,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -207,6 +219,7 @@ context('AppointmentFileTravelPayAlert', () => {
       travelPayClaim: undefined,
       isPending: false,
       phoneOnly: false,
+      travel_pay_eligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -220,6 +233,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
@@ -233,6 +247,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -245,6 +260,31 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: true,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: false,
+    })
+    initializeTestInstance(attributes)
+    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+  })
+
+  it('should not render if a claim has already been filed', async () => {
+    const attributes = createTestAppointmentAttributes({
+      status: AppointmentStatusConstants.BOOKED,
+      appointmentType: AppointmentTypeConstants.VA,
+      isPending: false,
+      phoneOnly: false,
+      travel_pay_eligible: true,
+      travelPayClaim: {
+        ...travelPayClaimData,
+        claim: {
+          id: '1234',
+          claimNumber: 'string',
+          claimStatus: 'In Process',
+          appointmentDateTime: '2024-01-01T16:45:34.465Z',
+          facilityName: 'Cheyenne VA Medical Center',
+          createdOn: '2024-03-22T21:22:34.465Z',
+          modifiedOn: '2024-01-01T16:44:34.465Z',
+        },
+      },
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -278,28 +318,5 @@ context('AppointmentFileTravelPayAlert', () => {
       },
       appointmentRouteKey: 'key',
     })
-  })
-
-  it('should not render if a claim has already been filed', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: {
-        ...travelPayClaimData,
-        claim: {
-          id: '1234',
-          claimNumber: 'string',
-          claimStatus: 'In Process',
-          appointmentDateTime: '2024-01-01T16:45:34.465Z',
-          facilityName: 'Cheyenne VA Medical Center',
-          createdOn: '2024-03-22T21:22:34.465Z',
-          modifiedOn: '2024-01-01T16:44:34.465Z',
-        },
-      },
-    })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
   })
 })

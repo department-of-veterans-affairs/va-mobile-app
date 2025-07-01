@@ -14,8 +14,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
+  isEligibleForTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
@@ -119,7 +119,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && appointmentMeetsTravelPayCriteria(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    if (!claim && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}

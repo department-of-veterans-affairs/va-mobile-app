@@ -186,6 +186,7 @@ export type AppointmentAttributes = {
   physicalLocation?: string
   travelPayClaim?: AppointmentTravelPayClaim
   showScheduleLink?: boolean
+  travel_pay_eligible: boolean
 }
 
 export type AppointmentData = {

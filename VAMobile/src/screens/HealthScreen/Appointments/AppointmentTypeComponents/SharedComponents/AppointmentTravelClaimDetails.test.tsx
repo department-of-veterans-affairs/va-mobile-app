@@ -62,6 +62,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travel_pay_eligible: true,
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -83,17 +84,19 @@ type createProps = {
   startDateUtc?: AppointmentAttributes['startDateUtc']
   travelPayClaim?: AppointmentTravelPayClaim
   appointmentType: AppointmentType
+  travel_pay_eligible?: boolean
 }
 
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travel_pay_eligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travel_pay_eligible }
 }
 
 const tests = [
@@ -101,6 +104,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: false,
     }),
     testName: 'Community Care',
   },
@@ -108,6 +112,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: true,
     }),
     testName: 'In Person VA',
   },
@@ -115,6 +120,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: true,
     }),
     testName: 'Video Atlas',
   },
@@ -122,6 +128,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: false,
     }),
     testName: 'Video GFE',
   },
@@ -129,6 +136,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: false,
     }),
     testName: 'Video Home',
   },
@@ -136,6 +144,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
       travelPayClaim: travelPayClaimData,
+      travel_pay_eligible: true,
     }),
     testName: 'Video On Site',
   },
@@ -278,6 +287,7 @@ describe('AppointmentTravelClaimDetails', () => {
               ...travelPayClaimData,
               claim: undefined,
             },
+            travel_pay_eligible: true,
           })
           initializeTestInstance('Past', { ...notFiledData })
           expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
@@ -293,6 +303,7 @@ describe('AppointmentTravelClaimDetails', () => {
               ...travelPayClaimData,
               claim: undefined,
             },
+            travel_pay_eligible: true,
           })
           initializeTestInstance('Past', { ...missedClaimDeadlineData })
           expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
@@ -311,6 +322,7 @@ describe('AppointmentTravelClaimDetails', () => {
                 success: false,
               },
             },
+            travel_pay_eligible: true,
           })
           initializeTestInstance('Past', { ...errorData })
           expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
@@ -328,6 +340,7 @@ describe('AppointmentTravelClaimDetails', () => {
                 success: false,
               },
             },
+            travel_pay_eligible: true,
           })
           initializeTestInstance('Past', { ...errorData })
           expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()

@@ -347,6 +347,7 @@ const getIsVideo = (attributes: AppointmentAttributes) => {
   )
 }
 
+
 /**
  * Returns true or false if the appointment meets the travel pay criteria
  * @param attributes - type AppointmentAttributes, data attributes of an appointment
@@ -361,6 +362,7 @@ export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttribu
   return isPast && isBooked && (isInPerson || isClinicVideo)
 }
 
+
 /**
  * Returns true or false if the appointment is eligible for travel pay
  * @param attributes - type AppointmentAttributes, data attributes of an appointment
@@ -371,6 +373,7 @@ export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
   // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
   const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
   return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
+  // return attributes.travel_pay_eligible && hasNoClaim
 }
 
 /**
