@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import {
   Allergy,
   AppointmentData,
+  LabsAndTests,
   PrescriptionData,
   RefillRequestSummaryItems,
   RefillStatus,
@@ -15,21 +16,20 @@ import {
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
+import HealthHelp from 'screens/HealthScreen/HealthHelp/HealthHelp'
+import PrescriptionHelp from 'screens/HealthScreen/Pharmacy/PrescriptionHelp/PrescriptionHelp'
+import RefillRequestSummary from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillRequestSummary'
+import RefillScreenModal from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
+import RefillTrackingModal from 'screens/HealthScreen/Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
+import StatusDefinition from 'screens/HealthScreen/Pharmacy/StatusDefinition/StatusDefinition'
+import EditDraft from 'screens/HealthScreen/SecureMessaging/EditDraft/EditDraft'
+import ReplyHelp from 'screens/HealthScreen/SecureMessaging/ReplyHelp/ReplyHelp'
+import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/ReplyMessage'
+import Attachments from 'screens/HealthScreen/SecureMessaging/StartNewMessage/Attachments/Attachments'
+import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
+import SubmitMileageTravelPayScreen from 'screens/HealthScreen/TravelPay'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-
-import SessionNotStarted from './Appointments/UpcomingAppointments/SessionNotStarted'
-import HealthHelp from './HealthHelp/HealthHelp'
-import PrescriptionHelp from './Pharmacy/PrescriptionHelp/PrescriptionHelp'
-import RefillRequestSummary from './Pharmacy/RefillScreens/RefillRequestSummary'
-import RefillScreenModal from './Pharmacy/RefillScreens/RefillScreen'
-import RefillTrackingModal from './Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
-import StatusDefinition from './Pharmacy/StatusDefinition/StatusDefinition'
-import EditDraft from './SecureMessaging/EditDraft/EditDraft'
-import ReplyHelp from './SecureMessaging/ReplyHelp/ReplyHelp'
-import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
-import Attachments from './SecureMessaging/StartNewMessage/Attachments/Attachments'
-import StartNewMessage from './SecureMessaging/StartNewMessage/StartNewMessage'
-import SubmitMileageTravelPayScreen from './TravelPay'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
@@ -116,6 +116,10 @@ export type HealthStackParamList = WebviewStackParams & {
   AllergyList: undefined
   AllergyDetails: {
     allergy: Allergy
+  }
+  LabsAndTestsList: undefined
+  LabsAndTestsDetailsScreen: {
+    labOrTest: LabsAndTests
   }
   GeneralHelpScreen: {
     title: string

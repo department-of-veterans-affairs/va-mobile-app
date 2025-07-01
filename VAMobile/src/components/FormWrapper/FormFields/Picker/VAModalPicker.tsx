@@ -14,10 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
-import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
-import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
-
+import PickerList, { PickerListItemObj } from 'components/FormWrapper/FormFields/Picker/PickerList'
 import {
   generateA11yValue,
   generateInputA11yLabel,
@@ -25,8 +22,10 @@ import {
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
-} from '../formFieldUtils'
-import PickerList, { PickerListItemObj } from './PickerList'
+} from 'components/FormWrapper/FormFields/formFieldUtils'
+import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
+import { getTranslation } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -38,6 +37,8 @@ export type PickerItem = {
   value: string
   /** icon to show */
   icon?: IconProps
+  /** Test ID for the item */
+  testID?: string
 }
 
 export type VAModalPickerProps = {
@@ -164,6 +165,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       },
       isSelected: currentSelectedValue === pickerOption.value,
       icon: pickerOption.icon,
+      testId: pickerOption.testID,
     }
   })
 
