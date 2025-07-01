@@ -311,7 +311,6 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
         cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
         useModal: true,
-        // autoFocus: true,
       },
       (buttonIndex) => {
         if (buttonIndex || buttonIndex === 0) {

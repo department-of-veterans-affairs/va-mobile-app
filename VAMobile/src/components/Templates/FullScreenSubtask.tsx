@@ -234,7 +234,11 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     return fullScreenSubtaskContent()
   }
 
-  return <Modal presentationStyle="fullScreen">{fullScreenSubtaskContent()}</Modal>
+  return (
+    <Modal presentationStyle="fullScreen" animationType="slide">
+      {fullScreenSubtaskContent()}
+    </Modal>
+  )
 }
 
 export default FullScreenSubtask

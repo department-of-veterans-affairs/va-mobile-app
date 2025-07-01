@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
+import { Alert, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -23,6 +23,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const [meetMyNeeds, setMeetMyNeeds] = useState('')
   const [easyToUse, setEasyToUse] = useState('')
   const [task, setTaskOverride] = useState('')
+  const feedbackTextRef = useRef<TextInput>(null)
   let submittedCheck = false
   const navigateTo = useRouteNavigation()
 
@@ -176,6 +177,7 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
             inputType="none"
             isTextArea={true}
             value={task}
+            inputRef={feedbackTextRef}
             testID="AppFeedbackTaskID"
             onChange={setTaskOverride}
           />

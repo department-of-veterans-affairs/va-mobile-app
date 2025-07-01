@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, TextInput } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -34,6 +34,11 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
   const [errorMsgBodyOverride, setErrorMsgBodyOverride] = useState(wg.errorMsgBody)
   const [errorMsgBodyV2Override, setErrorMsgBodyV2Override] = useState(wg.errorMsgBodyV2)
   const [errorPhoneNumberOverride, setErrorPhoneNumber] = useState(wg.errorPhoneNumber)
+  const typeRef = useRef<TextInput>(null)
+  const errTitleRef = useRef<TextInput>(null)
+  const errBodyRef = useRef<TextInput>(null)
+  const errBody2Ref = useRef<TextInput>(null)
+  const errPhoneRef = useRef<TextInput>(null)
 
   useEffect(() => {
     if (onSaveClicked) {
@@ -94,6 +99,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
         <VATextInput
           inputType="none"
           value={typeOverride}
+          inputRef={typeRef}
           testID="AFTypeTestID"
           onChange={(val) => {
             setTypeOverride(val)
@@ -103,6 +109,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
         <VATextInput
           inputType="none"
           value={errorMsgTitleOverride}
+          inputRef={errTitleRef}
           testID="AFErrorMsgTitleTestID"
           onChange={(val) => {
             setErrorMsgTitleOverride(val)
@@ -112,6 +119,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
         <VATextInput
           inputType="none"
           value={errorMsgBodyOverride}
+          inputRef={errBodyRef}
           testID="AFErrorMsgBodyTestID"
           onChange={(val) => {
             setErrorMsgBodyOverride(val)
@@ -121,6 +129,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
         <VATextInput
           inputType="none"
           value={errorMsgBodyV2Override}
+          inputRef={errBody2Ref}
           testID="AFErrorMsgBodyV2TestID"
           onChange={(val) => {
             setErrorMsgBodyV2Override(val)
@@ -130,6 +139,7 @@ function WaygateEditScreen({ navigation, route }: WaygateEditScreenProps) {
         <VATextInput
           inputType="none"
           value={errorPhoneNumberOverride}
+          inputRef={errPhoneRef}
           testID="AFErrorPhoneNumberTestID"
           onChange={(val) => {
             setErrorPhoneNumber(val)
