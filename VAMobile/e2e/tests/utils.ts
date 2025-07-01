@@ -338,12 +338,8 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
   const mockDirectory = './src/store/api/demo/mocks/'
 
-  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-
+  try {
+    const data = await fs.promises.readFile(mockDirectory + mockFileName, 'utf8')
     const jsonParsed = JSON.parse(data)
     let mockDataVariable
     let mockDataKeyValue
@@ -363,22 +359,20 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
         }
       }
     }
-
-    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-      if (err) {
-        return console.log(err)
-      }
-    })
-  })
+    await fs.promises.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2))
+  } catch (ex) {
+    console.log(ex)
+    return
+  }
 
   await device.uninstallApp()
   await setTimeout(1000)
   if (device.getPlatform() === 'ios') {
-    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 400000 })
+    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 400000 })
   } else {
-    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 400000 })
+    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 400000 })
   }
   await device.installApp()
   await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
@@ -675,7 +669,7 @@ const navigateToFeature = async (featureNavigationArray) => {
       await element(by.text(featureNavigationArray[j])).tap()
     } else if (featureNavigationArray[j] === 'Request Refill') {
       await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Proof of Veteran status') {
+    } else if (featureNavigationArray[j] === 'Contact us' || featureNavigationArray[j] === 'Veteran Status Card') {
       await waitFor(element(by.text(featureNavigationArray[j])))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))

@@ -28,24 +28,28 @@ beforeAll(async () => {
 })
 
 export async function verifyMilitaryInfo(militaryBranch: string) {
-  it('verify ' + militaryBranch + ' is shown and seal is correct', async () => {
-    //changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
-    await changeMockData(
-      'profile.json',
-      ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
-      militaryBranch,
-    )
-    let tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestHome')
-    checkImages(tempPath)
-    await expect(element(by.text(militaryBranch))).toExist()
-    await openProfile()
-    tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestProfile')
-    checkImages(tempPath)
-    await expect(element(by.text(militaryBranch))).toExist()
-    await openMilitaryInformation()
-    await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
-    await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
-  })
+  it(
+    'verify ' + militaryBranch + ' is shown and seal is correct',
+    async () => {
+      //changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
+      await changeMockData(
+        'profile.json',
+        ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
+        militaryBranch,
+      )
+      let tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestHome')
+      checkImages(tempPath)
+      await expect(element(by.text(militaryBranch))).toExist()
+      await openProfile()
+      tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestProfile')
+      checkImages(tempPath)
+      await expect(element(by.text(militaryBranch))).toExist()
+      await openMilitaryInformation()
+      await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
+      await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
+    },
+    800000,
+  )
 }
 
 describe('Military Info Screen', () => {
@@ -86,7 +90,7 @@ describe('Military Info Screen', () => {
     await openMilitaryInformation()
     await expect(element(by.text(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_PAGE_TITLE_TEXT))).toExist()
     await expect(element(by.id(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_ID))).toExist()
-  })
+  }, 800000)
 
   it('should reset mock data', async () => {
     await changeMockData(
@@ -113,5 +117,5 @@ describe('Military Info Screen', () => {
         },
       ],
     )
-  })
+  }, 800000)
 })
