@@ -8,6 +8,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
+//e2e tests to run
+
 function NoLettersScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
