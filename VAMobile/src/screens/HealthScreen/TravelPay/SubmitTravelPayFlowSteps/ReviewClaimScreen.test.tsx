@@ -7,12 +7,11 @@ import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
+import ReviewClaimScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/ReviewClaimScreen'
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 import { appendClaimDataToAppointment } from 'utils/travelPay'
-
-import ReviewClaimScreen from './ReviewClaimScreen'
 
 const residentialAddress: AddressData = {
   id: 0,
@@ -228,7 +227,7 @@ context('ReviewClaimScreen', () => {
   })
 
   describe('when the submission fails', () => {
-    it('should navigate to the ErrorScreen', async () => {
+    it('should navigate to the SMOCErrorScreen', async () => {
       mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
         if (options && options.onError) {
           options.onError(new Error('Failed to submit travel claim'), {}, undefined)
@@ -241,7 +240,7 @@ context('ReviewClaimScreen', () => {
       fireEvent.press(button)
 
       await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('ErrorScreen', {
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SMOCErrorScreen', {
           error: 'error',
         })
       })
