@@ -3,9 +3,8 @@ import { Appearance } from 'react-native'
 import { colors, font } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
+import { darkTheme, lightTheme, primaryTextColor } from 'styles/themes/colorSchemes'
 import { isIOS } from 'utils/platform'
-
-import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
@@ -257,6 +256,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
     LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabResultHeader: buildFont('SourceSansPro-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
