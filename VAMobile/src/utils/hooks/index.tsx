@@ -224,7 +224,7 @@ export function useGiveFeedback(): (task: string) => void {
   return (task: string) => {
     const onOKPress = () => {
       logAnalyticsEvent(Events.vama_feedback_ask(task, true))
-      navigateTo('InAppFeedback', { task })
+      navigateTo('FeedbackIntercept', { task })
     }
 
     const onCancelPress = () => {
