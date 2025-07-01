@@ -86,7 +86,7 @@ const TravelPayE2eIdConstants = {
   TRAVEL_PAY_HELP_COMPONENT_ID: 'travelPayHelp',
   TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
   APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID: 'appointmentFileTravelPayAlert',
-  ERROR_SCREEN_ID: 'ErrorScreen',
+  ERROR_SCREEN_ID: 'SMOCErrorScreen',
   FINISH_TRAVEL_CLAIM_LINK_ID: 'finishTravelClaimLinkID',
 }
 
