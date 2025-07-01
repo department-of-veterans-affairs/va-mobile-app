@@ -1472,6 +1472,27 @@ PODS:
     - Yoga
   - react-native-notifications (5.1.0):
     - React-Core
+  - react-native-quick-base64 (2.1.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.10.14.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-safe-area-context (5.4.0):
     - React-Core
   - react-native-webview (13.13.5):
@@ -1824,7 +1845,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNKeychain (9.2.1):
+  - RNKeychain (9.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1868,7 +1889,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.34.0):
+  - RNScreens (3.37.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1951,6 +1972,7 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-notifications (from `../node_modules/react-native-notifications`)
+  - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2112,6 +2134,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-notifications:
     :path: "../node_modules/react-native-notifications"
+  react-native-quick-base64:
+    :path: "../node_modules/react-native-quick-base64"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -2270,6 +2294,7 @@ SPEC CHECKSUMS:
   react-native-document-picker: a338165804b1a14c8e408448115dc0edfd7b73ca
   react-native-image-picker: 3bf9fad4e53ff47e3f6b02ac42c4cc3dc3fb3163
   react-native-notifications: 3bafa1237ae8a47569a84801f17d80242fe9f6a5
+  react-native-quick-base64: 5565249122493bef017004646d73f918e8c2dfb0
   react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
   react-native-webview: a72098fc86dcc2e5f8f4d5d87f08bb779596337b
   React-nativeconfig: 8efdb1ef1e9158c77098a93085438f7e7b463678
@@ -2310,10 +2335,10 @@ SPEC CHECKSUMS:
   RNFBRemoteConfig: 90695aad20df3f5fc5b514668b44ae646dfabc8e
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
   RNGestureHandler: 093134b25de1fcd57b275b3c8cd66d11186c569b
-  RNKeychain: 5549bc4ba9381f126a66ccec7e8fbb9dbfd1fc8a
+  RNKeychain: 846378665084073892de110346f041f97aa99a42
   RNLocalize: d024afa9204c13885e61dc88b8190651bcaabac9
   RNReactNativeHapticFeedback: 9e40918e714999589d7d4adc740bc345158bd733
-  RNScreens: 48b086d2827fa76efa98e85a8c32821c4a38fce0
+  RNScreens: 09d0dfadf032f78e0580cd417dc378268d483a38
   RNSVG: 8542aa11770b27563714bbd8494a8436385fc85f
   SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380

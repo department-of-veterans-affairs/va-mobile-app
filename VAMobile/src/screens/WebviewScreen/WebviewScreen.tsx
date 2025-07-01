@@ -84,6 +84,8 @@ export type WebviewStackParams = {
     loadingMessage?: string
     /** Use SSO to authenticate webview */
     useSSO?: boolean
+    /** Test ID for the webview back button */
+    backButtonTestID?: string
   }
 }
 
@@ -93,7 +95,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
-  const { url, displayTitle, loadingMessage, useSSO } = route.params
+  const { url, displayTitle, loadingMessage, useSSO, backButtonTestID } = route.params
   const isSSOSession = featureEnabled('sso') && useSSO
 
   const theme = useTheme()
@@ -122,6 +124,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
           onPress={props.onPress}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.done}
+          backButtonTestID={backButtonTestID}
         />
       ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
@@ -154,7 +157,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   // The following two consts are an effort to reduce the 'noise' of the websites we are linking to
   // via webview and make them a more specific path for the user to experience. This code ignores headers,
   // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
+  // VA website does not allow scroll when the feedback screen is up
+  // Only visually hiding the screen, so adjust overflow style to enable scrolling
   const css = `
+  body.merger { overflow: scroll !important; }
   header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
   nav[aria-label="My HealtheVet"] { display: none; }
 `

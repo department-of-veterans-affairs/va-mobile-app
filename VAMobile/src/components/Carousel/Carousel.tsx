@@ -6,7 +6,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import CarouselTabBar from './CarouselTabBar'
+import CarouselTabBar from 'components/Carousel/CarouselTabBar'
 
 const CarouselTabNav = createBottomTabNavigator()
 const CarouselStack = createStackNavigator()

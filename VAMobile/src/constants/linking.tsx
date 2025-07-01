@@ -29,11 +29,11 @@ export const linking: LinkingOptions<any> = {
               ViewMessage: 'messages/:messageID',
             },
           },
-          BenefitsTab:{
-            screens:{
-              ClaimLettersScreen:'claimLetters'
-            }
-          }
+          BenefitsTab: {
+            screens: {
+              ClaimLettersScreen: 'claimLetters',
+            },
+          },
         },
       },
     },
@@ -95,6 +95,24 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'pastAppointments') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'Appointments', params: { tab: 1 } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     } else if (pathParts[0] === 'prescriptions') {
       return {
         routes: [
@@ -135,7 +153,7 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    }else if (pathParts[0] === 'claimLetters') {
+    } else if (pathParts[0] === 'claimLetters') {
       return {
         routes: [
           {
@@ -145,10 +163,7 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'BenefitsTab',
                   state: {
-                    routes: [
-                      { name: 'Benefits' },
-                      { name: 'ClaimLettersScreen' },
-                    ],
+                    routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
                   },
                 },
               ],

@@ -1,8 +1,7 @@
 import React from 'react'
 
+import AlertWithHaptics from 'components/AlertWithHaptics'
 import { context, render, screen } from 'testUtils'
-
-import AlertWithHaptics from './AlertWithHaptics'
 
 context('AlertWithHaptics', () => {
   beforeEach(() => {

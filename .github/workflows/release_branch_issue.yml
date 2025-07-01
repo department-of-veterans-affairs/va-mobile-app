@@ -72,21 +72,41 @@ jobs:
     secrets:
       TEST_RAIL_USER: ${{secrets.TEST_RAIL_USER}}
       TEST_RAIL_KEY: ${{secrets.TEST_RAIL_KEY}}
-  update_ticket:
+  # NOTE: Commenting out until we fix issue # 6354
+  # update_ticket:
+  #   runs-on: ubuntu-latest
+  #   needs: [release_ticket, create_testrail_milestone, start_testrail_run]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+  #     - run: gh auth login --with-token < token.txt
+  #     - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
+  #     - run: |
+  #         TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
+  #         RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
+  #         OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
+  #         NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
+  #         gh issue edit $TICKET_NUM -b $NEW_BODY
+  close_milestone:
     runs-on: ubuntu-latest
-    needs: [release_ticket, create_testrail_milestone, start_testrail_run]
+    needs: [release_ticket]
     steps:
       - uses: actions/checkout@v3
       - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
       - run: gh auth login --with-token < token.txt
-      - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
       - run: |
+          VERSION_NUMBER=${{ needs.release_ticket.outputs.versionNumber }}
           TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
-          RUN_URL=${{ needs.start_testrail_run.outputs.testrailUrl }}
-          OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
-          NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
-          gh issue edit $TICKET_NUM -b $NEW_BODY
+          MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones" --jq '.[] | select(.title == "'"$VERSION_NUMBER"'") | .number')
+          echo Ticket Number: $TICKET_NUM
+          echo Version Numbver: $VERSION_NUMBER
+          echo Milestone ID: $MILESTONE_ID
+          gh api \
+            --method PATCH \
+            "repos/${{ github.repository }}/milestones/$MILESTONE_ID" \
+            -F state=closed
   start_slack_thread:
+    if: ${{ success() || failure() }}
     name: Start Slack thread
     needs: release_ticket
     uses: ./.github/workflows/start_slack_thread.yml

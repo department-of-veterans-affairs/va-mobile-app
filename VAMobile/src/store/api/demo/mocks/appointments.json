@@ -40,7 +40,25 @@
             "vetextId": null,
             "reason": "Test",
             "isCovidVaccine": false,
-            "typeOfCare": "Podiatry"
+            "typeOfCare": "Podiatry",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-ebf3-ed0f6908ee53",
+                "claimNumber": "TC00000000042",
+                "claimStatus": "In Progress",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
+              }
+            }
           }
         },
         {
@@ -95,7 +113,14 @@
             "patientEmail": "christopher.ray3@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening"],
             "friendlyLocationName": "Denver VA Medical Center",
-            "serviceCategoryName": null
+            "serviceCategoryName": null,
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -145,7 +170,15 @@
             "patientEmail": "Judy.morrison@id.me",
             "bestTimeToCall": ["Evening"],
             "friendlyLocationName": null,
-            "serviceCategoryName": null
+            "serviceCategoryName": null,
+            "showScheduleLink": true,
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -187,7 +220,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -229,7 +269,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -278,7 +325,14 @@
             ],
             "isPending": true,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
 
@@ -321,7 +375,14 @@
             "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -363,7 +424,14 @@
             "reason": "Reason test",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -415,7 +483,14 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": ["Afternoon"],
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -457,7 +532,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -499,7 +581,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -551,7 +640,14 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": ["Afternoon"],
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
 
@@ -594,7 +690,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": null
+            "typeOfCare": null,
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -636,7 +739,14 @@
             "reason": null,
             "isCovidVaccine": false,
             "serviceCategoryName": null,
-            "typeOfCare": "Mental Health"
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -688,7 +798,14 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": ["Afternoon"],
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -732,7 +849,14 @@
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
             "friendlyLocationName": "Fort Collins VA Clinic",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
+            "typeOfCare": "Audiology and speech (including hearing aid support)",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -776,7 +900,14 @@
             "isCovidVaccine": false,
             "serviceCategoryName": "COMPENSATION & PENSION",
             "friendlyLocationName": "Fort Collins VA Clinic",
-            "typeOfCare": "Audiology and speech (including hearing aid support)"
+            "typeOfCare": "Audiology and speech (including hearing aid support)",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -836,7 +967,23 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "claim": {
+                "claimNumber": "TC0928098230498",
+                "claimStatus": "Closed",
+                "appointmentDateTime": "{{now - 31 days}}",
+                "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
+                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "createdOn": "{{now - 25 days}}",
+                "modifiedOn": "{{now - 28 days}}"
+              },
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -896,7 +1043,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -956,7 +1110,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1003,7 +1164,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1050,7 +1218,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1097,7 +1272,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1144,7 +1326,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1191,7 +1380,26 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000001",
+                "claimStatus": "Fiscal rescinded",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "reimbursementAmount": 4.03,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
+              }
+            }
           }
         },
         {
@@ -1238,7 +1446,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1285,7 +1500,26 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000002",
+                "claimStatus": "Paid",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 10.26,
+                "reimbursementAmount": 8.2,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
+              }
+            }
           }
         },
         {
@@ -1332,7 +1566,25 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000001",
+                "claimStatus": "Denied",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
+              }
+            }
           }
         },
         {
@@ -1379,7 +1631,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1426,7 +1685,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1473,7 +1739,26 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              },
+              "claim": {
+                "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
+                "claimNumber": "TC00000000032",
+                "claimStatus": "Paid",
+                "appointmentDateTime": "2023-02-23T22:22:52.549Z",
+                "facilityId": "442",
+                "facilityName": "Tomah VA Medical Center",
+                "totalCostRequested": 5.16,
+                "reimbursementAmount": 4.8,
+                "createdOn": "2023-02-24T22:22:52.549Z",
+                "modifiedOn": "2023-02-26T22:22:52.549Z"
+              }
+            }
           }
         },
         {
@@ -1520,7 +1805,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1567,7 +1859,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1614,7 +1913,14 @@
             "patientPhoneNumber": null,
             "patientEmail": null,
             "bestTimeToCall": null,
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1661,7 +1967,14 @@
             "patientPhoneNumber": null,
             "patientEmail": null,
             "bestTimeToCall": null,
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         },
         {
@@ -1713,7 +2026,14 @@
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
-            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
           }
         }
       ],
@@ -1724,7 +2044,8 @@
           "perPage": 10,
           "totalPages": 4,
           "totalEntries": 36
-        }
+        },
+        "travelPayEligibleCount": 5
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
@@ -1774,7 +2095,8 @@
             "vetextId": null,
             "reason": "Test",
             "isCovidVaccine": false,
-            "typeOfCare": "Podiatry"
+            "typeOfCare": "Podiatry",
+            "showScheduleLink": true
           }
         },
         {
@@ -1879,7 +2201,8 @@
             "patientEmail": "Judy.morrison@id.me",
             "bestTimeToCall": ["Evening"],
             "friendlyLocationName": null,
-            "serviceCategoryName": null
+            "serviceCategoryName": null,
+            "showScheduleLink": true
           }
         },
         {
@@ -3459,8 +3782,8 @@
           "totalPages": 4,
           "totalEntries": 36
         },
-        "upcomingAppointmentsCount": 3,
-        "upcomingDaysLimit": 7
+        "upcomingAppointmentsCount": 6,
+        "upcomingDaysLimit": 30
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",

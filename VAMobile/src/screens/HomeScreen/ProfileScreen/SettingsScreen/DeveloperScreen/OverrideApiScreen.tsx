@@ -94,8 +94,16 @@ const APIGroupings: {
     ],
   },
   {
+    name: 'Travel Pay',
+    endpoints: ['/v0/travel-pay/claims'],
+  },
+  {
     name: 'Vaccines',
     endpoints: ['/v1/health/immunizations', '/v0/health/locations/'],
+  },
+  {
+    name: 'Allergies',
+    endpoints: ['/v0/health/allergy-intolerance'],
   },
 ]
 
@@ -305,6 +313,7 @@ const IndividualQueryDisplay = (
         selectorType={SelectorType.Checkbox}
         labelKey={t('overrideAPI.otherCodes')}
         selected={otherSelected}
+        testID={`otherSelector-${endpoint}`}
         onSelectionChange={() => {
           setNetworkSelected(false)
           setBackEndSelected(false)
@@ -343,6 +352,7 @@ const IndividualQueryDisplay = (
           <VATextInput
             value={initialOtherErrorCode}
             inputType="phone"
+            testID={`otherStatus-${endpoint}`}
             onChange={(val) => {
               const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint

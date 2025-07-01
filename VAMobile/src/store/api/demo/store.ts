@@ -5,20 +5,20 @@ import {
   PaymentAccountData,
   PreferredNameUpdatePayload,
   SecureMessagingSystemFolderIdConstants,
+  SubmitSMOCTravelPayClaimParameters,
 } from 'api/types'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import { Params } from '../api'
-import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from './allergies'
-import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
-import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
-import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
-import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
-import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
-import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
-import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
-import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
+import { Params } from 'store/api/api'
+import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from 'store/api/demo/allergies'
+import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from 'store/api/demo/appointments'
+import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from 'store/api/demo/claims'
+import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from 'store/api/demo/decisionLetters'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from 'store/api/demo/demographics'
+import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
+import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
+import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
+import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
+import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
 import {
   ProfileDemoReturnTypes,
   ProfileDemoStore,
@@ -30,9 +30,15 @@ import {
   updateEmail,
   updateUserPhone,
   validateAddress,
-} from './profile'
-import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
-import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
+} from 'store/api/demo/profile'
+import {
+  SecureMessagingDemoApiReturnTypes,
+  SecureMessagingDemoStore,
+  getFolderMessages,
+} from 'store/api/demo/secureMessaging'
+import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
+import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Intersection type denoting the demo data store
@@ -49,7 +55,8 @@ export type DemoStore = AppointmentsDemoStore &
   PrescriptionsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
-  AllergyDemoStore
+  AllergyDemoStore &
+  LabsAndTestsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -68,6 +75,8 @@ type DemoApiReturns =
   | NotificationDemoApiReturnTypes
   | DemographicsDemoApiReturnTypes
   | AllergyDemoReturnTypes
+  | LabsAndTestsDemoReturnTypes
+  | TravelPayDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -136,6 +145,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/vaccine.json'),
     import('./mocks/disablityRating.json'),
     import('./mocks/decisionLetters.json'),
+    import('./mocks/labsAndTests.json'),
     import('./mocks/letters.json'),
     import('./mocks/payments.json'),
     import('./mocks/prescriptions.json'),
@@ -222,7 +232,10 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
     }
-    case '/v1/health/allergy-intolerances': {
+    case '/v1/health/labs-and-tests': {
+      return getLabsAndTestsList(store, params, endpoint)
+    }
+    case '/v0/health/allergy-intolerances': {
       return getAllergyList(store, params, endpoint)
     }
     case '/v0/payment-history': {
@@ -262,6 +275,12 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     }
     case '/v0/user/addresses': {
       return updateAddress(store, params as unknown as AddressData)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return submitAppointmentClaim(params as unknown as SubmitSMOCTravelPayClaimParameters)
     }
     default: {
       return undefined

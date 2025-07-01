@@ -7,7 +7,7 @@ import { UseMutateFunction } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes, AppointmentLocation } from 'api/types'
-import { Box, BoxProps, ClickToCallPhoneNumber, LinkWithAnalytics, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
@@ -23,6 +23,7 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useDestructiveActionSheetProps, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -33,20 +34,6 @@ type AppointmentCancelRescheduleProps = {
   type: AppointmentDetailsScreenType
   goBack: () => void
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>
-}
-
-const spacer = (theme: VATheme) => {
-  const boxProps: BoxProps = {
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
-    height: theme.dimensions.standardMarginBetween,
-    backgroundColor: 'main',
-    mx: -theme.dimensions.gutter,
-  }
-  return <Box {...boxProps} />
 }
 
 const cancelButton = (
@@ -144,6 +131,7 @@ const phoneFacilitySchedulingLink = (
   useFacilityLocatorFallback: boolean,
   isGFEAtlasHomeVideo: boolean,
   location: AppointmentLocation | undefined,
+  showScheduleLink: boolean,
   t: TFunction,
   theme: VATheme,
 ) => {
@@ -165,7 +153,7 @@ const phoneFacilitySchedulingLink = (
           a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
         />
       ) : undefined}
-      {!useFacilityLocatorFallback && (
+      {featureEnabled('rescheduleLink') && showScheduleLink && !useFacilityLocatorFallback && (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}
@@ -286,7 +274,7 @@ function AppointmentCancelReschedule({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
-  const { location, cancelId } = attributes || ({} as AppointmentAttributes)
+  const { location, cancelId, showScheduleLink } = attributes || ({} as AppointmentAttributes)
 
   const header = getHeader(subType, t)
   const body = getBody(cancelId, location, subType, type, t)
@@ -322,7 +310,7 @@ function AppointmentCancelReschedule({
 
   return (
     <Box>
-      {spacer(theme)}
+      <TextAreaSpacer />
       <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
         {header}
       </TextView>
@@ -334,8 +322,17 @@ function AppointmentCancelReschedule({
         {body}
       </TextView>
       {!isClaimExam ? (
-        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme)
-      ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
+        phoneFacilitySchedulingLink(
+          useFacilityFallback,
+          isAtlastGFEHomeVideoAppt,
+          location,
+          !!showScheduleLink,
+          t,
+          theme,
+        )
+      ) : featureEnabled('rescheduleLink') &&
+        showScheduleLink &&
+        subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}

@@ -1,11 +1,10 @@
 import { Appearance } from 'react-native'
 
-import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { colors, font } from '@department-of-veterans-affairs/mobile-tokens'
 
 import { VAColorScheme, VAFontSizes, VATheme } from 'styles/theme'
+import { darkTheme, lightTheme, primaryTextColor } from 'styles/themes/colorSchemes'
 import { isIOS } from 'utils/platform'
-
-import { darkTheme, lightTheme, primaryTextColor } from './colorSchemes'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'Bitter-Regular'
 export type ColorSchemeTypes = null | 'light' | 'dark' | undefined
@@ -195,6 +194,33 @@ const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, 
   return styles.join(';\n')
 }
 
+/**
+ * Function to export typography from mobile-token. Current implementation is a band-aid  for a future task to align
+ * design styling with styling the app
+ * @param mtTypography - mobile token typography
+ * @param scheme - color object to pull in the correct color for light/dark mode
+ */
+const buildFontFromMobileTokens = (
+  mtTypography: {
+    fontFamily: string
+    fontSize: number
+    lineHeight: number
+    marginBottom: number
+    letterSpacing: number
+  },
+  scheme: VAColorScheme,
+) => {
+  const styles = [
+    `color:${scheme.text.primary}`,
+    `font-family:"${mtTypography.fontFamily}"`,
+    `font-size:${mtTypography.fontSize}px`,
+    `line-height: ${mtTypography.lineHeight}px`,
+    `letter-spacing: ${mtTypography.letterSpacing}px`,
+  ]
+
+  return styles.join(';\n')
+}
+
 const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
   return {
     AboutYou: buildFont('Bitter-Regular', fontSizes.AboutYou, scheme.text.veteranStatusBranch),
@@ -230,6 +256,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     LargeNavButton: buildFont('Bitter-Regular', fontSizes.LargeButtonHeader, scheme.text.homeScreen),
     LargeNavSubtext: buildFont('SourceSansPro-Bold', fontSizes.largeNavSubext, scheme.text.homeScreen),
     LabelTag: buildFont('SourceSansPro-Regular', fontSizes.LabelTag, scheme.text.primaryContrast),
+    LabResultHeader: buildFont('SourceSansPro-Bold', fontSizes.BitterBoldHeading, scheme.text.primary),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.bodyText),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBody, scheme.text.primary),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBody, scheme.text.link, true),
@@ -261,6 +288,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.VeteranStatusCardHeaderLandscapeBold,
       scheme.text.primary,
     ),
+    // TODO: update to pull in the full mobile design token typography
+    vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
   }
 }
 
@@ -300,6 +329,7 @@ let theme: VATheme = {
     headerLeftButtonFromTextPadding: 14,
     fullScreenNavigationBarOffset: isIOS() ? 30 : 0, // this is done due to how the top of the screens differ between the two systems
     fullScreenContentButtonHeight: 60,
+    floatingButtonOffset: 94,
   },
 
   fontFace: {
