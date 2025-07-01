@@ -368,11 +368,11 @@ export async function changeMockData(mockFileName: string, jsonProperty, newJson
   await device.uninstallApp()
   await setTimeout(1000)
   if (device.getPlatform() === 'ios') {
-    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 400000 })
+    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 400000 })
   } else {
-    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
+    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 400000 })
+    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 400000 })
   }
   await device.installApp()
   await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
