@@ -40,6 +40,7 @@ export type FeatureToggleType =
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
+  | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
@@ -70,6 +71,7 @@ type FeatureToggleValues = {
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
+  travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
@@ -101,6 +103,7 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
+  travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
