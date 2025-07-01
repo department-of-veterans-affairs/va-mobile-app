@@ -18,7 +18,7 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
-const APIGroupings: {
+export const APIGroupings: {
   name: string
   endpoints: string[]
 }[] = [
@@ -179,6 +179,7 @@ const IndividualQueryDisplay = (
           }
           setErrors(newErrors)
         }}
+        testID={`${endpoint}_network`}
       />
       <VASelector
         selectorType={SelectorType.Checkbox}
@@ -215,6 +216,7 @@ const IndividualQueryDisplay = (
           }
           setErrors(newErrors)
         }}
+        testID={`${endpoint}_backendOverride`}
       />
       {backEndSelected && (
         <Box mb={theme.dimensions.standardMarginBetween}>
@@ -240,6 +242,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_title`}
           />
           <TextView>Body</TextView>
           <VATextInput
@@ -263,6 +266,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_body`}
           />
           <TextView>Telephone</TextView>
           <VATextInput
@@ -286,6 +290,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_telephone`}
           />
           <VASelector
             selectorType={SelectorType.Checkbox}
@@ -306,6 +311,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_refreshable`}
           />
         </Box>
       )}
