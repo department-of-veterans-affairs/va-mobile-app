@@ -1181,6 +1181,22 @@ export const Events = {
       name: 'vama_goto_payment_hist',
     }
   },
+  vama_smoc_time_taken: (totalTime: number): Event => {
+    return {
+      name: 'vama_smoc_time_taken',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_smoc_error: (error: string): Event => {
+    return {
+      name: 'vama_smoc_error',
+      params: {
+        error,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
