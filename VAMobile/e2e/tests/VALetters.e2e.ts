@@ -125,7 +125,7 @@ describe('VA Letters', () => {
   })
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
-    it.skip(`should view ${letterType.name}`, async () => {
+    it(`should view ${letterType.name}`, async () => {
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
@@ -140,11 +140,11 @@ describe('VA Letters', () => {
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
-        }
 
-        await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
-        await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
-        await element(by.text('Done')).tap()
+          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
+          await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
+          await element(by.text('Done')).tap()
+        }
       }
 
       await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_BACK_ID)).tap()

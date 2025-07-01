@@ -292,7 +292,6 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
  * Converts 1234567890 to 123-456-7890
  * @param phoneNumber - string that has the phone number
  */
-
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
   return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }
