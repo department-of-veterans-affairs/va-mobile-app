@@ -254,7 +254,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           <Button onPress={resetInAppReview} label={'Reset in-app review actions'} />
           <Box mt={theme.dimensions.condensedMarginBetween} flexDirection="row" alignItems="flex-end">
             <TextView variant={'MobileBody'}>In-App Review Count:</TextView>
-            <TextView ml={theme.dimensions.standardMarginBetween}>
+            <TextView ml={theme.dimensions.standardMarginBetween} testID="reviewCountTestID">
               {reviewCount ? parseInt(reviewCount, 10) : 0}
             </TextView>
           </Box>
@@ -351,15 +351,15 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
             Encouraged Update and What's New Versions
           </TextView>
           <TextView variant="MobileBodyBold">Encourage Update Local Version</TextView>
-          <TextView>{localVersionName}</TextView>
+          <TextView testID="encourageUpdateVersionTestID">{localVersionName}</TextView>
           <TextView variant="MobileBodyBold">What's New Local Version</TextView>
-          <TextView>{whatsNewLocalVersion}</TextView>
+          <TextView testID="whatsNewVersionTestID">{whatsNewLocalVersion}</TextView>
           <TextView variant="MobileBodyBold">Store Version</TextView>
-          <TextView>{storeVersion}</TextView>
+          <TextView testID="storeVersionTestID">{storeVersion}</TextView>
           <TextView variant="MobileBodyBold">Encourage Update Skipped Version</TextView>
-          <TextView>{skippedVersion}</TextView>
+          <TextView testID="encourageUpdateSkippedTestID">{skippedVersion}</TextView>
           <TextView variant="MobileBodyBold">Whats New Skipped Version</TextView>
-          <TextView>{whatsNewSkippedVersion}</TextView>
+          <TextView testID="whatsNewSkippedTestID">{whatsNewSkippedVersion}</TextView>
           <TextView variant="MobileBodyBold">Override Encourage Update Local Version</TextView>
           <VATextInput
             inputType={'none'}
@@ -372,6 +372,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
                 checkEncourageUpdateLocalVersion()
               }
             }}
+            testID="overrideEncourageUpdateTestID"
           />
           <TextView variant="MobileBodyBold">Override What's New Local Version</TextView>
           <VATextInput
@@ -385,6 +386,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
                 checkWhatsNewLocalVersion()
               }
             }}
+            testID="overrideWhatsNewTestID"
           />
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <Button
