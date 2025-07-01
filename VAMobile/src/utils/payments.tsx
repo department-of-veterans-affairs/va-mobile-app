@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
-import { forEach, groupBy, keys, map } from 'underscore'
+import { forEach, groupBy, keys } from 'underscore'
 
 import { PaymentsByDate, PaymentsData, PaymentsMetaPagination } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'

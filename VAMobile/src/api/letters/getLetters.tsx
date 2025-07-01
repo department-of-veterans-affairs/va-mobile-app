@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import _ from 'underscore'
 
 import { LettersData, LettersList } from 'api/types'
 import { get } from 'store/api'
