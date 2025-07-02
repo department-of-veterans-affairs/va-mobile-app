@@ -9,6 +9,7 @@ export const AppointmentsExpandede2eConstants = {
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
   TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
+  GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID: 'goToVAGovTravelClaimStatus',
 }
 
 const checkTravelClaimAvailability = async (
@@ -128,6 +129,7 @@ const checkUpcomingApptDetails = async (
   locationAddress?: string,
   travelClaimId?: string,
   daysSinceAppointmentStart?: number,
+  travelPayClaimsFullHistory?: boolean,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -373,19 +375,35 @@ const checkUpcomingApptDetails = async (
     daysSinceAppointmentStart,
   )
 
-  if (travelClaimId && pastAppointment) {
-    if (!daysSinceAppointmentStart || daysSinceAppointmentStart < 30) {
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
-    } else {
-      await expect(
-        element(
-          by.text(
-            'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
-          ),
-        ),
-      ).toExist()
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+  if (pastAppointment && appointmentStatus === 'Confirmed') {
+    // We can only check if we know the days since the appointment started
+    if (daysSinceAppointmentStart) {
+      if (daysSinceAppointmentStart < 30) {
+        if (travelClaimId) {
+          await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+          await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+          await expect(element(by.id('travelPayHelp'))).toExist()
+        }
+      } else {
+        if (travelPayClaimsFullHistory) {
+          await expect(
+            element(
+              by.text(
+                'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+              ),
+            ),
+          ).toExist()
+        } else {
+          await expect(
+            element(
+              by.text('Your appointment is older than 30 days. You can still view your travel claim status on VA.gov.'),
+            ),
+          ).toExist()
+          await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
+        }
+        await expect(element(by.id('travelPayHelp'))).toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+      }
     }
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
@@ -473,6 +491,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       '2341 North Ave',
       '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
+      1,
     )
   })
 
@@ -493,6 +512,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Smoke test 5/21 - 1',
       undefined,
       '2341 North Ave',
+      undefined,
+      1,
     )
   })
 
@@ -540,6 +561,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Middletown VA Clinic',
       '4337 North Union Road',
+      undefined,
+      5,
     )
   })
 
@@ -619,6 +642,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Other details test',
       'Middletown VA Clinic',
       '4337 North Union Road',
+      undefined,
+      6,
     )
   })
 
@@ -682,6 +707,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      7,
     )
   })
 
@@ -731,6 +758,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      7,
     )
   })
 
@@ -817,6 +846,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Fort Collins VA Clinic - Claim - Confirmed',
       '2509 Research Boulevard',
+      undefined,
+      13,
     )
   })
 
@@ -842,6 +873,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'San Francisco VA Health Care System',
       '2360 East Pershing Boulevard',
       '20d73591-ff18-4b66-9838-1429ebbf1b6e',
+      26,
     )
   })
 
@@ -1121,6 +1153,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      47,
     )
   })
 
