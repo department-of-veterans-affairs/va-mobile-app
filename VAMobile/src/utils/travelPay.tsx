@@ -5,10 +5,7 @@ import { TFunction } from 'i18next'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
-import getEnv from 'utils/env'
 import { RouteNavigationFunction } from 'utils/hooks'
-
-const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 
 /**
  * Strips the timezone offset from a datetime string
