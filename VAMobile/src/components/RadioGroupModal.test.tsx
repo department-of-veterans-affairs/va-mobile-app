@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import RadioGroupModal, { RadioGroupModalProps, RadioPickerGroup } from 'components/RadioGroupModal'
 import { context, render } from 'testUtils'
-
-import RadioGroupModal, { RadioGroupModalProps, RadioPickerGroup } from './RadioGroupModal'
 
 context('RadioGroupModal', () => {
   const onSetSpy = jest.fn()
@@ -17,8 +16,8 @@ context('RadioGroupModal', () => {
     const group1: RadioPickerGroup = {
       title: 'Group 1 title',
       items: [
-        { value: 'option-one', labelKey: 'Option One' },
-        { value: 'option-two', labelKey: 'Option Two' },
+        { value: 'option-one', optionLabelKey: 'Option One' },
+        { value: 'option-two', optionLabelKey: 'Option Two' },
       ],
       onSetOption: onSetSpy,
     }

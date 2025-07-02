@@ -4,11 +4,6 @@ import { AccessibilityInfo } from 'react-native'
 
 import { isEqual, map } from 'underscore'
 
-import { NAMESPACE } from 'constants/namespaces'
-import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
-
 import {
   Box,
   ButtonDecoratorType,
@@ -18,12 +13,16 @@ import {
   TextLine,
   TextView,
   VASelector,
-} from '../../index'
-import { renderInputError } from './formFieldUtils'
+} from 'components'
+import { renderInputError, renderInputLabelSection } from 'components/FormWrapper/FormFields/formFieldUtils'
+import { NAMESPACE } from 'constants/namespaces'
+import { getTranslation } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 export type radioOption<T> = {
   /** translated text displayed next to the checkbox/radio */
-  labelKey: string
+  optionLabelKey: string
   /** optional arguments to pass in with the labelKey during translation */
   labelArgs?: { [key: string]: string }
   /** value of the radio button */
@@ -53,6 +52,12 @@ export type RadioGroupProps<T> = {
   onChange: (val: T) => void
   /** optional boolean that disables the radio group when set to true */
   disabled?: boolean
+  /** i18n key for the text label */
+  labelKey?: string
+  /** optional boolean that displays required text next to label if set to true */
+  isRequiredField?: boolean
+  /** optional callback to update the error message if there is an error */
+  setError?: (error?: string) => void
   /** optional error to display */
   error?: string
   /** optional boolean to indicate to use the radio buttons in a list */
@@ -67,6 +72,9 @@ const RadioGroup = <T,>({
   value,
   onChange,
   disabled = false,
+  labelKey,
+  isRequiredField,
+  setError,
   error,
   isRadioList,
   radioListTitle,
@@ -83,14 +91,14 @@ const RadioGroup = <T,>({
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { labelKey, labelArgs, a11yLabel, testID } = option
+    const { optionLabelKey, labelArgs, a11yLabel, testID } = option
 
     // Render option as simple text
     if (hasSingleOption) {
       return (
         // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-        <TextView accessibilityLabel={a11yLabel || getTranslation(labelKey, t, labelArgs)} variant="VASelector">
-          {getTranslation(labelKey, t, labelArgs)}
+        <TextView accessibilityLabel={a11yLabel || getTranslation(optionLabelKey, t, labelArgs)} variant="VASelector">
+          {getTranslation(optionLabelKey, t, labelArgs)}
         </TextView>
       )
     }
@@ -98,6 +106,9 @@ const RadioGroup = <T,>({
     const selected = isEqual(option.value, value)
     const onVASelectorChange = (_selected: boolean): void => {
       onChange(option.value)
+      if (setError && error) {
+        setError('')
+      }
     }
 
     return (
@@ -105,7 +116,7 @@ const RadioGroup = <T,>({
         selectorType={SelectorType.Radio}
         selected={selected}
         onSelectionChange={onVASelectorChange}
-        labelKey={labelKey}
+        labelKey={optionLabelKey}
         labelArgs={labelArgs}
         disabled={disabled}
         a11yLabel={a11yLabel}
@@ -150,7 +161,7 @@ const RadioGroup = <T,>({
         }
       }
       const textLines: Array<TextLine> = [
-        { text: option.labelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' },
+        { text: option.optionLabelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' },
       ]
 
       if (option.additionalLabelText && option.additionalLabelText.length > 0) {
@@ -173,11 +184,12 @@ const RadioGroup = <T,>({
         a11yRole: 'radio',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
-        testId: `${option.a11yLabel || option.labelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.a11yLabel || option.optionLabelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton
     })
+
     return (
       <Box>
         <DefaultList items={listItems} title={radioListTitle} />
@@ -188,7 +200,8 @@ const RadioGroup = <T,>({
   const getRadios = (): ReactElement => {
     return (
       <Box>
-        {!!error && <Box mb={theme.dimensions.condensedMarginBetween}>{renderInputError(error)}</Box>}
+        {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, '')}
+        {!!error && <Box>{renderInputError(error)}</Box>}
         {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
       </Box>
     )
