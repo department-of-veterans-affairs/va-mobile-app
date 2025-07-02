@@ -1,4 +1,4 @@
-import { ColorSchemeTypes } from './themes/standardTheme'
+import { ColorSchemeTypes } from 'styles/themes/standardTheme'
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
@@ -91,6 +91,7 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LabResultHeader: string
   LargeNavButton: string
   LargeNavSubtext: string
   MobileBody: string
