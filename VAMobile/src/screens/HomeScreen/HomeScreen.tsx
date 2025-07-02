@@ -46,6 +46,22 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import PaymentBreakdownModal from 'screens/HomeScreen/PaymentBreakdownModal/PaymentBreakdownModal'
+import ContactInformationScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen'
+import MilitaryInformationScreen from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen'
+import PersonalInformationScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from 'screens/HomeScreen/ProfileScreen/ProfileScreen'
+import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen'
+import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
+import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
+import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
+import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
+import NotificationsSettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
@@ -57,20 +73,6 @@ import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import { HomeStackParamList } from './HomeStackScreens'
-import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
-import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
-import ProfileScreen from './ProfileScreen/ProfileScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
-import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
-import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
-import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -708,6 +710,21 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="GiveFeedback"
+        component={GiveFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="SendUsFeedback"
+        component={SendUsFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="FeedbackSent"
+        component={FeedbackSentScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="AccountSecurity"
         component={AccountSecurity}
