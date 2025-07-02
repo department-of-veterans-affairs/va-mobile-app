@@ -12,7 +12,6 @@ function NoLettersScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  // another touch for e2e
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
     justifyContent: 'center',
