@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { context, render } from 'testUtils'
-
-import SetUpDirectDepositWebLink from './SetUpDirectDepositWebLink'
 
 context('SetUpDirectDepositWebLink', () => {
   const initializeTestInstance = () => {
