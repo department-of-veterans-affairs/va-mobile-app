@@ -1,23 +1,25 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CommonActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
+
+import { DateTime } from 'luxon'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { SetUpDirectDepositWebLink } from './components'
 
 const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 
 type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'InterstitialScreen'>
 
-function InterstitialScreen({ navigation }: InterstitialScreenProps) {
+function InterstitialScreen({ navigation, route }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const theme = useTheme()
@@ -50,7 +52,13 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: () => navigateTo('MileageScreen'),
+    onPrimaryContentButtonPress: () => {
+      navigateTo('MileageScreen')
+      navigation.dispatch({
+        ...CommonActions.setParams({ smocFlowStartDate: DateTime.now().toISO() }),
+        source: route.params.flowStepsRouteKey,
+      })
+    },
   })
 
   return (

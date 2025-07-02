@@ -6,37 +6,39 @@ import { AppointmentData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
-import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-
-import { HealthStackParamList } from '../HealthStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import {
   AddressScreen,
   BeneficiaryTravelAgreement,
   BurdenStatement,
-  ErrorScreen,
   InterstitialScreen,
   MileageScreen,
   ReviewClaimScreen,
+  SMOCErrorScreen,
   SubmitSuccessScreen,
   TravelClaimHelpScreen,
   VehicleScreen,
-} from './SubmitTravelPayFlowSteps'
+} from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
-  InterstitialScreen: undefined
+  InterstitialScreen: {
+    flowStepsRouteKey: string
+  }
   MileageScreen: undefined
   VehicleScreen: undefined
   AddressScreen: undefined
   ReviewClaimScreen: {
     appointment: AppointmentData
     appointmentRouteKey: string
+    smocFlowStartDate: string
   }
   SubmitSuccessScreen: {
     appointmentDateTime: string
     facilityName: string
     status: string
   }
-  ErrorScreen: {
+  SMOCErrorScreen: {
     error: TravelPayError
   }
   TravelClaimHelpScreen: undefined
@@ -46,6 +48,7 @@ export type TravelPayStack = WebviewStackParams & {
   FlowSteps: {
     appointment: AppointmentData
     appointmentRouteKey: string
+    smocFlowStartDate?: string
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
@@ -58,7 +61,8 @@ const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
 const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
-  const { appointment, appointmentRouteKey } = route.params
+  const flowStepsRouteKey = route.key
+  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
 
   return (
@@ -69,6 +73,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="InterstitialScreen"
         name="InterstitialScreen"
         component={InterstitialScreen}
+        initialParams={{ flowStepsRouteKey }}
       />
       <TravelPayMultiStepStack.Screen key="MileageScreen" name="MileageScreen" component={MileageScreen} />
       <TravelPayMultiStepStack.Screen key="VehicleScreen" name="VehicleScreen" component={VehicleScreen} />
@@ -77,7 +82,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         key="ReviewClaimScreen"
         name="ReviewClaimScreen"
         component={ReviewClaimScreen}
-        initialParams={{ appointment, appointmentRouteKey }}
+        initialParams={{ appointment, appointmentRouteKey, smocFlowStartDate }}
       />
       <TravelPayMultiStepStack.Screen
         key="SubmitSuccessScreen"
@@ -89,7 +94,7 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
         }}
         initialParams={{ appointmentDateTime: attributes.startDateUtc, facilityName: attributes.location.name }}
       />
-      <TravelPayMultiStepStack.Screen key="ErrorScreen" name="ErrorScreen" component={ErrorScreen} />
+      <TravelPayMultiStepStack.Screen key="SMOCErrorScreen" name="SMOCErrorScreen" component={SMOCErrorScreen} />
     </MultiStepSubtask>
   )
 }

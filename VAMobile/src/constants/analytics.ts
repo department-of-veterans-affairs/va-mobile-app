@@ -32,6 +32,23 @@ export const Events = {
       name: 'vama_allergy_list',
     }
   },
+  vama_lab_or_test_list: (timeFrame: string, count?: number): Event => {
+    return {
+      name: 'vama_lab_or_test_list',
+      params: {
+        timeFrame,
+        count,
+      },
+    }
+  },
+  vama_lab_or_test_details: (labType: string): Event => {
+    return {
+      name: 'vama_lab_or_test_details',
+      params: {
+        labType,
+      },
+    }
+  },
   vama_appt_cancel: (
     isPendingAppointment: boolean,
     apt_id: string | undefined,
@@ -1179,6 +1196,22 @@ export const Events = {
   vama_goto_payment_hist: (): Event => {
     return {
       name: 'vama_goto_payment_hist',
+    }
+  },
+  vama_smoc_time_taken: (totalTime: number): Event => {
+    return {
+      name: 'vama_smoc_time_taken',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_smoc_error: (error: string): Event => {
+    return {
+      name: 'vama_smoc_error',
+      params: {
+        error,
+      },
     }
   },
 }

@@ -6,6 +6,7 @@ import { AppointmentAttributes } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
@@ -21,8 +22,6 @@ import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { TravelPayHelp } from '../../../TravelPay/SubmitTravelPayFlowSteps/components'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -119,11 +118,54 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    if (!claim && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
+    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
+    // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
+    const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
+
+    if (
+      apiReturnsFullHistory &&
+      !claim &&
+      isEligibleForTravelPay(attributes) &&
+      daysLeftToFileTravelPay < 0 &&
+      !claimError
+    ) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}
         </TextView>
+      )
+    }
+
+    if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
+      return (
+        <>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
+            mb={theme.dimensions.condensedMarginBetween}
+            variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
+          </TextView>
+          <LinkWithAnalytics
+            type="custom"
+            onPress={() => {
+              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
+              // but the base web URL is actually /claims
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+              navigateTo('Webview', {
+                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+                useSSO: true,
+              })
+            }}
+            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
+            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            testID={`goToVAGovTravelClaimStatus`}
+          />
+          <TravelPayHelp />
+        </>
       )
     }
 

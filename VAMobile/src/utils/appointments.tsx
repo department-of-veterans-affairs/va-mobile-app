@@ -20,15 +20,14 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { LabelTagTypeConstants } from 'components/LabelTag'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
-
-import { LabelTagTypeConstants } from '../components/LabelTag'
-import { getTestIDFromTextLines } from './accessibility'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   getFormattedDate,
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
-} from './formattingUtils'
+} from 'utils/formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -303,13 +302,13 @@ const getListItemsForAppointments = (
   return listItems
 }
 
-const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
-  const { appointmentType } = attributes
-  return (
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
-  )
-}
+// const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
+//   const { appointmentType } = attributes
+//   return (
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
+//   )
+// }
 
 /**
  * Determines if an appointment is community care.
@@ -317,9 +316,9 @@ const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
  * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
  * @returns boolean - true if the appointment is community care appointment.
  */
-const getIsCommunityCare = (attributes: AppointmentAttributes) => {
-  return attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
-}
+// const getIsCommunityCare = (attributes: AppointmentAttributes) => {
+//   return attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
+// }
 
 /**
  * Determines if an appointment is phone only.
@@ -327,9 +326,9 @@ const getIsCommunityCare = (attributes: AppointmentAttributes) => {
  * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
  * @returns boolean - true if the appointment is phone only.
  */
-const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
-  return attributes.phoneOnly
-}
+// const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
+//   return attributes.phoneOnly
+// }
 
 /**
  * Determines if an appointment is a video appointment.
@@ -337,31 +336,29 @@ const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
  * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
  * @returns boolean - true if the appointment is a video appointment.
  */
-const getIsVideo = (attributes: AppointmentAttributes) => {
-  const { appointmentType } = attributes
-  return (
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
-  )
-}
+// const getIsVideo = (attributes: AppointmentAttributes) => {
+//   const { appointmentType } = attributes
+//   return (
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
+//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+//   )
+// }
 
-
-/**
- * Returns true or false if the appointment meets the travel pay criteria
- * @param attributes - type AppointmentAttributes, data attributes of an appointment
- * @returns boolean, true if the appointment meets the travel pay criteria
- */
-export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttributes) => {
-  const { status } = attributes
-  const isPast = !isAPendingAppointment(attributes)
-  const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
-  const isClinicVideo = isClinicVideoAppointment(attributes)
-  const isBooked = status === AppointmentStatusConstants.BOOKED
-  return isPast && isBooked && (isInPerson || isClinicVideo)
-}
-
+// /**
+//  * Returns true or false if the appointment meets the travel pay criteria
+//  * @param attributes - type AppointmentAttributes, data attributes of an appointment
+//  * @returns boolean, true if the appointment meets the travel pay criteria
+//  */
+// export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttributes) => {
+//   const { status } = attributes
+//   const isPast = !isAPendingAppointment(attributes)
+//   const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
+//   const isClinicVideo = isClinicVideoAppointment(attributes)
+//   const isBooked = status === AppointmentStatusConstants.BOOKED
+//   return isPast && isBooked && (isInPerson || isClinicVideo)
+// }
 
 /**
  * Returns true or false if the appointment is eligible for travel pay
@@ -372,8 +369,8 @@ export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
   const { travelPayClaim } = attributes
   // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
   const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
-  return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
-  // return attributes.travel_pay_eligible && hasNoClaim
+  // return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
+  return attributes.travel_pay_eligible && hasNoClaim
 }
 
 /**
@@ -505,11 +502,12 @@ export const getTextLinesForAppointmentListItem = (
       getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
     ]
   } else {
+    const travelPayTag = includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween)
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween),
-      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      travelPayTag,
+      !travelPayTag && getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
       getModality(appointmentType, phoneOnly, location, theme, t),
