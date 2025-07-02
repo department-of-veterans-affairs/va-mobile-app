@@ -8,7 +8,6 @@ This script should be updated whenever new things are added/changed in src/scree
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { HomeE2eIdConstants } from './HomeScreen.e2e'
 import {
   CommonE2eIdConstants,
   checkIfElementIsPresent,
