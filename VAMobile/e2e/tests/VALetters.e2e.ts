@@ -142,6 +142,9 @@ describe('VA Letters', () => {
           await device.launchApp({ newInstance: false })
 
           await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
+          await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
+            .toBeVisible()
+            .withTimeout(20000)
           await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
           await element(by.text('Done')).tap()
         }
