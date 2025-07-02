@@ -5,9 +5,10 @@ Note: This test does not cover verifying that the correct letter is downloaded b
 When to update:
 This script should be updated whenever new things are added/changed in src/screens/BenefitsScreen/Letters, anything is added/changed in src/api/letters or if anything is changed in src/store/api/demo/mocks/letters.json.
 */
-import { by, device, element, expect } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
+import { HomeE2eIdConstants } from './HomeScreen.e2e'
 import {
   CommonE2eIdConstants,
   checkIfElementIsPresent,
@@ -142,7 +143,9 @@ describe('VA Letters', () => {
           await device.launchApp({ newInstance: false })
 
           await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
-          await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
+          await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
+            .toBeVisible()
+            .withTimeout(20000)
           await element(by.text('Done')).tap()
         }
       }
