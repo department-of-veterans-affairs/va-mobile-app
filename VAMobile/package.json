@@ -17,9 +17,11 @@
     "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
-    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx && yarn run lint:changed",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
+    "lint:changed": "CHANGED_FILES=$(git diff --diff-filter=ACM --relative --name-only origin/develop -- \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./src/**/*.js\" \"./src/**/*.jsx\" \":(exclude)./src/**/index.ts\") && eslint --ignore-pattern '**/index.ts' --no-eslintrc -c ./.eslintrc.changed.js $CHANGED_FILES",
+    "lint:changed:ci": "eslint --ignore-pattern '**/index.ts' --no-eslintrc --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js $CHANGED_FILES && yarn run tsc:compile",
     "lint:ci": "eslint --max-warnings 0 --rule 'deprecate/import: off' ./src --ext .js,.jsx,.ts,.tsx && yarn run tsc:compile",
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache",
@@ -80,6 +82,7 @@
     "react-native-keychain": "^9.2.3",
     "react-native-localize": "^3.3.0",
     "react-native-notifications": "^5.1.0",
+    "react-native-quick-base64": "^2.1.2",
     "react-native-safe-area-context": "^4.10.9",
     "react-native-screens": "^3.37.0",
     "react-native-shadow-2": "^7.1.1",
@@ -158,7 +161,8 @@
     "watch/**/merge": "^2.1.1"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json}": "prettier --write",
+    "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed"
   },
   "engines": {
     "node": ">=18.0.0"

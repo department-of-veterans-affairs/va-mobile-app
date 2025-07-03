@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
@@ -28,6 +30,23 @@ export const Events = {
   vama_allergy_list: (): Event => {
     return {
       name: 'vama_allergy_list',
+    }
+  },
+  vama_lab_or_test_list: (timeFrame: string, count?: number): Event => {
+    return {
+      name: 'vama_lab_or_test_list',
+      params: {
+        timeFrame,
+        count,
+      },
+    }
+  },
+  vama_lab_or_test_details: (labType: string): Event => {
+    return {
+      name: 'vama_lab_or_test_details',
+      params: {
+        labType,
+      },
     }
   },
   vama_appt_cancel: (
@@ -622,6 +641,17 @@ export const Events = {
       },
     }
   },
+  vama_feedback: (satisfaction: string, meetsMyNeeds: string, easyToUse: string, task: string): Event => {
+    return {
+      name: 'vama_feedback',
+      params: {
+        satisfaction,
+        meetsMyNeeds,
+        easyToUse,
+        task,
+      },
+    }
+  },
   vama_hs_appts_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_appts_load_time',
@@ -753,6 +783,16 @@ export const Events = {
       name: 'vama_login_token_store',
       params: {
         success,
+      },
+    }
+  },
+  vama_mw_shown: (feature: string, start: DateTime, end: DateTime): Event => {
+    return {
+      name: 'vama_mw_shown',
+      params: {
+        feature,
+        start,
+        end,
       },
     }
   },
@@ -1156,6 +1196,22 @@ export const Events = {
   vama_goto_payment_hist: (): Event => {
     return {
       name: 'vama_goto_payment_hist',
+    }
+  },
+  vama_smoc_time_taken: (totalTime: number): Event => {
+    return {
+      name: 'vama_smoc_time_taken',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_smoc_error: (error: string): Event => {
+    return {
+      name: 'vama_smoc_error',
+      params: {
+        error,
+      },
     }
   },
 }
