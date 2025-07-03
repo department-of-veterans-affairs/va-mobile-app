@@ -2,9 +2,8 @@ import React from 'react'
 
 import { t } from 'i18next'
 
+import VehicleScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/VehicleScreen'
 import { context, mockNavProps, render, screen } from 'testUtils'
-
-import VehicleScreen from './VehicleScreen'
 
 context('VehicleScreen', () => {
   const props = mockNavProps()
