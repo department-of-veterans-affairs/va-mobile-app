@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+This release introduces a new in-app feedback survey located in the profile for Veterans to share general app feedback. We also added a “Dismiss” button to the non-VA meds alert, limited its display to relevant users, and updated the appointment reschedule link to show only for eligible appointments.
