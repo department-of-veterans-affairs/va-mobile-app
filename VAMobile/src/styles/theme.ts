@@ -1,4 +1,4 @@
-import { ColorSchemeTypes } from './themes/standardTheme'
+import { ColorSchemeTypes } from 'styles/themes/standardTheme'
 
 export type VAButtonBackgroundColors = {
   buttonPrimary: string
@@ -91,6 +91,7 @@ export type VATypographyThemeVariants = {
   HelperText: string
   HelperTextBold: string
   LabelTag: string
+  LabResultHeader: string
   LargeNavButton: string
   LargeNavSubtext: string
   MobileBody: string
@@ -113,6 +114,7 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
+  vadsFontHeadingXsmall: string
 }
 
 export type VABackgroundColors = {
@@ -230,6 +232,7 @@ export type VATheme = {
     headerLeftButtonFromTextPadding: number
     fullScreenNavigationBarOffset: number
     fullScreenContentButtonHeight: number
+    floatingButtonOffset: number
   }
   fontFace: {
     regular: string

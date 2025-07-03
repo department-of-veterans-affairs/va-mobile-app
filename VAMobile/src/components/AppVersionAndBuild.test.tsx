@@ -1,8 +1,7 @@
 import React from 'react'
 
+import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { context, render, screen } from 'testUtils'
-
-import AppVersionAndBuild from './AppVersionAndBuild'
 
 context('AppVersionAndBuild', () => {
   beforeEach(() => {

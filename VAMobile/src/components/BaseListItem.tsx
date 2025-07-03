@@ -5,13 +5,12 @@ import { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
+import Box, { BackgroundVariant, BoxProps } from 'components/Box'
+import SwitchComponent, { SwitchProps } from 'components/Switch'
 import FileRequestNumberIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestNumberIndicator'
 import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
 import { triggerHaptic } from 'utils/haptics'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BackgroundVariant, BoxProps } from './Box'
-import SwitchComponent, { SwitchProps } from './Switch'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -35,6 +34,8 @@ export enum ButtonDecoratorType {
   CheckBoxEmpty = 'CheckBoxOutlineBlank',
   /** Filled check box button decorator */
   CheckBoxFilled = 'CheckBox',
+  /** Launch to external site decorator */
+  Launch = 'Launch',
 }
 
 export type ListItemDecoratorProps = Partial<IconProps> | Partial<SwitchProps>
@@ -145,6 +146,15 @@ export const ButtonDecorator: FC<{
           height={radioBtnHeight}
           width={radioBtnWidth}
           fill={theme.colors.icon.checkboxDisabledContrast}
+        />
+      )
+    case ButtonDecoratorType.Launch:
+      return (
+        <Icon
+          name={'Launch'}
+          height={radioBtnHeight}
+          width={radioBtnWidth}
+          fill={theme.colors.icon.announcementBanner}
         />
       )
 

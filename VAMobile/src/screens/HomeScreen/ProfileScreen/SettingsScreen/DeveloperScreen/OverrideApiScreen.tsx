@@ -18,7 +18,7 @@ import { useAppDispatch, useTheme } from 'utils/hooks'
 
 type OverrideAPIScreenProps = StackScreenProps<HomeStackParamList, 'OverrideAPI'>
 
-const APIGroupings: {
+export const APIGroupings: {
   name: string
   endpoints: string[]
 }[] = [
@@ -94,8 +94,16 @@ const APIGroupings: {
     ],
   },
   {
+    name: 'Travel Pay',
+    endpoints: ['/v0/travel-pay/claims'],
+  },
+  {
     name: 'Vaccines',
     endpoints: ['/v1/health/immunizations', '/v0/health/locations/'],
+  },
+  {
+    name: 'Allergies',
+    endpoints: ['/v0/health/allergy-intolerance'],
   },
 ]
 
@@ -171,6 +179,7 @@ const IndividualQueryDisplay = (
           }
           setErrors(newErrors)
         }}
+        testID={`${endpoint}_network`}
       />
       <VASelector
         selectorType={SelectorType.Checkbox}
@@ -207,6 +216,7 @@ const IndividualQueryDisplay = (
           }
           setErrors(newErrors)
         }}
+        testID={`${endpoint}_backendOverride`}
       />
       {backEndSelected && (
         <Box mb={theme.dimensions.standardMarginBetween}>
@@ -232,6 +242,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_title`}
           />
           <TextView>Body</TextView>
           <VATextInput
@@ -255,6 +266,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_body`}
           />
           <TextView>Telephone</TextView>
           <VATextInput
@@ -278,6 +290,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_telephone`}
           />
           <VASelector
             selectorType={SelectorType.Checkbox}
@@ -298,6 +311,7 @@ const IndividualQueryDisplay = (
               otherErrors.push(backEndError)
               setErrors(otherErrors)
             }}
+            testID={`${endpoint}_backendOverride_refreshable`}
           />
         </Box>
       )}
@@ -305,6 +319,7 @@ const IndividualQueryDisplay = (
         selectorType={SelectorType.Checkbox}
         labelKey={t('overrideAPI.otherCodes')}
         selected={otherSelected}
+        testID={`otherSelector-${endpoint}`}
         onSelectionChange={() => {
           setNetworkSelected(false)
           setBackEndSelected(false)
@@ -343,6 +358,7 @@ const IndividualQueryDisplay = (
           <VATextInput
             value={initialOtherErrorCode}
             inputType="phone"
+            testID={`otherStatus-${endpoint}`}
             onChange={(val) => {
               const otherErrors = _.filter(overrideErrors, function (n) {
                 return n.endpoint !== endpoint
