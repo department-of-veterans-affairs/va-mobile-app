@@ -1,5 +1,167 @@
 [
   {
+    "title": "v2.54.0",
+    "due_on": "2025-07-15T07:00:00Z",
+    "issues": [
+      {
+        "title": "BUG - [Sev-2] - [Android] - Single Sign On for Appointment scheduling doesn't scroll in web view",
+        "number": 11144,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11144",
+        "isPR": false
+      },
+      {
+        "title": "Fix failing E2E Tests - Prescriptions / Navigation",
+        "number": 11139,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11139",
+        "isPR": false
+      },
+      {
+        "title": "BUG - [Sev-3] - [All] -  Screen reader stops on a blank line at the top of pages where the title is moved for the screen reader",
+        "number": 11126,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11126",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage ofsaveAddress.tsx up to 80%",
+        "number": 11088,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11088",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of consoleWarnings.ts up to 80%",
+        "number": 11085,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11085",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of MenuItem.tsx up to 80%",
+        "number": 11082,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11082",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of Menu.tsx up to 80%",
+        "number": 11081,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11081",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of WhatsNew.tsx up to 80%",
+        "number": 11080,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11080",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of WaygateEditScreen.tsx up to 80%",
+        "number": 11079,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11079",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of RemoteConfigScreen.tsx up to 80%",
+        "number": 11078,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11078",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of OverrideApiScreen.tsx up to 80%",
+        "number": 11077,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11077",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of DeveloperScreen.tsx up to 80%",
+        "number": 11076,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11076",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of rnInAppUpdate.tsx up to 80%",
+        "number": 11075,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11075",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of CancelAppointment.tsx up to 80%",
+        "number": 11073,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11073",
+        "isPR": false
+      },
+      {
+        "title": "Travel Pay eligible appointments on Home Screen",
+        "number": 11063,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11063",
+        "isPR": false
+      },
+      {
+        "title": "10872 Update various relative paths to absolute paths",
+        "number": 11027,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11027",
+        "isPR": true
+      },
+      {
+        "title": "Add \"Dismiss\" button to Non-VA meds alert",
+        "number": 11018,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11018",
+        "isPR": false
+      },
+      {
+        "title": "Frontend change to display non-VA meds alert only when Veteran has non-VA meds",
+        "number": 10980,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10980",
+        "isPR": false
+      },
+      {
+        "title": "Remove Phase two platform-level event tracking from the app",
+        "number": 10942,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10942",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 1)",
+        "number": 10871,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10871",
+        "isPR": false
+      },
+      {
+        "title": "Appointments Reschedule weblink shown for Types of Care that allow online scheduling",
+        "number": 10797,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10797",
+        "isPR": false
+      },
+      {
+        "title": "Remove unused events from analytics.ts and the data dictionary",
+        "number": 10792,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10792",
+        "isPR": false
+      },
+      {
+        "title": "In App Feedback Survey",
+        "number": 10734,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10734",
+        "isPR": false
+      },
+      {
+        "title": "Add labs and tests to VAHB",
+        "number": 10405,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10405",
+        "isPR": true
+      },
+      {
+        "title": "FE analytics for maintenance windows",
+        "number": 10384,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10384",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Demo Mode to reflect BE Appointment Activity Change",
+        "number": 9905,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9905",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.53.0",
     "due_on": "2025-07-01T07:00:00Z",
     "issues": [
