@@ -67,7 +67,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
-  travel_pay_eligible: true,
+  travelPayEligible: true,
 }
 
 type createProps = {
@@ -77,7 +77,7 @@ type createProps = {
   isPending: AppointmentAttributes['isPending']
   appointmentType: AppointmentType
   phoneOnly: AppointmentAttributes['phoneOnly']
-  travel_pay_eligible?: boolean
+  travelPayEligible?: boolean
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -89,13 +89,13 @@ const mockStartDateUtc = DateTime.utc().toISO()
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
-  travel_pay_eligible = true,
+  travelPayEligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travel_pay_eligible }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim,  travelPayEligible }
 }
 
 const claimExamAttributes = createTestAppointmentAttributes({
@@ -104,7 +104,7 @@ const claimExamAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: true,
+  travelPayEligible: true,
 })
 
 const communityCareAttributes = createTestAppointmentAttributes({
@@ -113,7 +113,7 @@ const communityCareAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: false,
+  travelPayEligible: false,
 })
 
 const inPersonVAAttributes = createTestAppointmentAttributes({
@@ -122,7 +122,7 @@ const inPersonVAAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: true,
+  travelPayEligible: true,
 })
 
 const phoneAppointmentAttributes = createTestAppointmentAttributes({
@@ -131,7 +131,7 @@ const phoneAppointmentAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: true,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: false,
+  travelPayEligible: false,
 })
 
 const videoAtlasAttributes = createTestAppointmentAttributes({
@@ -140,7 +140,7 @@ const videoAtlasAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: true,
+  travelPayEligible: true,
 })
 
 const videoGFEAttributes = createTestAppointmentAttributes({
@@ -149,7 +149,7 @@ const videoGFEAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: false,
+  travelPayEligible: false,
 })
 
 const videoHomeAttributes = createTestAppointmentAttributes({
@@ -158,7 +158,7 @@ const videoHomeAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: false,
+  travelPayEligible: false,
 })
 
 const videoOnsiteAttributes = createTestAppointmentAttributes({
@@ -167,7 +167,7 @@ const videoOnsiteAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
-  travel_pay_eligible: true,
+  travelPayEligible: true,
 })
 
 const tests = [
@@ -206,7 +206,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
-      travel_pay_eligible: true,
+      travelPayEligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -219,7 +219,7 @@ context('AppointmentFileTravelPayAlert', () => {
       travelPayClaim: undefined,
       isPending: false,
       phoneOnly: false,
-      travel_pay_eligible: true,
+      travelPayEligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -233,7 +233,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
-      travel_pay_eligible: true,
+      travelPayEligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
@@ -247,7 +247,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
-      travel_pay_eligible: false,
+      travelPayEligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -260,7 +260,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: true,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
-      travel_pay_eligible: false,
+      travelPayEligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -272,7 +272,7 @@ context('AppointmentFileTravelPayAlert', () => {
       appointmentType: AppointmentTypeConstants.VA,
       isPending: false,
       phoneOnly: false,
-      travel_pay_eligible: true,
+      travelPayEligible: true,
       travelPayClaim: {
         ...travelPayClaimData,
         claim: {

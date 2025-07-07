@@ -174,6 +174,7 @@ export type AppointmentAttributes = {
   reason: string | null
   isCovidVaccine: boolean
   serviceCategoryName: string | null
+  travelPayEligible: boolean
   // pending appointment props
   isPending: boolean
   typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
@@ -186,7 +187,6 @@ export type AppointmentAttributes = {
   physicalLocation?: string
   travelPayClaim?: AppointmentTravelPayClaim
   showScheduleLink?: boolean
-  travel_pay_eligible: boolean
 }
 
 export type AppointmentData = {

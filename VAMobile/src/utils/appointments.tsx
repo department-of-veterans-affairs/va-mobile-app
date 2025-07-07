@@ -369,8 +369,7 @@ export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
   const { travelPayClaim } = attributes
   // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
   const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
-  // return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
-  return attributes.travel_pay_eligible && hasNoClaim
+  return attributes.travelPayEligible && hasNoClaim
 }
 
 /**

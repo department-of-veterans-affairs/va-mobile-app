@@ -41,6 +41,7 @@
             "reason": "Test",
             "isCovidVaccine": false,
             "typeOfCare": "Podiatry",
+            "travelPayEligible": false,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -190,6 +191,7 @@
             "comment": null,
             "healthcareProvider": "Sami Alsahhar - Onsite - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "travelPayEligible": true,
             "location": {
               "id": "984GA",
               "name": "Middletown VA Clinic",
@@ -345,6 +347,7 @@
             "comment": "Other details test",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "travelPayEligible": true,
             "location": {
               "id": "984GA",
               "name": "Middletown VA Clinic",
