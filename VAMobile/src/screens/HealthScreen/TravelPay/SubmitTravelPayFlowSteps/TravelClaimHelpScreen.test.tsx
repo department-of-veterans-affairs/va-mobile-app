@@ -3,9 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import TravelClaimHelpScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import TravelClaimHelpScreen from './TravelClaimHelpScreen'
 
 const mockPopSpy = jest.fn()
 

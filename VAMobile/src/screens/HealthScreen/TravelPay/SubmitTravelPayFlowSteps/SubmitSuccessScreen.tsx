@@ -10,11 +10,10 @@ import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { navigateToTravelPayWebsite } from 'utils/travelPay'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { SetUpDirectDepositWebLink } from './components'
 
 type SubmitSuccessScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SubmitSuccessScreen'>
 

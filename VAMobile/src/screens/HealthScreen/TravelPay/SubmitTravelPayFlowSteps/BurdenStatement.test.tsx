@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import BurdernStatement from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/BurdenStatement'
 import { context, mockNavProps, render } from 'testUtils'
-
-import BurdernStatement from './BurdenStatement'
 
 context('BurdenStatement', () => {
   const initializeTestInstance = () => {
