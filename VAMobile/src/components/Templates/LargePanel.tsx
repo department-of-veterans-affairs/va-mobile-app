@@ -7,10 +7,9 @@ import { useNavigation } from '@react-navigation/native'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { VAScrollView, WaygateWrapper } from 'components'
+import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.

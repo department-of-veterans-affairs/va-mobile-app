@@ -4,15 +4,15 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PaymentIssue from 'screens/PaymentsScreen/PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import { context, mockNavProps, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import PaymentIssue from './PaymentIssueScreen'
 
 context('PaymentIssueScreen', () => {
   beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     render(<PaymentIssue {...props} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('initializes correctly', () => {
