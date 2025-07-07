@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, View, ViewStyle } from 'react-native'
 
@@ -65,11 +65,23 @@ export const LargePanel: FC<LargePanelProps> = ({
   removeInsets,
   hideModal,
 }) => {
+  const [showScrollView, setShowScrollView] = useState(false)
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const confirmAlert = useDestructiveActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
+
+  // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
+  // https://github.com/facebook/react-native/issues/48822
+  useEffect(() => {
+    if (!hideModal) {
+      const timeout = setTimeout(() => setShowScrollView(true), 50)
+      return () => clearTimeout(timeout)
+    } else {
+      setShowScrollView(false)
+    }
+  }, [hideModal])
 
   const leftTitleButtonPress = () => {
     confirmAlert({
@@ -136,17 +148,19 @@ export const LargePanel: FC<LargePanelProps> = ({
     <Modal visible={!hideModal} animationType="slide" transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView
-          testID={testID}
-          removeInsets={removeInsets}
-          contentContainerStyle={removeInsets ? containerStyle : undefined}>
-          <WaygateWrapper>
-            {children}
-            {footerButtonText && onFooterButtonPress && (
-              <Button label={footerButtonText} onPress={onFooterButtonPress} />
-            )}
-          </WaygateWrapper>
-        </VAScrollView>
+        {showScrollView && (
+          <VAScrollView
+            testID={testID}
+            removeInsets={removeInsets}
+            contentContainerStyle={removeInsets ? containerStyle : undefined}>
+            <WaygateWrapper>
+              {children}
+              {footerButtonText && onFooterButtonPress && (
+                <Button label={footerButtonText} onPress={onFooterButtonPress} />
+              )}
+            </WaygateWrapper>
+          </VAScrollView>
+        )}
       </View>
     </Modal>
   )
