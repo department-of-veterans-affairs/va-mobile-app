@@ -302,64 +302,6 @@ const getListItemsForAppointments = (
   return listItems
 }
 
-// const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
-//   const { appointmentType } = attributes
-//   return (
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
-//   )
-// }
-
-/**
- * Determines if an appointment is community care.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is community care appointment.
- */
-// const getIsCommunityCare = (attributes: AppointmentAttributes) => {
-//   return attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
-// }
-
-/**
- * Determines if an appointment is phone only.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is phone only.
- */
-// const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
-//   return attributes.phoneOnly
-// }
-
-/**
- * Determines if an appointment is a video appointment.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is a video appointment.
- */
-// const getIsVideo = (attributes: AppointmentAttributes) => {
-//   const { appointmentType } = attributes
-//   return (
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
-//     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
-//   )
-// }
-
-// /**
-//  * Returns true or false if the appointment meets the travel pay criteria
-//  * @param attributes - type AppointmentAttributes, data attributes of an appointment
-//  * @returns boolean, true if the appointment meets the travel pay criteria
-//  */
-// export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttributes) => {
-//   const { status } = attributes
-//   const isPast = !isAPendingAppointment(attributes)
-//   const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
-//   const isClinicVideo = isClinicVideoAppointment(attributes)
-//   const isBooked = status === AppointmentStatusConstants.BOOKED
-//   return isPast && isBooked && (isInPerson || isClinicVideo)
-// }
-
 /**
  * Returns true or false if the appointment is eligible for travel pay
  * @param attributes - type AppointmentAttributes, data attributes of an appointment
