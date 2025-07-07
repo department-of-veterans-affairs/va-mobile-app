@@ -256,7 +256,7 @@ describe('AppointmentTravelClaimDetails', () => {
             travelPayEligible: true,
           })
           initializeTestInstance('Past', { ...missedClaimDeadlineData })
-          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
         })
       })
 
