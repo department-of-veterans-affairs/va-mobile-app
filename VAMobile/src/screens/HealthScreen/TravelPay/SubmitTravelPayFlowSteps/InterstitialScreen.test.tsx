@@ -3,9 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import InterstitialScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/InterstitialScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import InterstitialScreen from './InterstitialScreen'
 
 const mockNavigationSpy = jest.fn()
 
