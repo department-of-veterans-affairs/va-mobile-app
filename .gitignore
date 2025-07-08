@@ -149,6 +149,7 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 */fastlane/README.md
+.github/scripts/app-store-images/fastlane/
 
 # CircleCI
   # CCI installs all the deps including yarn at the project root and we don't want to check this in
