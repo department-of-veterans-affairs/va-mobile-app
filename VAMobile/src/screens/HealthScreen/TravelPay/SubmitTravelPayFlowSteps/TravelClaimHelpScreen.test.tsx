@@ -12,6 +12,7 @@ context('TravelClaimHelpScreen', () => {
   const initializeTestInstance = () => {
     const props = mockNavProps(undefined, { pop: mockPopSpy })
     render(<TravelClaimHelpScreen {...props} />)
+    jest.advanceTimersByTime(50)
   }
   it('should initialize correctly', () => {
     initializeTestInstance()

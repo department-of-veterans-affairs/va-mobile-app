@@ -4,14 +4,14 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 import { context, mockNavProps, render } from 'testUtils'
-
-import WhatDoIDoIfDisagreement from './WhatDoIDoIfDisagreement'
 
 context('WhatDoIDoIfDisagreement', () => {
   beforeEach(() => {
     const props = mockNavProps({}, {}, { params: { display: '', value: 'active' } })
     render(<WhatDoIDoIfDisagreement {...props} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('Renders WhatDoIDoIfDisagreement', () => {
