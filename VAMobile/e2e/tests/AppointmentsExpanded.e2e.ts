@@ -25,6 +25,7 @@ const checkTravelClaimAvailability = async (
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
+
   if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId && !claimError) {
     if (daysSinceAppointmentStart < 30) {
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
@@ -417,7 +418,9 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
   if (
     text === 'Sami Alsahhar - HOME - Canceled' ||
     text === 'At VA Palo Alto Health Care System' ||
-    text === 'At Hampton VA Medical Center'
+    text === 'At Hampton VA Medical Center' ||
+    text === 'At San Francisco VA Health Care System' ||
+    text === 'At LA VA Medical System'
   ) {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
