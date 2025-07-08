@@ -22,7 +22,7 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
         label={'Start a statement'}
         onPress={() => {
           navigateTo('Webview', {
-            url: `https://didactic-cod-xx56j6p5vg3v45v-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/personal-information`,
+            url: `https://didactic-cod-xx56j6p5vg3v45v-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`,
             useSSO: true,
             onClose: (url: string) => {
               // TODO probably check if its the right url or path (ex. '/submit-statement-form-21-4138')
@@ -33,6 +33,8 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
               const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
               let status = ''
               switch (endUrl) {
+                case 'introduction':
+                case 'statement-type':
                 case 'personal-information':
                 case 'identification-information':
                 case 'mailing-address':
@@ -51,6 +53,7 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
               snackbar.show('Form updated successfully', {
                 offset: 160,
               })
+              // @ts-ignore
               setActiveForms((prevItems) => [
                 {
                   id: Date.now(),
