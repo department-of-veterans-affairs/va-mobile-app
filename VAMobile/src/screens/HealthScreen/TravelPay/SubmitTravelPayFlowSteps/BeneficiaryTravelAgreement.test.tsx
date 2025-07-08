@@ -10,6 +10,7 @@ context('BeneficiaryTravelAgreement', () => {
   const initializeTestInstance = () => {
     const props = mockNavProps()
     render(<BeneficiaryTravelAgreement {...props} />)
+    jest.advanceTimersByTime(50)
   }
   it('initializes correctly', () => {
     initializeTestInstance()

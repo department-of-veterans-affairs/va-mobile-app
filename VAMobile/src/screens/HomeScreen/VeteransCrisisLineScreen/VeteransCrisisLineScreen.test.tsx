@@ -4,13 +4,13 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import { context, render } from 'testUtils'
-
-import VeteransCrisisLineScreen from './VeteransCrisisLineScreen'
 
 context('VeteransCrisisLineScreen', () => {
   beforeEach(() => {
     render(<VeteransCrisisLineScreen />)
+    jest.advanceTimersByTime(50)
   })
 
   it('initializes correctly', () => {
