@@ -1,4 +1,4 @@
-import { TravelPayClaimSummary } from './TravelPayClaimData'
+import { TravelPayClaimSummary } from 'api/types/TravelPayClaimData'
 
 export const AppointmentTimeZoneConstants: {
   PacificHonolulu: AppointmentTimeZone
@@ -185,6 +185,7 @@ export type AppointmentAttributes = {
   vetextId: string
   physicalLocation?: string
   travelPayClaim?: AppointmentTravelPayClaim
+  showScheduleLink?: boolean
 }
 
 export type AppointmentData = {
@@ -224,6 +225,7 @@ export type AppointmentsMetaPagination = {
 export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
   pagination?: AppointmentsMetaPagination
+  travelPayEligibleCount?: number
   upcomingAppointmentsCount: number
   upcomingDaysLimit: number
 }

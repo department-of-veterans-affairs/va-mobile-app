@@ -103,6 +103,8 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
+  LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
+  LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
@@ -310,6 +312,31 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
+/** Scroll down inside container until specified text is found
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToElement(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+}
+
+/** Test for the presence of text 1 or more times
+ *
+ * @param text - string of the text to match
+ */
+export const testForOneOrManyOccurancesOf = async (text: string) => {
+  const multipleMatchedElements = await element(by.text(text)).getAttributes()
+  if (!('elements' in multipleMatchedElements)) {
+    await expect(element(by.text(text))).toExist()
+  } else {
+    await expect(element(by.text(text)).atIndex(0)).toExist()
+  }
+}
+
 /** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -472,6 +499,10 @@ export async function openVaccineRecords() {
 }
 export async function openAllergyRecords() {
   await element(by.id(CommonE2eIdConstants.ALLERGIES_BUTTON_ID)).tap()
+}
+
+export async function openLabsAndTestRecords() {
+  await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_BUTTON_ID)).tap()
 }
 
 export async function openMedicalRecords() {
@@ -770,6 +801,10 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
+  await waitFor(element(by.label(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(100, 'down')
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
