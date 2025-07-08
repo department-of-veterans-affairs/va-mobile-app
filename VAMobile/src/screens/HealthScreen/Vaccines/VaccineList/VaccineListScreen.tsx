@@ -22,15 +22,14 @@ import {
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import NoVaccineRecords from 'screens/HealthScreen/Vaccines/NoVaccineRecords/NoVaccineRecords'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getA11yLabelText } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import NoVaccineRecords from '../NoVaccineRecords/NoVaccineRecords'
 
 type VaccineListScreenProps = StackScreenProps<HealthStackParamList, 'VaccineList'>
 

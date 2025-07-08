@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { lettersKeys } from 'api/letters/queryKeys'
 import { LettersData, LettersList } from 'api/types'
 import { get } from 'store/api'
-
-import { lettersKeys } from './queryKeys'
 
 /**
  * Fetch user letters

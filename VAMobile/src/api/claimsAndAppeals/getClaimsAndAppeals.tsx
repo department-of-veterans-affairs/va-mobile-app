@@ -1,15 +1,22 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { has } from 'underscore'
+import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { ClaimsAndAppealsListPayload } from 'api/types'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
+import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 
-import { claimsAndAppealsKeys } from './queryKeys'
+const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
+  return chain(claimsAndAppeals)
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.dateFiled))
+    .sortBy((claimAndAppeal) => new Date(claimAndAppeal.attributes.updatedAt))
+    .reverse()
+    .value()
+}
 
 /**
  * Fetch user ClaimsAndAppeals
@@ -23,7 +30,10 @@ const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppea
   })
 
   if (response) {
-    return response
+    return {
+      ...response,
+      data: sortByLatestDate(response.data),
+    }
   }
 }
 

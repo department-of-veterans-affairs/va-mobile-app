@@ -23,6 +23,8 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAllergyRecords from 'screens/HealthScreen/Allergies/NoAllergyRecords/NoAllergyRecords'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -30,9 +32,6 @@ import { getA11yLabelText } from 'utils/common'
 import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import NoAllergyRecords from '../NoAllergyRecords/NoAllergyRecords'
 
 type AllergyListScreenProps = StackScreenProps<HealthStackParamList, 'AllergyList'>
 

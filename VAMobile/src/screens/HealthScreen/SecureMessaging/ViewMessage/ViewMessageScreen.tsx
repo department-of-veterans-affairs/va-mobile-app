@@ -44,6 +44,8 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
+import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
@@ -53,9 +55,6 @@ import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import CollapsibleMessage from './CollapsibleMessage'
-import MessageCard from './MessageCard'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessage'>
 
