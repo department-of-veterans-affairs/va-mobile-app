@@ -65,6 +65,28 @@ const getWebViewLink = (
   return webViewLinkHelper(url, text, navigateTo, t, testID)
 }
 
+// This function generates a webview link specifically for video appointments
+// Where device preparation is necessary. It is shown in addition to the other
+// webview link for general information.
+const getVideoWebviewLink = (
+  type: AppointmentDetailsScreenType,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  t: TFunction,
+) => {
+  if (
+    [
+      AppointmentDetailsTypeConstants.VideoAtlas,
+      AppointmentDetailsTypeConstants.VideoGFE,
+      AppointmentDetailsTypeConstants.VideoHome,
+    ].includes(type)
+  ) {
+    const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
+    return webViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
+  }
+
+  return null
+}
+
 type AppointmentMedicationWordingProps = {
   subType: AppointmentDetailsSubType
   type: AppointmentDetailsScreenType
@@ -77,23 +99,8 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
   const theme = useTheme()
 
   const webViewLink = getWebViewLink(type, navigateTo, t)
-  let videoHealthAppointmentsLink: React.ReactNode | null = null
-  if (
-    [
-      AppointmentDetailsTypeConstants.VideoAtlas,
-      AppointmentDetailsTypeConstants.VideoGFE,
-      AppointmentDetailsTypeConstants.VideoHome,
-    ].includes(type)
-  ) {
-    const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
-    videoHealthAppointmentsLink = webViewLinkHelper(
-      WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS,
-      text,
-      navigateTo,
-      t,
-      'prepareForVideoVisitTestID',
-    )
-  }
+  const videoWebViewLink = getVideoWebviewLink(type, navigateTo, t)
+
   const getContent = () => {
     switch (type) {
       case AppointmentDetailsTypeConstants.InPersonVA:
@@ -114,7 +121,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
             <VABulletList listOfText={[body]} />
             {webViewLink}
             <VABulletList listOfText={[t('appointmentsTab.medicationWording.bullet2')]} />
-            {videoHealthAppointmentsLink}
+            {videoWebViewLink}
           </>
         )
       case AppointmentDetailsTypeConstants.ClaimExam:
