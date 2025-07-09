@@ -446,7 +446,11 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   // Open non-notification deep link that launched the app once sign in is complete.
   useEffect(() => {
     if (initialDeepLink) {
-      Linking.openURL(initialDeepLink)
+      Linking.canOpenURL(initialDeepLink).then((canOpenDeepLink) => {
+        if (canOpenDeepLink) {
+          Linking.openURL(initialDeepLink)
+        }
+      })
     }
   }, [initialDeepLink])
 

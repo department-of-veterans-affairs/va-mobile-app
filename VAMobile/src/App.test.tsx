@@ -29,6 +29,7 @@ jest.mock('react-native-keyboard-manager', () => ({
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   getInitialURL: jest.fn(),
+  canOpenURL: jest.fn(),
   openURL: jest.fn(),
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
@@ -129,8 +130,9 @@ context('App', () => {
     })
 
     it('should open the initial deep link once logged in', async () => {
-      const mockDeepLink = 'vamobile://mockdeeplink'
+      const mockDeepLink = 'vamobile://messages'
       when(Linking.getInitialURL as jest.Mock).mockResolvedValue(mockDeepLink)
+      when(Linking.canOpenURL as jest.Mock).mockResolvedValue(true)
 
       render(<AuthGuard />, {
         preloadedState: {
