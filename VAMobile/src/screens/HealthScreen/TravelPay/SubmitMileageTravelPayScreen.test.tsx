@@ -4,10 +4,9 @@ import { screen } from '@testing-library/react-native'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
+import SubmitMileageTravelPayScreen from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { defaultAppointmentAttributes } from 'utils/tests/appointments'
-
-import SubmitMileageTravelPayScreen from './SubmitMileageTravelPayScreen'
 
 const mockNavigationSpy = jest.fn()
 const mockBack = jest.fn()
