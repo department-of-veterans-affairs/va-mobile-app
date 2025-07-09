@@ -418,9 +418,7 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
   if (
     text === 'Sami Alsahhar - HOME - Canceled' ||
     text === 'At VA Palo Alto Health Care System' ||
-    text === 'At Hampton VA Medical Center' ||
-    text === 'At San Francisco VA Health Care System' ||
-    text === 'At LA VA Medical System'
+    text === 'At Hampton VA Medical Center'
   ) {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
@@ -855,13 +853,18 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA appt - provider/typeOfCare/facility/number', async () => {
-    await scrollToThenTap('At San Francisco VA Health Care System', pastAppointmentString)
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
     if (!pastAppointment) {
       await expect(element(by.text('Cancel appointment'))).toExist()
       await expect(element(by.text('Go to San Francisco VA Health Care System for this appointment.'))).toExist()
     } else {
-      await expect(element(by.text('This appointment happened in the past.'))).toExist()
+      await element(by.text('Past')).tap()
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     }
+    await scrollToThenTap('At San Francisco VA Health Care System', pastAppointmentString)
+    await expect(element(by.text('This appointment happened in the past.'))).toExist()
 
     await checkUpcomingApptDetails(
       'VA',
