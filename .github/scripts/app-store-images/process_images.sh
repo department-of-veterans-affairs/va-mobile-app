@@ -47,8 +47,9 @@ if [ -n "$(ls -A fastlane/screenshots/en-US/ios_original/)" ]; then
   echo '{"default": {"background": "#00000000"}}' > fastlane/Framefile.json
 
   # Run frameit for iOS, letting it auto-detect the device from image dimensions
+  cd fastlane
   fastlane frameit
-  rm fastlane/Framefile.json
+  rm Framefile.json
 
   # Move framed iOS images to their dedicated framed directory
   if ! ls fastlane/screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
@@ -73,10 +74,11 @@ if [ -n "$(ls -A fastlane/screenshots/en-US/android_original/)" ]; then
   # Create a temporary Framefile.json to suppress warnings
   echo '{"default": {"background": "#00000000"}}' > fastlane/Framefile.json
 
-  # Run frameit once for all Android images
+  # Run frameit for iOS, letting it auto-detect the device from image dimensions
   echo "Adding Android frames with frameit"
+  cd fastlane
   fastlane frameit android
-  rm fastlane/Framefile.json
+  rm Framefile.json
 
   # Verify that framed images were created
   if ! ls fastlane/screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
@@ -217,5 +219,19 @@ rm -f Gemfile Gemfile.lock # Clean up any lingering fastlane files
 
 echo "--- Image processing complete! ---"
 echo "Final images are in the 'framed_images' directory."
+
+# Create directories for android and ios images
+mkdir -p framed_images/android
+mkdir -p framed_images/ios
+
+# Move android images
+if ls framed_images/*_android_final.png 1> /dev/null 2>&1; then
+  mv framed_images/*_android_final.png framed_images/android/
+fi
+
+# Move ios images
+if ls framed_images/*_ios_final.png 1> /dev/null 2>&1; then
+  mv framed_images/*_ios_final.png framed_images/ios/
+fi
 
 ls -l framed_images/

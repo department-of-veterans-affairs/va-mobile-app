@@ -56,4 +56,7 @@ if [ "$PROCESSED" = false ]; then
     echo "No directories matching 'ios*' or 'android*' found in '$ARTIFACTS_DIR' to process."
 fi
 
-echo "Script finished. Screenshots are in the '$DEST_DIR' directory, ready for fastlane frameit."
+echo "Copying Letters Images.."
+cp LettersDownload* fastlane/screenshots/en-US/
+
+echo "Script Complete."
