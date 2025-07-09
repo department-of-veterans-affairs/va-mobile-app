@@ -1,8 +1,7 @@
 import React from 'react'
 
+import LargePanel from 'components/Templates/LargePanel'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import LargePanel from './LargePanel'
 
 context('LargePanel', () => {
   const onPressSpy = jest.fn(() => {})
@@ -23,6 +22,7 @@ context('LargePanel', () => {
         onFooterButtonPress={onFooterButtonPress}
       />,
     )
+    jest.advanceTimersByTime(50)
   }
 
   beforeEach(() => {
