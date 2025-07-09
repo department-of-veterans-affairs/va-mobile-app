@@ -78,10 +78,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   shadow: bannerShadow,
 }) => {
   const theme = useTheme()
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
-  const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
-  useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
+  useFocusEffect(setFocusTitle)
   const screenReaderEnabled = useIsScreenReaderEnabled()
 
   const TEXT_CONSTRAINT_THRESHOLD = 26
@@ -279,15 +277,11 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   label={leftButton.text}
                   labelA11y={leftButton.a11yLabel}
                   onPress={leftButton.onPress}
-                  focusOnButton={focus === 'Left'}
                   backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
                 <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-                  <TouchableWithoutFeedback
-                    ref={focus === 'Left' ? focusRef : () => {}}
-                    onPress={leftButton.onPress}
-                    accessibilityRole="button">
+                  <TouchableWithoutFeedback onPress={leftButton.onPress} accessibilityRole="button">
                     <Box {...commonBoxProps}>
                       <Box display="flex" flexDirection="row" alignItems="center">
                         <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
@@ -300,7 +294,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
 
             {title && (
               <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
-                <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>
+                <View {...titleViewProps} ref={focusTitle}>
                   <Box {...titleBoxProps}>{buildTitleDisplay()}</Box>
                 </View>
               </Box>
@@ -313,7 +307,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
               alignItems={'flex-end'}>
               {rightButton && (
                 <TouchableWithoutFeedback
-                  ref={focus === 'Right' ? focusRef : () => {}}
                   onPress={rightButton.onPress}
                   accessibilityRole={rightButton.accessibilityRole || 'button'}>
                   <Box {...commonBoxProps}>
