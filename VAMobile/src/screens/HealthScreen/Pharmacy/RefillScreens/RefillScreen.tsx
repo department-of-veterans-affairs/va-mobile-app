@@ -15,6 +15,9 @@ import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -26,10 +29,6 @@ import {
   useTheme,
 } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import NoRefills from './NoRefills'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
@@ -184,7 +183,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
           return
         }
         onSubmitPressed()
-      }}>
+      }}
+      renderAsView={true}>
       {loadingHistory ? (
         <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
       ) : showLoadingScreenRequestRefills ? (

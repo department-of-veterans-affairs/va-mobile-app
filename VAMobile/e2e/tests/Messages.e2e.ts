@@ -269,6 +269,7 @@ describe('Messages Screen', () => {
 
   it('should tap cancel and verify that the reply page is displayed', async () => {
     await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
+    await setTimeout(2000)
     await expect(element(by.id('To RATANA, NARIN '))).toExist()
     await expect(element(by.id('Subject Medication: Naproxen side effects'))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.ATTACHMENTS_BUTTON_ID))).toExist()
@@ -289,7 +290,7 @@ describe('Messages Screen', () => {
       await element(by.text('Cancel ')).tap()
       await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
     } else {
-      await element(by.text('Cancel')).atIndex(2).tap()
+      await element(by.text('Cancel')).atIndex(1).tap()
       await element(by.id(MessagesE2eIdConstants.ATTACHMENTS_PAGE_CANCEL_ID)).tap()
     }
   })

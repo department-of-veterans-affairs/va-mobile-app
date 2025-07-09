@@ -449,7 +449,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       {...rightButtonProps}
       showCrisisLineButton={!(isLoading || hasError)}
       testID="startNewMessageTestID"
-      leftButtonTestID="startNewMessageCancelTestID">
+      leftButtonTestID="startNewMessageCancelTestID"
+      renderAsView={true}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

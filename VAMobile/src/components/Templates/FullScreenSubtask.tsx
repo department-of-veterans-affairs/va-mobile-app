@@ -65,8 +65,8 @@ export type FullScreenSubtaskProps = {
   showCrisisLineButton?: boolean
   /** Optional testID */
   testID?: string
-  /** isMultiStepSubtask */
-  isMultiStepSubtask?: boolean
+  /** Default to rendering as a modal, but in specific cases (multiStepSubtasks, modals within modals) render as a view */
+  renderAsView?: boolean
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -92,7 +92,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineButton = false,
   testID,
-  isMultiStepSubtask,
+  renderAsView,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -230,7 +230,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     )
   }
 
-  if (isMultiStepSubtask) {
+  if (renderAsView) {
     return fullScreenSubtaskContent()
   }
 

@@ -45,7 +45,7 @@ function MultiStepSubtask<T extends ParamListBase>({ ...props }: MultiStepSubtas
   const [subtaskProps, setSubtaskProps] = useState<FullScreenSubtaskProps>({})
 
   return (
-    <FullScreenSubtask {...subtaskProps} isMultiStepSubtask>
+    <FullScreenSubtask {...subtaskProps} renderAsView={true}>
       <SubtaskContext.Provider value={{ setSubtaskProps }}>
         <stackNavigator.Navigator
           screenOptions={subtaskScreenOptions}

@@ -94,6 +94,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
 
+    await setTimeout(1000)
     await expect(element(by.text(DirectDepositConstants.INFORMATION_HEADING))).toExist()
     await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
@@ -115,6 +116,7 @@ describe('Direct Deposit Screen', () => {
     await element(by.id('accountNumber')).typeText('12345678901234567\n')
     await element(by.id(DirectDepositConstants.SAVE_ID)).tap()
 
+    await setTimeout(1000)
     await expect(element(by.text('FIRST CITIZENS BANK & TRUST COMPANY'))).toExist()
     await expect(element(by.text('*************4567'))).toExist()
     await expect(element(by.text('Savings account'))).toExist()
@@ -132,6 +134,7 @@ describe('Direct Deposit Screen', () => {
     await expect(element(by.text(DirectDepositConstants.CANCEL_CONFIRM_TEXT))).toExist()
     await element(by.text(CommonE2eIdConstants.CANCEL_DELETE_CHANGES_BUTTON_TEXT)).tap()
 
+    await setTimeout(1000)
     await expect(element(by.text(DirectDepositConstants.SCREEN_TITLE))).toExist()
   })
 

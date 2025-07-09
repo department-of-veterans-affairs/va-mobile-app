@@ -391,7 +391,8 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
         setOnSendClicked(true)
       }}
       showCrisisLineButton={!isLoading}
-      testID="replyPageTestID">
+      testID="replyPageTestID"
+      renderAsView={true}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : (

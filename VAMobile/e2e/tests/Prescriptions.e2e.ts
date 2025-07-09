@@ -448,6 +448,7 @@ describe('Prescriptions Screen', () => {
 
   it('verify pending prescriptions are displayed on pending refills button tap', async () => {
     await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
+    await setTimeout(2000)
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_DESCRIPTION_LABEL))).toExist()
     await expect(
       element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT)),
