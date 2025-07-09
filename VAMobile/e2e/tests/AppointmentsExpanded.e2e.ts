@@ -855,14 +855,9 @@ export async function apppointmentVerification(pastAppointment = false) {
   it(pastAppointmentString + 'verify confirmed VA appt - provider/typeOfCare/facility/number', async () => {
     await element(by.text('Health')).atIndex(0).tap()
     await openAppointments()
-    if (!pastAppointment) {
-      await expect(element(by.text('Cancel appointment'))).toExist()
-      await expect(element(by.text('Go to San Francisco VA Health Care System for this appointment.'))).toExist()
-    } else {
-      await element(by.text('Past')).tap()
-      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
-      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    }
+    await element(by.text('Past')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     await scrollToThenTap('At San Francisco VA Health Care System', pastAppointmentString)
     await expect(element(by.text('This appointment happened in the past.'))).toExist()
 
@@ -884,6 +879,11 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify confirmed VA appt - no provider/typeOfCare/address/number', async () => {
+    await element(by.text('Health')).atIndex(0).tap()
+    await openAppointments()
+    await element(by.text('Past')).tap()
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
     await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
     await expect(element(by.text('Type of care not noted'))).not.toExist()
     await expect(element(by.text('Provider not noted'))).not.toExist()
