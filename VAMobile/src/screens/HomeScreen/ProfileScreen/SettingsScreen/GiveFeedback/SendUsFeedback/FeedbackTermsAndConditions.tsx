@@ -23,8 +23,8 @@ function FeedbackTermsAndConditionsScreen({ navigation }: FeedbackTermsAndCondit
     <FullScreenSubtask
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
-      primaryContentButtonText={t('back')}
-      onPrimaryContentButtonPress={navigation.goBack}>
+      secondaryContentButtonText={t('back')}
+      onSecondaryContentButtonPress={navigation.goBack}>
       <Box mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold">{t('giveFeedback.termsAndConditions.lowercase')}</TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
