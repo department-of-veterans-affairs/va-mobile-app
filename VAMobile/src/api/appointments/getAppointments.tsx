@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
+import { appointmentsKeys } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
@@ -9,9 +10,6 @@ import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import { appointmentsKeys } from './queryKeys'
 
 /**
  * Fetch user appointments
@@ -50,8 +48,7 @@ export const useAppointments = (
   const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
-  const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+  const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const includeTravelClaims = timeFrame !== TimeFrameTypeConstants.UPCOMING && travelPayEnabled
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]

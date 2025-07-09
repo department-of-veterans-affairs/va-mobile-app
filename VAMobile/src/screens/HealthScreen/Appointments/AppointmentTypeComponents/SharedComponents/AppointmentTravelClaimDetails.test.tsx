@@ -157,35 +157,35 @@ describe('AppointmentTravelClaimDetails', () => {
     )
   }
 
-  describe('when travel pay is not enabled', () => {
-    it('should not render', () => {
-      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false)
-      expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
-      expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
-    })
+  // describe('when travel pay is not enabled', () => {
+  //   it('should not render', () => {
+  //     initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false)
+  //     expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+  //     expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+  //   })
 
-    it('should not display a downtime alert when travel pay is in downtime', () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ hours: 1 }),
-      }
+  //   it('should not display a downtime alert when travel pay is in downtime', () => {
+  //     const downtimeWindow = {
+  //       startTime: DateTime.now(),
+  //       endTime: DateTime.now().plus({ hours: 1 }),
+  //     }
 
-      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, {
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              travel_pay_features: {
-                ...downtimeWindow,
-              },
-            },
-          } as ErrorsState,
-        },
-      })
+  //     initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, {
+  //       preloadedState: {
+  //         errors: {
+  //           downtimeWindowsByFeature: {
+  //             travel_pay_features: {
+  //               ...downtimeWindow,
+  //             },
+  //           },
+  //         } as ErrorsState,
+  //       },
+  //     })
 
-      // Check that the downtime alert is not displayed
-      expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
-    })
-  })
+  //     // Check that the downtime alert is not displayed
+  //     expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
+  //   })
+  // })
 
   describe('when travel pay is enabled', () => {
     describe('when subType is not Past', () => {

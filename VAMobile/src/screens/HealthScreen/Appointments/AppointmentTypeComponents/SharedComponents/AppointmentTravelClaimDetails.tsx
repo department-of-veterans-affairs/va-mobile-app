@@ -41,10 +41,6 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime,
   )
 
-  if (!featureEnabled('travelPaySMOC')) {
-    return null
-  }
-
   const getContent = () => {
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {

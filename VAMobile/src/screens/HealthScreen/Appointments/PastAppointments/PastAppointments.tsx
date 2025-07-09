@@ -10,15 +10,13 @@ import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, V
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { NoAppointments } from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -58,7 +56,7 @@ function PastAppointments({
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const endTime =
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
-  const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
+  const includeTravelClaims = !travelPayInDowntime
 
   const pagination = {
     currentPage: page,
@@ -240,7 +238,7 @@ function PastAppointments({
           cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
-      {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
+      {travelPayInDowntime && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
             variant="warning"

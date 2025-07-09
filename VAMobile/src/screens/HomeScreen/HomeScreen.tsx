@@ -398,7 +398,7 @@ export function HomeScreen({}: HomeScreenProps) {
                     deepLink={'appointments'}
                   />
                 )}
-              {featureEnabled('travelPaySMOC') && !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
+              {!!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
                 <ActivityButton
                   title={t('pastAppointments')}
                   subText={t('pastAppointments.activityButton.subText', {
