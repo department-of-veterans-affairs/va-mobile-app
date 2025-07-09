@@ -3,14 +3,14 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import { context, mockNavProps, render } from 'testUtils'
-
-import ConsolidatedClaimsNote from './ConsolidatedClaimsNote'
 
 context('ConsolidatedClaimsNote', () => {
   beforeEach(() => {
     const props = mockNavProps(undefined, { setOptions: jest.fn() })
     render(<ConsolidatedClaimsNote {...props} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('Renders ConsolidatedClaimsNote', () => {

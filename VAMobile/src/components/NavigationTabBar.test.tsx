@@ -6,9 +6,8 @@ import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-nav
 import { fireEvent, screen, userEvent } from '@testing-library/react-native'
 import { TFunction } from 'i18next'
 
+import NavigationTabBar from 'components/NavigationTabBar'
 import { context, render } from 'testUtils'
-
-import NavigationTabBar from './NavigationTabBar'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -30,7 +29,6 @@ context('NavigationTabBar', () => {
   ]
 
   const renderWithRoute = (index = 0) => {
-    jest.resetAllMocks()
     render(
       <NavigationTabBar
         state={{ index, routes } as unknown as TabNavigationState<ParamListBase>}
