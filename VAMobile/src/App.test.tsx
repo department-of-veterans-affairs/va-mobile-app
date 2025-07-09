@@ -2,11 +2,10 @@ import React from 'react'
 import { Linking } from 'react-native'
 
 import { screen } from '@testing-library/react-native'
+import { AuthGuard } from 'App'
 
 import { handleTokenCallbackUrl, initialAuthState } from 'store/slices'
-import { context, render } from 'testUtils'
-
-import { AuthGuard } from './App'
+import { context, render, waitFor, when } from 'testUtils'
 
 jest.mock('./utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
@@ -30,6 +29,7 @@ jest.mock('react-native-keyboard-manager', () => ({
 
 jest.mock('react-native/Libraries/Linking/Linking', () => ({
   getInitialURL: jest.fn(),
+  openURL: jest.fn(),
   addEventListener: jest.fn(),
   removeEventListener: jest.fn(),
 }))
@@ -126,6 +126,26 @@ context('App', () => {
       expect(screen.getByText('Benefits')).toBeTruthy()
       expect(screen.getByText('Health')).toBeTruthy()
       expect(screen.getByText('Payments')).toBeTruthy()
+    })
+
+    it('should open the initial deep link once logged in', async () => {
+      const mockDeepLink = 'vamobile://mockdeeplink'
+      when(Linking.getInitialURL as jest.Mock).mockResolvedValue(mockDeepLink)
+
+      render(<AuthGuard />, {
+        preloadedState: {
+          auth: {
+            ...initialAuthState,
+            initializing: false,
+            loggedIn: true,
+          },
+          settings: {
+            remoteConfigActivated: true,
+          },
+        },
+      })
+
+      await waitFor(() => expect(Linking.openURL).toHaveBeenCalledWith(mockDeepLink))
     })
   })
 })
