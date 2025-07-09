@@ -9,11 +9,10 @@ import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { FileOnlineComponent, TravelPayHelp } from './components'
 
 type SMOCErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SMOCErrorScreen'>
 
