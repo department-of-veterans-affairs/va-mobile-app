@@ -52,7 +52,7 @@ export type RadioGroupProps<T> = {
   onChange: (val: T) => void
   /** optional boolean that disables the radio group when set to true */
   disabled?: boolean
-  /** i18n key for the text label */
+  /** i18n key label representing the title of the radio group */
   labelKey?: string
   /** optional boolean that displays required text next to label if set to true */
   isRequiredField?: boolean
