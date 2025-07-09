@@ -4,15 +4,15 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import IncorrectServiceInfo from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
 import { context, mockNavProps, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import IncorrectServiceInfo from './index'
 
 context('IncorrectServiceInfo', () => {
   beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
     render(<IncorrectServiceInfo {...props} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('initializes correctly', () => {
