@@ -11,8 +11,6 @@ context('RadioGroupModal', () => {
   const onCancelSpy = jest.fn()
 
   beforeEach(() => {
-    jest.resetAllMocks()
-
     const group1: RadioPickerGroup = {
       title: 'Group 1 title',
       items: [
@@ -35,6 +33,7 @@ context('RadioGroupModal', () => {
   })
 
   it('renders modal header and group title', () => {
+    jest.advanceTimersByTime(50)
     expect(screen.getByRole('header', { name: 'Modal header' })).toBeTruthy()
     expect(screen.getAllByRole('header', { name: 'Group 1 title' })[0]).toBeTruthy()
   })
@@ -52,6 +51,7 @@ context('RadioGroupModal', () => {
   })
 
   it('renders options with roles and a11yLabels', () => {
+    jest.advanceTimersByTime(50)
     expect(screen.getByRole('radio', { name: 'Option One' })).toBeTruthy()
     expect(screen.getByLabelText('Option One option 1 of 2')).toBeTruthy()
     expect(screen.getByRole('radio', { name: 'Option Two' })).toBeTruthy()
@@ -59,6 +59,7 @@ context('RadioGroupModal', () => {
   })
 
   it('calls onSetOption when option is pressed', () => {
+    jest.advanceTimersByTime(50)
     fireEvent.press(screen.getByRole('radio', { name: 'Option One' }))
     expect(onSetSpy).toHaveBeenCalledWith('option-one')
     fireEvent.press(screen.getByRole('radio', { name: 'Option Two' }))

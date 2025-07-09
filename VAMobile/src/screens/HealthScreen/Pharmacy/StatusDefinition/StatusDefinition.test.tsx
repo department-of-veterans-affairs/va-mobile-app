@@ -4,10 +4,9 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { RefillStatus, RefillStatusConstants } from 'api/types'
+import StatusDefinition from 'screens/HealthScreen/Pharmacy/StatusDefinition/StatusDefinition'
 import { context, mockNavProps, render } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
-
-import StatusDefinition from './StatusDefinition'
 
 context('StatusDefinition', () => {
   const initializeTestInstance = (routeMock?: { display: string; value: RefillStatus }) => {
@@ -22,6 +21,7 @@ context('StatusDefinition', () => {
     )
 
     render(<StatusDefinition {...props} />)
+    jest.advanceTimersByTime(50)
   }
 
   it('should display a glossary definition for a refill status', () => {
