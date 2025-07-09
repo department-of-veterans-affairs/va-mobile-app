@@ -10,6 +10,7 @@ context('BurdenStatement', () => {
   const initializeTestInstance = () => {
     const props = mockNavProps()
     render(<BurdernStatement {...props} />)
+    jest.advanceTimersByTime(50)
   }
   it('should initialize correctly', () => {
     initializeTestInstance()
