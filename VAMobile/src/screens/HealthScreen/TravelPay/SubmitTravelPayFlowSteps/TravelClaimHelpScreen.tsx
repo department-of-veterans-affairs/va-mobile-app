@@ -5,10 +5,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { useTheme } from 'utils/hooks'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { FileOnlineComponent, TravelPayHelp } from './components'
 
 type TravelClaimHelpScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'TravelClaimHelpScreen'>
 

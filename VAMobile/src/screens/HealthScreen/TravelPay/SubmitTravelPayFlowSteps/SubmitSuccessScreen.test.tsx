@@ -5,9 +5,8 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
+import SubmitSuccessScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/SubmitSuccessScreen'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
-
-import SubmitSuccessScreen from './SubmitSuccessScreen'
 
 jest.spyOn(Alert, 'alert')
 const mockNavigateToTravelPayWebsiteSpy = jest.fn()

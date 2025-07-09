@@ -6,9 +6,8 @@ import { t } from 'i18next'
 import { disabilityRatingKeys } from 'api/disabilityRating'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
 import { veteranStatusKeys } from 'api/veteranStatus'
+import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import VeteranStatusScreen from './VeteranStatusScreen'
 
 jest.mock('utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
@@ -127,6 +126,7 @@ context('VeteranStatusScreen', () => {
       },
     )
     render(<VeteranStatusScreen {...props} />, { queriesData })
+    jest.advanceTimersByTime(50)
   }
 
   describe('Errors', () => {

@@ -28,6 +28,7 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import VeteranStatusCard from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusCard/VeteranStatusCard'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isValidDisabilityRating } from 'utils/claims'
@@ -35,8 +36,6 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import VeteranStatusCard from './VeteranStatusCard/VeteranStatusCard'
 
 // import PhotoUpload from 'components/PhotoUpload'
 
@@ -146,7 +145,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (isError || notConfirmedReason === 'ERROR') {
       return (
         <AlertWithHaptics
-          variant="error"
+          variant="warning"
           header={t('errors.somethingWentWrong')}
           headerA11yLabel={a11yLabelVA(t('errors.somethingWentWrong'))}
           description={t('veteranStatus.error.generic')}
