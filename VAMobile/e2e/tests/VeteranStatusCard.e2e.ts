@@ -90,36 +90,31 @@ Validates that the military information is correct
 param militaryBranch: String name of the military branch to test
 */
 export async function verifyMilitaryInfo(militaryBranch: string) {
-  it(
-    militaryBranch + ': verify the name and branch matches the home/profile page',
-    async () => {
-      await changeMockData(
-        'profile.json',
-        ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
-        militaryBranch,
-      )
-      await element(by.text('Home')).tap()
-      await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
-        .scroll(200, 'down')
-      await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-      const expectedBranchText = `${militaryBranch} • 1998–2000`
-      await expect(element(by.text(expectedBranchText))).toBeVisible()
-      await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-      await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
-      await expect(element(by.text(militaryBranch))).toExist()
-      await openProfile()
-      await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-      await expect(element(by.text(expectedBranchText))).toExist()
-      await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-      await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
-      await expect(element(by.text(militaryBranch))).toExist()
-    },
-    800000,
-  )
+  it(militaryBranch + ': verify the name and branch matches the home/profile page', async () => {
+    await changeMockData(
+      'profile.json',
+      ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
+      militaryBranch,
+    )
+    await element(by.text('Home')).tap()
+    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
+    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    const expectedBranchText = `${militaryBranch} • 1998–2000`
+    await expect(element(by.text(expectedBranchText))).toBeVisible()
+    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
+    await openProfile()
+    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
+    await expect(element(by.text(expectedBranchText))).toExist()
+    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
+    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
+    await expect(element(by.text(militaryBranch))).toExist()
+  })
 }
-
 describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
     await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
@@ -194,5 +189,5 @@ describe('Veteran Status Card', () => {
         },
       ],
     )
-  }, 800000)
+  })
 })
