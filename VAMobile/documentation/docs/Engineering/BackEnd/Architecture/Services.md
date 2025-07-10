@@ -96,7 +96,7 @@ graph LR
         VistA([VistA])
         VEText([VEText])
         SIS([SIS])
-        BGS([BGS])
+        BEP([BEP])
         VBMS([VBMS])
         CorpDB([CorpDB])
         DSLogon([DSLogon])
@@ -142,16 +142,16 @@ graph LR
     Lighthouse --> ArcGIS
     Lighthouse --> CDW
     Lighthouse ---> VBMS
-    Lighthouse --> BGS
+    Lighthouse --> BEP
 
     Dependents --> VBMS
-    Dependents --> BGS
-    Awards --> BGS
-    PaymentHistory --> BGS
-    BGS --> CorpDB
+    Dependents --> BEP
+    Awards --> BEP
+    PaymentHistory --> BEP
+    BEP --> CorpDB
 
     Letters --> EVSS
-    EVSS --> BGS
+    EVSS --> BEP
     EVSS --> DEERS
     EVSS --> VBMS
     EVSS --> MPI
