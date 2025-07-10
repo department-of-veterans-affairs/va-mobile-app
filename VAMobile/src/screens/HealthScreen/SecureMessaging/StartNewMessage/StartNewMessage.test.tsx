@@ -3,11 +3,19 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { SecureMessagingRecipients, SecureMessagingSignatureData } from 'api/types'
+import {
+  CategoryTypeFields,
+  FacilitiesPayload,
+  SecureMessagingFolderMessagesGetData,
+  SecureMessagingRecipients,
+  SecureMessagingSignatureData,
+  SecureMessagingSystemFolderIdConstants,
+} from 'api/types'
+import { LARGE_PAGE_SIZE } from 'constants/common'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 
-import StartNewMessage from './StartNewMessage'
+import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -41,6 +49,70 @@ context('StartNewMessage', () => {
       },
     },
   }
+  const facilities: FacilitiesPayload = {
+    data: {
+      attributes: {
+        facilities: [
+          {
+            id: '357',
+            name: 'Cary VA Medical Center',
+            city: 'Cary',
+            state: 'WY',
+            cerner: false,
+            miles: '3.63',
+          },
+          {
+            id: '358',
+            name: 'Cheyenne VA Medical Center',
+            city: 'Cheyenne',
+            state: 'WY',
+            cerner: false,
+            miles: '3.17',
+          },
+        ],
+      },
+    },
+  }
+  const folderMessages: SecureMessagingFolderMessagesGetData = {
+    data: [
+      {
+        type: 'test',
+        id: 1,
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'test',
+          body: 'test',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1-1-21',
+          senderId: 2,
+          senderName: 'mock sender',
+          recipientId: 3,
+          recipientName: 'mock recipient name',
+          readReceipt: 'mock read receipt',
+        },
+      },
+    ],
+    links: {
+      self: '',
+      first: '',
+      prev: '',
+      next: '',
+      last: '',
+    },
+    meta: {
+      sort: {
+        sentDate: 'DESC',
+      },
+      pagination: {
+        currentPage: 1,
+        perPage: 1,
+        totalPages: 3,
+        totalEntries: 5,
+      },
+    },
+  }
   const recipients: SecureMessagingRecipients = {
     data: [
       {
@@ -51,6 +123,10 @@ context('StartNewMessage', () => {
           name: 'Doctor 1',
           relationType: 'PATIENT',
           preferredTeam: true,
+          stationNumber: '357',
+          locationName: 'test_location',
+          suggestedNameDisplay: 'test_suggested_name',
+          healthCareSystemName: 'test_healthcare_system_name',
         },
       },
       {
@@ -61,6 +137,10 @@ context('StartNewMessage', () => {
           name: 'Doctor 2',
           relationType: 'PATIENT',
           preferredTeam: true,
+          stationNumber: '357',
+          locationName: 'test_location',
+          suggestedNameDisplay: 'test_suggested_name',
+          healthCareSystemName: 'test_healthcare_system_name',
         },
       },
     ],
@@ -87,10 +167,26 @@ context('StartNewMessage', () => {
     render(<StartNewMessage {...props} />, {})
   }
 
+  const initializeApiCalls = () => {
+    when(api.get as jest.Mock)
+      .calledWith('/v0/messaging/health/allrecipients')
+      .mockResolvedValue(recipients)
+      .calledWith('/v0/messaging/health/messages/signature')
+      .mockResolvedValue(signature)
+      .calledWith('/v0/facilities-info')
+      .mockResolvedValue(facilities)
+      .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+        page: '1',
+        per_page: LARGE_PAGE_SIZE.toString(),
+        useCache: 'false',
+      } as api.Params)
+      .mockResolvedValue(folderMessages)
+  }
+
   describe('when no recipients are returned', () => {
     it('should display an AlertBox', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue({
           data: [],
           meta: {
@@ -101,6 +197,14 @@ context('StartNewMessage', () => {
         })
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
       initializeTestInstance()
       expect(screen.getByText(t('secureMessaging.formMessage.startNewMessage.loading'))).toBeTruthy()
       await waitFor(() =>
@@ -115,7 +219,7 @@ context('StartNewMessage', () => {
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
       when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
+        .calledWith('/v0/messaging/health/allrecipients')
         .mockRejectedValue({ networkError: true } as api.APIError)
         .calledWith('/v0/messaging/health/messages/signature')
         .mockRejectedValue({ networkError: true } as api.APIError)
@@ -126,11 +230,7 @@ context('StartNewMessage', () => {
 
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -143,22 +243,14 @@ context('StartNewMessage', () => {
 
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByText(t('cancel'))))
       await waitFor(() => expect(goBack).toHaveBeenCalled())
     })
 
     it('should ask for confirmation if any field filled in', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -171,11 +263,7 @@ context('StartNewMessage', () => {
   describe('on click of save (draft)', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        when(api.get as jest.Mock)
-          .calledWith('/v0/messaging/health/recipients')
-          .mockResolvedValue(recipients)
-          .calledWith('/v0/messaging/health/messages/signature')
-          .mockResolvedValue(signature)
+        initializeApiCalls()
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('save'))))
         await waitFor(() =>
@@ -192,11 +280,7 @@ context('StartNewMessage', () => {
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        when(api.get as jest.Mock)
-          .calledWith('/v0/messaging/health/recipients')
-          .mockResolvedValue(recipients)
-          .calledWith('/v0/messaging/health/messages/signature')
-          .mockResolvedValue(signature)
+        initializeApiCalls()
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send'))))
         await waitFor(() =>
@@ -212,11 +296,7 @@ context('StartNewMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText(t('secureMessaging.formMessage.addFiles'))))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -225,11 +305,7 @@ context('StartNewMessage', () => {
 
   describe('when displaying the form', () => {
     it('should display an alert about urgent messages', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/messaging/health/recipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/messaging/health/messages/signature')
-        .mockResolvedValue(signature)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() =>
         expect(

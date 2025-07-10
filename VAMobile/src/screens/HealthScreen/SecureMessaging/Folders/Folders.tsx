@@ -86,9 +86,6 @@ export function getUserFolders(
     return <></>
   }
 
-  // sort alphabetically
-  userFolders.sort((a, b) => a.attributes.name.toLowerCase().localeCompare(b.attributes.name.toLowerCase()))
-
   const listItems = getListItemsForFolders(userFolders, t, onFolderPress)
 
   return <SimpleList items={listItems} title={t('secureMessaging.myFolders')} />
