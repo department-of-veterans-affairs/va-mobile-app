@@ -200,6 +200,10 @@ export type SecureMessagingRecipientData = {
     name: string
     relationType: 'PATIENT'
     preferredTeam: boolean
+    stationNumber: string
+    locationName: string
+    suggestedNameDisplay: string
+    healthCareSystemName: string
   }
 }
 
