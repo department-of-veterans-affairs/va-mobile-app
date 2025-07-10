@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -9,11 +9,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
+import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
+  useAllMessageRecipients,
   useDeleteMessage,
+  useFolderMessages,
   useMessage,
-  useMessageRecipients,
   useSaveDraft,
   useSendMessage,
   useThread,
@@ -32,6 +34,8 @@ import {
 import {
   AlertWithHaptics,
   Box,
+  ComboBoxItem,
+  ComboBoxOptions,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -40,7 +44,6 @@ import {
   LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
-  PickerItem,
   TextArea,
   TextView,
 } from 'components'
@@ -63,15 +66,18 @@ import {
   useTheme,
 } from 'utils/hooks'
 import {
+  RecentRecipient,
   SubjectLengthValidationFn,
   formatSubject,
+  getCareSystemPickerOptions,
+  getRecentRecipients,
   getStartNewMessageCategoryPickerOptions,
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import { useComposeCancelConfirmation, useGoToDrafts } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { useComposeCancelConfirmation, useGoToDrafts } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -83,13 +89,29 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
   const {
+    data: facilitiesInfo,
+    isFetched: hasLoadedFacilities,
+    error: facilitiesError,
+    refetch: refetchFacilities,
+    isFetching: refetchingFacilities,
+  } = useFacilitiesInfo()
+  const {
     data: recipients,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
     isFetching: refetchingRecipients,
-  } = useMessageRecipients({
+  } = useAllMessageRecipients({
     enabled: screenContentAllowed('WG_EditDraft'),
+  })
+  const {
+    data: folderMessagesData,
+    isFetched: hasLoadedFolderMessages,
+    error: folderMessagesError,
+    refetch: refetchFolderMessages,
+    isFetching: refetchingFolderMessages,
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
+    enabled: screenContentAllowed('WG_FolderMessages'),
   })
   const destructiveAlert = useDestructiveActionSheet()
   const draftAttachmentAlert = useDestructiveActionSheet()
@@ -123,6 +145,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   })
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+  const messageRecipient = recipients?.find((r) => r.id === message?.recipientId?.toString())
   const isReplyDraft = thread.length > 1
   const replyToID = thread?.find((id) => {
     const currentMessage = id.attributes
@@ -134,7 +157,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
 
-  const [to, setTo] = useState((message?.recipientId || '').toString())
+  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
+  const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, addAttachment, removeAttachment] = useAttachments()
@@ -167,9 +191,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
-      setTo((message?.recipientId || '').toString())
+      setCareSystem(messageRecipient?.attributes.stationNumber || '')
+      setTo({ value: message.recipientId?.toString() || '', label: message.recipientName })
     }
-  }, [loadingMessage, messageFetched, message.body, message.category, message.subject, message.recipientId])
+  }, [
+    loadingMessage,
+    messageFetched,
+    message?.body,
+    message?.category,
+    message?.subject,
+    message.recipientId,
+    message.recipientName,
+    messageRecipient?.attributes.stationNumber,
+  ])
 
   useEffect(() => {
     if (sendMessageError && isErrorObject(sendMessageErrorDetails)) {
@@ -178,7 +212,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       } else {
         const messageData = isReplyDraft
           ? { body, draft_id: messageID, category }
-          : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
+          : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
         const mutateOptions = {
           onSuccess: () => {
             snackbar.show(t('secureMessaging.startNewMessage.sent'))
@@ -215,18 +249,18 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const getMessageData = (): SecureMessagingFormData => {
     return isReplyDraft
       ? { body, draft_id: messageID, category }
-      : { recipient_id: parseInt(to, 10), category, body, subject, draft_id: messageID }
+      : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
   }
 
   const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = noRecipientsReceived && hasLoadedRecipients
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients && hasLoadedFacilities
 
   const draftChanged = (): boolean => {
     if (isReplyDraft) {
       return message?.body !== body
     } else {
       return (
-        (message?.recipientId || '').toString() !== to ||
+        (message?.recipientId || '').toString() !== to?.value ||
         message?.category !== category ||
         message?.subject !== subject ||
         message?.body !== body
@@ -361,18 +395,40 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     }
   }
 
-  const getToPickerOptions = (): Array<PickerItem> => {
-    return (recipients || []).map((recipient) => {
-      return {
-        label: recipient.attributes.name,
-        value: recipient.id,
-      }
-    })
+  const handleSetCareSystem = (cs: string) => {
+    setCareSystem(cs)
+    // Clear to recipient
+    setTo(undefined)
   }
 
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
+  }
+
+  const recentRecipients: Array<RecentRecipient> = useMemo(() => {
+    return getRecentRecipients(folderMessagesData?.data || [])
+  }, [folderMessagesData?.data])
+
+  const getToComboBoxOptions = (): ComboBoxOptions => {
+    // filter recipients by selected care system station number
+    const careSystemRecipients = _.filter(
+      recipients || [],
+      (recipient) => recipient.attributes.stationNumber === careSystem,
+    )
+    const allRecipients = (careSystemRecipients || []).map((recipient) => {
+      return {
+        label: recipient.attributes.name,
+        value: recipient.id,
+      }
+    })
+
+    // not crazy about the keys here being the labels we eventually display in the combobox
+    // open to suggestions here
+    return {
+      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+    }
   }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
@@ -382,10 +438,24 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       {
         fieldType: FieldType.Picker,
         fieldProps: {
+          labelKey: 'secureMessaging.formMessage.careSystem',
+          selectedValue: careSystem,
+          onSelectionChange: handleSetCareSystem,
+          pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+          includeBlankPlaceholder: true,
+          isRequiredField: true,
+          testID: 'care system field',
+          confirmTestID: 'careSystemPickerConfirmID',
+        },
+        fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
+      },
+      {
+        fieldType: FieldType.ComboBox,
+        fieldProps: {
           labelKey: 'secureMessaging.formMessage.to',
           selectedValue: to,
           onSelectionChange: setTo,
-          pickerOptions: getToPickerOptions(),
+          comboBoxOptions: getToComboBoxOptions(),
           includeBlankPlaceholder: true,
           isRequiredField: true,
           testID: 'editDraftToTestID',
@@ -631,7 +701,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
-  const hasError = recipientsError || threadError || messageError
+  const hasError = recipientsError || threadError || messageError || facilitiesError || folderMessagesError
   const isLoading =
     (!isReplyDraft && !hasLoadedRecipients) ||
     loadingMessage ||
@@ -640,7 +710,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     deletingDraft ||
     isDiscarded ||
     refetchingRecipients ||
-    refetchingThread
+    refetchingThread ||
+    !hasLoadedFacilities ||
+    refetchingFacilities ||
+    !hasLoadedFolderMessages ||
+    refetchingFolderMessages
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -677,7 +751,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
                 ? refetchThread
                 : messageError
                   ? refetchMessage
-                  : undefined
+                  : facilitiesError
+                    ? refetchFacilities
+                    : folderMessagesError
+                      ? refetchFolderMessages
+                      : undefined
           }
         />
       ) : (
