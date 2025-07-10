@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
@@ -7,11 +7,9 @@ import _ from 'underscore'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
 import { AddressData, UserContactInformation, addressTypeFields } from 'api/types'
 import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
-import { Events } from 'constants/analytics'
 import { Countries } from 'constants/countries'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
 import getEnv from 'utils/env'
 
@@ -156,18 +154,6 @@ export type AddressSummaryProps = {
 function AddressSummary({ addressData, title }: AddressSummaryProps) {
   const contactInformationQuery = useContactInformation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const [retried, setRetried] = useState(false)
-
-  useEffect(() => {
-    if (contactInformationQuery.failureCount > 0) {
-      setRetried(true)
-    }
-
-    if (retried && !contactInformationQuery.isFetching) {
-      const retryStatus = contactInformationQuery.error ? 'fail' : 'success'
-      logAnalyticsEvent(Events.vama_react_query_retry(retryStatus))
-    }
-  }, [contactInformationQuery.failureCount, contactInformationQuery.error, contactInformationQuery.isFetching, retried])
 
   const data = getAddressData(contactInformationQuery.data, t, addressData)
 

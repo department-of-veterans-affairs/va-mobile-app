@@ -23,6 +23,7 @@ NativeModules.DeviceData = {
 NativeModules.RNInAppUpdate = {
   storeVersion: '2.0.0',
   requestStoreVersion: jest.fn().mockReturnValue('2.0.0'),
+  requestStorePopup: jest.fn(),
 }
 
 NativeModules.SettingsManager = {
@@ -40,8 +41,6 @@ jest.spyOn(Alert, 'alert')
 jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter')
 
 jest.mock('react-native-safe-area-context', () => mockSafeAreaContext)
-
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper')
 
 jest.mock('react-native/Libraries/Linking/Linking', () => {
   return {
@@ -309,6 +308,7 @@ jest.mock('utils/homeScreenAlerts', () => {
     getVersionSkipped: jest.fn(),
     getStoreVersion: jest.fn(),
     getLocalVersion: jest.fn(),
+    setVersionSkipped: jest.fn(),
   }
 })
 

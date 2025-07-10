@@ -7,9 +7,8 @@ import { waitFor } from '@testing-library/react-native'
 import { RootNavStackParamList } from 'App'
 import { t } from 'i18next'
 
+import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen/FeedbackInterceptScreen'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import InAppFeedbackScreen from './InAppFeedbackScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -20,7 +19,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('InAppFeedbackScreen', () => {
+context('FeedbackInterceptScreen', () => {
   const initializeTestInstance = () => {
     const props = {
       navigation: {
@@ -32,9 +31,10 @@ context('InAppFeedbackScreen', () => {
           screen: 'InAppFeedback',
         },
       },
-    } as unknown as StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
+    } as unknown as StackScreenProps<RootNavStackParamList, 'FeedbackIntercept'>
 
-    render(<InAppFeedbackScreen {...props} />)
+    render(<FeedbackInterceptScreen {...props} />)
+    jest.advanceTimersByTime(50)
     return props
   }
 

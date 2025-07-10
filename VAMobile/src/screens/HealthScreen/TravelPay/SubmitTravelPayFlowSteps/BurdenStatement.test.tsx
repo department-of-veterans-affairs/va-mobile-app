@@ -3,14 +3,14 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import BurdernStatement from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/BurdenStatement'
 import { context, mockNavProps, render } from 'testUtils'
-
-import BurdernStatement from './BurdenStatement'
 
 context('BurdenStatement', () => {
   const initializeTestInstance = () => {
     const props = mockNavProps()
     render(<BurdernStatement {...props} />)
+    jest.advanceTimersByTime(50)
   }
   it('should initialize correctly', () => {
     initializeTestInstance()

@@ -9,15 +9,14 @@ import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-import { FileOnlineComponent, TravelPayHelp } from './components'
+type SMOCErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SMOCErrorScreen'>
 
-type ErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ErrorScreen'>
-
-function ErrorScreen({ route }: ErrorScreenProps) {
+function SMOCErrorScreen({ route }: SMOCErrorScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { error = 'error' } = route.params
   const theme = useTheme()
@@ -76,7 +75,7 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   const { title, textLines, content } = getErrorContent(error)
 
   return (
-    <VAScrollView testID="ErrorScreen">
+    <VAScrollView testID="SMOCErrorScreen">
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
@@ -100,4 +99,4 @@ function ErrorScreen({ route }: ErrorScreenProps) {
   )
 }
 
-export default ErrorScreen
+export default SMOCErrorScreen
