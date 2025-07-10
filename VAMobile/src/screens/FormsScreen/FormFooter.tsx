@@ -25,16 +25,14 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
             url: `https://didactic-cod-xx56j6p5vg3v45v-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`,
             useSSO: true,
             onClose: (url: string) => {
-              // TODO probably check if its the right url or path (ex. '/submit-statement-form-21-4138')
-              if (!url.includes('/submit-statement-form-21-4138')) {
-                return
-              }
-
               const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
               let status = ''
               switch (endUrl) {
                 case 'introduction':
                 case 'statement-type':
+                  // The flow does not officially start until they get to personal information
+                  // ignore the first two screens for now
+                  return
                 case 'personal-information':
                 case 'identification-information':
                 case 'mailing-address':
@@ -44,9 +42,9 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
                   status = FORM_STATUS.draft
                   break
                 case 'confirmation':
-                  status = FORM_STATUS.inProgress
-                  break
                 default:
+                  // Assumed they finish at this point if they got to confirmation or are on a different page now
+                  status = FORM_STATUS.inProgress
                   break
               }
 

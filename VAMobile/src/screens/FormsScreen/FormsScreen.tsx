@@ -21,13 +21,13 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
 
   const [activeForms, setActiveForms] = useState<FormMetaData[]>([])
   const [completedForms, _setCompletedForms] = useState<FormMetaData[]>([
-    {
-      id: 128912341,
-      url: 'https://test.va.gov/supporting-forms-for-claims/submit-statement-form-21-4138/confirmation',
-      status: FORM_STATUS.received,
-      statusDate: DateTime.now().toISODate(),
-      receivedDate: DateTime.now().minus({ month: 1 }).toISODate(),
-    },
+    // {
+    //   id: 128912341,
+    //   url: 'https://test.va.gov/supporting-forms-for-claims/submit-statement-form-21-4138/confirmation',
+    //   status: FORM_STATUS.received,
+    //   statusDate: DateTime.now().toISODate(),
+    //   receivedDate: DateTime.now().minus({ month: 1 }).toISODate(),
+    // },
   ])
 
   const hasDraftForm = useMemo(() => {
@@ -37,16 +37,23 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
   }, [activeForms])
 
   const updateForm = (formId: number, url: string) => {
-    // TODO probably check if its the right url or path (ex. '/submit-statement-form-21-4138')
-    if (!url.includes('/submit-statement-form-21-4138')) {
-      return
-    }
-
     const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
-
     let status: FormStatus = FORM_STATUS.draft
-    if (endUrl === 'confirmation') {
-      status = FORM_STATUS.inProgress
+
+    switch (endUrl) {
+      case 'personal-information':
+      case 'identification-information':
+      case 'mailing-address':
+      case 'contact-information':
+      case 'statement':
+      case 'review-and-submit':
+        status = FORM_STATUS.draft
+        break
+      case 'confirmation':
+      default:
+        // Assumed they finish at this point if they got to confirmation or are on a different page now
+        status = FORM_STATUS.inProgress
+        break
     }
 
     snackbar.show('Form updated successfully', {

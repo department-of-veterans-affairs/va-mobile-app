@@ -51,7 +51,7 @@ function FormsCardItem({ data, onFormClose, key }: FormsCardProps) {
   let bottomContent
   let bottomOnPress
 
-  if (data.url && data.status == FORM_STATUS.draft) {
+  if (data.url && data.status === FORM_STATUS.draft) {
     bottomContent = (
       <Box
         display={'flex'}

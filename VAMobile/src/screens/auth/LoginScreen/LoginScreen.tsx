@@ -55,7 +55,7 @@ function LoginScreen() {
 
   useEffect(() => {
     dispatch(updateDemoMode(true))
-  }, [])
+  }, [dispatch])
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
