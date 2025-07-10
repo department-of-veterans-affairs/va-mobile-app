@@ -20,36 +20,43 @@ import { useOrientation, useTheme } from 'utils/hooks'
 
 type SubmitSuccessScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SubmitSuccessScreen'>
 
+
 interface SuccessScreenContent {
-  title: string
-  text: string
-  nextText: string
-  nextTitle: string
-  nextText2: string
-  linkText: string
-  linkTestID: string
-  linkComponent: React.ReactNode
+  /** Main heading text displayed at the top of the screen */
+  heading: string
+  /** Primary descriptive text explaining the main message */
+  description: string
+  /** Bold title for the instructional section */
+  sectionTitle: string
+  /** Instructional text describing the next steps or actions */
+  instructionText: string
+  /** React component that renders the primary action (link, button, etc.) */
+  actionComponent: React.ReactNode
+  /** Additional descriptive text displayed after the action component */
+  additionalText: string
+  /** Test ID for the action component used in automated testing */
+  actionTestID: string
 }
 
-const ContentSection = ({ title, text, nextText, nextTitle, nextText2, linkComponent }: SuccessScreenContent) => {
+const ContentSection = ({ heading, description, instructionText, sectionTitle, additionalText, actionComponent }: SuccessScreenContent) => {
   const theme = useTheme()
   return (
     <>
       <TextView testID="successTitleID" variant="BitterHeading" accessibilityRole="header">
-        {title}
+        {heading}
       </TextView>
       <TextView testID="successTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-        {text}
+        {description}
       </TextView>
       <TextView testID="successNextTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-        {nextTitle}
+        {sectionTitle}
       </TextView>
       <TextView testID="successNextTextID" variant="MobileBody">
-        {nextText}
+        {instructionText}
       </TextView>
-      <Box mt={theme.dimensions.condensedMarginBetween}>{linkComponent}</Box>
+      <Box mt={theme.dimensions.condensedMarginBetween}>{actionComponent}</Box>
       <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
-        {nextText2}
+        {additionalText}
       </TextView>
     </>
   )
@@ -67,30 +74,28 @@ const getContent = (
     status === TravelPayPartialSuccessStatusConstants.SAVED
   if (isPartialSuccess) {
     return {
-      title: t('travelPay.partialSuccess.title'),
-      text: t('travelPay.partialSuccess.text'),
-      nextText: t('travelPay.partialSuccess.nextText'),
-      nextTitle: t('travelPay.success.nextTitle'),
-      nextText2: t('travelPay.setUpDirectDeposit.eligible'),
-      linkText: t('travelPay.partialSuccess.link'),
-      linkTestID: 'finishTravelClaimLinkID',
-      linkComponent: <FileOnBTSSSLink text={t('travelPay.partialSuccess.link')} testID="finishTravelClaimLinkID" />,
+      heading: t('travelPay.partialSuccess.title'),
+      description: t('travelPay.partialSuccess.text'),
+      instructionText: t('travelPay.partialSuccess.nextText'),
+      sectionTitle: t('travelPay.success.nextTitle'),
+      additionalText: t('travelPay.setUpDirectDeposit.eligible'),
+      actionTestID: 'finishTravelClaimLinkID',
+      actionComponent: <FileOnBTSSSLink text={t('travelPay.partialSuccess.link')} testID="finishTravelClaimLinkID" />,
     }
   }
 
   return {
-    title: t('travelPay.success.title'),
-    text: t('travelPay.success.text', {
+    heading: t('travelPay.success.title'),
+    description: t('travelPay.success.text', {
       facilityName,
       date: DateTime.fromISO(appointmentDateTime).toFormat('LLLL dd, yyyy'),
       time: DateTime.fromISO(appointmentDateTime).toFormat('h:mm a'),
     }),
-    nextText: t('travelPay.success.nextText'),
-    nextTitle: t('travelPay.success.nextTitle'),
-    nextText2: t('travelPay.setUpDirectDeposit.eligible'),
-    linkText: t('travelPay.success.goToAppointment'),
-    linkTestID: 'goToAppointmentLinkID',
-    linkComponent: (
+    instructionText: t('travelPay.success.nextText'),
+    sectionTitle: t('travelPay.success.nextTitle'),
+    additionalText: t('travelPay.setUpDirectDeposit.eligible'),
+    actionTestID: 'goToAppointmentLinkID',
+    actionComponent: (
       <LinkWithAnalytics
         type="custom"
         text={t('travelPay.success.goToAppointment')}
