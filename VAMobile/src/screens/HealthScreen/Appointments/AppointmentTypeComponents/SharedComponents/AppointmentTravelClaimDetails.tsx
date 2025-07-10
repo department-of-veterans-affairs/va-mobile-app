@@ -124,7 +124,8 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
 
     if (
       apiReturnsFullHistory &&
-      !claim &&
+      // !claim &&
+      // attributes.travelPayEligible &&
       isEligibleForTravelPay(attributes) &&
       daysLeftToFileTravelPay < 0 &&
       !claimError
