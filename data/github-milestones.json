@@ -266,6 +266,12 @@
         "number": 10803,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10803",
         "isPR": false
+      },
+      {
+        "title": "BUG - sev-2 - All - Keyboard navigation on subtasks, large panels, cancel popups often goes to hidden layers, gets stuck",
+        "number": 9476,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/9476",
+        "isPR": false
       }
     ]
   },
