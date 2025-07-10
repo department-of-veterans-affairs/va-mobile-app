@@ -196,6 +196,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
             display="flex"
             flexDirection="row"
             mt={theme.dimensions.condensedMarginBetween}
+            mr={theme.dimensions.gutter}
             mb={theme.dimensions.contentMarginBottom}
             alignItems={'center'}>
             {hasSecondaryButton && (
@@ -208,10 +209,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
               </Box>
             )}
             {hasPrimaryButton && (
-              <Box
-                ml={hasSecondaryButton ? theme.dimensions.buttonPadding : theme.dimensions.gutter}
-                mr={theme.dimensions.gutter}
-                flex={1}>
+              <Box ml={hasSecondaryButton ? theme.dimensions.buttonPadding : theme.dimensions.gutter} flex={1}>
                 <Button
                   onPress={onPrimaryContentButtonPress}
                   label={primaryContentButtonText}
