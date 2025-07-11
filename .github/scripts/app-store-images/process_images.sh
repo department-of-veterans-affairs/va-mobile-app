@@ -48,16 +48,19 @@ if [ -n "$(ls -A fastlane/screenshots/en-US/ios_original/)" ]; then
 
   # Run frameit for iOS, letting it auto-detect the device from image dimensions
   cd fastlane
-  fastlane frameit
+  fastlane frameit &> frameit_ios.log
   rm Framefile.json
 
   # Move framed iOS images to their dedicated framed directory
-  if ! ls fastlane/screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
-    echo "Error: frameit failed to create iOS images. Check frameit_ios.log for details."
+  if ! ls screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
+    echo "Error: frameit failed to create iOS images. See log below:"
+    cat frameit_ios.log
+    cd ..
     exit 1
   fi
-  mv fastlane/screenshots/en-US/*_framed.png fastlane/screenshots/en-US/ios_framed/
-  rm fastlane/screenshots/en-US/*_ios.png
+  mv screenshots/en-US/*_framed.png screenshots/en-US/ios_framed/
+  rm screenshots/en-US/*_ios.png
+  cd ..
 fi
 
 # Process Android images
@@ -74,21 +77,24 @@ if [ -n "$(ls -A fastlane/screenshots/en-US/android_original/)" ]; then
   # Create a temporary Framefile.json to suppress warnings
   echo '{"default": {"background": "#00000000"}}' > fastlane/Framefile.json
 
-  # Run frameit for iOS, letting it auto-detect the device from image dimensions
+  # Run frameit for Android, letting it auto-detect the device from image dimensions
   echo "Adding Android frames with frameit"
   cd fastlane
-  fastlane frameit android
+  fastlane frameit android &> frameit_android.log
   rm Framefile.json
 
   # Verify that framed images were created
-  if ! ls fastlane/screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
-    echo "Error: frameit failed to create Android images."
+  if ! ls screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
+    echo "Error: frameit failed to create Android images. See log below:"
+    cat frameit_android.log
+    cd ..
     exit 1
   fi
   
   # Move framed images to the dedicated directory
-  mv fastlane/screenshots/en-US/*_framed.png fastlane/screenshots/en-US/android_framed/
-  rm fastlane/screenshots/en-US/*_android.png
+  mv screenshots/en-US/*_framed.png screenshots/en-US/android_framed/
+  rm screenshots/en-US/*_android.png
+  cd ..
 fi
 
 # Consolidate all framed images back into the main fastlane/screenshots/en-US/ directory
@@ -130,12 +136,8 @@ echo "Stage 2: Adding background and titles with ImageMagick..."
 BACKGROUND_IMG="gradient.png"
 FONT="source-sans-pro.regular.ttf"
 FONT_COLOR="#F1F1F1"
-# Font sizes for normal and long titles
-TITLE_FONT_SIZE=70
-LONG_TITLE_FONT_SIZE=50 # Reduced from 55
-SMALLER_SPECIFIC_FONT_SIZE=60 # New font size for specific images
-LONG_TITLE_THRESHOLD=25 # Characters
-INTERLINE_SPACING=10
+TITLE_FONT_SIZE=49
+INTERLINE_SPACING=-5
 TEXT_AREA_PADDING=40 # Added padding between text and image
 TEXT_VERTICAL_OFFSET=30 # Offset to drop text down from the top (approx 0.25 inches)
 TEXT_HORIZONTAL_INSET=20 # Small inset from left/right edges for text
@@ -165,7 +167,15 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
   fi
 
   # Extract the title string from screenshot_data.ts
-  TITLE=$(grep -A 3 "testId: '$BASENAME'" ../../../VAMobile/e2e/screenshots/screenshot_data.ts | grep "description:" | sed "s/.*description: '//;s/',.*//")
+  DESCRIPTION_LINE=$(grep -A 5 "testId: '$BASENAME'" ../../../VAMobile/e2e/screenshots/screenshot_data.ts | grep "description:")
+
+  if [[ "$DESCRIPTION_LINE" == *"["* ]]; then
+    # Handle array of strings for multi-line descriptions
+    TITLE=$(echo "$DESCRIPTION_LINE" | sed -e "s/.*description: \[//" -e "s/\]//" -e "s/'//g" -e 's/,\s*$/ /' -e "s/, /\n/g")
+  else
+    # Handle single string description
+    TITLE=$(echo "$DESCRIPTION_LINE" | sed -e "s/.*description: '//" -e "s/',.*//")
+  fi
 
   if [ -z "$TITLE" ]; then
     echo "Skipping $img, no title found."
@@ -173,18 +183,6 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
   fi
 
   echo "Processing $BASENAME_WITH_DEVICE -> framed_images/${BASENAME_WITH_DEVICE}_final.png"
-
-  # Determine which font size to use based on title length
-  if [ ${#TITLE} -gt $LONG_TITLE_THRESHOLD ]; then
-    CURRENT_FONT_SIZE=$LONG_TITLE_FONT_SIZE
-  else
-    CURRENT_FONT_SIZE=$TITLE_FONT_SIZE
-  fi
-
-  # Apply specific font size for BenefitsScreen and HealthScreen
-  if [[ "$BASENAME" == "BenefitsScreen" || "$BASENAME" == "HealthScreen" ]]; then
-    CURRENT_FONT_SIZE=$SMALLER_SPECIFIC_FONT_SIZE
-  fi
 
   # Get framed image dimensions (output from frameit)
   FRAMED_IMG_WIDTH=$(magick identify -format "%w" "$img")
@@ -208,14 +206,11 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
   magick \
     "$BACKGROUND_IMG" -resize "${CANVAS_WIDTH}x${CANVAS_HEIGHT}!" \
     \( "$img" \) -gravity North -geometry "+0+${TOP_PADDING}" -composite \
-    -font "$FONT" -pointsize "$CURRENT_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
+    -font "$FONT" -pointsize "$TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
     \( -gravity Center -background none -size "${TEXT_BOX_WIDTH}x${TEXT_BOX_HEIGHT}" caption:"$TITLE" \) \
     -gravity NorthWest -geometry "+${TEXT_HORIZONTAL_INSET}+${TEXT_VERTICAL_OFFSET}" -composite \
     "$OUTPUT_PATH"
 done
-
-# --- Final Cleanup ---
-rm -f Gemfile Gemfile.lock # Clean up any lingering fastlane files
 
 echo "--- Image processing complete! ---"
 echo "Final images are in the 'framed_images' directory."
@@ -234,4 +229,24 @@ if ls framed_images/*_ios_final.png 1> /dev/null 2>&1; then
   mv framed_images/*_ios_final.png framed_images/ios/
 fi
 
-ls -l framed_images/
+echo "Final resizing of images"
+for f in framed_images/ios/*_final.png; do
+  magick "$f" -resize 1242x2208! "$f"
+done
+
+for f in framed_images/android/*_final.png; do
+  magick "$f" -resize 1280x2276! "$f"
+done
+
+
+echo "Moving ios images to final location"
+for i in framed_images/ios/*_final.png; do
+  cp $i ../../../VAMobile/ios/fastlane/screenshots/en-US/
+done
+
+echo "Moving android images to final location"
+for i in framed_images/android/*_final.png; do
+  cp $i ../../../VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+done
+
+echo "All images processed."

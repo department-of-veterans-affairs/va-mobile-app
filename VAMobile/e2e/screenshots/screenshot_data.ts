@@ -1,16 +1,17 @@
 export interface ScreenshotData {
   testId: string
   imageName: string
-  description: string
+  description: string | string[]
   deviceType: ('ios' | 'android')[]
   setupFunction: string // The name of the function to call in screenshot.utils.ts
+  skipScreenshot?: boolean
 }
 
 export const screenshotData: ScreenshotData[] = [
   {
     testId: 'HomeScreen',
     imageName: 'HomeScreen',
-    description: 'Complete health care and benefits transactions',
+    description: ['Complete health care and', 'benefits transactions'],
     deviceType: ['ios', 'android'],
     setupFunction: 'goHome',
   },
@@ -31,14 +32,14 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'AppointmentDetails',
     imageName: 'AppointmentDetails',
-    description: 'Review and cancel your VA medical appointments',
+    description: ['Review and cancel your VA', 'medical appointments'],
     deviceType: ['ios', 'android'],
     setupFunction: 'appointmentDetails',
   },
   {
     testId: 'MessagesInbox',
     imageName: 'MessagesInbox',
-    description: 'Send and receive messages with your VA health care team',
+    description: ['Send and receive messages', 'with your VA health care team'],
     deviceType: ['ios', 'android'],
     setupFunction: 'messagesInbox',
   },
@@ -56,14 +57,14 @@ export const screenshotData: ScreenshotData[] = [
     deviceType: ['ios', 'android'],
     setupFunction: 'profileScreen',
   },
-  // BUG: Test not working
-  // {
-  //   testId: 'LettersDownload',
-  //   imageName: 'LettersDownload',
-  //   description: 'Download common VA letters and documents',
-  //   deviceType: ['ios', 'android'],
-  //   setupFunction: 'lettersDownload',
-  // },
+  {
+    testId: 'LettersDownload',
+    imageName: 'LettersDownload',
+    description: ['Download common VA letters', 'and documents'],
+    deviceType: ['ios', 'android'],
+    setupFunction: '',
+    skipScreenshot: true,
+  },
   {
     testId: 'Prescriptions',
     imageName: 'Prescriptions',
@@ -74,7 +75,7 @@ export const screenshotData: ScreenshotData[] = [
   {
     testId: 'ClaimDetails',
     imageName: 'ClaimDetails',
-    description: 'Check claim status and upload new evidence',
+    description: ['Check claim status and upload', 'new evidence'],
     deviceType: ['ios', 'android'],
     setupFunction: 'claimDetails',
   },
