@@ -10,11 +10,10 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
+import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { NAMESPACE } from 'constants/namespaces'
 import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
-import SubtaskTitle from './SubtaskTitle'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -180,6 +179,8 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
     flex: 1,
   }
   const titleMarginTop = showCrisisLineButton ? 0 : theme.dimensions.buttonPadding
+  const hasPrimaryButton = primaryContentButtonText && onPrimaryContentButtonPress
+  const hasSecondaryButton = secondaryContentButtonText && onSecondaryContentButtonPress
 
   return (
     <View {...fillStyle}>
@@ -190,14 +191,15 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>
-        {primaryContentButtonText && onPrimaryContentButtonPress && (
+        {(hasPrimaryButton || hasSecondaryButton) && (
           <Box
             display="flex"
             flexDirection="row"
             mt={theme.dimensions.condensedMarginBetween}
+            mr={theme.dimensions.gutter}
             mb={theme.dimensions.contentMarginBottom}
             alignItems={'center'}>
-            {secondaryContentButtonText && onSecondaryContentButtonPress && (
+            {hasSecondaryButton && (
               <Box ml={theme.dimensions.gutter} flex={1}>
                 <Button
                   onPress={onSecondaryContentButtonPress}
@@ -206,20 +208,15 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
                 />
               </Box>
             )}
-            <Box
-              ml={
-                secondaryContentButtonText && onSecondaryContentButtonPress
-                  ? theme.dimensions.buttonPadding
-                  : theme.dimensions.gutter
-              }
-              mr={theme.dimensions.gutter}
-              flex={1}>
-              <Button
-                onPress={onPrimaryContentButtonPress}
-                label={primaryContentButtonText}
-                testID={primaryButtonTestID}
-              />
-            </Box>
+            {hasPrimaryButton && (
+              <Box ml={hasSecondaryButton ? theme.dimensions.buttonPadding : theme.dimensions.gutter} flex={1}>
+                <Button
+                  onPress={onPrimaryContentButtonPress}
+                  label={primaryContentButtonText}
+                  testID={primaryButtonTestID}
+                />
+              </Box>
+            )}
           </Box>
         )}
       </WaygateWrapper>

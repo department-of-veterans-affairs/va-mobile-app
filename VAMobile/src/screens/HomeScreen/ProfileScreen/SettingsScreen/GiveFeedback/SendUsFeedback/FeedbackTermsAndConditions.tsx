@@ -23,19 +23,19 @@ function FeedbackTermsAndConditionsScreen({ navigation }: FeedbackTermsAndCondit
     <FullScreenSubtask
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"
-      primaryContentButtonText={t('back')}
-      onPrimaryContentButtonPress={navigation.goBack}>
+      secondaryContentButtonText={t('back')}
+      onSecondaryContentButtonPress={navigation.goBack}>
       <Box mx={theme.dimensions.gutter}>
-        <TextView variant="HelperTextBold">{t('giveFeedback.termsAndConditions.lowercase')}</TextView>
-        <TextView variant="HelperText" mt={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold">{t('giveFeedback.termsAndConditions.lowercase')}</TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {t('inAppFeedback.legalReqs.paragraph')}
         </TextView>
         <Pressable onPress={() => launchExternalLink(LINK_URL_OMB_PAGE)} accessibilityRole="link" accessible={true}>
-          <TextView variant="MobileFooterLink" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyLink" mt={theme.dimensions.standardMarginBetween}>
             {t('inAppFeedback.legalReqs.paragraph.link')}
           </TextView>
         </Pressable>
-        <TextView variant="HelperText" mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('inAppFeedback.legalReqs.paragraph.2')}
         </TextView>
       </Box>
