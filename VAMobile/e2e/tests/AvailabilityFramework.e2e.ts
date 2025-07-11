@@ -48,7 +48,7 @@ const AFNavigationForIndividual = [
   ['HomeScreen.e2e', 'WG_ClaimsHistoryScreen', 'Claims'],
   ['HomeScreen.e2e', 'WG_Appointments', 'Appointments'],
   ['VeteransCrisisLine.e2e', 'WG_VeteransCrisisLine', 'Talk to the Veterans Crisis Line now'],
-  ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Proof of Veteran status'],
+  ['VeteranStatusCard.e2e', 'WG_VeteranStatus', 'Veteran Status Card'],
   [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'WG_Appointments', 'Health', 'Appointments'],
   ['Messages.e2e', 'WG_FolderMessages', 'Health', 'Messages', 'Folders', 'Sent'],
   ['Prescriptions.e2e', 'WG_PrescriptionDetails', 'Health', 'Prescriptions', 'Get prescription details'],

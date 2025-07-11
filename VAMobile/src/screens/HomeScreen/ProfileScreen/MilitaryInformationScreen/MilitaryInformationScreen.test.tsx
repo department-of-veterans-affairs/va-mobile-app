@@ -7,13 +7,12 @@ import { t } from 'i18next'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
+import MilitaryInformationScreen from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen/MilitaryInformationScreen'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 
-import MilitaryInformationScreen from './index'
-
 context('MilitaryInformationScreen', () => {
-  const serviceHistoryMockAtributes = {
+  const serviceHistoryMockAttributes = {
     branchOfService: BranchesOfServiceConstants.MarineCorps,
     beginDate: '1993-06-04',
     endDate: '1995-07-10',
@@ -25,7 +24,7 @@ context('MilitaryInformationScreen', () => {
   const serviceHistoryMock: ServiceHistoryAttributes = {
     serviceHistory: [
       {
-        ...serviceHistoryMockAtributes,
+        ...serviceHistoryMockAttributes,
       },
     ],
   }
@@ -70,6 +69,40 @@ context('MilitaryInformationScreen', () => {
     render(<MilitaryInformationScreen {...props} />, { queriesData })
   }
 
+  const verifyMilitaryInfo = async (
+    branchOfService: (typeof BranchesOfServiceConstants)[keyof typeof BranchesOfServiceConstants],
+  ) => {
+    it('should render correctly for ' + branchOfService, async () => {
+      const serviceHistory = [
+        {
+          ...serviceHistoryMockAttributes,
+          branchOfService,
+        },
+      ]
+      const militaryServiceHistoryData: MilitaryServiceHistoryData = {
+        data: {
+          type: 'a',
+          id: 'string',
+          attributes: {
+            serviceHistory: serviceHistory,
+          },
+        },
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v0/military-service-history')
+        .mockResolvedValue(militaryServiceHistoryData)
+      const { formattedBeginDate, formattedEndDate } = serviceHistoryMockAttributes
+      initializeTestInstance({ serviceHistory })
+      await waitFor(() => {
+        expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy()
+      })
+      expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy()
+      expect(screen.getByText(branchOfService)).toBeTruthy()
+      expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy()
+    })
+  }
+
   describe('when military service history authorization is false', () => {
     it('should render NoMilitaryInformationAccess', async () => {
       const militaryServiceHistoryData = {
@@ -89,7 +122,7 @@ context('MilitaryInformationScreen', () => {
     })
   })
 
-  describe('when service history is empty', () => {
+  describe('when military service history is empty', () => {
     it('should render NoMilitaryInformationAccess', async () => {
       const militaryServiceHistoryData = {
         data: {
@@ -108,25 +141,12 @@ context('MilitaryInformationScreen', () => {
     })
   })
 
-  it('initializes correctly', async () => {
-    const militaryServiceHistoryData: MilitaryServiceHistoryData = {
-      data: {
-        type: 'a',
-        id: 'string',
-        attributes: serviceHistoryMock,
-      },
-    }
-    when(api.get as jest.Mock)
-      .calledWith('/v0/military-service-history')
-      .mockResolvedValue(militaryServiceHistoryData)
-    const { branchOfService, formattedBeginDate, formattedEndDate } = serviceHistoryMockAtributes
-    initializeTestInstance()
-    await waitFor(() => expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy())
-    await waitFor(() => expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy())
-    await waitFor(() => expect(screen.getByText(branchOfService)).toBeTruthy())
-    await waitFor(() => expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy())
-    await waitFor(() =>
-      expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy(),
-    )
+  describe('when military service history is not empty', () => {
+    verifyMilitaryInfo(BranchesOfServiceConstants.AirForce)
+    verifyMilitaryInfo(BranchesOfServiceConstants.Army)
+    verifyMilitaryInfo(BranchesOfServiceConstants.CoastGuard)
+    verifyMilitaryInfo(BranchesOfServiceConstants.MarineCorps)
+    verifyMilitaryInfo(BranchesOfServiceConstants.Navy)
+    verifyMilitaryInfo(BranchesOfServiceConstants.SpaceForce)
   })
 })
