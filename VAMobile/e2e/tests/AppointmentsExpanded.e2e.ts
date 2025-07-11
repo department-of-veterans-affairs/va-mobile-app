@@ -25,7 +25,6 @@ const checkTravelClaimAvailability = async (
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
     appointmentType === 'VA'
-
   if (pastAppointment && isAllowed && appointmentStatus === 'Confirmed' && !travelClaimId && !claimError) {
     if (daysSinceAppointmentStart < 30) {
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_FILE_CLAIM_ALERT_ID))).toExist()
