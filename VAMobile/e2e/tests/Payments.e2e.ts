@@ -55,12 +55,28 @@ describe('Payments Screen', () => {
   })
 
   it('payment details: verify the payment details for paper check', async () => {
+    // Wait for and tap the first payment history item
+    await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0))
+      .toBeVisible()
+      .withTimeout(5000)
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
-    await expect(element(by.text('June 1, 2024'))).toExist()
-    await expect(element(by.text('Regular Chapter 31'))).toExist()
-    await expect(element(by.text('$603.33'))).toExist()
-    await expect(element(by.text('Paper Check'))).toExist()
-    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID))).toExist()
+
+    // Wait for the details screen to be fully visible
+    await waitFor(element(by.text('June 1, 2024')))
+      .toBeVisible()
+      .withTimeout(5000)
+
+    // Verify payment details
+    await expect(element(by.text('June 1, 2024'))).toBeVisible()
+    await expect(element(by.text('Regular Chapter 31'))).toBeVisible()
+    await expect(element(by.text('$603.33'))).toBeVisible()
+    await expect(element(by.text('Paper Check'))).toBeVisible()
+
+    // Wait for and check the "info incorrect" button
+    await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)))
+      .toBeVisible()
+      .withTimeout(3000)
+    await expect(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID))).toBeVisible()
   })
 
   it("verify what if my payment information doesn't look right info", async () => {
