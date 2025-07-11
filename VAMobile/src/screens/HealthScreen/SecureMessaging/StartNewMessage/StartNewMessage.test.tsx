@@ -12,10 +12,9 @@ import {
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {

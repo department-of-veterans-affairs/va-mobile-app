@@ -63,23 +63,23 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     onChange: setSatisfaction,
     options: [
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
         value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
         value: t('inAppFeedback.overallSatisfaction.satisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.neither'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.neither'),
         value: t('inAppFeedback.overallSatisfaction.neither'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
         value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
         value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
       },
     ],
@@ -91,23 +91,23 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     onChange: setMeetMyNeeds,
     options: [
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
         value: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.agree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.agree'),
         value: t('inAppFeedback.agreeOrDisagree.agree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.neither'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.neither'),
         value: t('inAppFeedback.agreeOrDisagree.neither'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
         value: t('inAppFeedback.agreeOrDisagree.disagree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
         value: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
       },
     ],
@@ -119,23 +119,23 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     onChange: setEasyToUse,
     options: [
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
         value: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.agree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.agree'),
         value: t('inAppFeedback.agreeOrDisagree.agree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.neither'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.neither'),
         value: t('inAppFeedback.agreeOrDisagree.neither'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
         value: t('inAppFeedback.agreeOrDisagree.disagree'),
       },
       {
-        labelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
+        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
         value: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
       },
     ],

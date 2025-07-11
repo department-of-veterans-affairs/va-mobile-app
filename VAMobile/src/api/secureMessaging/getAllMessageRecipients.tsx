@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { filter } from 'underscore'
 
+import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingRecipientDataList, SecureMessagingRecipients } from 'api/types'
 import { get } from 'store/api'
-
-import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 
 /**
  * Fetch user message recipients

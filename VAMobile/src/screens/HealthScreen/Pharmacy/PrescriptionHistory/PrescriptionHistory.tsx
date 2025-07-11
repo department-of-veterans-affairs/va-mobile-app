@@ -39,6 +39,11 @@ import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModa
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import PrescriptionHistoryNoMatches from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoMatches'
+import PrescriptionHistoryNoPrescriptions from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoPrescriptions'
+import PrescriptionHistoryNotAuthorized from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNotAuthorized'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -49,12 +54,6 @@ import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
-import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
-import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
@@ -336,20 +335,20 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const modalSortByOptions = sortByOptions.map((option) => {
     return {
       value: option.value,
-      labelKey: getTranslation(option.display, t),
+      optionLabelKey: getTranslation(option.display, t),
     }
   })
 
   const modalFilterOptions = filterOptions.map((option) => {
-    const labelKey = `${getTranslation(option.display, t)} (${option.count})`
-    let a11yLabel = labelKey
+    const optionLabelKey = `${getTranslation(option.display, t)} (${option.count})`
+    let a11yLabel = optionLabelKey
     if (option.additionalLabelText) {
       a11yLabel += ` ${a11yLabelVA(option.additionalLabelText[0])}.`
     }
 
     return {
       value: option.value,
-      labelKey,
+      optionLabelKey,
       additionalLabelText: option.additionalLabelText,
       a11yLabel,
     }

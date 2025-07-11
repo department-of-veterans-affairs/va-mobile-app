@@ -12,12 +12,11 @@ import { useContactInformation } from 'api/contactInformation'
 import { AddressData, SaveAddressParameters, SuggestedAddress, ValidateAddressData } from 'api/types'
 import { AlertWithHaptics, Box, RadioGroup, TextArea, TextView, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { EditResponseData } from 'store/api'
 import { GenerateAddressMessage } from 'translations/en/functions'
 import { useTheme } from 'utils/hooks'
 import { getAddressDataFromSuggestedAddress, getAddressDataPayload } from 'utils/personalInformation'
-
-import { profileAddressType } from '../AddressSummary'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -169,7 +168,7 @@ function AddressValidation({
 
     suggestedAddressOptions.push({
       value: addressEntered,
-      labelKey: 'editAddress.address',
+      optionLabelKey: 'editAddress.address',
       labelArgs: getSuggestedAddressLabelArgs(addressEntered),
       headerText: t('editAddress.validation.youEntered'),
       testID: 'youEnteredTestID',
@@ -180,7 +179,7 @@ function AddressValidation({
         map(confirmedSuggestedAddresses, (address, index) => {
           return {
             value: address,
-            labelKey: 'editAddress.address',
+            optionLabelKey: 'editAddress.address',
             labelArgs: getSuggestedAddressLabelArgs(address),
             addHeader: index === 0 ? true : false,
             headerText: t('editAddress.validation.suggestedAddresses'),

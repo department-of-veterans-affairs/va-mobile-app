@@ -18,6 +18,7 @@ import {
   SecureMessagingMessageList,
 } from 'api/types'
 import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
@@ -30,16 +31,14 @@ import {
 } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import theme from 'styles/themes/standardTheme'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'
 import {
   getFormattedMessageTime,
   getNumberAccessibilityLabelFromString,
   getNumbersFromString,
   stringToTitleCase,
 } from 'utils/formattingUtils'
-
-import Unread from 'components/VAIcon/svgs/Unread.svg'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'
 import { imageDocumentResponseType, useDestructiveActionSheetProps } from 'utils/hooks'
 
 const MAX_SUBJECT_LENGTH = 50
