@@ -2,7 +2,6 @@ import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'reac
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
-  AccessibilityInfo,
   Alert,
   AlertButton,
   AppState,
@@ -11,7 +10,6 @@ import {
   Linking,
   PixelRatio,
   ScrollView,
-  UIManager,
   View,
   findNodeHandle,
 } from 'react-native'
@@ -40,6 +38,7 @@ import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
+import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
@@ -167,15 +166,10 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
            */
           if (isAndroid()) {
             dispatch(updateAccessibilityFocus(false))
-            // @ts-ignore: sendAccessibilityEvent is missing from @types/react-native
-            UIManager.sendAccessibilityEvent(
-              focusPoint,
-              // @ts-ignore: AccessibilityEventTypes is missing from @types/react-native
-              UIManager.AccessibilityEventTypes.typeViewFocused,
-            )
+            setAccessibilityFocus(ref)
             dispatch(updateAccessibilityFocus(true))
           } else {
-            AccessibilityInfo.setAccessibilityFocus(focusPoint)
+            setAccessibilityFocus(ref)
           }
         }
       }, 300)

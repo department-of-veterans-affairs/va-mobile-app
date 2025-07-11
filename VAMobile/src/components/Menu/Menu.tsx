@@ -129,7 +129,7 @@ interface Props {
   /** set the style for the menu container */
   style?: StyleProp<ViewStyle>
   /** method to run when menu is hidden */
-  onHidden?: () => Record<string, unknown>
+  onHidden?: () => void
   /** translation function */
   t: TFunction
 }

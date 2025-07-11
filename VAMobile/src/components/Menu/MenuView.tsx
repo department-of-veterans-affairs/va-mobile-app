@@ -6,20 +6,21 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import IconWithText from 'components/IconWithText'
+import { Menu, Position } from 'components/Menu/Menu'
+import { MenuDivider } from 'components/Menu/MenuDivider'
+import { MenuItem } from 'components/Menu/MenuItem'
 import TextView from 'components/TextView'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors } from 'styles/theme'
+import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
-
-import { Menu, Position } from './Menu'
-import { MenuDivider } from './MenuDivider'
-import { MenuItem } from './MenuItem'
 
 interface ElementToStickProps {
   /** styles the element which the popup anchor to */
   style?: StyleProp<ViewStyle>
 }
+
 const ElementToStick = React.forwardRef<View, ElementToStickProps>(({ style }, ref) => {
   return <View ref={ref} style={style} collapsable={false} />
 })
@@ -53,6 +54,7 @@ export type MenuViewProps = {
 const MenuView: FC<MenuViewProps> = ({ actions }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const elementRef = useRef<View>(null)
+  const buttonRef = useRef(null)
   let menuRef: Menu | null = null
   const setMenuRef: (instance: Menu | null) => void = (ref) => (menuRef = ref)
 
@@ -66,9 +68,14 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
     menuRef?.show(elementRef.current, Position.BOTTOM_LEFT, { left: -55, top: isIOS() ? -10 : -5 })
   }
 
+  const resetFocus = () => {
+    setAccessibilityFocus(buttonRef)
+  }
+
   useEffect(() => {
     const sub = Dimensions.addEventListener('change', () => {
       hideMenu()
+      resetFocus()
     })
 
     return () => {
@@ -139,6 +146,7 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
       <ElementToStick ref={elementRef} style={elementToStickStyle} />
       <Pressable
         onPress={showMenu}
+        ref={buttonRef}
         style={launchBtnStyle}
         accessibilityLabel={t('more')}
         accessibilityRole={'link'}
@@ -146,7 +154,11 @@ const MenuView: FC<MenuViewProps> = ({ actions }) => {
         <IconWithText name="MoreHoriz" fill={currentTheme.colors.icon.active} label={t('more')} />
       </Pressable>
 
-      <Menu ref={setMenuRef} style={{ backgroundColor: currentTheme.colors.background.menu }} t={t}>
+      <Menu
+        ref={setMenuRef}
+        style={{ backgroundColor: currentTheme.colors.background.menu }}
+        onHidden={resetFocus}
+        t={t}>
         {getActionsForMenu()}
       </Menu>
     </>
