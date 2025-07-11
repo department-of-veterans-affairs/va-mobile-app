@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { ErrorAlert } from 'components'
 import { context, render } from 'testUtils'
-
-import ErrorAlert from './ErrorAlert'
 
 context('ErrorAlert', () => {
   let onTryAgainSpy: jest.Mock

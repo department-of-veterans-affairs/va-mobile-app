@@ -1,11 +1,10 @@
 import React from 'react'
 
+import { ErrorComponent } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { initialErrorsState, initializeErrorsByScreenID } from 'store/slices'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import ErrorComponent from './ErrorComponent'
 
 context('ErrorComponent', () => {
   const onTryAgainPressSpy = jest.fn()

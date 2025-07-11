@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { NetworkConnectionError } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import NetworkConnectionError from './NetworkConnectionError'
 
 context('NetworkConnectionError', () => {
   const onTryAgainPressSpy = jest.fn()
