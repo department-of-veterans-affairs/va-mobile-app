@@ -72,7 +72,7 @@ describe('Payments Screen', () => {
     await expect(element(by.text('$603.33'))).toBeVisible()
     await expect(element(by.text('Paper Check'))).toBeVisible()
 
-    // Wait for and check the "info incorrect" button
+    // Wait for and check PAYMENT_INFO_INCORRECT_ID
     await waitFor(element(by.id(PaymentsE2eIDConstants.PAYMENT_INFO_INCORRECT_ID)))
       .toBeVisible()
       .withTimeout(3000)
