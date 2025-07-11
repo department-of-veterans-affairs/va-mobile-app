@@ -225,6 +225,7 @@ context('PastAppointments', () => {
             isPending: false,
             startDateUtc: isoString,
             travelPayClaim: undefined, // No metadata
+            travelPayEligible: false,
           },
         },
       ]
@@ -260,6 +261,7 @@ context('PastAppointments', () => {
               },
               claim: undefined,
             },
+            travelPayEligible: false,
           },
         },
       ]

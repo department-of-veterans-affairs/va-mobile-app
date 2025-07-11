@@ -61,6 +61,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travelPayEligible: true,
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -82,17 +83,19 @@ type createProps = {
   startDateUtc?: AppointmentAttributes['startDateUtc']
   travelPayClaim?: AppointmentTravelPayClaim
   appointmentType: AppointmentType
+  travelPayEligible?: boolean
 }
 
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travelPayEligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travelPayEligible }
 }
 
 const tests = [
@@ -100,6 +103,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Community Care',
   },
@@ -107,6 +111,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'In Person VA',
   },
@@ -114,6 +119,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video Atlas',
   },
@@ -121,6 +127,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video GFE',
   },
@@ -128,6 +135,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video Home',
   },
@@ -135,6 +143,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video On Site',
   },
@@ -215,6 +224,112 @@ describe('AppointmentTravelClaimDetails', () => {
 
         // Check that the downtime alert is not displayed
         expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
+      })
+    })
+
+    describe('when travel pay claim is not present', () => {
+      describe('when the appointment is not past the 30 day window', () => {
+        it('should not render', () => {
+          const notFiledData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              ...travelPayClaimData,
+              claim: undefined,
+            },
+            travelPayEligible: true,
+          })
+          initializeTestInstance('Past', { ...notFiledData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeNull()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeNull()
+        })
+      })
+      describe('when the appointment is past the 30 day window', () => {
+        it('should render the no claim message when appointment meets travel pay criteria', () => {
+          const missedClaimDeadlineData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              ...travelPayClaimData,
+              claim: undefined,
+            },
+            travelPayEligible: true,
+          })
+          initializeTestInstance('Past', { ...missedClaimDeadlineData })
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
+        })
+      })
+
+      describe('when there was an error retrieving travel claim data', () => {
+        it('should render an error message when appointment is less than 30 days old', () => {
+          const errorData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 28 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Error retrieving travel pay claim data',
+                success: false,
+              },
+            },
+            travelPayEligible: true,
+          })
+          initializeTestInstance('Past', { ...errorData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+        })
+        it('should render an error message when appointment is more than 30 days old', () => {
+          const errorData = createTestAppointmentAttributes({
+            startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+            appointmentType: AppointmentTypeConstants.VA,
+            travelPayClaim: {
+              metadata: {
+                status: 500,
+                message: 'Error retrieving travel pay claim data',
+                success: false,
+              },
+            },
+            travelPayEligible: true,
+          })
+          initializeTestInstance('Past', { ...errorData })
+          expect(screen.queryByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+          expect(screen.getByText(t('travelPay.error.general'))).toBeTruthy()
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.noClaim'))).toBeNull()
+        })
+      })
+    })
+
+    describe('when travel pay is in downtime', () => {
+      const downtimeWindow = {
+        startTime: DateTime.now(),
+        endTime: DateTime.now().plus({ hours: 1 }),
+      }
+
+      tests.forEach((test) => {
+        it(`initializes correctly when ${test.testName}`, () => {
+          initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, {
+            preloadedState: {
+              errors: {
+                downtimeWindowsByFeature: {
+                  travel_pay_features: {
+                    ...downtimeWindow,
+                  },
+                },
+              } as ErrorsState,
+            },
+          })
+          expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
+          expect(screen.getByText(t('travelPay.downtime.title'))).toBeTruthy()
+          expect(
+            screen.getByText(
+              t('downtime.message.1', {
+                endTime: downtimeWindow.endTime.toFormat('EEEE, fff'),
+              }),
+            ),
+          ).toBeTruthy()
+        })
       })
     })
 

@@ -88,6 +88,7 @@ context('UpcomingAppointmentDetails', () => {
             bestTimeToCall: ['Afternoon', 'Evening'],
             friendlyLocationName: 'Denver VA Medical Center',
             serviceCategoryName: null,
+            travelPayEligible: false,
           },
         },
         {
@@ -114,6 +115,7 @@ context('UpcomingAppointmentDetails', () => {
             typeOfCare: 'Podiatry',
             serviceCategoryName: null,
             isPending: false,
+            travelPayEligible: false,
           },
         },
       ]
