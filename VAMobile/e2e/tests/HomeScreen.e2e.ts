@@ -1,7 +1,15 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  disableAF,
+  enableAF,
+  loginToDemoMode,
+  toggleRemoteConfigFlag,
+  verifyAF,
+} from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
@@ -29,6 +37,7 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -42,6 +51,7 @@ describe('Home Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
     await loginToDemoMode()
   })
 
@@ -199,6 +209,10 @@ describe('Home Screen', () => {
   })
 
   it('should show latest payment breakdown', async () => {
+    await waitFor(element(by.id(CommonE2eIdConstants.HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
+      .scroll(200, 'down')
     await element(by.id(CommonE2eIdConstants.HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID)).tap()
 
     await expect(element(by.text(HomeE2eIdConstants.LATEST_PAYMENT_ROW_ONE_PAYMENT_TYPE))).toExist()

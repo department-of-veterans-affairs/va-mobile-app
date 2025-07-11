@@ -20,17 +20,18 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
 function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey } = route.params
+  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -58,6 +59,11 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const contactInformationQuery = useContactInformation({ enabled: true })
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
+  const navigateToErrorScreen = (error: string) => {
+    logAnalyticsEvent(Events.vama_smoc_error(error))
+    navigateTo('SMOCErrorScreen', { error })
+  }
+
   const submitTravelClaim = async () => {
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
@@ -65,8 +71,13 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
     }
 
     if (!attributes.location.id) {
-      navigateTo('ErrorScreen', { error: 'error' })
+      navigateToErrorScreen('error')
       return
+    }
+
+    if (smocFlowStartDate) {
+      const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+      logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
     }
 
     submitClaim(
@@ -91,9 +102,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
             status: data?.data.attributes.claimStatus,
           })
         },
-        onError: () => {
-          navigateTo('ErrorScreen', { error: 'error' })
-        },
+        onError: () => navigateToErrorScreen('error'),
       },
     )
   }

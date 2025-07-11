@@ -3,13 +3,13 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import ReplyHelpScreen from 'screens/HealthScreen/SecureMessaging/ReplyHelp/ReplyHelp'
 import { context, render } from 'testUtils'
-
-import ReplyHelpScreen from './ReplyHelp'
 
 context('ReplyHelpScreen', () => {
   beforeEach(() => {
     render(<ReplyHelpScreen />)
+    jest.advanceTimersByTime(50)
   })
 
   it('initializes correctly', () => {

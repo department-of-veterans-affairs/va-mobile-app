@@ -15,7 +15,7 @@ This documentation explains how to update the later data.
 App store data is very volatile and can take up to 7 days to settle. **We currently update the data every month on or after the 7th of the month** for consistency and to avoid any discrepancies that happen due to Apple and Google's collection processes. 
 
 ## Overview of steps
-1. Complete the steps in the [Steps to gather and record app store data section](#Steps-to-gather-and-record-app-store-data)
+1. Complete the steps in the [Steps to gather and record app store data section](#steps-to-gather-and-record-app-store-data)
 2. Review the [monthly dashboard](Dashboard.md) and confirm the board is operating properly post-data updates. Make adjustments if needed.
 3. Posted in DSVA Slack channel #va-mobile-app-analytics that the updates are complete for the prior month and tag the following stakeholders:
     * Mobile app POs: Rachel Han and Ryan Twell 
