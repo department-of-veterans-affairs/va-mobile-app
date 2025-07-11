@@ -95,11 +95,11 @@ context('MilitaryInformationScreen', () => {
       initializeTestInstance({ serviceHistory })
       await waitFor(() => {
         expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy()
-        expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy()
-        expect(screen.getByText(branchOfService)).toBeTruthy()
-        expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy()
-        expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy()
       })
+      expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy()
+      expect(screen.getByText(branchOfService)).toBeTruthy()
+      expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy()
+      expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy()
     })
   }
 
