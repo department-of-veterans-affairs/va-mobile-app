@@ -5,18 +5,13 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
-import SubmitSuccessScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/SubmitSuccessScreen'
+
+import { SubmitSuccessScreen } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
+import getEnv from 'utils/env'
 
 jest.spyOn(Alert, 'alert')
-const mockNavigateToTravelPayWebsiteSpy = jest.fn()
-jest.mock('utils/travelPay', () => {
-  const original = jest.requireActual('utils/travelPay')
-  return {
-    ...original,
-    navigateToTravelPayWebsite: () => mockNavigateToTravelPayWebsiteSpy(),
-  }
-})
+const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 
 const params = {
   facilityName: 'Test Facility',
@@ -61,11 +56,11 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
     })
 
-    describe('when the user clicks the link', () => {
+    describe('when the user clicks the go to appointment link', () => {
       it('navigates back and closes the subtask', () => {
         initializeTestInstance('In Progress')
         fireEvent.press(screen.getByTestId('goToAppointmentLinkID'))
-        expect(mockGoBackSpy).toHaveBeenCalledTimes(1)
+        expect(mockGoBackSpy).toHaveBeenCalled()
       })
     })
   })
@@ -83,11 +78,16 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
     })
 
-    describe('when the user clicks the link', () => {
-      it('calls the navigateToTravelPayWebsite function', () => {
+    describe('when the user clicks the BTSSS link', () => {
+      it('navigates to the BTSSS website on an authenticated webview', () => {
         initializeTestInstance(TravelPayPartialSuccessStatusConstants.INCOMPLETE)
         fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
-        expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+          url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+          displayTitle: t('travelPay.webview.fileForTravelPay.title'),
+          loadingMessage: t('loading.vaWebsite'),
+          useSSO: true,
+        })
       })
     })
   })
@@ -105,11 +105,16 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
     })
 
-    describe('when the user clicks the link', () => {
-      it('calls the navigateToTravelPayWebsite function', () => {
+    describe('when the user clicks the BTSSS link', () => {
+      it('navigates to the BTSSS website on an authenticated webview', () => {
         initializeTestInstance(TravelPayPartialSuccessStatusConstants.SAVED)
         fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
-        expect(mockNavigateToTravelPayWebsiteSpy).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+          url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+          displayTitle: t('travelPay.webview.fileForTravelPay.title'),
+          loadingMessage: t('loading.vaWebsite'),
+          useSSO: true,
+        })
       })
     })
   })
