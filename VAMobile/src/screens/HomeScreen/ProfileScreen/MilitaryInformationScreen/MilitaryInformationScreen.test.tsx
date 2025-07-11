@@ -93,13 +93,13 @@ context('MilitaryInformationScreen', () => {
         .mockResolvedValue(militaryServiceHistoryData)
       const { formattedBeginDate, formattedEndDate } = serviceHistoryMockAttributes
       initializeTestInstance({ serviceHistory })
-      await waitFor(() => expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy())
-      await waitFor(() => expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy())
-      await waitFor(() => expect(screen.getByText(branchOfService)).toBeTruthy())
-      await waitFor(() => expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy())
-      await waitFor(() =>
-        expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy(),
-      )
+      await waitFor(() => {
+        expect(screen.queryByText(t('militaryInformation.noMilitaryInfoAccess.title'))).toBeFalsy()
+        expect(screen.getByText(t('militaryInformation.periodOfService'))).toBeTruthy()
+        expect(screen.getByText(branchOfService)).toBeTruthy()
+        expect(screen.getByText(`${formattedBeginDate} – ${formattedEndDate}`)).toBeTruthy()
+        expect(screen.getByRole('link', { name: t('militaryInformation.incorrectServiceInfo') })).toBeTruthy()
+      })
     })
   }
 
