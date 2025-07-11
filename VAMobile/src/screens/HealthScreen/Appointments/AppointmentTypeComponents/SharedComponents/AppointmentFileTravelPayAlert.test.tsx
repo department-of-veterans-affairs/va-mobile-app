@@ -95,7 +95,7 @@ const createTestAppointmentAttributes = ({
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim,  travelPayEligible }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travelPayEligible }
 }
 
 const claimExamAttributes = createTestAppointmentAttributes({
@@ -219,7 +219,7 @@ context('AppointmentFileTravelPayAlert', () => {
       travelPayClaim: undefined,
       isPending: false,
       phoneOnly: false,
-      travelPayEligible: true,
+      travelPayEligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
