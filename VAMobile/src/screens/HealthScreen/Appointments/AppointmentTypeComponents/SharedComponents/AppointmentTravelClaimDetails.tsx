@@ -122,14 +122,7 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
     const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
 
-    if (
-      apiReturnsFullHistory &&
-      // !claim &&
-      // attributes.travelPayEligible &&
-      isEligibleForTravelPay(attributes) &&
-      daysLeftToFileTravelPay < 0 &&
-      !claimError
-    ) {
+    if (apiReturnsFullHistory && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}

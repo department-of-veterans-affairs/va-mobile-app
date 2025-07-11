@@ -878,62 +878,12 @@ export async function apppointmentVerification(pastAppointment = false) {
     )
   })
 
-  // it(pastAppointmentString + 'verify confirmed VA appt - provider/typeOfCare/facility/number', async () => {
-  //   await element(by.text('Health')).atIndex(0).tap()
-  //   await openAppointments()
-  //   if (!pastAppointment) {
-  //     await waitFor(element(by.text('Upcoming')))
-  //       .toExist()
-  //       .withTimeout(10000)
-  //     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
-  //     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-  //   } else {
-  //     await element(by.text('Past')).tap()
-  //     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
-  //     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-  //     await scrollToThenTap('At San Francisco VA Health Care System', pastAppointmentString)
-  //     await expect(element(by.text('This appointment happened in the past.'))).toExist()
-  //   }
-  //   // if (!pastAppointment) {
-  //   //   await expect(element(by.text('Cancel appointment'))).toExist()
-  //   //   await expect(element(by.text('Go to San Francisco VA Health Care System for this appointment.'))).toExist()
-  //   // } else {
-
-  //   await checkUpcomingApptDetails(
-  //     'VA',
-  //     'Confirmed',
-  //     pastAppointment,
-  //     'Primary Care',
-  //     'Jane Smith',
-  //     'DAYTSHR - Dayton VA Medical Center',
-  //     undefined,
-  //     'New Issue',
-  //     undefined,
-  //     'San Francisco VA Health Care System',
-  //     '2360 East Pershing Boulevard',
-  //     '20d73591-ff18-4b66-9838-1429ebbf1b6e',
-  //     26,
-  //   )
-  // })
-
   it(pastAppointmentString + 'verify confirmed VA appt - no provider/typeOfCare/address/number', async () => {
     await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
     await expect(element(by.text('Type of care not noted'))).not.toExist()
     await expect(element(by.text('Provider not noted'))).not.toExist()
     await element(by.text('Appointments')).tap()
   })
-
-  // it(pastAppointmentString + 'verify confirmed VA appt - no provider/typeOfCare/address/number', async () => {
-  //   await element(by.text('Health')).atIndex(0).tap()
-  //   await openAppointments()
-  //   await element(by.text('Past')).tap()
-  //   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
-  //   await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-  //   await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
-  //   await expect(element(by.text('Type of care not noted'))).not.toExist()
-  //   await expect(element(by.text('Provider not noted'))).not.toExist()
-  //   await element(by.text('Appointments')).tap()
-  // })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
     await element(by.text('Health')).atIndex(0).tap()
