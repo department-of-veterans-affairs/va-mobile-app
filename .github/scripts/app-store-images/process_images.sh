@@ -18,8 +18,10 @@ echo "Stage 1: Adding device frames with fastlane frameit..."
 # Create temporary directories for original and framed screenshots
 mkdir -p fastlane/screenshots/en-US/ios_original
 mkdir -p fastlane/screenshots/en-US/android_original
+mkdir -p fastlane/screenshots/en-US/ipad_original
 mkdir -p fastlane/screenshots/en-US/ios_framed
 mkdir -p fastlane/screenshots/en-US/android_framed
+mkdir -p fastlane/screenshots/en-US/ipad_framed
 mkdir -p framed_images
 
 # Move screenshots to their respective temporary original directories
@@ -29,6 +31,8 @@ for img in fastlane/screenshots/en-US/*.png; do
     mv "$img" fastlane/screenshots/en-US/ios_original/
   elif [[ "$BASENAME" == *_android ]]; then
     mv "$img" fastlane/screenshots/en-US/android_original/
+  elif [[ "$BASENAME" == *_ipad ]]; then
+    mv "$img" fastlane/screenshots/en-US/ipad_original/
   fi
 done
 
@@ -97,6 +101,40 @@ if [ -n "$(ls -A fastlane/screenshots/en-US/android_original/)" ]; then
   cd ..
 fi
 
+# Process iPad images
+if [ -n "$(ls -A fastlane/screenshots/en-US/ipad_original/)" ]; then
+  echo "Processing iPad images..."
+  # Move iPad images to the main screenshots directory for framing
+  mv fastlane/screenshots/en-US/ipad_original/* fastlane/screenshots/en-US/
+
+  # Resize all iPad images first for frameit
+  for img in fastlane/screenshots/en-US/*_ipad.png; do
+    magick "$img" -resize "2048x2732!" "$img" # iPad Pro 12.9-inch
+  done
+
+  # Create a temporary Framefile.json to suppress warnings
+  echo '{"default": {"background": "#00000000"}}' > fastlane/Framefile.json
+
+  # Run frameit for iPad
+  echo "Adding iPad frames with frameit"
+  cd fastlane
+  fastlane frameit &> frameit_ipad.log
+  rm Framefile.json
+
+  # Verify that framed images were created
+  if ! ls screenshots/en-US/*_framed.png 1> /dev/null 2>&1; then
+    echo "Error: frameit failed to create iPad images. See log below:"
+    cat frameit_ipad.log
+    cd ..
+    exit 1
+  fi
+  
+  # Move framed images to the dedicated directory
+  mv screenshots/en-US/*_framed.png screenshots/en-US/ipad_framed/
+  rm screenshots/en-US/*_ipad.png
+  cd ..
+fi
+
 # Consolidate all framed images back into the main fastlane/screenshots/en-US/ directory
 if [ -n "$(ls -A fastlane/screenshots/en-US/ios_framed/)" ]; then
   mv fastlane/screenshots/en-US/ios_framed/* fastlane/screenshots/en-US/
@@ -104,12 +142,17 @@ fi
 if [ -n "$(ls -A fastlane/screenshots/en-US/android_framed/)" ]; then
   mv fastlane/screenshots/en-US/android_framed/* fastlane/screenshots/en-US/
 fi
+if [ -n "$(ls -A fastlane/screenshots/en-US/ipad_framed/)" ]; then
+  mv fastlane/screenshots/en-US/ipad_framed/* fastlane/screenshots/en-US/
+fi
 
 # Clean up temporary directories
 rm -rf fastlane/screenshots/en-US/ios_original
 rm -rf fastlane/screenshots/en-US/android_original
+rm -rf fastlane/screenshots/en-US/ipad_original
 rm -rf fastlane/screenshots/en-US/ios_framed
 rm -rf fastlane/screenshots/en-US/android_framed
+rm -rf fastlane/screenshots/en-US/ipad_framed
 
 # --- Resize framed images ---
 echo "Resizing framed images..."
@@ -124,6 +167,9 @@ else
       magick "$img" -resize 475 "$img"
     elif [[ "$img" == *_android_framed.png ]]; then
       # Resize Android images to a width of 475px, maintaining aspect ratio
+      magick "$img" -resize 475 "$img"
+    elif [[ "$img" == *_ipad_framed.png ]]; then
+      # Resize iPad images to a width of 475px, maintaining aspect ratio
       magick "$img" -resize 475 "$img"
     fi
   done
@@ -162,6 +208,8 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
     BASENAME="${BASENAME_WITH_DEVICE%_ios}"
   elif [[ "$BASENAME_WITH_DEVICE" == *_android ]]; then
     BASENAME="${BASENAME_WITH_DEVICE%_android}"
+  elif [[ "$BASENAME_WITH_DEVICE" == *_ipad ]]; then
+    BASENAME="${BASENAME_WITH_DEVICE%_ipad}"
   else
     BASENAME="$BASENAME_WITH_DEVICE" # Fallback if no device suffix
   fi
@@ -218,6 +266,7 @@ echo "Final images are in the 'framed_images' directory."
 # Create directories for android and ios images
 mkdir -p framed_images/android
 mkdir -p framed_images/ios
+mkdir -p framed_images/ipad
 
 # Move android images
 if ls framed_images/*_android_final.png 1> /dev/null 2>&1; then
@@ -229,6 +278,11 @@ if ls framed_images/*_ios_final.png 1> /dev/null 2>&1; then
   mv framed_images/*_ios_final.png framed_images/ios/
 fi
 
+# Move ipad images
+if ls framed_images/*_ipad_final.png 1> /dev/null 2>&1; then
+  mv framed_images/*_ipad_final.png framed_images/ipad/
+fi
+
 echo "Final resizing of images"
 for f in framed_images/ios/*_final.png; do
   magick "$f" -resize 1242x2208! "$f"
@@ -236,6 +290,10 @@ done
 
 for f in framed_images/android/*_final.png; do
   magick "$f" -resize 1280x2276! "$f"
+done
+
+for f in framed_images/ipad/*_final.png; do
+  magick "$f" -resize 2048x2732! "$f"
 done
 
 
@@ -247,6 +305,12 @@ done
 echo "Moving android images to final location"
 for i in framed_images/android/*_final.png; do
   cp $i ../../../VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+done
+
+echo "Moving ipad images to final location"
+mkdir -p ../../../VAMobile/ios/fastlane/screenshots_ipad/en-US
+for i in framed_images/ipad/*_final.png; do
+  cp $i ../../../VAMobile/ios/fastlane/screenshots_ipad/en-US/
 done
 
 echo "All images processed."

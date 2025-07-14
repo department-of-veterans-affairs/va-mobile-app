@@ -20,8 +20,8 @@ PROCESSED=false
 # Use nullglob to prevent errors if no matches are found
 shopt -s nullglob
 
-# Find and process directories starting with 'ios' or 'android' in the artifacts folder
-for SOURCE_DIR in "$ARTIFACTS_DIR"/ios* "$ARTIFACTS_DIR"/android*; do
+# Find and process directories starting with 'ios', 'android', or 'ipad' in the artifacts folder
+for SOURCE_DIR in "$ARTIFACTS_DIR"/ios* "$ARTIFACTS_DIR"/android* "$ARTIFACTS_DIR"/ipad*; do
     if [ -d "$SOURCE_DIR" ]; then
         PROCESSED=true
         echo "Processing directory: $SOURCE_DIR"
@@ -33,13 +33,18 @@ for SOURCE_DIR in "$ARTIFACTS_DIR"/ios* "$ARTIFACTS_DIR"/android*; do
             DEVICE_TYPE="_ios"
         elif [[ "$DIR_BASENAME" == android* ]]; then
             DEVICE_TYPE="_android"
+        elif [[ "$DIR_BASENAME" == ipad* ]]; then
+            DEVICE_TYPE="_ipad"
         fi
 
         echo "Moving .png files from $SOURCE_DIR to $DEST_DIR..."
         # Use find to get all .png files, excluding those with "done" in their name
         # and move them, appending the device type suffix.
-        find "$SOURCE_DIR" -type f -name "*.png" -not -iname "*done*" -print0 | while IFS= read -r -d $'\000' file; do
+        find "$SOURCE_DIR" -type f -name "*.png" -not -iname "*done*" -print0 | while IFS= read -r -d '' file; do
             BASENAME=$(basename "$file" .png)
+            if [[ "$DEVICE_TYPE" == "_ipad" && "$BASENAME" == *-ipad ]]; then
+                BASENAME="${BASENAME%-ipad}"
+            fi
             mv -v "$file" "$DEST_DIR/${BASENAME}${DEVICE_TYPE}.png"
         done
 
@@ -53,7 +58,7 @@ done
 shopt -u nullglob
 
 if [ "$PROCESSED" = false ]; then
-    echo "No directories matching 'ios*' or 'android*' found in '$ARTIFACTS_DIR' to process."
+    echo "No directories matching 'ios*', 'android*', or 'ipad*' found in '$ARTIFACTS_DIR' to process."
 fi
 
 echo "Copying Letters Images.."

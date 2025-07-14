@@ -1443,13 +1443,13 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-blob-util (0.21.2):
+  - react-native-blob-util (0.21.3):
     - React-Core
   - react-native-cookies (6.2.1):
     - React-Core
   - react-native-document-picker (8.2.2):
     - React-Core
-  - react-native-image-picker (7.1.2):
+  - react-native-image-picker (7.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1472,30 +1472,11 @@ PODS:
     - Yoga
   - react-native-notifications (5.1.0):
     - React-Core
-  - react-native-quick-base64 (2.1.2):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-quick-base64 (2.2.0):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.5.2):
     - React-Core
-  - react-native-webview (13.13.5):
+  - react-native-webview (13.15.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1795,7 +1776,7 @@ PODS:
   - ReactNativeWebPFormat (1.2.1):
     - React-Core
     - SDWebImageWebPCoder
-  - RNCAsyncStorage (2.1.2):
+  - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNFBAnalytics (18.9.0):
     - Firebase/AnalyticsWithoutAdIdSupport (= 10.20.0)
@@ -1824,7 +1805,7 @@ PODS:
     - RNFBApp
   - RNFileViewer (2.1.5):
     - React-Core
-  - RNGestureHandler (2.21.1):
+  - RNGestureHandler (2.21.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1866,7 +1847,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNLocalize (3.3.0):
+  - RNLocalize (3.5.0):
     - React-Core
   - RNReactNativeHapticFeedback (2.3.3):
     - DoubleConversion
@@ -1913,7 +1894,7 @@ PODS:
     - Yoga
   - RNSVG (15.8.0):
     - React-Core
-  - SDWebImage/Core (5.21.0)
+  - SDWebImage/Core (5.21.1)
   - SDWebImageWebPCoder (0.14.6):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
@@ -2289,14 +2270,14 @@ SPEC CHECKSUMS:
   React-logger: c4052eb941cca9a097ef01b59543a656dc088559
   React-Mapbuffer: 33546a3ebefbccb8770c33a1f8a5554fa96a54de
   React-microtasksnativemodule: 5c3d795318c22ab8df55100e50b151384a4a60b3
-  react-native-blob-util: b653f7dae5c9fa3f903af51bc2edfb8ef659022b
+  react-native-blob-util: 45eb0e23b243b48955d231414ca5ee4da2439968
   react-native-cookies: d648ab7025833b977c0b19e142503034f5f29411
   react-native-document-picker: a338165804b1a14c8e408448115dc0edfd7b73ca
-  react-native-image-picker: 3bf9fad4e53ff47e3f6b02ac42c4cc3dc3fb3163
+  react-native-image-picker: e0cc9db303019b8fd4a1483d640cad34553d85cc
   react-native-notifications: 3bafa1237ae8a47569a84801f17d80242fe9f6a5
-  react-native-quick-base64: 5565249122493bef017004646d73f918e8c2dfb0
-  react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
-  react-native-webview: a72098fc86dcc2e5f8f4d5d87f08bb779596337b
+  react-native-quick-base64: 17dc4b8daee50e680d5f57cc3ee6773b6ee0110a
+  react-native-safe-area-context: 0f7bf11598f9a61b7ceac8dc3f59ef98697e99e1
+  react-native-webview: ab7d17cb9fd64af9f4a9e3936248364995518f74
   React-nativeconfig: 8efdb1ef1e9158c77098a93085438f7e7b463678
   React-NativeModulesApple: cebca2e5320a3d66e123cade23bd90a167ffce5e
   React-perflogger: 72e653eb3aba9122f9e57cf012d22d2486f33358
@@ -2326,7 +2307,7 @@ SPEC CHECKSUMS:
   ReactCommon: 300d8d9c5cb1a6cd79a67cf5d8f91e4d477195f9
   ReactNativeKeyboardManager: 25f1090b2a82fb449feb0f8f026cf3b34dcaff37
   ReactNativeWebPFormat: b4de869bc14e3b345e8727da3ed4b18559f499e6
-  RNCAsyncStorage: b9f5f78da5d16a853fe3dc22e8268d932fc45a83
+  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNFBAnalytics: ffa26d6ec89d0f1ab4c5ef1f1f70bfdab1a03217
   RNFBApp: 20bfba7e2a61a959518c1d57e5d48817c62ed3f6
   RNFBCrashlytics: 35e45b650ea8caa14f341eba943a58d47073f23e
@@ -2334,17 +2315,17 @@ SPEC CHECKSUMS:
   RNFBPerf: 244a4d455fe2fb34aedec78ea7d7b0bb4dae7177
   RNFBRemoteConfig: 90695aad20df3f5fc5b514668b44ae646dfabc8e
   RNFileViewer: 4b5d83358214347e4ab2d4ca8d5c1c90d869e251
-  RNGestureHandler: 093134b25de1fcd57b275b3c8cd66d11186c569b
+  RNGestureHandler: e9ff57ef12ccdb4ec8687e95b8d5194f4a2350c5
   RNKeychain: 846378665084073892de110346f041f97aa99a42
-  RNLocalize: d024afa9204c13885e61dc88b8190651bcaabac9
+  RNLocalize: 946d14c57cbd006e010642cba0d9b6a0eff509da
   RNReactNativeHapticFeedback: 9e40918e714999589d7d4adc740bc345158bd733
   RNScreens: 09d0dfadf032f78e0580cd417dc378268d483a38
   RNSVG: 8542aa11770b27563714bbd8494a8436385fc85f
-  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
+  SDWebImage: f29024626962457f3470184232766516dee8dfea
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: feb4910aba9742cfedc059e2b2902e22ffe9954a
 
 PODFILE CHECKSUM: 75aeff26358ee70aa92e2e05e083fc1d10952b61
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2

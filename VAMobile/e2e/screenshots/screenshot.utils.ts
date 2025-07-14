@@ -26,6 +26,12 @@ const utils = {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
   },
 
+  skipUpdate: async () => {
+    try {
+      await element(by.text('Skip this update')).tap()
+    } catch (e) {}
+  },
+
   healthScreen: async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
   },
