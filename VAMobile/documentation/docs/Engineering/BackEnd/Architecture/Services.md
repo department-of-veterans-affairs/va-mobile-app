@@ -16,12 +16,14 @@ graph LR
         Appeals([Appeals])
 
         Claims([Claims])
-        DisabilityRating([Disability Rating])
-        PaymentInfo([Payment Info])
 
+        DisabilityRating([Disability Rating])
+        VeteranVerification([Veteran Verification])
+
+        PaymentInfo([Payment Info])
+    
         Allergies([Allergies])
         Immunizations([Immunizations])
-
         LabsAndTests([Labs And Tests])
         Locations([Locations])
         Observations([Observations])
@@ -74,7 +76,6 @@ graph LR
         Checkin([Check In])
         Pensions([Pensions])
         PushNotifications([Push Notifications])
-
     end
     
     subgraph Upstream[Upstream Services]
@@ -128,6 +129,7 @@ graph LR
 
     Claims --> LHBenefitsClaims
     DisabilityRating --> LHVetService
+    VeteranVerification --> LHVetService
     Dependents --> LHBenefitsIntake
     PaymentInfo --> LHDirectDeposit
     %% Letters --> LHLetters # In Progress
@@ -204,7 +206,6 @@ graph LR
     PushNotifications ---> VEText
     VEText --> APNsGCM
     VEText --> AWS
-
 ```
 Image: Diagram mapping all the upstream services used by the VA Mobile API
 
