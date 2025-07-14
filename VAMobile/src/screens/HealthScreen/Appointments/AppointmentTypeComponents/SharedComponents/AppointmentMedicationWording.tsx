@@ -109,7 +109,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
       case AppointmentDetailsTypeConstants.VideoVA:
         return (
           <>
-            <TextView variant="MobileBody">{body}</TextView>
+            <TextView variant="MobileBody">{body}.</TextView>
             {webViewLink}
           </>
         )
