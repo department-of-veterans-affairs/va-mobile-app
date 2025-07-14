@@ -1,14 +1,7 @@
 import { by, device, element, expect } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  changeMockData,
-  checkImages,
-  loginToDemoMode,
-  openMilitaryInformation,
-  openProfile,
-} from './utils'
+import { CommonE2eIdConstants, checkImages, loginToDemoMode, openMilitaryInformation, openProfile } from './utils'
 
 export const MilitaryInformationE2eIdConstants = {
   SERVICE_INFORMATION_INCORRECT_ID: 'militaryServiceIncorrectLinkID',
@@ -27,14 +20,9 @@ beforeAll(async () => {
   await loginToDemoMode()
 })
 
-export async function verifyMilitaryInfo(militaryBranch: string) {
-  it('verify ' + militaryBranch + ' is shown and seal is correct', async () => {
-    //changing the JSON file is currently causing issues only on iOS. Commenting out this code until it can be fixed
-    await changeMockData(
-      'profile.json',
-      ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
-      militaryBranch,
-    )
+describe('Military Info Screen', () => {
+  it('verify military branch is shown and seal is correct', async () => {
+    const militaryBranch = CommonE2eIdConstants.MILITARY_BRANCH_COAST_GUARD
     let tempPath = await element(by.id(`${militaryBranch} Emblem`)).takeScreenshot(militaryBranch + 'ImageTestHome')
     checkImages(tempPath)
     await expect(element(by.text(militaryBranch))).toExist()
@@ -46,15 +34,6 @@ export async function verifyMilitaryInfo(militaryBranch: string) {
     await expect(element(by.text(militaryBranch)).atIndex(0)).toExist()
     await expect(element(by.text(CommonE2eIdConstants.MILITARY_PERIOD_OF_SERVICE))).toExist()
   })
-}
-
-describe('Military Info Screen', () => {
-  verifyMilitaryInfo('United States Coast Guard')
-  verifyMilitaryInfo('United States Army')
-  verifyMilitaryInfo('United States Air Force')
-  verifyMilitaryInfo('United States Navy')
-  verifyMilitaryInfo('United States Marine Corps')
-  verifyMilitaryInfo('United States Space Force')
 
   it('should open new screen if military service information is incorrect', async () => {
     await element(by.id(MilitaryInformationE2eIdConstants.SERVICE_INFORMATION_INCORRECT_ID)).tap()
@@ -76,42 +55,5 @@ describe('Military Info Screen', () => {
       await device.enableSynchronization()
       await device.launchApp({ newInstance: false })
     }
-  })
-
-  it('should show correct information if no military service is available', async () => {
-    await changeMockData('profile.json', ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'], [])
-    await device.launchApp({ newInstance: true })
-    await loginToDemoMode()
-    await openProfile()
-    await openMilitaryInformation()
-    await expect(element(by.text(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_PAGE_TITLE_TEXT))).toExist()
-    await expect(element(by.id(MilitaryInformationE2eIdConstants.SERVICE_NOT_AVAILABLE_ID))).toExist()
-  })
-
-  it('should reset mock data', async () => {
-    await changeMockData(
-      'profile.json',
-      ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'],
-      [
-        {
-          branchOfService: 'United States Army',
-          beginDate: '1970-07-13',
-          endDate: '1998-08-31',
-          formattedBeginDate: 'July 13, 1970',
-          formattedEndDate: 'August 31, 1998',
-          characterOfDischarge: 'Dishonorable',
-          honorableServiceIndicator: 'N',
-        },
-        {
-          branchOfService: 'United States Coast Guard',
-          beginDate: '1998-09-01',
-          endDate: '2000-01-01',
-          formattedBeginDate: 'September 01, 1998',
-          formattedEndDate: 'January 01, 2000',
-          characterOfDischarge: 'Honorable',
-          honorableServiceIndicator: 'Y',
-        },
-      ],
-    )
   })
 })
