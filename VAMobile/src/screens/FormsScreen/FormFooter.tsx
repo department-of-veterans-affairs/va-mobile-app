@@ -33,6 +33,8 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
                   // The flow does not officially start until they get to personal information
                   // ignore the first two screens for now
                   return
+                // cover the case if they click on form-saved
+                case 'form-saved':
                 case 'personal-information':
                 case 'identification-information':
                 case 'mailing-address':

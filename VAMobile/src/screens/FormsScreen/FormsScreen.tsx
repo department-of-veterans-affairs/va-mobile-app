@@ -41,6 +41,8 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
     let status: FormStatus = FORM_STATUS.draft
 
     switch (endUrl) {
+      // cover the case if they click on form-saved
+      case 'form-saved':
       case 'personal-information':
       case 'identification-information':
       case 'mailing-address':
