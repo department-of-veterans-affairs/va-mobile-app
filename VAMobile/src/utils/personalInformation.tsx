@@ -1,4 +1,4 @@
-import { filter, omit, sortBy } from 'underscore'
+import { filter, omit } from 'underscore'
 
 import {
   AddressData,
@@ -35,9 +35,7 @@ export const getSuggestedAddresses = (
     return
   }
 
-  return sortBy(addressValidationData.data, (address) => {
-    return address?.meta?.address?.confidenceScore
-  }).reverse()
+  return addressValidationData.data.reverse()
 }
 
 /**
