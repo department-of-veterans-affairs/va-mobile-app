@@ -2,14 +2,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
-
-import { claimsAndAppealsKeys } from './queryKeys'
 
 const sortByLatestDate = (claimsAndAppeals: Array<ClaimsAndAppealsList>): Array<ClaimsAndAppealsList> => {
   return chain(claimsAndAppeals)

@@ -157,7 +157,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     if (isError || notConfirmedReason === 'ERROR') {
       return (
         <AlertWithHaptics
-          variant="error"
+          variant="warning"
           header={t('errors.somethingWentWrong')}
           headerA11yLabel={a11yLabelVA(t('errors.somethingWentWrong'))}
           description={t('veteranStatus.error.generic')}
