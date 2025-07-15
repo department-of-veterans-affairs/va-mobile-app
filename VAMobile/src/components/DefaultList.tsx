@@ -2,9 +2,8 @@ import React, { FC } from 'react'
 
 import { List, ListItemObj, ListProps } from 'components'
 import { TextLines } from 'components/TextLines'
+import { type TextLine } from 'components/types'
 import { generateTestIDForTextList } from 'utils/common'
-
-import { TextLine } from './types'
 
 /**
  * Signifies each item in the list of items in {@link DefaultListProps}
