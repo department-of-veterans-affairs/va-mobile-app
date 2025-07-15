@@ -1,12 +1,8 @@
 import React, { FC } from 'react'
+import { FlatList } from 'react-native'
 
+import { BaseListItem, BaseListItemProps, Box, SwitchProps, TextView, TextViewProps } from 'components'
 import { useTheme } from 'utils/hooks'
-
-import BaseListItem, { BaseListItemProps } from './BaseListItem'
-import Box from './Box'
-import { SwitchProps } from './Switch'
-import { TextViewProps } from './TextView'
-import { TextView } from './index'
 
 /**
  * Signifies each item in the list of items in {@link ListProps}
@@ -63,7 +59,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
     accessibilityRole: 'header',
   }
 
-  const buttons = items.map((item, index) => {
+  const renderButton = (item: ListItemObj, index: number) => {
     const { content, a11yHintText, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
@@ -72,7 +68,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
         {content}
       </BaseListItem>
     )
-  })
+  }
 
   return (
     <Box>
@@ -99,7 +95,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
         )}
       </Box>
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
-        <Box backgroundColor={'list'}>{buttons}</Box>
+        <FlatList data={items} renderItem={({ item, index }) => renderButton(item, index)} />
       </Box>
     </Box>
   )

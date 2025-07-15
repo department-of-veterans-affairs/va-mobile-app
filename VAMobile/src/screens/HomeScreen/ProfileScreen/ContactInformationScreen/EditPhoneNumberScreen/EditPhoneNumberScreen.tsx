@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { each } from 'underscore'
 
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
@@ -17,8 +18,13 @@ import {
   FormWrapper,
   FullScreenSubtask,
   LoadingComponent,
+  PickerItem,
+  TextView,
+  VAIcon,
+  VAIcons,
 } from 'components'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
+import { DefaultFlagCode, Flags } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
@@ -26,6 +32,25 @@ import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
+
+const FlagCountryToCode: Record<string, string> = {}
+// Todo: Will be replaced with saving the country code with phone data
+const FlagCodeToCountry: Record<string, string> = {}
+const FlagOptions: Array<PickerItem> = []
+each(Flags, (flag) => {
+  FlagOptions.push({
+    value: flag.iso_code,
+    label: `${flag.name} +${flag.calling_code}`,
+    icon: {
+      // @ts-ignore
+      name: flag.iso_code,
+      width: 30,
+      height: 20,
+    },
+  })
+  FlagCountryToCode[flag.iso_code] = `${flag.calling_code}`
+  FlagCodeToCountry[flag.calling_code] = flag.iso_code
+})
 
 function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const snackbar = useSnackbar()
@@ -36,6 +61,11 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const confirmAlert = useDestructiveActionSheet()
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
+
+  const [country, setCountry] = useState(
+    phoneData?.countryCode ? FlagCodeToCountry[phoneData?.countryCode] : DefaultFlagCode,
+  )
+  const [countryCode, setCountryCode] = useState(phoneData?.countryCode || FlagCountryToCode[DefaultFlagCode])
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -98,7 +128,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     let phoneDataPayload: PhoneData = {
       areaCode: onlyDigitsNum.substring(0, 3),
-      countryCode: '1',
+      countryCode,
       phoneNumber: onlyDigitsNum.substring(3),
       phoneType,
     }
@@ -166,6 +196,11 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     }
   }
 
+  const setCountryCodeOnChange = (code: string): void => {
+    setCountry(code)
+    setCountryCode(FlagCountryToCode[code])
+  }
+
   const onEndEditingPhoneNumber = (): void => {
     // Retrieve only digits from text input
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
@@ -188,6 +223,19 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        labelKey: 'editPhoneNumber.countryCode',
+        selectedValue: country,
+        onSelectionChange: setCountryCodeOnChange,
+        pickerOptions: FlagOptions,
+        testID: 'countryCode',
+        startIcon: <VAIcon width={74} height={56} name={country as VAIcons} />,
+      },
+      fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
+      validationList: [],
+    },
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
@@ -257,16 +305,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         <LoadingComponent text={loadingText} />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {getFormattedPhoneNumber(phoneData) !== '' && (
-            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-              <Button
-                onPress={onDeletePressed}
-                label={t('contactInformation.removeData', { pageName: buttonTitle })}
-                buttonType={ButtonVariants.Destructive}
-              />
-            </Box>
-          )}
-          <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
@@ -277,7 +315,12 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
+          <Box
+            my={theme.dimensions.formMarginBetween}
+            mx={theme.dimensions.gutter}
+            gap={theme.dimensions.smallMarginBetween}>
+            <TextView variant="MobileBody">{t('editPhoneNumber.numberTitle')}</TextView>
+            <TextView variant="ActivityFooter">{t('editPhoneNumber.disableSMSMessage')}</TextView>
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onSave}
@@ -286,6 +329,15 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               setOnSaveClicked={setOnSaveClicked}
             />
           </Box>
+          {getFormattedPhoneNumber(phoneData) !== '' && (
+            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: buttonTitle })}
+                buttonType={ButtonVariants.Destructive}
+              />
+            </Box>
+          )}
         </Box>
       )}
     </FullScreenSubtask>

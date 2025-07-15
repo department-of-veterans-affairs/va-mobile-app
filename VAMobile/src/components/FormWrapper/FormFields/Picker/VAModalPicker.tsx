@@ -78,6 +78,8 @@ export type VAModalPickerProps = {
   cancelTestID?: string
   /** Option TestID for apply button */
   confirmTestID?: string
+  /** An element to be rendered left of the selector **/
+  startIcon?: Element
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -100,6 +102,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   showModalByDefault,
   cancelTestID,
   confirmTestID,
+  startIcon,
 }) => {
   const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
@@ -181,9 +184,12 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const wrapperProps = getInputWrapperProps(theme, error, false)
 
     const valueBox = (
-      <Box {...wrapperProps}>
+      <Box {...wrapperProps} px={0} pr={8}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView testID={testID} variant="MobileBody" flex={1}>
+          <Box borderRightColor={wrapperProps.borderColor} borderRightWidth={wrapperProps.borderWidth}>
+            {startIcon}
+          </Box>
+          <TextView pl={8} testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
           <Box ml={16} my={12}>
