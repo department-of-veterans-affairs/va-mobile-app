@@ -1,40 +1,21 @@
 import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
 import { DemoStore } from 'store/api/demo/store'
 import { Params } from 'store/api/index'
-import { getDateMonthsAgo } from 'utils/dateUtils'
-
-function getTestDataDateRangeStore(endpoint: string, endDate: Date, store: DemoStore): LabsAndTestsListPayload {
-  const threeMonthsEarlier = getDateMonthsAgo(2, 'start', 'start')
-  const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
-  const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
-  const elevenMonthsEarlier = getDateMonthsAgo(11, 'start', 'start')
-  const fourteenMonthsEarlier = getDateMonthsAgo(14, 'start', 'start')
-
-  if (endDate >= threeMonthsEarlier.toJSDate()) {
-    return store['/v1/health/labs-and-tests'].PAST_THREE_MONTHS
-  } else if (endDate >= fiveMonthsEarlier.toJSDate() && endDate < threeMonthsEarlier.toJSDate()) {
-    return store['/v1/health/labs-and-tests'].PAST_FOUR_TO_SIX_MONTHS
-  } else if (endDate >= eightMonthsEarlier.toJSDate() && endDate < fiveMonthsEarlier.toJSDate()) {
-    return store['/v1/health/labs-and-tests'].PAST_SEVEN_TO_NINE_MONTHS
-  } else if (endDate >= elevenMonthsEarlier.toJSDate() && endDate < eightMonthsEarlier.toJSDate()) {
-    return store['/v1/health/labs-and-tests'].PAST_TEN_TO_TWELVE_MONTHS
-  } else if (endDate >= fourteenMonthsEarlier.toJSDate() && endDate < elevenMonthsEarlier.toJSDate()) {
-    return store['/v1/health/labs-and-tests'].PAST_THIRTEEN_TO_FIFTEEN_MONTHS
-  } else {
-    return store['/v1/health/labs-and-tests'].PAST_THREE_MONTHS
-  }
-}
 
 /**
  * Type denoting the demo data store
  */
 export type LabsAndTestsList = {
   '/v1/health/labs-and-tests': {
-    PAST_THREE_MONTHS: LabsAndTestsListPayload
-    PAST_FOUR_TO_SIX_MONTHS: LabsAndTestsListPayload
-    PAST_SEVEN_TO_NINE_MONTHS: LabsAndTestsListPayload
-    PAST_TEN_TO_TWELVE_MONTHS: LabsAndTestsListPayload
-    PAST_THIRTEEN_TO_FIFTEEN_MONTHS: LabsAndTestsListPayload
+    '2024': {
+      '1': LabsAndTestsListPayload
+      '12': LabsAndTestsListPayload
+    }
+    '2023': {
+      '2': LabsAndTestsListPayload
+      '10': LabsAndTestsListPayload
+    }
+    DEFAULT: LabsAndTestsListPayload
   }
 }
 
@@ -45,7 +26,20 @@ export type LabsAndTestsDemoStore = LabsAndTestsList
  */
 export type LabsAndTestsDemoReturnTypes = undefined | LabsAndTestsListPayload
 
-export const getLabsAndTestsList = (store: DemoStore, params: Params, endpoint: string): LabsAndTestsListPayload => {
+export const getLabsAndTestsList = (store: DemoStore, params: Params): LabsAndTestsListPayload => {
   const endDate = new Date(params.endDate.toString())
-  return getTestDataDateRangeStore(endpoint, endDate, store)
+  const month = endDate.getMonth() + 1
+  const year = endDate.getFullYear()
+
+  if (month === 1 && year === 2024) {
+    return store['/v1/health/labs-and-tests']['2024']['1']
+  } else if (month === 12 && year === 2024) {
+    return store['/v1/health/labs-and-tests']['2024']['12']
+  } else if (month === 2 && year === 2023) {
+    return store['/v1/health/labs-and-tests']['2023']['2']
+  } else if (month === 10 && year === 2023) {
+    return store['/v1/health/labs-and-tests']['2023']['10']
+  } else {
+    return store['/v1/health/labs-and-tests'].DEFAULT
+  }
 }
