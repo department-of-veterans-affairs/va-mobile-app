@@ -6,7 +6,6 @@ import {
   SecureMessagingRecipientData,
   SecureMessagingThreadGetData,
 } from 'api/types'
-
 import { Params } from 'store/api'
 import { DemoStore } from 'store/api/demo/store'
 

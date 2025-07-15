@@ -2,8 +2,6 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
-import { useTheme } from 'utils/hooks'
-
 import {
   Box,
   ComboBoxInput,
@@ -19,6 +17,7 @@ import {
   VATextInput,
   VATextInputProps,
 } from 'components/index'
+import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
 export enum FieldType {
@@ -143,6 +142,9 @@ const FormWrapper = <T,>({
           case FieldType.ComboBox:
             const comboBoxProps = el.fieldProps as ComboBoxInputProps
             return !comboBoxProps.selectedValue && comboBoxProps.isRequiredField
+          case FieldType.Radios:
+            const radioProps = el.fieldProps as RadioGroupProps<T>
+            return !radioProps.value && radioProps.isRequiredField
           default:
             // default returns false because the radio group and form attachments will not have field errors
             return false
@@ -267,7 +269,13 @@ const FormWrapper = <T,>({
           />
         )
       case FieldType.Radios:
-        return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
+        return (
+          <RadioGroup
+            {...(fieldProps as RadioGroupProps<T>)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
+        )
       case FieldType.FormAttachmentsList:
         return <FormAttachments {...(fieldProps as FormAttachmentsProps)} />
       case FieldType.ComboBox:
