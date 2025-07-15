@@ -67,6 +67,7 @@ jobs:
           brew install detox
           brew install applesimutils
           brew install imagemagick
+          detox --version
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -129,7 +130,6 @@ jobs:
              https://slack.com/api/chat.postMessage|\
              jq -r '.ts')
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
-           echo "DATE_OF_BUILD=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
 
       - name: Inform Slack of Failure
         if: needs.generate-screenshots.outputs.outcome == 'failure'
@@ -142,4 +142,3 @@ jobs:
              https://slack.com/api/chat.postMessage|\
              jq -r '.ts')
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
-           echo "DATE_OF_BUILD=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
