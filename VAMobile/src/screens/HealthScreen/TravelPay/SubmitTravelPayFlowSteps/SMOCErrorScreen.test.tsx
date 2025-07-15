@@ -3,10 +3,9 @@ import React from 'react'
 import { t } from 'i18next'
 
 import { TravelPayError } from 'constants/travelPay'
+import SMOCErrorScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/SMOCErrorScreen'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
-
-import SMOCErrorScreen from './SMOCErrorScreen'
 
 const mockNavigationSpy = jest.fn()
 

@@ -4,9 +4,8 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import InAppRecruitmentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import InAppRecruitmentScreen from './InAppRecruitmentScreen'
 
 const mockNavigationSpy = jest.fn()
 
@@ -32,6 +31,7 @@ mockNavigationSpy.mockReturnValue(jest.fn())
 context('InAppRecruitmentScreen', () => {
   beforeEach(() => {
     render(<InAppRecruitmentScreen {...mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() })} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('renders screen correctly', () => {

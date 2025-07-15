@@ -5,9 +5,8 @@ import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
+import AddressScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/AddressScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import AddressScreen from './AddressScreen'
 
 const mockNavigationSpy = jest.fn()
 

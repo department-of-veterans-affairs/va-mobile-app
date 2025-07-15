@@ -34,6 +34,7 @@ context('FeedbackInterceptScreen', () => {
     } as unknown as StackScreenProps<RootNavStackParamList, 'FeedbackIntercept'>
 
     render(<FeedbackInterceptScreen {...props} />)
+    jest.advanceTimersByTime(50)
     return props
   }
 
