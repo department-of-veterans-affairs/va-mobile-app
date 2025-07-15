@@ -1,7 +1,7 @@
 import { by, element, expect } from 'detox'
 import { DateTime } from 'luxon'
 
-import { getDateMonthsAgo, getFormattedDate } from '../../src/utils/dateUtils'
+import { MONTHS, getDateMonthsAgo, getFormattedDate } from '../../src/utils/dateUtils'
 import {
   CommonE2eIdConstants,
   loginToDemoMode,
@@ -13,33 +13,21 @@ import {
   toggleRemoteConfigFlag,
 } from './utils'
 
-const todaysDate = DateTime.local()
-
-// Use the utility function to calculate dates
-const threeMonthsEarlier = getDateMonthsAgo(3, 'end', 'end')
-const fiveMonthsEarlier = getDateMonthsAgo(5, 'start', 'start')
-
-const sixMonthsEarlier = getDateMonthsAgo(6, 'end', 'end')
-const eightMonthsEarlier = getDateMonthsAgo(8, 'start', 'start')
-
-const nineMonthsEarlier = getDateMonthsAgo(9, 'end', 'end')
-const elevenMonthsEarlier = getDateMonthsAgo(11, 'start', 'start')
-
-const twelveMonthsEarlier = getDateMonthsAgo(12, 'end', 'end')
-const fourteenMonthsEarlier = getDateMonthsAgo(14, 'start', 'start')
+const todaysDate = new Date()
 
 const resetDateRangeToDefault = async () => {
-  await element(by.id('labsAndTestDataRangeTestID')).tap()
-  await element(by.text('Past 3 months')).tap()
-  await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
+  await element(by.id('labsAndTestDataRangeMonthTestID')).tap()
+  await element(by.text(MONTHS[todaysDate.getMonth()])).tap()
+  await element(by.id('labsAndTestsDateRangeMonthConfirmID')).tap()
+  await element(by.id('labsAndTestDataRangeYearTestID')).tap()
+  await element(by.text(todaysDate.getFullYear.toString())).tap()
+  await element(by.id('labsAndTestsDateRangeYearConfirmID')).tap()
 }
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
 // CH test data with id: e9513940-bf84-4120-ac9c-718f537b00e0
-const oneMonthAgo = todaysDate.minus({ months: 1 })
-const surgicalPathologyTestDate = getFormattedDate(oneMonthAgo.toISO(), 'MMMM dd, yyyy')
-const fortyFiveDaysAgo = todaysDate.minus({ days: 45 })
-const chemHemTestDate = getFormattedDate(fortyFiveDaysAgo.toISO(), 'MMMM dd, yyyy')
+const surgicalPathologyTestDate = getFormattedDate('2024-01-16T18:53:14.000-01:00', 'MMMM dd, yyyy')
+const chemHemTestDate = getFormattedDate('2024-01-29T18:53:14.000-01:00', 'MMMM dd, yyyy')
 const TEST_IDS = {
   LIST_ID: 'LabsAndTestsButtonsListTestID',
   SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology ' + surgicalPathologyTestDate,
@@ -57,66 +45,15 @@ beforeAll(async () => {
 })
 
 describe('Labs And Test Screen - Date Picker', () => {
-  it('past labs: three months - five months earlier verification', async () => {
-    await element(by.id('labsAndTestDataRangeTestID')).tap()
-    await element(
-      by.text(
-        fiveMonthsEarlier.monthShort +
-          ' ' +
-          fiveMonthsEarlier.year +
-          ' - ' +
-          threeMonthsEarlier.monthShort +
-          ' ' +
-          threeMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
-  })
-  it('past labs: six months - eight months earlier verification', async () => {
-    await element(by.id('labsAndTestDataRangeTestID')).tap()
-    await element(
-      by.text(
-        eightMonthsEarlier.monthShort +
-          ' ' +
-          eightMonthsEarlier.year +
-          ' - ' +
-          sixMonthsEarlier.monthShort +
-          ' ' +
-          sixMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
-  })
-
-  it('past labs: eleven months - nine months earlier verification', async () => {
-    await element(by.id('labsAndTestDataRangeTestID')).tap()
-    await element(
-      by.text(
-        elevenMonthsEarlier.monthShort +
-          ' ' +
-          elevenMonthsEarlier.year +
-          ' - ' +
-          nineMonthsEarlier.monthShort +
-          ' ' +
-          nineMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
-  })
-  it('past labs: fourteen months - twelve months earlier verification', async () => {
-    await element(by.id('labsAndTestDataRangeTestID')).tap()
-    await element(
-      by.text(
-        fourteenMonthsEarlier.monthShort +
-          ' ' +
-          fourteenMonthsEarlier.year +
-          ' - ' +
-          twelveMonthsEarlier.monthShort +
-          ' ' +
-          twelveMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.id('labsAndTestsDateRangeConfirmID')).tap()
+  it('month and year selection verification', async () => {
+    await element(by.id('labsAndTestDataRangeMonthTestID')).tap()
+    await element(by.text(MONTHS[3])).tap()
+    await element(by.id('labsAndTestsDateRangeMonthConfirmID')).tap()
+    await element(by.id('labsAndTestDataRangeYearTestID')).tap()
+    await element(by.text('2020')).tap()
+    await element(by.id('labsAndTestsDateRangeYearConfirmID')).tap()
+    expect(element(by.id('labsAndTestDataRangeMonthTestID'))).toHaveValue('April')
+    expect(element(by.id('labsAndTestDataRangeYearTestID'))).toHaveValue('2020')
   })
 })
 
