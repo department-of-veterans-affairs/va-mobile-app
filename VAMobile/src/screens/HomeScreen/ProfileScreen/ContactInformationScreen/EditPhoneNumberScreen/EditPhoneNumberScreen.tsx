@@ -13,18 +13,19 @@ import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformatio
 import {
   AlertWithHaptics,
   Box,
+  ComboBoxItem,
+  ComboBoxOptions,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
   LoadingComponent,
-  PickerItem,
   TextView,
   VAIcon,
   VAIcons,
 } from 'components'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
-import { DefaultFlagCode, Flags } from 'constants/flags'
+import { DefaultFlagCode, FlagT, Flags } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
@@ -33,23 +34,27 @@ import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
-const FlagCountryToCode: Record<string, string> = {}
+const FlagIcon = ({ name }: { name: VAIcons }) => {
+  const theme = useTheme()
+  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1 }
+  return <VAIcon name={name} width={32} height={24} maxHeight={26} style={borderStyles} />
+}
+
+const FlagCountryToFlag: Record<string, FlagT> = {}
 // Todo: Will be replaced with saving the country code with phone data
-const FlagCodeToCountry: Record<string, string> = {}
-const FlagOptions: Array<PickerItem> = []
+const FlagCodeToFlag: Record<string, FlagT> = {}
+const FlagOptions: ComboBoxOptions = { Flags: [] }
 each(Flags, (flag) => {
-  FlagOptions.push({
+  const item = {
     value: flag.iso_code,
     label: `${flag.name} +${flag.calling_code}`,
-    icon: {
-      // @ts-ignore
-      name: flag.iso_code,
-      width: 30,
-      height: 20,
-    },
+  }
+  FlagOptions.Flags.push({
+    ...item,
+    icon: <FlagIcon name={flag.iso_code as VAIcons} />,
   })
-  FlagCountryToCode[flag.iso_code] = `${flag.calling_code}`
-  FlagCodeToCountry[flag.calling_code] = flag.iso_code
+  FlagCountryToFlag[flag.iso_code] = flag
+  FlagCodeToFlag[flag.calling_code] = flag
 })
 
 function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
@@ -63,9 +68,11 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
   const [country, setCountry] = useState(
-    phoneData?.countryCode ? FlagCodeToCountry[phoneData?.countryCode] : DefaultFlagCode,
+    phoneData?.countryCode ? FlagCodeToFlag[phoneData?.countryCode].iso_code : DefaultFlagCode,
   )
-  const [countryCode, setCountryCode] = useState(phoneData?.countryCode || FlagCountryToCode[DefaultFlagCode])
+  const [countryCode, setCountryCode] = useState(
+    phoneData?.countryCode || FlagCountryToFlag[DefaultFlagCode].calling_code,
+  )
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -128,7 +135,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     let phoneDataPayload: PhoneData = {
       areaCode: onlyDigitsNum.substring(0, 3),
-      countryCode,
+      countryCode: `${countryCode}`,
       phoneNumber: onlyDigitsNum.substring(3),
       phoneType,
     }
@@ -196,9 +203,11 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     }
   }
 
-  const setCountryCodeOnChange = (code: string): void => {
-    setCountry(code)
-    setCountryCode(FlagCountryToCode[code])
+  const setCountryCodeOnChange = (code: ComboBoxItem | undefined): void => {
+    if (code) {
+      setCountry(code.value)
+      setCountryCode(FlagCountryToFlag[code.value].calling_code)
+    }
   }
 
   const onEndEditingPhoneNumber = (): void => {
@@ -222,16 +231,19 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
+  const flagData = FlagCountryToFlag[country]
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
-      fieldType: FieldType.Picker,
+      fieldType: FieldType.ComboBox,
       fieldProps: {
         labelKey: 'editPhoneNumber.countryCode',
-        selectedValue: country,
+        selectedValue: { label: `${flagData.name} +${flagData.calling_code}`, value: flagData.iso_code },
         onSelectionChange: setCountryCodeOnChange,
-        pickerOptions: FlagOptions,
+        comboBoxOptions: FlagOptions,
         testID: 'countryCode',
-        startIcon: <VAIcon width={74} height={56} name={country as VAIcons} />,
+        startIcon: <FlagIcon name={flagData.iso_code as VAIcons} />,
+        virtualized: true,
+        hideRemoveButton: true,
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [],

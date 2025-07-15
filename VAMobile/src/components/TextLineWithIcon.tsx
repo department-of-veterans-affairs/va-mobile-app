@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextLine, TextView, VAIcon, VAIcons } from 'components'
+import { Box, TextLine, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
 
 export type TextLineWithIconProps = {
@@ -32,11 +32,11 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
             testID={iconProps.testID}
           />
         ) : iconProps?.name ? (
-          // TODO Come back to this
-          <VAIcon
-            name={iconProps.name as VAIcons}
+          <Icon
+            name={iconProps.name}
             width={iconProps.width ?? 24}
             height={iconProps.height ?? 24}
+            fill={iconProps.fill}
             testID={iconProps.testID}
           />
         ) : null}

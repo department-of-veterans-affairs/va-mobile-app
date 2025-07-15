@@ -125,9 +125,6 @@ export type VAIconProps = BoxProps & {
 
   /** Optional TestID */
   testID?: string
-
-  /** optional string defining the position and dimension of the viewport **/
-  viewBox?: string
 }
 
 /**
@@ -158,14 +155,13 @@ const VAIcon: FC<VAIconProps> = ({
   maxWidth,
   preventScaling,
   testID,
-  viewBox,
   ...boxProps
 }) => {
   const theme = useTheme()
   const fs: (val: number) => number = useFontScale()
   const dispatch = useAppDispatch()
   const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
-  let iconProps = Object.create({ name, width, height, stroke, preventScaling, fill, viewBox })
+  let iconProps = Object.create({ name, width, height, stroke, preventScaling, fill })
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed

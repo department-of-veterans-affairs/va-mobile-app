@@ -21,6 +21,8 @@ export type ComboBoxItem = {
   label: string
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
+  /** optional icon for each row */
+  icon?: Element
 }
 
 export type ComboBoxOptions = Record<string, Array<unknown>>
@@ -50,6 +52,12 @@ export type ComboBoxInputProps = {
   comboBoxOptions: ComboBoxOptions
   /** Optional TestID */
   testID?: string
+  /** An element to be rendered left of the selector */
+  startIcon?: Element
+  /** An optional boolean to use a virtualized list */
+  virtualized?: boolean
+  /** An optional boolean to hide the remove button */
+  hideRemoveButton?: boolean
 }
 
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
@@ -61,6 +69,9 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   error,
   labelKey,
   testID,
+  startIcon,
+  virtualized,
+  hideRemoveButton = false,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -91,10 +102,15 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
               flexDirection={'row'}
               justifyContent={'space-between'}
               alignItems={'center'}>
+              {startIcon && (
+                <Box ml={4} mr={8}>
+                  {startIcon}
+                </Box>
+              )}
               <TextView testID={testID} variant="MobileBody" flex={1}>
                 {selectedValue?.label}
               </TextView>
-              {selectedValue && (
+              {selectedValue && !hideRemoveButton && (
                 <Pressable accessibilityRole="button" onPress={() => onSelectionChange(undefined)}>
                   <Box ml={16} my={12}>
                     <Icon name="Close" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
@@ -115,6 +131,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
     selectedValue,
     comboBoxOptions,
     onSelectionChange,
+    virtualized,
     onClose: () => {
       setModalVisible(false)
       setFocusUpdated(true)

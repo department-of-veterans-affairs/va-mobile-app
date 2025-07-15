@@ -42,12 +42,22 @@ export type ListProps = {
 
   /** optional a11y hint for the rightTitleText */
   rightTitleTextA11yLabel?: string
+
+  /** optional boolean to use a virtualized list */
+  virtualized?: boolean
 }
 
 /**
  * A common component for showing a list of <ListItem>.
  */
-const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rightTitleTextA11yLabel }) => {
+const List: FC<ListProps> = ({
+  items,
+  title,
+  titleA11yLabel,
+  rightTitleText,
+  rightTitleTextA11yLabel,
+  virtualized = false,
+}) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -69,6 +79,8 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
       </BaseListItem>
     )
   }
+
+  const buttons = items.map(renderButton)
 
   return (
     <Box>
@@ -95,7 +107,11 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
         )}
       </Box>
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
-        <FlatList data={items} renderItem={({ item, index }) => renderButton(item, index)} />
+        {virtualized ? (
+          <Box backgroundColor={'list'}>{buttons}</Box>
+        ) : (
+          <FlatList data={items} renderItem={({ item, index }) => renderButton(item, index)} />
+        )}
       </Box>
     </Box>
   )
