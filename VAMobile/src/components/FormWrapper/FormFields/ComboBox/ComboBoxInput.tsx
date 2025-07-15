@@ -5,17 +5,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, TextView } from 'components/index'
-import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
-
+import ComboBox, { ComboBoxProps } from 'components/FormWrapper/FormFields/ComboBox/ComboBox'
 import {
   getInputWrapperProps,
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
 } from 'components/FormWrapper/FormFields/formFieldUtils'
-import ComboBox, { ComboBoxProps } from 'components/FormWrapper/FormFields/ComboBox/ComboBox'
+import { Box, TextView } from 'components/index'
+import { NAMESPACE } from 'constants/namespaces'
+import { useTheme } from 'utils/hooks'
 
 export type ComboBoxItem = {
   /** label is the text displayed to the user for the item */
