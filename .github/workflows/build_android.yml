@@ -1,6 +1,6 @@
 # Reusable workflow that sets up environment, installs depdendencies, and
 # runs Android fastlane using provided inputs
-name: '[Build] Reusable Android Workflow'
+name: "[Build] Reusable Android Workflow"
 
 on:
   workflow_call:
@@ -19,22 +19,22 @@ on:
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
         type: string
-        default: ''
+        default: ""
       # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
-        default: ''
+        default: ""
       # The branch or tag that we want to build from.  Defaults to the branch/tag that triggered
       # the automation, otherwise uses develop
       ref:
         type: string
-        default: ''
+        default: ""
       # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
         type: string
-        default: ''
+        default: ""
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in Google Play Console
       version:
@@ -75,7 +75,7 @@ jobs:
       - name: Set git config
         run: |
           git config --global user.name 'VA Automation Bot'
-          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git config --global user.email 'VAFlagshipMobile@va.gov'
       # Decodes base64 encoded keystore, Play Store service distribution key,
       # Firebase distribution key, and Firebase analytics/crashlytics json
       - name: Decode base64 encoded keys
@@ -91,19 +91,19 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'microsoft'
+          distribution: "microsoft"
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: "3.1"
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          node-version-file: "VAMobile/.nvmrc"
+          cache: "yarn"
+          cache-dependency-path: "VAMobile/yarn.lock"
       - name: Install npm dependencies
         uses: nick-fields/retry@v2
         with:
@@ -120,7 +120,7 @@ jobs:
           bundle exec fastlane update_plugins
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV 
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
