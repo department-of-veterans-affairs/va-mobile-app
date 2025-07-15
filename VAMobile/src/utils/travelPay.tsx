@@ -1,7 +1,9 @@
 import { ParamListBase } from '@react-navigation/native'
 
+import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
+import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -126,4 +128,12 @@ export const navigateToTravelPayWebsite = (t: TFunction, navigateTo: RouteNaviga
     loadingMessage: t('loading.vaWebsite'),
     useSSO: true,
   })
+}
+
+export const useTravelClaimSubmissionMutationState = (appointmentId: string) => {
+  const [mutationState] = useMutationState({
+    filters: { mutationKey: [travelPayMutationKeys.submitClaim, appointmentId] },
+  })
+
+  return mutationState
 }

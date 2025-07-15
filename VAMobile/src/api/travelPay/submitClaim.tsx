@@ -1,7 +1,15 @@
+import { CommonActions, useNavigation } from '@react-navigation/native'
+
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { appointmentsKeys } from 'api/appointments'
-import { AppointmentsGetData, SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
+import { travelPayMutationKeys } from 'api/travelPay'
+import {
+  AppointmentData,
+  AppointmentsGetData,
+  SubmitSMOCTravelPayClaimParameters,
+  SubmitTravelPayClaimResponse,
+} from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { Params as APIParams, post } from 'store/api/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
@@ -21,11 +29,13 @@ const submitClaim = async (smocTravelPayClaimData: SubmitSMOCTravelPayClaimParam
 /**
  * Returns a mutation for submitting a travel pay claim
  */
-export const useSubmitTravelClaim = (appointmentId: string) => {
+export const useSubmitTravelClaim = (appointmentId: string, appointmentRouteKey: string) => {
   const queryClient = useQueryClient()
+  const navigation = useNavigation()
 
   return useMutation({
     mutationFn: submitClaim,
+    mutationKey: [travelPayMutationKeys.submitClaim, appointmentId],
     onSuccess: (data) => {
       // Find what appointment queries have data
       const appointmentQueries = queryClient.getQueriesData<AppointmentsGetData>({
@@ -44,13 +54,19 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
         )
       }) as [QueryKey, AppointmentsGetData][]
 
+      let aptmnt: AppointmentData | undefined
+
       // Append the claim data to the appointments in the query data
       const newAppointmentsQueryData = validAppointmentQueries.map(([queryKey, queryData]) => {
         const eligibleCount = queryData.meta?.travelPayEligibleCount ? queryData.meta?.travelPayEligibleCount : 1
         const newQueryData = {
           data: queryData?.data.map((appointment) => {
             if (appointment.id === appointmentId) {
-              return appendClaimDataToAppointment(appointment, data?.data.attributes)
+              const modifiedAppointment = appendClaimDataToAppointment(appointment, data?.data.attributes)
+              if (!aptmnt) {
+                aptmnt = modifiedAppointment
+              }
+              return modifiedAppointment
             }
             return { ...appointment }
           }),
@@ -63,6 +79,14 @@ export const useSubmitTravelClaim = (appointmentId: string) => {
       newAppointmentsQueryData.forEach(([queryKey, queryData]) => {
         queryClient.setQueryData(queryKey, queryData)
       })
+
+      if (aptmnt) {
+        // Update the navigation params with the new appointment data
+        navigation.dispatch({
+          ...CommonActions.setParams({ appointment: aptmnt }),
+          source: appointmentRouteKey,
+        })
+      }
     },
     onError: (error) => {
       if (isErrorObject(error)) {
