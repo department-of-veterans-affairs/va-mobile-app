@@ -5,7 +5,7 @@
 name: "[Utils] Gather iOS and Android screenshots"
 
 on:
-  # push:
+  push:
   #   paths:
   #     - "VAMobile/e2e/screenshots/screenshot_data.ts"
   workflow_dispatch: {}
