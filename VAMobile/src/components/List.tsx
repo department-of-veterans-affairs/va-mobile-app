@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { FlatList } from 'react-native'
 
 import { BaseListItem, BaseListItemProps, Box, SwitchProps, TextView, TextViewProps } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -42,22 +41,12 @@ export type ListProps = {
 
   /** optional a11y hint for the rightTitleText */
   rightTitleTextA11yLabel?: string
-
-  /** optional boolean to use a virtualized list */
-  virtualized?: boolean
 }
 
 /**
  * A common component for showing a list of <ListItem>.
  */
-const List: FC<ListProps> = ({
-  items,
-  title,
-  titleA11yLabel,
-  rightTitleText,
-  rightTitleTextA11yLabel,
-  virtualized = false,
-}) => {
+const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rightTitleTextA11yLabel }) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -69,7 +58,7 @@ const List: FC<ListProps> = ({
     accessibilityRole: 'header',
   }
 
-  const renderButton = (item: ListItemObj, index: number) => {
+  const buttons = items.map((item, index) => {
     const { content, a11yHintText, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
@@ -78,9 +67,7 @@ const List: FC<ListProps> = ({
         {content}
       </BaseListItem>
     )
-  }
-
-  const buttons = items.map(renderButton)
+  })
 
   return (
     <Box>
@@ -107,11 +94,7 @@ const List: FC<ListProps> = ({
         )}
       </Box>
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
-        {virtualized ? (
-          <Box backgroundColor={'list'}>{buttons}</Box>
-        ) : (
-          <FlatList data={items} renderItem={({ item, index }) => renderButton(item, index)} />
-        )}
+        <Box backgroundColor={'list'}>{buttons}</Box>
       </Box>
     </Box>
   )

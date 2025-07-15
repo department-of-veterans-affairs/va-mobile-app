@@ -10,12 +10,10 @@ import {
   View,
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet'
-import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes'
 
 import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, TextView, TextViewProps, VAIcons, VAScrollView } from 'components'
+import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
 import PickerList, { PickerListItemObj } from 'components/FormWrapper/FormFields/Picker/PickerList'
 import {
   generateA11yValue,
@@ -38,16 +36,7 @@ export type PickerItem = {
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
   /** icon to show */
-  icon?: IconProps & {
-    /** If the icon is supposed to appear on its own line (ex: read tag) */
-    isOwnLine?: boolean
-
-    /** optional name for va icon */
-    vaName?: VAIcons
-
-    /** optional styles for icon */
-    style: StyleProp<ViewStyle>
-  }
+  icon?: IconProps
   /** Test ID for the item */
   testID?: string
 }
@@ -89,8 +78,6 @@ export type VAModalPickerProps = {
   cancelTestID?: string
   /** Option TestID for apply button */
   confirmTestID?: string
-  /** An element to be rendered left of the selector **/
-  startIcon?: Element
 }
 
 /**A common component to display a picker for the device with an optional label*/
@@ -113,7 +100,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   showModalByDefault,
   cancelTestID,
   confirmTestID,
-  startIcon,
 }) => {
   const snackbar = useSnackbar()
   const [modalVisible, setModalVisible] = useState(false)
@@ -196,13 +182,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const renderSelectionBox = (): ReactElement => {
     const wrapperProps = getInputWrapperProps(theme, error, false)
+
     const valueBox = (
-      <Box {...wrapperProps} px={0} pr={8}>
+      <Box {...wrapperProps}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Box ml={12} borderColor="primary" borderWidth={1}>
-            {startIcon}
-          </Box>
-          <TextView pl={8} testID={testID} variant="MobileBody" flex={1}>
+          <TextView testID={testID} variant="MobileBody" flex={1}>
             {currentlySelectedOption?.label}
           </TextView>
           <Box ml={16} my={12}>
