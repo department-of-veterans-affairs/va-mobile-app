@@ -35,6 +35,8 @@ jobs:
 
   generate-screenshots:
     runs-on: macos-latest
+    outputs:
+      outcome: ${{ steps.run_images.outcome }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -114,13 +116,27 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Inform Slack
-        id: inform_slack
+      - name: Inform Slack of Success
+        if: needs.generate-screenshots.outputs.outcome == 'success'
+        id: inform_slack_success
         shell: bash
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
              -H 'Content-type: application/json' \
-             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created."}' \
+             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created successfully."}' \
+             https://slack.com/api/chat.postMessage|\
+             jq -r '.ts')
+           echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
+           echo "DATE_OF_BUILD=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
+
+      - name: Inform Slack of Failure
+        if: needs.generate-screenshots.outputs.outcome == 'failure'
+        id: inform_slack_failure
+        shell: bash
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+             -H 'Content-type: application/json' \
+             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store image creation failed."}' \
              https://slack.com/api/chat.postMessage|\
              jq -r '.ts')
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
