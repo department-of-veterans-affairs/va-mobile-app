@@ -1,6 +1,6 @@
 #!/bin/bash
-# set -x
-# set -e
+set -x
+set -e
 # This Script will generate the app store images so we are able to do them automatically instead of manually creating.
 
 echo "current working dir is"
@@ -9,15 +9,21 @@ cd ../../../VAMobile/
 pwd
 yarn install
 
+echo "Bundling ios.."
+yarn bundle:ios
+
+echo "Building apps.."
+detox build -c android
+detox build -c ios
+
+echo "Gahtering Android screens.."
+yarn jest:clear && detox test -c android --cleanup ./screenshot.e2e.ts
+
 echo "Gathering iOS screens.."
 yarn jest:clear && detox test -c ios --cleanup ./screenshot.e2e.ts
 
 echo "Gathering iPad screens.."
 yarn jest:clear && detox test -c ipad --cleanup ./screenshot.e2e.ts
-
-echo "Gahtering Android screens.."
-yarn jest:clear && detox test -c android --cleanup ./screenshot.e2e.ts
-
 
 echo "Current dir is"
 pwd
