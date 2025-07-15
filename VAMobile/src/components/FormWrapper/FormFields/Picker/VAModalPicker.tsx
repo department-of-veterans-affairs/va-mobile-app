@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   AccessibilityProps,
@@ -23,7 +23,7 @@ import {
   renderInputError,
   renderInputLabelSection,
 } from 'components/FormWrapper/FormFields/formFieldUtils'
-import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp, setAccessibilityFocus } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -109,6 +109,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
+  const ref = useRef(null)
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
   const [focusUpdated, setFocusUpdated] = useState(false)
@@ -135,6 +136,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
+    setAccessibilityFocus(ref)
   }
 
   const onCancel = (): void => {
@@ -145,6 +147,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
+    setAccessibilityFocus(ref)
   }
 
   const handleSelection = (selectionVal: string): void => {
@@ -209,7 +212,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-      <Pressable onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
+      <Pressable ref={ref} onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
         {content}
       </Pressable>
     )
