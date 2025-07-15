@@ -63,7 +63,7 @@ jobs:
 
       - name: Install macOS dependencies
         run: |
-          npm install detox-cli --global        
+          # npm install detox-cli --global        
           npm install detox --save-dev
           brew tap wix/brew
           brew install applesimutils
