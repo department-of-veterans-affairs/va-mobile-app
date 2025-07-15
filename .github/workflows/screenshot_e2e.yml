@@ -64,7 +64,9 @@ jobs:
       - name: Install macOS dependencies
         run: |
           brew tap wix/brew
+          brew install detox
           brew install applesimutils
+          brew install imagemagick
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -87,7 +89,7 @@ jobs:
         id: run_images
         run: |
           ../.github/scripts/app-store-images/generate_images.sh
-        continue-on-error: true
+        # continue-on-error: true
 
       # NOTE: is this needed?
       # - name: Rerun e2e tests for iOS if failed
@@ -123,7 +125,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
              -H 'Content-type: application/json' \
-             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created successfully."}' \
+             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created successfully." \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
              https://slack.com/api/chat.postMessage|\
              jq -r '.ts')
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
@@ -136,7 +138,7 @@ jobs:
         run: |
           ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
              -H 'Content-type: application/json' \
-             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store image creation failed."}' \
+             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store image creation failed." \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
              https://slack.com/api/chat.postMessage|\
              jq -r '.ts')
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
