@@ -24,4 +24,4 @@ GET https://va-mobile-dev-tools-0cb741eb06ae.herokuapp.com/auth/sis/token/judy.m
 
 ## Working on the token app
 
-[View code for the token fetcher app](https://github.com/adhocteam/va-mobile-sampleweb) and instructions for development can be found in the README. To work on the app, you will need write access to the repo and admin access to the heroku instance.
+[View code for the token fetcher app](https://github.com/department-of-veterans-affairs/va-mobile-dev-tools) and instructions for development can be found in the README. To work on the app, you will need write access to the repo and admin access to the heroku instance.
