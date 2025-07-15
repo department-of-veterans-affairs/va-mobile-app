@@ -62,12 +62,12 @@ describe('Payments Screen', () => {
     await element(by.id(PaymentsE2eIDConstants.PAYMENT_HISTORY_1_ID)).atIndex(0).tap()
 
     // Wait for the details screen to be fully visible
-    await waitFor(element(by.text('June 1, 2024')))
+    await waitFor(element(by.text('February 1, 2024')))
       .toBeVisible()
       .withTimeout(5000)
 
     // Verify payment details
-    await expect(element(by.text('June 1, 2024'))).toBeVisible()
+    await expect(element(by.text('February 1, 2024'))).toBeVisible()
     await expect(element(by.text('Regular Chapter 31'))).toBeVisible()
     await expect(element(by.text('$603.33'))).toBeVisible()
     await expect(element(by.text('Paper Check'))).toBeVisible()
