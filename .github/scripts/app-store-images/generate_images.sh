@@ -1,12 +1,13 @@
 #!/bin/bash
-# set -x
-# set -e
+set -x
+set -e
 # This Script will generate the app store images so we are able to do them automatically instead of manually creating.
 
 # echo "current working dir is"
 # pwd
 # cd ../../../VAMobile/
 # pwd
+echo "Installing Packages.."
 yarn install
 
 echo "Bundling ios.."
