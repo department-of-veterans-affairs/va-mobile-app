@@ -8,9 +8,9 @@ on:
   push:
   #   paths:
   #     - "VAMobile/e2e/screenshots/screenshot_data.ts"
-  workflow_dispatch: {}
-concurrency:
-  cancel-in-progress: true
+  workflow_dispatch:
+# concurrency:
+#   cancel-in-progress: true
 
 defaults:
   run:
@@ -106,22 +106,22 @@ jobs:
           path: VAMobile/artifacts
           retention-days: 1
 
-output-slack-results:
-  needs: [start_slack_thread, generate-screenshots]
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.ref }}
+  output-slack-results:
+    needs: [start_slack_thread, generate-screenshots]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
 
-    - name: Inform Slack
-      id: inform_slack
-      shell: bash
-      run: |
-        ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-          -H 'Content-type: application/json' \
-          --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created."}' \
-          https://slack.com/api/chat.postMessage|\
-          jq -r '.ts')
-        echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
-        echo "DATE_OF_BUILD=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
+      - name: Inform Slack
+        id: inform_slack
+        shell: bash
+        run: |
+          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+             -H 'Content-type: application/json' \
+             --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created."}' \
+             https://slack.com/api/chat.postMessage|\
+             jq -r '.ts')
+           echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
+           echo "DATE_OF_BUILD=$(date -d '+%A %b %d, %Y')" >> $GITHUB_ENV
