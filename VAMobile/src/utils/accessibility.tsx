@@ -70,3 +70,10 @@ export const updateIsVoiceOverTalkBackRunning = async (
 export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
   return _.map(textLines, 'text').join(' ')
 }
+
+/**
+ * Returns testID given a ListItems textLines with hyphens
+ */
+export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join('-')
+}
