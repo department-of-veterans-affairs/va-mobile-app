@@ -3,14 +3,14 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import BeneficiaryTravelAgreement from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/BeneficiaryTravelAgreement'
 import { context, mockNavProps, render } from 'testUtils'
-
-import BeneficiaryTravelAgreement from './BeneficiaryTravelAgreement'
 
 context('BeneficiaryTravelAgreement', () => {
   const initializeTestInstance = () => {
     const props = mockNavProps()
     render(<BeneficiaryTravelAgreement {...props} />)
+    jest.advanceTimersByTime(50)
   }
   it('initializes correctly', () => {
     initializeTestInstance()

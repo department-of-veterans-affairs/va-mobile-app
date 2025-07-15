@@ -1,17 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import _ from 'underscore'
 
+import { lettersKeys } from 'api/letters/queryKeys'
 import { LettersData, LettersList } from 'api/types'
 import { get } from 'store/api'
-
-import { lettersKeys } from './queryKeys'
-
-const sortByName = (letters?: LettersList): LettersList => {
-  const newLetters = letters || []
-  return _.sortBy(newLetters, (letter) => {
-    return letter.name
-  })
-}
 
 /**
  * Fetch user letters
@@ -19,7 +10,7 @@ const sortByName = (letters?: LettersList): LettersList => {
 const getLetters = async (): Promise<LettersList | undefined> => {
   const response = await get<LettersData>('/v0/letters')
   if (response) {
-    return sortByName(response.data.attributes.letters)
+    return response.data.attributes.letters
   }
 }
 

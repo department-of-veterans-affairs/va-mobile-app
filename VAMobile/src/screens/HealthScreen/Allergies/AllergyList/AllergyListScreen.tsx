@@ -23,6 +23,8 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAllergyRecords from 'screens/HealthScreen/Allergies/NoAllergyRecords/NoAllergyRecords'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -30,9 +32,6 @@ import { getA11yLabelText } from 'utils/common'
 import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import NoAllergyRecords from '../NoAllergyRecords/NoAllergyRecords'
 
 type AllergyListScreenProps = StackScreenProps<HealthStackParamList, 'AllergyList'>
 
@@ -65,12 +64,8 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   }, [allergies])
 
   useEffect(() => {
-    const filteredAllergies = allergies?.data.sort((a, b) => {
-      const dateA = b.attributes?.recordedDate ? new Date(b.attributes.recordedDate) : new Date(0)
-      const dateB = a.attributes?.recordedDate ? new Date(a.attributes.recordedDate) : new Date(0)
-      return dateA.getTime() - dateB.getTime()
-    })
-    const allergyList = filteredAllergies?.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
+    const descending = (allergies?.data || []).slice().reverse()
+    const allergyList = descending.slice((page - 1) * DEFAULT_PAGE_SIZE, page * DEFAULT_PAGE_SIZE)
     setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 

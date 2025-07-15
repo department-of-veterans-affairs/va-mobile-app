@@ -3,14 +3,14 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PrepareForVideoVisit from 'screens/HealthScreen/Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import { context, mockNavProps, render } from 'testUtils'
-
-import PrepareForVideoVisit from './PrepareForVideoVisit'
 
 context('PrepareForVideoVisit', () => {
   beforeEach(() => {
     const props = mockNavProps({}, { setOptions: jest.fn() })
     render(<PrepareForVideoVisit {...props} />)
+    jest.advanceTimersByTime(50)
   })
 
   it('initializes correctly', () => {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
@@ -84,6 +84,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+  const ref = useRef(null)
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -599,15 +600,17 @@ export function HomeScreen({}: HomeScreenProps) {
                         testID={'showCompensationTestID'}
                       />
                       <Box mt={theme.dimensions.condensedMarginBetween} />
-                      <Button
-                        onPress={() => {
-                          setPaymentBreakdownVisible(true)
-                          logAnalyticsEvent(Events.vama_payment_bd_details())
-                        }}
-                        label={t('monthlyCompensationPayment.seeDetails')}
-                        buttonType={ButtonVariants.Secondary}
-                        testID={'seePaymentBreakdownButtonTestID'}
-                      />
+                      <View ref={ref} accessibilityRole="button">
+                        <Button
+                          onPress={() => {
+                            setPaymentBreakdownVisible(true)
+                            logAnalyticsEvent(Events.vama_payment_bd_details())
+                          }}
+                          label={t('monthlyCompensationPayment.seeDetails')}
+                          buttonType={ButtonVariants.Secondary}
+                          testID={'seePaymentBreakdownButtonTestID'}
+                        />
+                      </View>
                     </Box>
                   </Box>
                 )}
@@ -657,7 +660,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </Box>
         </InView>
       </Box>
-      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
+      <PaymentBreakdownModal ref={ref} visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }

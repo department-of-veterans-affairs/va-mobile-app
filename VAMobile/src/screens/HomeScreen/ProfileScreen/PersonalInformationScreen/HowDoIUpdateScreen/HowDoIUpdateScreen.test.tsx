@@ -4,10 +4,9 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import HowDoIUpdateScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import { context, mockNavProps, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import HowDoIUpdateScreen from './HowDoIUpdateScreen'
 
 context('HowDoIUpdateScreen', () => {
   const initializeTestInstance = (screenType = 'DOB'): void => {
@@ -22,6 +21,7 @@ context('HowDoIUpdateScreen', () => {
     )
 
     render(<HowDoIUpdateScreen {...props} />)
+    jest.advanceTimersByTime(50)
   }
 
   it('initializes correctly for DOB', () => {
