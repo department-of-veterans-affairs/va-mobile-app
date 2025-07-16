@@ -11,7 +11,7 @@ import {
   SubmitTravelPayClaimResponse,
 } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { Params as APIParams, post } from 'store/api/api'
+import { Params as APIParams, post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { appendClaimDataToAppointment, stripTZOffset } from 'utils/travelPay'
