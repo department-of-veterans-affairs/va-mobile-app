@@ -26,7 +26,7 @@ const resetDateRangeToDefault = async () => {
   await element(by.text(MONTHS[todaysDate.getMonth()])).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
-  await element(by.text(todaysDate.getFullYear.toString())).tap()
+  await element(by.text('2025')).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
 }
 // These dates must match the dates in the demo data
