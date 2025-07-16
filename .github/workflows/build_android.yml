@@ -75,7 +75,7 @@ jobs:
           ref: ${{ inputs.ref }}
       - name: Set git config
         run: |
-          git config --global user.name 'VA Automation Bot'
+          git config --global user.name 'VA Mobile Automation Bot'
           git config --global user.email 'VAFlagshipMobile@va.gov'
       # Decodes base64 encoded keystore, Play Store service distribution key,
       # Firebase distribution key, and Firebase analytics/crashlytics json
