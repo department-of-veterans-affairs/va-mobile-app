@@ -1,6 +1,7 @@
 name: "[Code Quality] Update Bundler"
 
 on:
+  push:
   schedule:
     - cron: "0 7 * * 3"
   workflow_dispatch:
@@ -9,35 +10,34 @@ jobs:
   update_bundler:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout repo'
+      - name: "Checkout repo"
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_ACTIONS_PAT }}
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
-      - name: 'Run update script for android files'
+          ruby-version: "3.1"
+      - name: "Run update script for android files"
         run: |
           bundle update --all
           bundle exec fastlane update_plugins
         working-directory: VAMobile/android/
-      - name: 'Run update script for ios files'
+      - name: "Run update script for ios files"
         run: |
           bundle update --all
           bundle exec fastlane update_plugins
         working-directory: VAMobile/ios/
-      - name: 'Push any changes to remote'
+      - name: "Push any changes to remote"
         run: |
           if [[ -n $(git status --porcelain --untracked-files=no) ]]
           then
             echo 'There are changes in git'
             git status --porcelain
-            git config --global user.name 'VA Automation Bot'
-            git config --global user.email 'va-mobileapp@adhocteam.us'
+            git config --global user.name 'VA Mobile Automation Bot'
+            git config --global user.email 'VAFlagshipMobile@va.gov'
             git add -A
             git commit -m "Automated bundler and fastlane updates"
             git push -u origin HEAD
           else
             echo 'There are no changes to the lock files or plugins'
           fi
-
