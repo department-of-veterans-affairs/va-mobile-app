@@ -6,8 +6,8 @@ name: "[e2e] Android Detox Test Run"
 
 on:
   push:
-    branches:
-      - "dependabot/**"
+    # branches:
+    #   - "dependabot/**"
   pull_request:
     types:
       - synchronize
@@ -159,9 +159,9 @@ jobs:
       # https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
       - name: Enable KVM group perms
         run: |
-            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-            sudo udevadm control --reload-rules
-            sudo udevadm trigger --name-match=kvm
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       # Required for the emulator on Linux
       - name: Install LibPulse
@@ -171,8 +171,8 @@ jobs:
 
       - name: Set git config
         run: |
-          git config --global user.name 'VA Automation Bot'
-          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git config --global user.name 'VA Mobile Automation Bot'
+          git config --global user.email 'VAFlagshipMobile@va.gov'
 
       - name: Decode base64 encoded keys
         working-directory: VAMobile/android
