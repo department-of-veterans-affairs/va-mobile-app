@@ -36,10 +36,12 @@ type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNum
 
 const FlagIcon = ({ name }: { name: VAIcons }) => {
   const theme = useTheme()
-  // Overflow hidden is required here to prevent some svgs from 'bleeding out' over pressable areas of the list
-  // specifically in the case of the flag for Tajikistan and New Zealand
-  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1, overflow: 'hidden' }
-  return <VAIcon name={name} width={32} height={24} maxHeight={26} style={borderStyles} />
+
+  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1 }
+
+  // Overflow hidden is required here to prevent some svgs from overlapping with pressable areas of the list
+  // specifically in the case of the svg for Tajikistan and New Zealand
+  return <VAIcon name={name} width={32} height={24} maxHeight={26} style={borderStyles} overflow="hidden" />
 }
 
 const FlagCountryToFlag: Record<string, FlagT> = {}
@@ -238,6 +240,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     {
       fieldType: FieldType.ComboBox,
       fieldProps: {
+        titleKey: 'editPhoneNumber.selectCountryCode',
         labelKey: 'editPhoneNumber.countryCode',
         selectedValue: { label: `${flagData.name} +${flagData.calling_code}`, value: flagData.iso_code },
         onSelectionChange: setCountryCodeOnChange,

@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 export type ComboBoxProps = {
+  titleKey: string
   selectedValue?: ComboBoxItem
   onSelectionChange: (item?: ComboBoxItem) => void
   comboBoxOptions: ComboBoxOptions
@@ -18,7 +19,13 @@ export type ComboBoxProps = {
   virtualized?: boolean
 }
 
-const ComboBox: FC<ComboBoxProps> = ({ onSelectionChange, comboBoxOptions, onClose, virtualized = false }) => {
+const ComboBox: FC<ComboBoxProps> = ({
+  onSelectionChange,
+  comboBoxOptions,
+  onClose,
+  titleKey,
+  virtualized = false,
+}) => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -106,11 +113,6 @@ const ComboBox: FC<ComboBoxProps> = ({ onSelectionChange, comboBoxOptions, onClo
       fontFamily: theme.fontFace.regular,
     },
   }
-
-  // TODO This does not seem right
-  // useEffect(() => {
-  //   setFilterStr(selectedValue?.label || '')
-  // }, [selectedValue])
 
   useEffect(() => {
     const updatedFilteredOpts: ComboBoxOptions = {}
@@ -216,11 +218,11 @@ const ComboBox: FC<ComboBoxProps> = ({ onSelectionChange, comboBoxOptions, onClo
       )
     })
   }
-
+  console.log(titleKey)
   return (
     <Box {...containerStyle}>
       <Box {...headerStyle}>
-        <TextView variant={'MobileBodyBold'}>{t('secureMessaging.formMessage.careTeam')}</TextView>
+        <TextView variant={'MobileBodyBold'}>{t(titleKey)}</TextView>
         <Pressable {...closeIconProps}>
           <Icon name={'Close'} width={30} height={30} fill={'base'} />
         </Pressable>

@@ -58,6 +58,8 @@ export type ComboBoxInputProps = {
   virtualized?: boolean
   /** An optional boolean to hide the remove button */
   hideRemoveButton?: boolean
+  /** i18n id for the title of the selector modal*/
+  titleKey: string
 }
 
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
@@ -71,6 +73,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   testID,
   startIcon,
   virtualized,
+  titleKey,
   hideRemoveButton = false,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -128,6 +131,7 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   }
 
   const comboboxProps: ComboBoxProps = {
+    titleKey,
     selectedValue,
     comboBoxOptions,
     onSelectionChange,

@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react'
 import { AppState, AppStateStatus } from 'react-native'
-import { NumberProp, SvgProps } from 'react-native-svg'
+import { SvgProps } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
 import { Box, BoxProps } from 'components'
@@ -112,10 +112,10 @@ export type VAIconProps = BoxProps & {
   stroke?: keyof VAIconColors | string
 
   /**  optional number use to set the width; otherwise defaults to svg's width */
-  width?: NumberProp
+  width?: number
 
   /**  optional number use to set the height; otherwise defaults to svg's height */
-  height?: NumberProp
+  height?: number
 
   /** optional maximum width when scaled (requires width and height props) */
   maxWidth?: number
@@ -192,7 +192,7 @@ const VAIcon: FC<VAIconProps> = ({
     return <></>
   }
 
-  if (width && height && typeof width === 'number' && typeof height === 'number') {
+  if (width && height) {
     if (preventScaling) {
       iconProps = { ...iconProps, width, height }
     } else if (maxWidth && fs(width) > maxWidth) {
@@ -204,7 +204,7 @@ const VAIcon: FC<VAIconProps> = ({
 
   return (
     <Box testID={testID} {...boxProps}>
-      <Icon preserveAspectRatio="xMinYMin slice" {...iconProps} />
+      <Icon {...iconProps} />
     </Box>
   )
 }
