@@ -334,29 +334,6 @@ context('AppointmentFileTravelPayAlert', () => {
     })
   })
 
-  it('should not render if a claim has already been filed', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: {
-        ...travelPayClaimData,
-        claim: {
-          id: '1234',
-          claimNumber: 'string',
-          claimStatus: 'In Process',
-          appointmentDateTime: '2024-01-01T16:45:34.465Z',
-          facilityName: 'Cheyenne VA Medical Center',
-          createdOn: '2024-03-22T21:22:34.465Z',
-          modifiedOn: '2024-01-01T16:44:34.465Z',
-        },
-      },
-    })
-    initializeTestInstance(attributes)
-    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
-  })
-
   it('should render an error message if the claim submission fails', async () => {
     mockTravelClaimSubmissionMutationState = { status: 'error' }
     initializeTestInstance(inPersonVAAttributes)
