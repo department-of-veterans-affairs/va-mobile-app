@@ -36,7 +36,9 @@ type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNum
 
 const FlagIcon = ({ name }: { name: VAIcons }) => {
   const theme = useTheme()
-  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1 }
+  // Overflow hidden is required here to prevent some svgs from 'bleeding out' over pressable areas of the list
+  // specifically in the case of the flag for Tajikistan and New Zealand
+  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1, overflow: 'hidden' }
   return <VAIcon name={name} width={32} height={24} maxHeight={26} style={borderStyles} />
 }
 
