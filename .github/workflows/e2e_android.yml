@@ -6,8 +6,8 @@ name: "[e2e] Android Detox Test Run"
 
 on:
   push:
-    # branches:
-    #   - "dependabot/**"
+    branches:
+      - "dependabot/**"
   pull_request:
     types:
       - synchronize
@@ -171,8 +171,8 @@ jobs:
 
       - name: Set git config
         run: |
-          git config --global user.name 'VA Mobile Automation Bot'
-          git config --global user.email 'VAFlagshipMobile@va.gov'
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
 
       - name: Decode base64 encoded keys
         working-directory: VAMobile/android
