@@ -15,8 +15,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
+  isEligibleForTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
@@ -155,17 +155,11 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can’t tell if a claim exists.
+    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
     // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
     const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
 
-    if (
-      apiReturnsFullHistory &&
-      !claim &&
-      appointmentMeetsTravelPayCriteria(attributes) &&
-      daysLeftToFileTravelPay < 0 &&
-      !claimError
-    ) {
+    if (apiReturnsFullHistory && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}
