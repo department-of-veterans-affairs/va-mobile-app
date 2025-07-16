@@ -12,15 +12,22 @@ import {
   toggleRemoteConfigFlag,
 } from './utils'
 
+export const LabsAndTestsE2eIDConstants = {
+  YEAR_PICKER_ID: 'labsAndTestDataRangeYearTestID',
+  YEAR_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeYearConfirmID',
+  MONTH_PICKER_ID: 'labsAndTestDataRangeMonthTestID',
+  MONTH_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeMonthConfirmID',
+}
+
 const todaysDate = new Date()
 
 const resetDateRangeToDefault = async () => {
-  await element(by.id('labsAndTestDataRangeMonthTestID')).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
   await element(by.text(MONTHS[todaysDate.getMonth()])).tap()
-  await element(by.id('labsAndTestsDateRangeMonthConfirmID')).tap()
-  await element(by.id('labsAndTestDataRangeYearTestID')).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
   await element(by.text(todaysDate.getFullYear.toString())).tap()
-  await element(by.id('labsAndTestsDateRangeYearConfirmID')).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
 }
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
@@ -45,12 +52,12 @@ beforeAll(async () => {
 
 describe('Labs And Test Screen - Date Picker', () => {
   it('month and year selection verification', async () => {
-    await element(by.id('labsAndTestDataRangeMonthTestID')).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
     await element(by.text(MONTHS[3])).tap()
-    await element(by.id('labsAndTestsDateRangeMonthConfirmID')).tap()
-    await element(by.id('labsAndTestDataRangeYearTestID')).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
     await element(by.text('2020')).tap()
-    await element(by.id('labsAndTestsDateRangeYearConfirmID')).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
   })
 })
 
@@ -90,7 +97,7 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text('this is a test'))).toExist()
 
     // Navigate back to the list
-    await element(by.id('labsAndTestsDetailsBackID')).tap()
+    await element(by.id(TEST_IDS.BACK_BUTTON_ID)).tap()
     // the title should be labs and tests
     await expect(element(by.text(HEADER_TEXT))).toExist()
   })
@@ -124,7 +131,7 @@ describe('Labs And Test Details Screen with Observations', () => {
     await expect(element(by.text('CREATININE'))).toExist()
 
     // go back
-    await element(by.id('labsAndTestsDetailsBackID')).tap()
+    await element(by.id(TEST_IDS.BACK_BUTTON_ID)).tap()
     // the title should be labs and tests
     await expect(element(by.text(HEADER_TEXT))).toExist()
   })
