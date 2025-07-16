@@ -25,6 +25,7 @@ context('CommunityCareAppointment', () => {
     status: AppointmentStatusConstants.BOOKED,
     //fields below are used in the subcomponents
     bestTimeToCall: undefined, //pending appointments
+    travelPayEligible: false,
     cancelId: '12',
     comment: 'Please arrive 20 minutes before the start of your appointment',
     friendlyLocationName: 'Johnson Clinic suite 100',
