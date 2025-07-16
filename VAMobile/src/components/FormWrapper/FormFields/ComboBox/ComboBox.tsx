@@ -218,7 +218,7 @@ const ComboBox: FC<ComboBoxProps> = ({
       )
     })
   }
-  console.log(titleKey)
+
   return (
     <Box {...containerStyle}>
       <Box {...headerStyle}>
