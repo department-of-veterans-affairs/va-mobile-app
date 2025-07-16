@@ -1,7 +1,6 @@
 import { by, element, expect } from 'detox'
-import { DateTime } from 'luxon'
 
-import { MONTHS, getDateMonthsAgo, getFormattedDate } from '../../src/utils/dateUtils'
+import { MONTHS, getFormattedDate } from '../../src/utils/dateUtils'
 import {
   CommonE2eIdConstants,
   loginToDemoMode,
@@ -52,8 +51,8 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(by.id('labsAndTestDataRangeYearTestID')).tap()
     await element(by.text('2020')).tap()
     await element(by.id('labsAndTestsDateRangeYearConfirmID')).tap()
-    expect(element(by.id('labsAndTestDataRangeMonthTestID'))).toHaveValue('April')
-    expect(element(by.id('labsAndTestDataRangeYearTestID'))).toHaveValue('2020')
+    await expect(element(by.id('labsAndTestDataRangeMonthTestID'))).toHaveValue('April')
+    await expect(element(by.id('labsAndTestDataRangeYearTestID'))).toHaveValue('2020')
   })
 })
 
