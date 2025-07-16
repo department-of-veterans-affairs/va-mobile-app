@@ -714,7 +714,7 @@
   "editPhoneNumber.mobilePhoneTitle": "Mobile phone",
   "editPhoneNumber.number": "Phone number",
   "editPhoneNumber.numberFieldError": "Enter a valid phone number",
-  "editPhoneNumber.numberTitle": "Number (Required)",
+  "editPhoneNumber.numberTitle": "Number",
   "editPhoneNumber.selectCountryCode": "Select a country code*",
   "editPhoneNumber.weCanOnlySupportUSNumbers": "We can only support U.S. phone numbers right now. If you have an international number, please check back later.",
   "editPhoneNumber.workPhoneTitle": "Work phone",

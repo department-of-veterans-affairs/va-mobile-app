@@ -31,6 +31,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
 
@@ -68,6 +69,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()
+  const displayInternationalPhoneNumberSelect = featureEnabled('internationalPhoneNumber')
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
@@ -238,6 +240,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const flagData = FlagCountryToFlag[country]
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
+      hideField: !displayInternationalPhoneNumberSelect,
       fieldType: FieldType.ComboBox,
       fieldProps: {
         titleKey: 'editPhoneNumber.selectCountryCode',
@@ -332,12 +335,16 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <Box
-            my={theme.dimensions.formMarginBetween}
-            mx={theme.dimensions.gutter}
-            gap={theme.dimensions.smallMarginBetween}>
-            <TextView variant="MobileBody">{t('editPhoneNumber.numberTitle')}</TextView>
-            <TextView variant="ActivityFooter">{t('editPhoneNumber.disableSMSMessage')}</TextView>
+          {!displayInternationalPhoneNumberSelect && (
+            <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
+          )}
+          <Box mx={theme.dimensions.gutter} gap={theme.dimensions.smallMarginBetween}>
+            {displayInternationalPhoneNumberSelect && (
+              <>
+                <TextView variant="MobileBody">{t('editPhoneNumber.numberTitle')}</TextView>
+                <TextView variant="ActivityFooter">{t('editPhoneNumber.disableSMSMessage')}</TextView>
+              </>
+            )}
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onSave}
