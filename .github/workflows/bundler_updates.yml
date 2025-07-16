@@ -1,7 +1,6 @@
 name: "[Code Quality] Update Bundler"
 
 on:
-  push:
   schedule:
     - cron: "0 7 * * 3"
   workflow_dispatch:
