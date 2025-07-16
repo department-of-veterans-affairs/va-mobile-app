@@ -18,17 +18,6 @@ export const LabsAndTestsE2eIDConstants = {
   MONTH_PICKER_ID: 'labsAndTestDataRangeMonthTestID',
   MONTH_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeMonthConfirmID',
 }
-
-const todaysDate = new Date()
-
-const resetDateRangeToDefault = async () => {
-  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
-  await element(by.text(MONTHS[todaysDate.getMonth()])).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
-  await element(by.text('2025')).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
-}
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
 // CH test data with id: e9513940-bf84-4120-ac9c-718f537b00e0
@@ -53,19 +42,15 @@ beforeAll(async () => {
 describe('Labs And Test Screen - Date Picker', () => {
   it('month and year selection verification', async () => {
     await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
-    await element(by.text(MONTHS[3])).tap()
+    await element(by.text(MONTHS[0])).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
-    await element(by.text('2020')).tap()
+    await element(by.text('2024')).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
   })
 })
 
 describe('Labs And Test Screen', () => {
-  beforeAll(async () => {
-    await resetDateRangeToDefault()
-  })
-
   it('navigate back and forth between the list and details screen', async () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
