@@ -1,5 +1,7 @@
 import { by, element, expect } from 'detox'
 
+import { fireEvent } from 'testUtils'
+
 import { MONTHS, getFormattedDate } from '../../src/utils/dateUtils'
 import {
   CommonE2eIdConstants,
@@ -17,6 +19,7 @@ export const LabsAndTestsE2eIDConstants = {
   YEAR_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeYearConfirmID',
   MONTH_PICKER_ID: 'labsAndTestDataRangeMonthTestID',
   MONTH_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeMonthConfirmID',
+  APPLY_DATE_BUTTON_ID: 'updateLabsAndTestsButtonTestID',
 }
 
 const resetDateRangeToDefault = async () => {
@@ -26,6 +29,7 @@ const resetDateRangeToDefault = async () => {
   await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
   await element(by.text('2024')).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.APPLY_DATE_BUTTON_ID)).tap()
 }
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
