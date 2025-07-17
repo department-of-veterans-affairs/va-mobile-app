@@ -46,7 +46,7 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -426,6 +426,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           <AlertWithHaptics
             variant="info"
             header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            testID={'startNewMessageNonUrgentWarning'}
             scrollViewRef={scrollViewRef}>
             <TextView variant="MobileBody">
               {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
