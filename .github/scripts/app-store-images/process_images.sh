@@ -247,6 +247,12 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
   # Define output path
   OUTPUT_PATH="framed_images/${BASENAME_WITH_DEVICE}_final.png"
 
+  if [[ "$BASENAME_WITH_DEVICE" == *_ipad* ]]; then
+    ADJUSTED_TITLE_FONT_SIZE=35 # Adjusted for final image scaling
+  else
+    ADJUSTED_TITLE_FONT_SIZE=$TITLE_FONT_SIZE
+  fi
+
   # --- ImageMagick Command ---
   # 1. Create the background canvas.
   # 2. Composite the framed screenshot onto the background, offset from the top.
@@ -254,7 +260,7 @@ for img in fastlane/screenshots/en-US/*_framed.png; do
   magick \
     "$BACKGROUND_IMG" -resize "${CANVAS_WIDTH}x${CANVAS_HEIGHT}!" \
     \( "$img" \) -gravity North -geometry "+0+${TOP_PADDING}" -composite \
-    -font "$FONT" -pointsize "$TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
+    -font "$FONT" -pointsize "$ADJUSTED_TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
     \( -gravity Center -background none -size "${TEXT_BOX_WIDTH}x${TEXT_BOX_HEIGHT}" caption:"$TITLE" \) \
     -gravity NorthWest -geometry "+${TEXT_HORIZONTAL_INSET}+${TEXT_VERTICAL_OFFSET}" -composite \
     "$OUTPUT_PATH"

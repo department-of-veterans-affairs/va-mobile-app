@@ -5,7 +5,7 @@ set -e
 
 # echo "current working dir is"
 # pwd
-# cd ../../../VAMobile/
+cd ../../../VAMobile/
 # pwd
 echo "Installing Packages.."
 yarn install

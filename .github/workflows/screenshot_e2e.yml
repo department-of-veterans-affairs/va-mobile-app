@@ -63,6 +63,7 @@ jobs:
 
       - name: Install macOS dependencies
         run: |
+          yarn install
           # npm install detox-cli --global        
           npm install detox --save-dev
           brew tap wix/brew
