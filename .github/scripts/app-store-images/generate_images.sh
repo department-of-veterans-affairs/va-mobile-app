@@ -3,19 +3,15 @@ set -x
 set -e
 # This Script will generate the app store images so we are able to do them automatically instead of manually creating.
 
-# echo "current working dir is"
-# pwd
-cd ../../../VAMobile/
-# pwd
+# This is needed for local runs
+# cd ../../../VAMobile/
+
 echo "Installing Packages.."
 yarn install
 
-echo "Bundling ios.."
-yarn bundle:ios
-
-echo "Building apps.."
-detox build -c android
-detox build -c ios
+echo "Bundling  and building.."
+yarn e2e:ios-build
+yarn e2e:android-build
 
 echo "Gahtering Android screens.."
 yarn jest:clear && detox test -c android --cleanup ./screenshot.e2e.ts
