@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 set -e
 # This Script will generate the app store images so we are able to do them automatically instead of manually creating.
 
