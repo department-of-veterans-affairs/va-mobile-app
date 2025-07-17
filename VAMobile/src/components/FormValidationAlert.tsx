@@ -21,7 +21,7 @@ export type FormValidationAlertProps = {
   errorList?: Array<string>
 }
 
-/**Common component to show a message alert when saving or sending a secure message */
+/**Common component to show a message alert when submitting a form */
 const FormValidationAlert: FC<FormValidationAlertProps> = ({
   description,
   hasValidationError,
