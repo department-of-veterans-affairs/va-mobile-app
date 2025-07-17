@@ -8,7 +8,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation } from 'utils/hooks'
 
-const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
+const { LINK_URL_GO_TO_BTSSS } = getEnv()
 
 type FileOnBTSSSLinkProps = {
   text: string
@@ -27,12 +27,11 @@ export default function FileOnBTSSSLink({ onBeforeOpenWebview, text, testID }: F
       testID={testID}
       onPress={() => {
         onBeforeOpenWebview?.()
-        logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS))
+        logAnalyticsEvent(Events.vama_webview(LINK_URL_GO_TO_BTSSS))
         navigateTo('Webview', {
-          url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+          url: LINK_URL_GO_TO_BTSSS,
           displayTitle: t('travelPay.webview.fileForTravelPay.title'),
           loadingMessage: t('loading.vaWebsite'),
-          useSSO: true,
         })
       }}
     />
