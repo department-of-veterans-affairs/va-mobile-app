@@ -34,7 +34,7 @@ const resetDateRangeToDefault = async () => {
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
 // CH test data with id: e9513940-bf84-4120-ac9c-718f537b00e0
-const surgicalPathologyTestDate = getFormattedDate('2024-01-16T18:53:14.000-01:00', 'MMMM dd, yyyy')
+const surgicalPathologyTestDate = getFormattedDate('2024-01-23T18:53:14.000-01:00', 'MMMM dd, yyyy')
 const chemHemTestDate = getFormattedDate('2024-01-29T18:53:14.000-01:00', 'MMMM dd, yyyy')
 const TEST_IDS = {
   LIST_ID: 'LabsAndTestsButtonsListTestID',
