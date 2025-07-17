@@ -1,5 +1,83 @@
 [
   {
+    "title": "v2.55.0",
+    "due_on": "2025-07-29T07:00:00Z",
+    "issues": [
+      {
+        "title": "542 - Update system error to yellow warning alert",
+        "number": 11263,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11263",
+        "isPR": true
+      },
+      {
+        "title": "Fix no-restricted-imports lint errors for Travel Pay related files.",
+        "number": 11234,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11234",
+        "isPR": false
+      },
+      {
+        "title": "517 - Removing sort functions from frontend",
+        "number": 11230,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11230",
+        "isPR": true
+      },
+      {
+        "title": "BUG - [SEVERITY-3] - [All] - Feedback function needs some styling work (text size, shadow under header, left text alignment)",
+        "number": 11154,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11154",
+        "isPR": false
+      },
+      {
+        "title": "Add Radio Buttons to Form Wrapper",
+        "number": 11133,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11133",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of registerDevice.tsx up to 80%",
+        "number": 11089,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11089",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of uploadFiletoClaim.tsx up to 80%",
+        "number": 11087,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11087",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of PastAppointmentDetails.tsx up to 80%",
+        "number": 11086,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11086",
+        "isPR": false
+      },
+      {
+        "title": "Bring test coverage of notifications.tsx up to 80%",
+        "number": 11083,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11083",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 1 - iOS - Accessibility: Exiting an option menu causes screen reader for focus on 'Back' button at top of page",
+        "number": 10931,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10931",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 2 - iOS/Android - Logging in to app through deep link does not direct user to the correct page",
+        "number": 10914,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10914",
+        "isPR": false
+      },
+      {
+        "title": "Upgrade React Native to v0.76.9",
+        "number": 10718,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10718",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.54.0",
     "due_on": "2025-07-15T07:00:00Z",
     "issues": [
