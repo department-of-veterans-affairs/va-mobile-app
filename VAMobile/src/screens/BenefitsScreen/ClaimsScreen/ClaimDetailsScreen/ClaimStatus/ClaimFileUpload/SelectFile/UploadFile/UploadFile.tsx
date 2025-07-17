@@ -24,6 +24,7 @@ import {
   VAScrollView,
 } from 'components'
 import FileList from 'components/FileList'
+import FormValidationAlert from 'components/FormValidationAlert'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -31,6 +32,7 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
@@ -43,8 +45,6 @@ import {
   useTheme,
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
-
-import { FileRequestStackParams } from '../../FileRequestSubtask'
 
 type UploadFileProps = StackScreenProps<FileRequestStackParams, 'UploadFile'>
 
@@ -69,6 +69,9 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   const [filesEmptyError, setFilesEmptyError] = useState(false)
   const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
+  const [formContainsError, setFormContainsError] = useState(false)
+  const [formErrorList, setFormErrorList] = useState<{ [key: number]: string }>({})
+  const [validationErrors, setValidationErrors] = useState<Array<string>>([])
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -121,6 +124,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       })
     }
   }, [documentType, originalRequest])
+
+  useEffect(() => {
+    const validationErrorsList = []
+    if (filesEmptyError) validationErrorsList.push(t('fileUpload.requiredPhoto'))
+    for (const key in formErrorList) {
+      if (formErrorList[key] !== '') {
+        validationErrorsList.push(`${formErrorList[key]}`)
+      }
+    }
+    setValidationErrors(validationErrorsList)
+  }, [formErrorList, filesEmptyError, t])
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
@@ -353,6 +367,13 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                 />
               </Box>
             )}
+            <FormValidationAlert
+              description={t('fileUpload.submit.error.message')}
+              hasValidationError={formContainsError || filesEmptyError}
+              scrollViewRef={scrollViewRef}
+              focusOnError={onSaveClicked}
+              errorList={validationErrors}
+            />
             {request && (
               <TextView
                 variant="MobileBodyBold"
@@ -387,6 +408,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                 onSave={onUpload}
                 onSaveClicked={onSaveClicked}
                 setOnSaveClicked={setOnSaveClicked}
+                setErrorList={setFormErrorList}
+                setFormContainsError={setFormContainsError}
               />
             </Box>
           </Box>
