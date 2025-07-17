@@ -32,8 +32,8 @@ jobs:
           then
             echo 'There are changes in git'
             git status --porcelain
-            git config --global user.name 'VA Automation Bot'
-            git config --global user.email 'va-mobileapp@adhocteam.us'
+            git config --global user.name 'VA Mobile Automation Bot'
+            git config --global user.email 'VAFlagshipMobile@va.gov'
             git add -A
             git commit -m "Automated bundler and fastlane updates"
             git push -u origin HEAD

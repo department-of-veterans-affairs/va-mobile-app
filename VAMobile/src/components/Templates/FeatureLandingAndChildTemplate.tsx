@@ -5,12 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use these templates:
 1. Wrap the screen content you want in <FeatureLandingTemplate> </FeatureLandingTemplate> or <ChildTemplate> </ChildTemplate> and
@@ -98,9 +96,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   const subtitleProps: TextViewProps = {
     variant: 'BitterHeading',
     mt: 0,
-    ml: theme.dimensions.condensedMarginBetween,
+    mx: theme.dimensions.gutter,
     mb: theme.dimensions.standardMarginBetween,
-    mr: theme.dimensions.condensedMarginBetween,
     accessible: false,
     importantForAccessibility: 'no-hide-descendants',
   }
@@ -143,10 +140,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           transitionHeader(event.nativeEvent.contentOffset.y)
         }}
         {...scrollViewProps}>
-        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-        <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
-          {!screenReaderEnabled ? <TextView {...subtitleProps}>{title}</TextView> : <TextView>{'\u200B'}</TextView>}
-        </View>
+        {!screenReaderEnabled ? (
+          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+          <View accessible accessibilityLabel={titleA11y} onLayout={getTransitionHeaderHeight}>
+            <TextView {...subtitleProps}>{title}</TextView>
+          </View>
+        ) : null}
         <WaygateWrapper>{children}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>

@@ -10,8 +10,15 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  Facility,
+  SecureMessagingFolderList,
+  SecureMessagingMessageList,
+} from 'api/types'
 import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
@@ -24,19 +31,53 @@ import {
 } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import theme from 'styles/themes/standardTheme'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'
 import {
   getFormattedMessageTime,
   getNumberAccessibilityLabelFromString,
   getNumbersFromString,
   stringToTitleCase,
 } from 'utils/formattingUtils'
-
-import Unread from '../components/VAIcon/svgs/Unread.svg'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
-import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
+import { imageDocumentResponseType, useDestructiveActionSheetProps } from 'utils/hooks'
 
 const MAX_SUBJECT_LENGTH = 50
+
+export type RecentRecipient = {
+  label: string
+  value?: string
+  date: string
+}
+
+/**
+ * Returns recent recipients based on the SecureMessagingMessageList data
+ * Modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
+ * might want to move this to the backend
+ *
+ * @param data - SecureMessagingMessageList data
+ */
+export const getRecentRecipients = (data: SecureMessagingMessageList) => {
+  const recentList: Record<string, RecentRecipient> = {}
+  _.each(data, (sentMessage) => {
+    const currentRecipientId = sentMessage?.attributes?.recipientId
+    const recentRecipient: RecentRecipient = {
+      label: sentMessage?.attributes?.recipientName,
+      value: String(sentMessage?.attributes?.recipientId),
+      date: sentMessage?.attributes?.sentDate,
+    }
+    if (currentRecipientId) {
+      if (!recentList[currentRecipientId]) {
+        recentList[currentRecipientId] = recentRecipient
+      } else {
+        if (new Date(recentRecipient.date) > new Date(recentList[currentRecipientId].date)) {
+          recentList[currentRecipientId] = recentRecipient
+        }
+      }
+    }
+  })
+
+  return _.values(recentList)
+}
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -656,4 +697,13 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
       {textReconstructedBody}
     </Box>
   )
+}
+
+export const getCareSystemPickerOptions = (facilitiesInfo: Array<Facility>): Array<PickerItem> => {
+  return facilitiesInfo.map((facility) => {
+    return {
+      label: facility.name,
+      value: facility.id,
+    }
+  })
 }

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
+import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import FullScreenSubtask from './FullScreenSubtask'
 
 context('FullScreenSubtask', () => {
   const onPressSpy = jest.fn(() => {})
@@ -94,9 +93,9 @@ context('FullScreenSubtask', () => {
       expect(screen.queryByRole('button')).toBeFalsy()
     })
 
-    it('should not be there when onPress and text is added and primary button is not present', () => {
+    it('should be there when onPress and text is added and primary button is not present', () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, undefined, undefined, 'Secondary', onPressSpy)
-      expect(screen.queryByRole('button', { name: 'Secondary' })).toBeFalsy()
+      expect(screen.queryByRole('button', { name: 'Secondary' })).toBeTruthy()
     })
     it('should be there when onPress and text is added and primary button is present', () => {
       initializeTestInstance(undefined, undefined, undefined, undefined, 'Primary', onPressSpy, 'Secondary', onPressSpy)

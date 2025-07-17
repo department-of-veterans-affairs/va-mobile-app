@@ -16,7 +16,7 @@ An example `ServiceGraph` instance could be something like:
 
 ```ruby
 Mobile::V0::ServiceGraph.new(
-  %i[bgs evss],
+  %i[bep evss],
   %i[vet360 military_service_history],
   %i[evss claims],
   %i[evss direct_deposit_benefits]
@@ -27,13 +27,13 @@ This gets processed into a hierarchy like:
 
 ```js
 {
-  bgs: [claims, direct_deposit_benefits],
+  bep: [claims, direct_deposit_benefits],
   evss: [claims, direct_deposit_benefits],
   vet360: [military_service_history]
 }
 ```
 
-So if there's an upcoming maintenance window for either `bgs` or `evss`, the `ServiceGraph` would return an array of `Mobile::MaintenanceWindow` objects including start and end times for `claims` and `direct_deposit_benefits`. If there's an upcoming maintenance window for `vet360`, it would return mobile maintenance window data for `military_service_history`. And if all three services had upcoming maintenance windows, it would return data for `claims`, `direct_deposit_benefits`, and `military_service_history`.
+So if there's an upcoming maintenance window for either `bep` or `evss`, the `ServiceGraph` would return an array of `Mobile::MaintenanceWindow` objects including start and end times for `claims` and `direct_deposit_benefits`. If there's an upcoming maintenance window for `vet360`, it would return mobile maintenance window data for `military_service_history`. And if all three services had upcoming maintenance windows, it would return data for `claims`, `direct_deposit_benefits`, and `military_service_history`.
 
 ## Front-end
 

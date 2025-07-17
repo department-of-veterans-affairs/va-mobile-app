@@ -4,19 +4,20 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { PhoneData, PhoneType } from 'api/types'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import EditEmailScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditEmailScreen'
+import EditPhoneNumberScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
+import HowWillYouScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/HowWillYouScreen'
+import IncorrectServiceInfo from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
+import HowDoIUpdateScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import PreferredNameScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
+import WaygateEditScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
+import FeedbackTermsAndConditionsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackTermsAndConditions'
+import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/InAppFeedbackScreen/InAppFeedbackScreen'
+import InAppRecruitmentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
+import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
+import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { Waygate } from 'utils/waygateConfig'
-
-import EditEmailScreen from './ProfileScreen/ContactInformationScreen/EditEmailScreen'
-import EditPhoneNumberScreen from './ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen'
-import HowWillYouScreen from './ProfileScreen/ContactInformationScreen/HowWillYouScreen'
-import IncorrectServiceInfo from './ProfileScreen/MilitaryInformationScreen/IncorrectServiceInfo'
-import HowDoIUpdateScreen from './ProfileScreen/PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
-import PreferredNameScreen from './ProfileScreen/PersonalInformationScreen/PreferredNameScreen'
-import WaygateEditScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/WaygateEditScreen'
-import InAppRecruitmentScreen from './ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
-import VeteranStatusScreen from './VeteranStatusScreen/VeteranStatusScreen'
-import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 
 export type HomeStackParamList = WebviewStackParams & {
   Home: undefined
@@ -40,6 +41,11 @@ export type HomeStackParamList = WebviewStackParams & {
   OverrideAPI: undefined
   RemoteConfig: undefined
   Settings: undefined
+  GiveFeedback: undefined
+  SendUsFeedback: undefined
+  FeedbackSent: undefined
+  InAppFeedback: undefined
+  FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
 }
@@ -106,6 +112,18 @@ export const getHomeScreens = () => {
       key={'WaygateEdit'}
       name="WaygateEdit"
       component={WaygateEditScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'FeedbackTermsAndConditions'}
+      name="FeedbackTermsAndConditions"
+      component={FeedbackTermsAndConditionsScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'InAppFeedback'}
+      name="InAppFeedback"
+      component={InAppFeedbackScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
   ]

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable, PressableProps, ScrollView } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
@@ -38,6 +39,11 @@ import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModa
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import PrescriptionHistoryNoMatches from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoMatches'
+import PrescriptionHistoryNoPrescriptions from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoPrescriptions'
+import PrescriptionHistoryNotAuthorized from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNotAuthorized'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -49,13 +55,9 @@ import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescr
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
-import PrescriptionHistoryNoPrescriptions from './PrescriptionHistoryNoPrescriptions'
-import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
-
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
+
+const NON_VA_MEDS_ALERT_DISMISSED = '@non_va_medications_alert_dismissed'
 
 const pageSize = DEFAULT_PAGE_SIZE
 
@@ -104,6 +106,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const navigateTo = useRouteNavigation()
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
+  const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -120,6 +123,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const [sortOnToUse, setSortOnToUse] = useState(ASCENDING)
   const [filteredPrescriptions, setFilteredPrescriptions] = useState<PrescriptionsList>([])
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const [displayNonVAMedsAlert, setDisplayNonVaMedsAlert] = useState<boolean>(false)
 
   useEffect(() => {
     if (prescriptionsFetched && prescriptionData?.data) {
@@ -132,6 +136,16 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       logAnalyticsEvent(Events.vama_cerner_alert())
     }
   }, [hasTransferred])
+
+  useEffect(() => {
+    const checkNonVAMedsAlertDismissed = async () => {
+      const dismissed = await AsyncStorage.getItem(NON_VA_MEDS_ALERT_DISMISSED)
+      if (!dismissed) {
+        setDisplayNonVaMedsAlert(true)
+      }
+    }
+    checkNonVAMedsAlertDismissed()
+  }, [])
 
   useEffect(() => {
     if (startingFilter) {
@@ -321,20 +335,20 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const modalSortByOptions = sortByOptions.map((option) => {
     return {
       value: option.value,
-      labelKey: getTranslation(option.display, t),
+      optionLabelKey: getTranslation(option.display, t),
     }
   })
 
   const modalFilterOptions = filterOptions.map((option) => {
-    const labelKey = `${getTranslation(option.display, t)} (${option.count})`
-    let a11yLabel = labelKey
+    const optionLabelKey = `${getTranslation(option.display, t)} (${option.count})`
+    let a11yLabel = optionLabelKey
     if (option.additionalLabelText) {
       a11yLabel += ` ${a11yLabelVA(option.additionalLabelText[0])}.`
     }
 
     return {
       value: option.value,
-      labelKey,
+      optionLabelKey,
       additionalLabelText: option.additionalLabelText,
       a11yLabel,
     }
@@ -394,6 +408,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasNoItems = filteredPrescriptions?.length === 0
 
   const getNonVAMedsAlert = () => {
+    if (!hasNonVaMeds || !displayNonVAMedsAlert) return <></>
+
     const pressableProps: PressableProps = {
       accessibilityRole: 'link',
       accessibilityLabel: a11yLabelVA(
@@ -410,6 +426,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       },
     }
 
+    const handleDismiss = (): void => {
+      AsyncStorage.setItem(NON_VA_MEDS_ALERT_DISMISSED, 'true')
+      setDisplayNonVaMedsAlert(false)
+    }
+
     return (
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
@@ -417,6 +438,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           expandable={true}
           header={t('prescription.history.nonVAMeds.header')}
           headerA11yLabel={a11yLabelVA(t('prescription.history.nonVAMeds.header'))}
+          primaryButton={{ label: t('dismiss'), onPress: handleDismiss }}
           testID="nonVAMedsAlertTestID">
           <Pressable {...pressableProps}>
             <TextView>
@@ -469,13 +491,26 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     )
   }
 
-  const getRequestRefillButton = () => (
-    <FloatingButton
-      testID="refillRequestTestID"
-      label={t('prescription.history.startRefillRequest')}
-      onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
-    />
-  )
+  const getRequestRefillButton = () => {
+    // Hide the refill request button on loading, error, and no prescription states
+    const hideRefillRequestButton =
+      prescriptionInDowntime ||
+      loadingHistory ||
+      loadingUserAuthorizedServices ||
+      !!getUserAuthorizedServicesError ||
+      !userAuthorizedServices?.prescriptions ||
+      !!hasError ||
+      !allPrescriptions?.length
+
+    return (
+      <FloatingButton
+        isHidden={hideRefillRequestButton}
+        testID="refillRequestTestID"
+        label={t('prescription.history.startRefillRequest')}
+        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+      />
+    )
+  }
 
   const prescriptionListTitle = () => {
     const sortUppercase = getDisplayForValue(sortByOptions, sortByToUse)

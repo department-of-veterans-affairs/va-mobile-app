@@ -103,6 +103,8 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
+  LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
+  LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
@@ -152,6 +154,37 @@ export const CommonE2eIdConstants = {
   AF_ERROR_MSG_PHONE_ID: 'AFErrorPhoneNumberTestID',
   AF_TYPE_INPUT_ID: 'AFTypeTestID',
   AF_USE_CASE_TWO_ID: 'AFUseCase2TestID',
+  // Contact information
+  MAILING_ADDRESS_ID: 'Mailing address 3101 N Fort Valley Rd Flagstaff, AZ, 86001',
+  MAILING_ADDRESS_2_ID: 'Mailing address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
+  HOME_ADDRESS_ID: 'Home address Add your home address',
+  HOME_PHONE_ID: 'homePhone',
+  WORK_PHONE_ID: 'workPhone',
+  MOBILE_PHONE_ID: 'mobilePhone',
+  EMAIL_ADDRESS_ID: 'emailAddress',
+  HOW_WE_USE_TEXT: 'How we use your contact information',
+  COUNTRY_PICKER_ID: 'countryPickerTestID',
+  STREET_ADDRESS_LINE_1_ID: 'streetAddressLine1TestID',
+  STREET_ADDRESS_LINE_3_ID: 'streetAddressLine3TestID',
+  MILITARY_POST_OFFICE_ID: 'militaryPostOfficeTestID',
+  CITY_TEST_ID: 'cityTestID',
+  STATE_ID: 'stateTestID',
+  ZIP_CODE_ID: 'zipCodeTestID',
+  PHONE_NUMBER_EXTENSION_ID: 'phoneNumberExtensionTestID',
+  PHONE_NUMBER_ID: 'phoneNumberTestID',
+  REMOVE_KEEP_TEXT: 'Keep',
+  REMOVE_REMOVE_TEXT: 'Remove',
+  EDIT_ADDRESS_ID: 'EditAddressTestID',
+  COUNTRY_PICKER_CONFIRM_ID: 'countryPickerConfirmID',
+  STATE_PICKER_CONFIRM_ID: 'statePickerConfirmID',
+  CONTACT_INFO_BACK_ID: 'contactInfoBackTestID',
+  VERIFY_YOUR_ADDRESS_ID: 'verifyYourAddressTestID',
+  EMAIL_ADDRESS_EDIT_ID: 'emailAddressEditTestID',
+  CONTACT_INFO_CLOSE_ID: 'ContactInfoCloseTestID',
+  MILITARY_POST_OFFICE_PICKER_CONFIRM_ID: 'militaryPostOfficeConfirmID',
+  HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
+  // travel pay
+  TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
 }
 
 /** Logs into demo mode.
@@ -279,6 +312,31 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
+/** Scroll down inside container until specified text is found
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToElement(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+}
+
+/** Test for the presence of text 1 or more times
+ *
+ * @param text - string of the text to match
+ */
+export const testForOneOrManyOccurancesOf = async (text: string) => {
+  const multipleMatchedElements = await element(by.text(text)).getAttributes()
+  if (!('elements' in multipleMatchedElements)) {
+    await expect(element(by.text(text))).toExist()
+  } else {
+    await expect(element(by.text(text)).atIndex(0)).toExist()
+  }
+}
+
 /** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -294,64 +352,6 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
-}
-
-/** This function will change the mock data for demo mode
- *
- * @param matchString - string: name of the json file ie appointments.json
- * @param jsonProperty - array of strings and dictionaries: should match the path to get to the
- * json obj you want changed that matches the path to get to the object you want changed
- * @param newJsonValue - string or boolean: new value for the json object
- */
-
-export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
-  const mockDirectory = './src/store/api/demo/mocks/'
-
-  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-
-    const jsonParsed = JSON.parse(data)
-    let mockDataVariable
-    let mockDataKeyValue
-    for (let x = 0; x < jsonProperty.length; x++) {
-      if (x === 0) {
-        mockDataVariable = jsonParsed[jsonProperty[x]]
-      } else if (x === jsonProperty.length - 1) {
-        mockDataVariable[jsonProperty[x]] = newJsonValue
-      } else {
-        if (jsonProperty[x].constructor === Object) {
-          const key = String(Object.keys(jsonProperty[x]))
-          const value = jsonProperty[x][key]
-          mockDataKeyValue = mockDataVariable[key]
-          mockDataVariable = mockDataKeyValue[value]
-        } else {
-          mockDataVariable = mockDataVariable[jsonProperty[x]]
-        }
-      }
-    }
-
-    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-      if (err) {
-        return console.log(err)
-      }
-    })
-  })
-
-  await device.uninstallApp()
-  await setTimeout(1000)
-  if (device.getPlatform() === 'ios') {
-    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
-  } else {
-    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
-  }
-  await device.installApp()
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
@@ -441,6 +441,10 @@ export async function openVaccineRecords() {
 }
 export async function openAllergyRecords() {
   await element(by.id(CommonE2eIdConstants.ALLERGIES_BUTTON_ID)).tap()
+}
+
+export async function openLabsAndTestRecords() {
+  await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_BUTTON_ID)).tap()
 }
 
 export async function openMedicalRecords() {
@@ -742,4 +746,40 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+}
+
+/**
+ * Navigates to the developer settings and configures API endpoint overrides for testing.
+ * This allows forcing specific API responses during E2E testing.
+ *
+ * @param endpoint - The API endpoint identifier to override
+ * @param options - Configuration options
+ * @param options.otherStatus - Optional custom status to set for the endpoint override
+ *
+ *
+ * @example
+ * // Override an endpoint with a custom 500 error status
+ * await toggleOverrideApi('/v0/travel-pay/claims', \{ otherStatus: "500" \});
+ */
+export async function toggleOverrideApi(endpoint: string, { otherStatus }: { otherStatus?: string } = {}) {
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await waitFor(element(by.label('Override Api Calls')))
+    .toBeVisible()
+    .whileElement(by.id('developerScreenTestID'))
+    .scroll(100, 'down')
+  await element(by.label('Override Api Calls')).tap()
+  await waitFor(element(by.id(`otherSelector-${endpoint}`)))
+    .toBeVisible()
+    .whileElement(by.id('overrideAPITestID'))
+    .scroll(250, 'down')
+
+  if (otherStatus) {
+    await element(by.id(`otherSelector-${endpoint}`)).tap()
+    await element(by.id('overrideAPITestID')).scroll(100, 'down')
+    await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
+  }
+
+  await element(by.label('Set API Errors')).tap()
 }

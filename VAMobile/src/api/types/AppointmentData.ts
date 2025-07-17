@@ -1,3 +1,5 @@
+import { TravelPayClaimSummary } from 'api/types/TravelPayClaimData'
+
 export const AppointmentTimeZoneConstants: {
   PacificHonolulu: AppointmentTimeZone
   AmericaAnchorage: AppointmentTimeZone
@@ -96,6 +98,7 @@ export type AppointmentPhone = {
 }
 
 export type AppointmentLocation = {
+  id?: string
   name: string
   address?: AppointmentAddress
   lat?: number
@@ -103,6 +106,11 @@ export type AppointmentLocation = {
   phone?: AppointmentPhone
   url?: string
   code?: string
+}
+
+export type AppointmentTravelPayClaim = {
+  metadata: { status: number; success: boolean; message: string }
+  claim?: TravelPayClaimSummary
 }
 
 export type AppointmentTimeZone =
@@ -166,6 +174,7 @@ export type AppointmentAttributes = {
   reason: string | null
   isCovidVaccine: boolean
   serviceCategoryName: string | null
+  travelPayEligible: boolean
   // pending appointment props
   isPending: boolean
   typeOfCare?: string // unclear if this always undefined for confirmed appointments that was a pending appointment
@@ -176,6 +185,8 @@ export type AppointmentAttributes = {
   bestTimeToCall?: Array<string>
   vetextId: string
   physicalLocation?: string
+  travelPayClaim?: AppointmentTravelPayClaim
+  showScheduleLink?: boolean
 }
 
 export type AppointmentData = {
@@ -215,6 +226,7 @@ export type AppointmentsMetaPagination = {
 export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
   pagination?: AppointmentsMetaPagination
+  travelPayEligibleCount?: number
   upcomingAppointmentsCount: number
   upcomingDaysLimit: number
 }

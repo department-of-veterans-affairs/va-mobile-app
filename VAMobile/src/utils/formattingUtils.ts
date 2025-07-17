@@ -292,7 +292,6 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
  * Converts 1234567890 to 123-456-7890
  * @param phoneNumber - string that has the phone number
  */
-
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
   return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }
@@ -380,4 +379,23 @@ export const numberToUSDollars = (amount: number): string => {
   })
 
   return USDollar.format(amount)
+}
+
+/**
+ * Formats a Luxon DateTime object into a human-readable string.
+ *
+ * Uses Luxon's `toFormat` method with format token `EEEE, fff` to ensure consistent
+ * timezone display across platforms (verified on Android & iOS). Previously used
+ * `ZZZZ` token caused duplicated timezone abbreviations (e.g., "CDT CDT").
+ *
+ * Example output: "Saturday, May 31, 2025 at 9:00 PM CDT"
+ *
+ * @param dateTime - the Luxon DateTime object to format; may be null or undefined
+ * @returns The formatted date-time string, or an empty string if dateTime is null or undefined
+ */
+export const formatDateTimeReadable = (dateTime?: DateTime | null): string => {
+  if (!dateTime) {
+    return ''
+  }
+  return dateTime.toFormat('EEEE, fff')
 }

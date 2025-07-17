@@ -20,15 +20,14 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { LabelTagTypeConstants } from 'components/LabelTag'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
-
-import { LabelTagTypeConstants } from '../components/LabelTag'
-import { getTestIDFromTextLines } from './accessibility'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   getFormattedDate,
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
-} from './formattingUtils'
+} from 'utils/formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -203,6 +202,7 @@ export const getGroupedAppointments = (
   onAppointmentPress: (appointment: AppointmentData) => void,
   isReverseSort: boolean,
   upcomingPageMetaData: AppointmentsMetaPagination,
+  includeTravelClaims: boolean = false,
 ): ReactNode => {
   if (!appointments) {
     return <></>
@@ -227,6 +227,7 @@ export const getGroupedAppointments = (
         upcomingPageMetaData,
         groupIdx,
         theme,
+        includeTravelClaims,
       )
       groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
@@ -277,13 +278,14 @@ const getListItemsForAppointments = (
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
   theme: VATheme,
+  includeTravelClaims: boolean,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
   const { t } = translations
   const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
   _.forEach(listOfAppointments, (appointment, index) => {
-    const textLines = getTextLinesForAppointmentListItem(appointment, t, theme)
+    const textLines = getTextLinesForAppointmentListItem(appointment, t, theme, includeTravelClaims)
     const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
     const a11yValue = t('listPosition', { position, total: totalEntries })
     const isPendingAppointment = isAPendingAppointment(appointment?.attributes)
@@ -298,6 +300,41 @@ const getListItemsForAppointments = (
   })
 
   return listItems
+}
+
+/**
+ * Returns true or false if the appointment is eligible for travel pay
+ * @param attributes - type AppointmentAttributes, data attributes of an appointment
+ * @returns boolean, true if the appointment is eligible for travel pay
+ */
+export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
+  const { travelPayClaim, travelPayEligible } = attributes
+  // if the claim has already been filed, then the appointment is not eligible for travel pay
+  return travelPayEligible && !travelPayClaim?.claim
+}
+
+/**
+ * Returns the number of days left to file travel pay
+ * @param startDateUtc - string, the start date of the appointment in UTC
+ * @returns number, the number of days left to file travel pay
+ */
+export const getDaysLeftToFileTravelPay = (startDateUtc: string) => {
+  const daysToFile = 30 // 30 days to file travel pay
+  const lastFileDate = DateTime.fromISO(startDateUtc).plus({ days: daysToFile })
+  return Math.floor(lastFileDate.diff(DateTime.now().toUTC(), 'days').days)
+}
+
+const getTravelPay = (attributes: AppointmentAttributes, t: TFunction, mb: number) => {
+  const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
+  if (isEligibleForTravelPay(attributes) && daysLeftToFile >= 0) {
+    return {
+      text: t('travelPay.daysToFile', { count: daysLeftToFile, days: daysLeftToFile }),
+      textTag: { labelType: LabelTagTypeConstants.tagBlue },
+      mb,
+    }
+  } else {
+    return undefined
+  }
 }
 
 const getStatus = (
@@ -375,6 +412,7 @@ export const getTextLinesForAppointmentListItem = (
   appointment: AppointmentData,
   t: TFunction,
   theme: VATheme,
+  includeTravelClaims: boolean,
 ): Array<TextLineWithIconProps> => {
   const { attributes } = appointment
   const {
@@ -393,7 +431,7 @@ export const getTextLinesForAppointmentListItem = (
     (attributes.status === AppointmentStatusConstants.SUBMITTED ||
       attributes.status === AppointmentStatusConstants.CANCELLED)
   const careText = getCareText(typeOfCare, serviceCategoryName, t)
-  let result: Array<TextLineWithIconProps | undefined> = []
+  let result: Array<TextLineWithIconProps | undefined | boolean> = []
 
   if (isPending) {
     const type = pendingType(appointmentType, t, phoneOnly)
@@ -404,10 +442,12 @@ export const getTextLinesForAppointmentListItem = (
       getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
     ]
   } else {
+    const travelPayTag = includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween)
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      travelPayTag,
+      !travelPayTag && getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
       getModality(appointmentType, phoneOnly, location, theme, t),

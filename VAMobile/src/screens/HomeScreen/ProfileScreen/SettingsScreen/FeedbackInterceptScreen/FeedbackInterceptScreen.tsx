@@ -18,9 +18,9 @@ import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks
 
 const { LINK_URL_OMB_PAGE } = getEnv()
 
-type InAppFeedbackScreenProps = StackScreenProps<RootNavStackParamList, 'InAppFeedback'>
+type FeedbackInterceptScreenProps = StackScreenProps<RootNavStackParamList, 'FeedbackIntercept'>
 
-function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
+function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -69,23 +69,23 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
     onChange: setSatisfaction,
     options: [
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
         value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
         value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.neither'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.neither'),
         value: t('inAppFeedback.overallSatisfaction.neither'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
         value: t('inAppFeedback.overallSatisfaction.satisfied'),
       },
       {
-        labelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
+        optionLabelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
         value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
       },
     ],
@@ -142,4 +142,4 @@ function InAppFeedbackScreen({ navigation, route }: InAppFeedbackScreenProps) {
   )
 }
 
-export default InAppFeedbackScreen
+export default FeedbackInterceptScreen

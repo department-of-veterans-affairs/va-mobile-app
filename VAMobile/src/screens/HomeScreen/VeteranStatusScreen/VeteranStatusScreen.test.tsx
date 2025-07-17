@@ -5,10 +5,10 @@ import { t } from 'i18next'
 
 import { disabilityRatingKeys } from 'api/disabilityRating'
 import { militaryServiceHistoryKeys } from 'api/militaryService'
+import { BranchesOfServiceConstants } from 'api/types'
 import { veteranStatusKeys } from 'api/veteranStatus'
+import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import VeteranStatusScreen from './VeteranStatusScreen'
 
 jest.mock('utils/remoteConfig', () => ({
   activateRemoteConfig: jest.fn(() => Promise.resolve()),
@@ -31,8 +31,8 @@ context('VeteranStatusScreen', () => {
     },
   }
 
-  const zeroPercentRating = {
-    combinedDisabilityRating: 0,
+  const noPercentRating = {
+    combinedDisabilityRating: undefined,
     combinedEffectiveDate: '2022-06-15',
     legalEffectiveDate: '2022-05-01',
     individualRatings: [
@@ -127,6 +127,7 @@ context('VeteranStatusScreen', () => {
       },
     )
     render(<VeteranStatusScreen {...props} />, { queriesData })
+    jest.advanceTimersByTime(50)
   }
 
   describe('Errors', () => {
@@ -210,7 +211,7 @@ context('VeteranStatusScreen', () => {
   })
 
   describe('Veteran Status Card', () => {
-    it('does NOT show the disability rating if combined disability rating is 0', async () => {
+    it('does NOT show the disability rating if combined disability rating does not exist', async () => {
       renderWithOptions([
         {
           queryKey: veteranStatusKeys.verification,
@@ -222,7 +223,7 @@ context('VeteranStatusScreen', () => {
         },
         {
           queryKey: disabilityRatingKeys.disabilityRating,
-          data: zeroPercentRating,
+          data: noPercentRating,
         },
       ])
 
@@ -262,12 +263,45 @@ context('VeteranStatusScreen', () => {
         },
         {
           queryKey: disabilityRatingKeys.disabilityRating,
-          data: zeroPercentRating,
+          data: noPercentRating,
         },
       ])
 
       const secondPeriodText = 'United States Army • 2010–2017'
       expect(screen.getByText(secondPeriodText)).toBeTruthy()
     })
+
+    for (const branch of Object.values(BranchesOfServiceConstants)) {
+      it(`displays the correct branch of service text for ${branch}`, () => {
+        const serviceHistory = {
+          serviceHistory: [
+            {
+              branchOfService: branch,
+              beginDate: '2010-01-01',
+              endDate: '2014-12-31',
+              formattedBeginDate: 'January 01, 2010',
+              formattedEndDate: 'December 31, 2014',
+              characterOfDischarge: 'Honorable',
+              honorableServiceIndicator: 'Y',
+            },
+          ],
+        }
+        renderWithOptions([
+          {
+            queryKey: veteranStatusKeys.verification,
+            data: confirmedData,
+          },
+          {
+            queryKey: militaryServiceHistoryKeys.serviceHistory,
+            data: serviceHistory,
+          },
+          {
+            queryKey: disabilityRatingKeys.disabilityRating,
+            data: noPercentRating,
+          },
+        ])
+        expect(screen.getByText(`${branch} • 2010–2014`)).toBeTruthy()
+      })
+    }
   })
 })

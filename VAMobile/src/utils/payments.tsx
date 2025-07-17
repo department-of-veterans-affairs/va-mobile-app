@@ -2,14 +2,13 @@ import React, { ReactNode } from 'react'
 
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
-import { forEach, groupBy, keys, map } from 'underscore'
+import { forEach, groupBy, keys } from 'underscore'
 
 import { PaymentsByDate, PaymentsData, PaymentsMetaPagination } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { VATheme } from 'styles/theme'
-
-import { getTestIDFromTextLines } from './accessibility'
-import { formatDateUtc, getFormattedDate, numberToUSDollars, strNumberToNumber } from './formattingUtils'
+import { getTestIDFromTextLines } from 'utils/accessibility'
+import { formatDateUtc, getFormattedDate, numberToUSDollars, strNumberToNumber } from 'utils/formattingUtils'
 
 /**
  * @param paymentList - type PaymentsList, list of payments
@@ -46,14 +45,14 @@ export const getGroupedPayments = (
     return <></>
   }
 
-  const sortedDates = keys(paymentsGroupedByDate).sort()
+  const dates = keys(paymentsGroupedByDate)
   if (isReverseSort) {
-    sortedDates.reverse()
+    dates.reverse()
   }
 
   //track the start index for each grouping to get the current item position for a11yValue
   let groupIdx = 0
-  return map(sortedDates, (date) => {
+  return dates.map((date) => {
     const listOfPayments = paymentsGroupedByDate[date]
     const { listItems, totalAmount } = getListItemsForPayments(
       listOfPayments,

@@ -7,11 +7,15 @@ import {
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 
-export const getAppointmentsPayload = (upcomingAppointmentsCount: number): AppointmentsGetData => ({
+export const getAppointmentsPayload = (
+  upcomingAppointmentsCount: number,
+  travelPayEligibleCount: number,
+): AppointmentsGetData => ({
   data: [],
   meta: {
     upcomingAppointmentsCount,
     upcomingDaysLimit: DEFAULT_UPCOMING_DAYS_LIMIT,
+    travelPayEligibleCount,
   },
 })
 export const getClaimsAndAppealsPayload = (
@@ -91,5 +95,6 @@ export const getPrescriptionsPayload = (refillablePrescriptionsCount: number): P
       unknown: 0,
       total: 20,
     },
+    hasNonVaMeds: false,
   },
 })
