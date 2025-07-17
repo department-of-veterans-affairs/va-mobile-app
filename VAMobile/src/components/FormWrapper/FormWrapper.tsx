@@ -2,10 +2,10 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
-import { useTheme } from 'utils/hooks'
-
 import {
   Box,
+  ComboBoxInput,
+  ComboBoxInputProps,
   FormAttachments,
   FormAttachmentsProps,
   RadioGroup,
@@ -16,7 +16,8 @@ import {
   VASelectorProps,
   VATextInput,
   VATextInputProps,
-} from '../index'
+} from 'components/index'
+import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
 export enum FieldType {
@@ -25,6 +26,7 @@ export enum FieldType {
   TextInput = 'TextInput',
   Radios = 'Radios',
   FormAttachmentsList = 'FormAttachmentsList',
+  ComboBox = 'Combobox',
 }
 
 /** contains function to compare against on save and on focus/blur, and its corresponding error message if the function fails */
@@ -44,7 +46,13 @@ export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
   fieldType: FieldType
   /** props to pass into form input component */
-  fieldProps: VASelectorProps | VATextInputProps | VAModalPickerProps | RadioGroupProps<T> | FormAttachmentsProps
+  fieldProps:
+    | VASelectorProps
+    | VATextInputProps
+    | VAModalPickerProps
+    | RadioGroupProps<T>
+    | FormAttachmentsProps
+    | ComboBoxInputProps
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
   /** optional boolean that prevents the field from being displayed when set to true */
@@ -131,6 +139,12 @@ const FormWrapper = <T,>({
           case FieldType.Selector:
             const checkboxProps = el.fieldProps as VASelectorProps
             return !checkboxProps.selected && checkboxProps.isRequiredField
+          case FieldType.ComboBox:
+            const comboBoxProps = el.fieldProps as ComboBoxInputProps
+            return !comboBoxProps.selectedValue && comboBoxProps.isRequiredField
+          case FieldType.Radios:
+            const radioProps = el.fieldProps as RadioGroupProps<T>
+            return !radioProps.value && radioProps.isRequiredField
           default:
             // default returns false because the radio group and form attachments will not have field errors
             return false
@@ -255,9 +269,23 @@ const FormWrapper = <T,>({
           />
         )
       case FieldType.Radios:
-        return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
+        return (
+          <RadioGroup
+            {...(fieldProps as RadioGroupProps<T>)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
+        )
       case FieldType.FormAttachmentsList:
         return <FormAttachments {...(fieldProps as FormAttachmentsProps)} />
+      case FieldType.ComboBox:
+        return (
+          <ComboBoxInput
+            {...(fieldProps as ComboBoxInputProps)}
+            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
+            error={errors[index]}
+          />
+        )
     }
   }
 

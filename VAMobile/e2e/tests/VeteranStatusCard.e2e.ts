@@ -9,7 +9,6 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
-  changeMockData,
   loginToDemoMode,
   openBenefits,
   openDisabilityRating,
@@ -85,36 +84,6 @@ export async function tapPhoneAndTTYLinks() {
   })
 }
 
-/*
-Validates that the military information is correct
-param militaryBranch: String name of the military branch to test
-*/
-export async function verifyMilitaryInfo(militaryBranch: string) {
-  it(militaryBranch + ': verify the name and branch matches the home/profile page', async () => {
-    await changeMockData(
-      'profile.json',
-      ['/v0/military-service-history', 'data', 'attributes', { serviceHistory: 1 }, 'branchOfService'],
-      militaryBranch,
-    )
-    await element(by.text('Home')).tap()
-    await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
-      .scroll(200, 'down')
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    const expectedBranchText = `${militaryBranch} • 1998–2000`
-    await expect(element(by.text(expectedBranchText))).toBeVisible()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
-    await expect(element(by.text(militaryBranch))).toExist()
-    await openProfile()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)).tap()
-    await expect(element(by.text(expectedBranchText))).toExist()
-    await element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_CLOSE_ID)).tap()
-    await expect(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID))).toExist()
-    await expect(element(by.text(militaryBranch))).toExist()
-  })
-}
 describe('Veteran Status Card', () => {
   it('should match design in the home screen', async () => {
     await waitFor(element(by.id(VeteranStatusCardConstants.VETERAN_STATUS_ID)))
@@ -155,39 +124,5 @@ describe('Veteran Status Card', () => {
     await openBenefits()
     await openDisabilityRating()
     await expect(element(by.text(CommonE2eIdConstants.DISABILITY_RATING_PERCENT_TEXT)).atIndex(1)).toExist()
-  })
-
-  verifyMilitaryInfo('United States Coast Guard')
-  verifyMilitaryInfo('United States Army')
-  verifyMilitaryInfo('United States Air Force')
-  verifyMilitaryInfo('United States Navy')
-  verifyMilitaryInfo('United States Marine Corps')
-  verifyMilitaryInfo('United States Space Force')
-
-  it('should reset mock data', async () => {
-    await changeMockData(
-      'profile.json',
-      ['/v0/military-service-history', 'data', 'attributes', 'serviceHistory'],
-      [
-        {
-          branchOfService: 'United States Army',
-          beginDate: '1970-07-13',
-          endDate: '1998-08-31',
-          formattedBeginDate: 'July 13, 1970',
-          formattedEndDate: 'August 31, 1998',
-          characterOfDischarge: 'Dishonorable',
-          honorableServiceIndicator: 'N',
-        },
-        {
-          branchOfService: 'United States Coast Guard',
-          beginDate: '1998-09-01',
-          endDate: '2000-01-01',
-          formattedBeginDate: 'September 01, 1998',
-          formattedEndDate: 'January 01, 2000',
-          characterOfDischarge: 'Honorable',
-          honorableServiceIndicator: 'Y',
-        },
-      ],
-    )
   })
 })

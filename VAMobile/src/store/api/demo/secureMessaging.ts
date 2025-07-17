@@ -6,9 +6,8 @@ import {
   SecureMessagingRecipientData,
   SecureMessagingThreadGetData,
 } from 'api/types'
-
-import { Params } from '../api'
-import { DemoStore } from './store'
+import { Params } from 'store/api'
+import { DemoStore } from 'store/api/demo/store'
 
 type MessagePageNumber = '1'
 
@@ -85,7 +84,8 @@ type draftFolderMessages = {
   '/v1/messaging/health/messages/2113141/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
   '/v1/messaging/health/messages/2092803/thread?excludeProvidedMessage=true': SecureMessagingThreadGetData
-  '"/v0/messaging/health/recipients"': SecureMessagingRecipientData
+  '/v0/messaging/health/recipients': SecureMessagingRecipientData
+  '/v0/messaging/health/allrecipients': SecureMessagingRecipientData
 }
 
 /**

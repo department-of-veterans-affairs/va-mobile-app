@@ -416,6 +416,7 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
+    "App.test.tsx": [],
     "analytics.ts": [],
     "backButtonLabels.ts": [],
     "documentTypes.ts": [],

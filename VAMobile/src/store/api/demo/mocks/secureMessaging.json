@@ -1869,5 +1869,527 @@
         "name": "ASC"
       }
     }
+  },
+  "/v0/messaging/health/allrecipients": {
+    "data": [
+      {
+        "id": "2336822",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2336822,
+          "name": "ATIVAN_PCMM RELATIONSHIP_MAY 09 2022_DAYT29",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2343333",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2343333,
+          "name": "AnTran_TGTest",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "3934580",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 3934580,
+          "name": "An_Test09132024",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2938067",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2938067,
+          "name": "An_Test20230803",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2416527",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2416527,
+          "name": "Anna-TEST",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1188616",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1188616,
+          "name": "CernerUAT_Day29",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1285326",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1285326,
+          "name": "DESIGNATED WH PCMM_DAYT29",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2575207",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2575207,
+          "name": "Demotoday",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "725671",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 725671,
+          "name": "GPK_ENSEMBLE_GROUP",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "896786",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 896786,
+          "name": "JAZZ 1253528_MULTIPLE_TYPES OF ASSOCIATION_DAYT29 ",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "788263",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 788263,
+          "name": "JAZZ 711180 TG_APPOINTMENT_DAYT29",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "893821",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 893821,
+          "name": "JAZZ 939559 TG_CPRS ERROR IN PROD_LILETTA _DAYT29",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "708008",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 708008,
+          "name": "Lisa-Anisha",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2050381",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2050381,
+          "name": "New Triage Group 9-14",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1429487",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1429487,
+          "name": "PCMM TEST DAYT29 AUG 24 2020",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1285336",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1285336,
+          "name": "PCMM-R Code 11",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1285333",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1285333,
+          "name": "PCMMTestSiri",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2298137",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2298137,
+          "name": "ROLLINS HEARING CLINIC",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "529552",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 529552,
+          "name": "Rajesh-PCMM-WEB_TST",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "3658288",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 3658288,
+          "name": "Record Amendment Admin",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "803571",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 803571,
+          "name": "Ro Test",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "909305",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 909305,
+          "name": "SMTG-Test Apr18",
+          "stationNumber": "989",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2710520",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2710520,
+          "name": "SM_TO_VA_GOV_TRIAGE_GROUP_TEST",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2343332",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2343332,
+          "name": "SQA Demo TG",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "863002",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 863002,
+          "name": "Siri111",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "3188767",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 3188767,
+          "name": "TG API TESTING",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1357456",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1357456,
+          "name": "TG with &",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2396583",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2396583,
+          "name": "Test TG 07-09-22 ",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "2162340",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 2162340,
+          "name": "Test TG 1",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1342959",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1342959,
+          "name": "TestUATJune30",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "882825",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 882825,
+          "name": "UAT - Escalation Job ",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "885264",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 885264,
+          "name": "UAT - PCMM Primary Providers",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1330002",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1330002,
+          "name": "UAT Search By Patient Multiple Clinics",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "857189",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 857189,
+          "name": "UAT Test 11-09-18",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "816092",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 816092,
+          "name": "UAT Test Rename TG",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "suggestedNameDisplay": null,
+          "preferredTeam": true,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "893823",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 893823,
+          "name": "UAT_Reg_Mar19 ++",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1918817",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1918817,
+          "name": "UAT_Reg_Jun19 ++ Testing long string. Demo Testing Multiple Clinics UAT",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "1918816",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 1918816,
+          "name": "UAT_Reg_Jun5 ++",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      }
+    ],
+    "meta": {
+      "associatedTriageGroups": 36,
+      "friendlyTriageTeamPilotFacilities": "979",
+      "associatedBlockedTriageGroups": 0,
+      "sort": {
+        "name": "ASC"
+      }
+    }
   }
 }
