@@ -36,7 +36,12 @@ import {
   SecureMessagingDemoStore,
   getFolderMessages,
 } from 'store/api/demo/secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import {
+  TravelPayDemoReturnTypes,
+  TravelPayDemoStore,
+  getTravelPayClaims,
+  submitAppointmentClaim,
+} from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -56,7 +61,8 @@ export type DemoStore = AppointmentsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
   AllergyDemoStore &
-  LabsAndTestsDemoStore
+  LabsAndTestsDemoStore &
+  TravelPayDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -158,6 +164,7 @@ export const initDemoStore = async (): Promise<void> => {
     import('./mocks/demographics.json'),
     import('./mocks/personalInformation.json'),
     import('./mocks/allergies.json'),
+    import('./mocks/travelPay.json'),
   ])
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
@@ -243,6 +250,12 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return getTravelPayClaims(store, params, endpoint) // TODO: SC: naming
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

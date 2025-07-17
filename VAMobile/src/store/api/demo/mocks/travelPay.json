@@ -1,0 +1,23 @@
+{
+  "/v0/travel-pay/claims": {
+    "metadata": {
+      "totalRecordCount": 8,
+      "pageNumber": 1,
+      "status": 200
+    },
+    "data": [
+      {
+        "id": "mock-travel-pay-claim-1",
+        "claimNumber": "1000",
+        "claimStatus": "",
+        "appointmentDateTime": "2024-01-01T10:00:00Z",
+        "facilityId": "mock-facility-id-1",
+        "facilityName": "Mock Facility 1",
+        "totalCostRequested": 100.0,
+        "reimbursementAmount": 50.0,
+        "createdOn": "2024-01-01T10:00:00Z",
+        "modifiedOn": "2024-01-02T10:00:00Z"
+      }
+    ]
+  }
+}

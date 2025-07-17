@@ -26,3 +26,16 @@ export type SubmitTravelPayClaimResponse = {
     attributes: TravelPayClaimSummary
   }
 }
+
+export type GetTravelPayClaimsResponse = {
+  metadata: {
+    totalRecordCount: number
+    pageNumber: number
+    status: number // will be either 200 if all claims returned, 206 if only some claims returned
+  }
+  data: {
+    id: string
+    type: string
+    attributes: TravelPayClaimSummary
+  }[]
+}
