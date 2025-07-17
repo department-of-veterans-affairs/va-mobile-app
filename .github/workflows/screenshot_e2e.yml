@@ -63,13 +63,9 @@ jobs:
 
       - name: Install macOS dependencies
         run: |
-          yarn install
-          # npm install detox-cli --global        
-          npm install detox --save-dev
           brew tap wix/brew
           brew install applesimutils
           brew install imagemagick
-          detox --version
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
