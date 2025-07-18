@@ -7,7 +7,7 @@ import { FileOnBTSSSLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayF
 import { context, render } from 'testUtils'
 import getEnv from 'utils/env'
 
-const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
+const { LINK_URL_GO_TO_BTSSS } = getEnv()
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -62,10 +62,9 @@ context('FileOnBTSSSLink', () => {
     fireEvent.press(link)
 
     expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-      url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+      url: LINK_URL_GO_TO_BTSSS,
       displayTitle: t('travelPay.webview.fileForTravelPay.title'),
       loadingMessage: t('loading.vaWebsite'),
-      useSSO: true,
     })
   })
 })

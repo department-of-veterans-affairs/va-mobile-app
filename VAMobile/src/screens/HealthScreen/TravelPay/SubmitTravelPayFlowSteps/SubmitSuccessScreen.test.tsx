@@ -5,13 +5,10 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
-
 import { SubmitSuccessScreen } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
 import { context, fireEvent, mockNavProps, render, screen } from 'testUtils'
-import getEnv from 'utils/env'
 
 jest.spyOn(Alert, 'alert')
-const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 
 const params = {
   facilityName: 'Test Facility',
@@ -77,19 +74,6 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByTestId('finishTravelClaimLinkID')).toBeTruthy()
       expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
     })
-
-    describe('when the user clicks the BTSSS link', () => {
-      it('navigates to the BTSSS website on an authenticated webview', () => {
-        initializeTestInstance(TravelPayPartialSuccessStatusConstants.INCOMPLETE)
-        fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-          url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
-          displayTitle: t('travelPay.webview.fileForTravelPay.title'),
-          loadingMessage: t('loading.vaWebsite'),
-          useSSO: true,
-        })
-      })
-    })
   })
 
   describe('when status is Saved', () => {
@@ -103,19 +87,6 @@ context('SubmitSuccessScreen', () => {
       expect(screen.getByText(t('travelPay.setUpDirectDeposit.eligible'))).toBeTruthy()
       expect(screen.getByTestId('finishTravelClaimLinkID')).toBeTruthy()
       expect(screen.getByTestId('setUpDirectDepositLinkID')).toBeTruthy()
-    })
-
-    describe('when the user clicks the BTSSS link', () => {
-      it('navigates to the BTSSS website on an authenticated webview', () => {
-        initializeTestInstance(TravelPayPartialSuccessStatusConstants.SAVED)
-        fireEvent.press(screen.getByTestId('finishTravelClaimLinkID'))
-        expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
-          url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
-          displayTitle: t('travelPay.webview.fileForTravelPay.title'),
-          loadingMessage: t('loading.vaWebsite'),
-          useSSO: true,
-        })
-      })
     })
   })
 
