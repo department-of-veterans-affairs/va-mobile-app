@@ -32,7 +32,7 @@ const FormValidationAlert: FC<FormValidationAlertProps> = ({
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  return hasValidationError ? (
+  return hasValidationError && errorList?.length ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertWithHaptics
         variant="error"
@@ -40,7 +40,7 @@ const FormValidationAlert: FC<FormValidationAlertProps> = ({
         description={description}
         scrollViewRef={scrollViewRef}
         focusOnError={focusOnError}>
-        <VABulletList listOfText={errorList || []} />
+        <VABulletList listOfText={errorList} />
       </AlertWithHaptics>
     </Box>
   ) : (
