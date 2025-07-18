@@ -17,6 +17,7 @@ export type ComboBoxProps = {
   comboBoxOptions: ComboBoxOptions
   onClose: () => void
   virtualized?: boolean
+  hideGroupsHeaders?: boolean
 }
 
 const ComboBox: FC<ComboBoxProps> = ({
@@ -24,6 +25,7 @@ const ComboBox: FC<ComboBoxProps> = ({
   comboBoxOptions,
   onClose,
   titleKey,
+  hideGroupsHeaders = false,
   virtualized = false,
 }) => {
   const theme = useTheme()
@@ -86,7 +88,7 @@ const ComboBox: FC<ComboBoxProps> = ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: theme.dimensions.smallMarginBetween,
     pl: theme.dimensions.listItemComboBoxMarginLeft,
     py: theme.dimensions.smallMarginBetween,
     borderColor: 'primary',
@@ -186,8 +188,8 @@ const ComboBox: FC<ComboBoxProps> = ({
         <SectionList
           sections={sections}
           renderItem={renderItem}
-          renderSectionHeader={renderSectionHeader}
-          keyExtractor={(item) => item.value}
+          renderSectionHeader={hideGroupsHeaders ? undefined : renderSectionHeader}
+          keyExtractor={(item, index) => `${item.value}-${index}`}
         />
       )
     }
@@ -198,19 +200,30 @@ const ComboBox: FC<ComboBoxProps> = ({
       if (!items.length) {
         return <></>
       }
-      return (
-        <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
+
+      let header
+      if (!hideGroupsHeaders) {
+        header = (
           <Box {...listGroupHeaderStyle}>
             <TextView variant={'MobileBodyBold'}>{groupName}</TextView>
           </Box>
-          {items.map(({ value, label }) => {
+        )
+      }
+
+      return (
+        <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
+          {header}
+          {items.map(({ value, label, icon }) => {
             const handleSelection = () => {
               onSelectionChange({ value, label })
               onClose()
             }
             return (
               <Pressable accessibilityRole="button" onPress={handleSelection} key={value}>
-                <Box {...listItemStyle}>{renderFilterableItem(label)}</Box>
+                <Box {...listItemStyle}>
+                  {icon}
+                  {renderFilterableItem(label)}
+                </Box>
               </Pressable>
             )
           })}

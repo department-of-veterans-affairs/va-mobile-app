@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
@@ -34,6 +35,7 @@ import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme
 import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
+const INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED = '@intl_number_notification_settings_dismissed'
 
 const FlagIcon = ({ name }: { name: VAIcons }) => {
   const theme = useTheme()
@@ -50,17 +52,22 @@ const FlagCountryToFlag: Record<string, FlagT> = {}
 const FlagCodeToFlag: Record<string, FlagT> = {}
 const FlagOptions: ComboBoxOptions = { Flags: [] }
 each(Flags, (flag) => {
-  const item = {
+  FlagOptions.Flags.push({
     value: flag.iso_code,
     label: `${flag.name} +${flag.calling_code}`,
-  }
-  FlagOptions.Flags.push({
-    ...item,
     icon: <FlagIcon name={flag.iso_code as VAIcons} />,
   })
   FlagCountryToFlag[flag.iso_code] = flag
   FlagCodeToFlag[flag.calling_code] = flag
 })
+
+// returns the combobox item for a given country calling code
+const getComboboxItemFromCountryCode = (countryCode: string) => {
+  return {
+    label: `${FlagCountryToFlag[countryCode].name} +${FlagCountryToFlag[countryCode].calling_code}`,
+    value: countryCode,
+  }
+}
 
 function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const snackbar = useSnackbar()
@@ -73,11 +80,10 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
-  const [country, setCountry] = useState(
-    phoneData?.countryCode ? FlagCodeToFlag[phoneData?.countryCode].iso_code : DefaultFlagCode,
-  )
-  const [countryCode, setCountryCode] = useState(
-    phoneData?.countryCode || FlagCountryToFlag[DefaultFlagCode].calling_code,
+  const [newCountry, setNewCountry] = useState<ComboBoxItem>(
+    getComboboxItemFromCountryCode(
+      phoneData?.countryCode ? FlagCodeToFlag[phoneData?.countryCode].iso_code : DefaultFlagCode,
+    ),
   )
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
@@ -141,7 +147,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     let phoneDataPayload: PhoneData = {
       areaCode: onlyDigitsNum.substring(0, 3),
-      countryCode: `${countryCode}`,
+      countryCode: `${FlagCountryToFlag[newCountry.value].calling_code}`,
       phoneNumber: onlyDigitsNum.substring(3),
       phoneType,
     }
@@ -166,7 +172,8 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     const save = (): void => {
       const mutateOptions = {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await AsyncStorage.setItem(INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED, 'false')
           snackbar.show(t('contactInformation.phoneNumber.saved', { type: displayTitle }))
         },
         onError: (error: unknown) =>
@@ -209,13 +216,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     }
   }
 
-  const setCountryCodeOnChange = (code: ComboBoxItem | undefined): void => {
-    if (code) {
-      setCountry(code.value)
-      setCountryCode(FlagCountryToFlag[code.value].calling_code)
-    }
-  }
-
   const onEndEditingPhoneNumber = (): void => {
     // Retrieve only digits from text input
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
@@ -237,7 +237,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
-  const flagData = FlagCountryToFlag[country]
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       hideField: !displayInternationalPhoneNumberSelect,
@@ -245,13 +244,15 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
       fieldProps: {
         titleKey: 'editPhoneNumber.selectCountryCode',
         labelKey: 'editPhoneNumber.countryCode',
-        selectedValue: { label: `${flagData.name} +${flagData.calling_code}`, value: flagData.iso_code },
-        onSelectionChange: setCountryCodeOnChange,
+        selectedValue: newCountry,
+        onSelectionChange: (code?: ComboBoxItem) =>
+          setNewCountry(code || getComboboxItemFromCountryCode(DefaultFlagCode)),
         comboBoxOptions: FlagOptions,
         testID: 'countryCode',
-        startIcon: <FlagIcon name={flagData.iso_code as VAIcons} />,
+        startIcon: <FlagIcon name={newCountry.value as VAIcons} />,
         virtualized: true,
         hideRemoveButton: true,
+        hideGroupsHeaders: true,
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [],

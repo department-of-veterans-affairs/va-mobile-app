@@ -4,6 +4,7 @@ export type FlagT = {
   name: string
 }
 export const DefaultFlagCode = 'US'
+export const DefaultCallingCode = '1'
 export const Flags: Array<FlagT> = [
   { iso_code: 'US', calling_code: 1, name: 'United States of America' },
   { iso_code: 'AF', calling_code: 93, name: 'Afghanistan' },

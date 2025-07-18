@@ -27,6 +27,7 @@ import {
   VAScrollView,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { DefaultCallingCode } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import AddressSummary, {
@@ -162,17 +163,19 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   useEffect(() => {
     const checkIntlNumberNotificationSettingsDismissed = async () => {
       const dismissed = await AsyncStorage.getItem(INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED)
-      if (!dismissed) {
+
+      if (dismissed === 'false') {
         setDisplayIntlNumberSettingsAlert(true)
       }
     }
-    // Only check notification dismissal if any phone number is an international phone nu,ber
+
+    // Only check notification dismissal if any phone number is an international phone number
     if (contactInformation) {
       const { workPhone, homePhone, mobilePhone } = contactInformation
       // TODO This should instead check the iso code instead of the calling code
-      const intlMobilePhone = mobilePhone && mobilePhone.countryCode !== '1'
-      const intlWorkPhone = workPhone && workPhone.countryCode !== '1'
-      const intlHomePhone = homePhone && homePhone.countryCode !== '1'
+      const intlMobilePhone = mobilePhone && mobilePhone.countryCode !== DefaultCallingCode
+      const intlWorkPhone = workPhone && workPhone.countryCode !== DefaultCallingCode
+      const intlHomePhone = homePhone && homePhone.countryCode !== DefaultCallingCode
       if (intlMobilePhone || intlWorkPhone || intlHomePhone) {
         checkIntlNumberNotificationSettingsDismissed()
       }
