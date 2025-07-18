@@ -108,11 +108,11 @@ jobs:
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33 # Match your target API level
+          api-level: 28 # Match your target API level
           target: google_apis # Or 'default' if you don't need Google APIs
           arch: x86_64 # Or arm64 for Apple Silicon runners
           avd-name: Pixel_6_Pro_API_33 # This name can be used to explicitly define the AVD name
-          profile: Pixel 6 Pro # Or a different device profile if you want
+          profile: pixel_6_pro # Or a different device profile if you want
           script: yarn detox test -c android --cleanup ./screenshot.e2e.ts # Your actual test command
 
       - name: gather-and-make-app-store-images
