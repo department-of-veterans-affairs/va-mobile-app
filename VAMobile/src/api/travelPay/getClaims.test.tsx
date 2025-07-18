@@ -4,7 +4,8 @@ import { waitFor } from '@testing-library/react-native'
 
 import { useTravelPayClaims } from 'api/travelPay/getClaims'
 import { travelPayKeys } from 'api/travelPay/queryKeys'
-import { GetTravelPayClaimsResponse } from 'api/types'
+import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/timeframes'
 import { get } from 'store/api'
 import { context, render, when } from 'testUtils'
 
@@ -55,12 +56,14 @@ const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
+const params: GetTravelPayClaimsParams = {
+  startDate: '2025-01-01',
+  endDate: '2025-03-31',
+  page: 1,
+}
+
 const TestComponent = () => {
-  useTravelPayClaims({
-    startDate: '2021-01-01',
-    endDate: '2021-12-31',
-    page: 1,
-  })
+  useTravelPayClaims(params)
   return <> </>
 }
 
@@ -68,18 +71,23 @@ context('getClaims', () => {
   describe('getting travel pay claims', () => {
     it('should return the travel pay claims data', async () => {
       when(get as jest.Mock)
-        .calledWith('/v0/travel-pay/claims')
+        .calledWith('/v0/travel-pay/claims', params)
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
 
       const { queryClient } = render(<TestComponent />)
 
-      await waitFor(() => {
-        const data = queryClient.getQueryData([travelPayKeys.claims]) as GetTravelPayClaimsResponse
+      const response = await waitFor(() => {
+        const data = queryClient.getQueryData([
+          travelPayKeys.claims,
+          TimeFrameTypeConstants.PAST_THREE_MONTHS,
+        ]) as GetTravelPayClaimsResponse
+
         expect(data).toBeDefined()
+        return data
       })
 
-      // queryClient.setQueryData(travelPayKeys.claims, MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE);
-      expect(get).toBeCalledWith('/v0/travel-pay/claims')
+      expect(get).toBeCalledWith(`/v0/travel-pay/claims`, params)
+      expect(response).toEqual(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
     })
   })
 })

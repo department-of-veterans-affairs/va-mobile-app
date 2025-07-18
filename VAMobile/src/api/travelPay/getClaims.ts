@@ -2,17 +2,16 @@ import { useQuery } from '@tanstack/react-query'
 
 import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
-import { get } from 'store/api'
+import { TimeFrameTypeConstants } from 'constants/timeframes'
+import { Params, get } from 'store/api'
 
 /**
  * Fetch paginated travel pay claims
  */
-const getClaims = async (_params: GetTravelPayClaimsParams): Promise<GetTravelPayClaimsResponse | undefined> => {
-  // const { startDate, endDate, page } = params
+const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPayClaimsResponse | undefined> => {
   console.log('get claims!!: ', getClaims)
-  // const url = `/v0/travel-pay/claims?start_date=${startDate}&end_date=${endDate}&page_number=${page}`
   const url = `/v0/travel-pay/claims`
-  const response = await get<GetTravelPayClaimsResponse>(url)
+  const response = await get<GetTravelPayClaimsResponse>(url, params as unknown as Params) // TODO: SC check
   return response
 }
 
@@ -22,7 +21,7 @@ const getClaims = async (_params: GetTravelPayClaimsParams): Promise<GetTravelPa
 export const useTravelPayClaims = (params: GetTravelPayClaimsParams) => {
   // TODO: sc: check for downtime and other considerations - do they apply here?
   return useQuery({
-    queryKey: [travelPayKeys.claims], // TODO: fix up
+    queryKey: [travelPayKeys.claims, TimeFrameTypeConstants.PAST_THREE_MONTHS],
     queryFn: () => getClaims(params),
     meta: {
       errorName: 'getClaims: Service error',
