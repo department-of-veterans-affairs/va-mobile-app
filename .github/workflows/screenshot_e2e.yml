@@ -78,6 +78,23 @@ jobs:
         working-directory: VAMobile/ios
         run: pod install
 
+      - name: Decode base64 encoded keys
+        working-directory: VAMobile/android
+        run: |
+          mkdir keys
+          cd keys
+          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          cd ../app
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          working-directory: VAMobile/android
+
       - name: Install Ruby gems
         working-directory: VAMobile/ios
         run: bundle install
