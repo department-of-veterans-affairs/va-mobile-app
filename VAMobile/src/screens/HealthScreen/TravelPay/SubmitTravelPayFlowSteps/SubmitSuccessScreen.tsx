@@ -20,7 +20,6 @@ import { useOrientation, useTheme } from 'utils/hooks'
 
 type SubmitSuccessScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SubmitSuccessScreen'>
 
-
 interface SuccessScreenContent {
   /** Main heading text displayed at the top of the screen */
   heading: string
@@ -34,28 +33,39 @@ interface SuccessScreenContent {
   actionComponent: React.ReactNode
   /** Additional descriptive text displayed after the action component */
   additionalText: string
-  /** Test ID for the action component used in automated testing */
-  actionTestID: string
 }
 
-const ContentSection = ({ heading, description, instructionText, sectionTitle, additionalText, actionComponent }: SuccessScreenContent) => {
+const ContentSection = ({
+  heading,
+  description,
+  instructionText,
+  sectionTitle,
+  additionalText,
+  actionComponent,
+}: SuccessScreenContent) => {
   const theme = useTheme()
   return (
     <>
-      <TextView testID="successTitleID" variant="BitterHeading" accessibilityRole="header">
+      <TextView testID="successContentHeaderID" variant="BitterHeading" accessibilityRole="header">
         {heading}
       </TextView>
-      <TextView testID="successTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+      <TextView testID="successContentDescriptionID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
         {description}
       </TextView>
-      <TextView testID="successNextTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
+      <TextView
+        testID="successContentSectionTitleID"
+        variant="MobileBodyBold"
+        mt={theme.dimensions.standardMarginBetween}>
         {sectionTitle}
       </TextView>
-      <TextView testID="successNextTextID" variant="MobileBody">
+      <TextView testID="successContentInstructionTextID" variant="MobileBody">
         {instructionText}
       </TextView>
       <Box mt={theme.dimensions.condensedMarginBetween}>{actionComponent}</Box>
-      <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
+      <TextView
+        testID="successContentAdditionalTextID"
+        variant="MobileBody"
+        mt={theme.dimensions.condensedMarginBetween}>
         {additionalText}
       </TextView>
     </>
@@ -79,7 +89,6 @@ const getContent = (
       instructionText: t('travelPay.partialSuccess.nextText'),
       sectionTitle: t('travelPay.success.nextTitle'),
       additionalText: t('travelPay.setUpDirectDeposit.eligible'),
-      actionTestID: 'finishTravelClaimLinkID',
       actionComponent: <FileOnBTSSSLink text={t('travelPay.partialSuccess.link')} testID="finishTravelClaimLinkID" />,
     }
   }
@@ -94,7 +103,6 @@ const getContent = (
     instructionText: t('travelPay.success.nextText'),
     sectionTitle: t('travelPay.success.nextTitle'),
     additionalText: t('travelPay.setUpDirectDeposit.eligible'),
-    actionTestID: 'goToAppointmentLinkID',
     actionComponent: (
       <LinkWithAnalytics
         type="custom"
