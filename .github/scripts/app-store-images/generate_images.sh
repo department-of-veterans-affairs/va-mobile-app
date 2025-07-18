@@ -6,8 +6,8 @@ set -e
 # This is needed for local runs
 # cd ../../../VAMobile/
 
-echo "Gahtering Android screens.."
-yarn jest:clear && yarn detox test -c android --cleanup ./screenshot.e2e.ts
+# echo "Gahtering Android screens.."
+# yarn jest:clear && yarn detox test -c android --cleanup ./screenshot.e2e.ts
 
 # echo "Gathering iOS screens.."
 # yarn jest:clear && yarn detox test -c ios --cleanup ./screenshot.e2e.ts
