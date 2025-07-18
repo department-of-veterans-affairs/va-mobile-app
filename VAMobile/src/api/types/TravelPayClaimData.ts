@@ -27,6 +27,12 @@ export type SubmitTravelPayClaimResponse = {
   }
 }
 
+export type GetTravelPayClaimsParams = {
+  startDate?: string
+  endDate?: string
+  page?: number
+}
+
 export type GetTravelPayClaimsResponse = {
   metadata: {
     totalRecordCount: number
