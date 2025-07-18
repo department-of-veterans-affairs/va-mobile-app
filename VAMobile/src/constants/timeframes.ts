@@ -33,9 +33,3 @@ export type TimeFrameDropDownItem = {
   }
   timeFrame: TimeFrameType
 }
-
-export type DayMonthOrYearDropDownItem = {
-  label: string
-  value: string
-  testID: string
-}

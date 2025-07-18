@@ -22,6 +22,7 @@ import {
   LoadingComponent,
   Pagination,
   PaginationProps,
+  PickerItem,
   TextLine,
   TextView,
   VAModalPicker,
@@ -30,7 +31,6 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { DayMonthOrYearDropDownItem } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import NoLabsAndTestsRecords from 'screens/HealthScreen/LabsAndTests/NoLabsAndTestsRecords/NoLabsAndTestsRecords'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -76,7 +76,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     display: string
   }>(createApiParamObject(selectedMonth, selectedYear))
 
-  const allMonthsOptions: Array<DayMonthOrYearDropDownItem> = useMemo(() => {
+  const allMonthsOptions: Array<PickerItem> = useMemo(() => {
     return MONTHS.map((month) => {
       return {
         label: month,
@@ -86,7 +86,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     })
   }, [t])
 
-  const allYearsOptions: Array<DayMonthOrYearDropDownItem> = useMemo(() => {
+  const allYearsOptions: Array<PickerItem> = useMemo(() => {
     const currentYear = new Date().getFullYear()
     const years = getListOfYearsSinceYear(currentYear - 100)
     return years.map((year) => {
