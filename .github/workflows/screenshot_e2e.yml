@@ -9,8 +9,6 @@ on:
   #   paths:
   #     - "VAMobile/e2e/screenshots/screenshot_data.ts"
   workflow_dispatch:
-# concurrency:
-#   cancel-in-progress: true
 
 defaults:
   run:
@@ -34,7 +32,7 @@ jobs:
       message: "Generating new App Store images for iOS and Android. Please see :thread: for results. This process may take a while."
 
   generate-screenshots:
-    runs-on: macos-latest
+    runs-on: macos-latest-large
     outputs:
       outcome: ${{ steps.run_images.outcome }}
     steps:
