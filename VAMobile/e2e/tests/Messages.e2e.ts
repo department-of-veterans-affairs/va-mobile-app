@@ -40,6 +40,7 @@ export const MessagesE2eIdConstants = {
   START_NEW_MESSAGE_ID: 'startNewMessageTestID',
   START_NEW_MESSAGE_SAVE_ID: 'startNewMessageSaveTestID',
   START_NEW_MESSAGE_CANCEL_ID: 'startNewMessageCancelTestID',
+  START_NEW_MESSAGE_NON_URGENT_WARNING: 'startNewMessageNonUrgentWarning',
   MESSAGE_CANCEL_DELETE_TEXT: device.getPlatform() === 'ios' ? 'Delete' : 'Delete ',
   MESSAGE_CANCEL_SAVE_TEXT: device.getPlatform() === 'ios' ? 'Save' : 'Save ',
   EDIT_DRAFT_MESSAGE_FIELD_ID: 'messageText',
@@ -333,6 +334,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CATEGORY_ID))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_MESSAGE_FIELD_ID))).toExist()
+    await expect(element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_NON_URGENT_WARNING))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.START_NEW_MESSAGE_ADD_FILES_TEXT))).toExist()
   })
 
