@@ -30,7 +30,7 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameDropDownItem, TimeFrameTypeConstants } from 'constants/timeframes'
+import { DayMonthOrYearDropDownItem } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import NoLabsAndTestsRecords from 'screens/HealthScreen/LabsAndTests/NoLabsAndTestsRecords/NoLabsAndTestsRecords'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -41,9 +41,6 @@ import { MONTHS, getCurrentMonth, getDateRange, getFormattedDate, getListOfYears
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-// import { TimeFrameDropDownItem } from './TimeFrameType'
-// import { TimeFrameTypeConstants } from './constants'
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -79,22 +76,17 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     display: string
   }>(createApiParamObject(selectedMonth, selectedYear))
 
-  const allMonthsOptions: Array<TimeFrameDropDownItem> = useMemo(() => {
+  const allMonthsOptions: Array<DayMonthOrYearDropDownItem> = useMemo(() => {
     return MONTHS.map((month) => {
       return {
         label: month,
         value: month,
         testID: t('labsAndTests.list.dateFilter.monthA11y', { date1: month }),
-        dates: {
-          startDate: DateTime.now(),
-          endDate: DateTime.now(),
-        },
-        timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       }
     })
   }, [t])
 
-  const allYearsOptions: Array<TimeFrameDropDownItem> = useMemo(() => {
+  const allYearsOptions: Array<DayMonthOrYearDropDownItem> = useMemo(() => {
     const currentYear = new Date().getFullYear()
     const years = getListOfYearsSinceYear(currentYear - 100)
     return years.map((year) => {
@@ -102,11 +94,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         label: year,
         value: year,
         testID: t('labsAndTests.list.dateFilter.yearA11y', { date1: year }),
-        dates: {
-          startDate: DateTime.now(),
-          endDate: DateTime.now(),
-        },
-        timeFrame: TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
       }
     })
   }, [t])
