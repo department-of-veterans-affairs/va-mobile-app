@@ -6,10 +6,6 @@ set -e
 # This is needed for local runs
 # cd ../../../VAMobile/
 
-# echo "Bundling  and building.."
-# yarn e2e:ios-build
-# yarn e2e:android-build
-
 echo "Gahtering Android screens.."
 yarn jest:clear && detox test -c android --cleanup ./screenshot.e2e.ts
 
@@ -21,7 +17,6 @@ yarn jest:clear && detox test -c ipad --cleanup ./screenshot.e2e.ts
 
 echo "navigating to script directory.."
 cd ./.github/scripts/app-store-images
-
 
 echo "Moving Images.."
 ./move_screenshots.sh

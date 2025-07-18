@@ -71,9 +71,6 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
 
-      # - name: Set app environment variables
-      #   run: yarn env:staging lg
-
       - name: Install pods
         working-directory: VAMobile/ios
         run: pod install
@@ -81,6 +78,12 @@ jobs:
       - name: Install Ruby gems
         working-directory: VAMobile/ios
         run: bundle install
+
+      - name: Bundle iOS app
+        run: yarn e2e:ios-build
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
 
       - name: gather-and-make-app-store-images
         id: run_images
