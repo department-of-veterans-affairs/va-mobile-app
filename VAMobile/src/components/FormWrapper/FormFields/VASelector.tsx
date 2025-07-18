@@ -124,7 +124,7 @@ const VASelector: FC<VASelectorProps> = ({
       }
       return (
         // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-        <VAIcon {...errorIconProps} testID="CheckBoxError" accessibilityLabel="CheckBoxError" />
+        <VAIcon {...errorIconProps} testID="Error" accessibilityLabel="CheckBoxError" />
       )
     }
 
