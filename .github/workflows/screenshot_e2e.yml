@@ -117,11 +117,11 @@ jobs:
           script: yarn detox test -c android --cleanup ./screenshot.e2e.ts
 
       - name: Upload artifacts
+        working-directory: VAMobile
         uses: actions/upload-artifact@v4
         with:
           name: "ios-android-app-store-images"
           path: artifacts
-        working-directory: VAMobile
 
       - name: gather-and-make-app-store-images
         id: run_images
