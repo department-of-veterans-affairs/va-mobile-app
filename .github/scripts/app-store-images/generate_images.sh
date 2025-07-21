@@ -15,9 +15,6 @@ set -e
 # echo "Gathering iPad screens.."
 # yarn jest:clear && yarn detox test -c ipad --cleanup ./screenshot.e2e.ts
 
-echo "Current directory is"
-pwd
-
 echo "navigating to script directory.."
 cd ../.github/scripts/app-store-images
 

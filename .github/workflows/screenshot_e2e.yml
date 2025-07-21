@@ -100,11 +100,19 @@ jobs:
         working-directory: VAMobile/ios
         run: bundle install
 
-      # - name: Bundle iOS app
-      #   run: yarn e2e:ios-build
+      - name: Bundle iOS app
+        run: yarn e2e:ios-build
 
       - name: Bundle Android app
         run: yarn e2e:android-build
+
+      - name: Run ios Emulator
+        uses: actions/checkout@v4
+        uses: futureware-tech/simulator-action@v4
+        with:
+          model: 'iPhone 16 Pro Max'
+        run: |
+           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -128,7 +136,6 @@ jobs:
         working-directory: VAMobile
         run: |
           ../.github/scripts/app-store-images/generate_images.sh
-        # continue-on-error: true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
