@@ -19,7 +19,7 @@ echo "Current directory is"
 pwd
 
 echo "navigating to script directory.."
-cd ./.github/scripts/app-store-images
+cd ../.github/scripts/app-store-images
 
 echo "Moving Images.."
 ./move_screenshots.sh
