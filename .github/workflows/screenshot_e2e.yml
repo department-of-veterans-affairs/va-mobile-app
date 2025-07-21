@@ -110,8 +110,16 @@ jobs:
         uses: futureware-tech/simulator-action@v4
         with:
           model: "iPhone 16 Pro Max"
+
+      - name: Run Detox ios steps
         run: |
           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
+
+      - name: Upload ios artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "ios-app-store-images"
+          path: VAMobile/artifacts/*
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -124,10 +132,10 @@ jobs:
           profile: pixel_6_pro
           script: yarn detox test -c android --cleanup ./screenshot.e2e.ts
 
-      - name: Upload artifacts
+      - name: Upload android artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-android-app-store-images"
+          name: "android-app-store-images"
           path: VAMobile/artifacts/*
 
       - name: gather-and-make-app-store-images
