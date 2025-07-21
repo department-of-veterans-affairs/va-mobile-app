@@ -1,1 +1,1 @@
-We added general improvements and fixed a few bugs.
+We updated the app to fix screen reader focus issues on iOS and ensure deep links direct users to the correct page after login. We also improved the styling of the in-app feedback feature for better readability.
