@@ -121,7 +121,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: "ios-android-app-store-images"
-          path: artifacts
+          path: VAMobile/artifacts/*
 
       - name: gather-and-make-app-store-images
         id: run_images
@@ -130,24 +130,11 @@ jobs:
           ../.github/scripts/app-store-images/generate_images.sh
         # continue-on-error: true
 
-      # NOTE: is this needed?
-      # - name: Rerun e2e tests for iOS if failed
-      #   if: steps.run_e2e_tests.outcome == 'failure'
-      #   id: rerun_e2e_tests
-      #   run: |
-      #     yarn jest:clear;
-      #     if [[ "${{ steps.run_e2e_tests.outputs.NAV_AF_TEST_RUN}}" != "" ]]; then
-      #       yarn e2e:ios-test /e2e/tests/Navigation.e2e AvailabilityFramework.e2e ${{matrix.testsuite}}.e2e --updateSnapshot --debug-synchronization 15000
-      #     else
-      #       yarn e2e:ios-test /e2e/tests/${{matrix.testsuite}} --updateSnapshot --debug-synchronization 15000
-      #     fi
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-android-app-store-images"
-          path: VAMobile/artifacts
-          retention-days: 1
+          name: "ios-android-app-store-images-framed"
+          path: ../.github/scripts/app-store-images/framed_images/*
 
   output-slack-results:
     needs: [start_slack_thread, generate-screenshots]
@@ -158,7 +145,8 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Inform Slack of Success
-        if: needs.generate-screenshots.outputs.outcome == 'success'
+        if: ${{ success() }}
+        # if: needs.generate-screenshots.outputs.outcome == 'success'
         id: inform_slack_success
         shell: bash
         run: |
@@ -170,7 +158,8 @@ jobs:
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
 
       - name: Inform Slack of Failure
-        if: needs.generate-screenshots.outputs.outcome == 'failure'
+        if: ${{ failure() }}
+        # if: needs.generate-screenshots.outputs.outcome == 'failure'
         id: inform_slack_failure
         shell: bash
         run: |
