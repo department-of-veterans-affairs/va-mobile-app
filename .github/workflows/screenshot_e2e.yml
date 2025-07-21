@@ -134,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: "ios-android-app-store-images-framed"
-          path: ../.github/scripts/app-store-images/framed_images/*
+          path: .github/scripts/app-store-images/framed_images/*
 
   output-slack-results:
     needs: [start_slack_thread, generate-screenshots]
@@ -145,6 +145,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Inform Slack of Success
+        needds: generate-screenshots
         if: ${{ success() }}
         # if: needs.generate-screenshots.outputs.outcome == 'success'
         id: inform_slack_success
@@ -158,6 +159,7 @@ jobs:
            echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
 
       - name: Inform Slack of Failure
+        needs: generate-screenshots
         if: ${{ failure() }}
         # if: needs.generate-screenshots.outputs.outcome == 'failure'
         id: inform_slack_failure
