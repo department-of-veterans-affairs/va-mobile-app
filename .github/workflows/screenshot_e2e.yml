@@ -107,12 +107,11 @@ jobs:
         run: yarn e2e:android-build
 
       - name: Run ios Emulator
-        uses: actions/checkout@v4
         uses: futureware-tech/simulator-action@v4
         with:
-          model: 'iPhone 16 Pro Max'
+          model: "iPhone 16 Pro Max"
         run: |
-           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
+          yarn detox test -c ios --cleanup ./screenshot.e2e.ts
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
