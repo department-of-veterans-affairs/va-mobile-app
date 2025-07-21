@@ -1,13 +1,14 @@
 import React from 'react'
 
-import { waitFor } from '@testing-library/react-native'
+import { NavigationContainer } from '@react-navigation/native'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { renderHook, waitFor } from '@testing-library/react-native'
 
 import { useTravelPayClaims } from 'api/travelPay/getClaims'
-import { travelPayKeys } from 'api/travelPay/queryKeys'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
-import { TimeFrameTypeConstants } from 'constants/timeframes'
 import { get } from 'store/api'
-import { context, render, when } from 'testUtils'
+import { context, when } from 'testUtils'
 
 const mockDispatchSpy = jest.fn()
 
@@ -62,9 +63,13 @@ const params: GetTravelPayClaimsParams = {
   page: 1,
 }
 
-const TestComponent = () => {
-  useTravelPayClaims(params)
-  return <> </>
+const wrapper = ({ children }: { children: React.ReactNode }) => {
+  const queryClient = new QueryClient()
+  return (
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
+    </QueryClientProvider>
+  )
 }
 
 context('getClaims', () => {
@@ -74,19 +79,15 @@ context('getClaims', () => {
         .calledWith('/v0/travel-pay/claims', params)
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
 
-      const { queryClient } = render(<TestComponent />)
-
+      // useTravelPayClaims will call the get claims endpoint and populate the query data
+      const { result } = renderHook(() => useTravelPayClaims(params), { wrapper })
       const response = await waitFor(() => {
-        const data = queryClient.getQueryData([
-          travelPayKeys.claims,
-          TimeFrameTypeConstants.PAST_THREE_MONTHS,
-        ]) as GetTravelPayClaimsResponse
-
-        expect(data).toBeDefined()
-        return data
+        expect(result.current.data).toBeDefined()
+        return result.current.data
       })
 
-      expect(get).toBeCalledWith(`/v0/travel-pay/claims`, params)
+      // Check the hook called the correct endpoint and received the correct response
+      expect(get).toBeCalledWith('/v0/travel-pay/claims', params)
       expect(response).toEqual(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
     })
   })
