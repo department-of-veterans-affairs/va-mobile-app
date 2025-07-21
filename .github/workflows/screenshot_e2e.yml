@@ -113,9 +113,7 @@ jobs:
 
       - name: Bundle iOS app
         run: yarn e2e:ios-build
-
-      - name: Bundle Android app
-        run: yarn e2e:android-build
+        working-directory: VAMobile
 
       - name: Run ios Emulator
         uses: futureware-tech/simulator-action@v4
@@ -125,12 +123,17 @@ jobs:
       - name: Run Detox ios steps
         run: |
           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
+        working-directory: VAMobile
 
       - name: Upload ios artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "ios-app-store-images"
           path: VAMobile/artifacts/*
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
+        working-directory: VAMobile
 
       - name: Run Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
@@ -141,7 +144,10 @@ jobs:
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
           profile: pixel_6_pro
-          script: yarn detox test -c android --cleanup ./screenshot.e2e.ts
+
+      - name: Run Detox Android Steps
+        run: yarn detox test -c android --cleanup ./screenshot.e2e.ts
+        working-directory: VAMobile
 
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4
@@ -162,7 +168,7 @@ jobs:
           path: .github/scripts/app-store-images/framed_images/*
 
   output-slack-results:
-    needs: [start_slack_thread, generate-screenshots]
+    needs: generate-screenshots
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
