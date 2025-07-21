@@ -145,7 +145,7 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: Inform Slack of Success
-        needds: generate-screenshots
+        needs: generate-screenshots
         if: ${{ success() }}
         # if: needs.generate-screenshots.outputs.outcome == 'success'
         id: inform_slack_success
