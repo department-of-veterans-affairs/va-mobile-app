@@ -49,7 +49,8 @@ const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
         appointmentDateTime: '2023-02-23T22:22:52.549Z',
         facilityId: '442',
         facilityName: 'Tomah VA Medical Center',
-        totalCostRequested: 10.26,
+        totalCostRequested: 10.5,
+        reimbursementAmount: 5.25,
         createdOn: '2023-02-24T22:22:52.549Z',
         modifiedOn: '2023-02-26T22:22:52.549Z',
       },
@@ -74,7 +75,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
 
 context('getClaims', () => {
   describe('getting travel pay claims', () => {
-    it('should return the travel pay claims data', async () => {
+    it('should return the travel pay claims data from the hook', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/travel-pay/claims', params)
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)

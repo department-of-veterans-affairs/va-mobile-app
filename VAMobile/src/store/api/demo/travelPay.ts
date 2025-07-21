@@ -8,7 +8,7 @@ type TravelPayClaimsData = {
   '/v0/travel-pay/claims': GetTravelPayClaimsResponse
 }
 export type TravelPayDemoStore = TravelPayClaimsData
-export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse // TODO: SC: need undefined?
+export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
   data: {
@@ -54,10 +54,6 @@ export const submitAppointmentClaim = (params: SubmitSMOCTravelPayClaimParameter
   return createMockClaimResponse(params)
 }
 
-export const getTravelPayClaims = (store: DemoStore, params: Params, endpoint: string): GetTravelPayClaimsResponse => {
-  // const startDate = DateTime.fromISO(params.startDate.toString());
-  // const endDate = DateTime.fromISO(params.endDate.toString())
-  // const page = params['page[number]'] || '1'
-  // TODO: sc: factor in start date, end data, page when returning mock data?
+export const getTravelPayClaims = (store: DemoStore, _params: Params, endpoint: string): GetTravelPayClaimsResponse => {
   return store[endpoint as keyof TravelPayDemoStore] as GetTravelPayClaimsResponse
 }
