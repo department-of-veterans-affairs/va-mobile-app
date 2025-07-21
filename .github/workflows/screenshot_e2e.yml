@@ -21,6 +21,18 @@ env:
   APP_CLIENT_SECRET_PROD: ${{ secrets.APP_CLIENT_SECRET_PROD }}
   # Slack API token
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  # App Store Connect Issuer ID
+  APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
+  # App Store Connect Key Id
+  APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
+  # Path to write secret key to. Also used by fastlane
+  APPSTORE_CONNECT_FILEPATH: "./AppStoreConnectKey.p8"
+  # Xcode project file name
+  IOS_PROJ_FILE: "VAMobile.xcodeproj"
+  # Xcode scheme to build
+  IOS_SCHEME: "VAMobileRelease"
+  # Fast lane patch password
+  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
 jobs:
   start_slack_thread:
@@ -40,12 +52,11 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      # NOTE: is this needed?
-      # - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
-      #   working-directory: VAMobile/ios
-      #   run: |
-      #     echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-      #     echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+      - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
+        working-directory: VAMobile/ios
+        run: |
+          echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
+          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
 
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
