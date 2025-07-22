@@ -1,14 +1,10 @@
-import React, { FC } from 'react'
-import { TouchableWithoutFeedback } from 'react-native'
-
-import { useFocusEffect } from '@react-navigation/native'
+import React, { forwardRef } from 'react'
+import { TouchableWithoutFeedback, View } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-
-import Box from './Box'
-import TextView from './TextView'
+import { Box, TextView } from 'components'
+import { useTheme } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link DescriptiveBackButton}
@@ -29,44 +25,38 @@ export type DescBackButtonProps = {
 /**
  * Descriptive button used by the stack navigation to go back to the previous screen
  */
-export const DescriptiveBackButton: FC<DescBackButtonProps> = ({
-  onPress,
-  label,
-  labelA11y,
-  focusOnButton = true,
-  backButtonTestID,
-}) => {
-  const theme = useTheme()
+export const DescriptiveBackButton = forwardRef<View, DescBackButtonProps>(
+  ({ onPress, label, labelA11y, backButtonTestID }, ref) => {
+    const theme = useTheme()
 
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+    if (!onPress) {
+      return null
+    }
 
-  useFocusEffect(focusOnButton ? setFocus : () => {})
-  if (!onPress) {
-    return null
-  }
-
-  return (
-    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-    <TouchableWithoutFeedback
-      ref={focusRef}
-      onPress={onPress}
-      accessibilityRole="link"
-      accessibilityLabel={labelA11y ? labelA11y : label}
-      testID={backButtonTestID}>
-      <Box
-        display="flex"
-        flexDirection="row"
-        ml={theme.dimensions.headerButtonSpacing}
-        mt={theme.dimensions.buttonPadding}
-        height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
-        alignItems={'center'}>
-        <Icon name={'ChevronLeft'} fill={theme.colors.icon.link} width={30} height={28} maxWidth={36} />
-        <TextView variant="DescriptiveBackButton" color="link" allowFontScaling={false} accessible={false}>
-          {label}
-        </TextView>
-      </Box>
-    </TouchableWithoutFeedback>
-  )
-}
+    return (
+      <View ref={ref}>
+        {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
+        <TouchableWithoutFeedback
+          onPress={onPress}
+          accessibilityRole="link"
+          accessibilityLabel={labelA11y ? labelA11y : label}
+          testID={backButtonTestID}>
+          <Box
+            display="flex"
+            flexDirection="row"
+            ml={theme.dimensions.headerButtonSpacing}
+            mt={theme.dimensions.buttonPadding}
+            height={theme.dimensions.headerHeight} // Uniform height ensures proper screen reader order in header
+            alignItems={'center'}>
+            <Icon name={'ChevronLeft'} fill={theme.colors.icon.link} width={30} height={28} maxWidth={36} />
+            <TextView variant="DescriptiveBackButton" color="link" allowFontScaling={false} accessible={false}>
+              {label}
+            </TextView>
+          </Box>
+        </TouchableWithoutFeedback>
+      </View>
+    )
+  },
+)
 
 export default DescriptiveBackButton
