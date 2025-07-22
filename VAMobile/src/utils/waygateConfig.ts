@@ -63,7 +63,6 @@ export type WaygateToggleType =
   | 'WG_LabsAndTestsDetails'
   | 'WG_LabsAndTestsList'
   | 'WG_ViewMessage'
-  | 'WG_PrepareForVideoVisit'
   | 'WG_StartNewMessage'
   | 'WG_ReplyMessage'
   | 'WG_EditDraft'
@@ -148,7 +147,6 @@ type WaygateToggleValues = {
   WG_LabsAndTestsDetails: Waygate
   WG_LabsAndTestsList: Waygate
   WG_ViewMessage: Waygate
-  WG_PrepareForVideoVisit: Waygate
   WG_SubmitEvidence: Waygate
   WG_StartNewMessage: Waygate
   WG_ReplyMessage: Waygate
@@ -242,7 +240,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_LabsAndTestsDetails: { ...waygateDefault },
   WG_LabsAndTestsList: { ...waygateDefault },
   WG_ViewMessage: { ...waygateDefault },
-  WG_PrepareForVideoVisit: { ...waygateDefault },
   WG_StartNewMessage: { ...waygateDefault },
   WG_ReplyMessage: { ...waygateDefault },
   WG_EditDraft: { ...waygateDefault },
