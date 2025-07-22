@@ -94,7 +94,7 @@ export const getCurrentMonth = (): string => {
 export const getMonthNumber = (month: string): number => {
   const months = MONTHS
   const monthIndex = months.indexOf(month)
-  return monthIndex !== -1 ? monthIndex + 1 : -1 // Months are
+  return monthIndex !== -1 ? monthIndex + 1 : -1
 }
 
 export const MONTHS = [

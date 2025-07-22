@@ -37,7 +37,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { MONTHS, getCurrentMonth, getDateRange, getFormattedDate, getListOfYearsSinceYear } from 'utils/dateUtils'
+import { MONTHS, getCurrentMonth, getFormattedDate, getListOfYearsSinceYear } from 'utils/dateUtils'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -66,14 +66,12 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       startDate: getFormattedDate(startDate.toISOString(), 'yyyy-MM-dd'),
       endDate: getFormattedDate(endDate.toISOString(), 'yyyy-MM-dd'),
       timeFrame: `${month}-${year}`,
-      display: getDateRange(DateTime.fromJSDate(startDate), DateTime.fromJSDate(endDate), 'MMMM dd, yyyy'),
     }
   }
   const [selectedDateRange, setSelectedDateRange] = useState<{
     startDate: string
     endDate: string
     timeFrame: string
-    display: string
   }>(createApiParamObject(selectedMonth, selectedYear))
 
   const allMonthsOptions: Array<PickerItem> = useMemo(() => {
@@ -81,10 +79,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       return {
         label: month,
         value: month,
-        testID: t('labsAndTests.list.dateFilter.monthA11y', { date1: month }),
+        testID: 'monthFilterTestID-${month}',
       }
     })
-  }, [t])
+  }, [])
 
   const allYearsOptions: Array<PickerItem> = useMemo(() => {
     const currentYear = new Date().getFullYear()
@@ -93,10 +91,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       return {
         label: year,
         value: year,
-        testID: t('labsAndTests.list.dateFilter.yearA11y', { date1: year }),
+        testID: 'yearFilterTestID-${year}',
       }
     })
-  }, [t])
+  }, [])
 
   const onMonthSelectionChange = (selectValue: string) => {
     const curSelectedMonth = allMonthsOptions.find((el) => el.value === selectValue)
@@ -122,12 +120,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   }
 
   const applyNewDateFilters = useCallback(() => {
-    const { startDate, endDate, timeFrame, display } = createApiParamObject(selectedMonth, selectedYear)
+    const { startDate, endDate, timeFrame } = createApiParamObject(selectedMonth, selectedYear)
     setSelectedDateRange({
       startDate,
       endDate,
       timeFrame,
-      display,
     })
   }, [selectedMonth, selectedYear])
 
