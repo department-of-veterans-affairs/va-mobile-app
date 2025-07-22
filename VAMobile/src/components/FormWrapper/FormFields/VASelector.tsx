@@ -5,13 +5,12 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
+import { Box, BoxProps, TextView } from 'components'
+import { renderInputError } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-
-import { Box, BoxProps, TextView } from '../../index'
-import { renderInputError } from './formFieldUtils'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',
