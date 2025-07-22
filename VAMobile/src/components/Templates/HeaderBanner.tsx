@@ -280,7 +280,6 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                   label={leftButton.text}
                   labelA11y={leftButton.a11yLabel}
                   onPress={leftButton.onPress}
-                  focusOnButton={focus === 'Left'}
                   backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
