@@ -101,7 +101,7 @@ jobs:
 
       - name: Run Detox iOS (iPhone) steps
         run: |
-          yarn detox test -c ios --cleanup ./screenshot.e2e.ts
+          yarn detox test -c ios ./screenshot.e2e.ts
         working-directory: VAMobile
 
       - name: Upload iOS artifacts
@@ -171,7 +171,7 @@ jobs:
 
       - name: Run Detox iPad steps
         run: |
-          yarn detox test -c ipad --cleanup ./screenshot.e2e.ts
+          yarn detox test -c ipad ./screenshot.e2e.ts
         working-directory: VAMobile
 
       - name: Download iPhone screenshots
