@@ -44,7 +44,7 @@ jobs:
       message: "Generating new App Store images for iOS and Android. Please see :thread: for results. This process may take a while."
 
   generate-screenshots:
-    runs-on: macos-latest-large
+    runs-on: macos-latest-xlarge
     outputs:
       outcome: ${{ steps.run_images.outcome }}
     steps:
@@ -131,30 +131,30 @@ jobs:
           name: "ios-app-store-images"
           path: VAMobile/artifacts/*
 
-      - name: Bundle Android app
-        run: yarn e2e:android-build
-        working-directory: VAMobile
-
-      - name: Run Android Emulator
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 28
-          working-directory: VAMobile
-          target: google_apis
-          arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
-          profile: pixel_6_pro
-
-      - name: Run Detox Android Steps
-        run: yarn detox test -c android --cleanup ./screenshot.e2e.ts
-        working-directory: VAMobile
-
-      - name: Upload android artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: "android-app-store-images"
-          path: VAMobile/artifacts/*
-
+      # - name: Bundle Android app
+      #   run: yarn e2e:android-build
+      #   working-directory: VAMobile
+      #
+      # - name: Run Android Emulator
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 28
+      #     working-directory: VAMobile
+      #     target: google_apis
+      #     arch: x86_64
+      #     avd-name: Pixel_6_Pro_API_33
+      #     profile: pixel_6_pro
+      #
+      # - name: Run Detox Android Steps
+      #   run: yarn detox test -c android --cleanup ./screenshot.e2e.ts
+      #   working-directory: VAMobile
+      #
+      # - name: Upload android artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: "android-app-store-images"
+      #     path: VAMobile/artifacts/*
+      #
       - name: gather-and-make-app-store-images
         id: run_images
         working-directory: VAMobile
