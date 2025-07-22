@@ -11,6 +11,12 @@ export type TravelPayClaimSummary = {
   modifiedOn: string
 }
 
+export type TravelPayClaimData = {
+  id: string
+  type: string
+  attributes: TravelPayClaimSummary
+}
+
 export type SubmitSMOCTravelPayClaimParameters = {
   appointmentDateTime: string
   facilityStationNumber: string
@@ -39,9 +45,5 @@ export type GetTravelPayClaimsResponse = {
     pageNumber: number
     status: number // will be either 200 if all claims returned, 206 if only some claims returned
   }
-  data: {
-    id: string
-    type: string
-    attributes: TravelPayClaimSummary
-  }[]
+  data: Array<TravelPayClaimData>
 }
