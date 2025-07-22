@@ -16,8 +16,6 @@ export type DescBackButtonProps = {
   label: string
   /** already translated a11y text */
   labelA11y?: string
-  /** boolean to specify if we want accessibility to focus on the back button */
-  focusOnButton?: boolean
   /** optional testID */
   backButtonTestID?: string
 }
