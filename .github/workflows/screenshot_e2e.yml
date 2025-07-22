@@ -213,7 +213,7 @@ jobs:
         run: yarn e2e:android-build
         working-directory: VAMobile
 
-      - name: Run Android Emulator
+      - name: Run Detox Android Steps
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 28
@@ -222,10 +222,7 @@ jobs:
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
           profile: pixel_6_pro
-
-      - name: Run Detox Android Steps
-        run: yarn detox test -c android ./screenshot.e2e.ts
-        working-directory: VAMobile
+          script: yarn detox test -c android ./screenshot.e2e.ts
 
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4
