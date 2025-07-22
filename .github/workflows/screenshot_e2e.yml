@@ -113,9 +113,6 @@ jobs:
   generate-ipad-screenshots:
     name: Generate iPad Screenshots
     runs-on: macos-latest-xlarge
-    needs: generate-iphone-screenshots
-    outputs:
-      outcome: ${{ steps.run_images.outcome }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -174,19 +171,103 @@ jobs:
           yarn detox test -c ipad ./screenshot.e2e.ts
         working-directory: VAMobile
 
+      - name: Upload iPad artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "ios-ipad-screenshots"
+          path: VAMobile/artifacts/
+
+  generate-android-screenshots:
+    name: Generate Android Screenshots
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: "VAMobile/.nvmrc"
+          cache: "yarn"
+          cache-dependency-path: "./VAMobile/yarn.lock"
+
+      - name: Install npm dependencies
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Set app environment variables
+        run: yarn env:staging
+
+      - name: Decode base64 encoded keys
+        working-directory: VAMobile/android
+        run: |
+          mkdir keys
+          cd keys
+          echo "${{ secrets.GOOGLE_KS }}" | base64 --decode > vamobile
+          echo "${{ secrets.GOOGLE_SA_JSON }}" | base64 --decode > service-account.json
+          echo "${{ secrets.FIREBASE_DIST_FILE_BASE64 }}" | base64 --decode > firebase-dist.json
+          cd ../app
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+
+      - name: Bundle Android app
+        run: yarn e2e:android-build
+        working-directory: VAMobile
+
+      - name: Run Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 28
+          working-directory: VAMobile
+          target: google_apis
+          arch: x86_64
+          avd-name: Pixel_6_Pro_API_33
+          profile: pixel_6_pro
+
+      - name: Run Detox Android Steps
+        run: yarn detox test -c android ./screenshot.e2e.ts
+        working-directory: VAMobile
+
+      - name: Upload android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "android-screenshots"
+          path: VAMobile/artifacts/*
+
+  combine-and-frame-images:
+    name: Combine and Frame Images
+    runs-on: ubuntu-latest
+    needs: [generate-iphone-screenshots, generate-ipad-screenshots, generate-android-screenshots]
+    outputs:
+      outcome: ${{ steps.run_images.outcome }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
         with:
           name: "ios-iphone-screenshots"
           path: VAMobile/artifacts_iphone
 
+      - name: Download iPad screenshots
+        uses: actions/download-artifact@v4
+        with:
+          name: "ios-ipad-screenshots"
+          path: VAMobile/artifacts_ipad
+
+      - name: Download Android screenshots
+        uses: actions/download-artifact@v4
+        with:
+          name: "android-screenshots"
+          path: VAMobile/artifacts_android
+
       - name: Combine screenshots
         run: |
-          mkdir -p VAMobile/artifacts_combined
-          mv VAMobile/artifacts_iphone/* VAMobile/artifacts_combined/
-          mv VAMobile/artifacts/* VAMobile/artifacts_combined/
-          rm -rf VAMobile/artifacts
-          mv VAMobile/artifacts_combined VAMobile/artifacts
+          mkdir -p VAMobile/artifacts
+          mv VAMobile/artifacts_iphone/* VAMobile/artifacts/
+          mv VAMobile/artifacts_ipad/* VAMobile/artifacts/
+          mv VAMobile/artifacts_android/* VAMobile/artifacts/
         working-directory: .
 
       - name: gather-and-make-app-store-images
@@ -202,7 +283,7 @@ jobs:
           path: .github/scripts/app-store-images/framed_images/*
 
   output-slack-results:
-    needs: generate-ipad-screenshots
+    needs: combine-and-frame-images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
