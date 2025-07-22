@@ -61,6 +61,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travelPayEligible: true,
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -82,17 +83,19 @@ type createProps = {
   startDateUtc?: AppointmentAttributes['startDateUtc']
   travelPayClaim?: AppointmentTravelPayClaim
   appointmentType: AppointmentType
+  travelPayEligible?: boolean
 }
 
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travelPayEligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travelPayEligible }
 }
 
 const tests = [
@@ -100,6 +103,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Community Care',
   },
@@ -107,6 +111,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'In Person VA',
   },
@@ -114,6 +119,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video Atlas',
   },
@@ -121,6 +127,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video GFE',
   },
@@ -128,6 +135,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video Home',
   },
@@ -135,6 +143,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video On Site',
   },
