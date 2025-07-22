@@ -6,8 +6,8 @@ name: "[Utils] Gather iOS and Android screenshots"
 
 on:
   push:
-  #   paths:
-  #     - "VAMobile/e2e/screenshots/screenshot_data.ts"
+  #  paths:
+  #    - "VAMobile/e2e/screenshots/screenshot_data.ts"
   workflow_dispatch:
 
 defaults:
@@ -46,7 +46,7 @@ jobs:
   generate-screenshots:
     runs-on: macos-latest-xlarge
     outputs:
-      outcome: ${{ steps.run_images.outcome }}
+      outcome: ${{ steps.run_images.outcome }} # This output remains tied to the 'run_images' step
     steps:
       - uses: actions/checkout@v3
         with:
@@ -115,33 +115,45 @@ jobs:
         run: yarn e2e:ios-build
         working-directory: VAMobile
 
-      - name: Run ios Emulator
+      # --- iPhone Simulator Steps ---
+      - name: Run iOS (iPhone) Emulator
         uses: futureware-tech/simulator-action@v4
         with:
           model: "iPhone 16 Pro Max"
-          shutdown_after_job: false
 
-      - name: Run Detox ios steps
+      - name: Run Detox iOS (iPhone) steps
         run: |
           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
         working-directory: VAMobile
 
-      - name: Run ios Emulator
+      - name: Explicitly Shut Down and Erase iPhone Simulator
+        run: |
+          echo "Shutting down all simulators..."
+          xcrun simctl shutdown all
+          echo "Erasing all simulator contents and settings..."
+          xcrun simctl erase all
+        shell: bash
+
+      # --- iPad Simulator Steps ---
+      - name: Run iPad Emulator
         uses: futureware-tech/simulator-action@v4
         with:
           model: "iPad Pro 13-inch (M4)"
-          shutdown_after_job: false
+          shutdown_after_job: true
+
       - name: Run Detox iPad steps
         run: |
           yarn detox test -c ipad --cleanup ./screenshot.e2e.ts
         working-directory: VAMobile
 
-      - name: Upload ios artifacts
+      # --- Artifact Uploads ---
+      - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "ios-app-store-images"
           path: VAMobile/artifacts/*
 
+      # Android steps remain commented out as per your original file
       # - name: Bundle Android app
       #   run: yarn e2e:android-build
       #   working-directory: VAMobile
@@ -165,19 +177,20 @@ jobs:
       #   with:
       #     name: "android-app-store-images"
       #     path: VAMobile/artifacts/*
-      #
+
       - name: gather-and-make-app-store-images
-        id: run_images
+        id: run_images # This ID is crucial for the job output
         working-directory: VAMobile
         run: |
           ../.github/scripts/app-store-images/generate_images.sh
 
-      - name: Upload artifacts
+      - name: Upload framed artifacts
         uses: actions/upload-artifact@v4
         with:
           name: "ios-android-app-store-images-framed"
           path: .github/scripts/app-store-images/framed_images/*
 
+  # output-slack-results job (remains as is, assuming it uses the 'outcome' output and thread_ts)
   # output-slack-results:
   #   needs: generate-screenshots
   #   runs-on: ubuntu-latest
@@ -192,11 +205,11 @@ jobs:
   #       shell: bash
   #       run: |
   #         ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-  #            -H 'Content-type: application/json' \
-  #            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created successfully." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
-  #            https://slack.com/api/chat.postMessage|\
-  #            jq -r '.ts')
-  #          echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
+  #           -H 'Content-type: application/json' \
+  #           --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store images created successfully." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
+  #           https://slack.com/api/chat.postMessage|\
+  #           jq -r '.ts')
+  #         echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
   #
   #     - name: Inform Slack of Failure
   #       if: ${{ failure() }}
@@ -204,8 +217,8 @@ jobs:
   #       shell: bash
   #       run: |
   #         ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-  #            -H 'Content-type: application/json' \
-  #            --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store image creation failed." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
-  #            https://slack.com/api/chat.postMessage|\
-  #            jq -r '.ts')
-  #          echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
+  #           -H 'Content-type: application/json' \
+  #           --data '{"channel":"'${{needs.start_slack_thread.outputs.channel_id}}'","thread_ts":"'${{needs.start_slack_thread.outputs.thread_ts}}'","text":"App Store image creation failed." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
+  #           https://slack.com/api/chat.postMessage|\
+  #           jq -r '.ts')
+  #         echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
