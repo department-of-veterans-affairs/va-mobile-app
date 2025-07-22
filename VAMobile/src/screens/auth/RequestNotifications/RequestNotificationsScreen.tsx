@@ -6,11 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useSystemNotificationsSettings } from 'api/notifications'
 import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { isAndroid } from 'utils/platform'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
@@ -22,6 +24,10 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
+  const { data: systemNotificationData } = useSystemNotificationsSettings({
+    enabled: screenContentAllowed('WG_NotificationsSettings'),
+  })
+
   const onSkip = (): void => {
     //This sets the async storage to not display this screen again
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
@@ -30,7 +36,7 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
 
     // Android 12 and lower defaults notifications to ON, set preferences
     // @ts-expect-error
-    if (isAndroid() && parseFloat(Platform.constants.Release) <= 12) {
+    if (isAndroid() && systemNotificationData?.systemNotificationsOn && parseFloat(Platform.constants.Release) <= 12) {
       dispatch(setRequestNotifications(true))
     }
   }
