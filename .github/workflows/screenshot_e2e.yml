@@ -123,7 +123,7 @@ jobs:
 
       - name: Run Detox iOS (iPhone) steps
         run: |
-          yarn detox test -c ios --cleanup ./screenshot.e2e.ts
+          yarn detox test -c ios ./screenshot.e2e.ts
         working-directory: VAMobile
 
       - name: Shut down simulators
