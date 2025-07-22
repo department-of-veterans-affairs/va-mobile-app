@@ -13,8 +13,6 @@ export type FormValidationAlertProps = {
   focusOnError?: boolean
   /**sets if there is validation errors */
   hasValidationError?: boolean
-  /**sets if attempted to save a draft */
-  saveDraftAttempted?: boolean
   /** optional ref for parent scroll view */
   scrollViewRef?: RefObject<ScrollView>
   /** optional list of alertbox failed reasons*/
