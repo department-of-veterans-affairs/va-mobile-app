@@ -126,6 +126,11 @@ jobs:
           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
         working-directory: VAMobile
 
+      - name: Run ios Emulator
+        uses: futureware-tech/simulator-action@v4
+        with:
+          model: "iPad Pro 13-inch (M4)"
+          shutdown_after_job: false
       - name: Run Detox iPad steps
         run: |
           yarn detox test -c ipad --cleanup ./screenshot.e2e.ts
