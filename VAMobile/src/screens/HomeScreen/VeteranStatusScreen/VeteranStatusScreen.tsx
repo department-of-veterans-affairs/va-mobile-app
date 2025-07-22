@@ -24,6 +24,7 @@ import {
   MilitaryBranchEmblem,
   TextView,
   VALogo,
+  WaygateWrapper,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -36,6 +37,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useOrientation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 // import PhotoUpload from 'components/PhotoUpload'
 
@@ -46,13 +48,16 @@ const MAX_WIDTH = 672
 type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranStatus'>
 
 function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
+  const isCardAllowed = screenContentAllowed('WG_VeteranStatusCard')
   const { data: militaryServiceHistoryAttributes } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
   const { data: ratingData } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { data: veteranStatus, isError } = useVeteranStatus({ enabled: false })
+  const { data: veteranStatus, isError } = useVeteranStatus({
+    enabled: isCardAllowed,
+  })
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const veteranStatusConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
@@ -75,6 +80,13 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   useBeforeNavBackListener(navigation, () => {
     registerReviewEvent()
   })
+
+  useEffect(() => {
+    if (!isCardAllowed) {
+      const message = 'VETERAN_STATUS_CARD_BLOCKED_BY_WAYGATE'
+      logAnalyticsEvent(Events.vama_vsc_error_shown(message))
+    }
+  }, [isCardAllowed])
 
   useEffect(() => {
     if (!showError) return
@@ -247,13 +259,15 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
         </>
       ) : isVSCFeatureEnabled ? (
         <>
-          <VeteranStatusCard
-            fullName={personalInfo?.fullName}
-            edipi={personalInfo?.edipi}
-            branch={branch}
-            percentText={percentText}
-            getLatestPeriodOfService={getLatestPeriodOfService}
-          />
+          <WaygateWrapper waygateName="WG_VeteranStatusCard">
+            <VeteranStatusCard
+              fullName={personalInfo?.fullName}
+              edipi={personalInfo?.edipi}
+              branch={branch}
+              percentText={percentText}
+              getLatestPeriodOfService={getLatestPeriodOfService}
+            />
+          </WaygateWrapper>
           {getHelperText()}
         </>
       ) : (
