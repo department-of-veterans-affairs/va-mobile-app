@@ -126,22 +126,10 @@ jobs:
           yarn detox test -c ios --cleanup ./screenshot.e2e.ts
         working-directory: VAMobile
 
-      # - name: Explicitly Shut Down and Erase iPhone Simulator
-      #   run: |
-      #     echo "Shutting down all simulators..."
-      #     xcrun simctl shutdown all
-      #     echo "Erasing all simulator contents and settings..."
-      #     xcrun simctl erase all
-      #   shell: bash
-
-      - name: Explicitly Shut Down and Erase iPhone Simulator
+      - name: Shut down simulators
         run: |
-          echo "Shutting down all simulators..."
+          echo "Shutting down all simulators to prepare for iPad tests."
           xcrun simctl shutdown all
-          echo "Erasing all simulator contents and settings..."
-          xcrun simctl erase all
-          echo "Waiting for 10 seconds for cleanup to settle..."
-          sleep 10
         shell: bash
 
       # --- iPad Simulator Steps ---
