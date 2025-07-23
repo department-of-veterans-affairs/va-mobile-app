@@ -7,5 +7,5 @@
  * ex. 'Regular Chapter 31 $603.33'
  */
 export const a11yLabelPaymentTypeAmount = (paymentType: string, amount: string): string => {
-  return `${paymentType}/${amount}`
+  return `${paymentType}—${amount}`
 }

@@ -82,10 +82,10 @@ export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
 }
 
 /**
- * Returns testID given a ListItems textLines with slash
+ * Returns testID given a ListItems textLines with hyphen
  */
-export const getTestIDFromTextLinesSlash = (textLines: Array<TextLine>): string => {
-  return _.map(textLines, 'text').join('/')
+export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join('—')
 }
 
 /**

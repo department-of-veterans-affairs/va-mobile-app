@@ -7,7 +7,7 @@ import { forEach, groupBy, keys } from 'underscore'
 import { PaymentsByDate, PaymentsData, PaymentsMetaPagination } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { VATheme } from 'styles/theme'
-import { getTestIDFromTextLinesSlash } from 'utils/accessibility'
+import { getTestIDFromTextLinesHyphen } from 'utils/accessibility'
 import { formatDateUtc, getFormattedDate, numberToUSDollars, strNumberToNumber } from 'utils/formattingUtils'
 
 /**
@@ -112,7 +112,7 @@ const getListItemsForPayments = (
       a11yValue,
       onPress: () => onPaymentPress(payment),
       a11yHintText: t('payments.viewDetails'),
-      testId: getTestIDFromTextLinesSlash(textLines),
+      testId: getTestIDFromTextLinesHyphen(textLines),
     })
   })
 

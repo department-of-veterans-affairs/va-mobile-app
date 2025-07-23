@@ -11,8 +11,8 @@ import { CommonE2eIdConstants, loginToDemoMode, openPayments, openVAPaymentHisto
 export const PaymentsE2eIDConstants = {
   PAYMENTS_YEAR_PICKER_ID: 'selectAYearTestID',
   MISSING_PAYMENTS_LINK_ID: 'missingPaymentsTestID',
-  PAYMENT_HISTORY_1_ID: 'Regular Chapter 31/$603.33',
-  PAYMENT_HISTORY_2_ID: 'Post-9/11 GI Bill/$1,172.60',
+  PAYMENT_HISTORY_1_ID: 'Regular Chapter 31—$603.33',
+  PAYMENT_HISTORY_2_ID: 'Post-9/11 GI Bill—$1,172.60',
   PAYMENT_INFO_INCORRECT_ID: 'paymentInfoIncorrectTestID',
   PAYMENT_MISSING_ID: 'paymentsMissingPanelID',
   PAYMENT_MISSING_CLOSE_ID: 'paymentsMissingCloseID',
