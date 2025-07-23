@@ -326,9 +326,9 @@ jobs:
         id: inform_slack_success
         shell: bash
         run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}" ' \
+          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}"'
             -H 'Content-type: application/json' \
-            --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store images created successfully." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
+            --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store images created successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
             https://slack.com/api/chat.postMessage|\
             jq -r '.ts')
           echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
@@ -338,9 +338,9 @@ jobs:
         id: inform_slack_failure
         shell: bash
         run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}" ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store image creation failed." See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' \
+          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}"'
+            -H 'Content-type: application/json'
+            --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store image creation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}'
             https://slack.com/api/chat.postMessage|\
             jq -r '.ts')
           echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
