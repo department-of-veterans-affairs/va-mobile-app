@@ -106,6 +106,7 @@ export const CommonE2eIdConstants = {
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
   LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
+  TRAVEL_BUTTON_ID: 'toTravelID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
@@ -402,6 +403,10 @@ export async function openHealth() {
 
 export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
+}
+
+export async function openTravelReimbursement() {
+  await element(by.id(CommonE2eIdConstants.TRAVEL_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {

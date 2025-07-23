@@ -8,13 +8,12 @@ import { appointmentsKeys } from 'api/appointments'
 import { prescriptionKeys } from 'api/prescriptions'
 import { secureMessagingKeys } from 'api/secureMessaging'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
+import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
-
-import { HealthScreen } from './HealthScreen'
 
 const mockNavigationSpy = jest.fn()
 
@@ -93,6 +92,31 @@ context('HealthScreen', () => {
       await waitFor(() =>
         expect(screen.queryByText(`in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`, { exact: false })).toBeFalsy(),
       )
+    })
+  })
+
+  describe('Travel button', () => {
+    it('navigates to Travel Reimbursement screen when pressed', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      initializeTestInstance()
+      fireEvent.press(screen.getByText('Travel'))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelReimbursement')
+    })
+
+    it('is not displayed if feature toggle is disabled', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(false)
+      initializeTestInstance()
+      expect(screen.getByText('Appointments')).toBeTruthy()
+      expect(screen.queryByText('Travel')).toBeFalsy()
+      expect(screen.getByText('Messages')).toBeTruthy()
+      expect(screen.queryByText('Prescriptions')).toBeFalsy()
+      expect(screen.getByText('Medical records')).toBeTruthy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      initializeTestInstance()
+      expect(screen.getByText('Travel')).toBeTruthy()
     })
   })
 
