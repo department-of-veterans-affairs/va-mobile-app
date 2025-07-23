@@ -255,6 +255,16 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          working-directory: VAMobile/ios
+
+      - name: Install Ruby gems
+        working-directory: VAMobile/ios
+        run: bundle install
+
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
         with:
@@ -282,8 +292,7 @@ jobs:
         working-directory: .
 
       - name: Install tools
-        run: |
-          apt install imagemagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
       - name: gather-and-make-app-store-images
         id: run_images
