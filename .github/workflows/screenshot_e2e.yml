@@ -41,7 +41,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Generating new App Store images for iOS and Android. Please see :thread: for results. This process may take a while."
+      message: "Generating new App Store images for iOS and Android. This process may take a while."
 
   generate-iphone-screenshots:
     name: Generate iPhone Screenshots
@@ -313,26 +313,20 @@ jobs:
           name: "app-store-images-framed"
           path: .github/scripts/app-store-images/framed_images/*
 
-  output-slack-results:
-    needs: [start_slack_thread, combine-and-frame-images]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
+  success-slack-message:
+    name: Success Slack thread
+    if: ${{ success() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: "Images gathered successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
-      - name: Inform Slack of Success
-        if: ${{ success() }}
-        id: inform_slack_success
-        shell: bash
-        run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}"' -H 'Content-type: application/json' --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store images created successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' https://slack.com/api/chat.postMessage)
-          echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
-
-      - name: Inform Slack of Failure
-        if: ${{ failure() }}
-        id: inform_slack_failure
-        shell: bash
-        run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer "${{ secrets.SLACK_API_TOKEN }}"' -H 'Content-type: application/json' --data '{"channel":"${{needs.start_slack_thread.outputs.channel_id}}","thread_ts":"${{needs.start_slack_thread.outputs.thread_ts}}","text":"App Store image creation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."}' https://slack.com/api/chat.postMessage)
-          echo "SLACK_THREAD_TS=${ts}" >> $GITHUB_OUTPUT
+  failure-slack-message:
+    name: Failure Slack thread
+    if: ${{ failure() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-sandbox
+      message: "Image gathering failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
