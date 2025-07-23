@@ -185,6 +185,9 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpulse-dev
+
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
