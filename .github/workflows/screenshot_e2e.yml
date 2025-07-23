@@ -286,15 +286,15 @@ jobs:
       - name: Combine screenshots
         run: |
           mkdir -p VAMobile/artifacts
-          cp -r VAMobile/artifacts_iphone/* VAMobile/artifacts/
-          cp -r VAMobile/artifacts_ipad/* VAMobile/artifacts/
-          cp -r VAMobile/artifacts_android/* VAMobile/artifacts/
+          mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
+          mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
+          mv VAMobile/artifacts_android VAMobile/artifacts/android
         working-directory: .
 
       - name: Install and verify tools
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
-          echo "/usr/bin" >> $GITHUB_PATH
+          sudo ln -s /usr/bin/magick /usr/local/bin/magick
 
       - name: gather-and-make-app-store-images
         id: run_images
