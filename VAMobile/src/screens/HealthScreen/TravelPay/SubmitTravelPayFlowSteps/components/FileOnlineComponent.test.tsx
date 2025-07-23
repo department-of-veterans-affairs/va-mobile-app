@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { FileOnlineComponent } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
@@ -18,9 +18,9 @@ jest.mock('utils/hooks', () => {
 })
 
 context('FileOnlineComponent', () => {
-  const initializeTestInstance = (onPress?: () => void) => {
+  const initializeTestInstance = () => {
     const navProps = mockNavProps()
-    render(<FileOnlineComponent {...navProps} onBeforeOpenTravelPayWebview={onPress} />)
+    render(<FileOnlineComponent {...navProps} />)
   }
   it('should initialize correctly', () => {
     initializeTestInstance()
@@ -30,13 +30,5 @@ context('FileOnlineComponent', () => {
     expect(screen.getByText(t('travelPay.otherWaysToFile.method2'))).toBeTruthy()
     expect(screen.getByTestId('fileOnlineBTSSSLink')).toBeTruthy()
     expect(screen.getByTestId('fileOnlineVAFormLink')).toBeTruthy()
-  })
-
-  it('should call onBeforeOpenTravelPayWebview when the file online link is tapped', () => {
-    const onBeforeOpenTravelPayWebview = jest.fn()
-    initializeTestInstance(onBeforeOpenTravelPayWebview)
-
-    fireEvent.press(screen.getByTestId('fileOnlineBTSSSLink'))
-    expect(onBeforeOpenTravelPayWebview).toHaveBeenCalled()
   })
 })

@@ -11,11 +11,7 @@ import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_VA_FORM_10_3542 } = getEnv()
 
-type FileOnlineComponentProps = {
-  onBeforeOpenTravelPayWebview?: () => void
-}
-
-function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineComponentProps) {
+function FileOnlineComponent() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -29,11 +25,7 @@ function FileOnlineComponent({ onBeforeOpenTravelPayWebview }: FileOnlineCompone
           {t('travelPay.otherWaysToFile.method1')}
         </TextView>
         <Box my={theme.dimensions.condensedMarginBetween}>
-          <FileOnBTSSSLink
-            text={t('travelPay.otherWaysToFile.method1.link')}
-            testID="fileOnlineBTSSSLink"
-            onBeforeOpenWebview={onBeforeOpenTravelPayWebview}
-          />
+          <FileOnBTSSSLink text={t('travelPay.otherWaysToFile.method1.link')} testID="fileOnlineBTSSSLink" />
         </Box>
         <TextView testID="fileOnlineComponentMethod2ID" variant="MobileBody">
           {t('travelPay.otherWaysToFile.method2')}

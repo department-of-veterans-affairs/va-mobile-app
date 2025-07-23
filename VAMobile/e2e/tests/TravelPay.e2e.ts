@@ -281,6 +281,7 @@ const checkSubmitSuccessScreen = async (partialSuccess: boolean = false) => {
   }
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
   await openDismissLeavingAppPopup(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID)
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FINISH_TRAVEL_CLAIM_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()
 }
 
@@ -291,6 +292,7 @@ const checkTravelPayFileOnlineComponent = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID)
   await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID)
 }
 

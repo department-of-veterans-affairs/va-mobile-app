@@ -1,17 +1,14 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import TravelClaimHelpScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
-import { context, mockNavProps, render } from 'testUtils'
-
-const mockPopSpy = jest.fn()
+import { context, render } from 'testUtils'
 
 context('TravelClaimHelpScreen', () => {
   const initializeTestInstance = () => {
-    const props = mockNavProps(undefined, { pop: mockPopSpy })
-    render(<TravelClaimHelpScreen {...props} />)
+    render(<TravelClaimHelpScreen />)
     jest.advanceTimersByTime(50)
   }
   it('should initialize correctly', () => {
@@ -25,13 +22,5 @@ context('TravelClaimHelpScreen', () => {
 
     expect(screen.getByTestId('fileOnlineComponent')).toBeTruthy()
     expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
-  })
-
-  describe('when the user clicks the file online link', () => {
-    it('should call the pop function to dismiss the help screen', () => {
-      initializeTestInstance()
-      fireEvent.press(screen.getByTestId('fileOnlineBTSSSLink'))
-      expect(mockPopSpy).toHaveBeenCalled()
-    })
   })
 })
