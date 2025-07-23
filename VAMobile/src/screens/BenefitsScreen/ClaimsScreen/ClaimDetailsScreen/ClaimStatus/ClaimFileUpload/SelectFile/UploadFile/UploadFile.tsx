@@ -127,7 +127,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
 
   useEffect(() => {
     const validationErrorsList = []
-    if (filesEmptyError) validationErrorsList.push(t('fileUpload.requiredPhoto'))
+    if (filesEmptyError) validationErrorsList.push(t('fileUpload.requiredFile'))
     for (const key in formErrorList) {
       if (formErrorList[key] !== '') {
         validationErrorsList.push(`${formErrorList[key]}`)
