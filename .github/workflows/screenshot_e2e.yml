@@ -241,7 +241,7 @@ jobs:
 
   combine-and-frame-images:
     name: Combine and Frame Images
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs:
       [
         generate-iphone-screenshots,
@@ -264,6 +264,14 @@ jobs:
       - name: Install Ruby gems
         working-directory: VAMobile/ios
         run: bundle install
+
+      - name: Install macOS dependencies
+        run: |
+          brew install fastlane
+          brew install imagemagick
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
@@ -290,11 +298,6 @@ jobs:
           mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
           mv VAMobile/artifacts_android VAMobile/artifacts/android
         working-directory: .
-
-      - name: Install and verify tools
-        run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          sudo ln -s /usr/bin/magick /usr/local/bin/magick
 
       - name: gather-and-make-app-store-images
         id: run_images
