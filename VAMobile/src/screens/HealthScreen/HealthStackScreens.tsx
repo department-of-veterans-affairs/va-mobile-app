@@ -16,7 +16,6 @@ import {
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import PrepareForVideoVisit from 'screens/HealthScreen/Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
 import HealthHelp from 'screens/HealthScreen/HealthHelp/HealthHelp'
 import PrescriptionHelp from 'screens/HealthScreen/Pharmacy/PrescriptionHelp/PrescriptionHelp'
@@ -42,7 +41,6 @@ export type HealthStackParamList = WebviewStackParams & {
     appointment?: AppointmentData
     vetextID?: string
   }
-  PrepareForVideoVisit: undefined
   PastAppointmentDetails: {
     appointment: AppointmentData
   }
@@ -159,12 +157,6 @@ const HealthStack = createStackNavigator<HealthStackParamList>()
 
 export const getHealthScreens = () => {
   return [
-    <HealthStack.Screen
-      key={'PrepareForVideoVisit'}
-      name="PrepareForVideoVisit"
-      component={PrepareForVideoVisit}
-      options={LARGE_PANEL_OPTIONS}
-    />,
     <HealthStack.Screen
       key={'StartNewMessage'}
       name="StartNewMessage"
