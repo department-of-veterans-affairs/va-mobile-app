@@ -107,7 +107,7 @@ jobs:
       - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-iphone-screenshots"
+          name: "ios-iphone-screenshots-unaltered"
           path: VAMobile/artifacts/
 
   generate-ipad-screenshots:
@@ -174,7 +174,7 @@ jobs:
       - name: Upload iPad artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-ipad-screenshots"
+          name: "ios-ipad-screenshots-unaltered"
           path: VAMobile/artifacts/
 
   generate-android-screenshots:
@@ -238,7 +238,7 @@ jobs:
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "android-screenshots"
+          name: "android-screenshots-unaltered"
           path: VAMobile/artifacts/*
 
   combine-and-frame-images:
