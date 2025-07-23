@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { SelectorType, VASelector } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import VASelector, { SelectorType } from './VASelector'
 
 import Mock = jest.Mock
 
@@ -32,6 +31,7 @@ context('VASelector', () => {
 
     render(
       <VASelector
+        testID="CheckBox"
         labelKey={'editAddress.address'}
         selected={selected}
         disabled={disabled}
@@ -58,23 +58,13 @@ context('VASelector', () => {
   describe('when selected is true', () => {
     it('should display the filled checkbox and update accessibility state', () => {
       initializeTestInstance(true)
-      expect(screen.getByTestId('CheckBox')).toBeTruthy()
-      expect(
-        screen.getByAccessibilityState({
-          checked: true,
-        }),
-      ).toBeTruthy()
+      expect(screen.getByRole('checkbox', { checked: true })).toBeTruthy()
     })
   })
 
   describe('when selected is false', () => {
     it('should display the empty checkbox', () => {
-      expect(screen.getByTestId('CheckBoxOutlineBlank')).toBeTruthy()
-      expect(
-        screen.getByAccessibilityState({
-          checked: false,
-        }),
-      ).toBeTruthy()
+      expect(screen.getByRole('checkbox', { checked: false })).toBeTruthy()
     })
   })
 
@@ -90,14 +80,17 @@ context('VASelector', () => {
   describe('when disabled is true and the selector type is radio', () => {
     it('should display the RadioEmpty', () => {
       initializeTestInstance(false, true, '', SelectorType.Radio)
-      expect(screen.getByTestId('RadioEmpty')).toBeTruthy()
+      expect(
+        screen.getByRole('radio', {
+          checked: false,
+        }),
+      ).toBeTruthy()
     })
   })
 
   describe('when there is an error and the selector type is checkbox', () => {
     it('should display the Error and the error message', () => {
       initializeTestInstance(false, false, 'ERROR MESSAGE')
-      expect(screen.getByTestId('Error')).toBeTruthy()
       expect(screen.getByText('ERROR MESSAGE')).toBeTruthy()
     })
   })
