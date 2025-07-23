@@ -276,19 +276,19 @@ jobs:
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "ios-iphone-screenshots"
+          name: "ios-iphone-screenshots-unaltered"
           path: VAMobile/artifacts_iphone
 
       - name: Download iPad screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "ios-ipad-screenshots"
+          name: "ios-ipad-screenshots-unaltered"
           path: VAMobile/artifacts_ipad
 
       - name: Download Android screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "android-screenshots"
+          name: "android-screenshots-unaltered"
           path: VAMobile/artifacts_android
 
       - name: Combine screenshots
@@ -308,11 +308,11 @@ jobs:
       - name: Upload framed artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-android-app-store-images-framed"
+          name: "app-store-images-framed"
           path: .github/scripts/app-store-images/framed_images/*
 
   output-slack-results:
-    needs: combine-and-frame-images
+    needs: [start_slack_thread, combine-and-frame-images]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
