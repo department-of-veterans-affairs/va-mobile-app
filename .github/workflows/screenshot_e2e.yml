@@ -35,8 +35,8 @@ env:
   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
 jobs:
-  start_slack_thread:
-    name: Start Slack thread
+  start_slack_message:
+    name: Start Slack message
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
@@ -321,7 +321,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Images gathered successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "App store images generated successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   failure-slack-message:
     name: Failure Slack thread
@@ -331,4 +331,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Image gathering failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
