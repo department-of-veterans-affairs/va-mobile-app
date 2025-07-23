@@ -79,7 +79,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       return {
         label: month,
         value: month,
-        testID: 'monthFilterTestID-${month}',
+        testID: month,
       }
     })
   }, [])
@@ -91,7 +91,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       return {
         label: year,
         value: year,
-        testID: 'yearFilterTestID-${year}',
+        testID: year,
       }
     })
   }, [])
