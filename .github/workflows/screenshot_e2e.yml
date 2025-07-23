@@ -231,6 +231,8 @@ jobs:
           arch: x86_64
           avd-name: Pixel_6_Pro_API_33
           profile: pixel_6_pro
+          channel: stable
+          sdk-version: latest
           script: yarn detox test -c android ./screenshot.e2e.ts
 
       - name: Upload android artifacts
