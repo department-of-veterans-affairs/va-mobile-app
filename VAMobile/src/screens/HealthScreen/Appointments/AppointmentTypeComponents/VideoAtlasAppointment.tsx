@@ -4,9 +4,6 @@ import { UseMutateFunction } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
-import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
-import { featureEnabled } from 'utils/remoteConfig'
-
 import {
   AppointmentCalendarButton,
   AppointmentCancelReschedule,
@@ -21,7 +18,9 @@ import {
   AppointmentTravelClaimDetails,
   AppointmentTypeOfCare,
   DEPRECATED_AppointmentCalendarButton,
-} from './SharedComponents'
+} from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
+import { AppointmentDetailsSubType, AppointmentDetailsTypeConstants } from 'utils/appointments'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type VideoAtlasAppointmentProps = {
   appointmentID: string
@@ -66,7 +65,7 @@ function VideoAtlasAppointment({
         <AppointmentReasonAndComment attributes={attributes} subType={subType} type={type} />
         <AppointmentMedicationWording subType={subType} type={type} />
         <AppointmentPersonalContactInfo attributes={attributes} subType={subType} />
-        <AppointmentTravelClaimDetails attributes={attributes} subType={subType} />
+        <AppointmentTravelClaimDetails appointmentID={appointmentID} attributes={attributes} subType={subType} />
         <AppointmentCancelReschedule
           appointmentID={appointmentID}
           attributes={attributes}
