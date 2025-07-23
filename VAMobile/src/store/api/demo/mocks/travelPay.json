@@ -1,6 +1,6 @@
 {
   "/v0/travel-pay/claims": {
-    "metadata": {
+    "meta": {
       "status": 200,
       "pageNumber": 1,
       "totalRecordCount": 31
