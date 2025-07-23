@@ -1,1 +1,1 @@
-This release introduces a new in-app feedback survey located in the profile for Veterans to share general app feedback. We also added a “Dismiss” button to the non-VA meds alert, limited its display to relevant users, and updated the appointment reschedule link to show only for eligible appointments.
+We updated the app to fix screen reader focus issues on iOS and ensure deep links direct users to the correct page after login. We also improved the styling of the in-app feedback feature for better readability.
