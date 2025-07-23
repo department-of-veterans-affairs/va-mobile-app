@@ -4,8 +4,8 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AddressData, ValidateAddressData } from 'api/types'
-import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen//AddressSummary'
-import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation/AddressValidation'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { render } from 'testUtils'
 
 const mockAddress: AddressData = {
@@ -94,7 +94,7 @@ describe('AddressValidation', () => {
 
   describe('when use this address button is pressed', () => {
     it('calls updateAddress', () => {
-      fireEvent.press(screen.getByTestId('youEnteredTestID'))
+      fireEvent.press(screen.getAllByRole('radio')[0])
       fireEvent.press(screen.getByRole('button', { name: t('editAddress.validation.useThisAddress') }))
       expect(saveAddressSpy).toBeCalled()
     })

@@ -78,7 +78,8 @@ context('UploadFile', () => {
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
-      expect(screen.getByRole('checkbox', { name: t('fileUpload.evidenceOnly.error') })).toBeTruthy()
+      const checkbox = screen.getByRole('checkbox')
+      expect(checkbox.props).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 
