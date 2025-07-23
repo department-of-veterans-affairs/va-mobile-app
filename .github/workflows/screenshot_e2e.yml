@@ -294,7 +294,7 @@ jobs:
       - name: Install and verify tools
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
-          which magick
+          echo "/usr/bin" >> $GITHUB_PATH
 
       - name: gather-and-make-app-store-images
         id: run_images
