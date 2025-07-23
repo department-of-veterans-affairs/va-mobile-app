@@ -5,7 +5,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
 
-import { Box, BoxProps, TextView } from 'components'
+import { Box, BoxProps, TextView, VAIcon, VAIconProps } from 'components'
 import { renderInputError } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
@@ -115,11 +115,16 @@ const VASelector: FC<VASelectorProps> = ({
     }
 
     if (!!error && selectorType === SelectorType.Checkbox) {
+      const errorIconProps: VAIconProps = {
+        name: 'CheckBoxError',
+        stroke: theme.colors.icon.error,
+        width: iconWidth,
+        height: 22,
+        fill: 'checkboxDisabledContrast',
+      }
       return (
-        <Icon
-          {...getIconsProps('Error', theme.colors.icon.error, theme.colors.icon.checkboxDisabledContrast)}
-          testID="Error"
-        />
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+        <VAIcon {...errorIconProps} testID="Error" accessibilityLabel="CheckBoxError" />
       )
     }
 
