@@ -52,7 +52,7 @@ const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
   data: [
     {
       id: 'claim-id',
-      type: 'TravelPayClaimSummary',
+      type: 'travelPayClaimSummary',
       attributes: {
         id: 'claim-id',
         claimNumber: '123456',
