@@ -128,7 +128,7 @@
     "VeteransCrisisLineScreen": ["VeteransCrisisLine", "SignIn"],
     "VeteranStatusScreen": ["VeteranStatusCard"],
     "OnboardingCarousel": ["Onboarding"],
-    "RequestNotificationsScreen": ["Onboarding"],
+    "RequestNotifications": ["Onboarding"],
     "DirectDepositScreen": ["DirectDeposit"],
     "PaymentHistory": ["Payments"],
     "SplashScreen": ["Onboarding", "LoginScreen"],
