@@ -615,7 +615,8 @@ export const filterAppointments = (
   const todaysDate = DateTime.local()
   const fourHoursAgo = todaysDate.minus({ hours: 4 }).valueOf()
   const oneHourAgo = todaysDate.minus({ hours: 1 }).valueOf()
-  return appointments.filter((appointment) => {
+  // If, by chance appointments is not undefined but is not an array, return undefined
+  return appointments.filter?.((appointment) => {
     const startDate = DateTime.fromISO(appointment.attributes.startDateLocal).valueOf()
 
     // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE

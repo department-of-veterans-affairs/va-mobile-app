@@ -587,6 +587,7 @@ context('authAction SIS', () => {
 
     it('should set the keychain and preference when transitioning to true', async () => {
       let storeState = store.getState().auth
+      console.log(storeState)
       expect(storeState.loggedIn).toBeTruthy()
       // expect(storeState.canStoreWithBiometric).toBeTruthy()
       // expect(storeState.shouldStoreWithBiometric).toBeTruthy()
