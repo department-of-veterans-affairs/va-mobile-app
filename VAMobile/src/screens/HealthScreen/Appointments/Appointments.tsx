@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -144,18 +143,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       />
     )
   }
-
-  useEffect(() => {
-    const data = apptsData?.data || []
-    const startDates = []
-    for (const item of data) {
-      if (item.attributes?.startDateLocal) {
-        const start = DateTime.fromISO(item.attributes.startDateLocal).toLocal()
-        startDates.push(start)
-      }
-    }
-    console.log({ apptsData: startDates?.sort((a, b) => a.valueOf() - b.valueOf()) })
-  }, [apptsData])
 
   return (
     <FeatureLandingTemplate

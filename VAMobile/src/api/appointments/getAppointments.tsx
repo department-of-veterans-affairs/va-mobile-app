@@ -24,7 +24,6 @@ const getAppointments = (
   const pastParams = includeTravelClaims && {
     'include[]': 'travel_pay_claims',
   }
-  console.log('getAppointments called with params:', { startDate, endDate, timeFrame })
 
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
