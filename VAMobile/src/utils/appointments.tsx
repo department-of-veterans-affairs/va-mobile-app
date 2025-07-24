@@ -622,7 +622,6 @@ export const filterAppointments = (
     // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
     const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
     const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
-    const shouldKeep = isPast ? startDate <= filterDateTime : startDate > filterDateTime
-    return shouldKeep
+    return isPast ? startDate <= filterDateTime : startDate > filterDateTime
   })
 }
