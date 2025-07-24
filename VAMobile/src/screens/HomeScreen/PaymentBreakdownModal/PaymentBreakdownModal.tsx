@@ -10,6 +10,7 @@ import { PaymentsData } from 'api/types'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelPaymentTypeAmount } from 'utils/a11yLabel'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateUtc } from 'utils/formattingUtils'
@@ -60,7 +61,13 @@ const PaymentBreakdownModal = React.forwardRef(({ visible, setVisible }: Payment
     const payments: ReactNode[] = []
     paymentsByLastDate.forEach((payment, idx) => {
       payments.push(
-        <Box flexDirection="row" justifyContent="space-between" accessible={true} key={idx}>
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          accessible={true}
+          key={idx}
+          accessibilityLabel={a11yLabelPaymentTypeAmount(payment.attributes.paymentType, payment.attributes.amount)}>
           <TextView flex={1} variant="MobileBody">
             {payment.attributes.paymentType}
           </TextView>
