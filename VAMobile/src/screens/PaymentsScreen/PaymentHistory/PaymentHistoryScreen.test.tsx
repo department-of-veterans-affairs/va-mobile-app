@@ -194,7 +194,7 @@ context('PaymentHistoryScreen', () => {
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill $1,172.60')))
+      await waitFor(() => fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill—$1,172.60')))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentDetails', {
           payment: {
