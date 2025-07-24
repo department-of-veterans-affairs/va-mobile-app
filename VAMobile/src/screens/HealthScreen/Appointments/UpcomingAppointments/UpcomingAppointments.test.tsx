@@ -64,7 +64,7 @@ context('UpcomingAppointments', () => {
   describe('on appointment press', () => {
     it('calls useRouteNavigation', async () => {
       const dateForAppointment = DateTime.fromISO(appointmentData[0].attributes.startDateLocal)
-        .toLocal()
+        .setZone(appointmentData[0].attributes.timeZone)
         .toFormat('cccc, LLLL d, yyyy h:mm a ZZZZ')
 
       initializeTestInstance({ data: appointmentData })

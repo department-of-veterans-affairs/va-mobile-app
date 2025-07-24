@@ -3,6 +3,305 @@
     "past": {
       "data": [
         {
+          "id": "3b71f0bb5e81156c1e8d7f09b7b3ef1a795fb173241dd9d71b0bf8cd4c19e808",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami X Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 4 hour}}",
+            "startDateUtc": "{{now - 4 hour utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "3b71f0bb5e81156c1e8d7f09b7b3ef1a795fb173241dd9d71b0bf8cd4c19e809",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami X Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 3 hour}}",
+            "startDateUtc": "{{now - 3 hour utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d411",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 61 minutes}}",
+            "startDateUtc": "{{now - 61 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d412",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 60 minutes}}",
+            "startDateUtc": "{{now - 60 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d418",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 59 minutes}}",
+            "startDateUtc": "{{now - 59 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
+        },
+        {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
           "attributes": {
@@ -2038,6 +2337,60 @@
               }
             }
           }
+        },
+        {
+          "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": "John X Smith",
+            "healthcareService": "Phone consultation",
+            "location": {
+              "id": null,
+              "name": "Test clinic 2",
+              "address": {
+                "street": "123 Sesame St.",
+                "city": "Cheyenne",
+                "state": "VA",
+                "zipCode": "20171"
+              },
+              "lat": null,
+              "long": null,
+              "phone": {
+                "areaCode": "703",
+                "number": "652-0000",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": true,
+            "startDateLocal": "{{now - 6 months}}",
+            "startDateUtc": "{{now - 6 months utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "routine-follow-up",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": "Phone consultation-Confirmed",
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
         }
       ],
       "meta": {
@@ -2060,6 +2413,287 @@
     },
     "upcoming": {
       "data": [
+        {
+          "id": "3b71f0bb5e81156c1e8d7f09b7b3ef1a795fb173241dd9d71b0bf8cd4c19e808",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami X Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 4 hour}}",
+            "startDateUtc": "{{now - 4 hour utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "3b71f0bb5e81156c1e8d7f09b7b3ef1a795fb173241dd9d71b0bf8cd4c19e809",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_HOME",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Sami X Alsahhar - HOME - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 3 hour}}",
+            "startDateUtc": "{{now - 3 hour utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/New_York",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d410",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "190305",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": "MID-V10 CRH MH PSY MD PT",
+            "location": {
+              "id": "984GA",
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603,
+              "long": -84.316475,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 30,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 61 minutes}}",
+            "startDateUtc": "{{now - 61 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": null,
+            "isCovidVaccine": false,
+            "serviceCategoryName": null,
+            "typeOfCare": "Mental Health",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d412",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 60 minutes}}",
+            "startDateUtc": "{{now - 60 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
+        },
+        {
+          "id": "b6135e2566948e22dde3172d08944d5a32979483790c4dc6ed347c2dd799d418",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane X Smith - VA - Confirmed",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 59 minutes}}",
+            "startDateUtc": "{{now - 59 minutes utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Los_Angeles",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully.",
+                "success": true
+              }
+            }
+          }
+        },
         {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
