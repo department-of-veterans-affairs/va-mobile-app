@@ -610,6 +610,7 @@ export const filterAppointments = (
     // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
     const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
 
+    // eslint-disable-next-line max-len
     // https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/health-care/appointments/va-online-scheduling/feature-reference/appointment-lists/upcoming-list.md#appointments-to-display
     // Upcoming:
     // If IS a video appointment, we want to show it in upcoming up to 4 hours in the past
