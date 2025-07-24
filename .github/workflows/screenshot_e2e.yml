@@ -222,28 +222,17 @@ jobs:
         run: yarn e2e:android-build
         working-directory: VAMobile
 
-      - name: Print App Version
-        working-directory: VAMobile
-        run: |
-          echo "Querying Gradle for app version..."
-          VERSION=$(cd android && ./gradlew app:properties | grep '^versionName:' | awk '{print $2}')
-          echo "App Version: $VERSION"
-
       - name: Run Detox Android Steps
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 36
           working-directory: VAMobile
           target: google_apis
           arch: x86_64
-          avd-name: Pixel_6_Pro_API_33
+          avd-name: Pixel_6_Pro_API_36
           profile: pixel_6_pro
           channel: stable
           script: |
-            echo "API Level: 33"
-            echo "Android Version: $(adb shell getprop ro.build.version.release | tr -d '\r\n')"
-            echo "SDK Version:"
-            $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --version
             yarn detox test -c android ./screenshot.e2e.ts
 
       - name: Upload android artifacts
