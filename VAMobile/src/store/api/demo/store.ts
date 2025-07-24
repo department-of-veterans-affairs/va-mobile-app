@@ -240,7 +240,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getVaccineList(store, params, endpoint)
     }
     case '/v1/health/labs-and-tests': {
-      return getLabsAndTestsList(store, params, endpoint)
+      return getLabsAndTestsList(store, params)
     }
     case '/v0/health/allergy-intolerances': {
       return getAllergyList(store, params, endpoint)
