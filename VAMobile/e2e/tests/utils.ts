@@ -186,6 +186,7 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
+  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
 }
 
 /** Logs into demo mode.

@@ -37,6 +37,7 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
 })
@@ -104,13 +105,9 @@ describe('Home Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
   })
 
-  it('health tab tap: verify travel button exists when feature flag is enabled', async () => {
+  it('health tab tap: verify travel button exists and navigation works when feature flag is enabled', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.text('Travel'))).toExist()
-  })
-
-  it('taps health then navigates to travel reimbursement from travel button', async () => {
-    await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await element(by.text('Travel')).tap()
     await expect(element(by.label('Travel Reimbursement'))).toExist()
   })

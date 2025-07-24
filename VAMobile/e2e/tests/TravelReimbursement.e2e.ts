@@ -1,12 +1,19 @@
 import { by, element, expect } from 'detox'
 
-import { loginToDemoMode, openHealth, openTravelReimbursement } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openHealth,
+  openTravelReimbursement,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const TravelReimbursementE2eIdConstants = {
   TRAVEL_REIMBURSEMENT_TITLE: 'Travel Reimbursement',
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openTravelReimbursement()
