@@ -533,8 +533,6 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
 
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
-    // If this change ends up with too many cache misses from vets-api we can change this to startOf('day') of the day
-    // for the endDate since we will filter out appointments that started more than 4 hours ago with filterAppointments
     endDate: todaysDate.endOf('day').toISO(),
   }
 }

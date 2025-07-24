@@ -112,7 +112,6 @@ function PastAppointments({
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        // for endDate see note in appointments.tsx for getPastAppointmentDateRange()
         dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
