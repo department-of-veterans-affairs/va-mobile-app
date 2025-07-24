@@ -224,7 +224,9 @@ jobs:
 
       - name: Print App Version
         working-directory: VAMobile
-        run: echo "App Version: $(grep versionName android/app/build.gradle | awk '{print $2}' | tr -d '"')"
+        run: |
+          VERSION=$(grep versionName android/app/build.gradle | cut -d '"' -f 2)
+          echo "App Version: $VERSION"
 
       - name: Run Detox Android Steps
         uses: reactivecircus/android-emulator-runner@v2
@@ -303,8 +305,8 @@ jobs:
       - name: Combine screenshots
         run: |
           mkdir -p VAMobile/artifacts
-          mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
-          mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
+          # mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
+          # mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
           mv VAMobile/artifacts_android VAMobile/artifacts/android
         working-directory: .
 
