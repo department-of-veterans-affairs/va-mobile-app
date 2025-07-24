@@ -225,11 +225,11 @@ jobs:
       - name: Run Detox Android Steps
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 36
+          api-level: 35
           working-directory: VAMobile
           target: google_apis
           arch: x86_64
-          avd-name: Pixel_6_Pro_API_36
+          avd-name: Pixel_6_Pro_API_35
           profile: pixel_6_pro
           channel: stable
           script: |
