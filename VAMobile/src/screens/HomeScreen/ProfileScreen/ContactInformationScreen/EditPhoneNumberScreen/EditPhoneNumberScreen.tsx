@@ -80,11 +80,12 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
-  const [newCountry, setNewCountry] = useState<ComboBoxItem>(
-    getComboboxItemFromCountryCode(
-      phoneData?.countryCode ? FlagCodeToFlag[phoneData?.countryCode].iso_code : DefaultFlagCode,
-    ),
-  )
+  // TODO Remove this once country codes can be saved
+  const countryCode =
+    !phoneData?.countryCode || phoneData?.countryCode === '1'
+      ? DefaultFlagCode
+      : FlagCodeToFlag[phoneData?.countryCode].iso_code
+  const [newCountry, setNewCountry] = useState<ComboBoxItem>(getComboboxItemFromCountryCode(countryCode))
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -268,6 +269,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         onEndEditing: onEndEditingPhoneNumber,
         isRequiredField: true,
         testID: 'phoneNumberTestID',
+        preAdornment: <TextView variant="MobileBody">+{FlagCountryToFlag[newCountry.value].calling_code}</TextView>,
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [
