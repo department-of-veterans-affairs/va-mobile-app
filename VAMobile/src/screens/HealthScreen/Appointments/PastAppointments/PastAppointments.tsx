@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -165,14 +165,18 @@ function PastAppointments({
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 
-  useEffect(() => {
-    const filteredAppointments =
+  const filteredAppointments = useMemo(
+    () =>
       datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
         ? filterAppointments(appointmentsData?.data || [], true)
-        : appointmentsData?.data
+        : appointmentsData?.data,
+    [appointmentsData?.data, datePickerOption],
+  )
+
+  useEffect(() => {
     const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
     setAppointmentsToShow(appointmentsList || [])
-  }, [appointmentsData?.data, page, perPage, datePickerOption])
+  }, [filteredAppointments, page, perPage])
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
