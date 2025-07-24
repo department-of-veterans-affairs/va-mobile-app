@@ -8,11 +8,10 @@ import { AppointmentData, AppointmentsGetData, AppointmentsList } from 'api/type
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getGroupedAppointments } from 'utils/appointments'
+import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -37,7 +36,8 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   const { perPage, totalEntries } = pagination
 
   useEffect(() => {
-    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
+    const filteredAppointments = filterAppointments(appointmentsData?.data || [])
+    const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
     setAppointmentsToShow(appointmentsList || [])
   }, [appointmentsData?.data, page, perPage])
 

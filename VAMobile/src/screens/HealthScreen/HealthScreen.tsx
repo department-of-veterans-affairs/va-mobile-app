@@ -111,6 +111,12 @@ export function HealthScreen({}: HealthScreenProps) {
     healthHelpScreenCheck()
   }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
 
+  useEffect(() => {
+    if (apptsData?.data?.length) {
+      console.log('DATA', apptsData.data)
+    }
+  }, [apptsData])
+
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
   const activityError = appointmentsError || inboxError || prescriptionsError
   const showAlert = featureInDowntime || activityError

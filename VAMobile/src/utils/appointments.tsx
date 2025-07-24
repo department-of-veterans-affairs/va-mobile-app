@@ -517,7 +517,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   const futureDate = todaysDate.plus({ days: 390 })
 
   return {
-    startDate: todaysDate.startOf('day').toISO(),
+    startDate: todaysDate.minus({ hours: 4 }).toISO(),
     endDate: futureDate.endOf('day').toISO(),
   }
 }
@@ -533,7 +533,7 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
 
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
-    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+    endDate: todaysDate.minus({ hours: 4 }).toISO(),
   }
 }
 
@@ -592,4 +592,33 @@ export const AppointmentDetailsSubTypeConstants: {
   Canceled: 'Canceled',
   CanceledAndPending: 'CanceledAndPending',
   PastPending: 'PastPending',
+}
+
+export const filterAppointments = (
+  appointments?: AppointmentsList,
+  isPast: boolean = false,
+): AppointmentsList | undefined => {
+  if (!appointments) {
+    return undefined
+  }
+  const todaysDate = DateTime.local()
+  const fourHoursAgo = todaysDate.minus({ hours: 4 }).valueOf()
+  const oneHourAgo = todaysDate.minus({ hours: 1 }).valueOf()
+  return appointments.filter((appointment) => {
+    const startDate = DateTime.fromISO(appointment.attributes.startDateLocal).valueOf()
+
+    // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
+    const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
+
+    // https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/health-care/appointments/va-online-scheduling/feature-reference/appointment-lists/upcoming-list.md#appointments-to-display
+    // Upcoming:
+    // If IS a video appointment, we want to show it in upcoming up to 4 hours in the past
+    // If NOT a video appointment, we want to show it in upcoming up to 1 hour in the past
+    // Past:
+    // If IS a video appointment, we want to show it in past if it started more than 4 hours ago
+    // If NOT a video appointment, we want to show it in past if it started more than 1 hour ago
+    const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
+    const shouldKeep = isPast ? startDate <= filterDateTime : startDate > filterDateTime
+    return shouldKeep
+  })
 }

@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -15,6 +16,11 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
+import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
+import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
+import CernerAlert from 'screens/HealthScreen/CernerAlert'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -23,12 +29,6 @@ import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import CernerAlert from '../CernerAlert'
-import { HealthStackParamList } from '../HealthStackScreens'
-import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
-import PastAppointments from './PastAppointments/PastAppointments'
-import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
@@ -144,6 +144,18 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       />
     )
   }
+
+  useEffect(() => {
+    const data = apptsData?.data || []
+    const startDates = []
+    for (const item of data) {
+      if (item.attributes?.startDateLocal) {
+        const start = DateTime.fromISO(item.attributes.startDateLocal).toLocal()
+        startDates.push(start)
+      }
+    }
+    console.log({ apptsData: startDates?.sort((a, b) => a.valueOf() - b.valueOf()) })
+  }, [apptsData])
 
   return (
     <FeatureLandingTemplate

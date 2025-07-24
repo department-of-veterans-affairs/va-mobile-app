@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
+import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
@@ -10,8 +11,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { appointmentsKeys } from './queryKeys'
 
 /**
  * Fetch user appointments
@@ -25,6 +24,7 @@ const getAppointments = (
   const pastParams = includeTravelClaims && {
     'include[]': 'travel_pay_claims',
   }
+  console.log('getAppointments called with params:', { startDate, endDate, timeFrame })
 
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,

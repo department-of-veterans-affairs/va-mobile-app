@@ -77,7 +77,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         }),
         dates: {
           startDate: twoMonthsEarlier.startOf('day'),
-          endDate: todaysDate.endOf('day'),
+          endDate: todaysDate.minus({ hours: 1 }),
         },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
