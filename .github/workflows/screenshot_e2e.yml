@@ -225,7 +225,7 @@ jobs:
       - name: Print App Version
         working-directory: VAMobile
         run: |
-          VERSION=$(grep versionName android/app/build.gradle | cut -d '"' -f 2)
+          VERSION=$(grep versionName android/app/build.gradle | sed 's/.*"\(.*\)"/\1/')
           echo "App Version: $VERSION"
 
       - name: Run Detox Android Steps
