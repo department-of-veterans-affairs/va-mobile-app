@@ -111,6 +111,7 @@ export const defaults: FeatureToggleValues = {
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
 }
+
 export let devConfig: FeatureToggleValues = defaults
 
 /**
