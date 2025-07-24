@@ -222,6 +222,10 @@ jobs:
         run: yarn e2e:android-build
         working-directory: VAMobile
 
+      - name: Print App Version
+        working-directory: VAMobile
+        run: echo "App Version: $(grep versionName android/app/build.gradle | awk '{print $2}' | tr -d '"')"
+
       - name: Run Detox Android Steps
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -233,8 +237,10 @@ jobs:
           profile: pixel_6_pro
           channel: stable
           script: |
-            echo "Android Version:"
-            adb shell getprop ro.build.version.release
+            echo "API Level: 33"
+            echo "Android Version: $(adb shell getprop ro.build.version.release | tr -d '\r\n')"
+            echo "SDK Version:"
+            $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --version
             yarn detox test -c android ./screenshot.e2e.ts
 
       - name: Upload android artifacts
@@ -276,17 +282,17 @@ jobs:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-      - name: Download iPhone screenshots
-        uses: actions/download-artifact@v4
-        with:
-          name: "ios-iphone-screenshots-unaltered"
-          path: VAMobile/artifacts_iphone
-
-      - name: Download iPad screenshots
-        uses: actions/download-artifact@v4
-        with:
-          name: "ios-ipad-screenshots-unaltered"
-          path: VAMobile/artifacts_ipad
+      # - name: Download iPhone screenshots
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: "ios-iphone-screenshots-unaltered"
+      #     path: VAMobile/artifacts_iphone
+      #
+      # - name: Download iPad screenshots
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: "ios-ipad-screenshots-unaltered"
+      #     path: VAMobile/artifacts_ipad
 
       - name: Download Android screenshots
         uses: actions/download-artifact@v4
