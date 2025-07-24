@@ -246,10 +246,9 @@ jobs:
   combine-and-frame-images:
     name: Combine and Frame Images
     runs-on: macos-latest
-    needs:
-      [
-        generate-iphone-screenshots,
-        generate-ipad-screenshots,
+    needs: [
+        # generate-iphone-screenshots,
+        # generate-ipad-screenshots,
         generate-android-screenshots,
       ]
     outputs:
