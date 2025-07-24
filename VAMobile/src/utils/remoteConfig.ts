@@ -114,6 +114,7 @@ export const defaults: FeatureToggleValues = {
   veteranStatusCardRedesign: true,
   internationalPhoneNumber: false,
 }
+
 export let devConfig: FeatureToggleValues = defaults
 
 /**
