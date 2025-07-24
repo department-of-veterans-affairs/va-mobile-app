@@ -20,7 +20,6 @@ const modifyAppt = (
   if (!inappt) return undefined
   const appt = cloneDeep(inappt) as AppointmentDataMod
   const startDate = DateTime.now().plus({ [unit]: amount })
-  console.error(`Modifying appointment ${appt.id} to start at ${startDate.toISO()}`)
   appt.attributes.startDateLocal = startDate.toISO()
   appt.attributes.startDateUtc = startDate.toUTC().toISO()
   appt.id = `${startDate.valueOf()}`
