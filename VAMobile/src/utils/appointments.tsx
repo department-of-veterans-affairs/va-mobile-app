@@ -517,7 +517,7 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
   const futureDate = todaysDate.plus({ days: 390 })
 
   return {
-    startDate: todaysDate.minus({ hours: 4 }).toISO(),
+    startDate: todaysDate.startOf('day').toISO(),
     endDate: futureDate.endOf('day').toISO(),
   }
 }
@@ -533,7 +533,9 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
 
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
-    endDate: todaysDate.minus({ hours: 4 }).toISO(),
+    // If this change ends up with too many cache misses from vets-api we can change this to startOf('day') of the day
+    // for the endDate since we will filter out appointments that started more than 4 hours ago with filterAppointments
+    endDate: todaysDate.endOf('day').toISO(),
   }
 }
 
@@ -594,6 +596,15 @@ export const AppointmentDetailsSubTypeConstants: {
   PastPending: 'PastPending',
 }
 
+/**
+ * Filters appointments based on logic from web for upcoming and past appointments.
+ * - Upcoming:
+ *   - If it is a video appointment, show it in upcoming up to 4 hours in the past
+ *   - If it is not a video appointment, show it in upcoming up to 1 hour in the past
+ * - Past:
+ *   - If it is a video appointment, show it in past if it started more than 4 hours ago
+ *   - If it is not a video appointment, show it in past
+ */
 export const filterAppointments = (
   appointments?: AppointmentsList,
   isPast: boolean = false,
@@ -609,15 +620,6 @@ export const filterAppointments = (
 
     // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
     const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
-
-    // eslint-disable-next-line max-len
-    // https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/health-care/appointments/va-online-scheduling/feature-reference/appointment-lists/upcoming-list.md#appointments-to-display
-    // Upcoming:
-    // If IS a video appointment, we want to show it in upcoming up to 4 hours in the past
-    // If NOT a video appointment, we want to show it in upcoming up to 1 hour in the past
-    // Past:
-    // If IS a video appointment, we want to show it in past if it started more than 4 hours ago
-    // If NOT a video appointment, we want to show it in past if it started more than 1 hour ago
     const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
     const shouldKeep = isPast ? startDate <= filterDateTime : startDate > filterDateTime
     return shouldKeep

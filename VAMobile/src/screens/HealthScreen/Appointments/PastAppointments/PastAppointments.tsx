@@ -112,7 +112,8 @@ function PastAppointments({
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ hours: 4 }) },
+        // for endDate see note in appointments.tsx for getPastAppointmentDateRange()
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
@@ -149,7 +150,7 @@ function PastAppointments({
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ hours: 4 }) },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
@@ -166,7 +167,6 @@ function PastAppointments({
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 
   useEffect(() => {
-    // Only filter when the selected date range is one that includes todays DateTime as an end point
     const filteredAppointments =
       datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
         ? filterAppointments(appointmentsData?.data || [], true)

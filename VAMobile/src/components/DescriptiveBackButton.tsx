@@ -5,10 +5,9 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
+import Box from 'components/Box'
+import TextView from 'components/TextView'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
-
-import Box from './Box'
-import TextView from './TextView'
 
 /**
  *  Signifies the props that need to be passed in to {@link DescriptiveBackButton}
