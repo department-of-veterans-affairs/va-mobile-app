@@ -742,15 +742,21 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 }
 
 /** Toggle the specified remote config feature flag
- * @param flagName - name of flag to toggle
+ * @param flagName - name of flag to toggle or array of flag names to toggle
  * */
-export async function toggleRemoteConfigFlag(flagName: string) {
+export async function toggleRemoteConfigFlag(flagName: string | string[]) {
+  const flagNames = Array.isArray(flagName) ? flagName : [flagName]
+
   await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+
+  for (const flag of flagNames) {
+    await scrollToThenTap(flag, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  }
+
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 
