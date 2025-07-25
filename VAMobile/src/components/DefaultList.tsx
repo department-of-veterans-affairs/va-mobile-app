@@ -13,7 +13,7 @@ export type DefaultListItemObj = {
   /** lines of text to display */
   textLines: Array<TextLine>
 } & Partial<ListItemObj>
-
+console.log()
 /**
  * Props for {@link DefaultList}
  */
