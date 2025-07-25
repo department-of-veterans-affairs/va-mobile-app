@@ -2,7 +2,6 @@ import { by, element, expect, waitFor } from 'detox'
 
 import {
   CommonE2eIdConstants,
-  disableAF,
   openAppointments,
   openBenefits,
   openClaims,
@@ -25,10 +24,6 @@ export const claimsId = {
 const utils = {
   goHome: async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
-  },
-
-  wgHome: async () => {
-    await disableAF(undefined, 'WG_Home', undefined, undefined)
   },
 
   skipUpdate: async () => {

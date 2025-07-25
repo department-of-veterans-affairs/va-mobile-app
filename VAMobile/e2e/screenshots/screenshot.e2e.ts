@@ -1,11 +1,12 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
-import { loginToDemoMode } from '../tests/utils'
+import { disableAF, loginToDemoMode } from '../tests/utils'
 import utils from './screenshot.utils'
 import { ScreenshotData, screenshotData } from './screenshot_data'
 
 describe('Screenshot Generation', () => {
   beforeAll(async () => {
+    await disableAF(undefined, 'WG_Home', undefined, undefined)
     await loginToDemoMode()
   })
 
