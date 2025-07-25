@@ -1,13 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
-import { useContactInformation } from 'api/contactInformation'
-import { useSubmitTravelClaim } from 'api/travelPay'
 import {
   Box,
   LinkWithAnalytics,
@@ -19,31 +15,28 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
-import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
-import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTravelPayContext } from 'utils/travelPay'
 import { getCommonSubtaskProps } from 'utils/travelPay'
 
-type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
-
-function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
+function ReviewClaimScreen() {
+  const {
+    appointment,
+    submitTravelClaim,
+    submittingTravelClaim,
+    userContactInformation,
+    isCheckboxChecked,
+    setIsCheckboxChecked,
+    checkboxError,
+  } = useTravelPayContext()
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
-  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(
-    appointment.id,
-    appointmentRouteKey,
-  )
 
   useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
-
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
-  const [checkBoxError, setCheckBoxError] = useState<string>('')
 
   useEffect(() => {
     if (!submittingTravelClaim) {
@@ -57,51 +50,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
 
   const theme = useTheme()
   const isPortrait = useOrientation()
-
-  const contactInformationQuery = useContactInformation({ enabled: true })
-  const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
-
-  const navigateToErrorScreen = (error: string) => {
-    logAnalyticsEvent(Events.vama_smoc_error(error))
-    navigateTo('SMOCErrorScreen', { error })
-  }
-
-  const submitTravelClaim = async () => {
-    if (!isCheckboxChecked) {
-      setCheckBoxError(t('required'))
-      return
-    }
-
-    if (!attributes.location.id) {
-      navigateToErrorScreen('error')
-      return
-    }
-
-    if (smocFlowStartDate) {
-      const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
-      logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
-    }
-
-    submitClaim(
-      {
-        appointmentDateTime: attributes.startDateLocal,
-        facilityStationNumber: attributes.location.id,
-        facilityName: attributes.location.name,
-        appointmentType: 'Other',
-        isComplete: false,
-      },
-      {
-        onSuccess: (data) => {
-          navigateTo('SubmitSuccessScreen', {
-            appointmentDateTime: attributes.startDateLocal,
-            facilityName: attributes.location.name,
-            status: data?.data.attributes.claimStatus,
-          })
-        },
-        onError: () => navigateToErrorScreen('error'),
-      },
-    )
-  }
+  const address = getTextForAddressData(userContactInformation, 'residentialAddress', t)
 
   if (submittingTravelClaim) {
     return <LoadingComponent text={t('travelPay.submitLoading')} />
@@ -186,7 +135,7 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
               setIsCheckboxChecked(!isCheckboxChecked)
             }}
             checked={isCheckboxChecked}
-            error={checkBoxError}
+            error={checkboxError ? t('required') : undefined}
             testID="checkboxTestID"
           />
         </Box>

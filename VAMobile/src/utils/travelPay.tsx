@@ -1,3 +1,5 @@
+import { createContext, useContext } from 'react'
+
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
@@ -6,6 +8,7 @@ import { TFunction } from 'i18next'
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
+import { TravelPayContextValue } from 'constants/travelPay'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction } from 'utils/hooks'
@@ -137,3 +140,30 @@ export const useTravelClaimSubmissionMutationState = (appointmentId: string) => 
 
   return mutationState
 }
+
+/**
+ * React context that provides shared state and actions for the **Submit Travel Pay**
+ * flow.
+ *
+ * @remarks The context value shape is described by {@link TravelPayContextValue}.
+ * The context is created with a placeholder (empty object cast to that type) so
+ * that it can be safely imported before the real value is supplied by
+ * `TravelPayContextProvider`.
+ *
+ * Components should wrap their subtree with `TravelPayContextProvider` (located
+ * in `SubmitTravelPayFlowSteps/components`) to supply the actual value.
+ */
+export const TravelPayContext = createContext<TravelPayContextValue>({} as TravelPayContextValue)
+
+/**
+ * React hook that returns the current value of {@link TravelPayContext}.
+ *
+ * @returns The current {@link TravelPayContextValue} provided higher in the
+ * component tree.
+ *
+ * @example
+ * ```tsx
+ * const { appointment, startSmocFlow } = useTravelPayContext();
+ * ```
+ */
+export const useTravelPayContext = () => useContext(TravelPayContext)
