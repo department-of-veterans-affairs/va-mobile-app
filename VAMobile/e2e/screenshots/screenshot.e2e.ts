@@ -6,7 +6,6 @@ import { ScreenshotData, screenshotData } from './screenshot_data'
 
 describe('Screenshot Generation', () => {
   beforeAll(async () => {
-    await disableAF(undefined, 'WG_Home', undefined, undefined)
     await loginToDemoMode()
   })
 
