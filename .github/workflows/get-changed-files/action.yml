@@ -11,4 +11,4 @@ runs:
     - name: Get paths of changed files
       id: get-changed-files
       shell: bash
-      run: cd VAMobile && echo changed_files=$(git diff --diff-filter=ACM --relative --name-only origin/develop... -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx" ":(exclude)./src/**/index.ts") >> $GITHUB_OUTPUT
+      run: cd VAMobile && CURRENT_BRANCH=$(git branch --show-current) && echo changed_files=$(git diff --diff-filter=ACM --relative --name-only origin/$CURRENT_BRANCH $(git merge-base origin/$CURRENT_BRANCH origin/develop) -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx" ":(exclude)./src/**/index.ts") >> $GITHUB_OUTPUT
