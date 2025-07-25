@@ -655,8 +655,8 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).not.toExist()
     await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).not.toExist()
   }
-  await device.uninstallApp()
-  await device.installApp()
+  // await device.uninstallApp()
+  // await device.installApp()
 }
 
 /** Function that allows the AF script to navigate to a certain feature
