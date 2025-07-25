@@ -1,0 +1,153 @@
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { useNavigation } from '@react-navigation/native'
+
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
+import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { getBuildNumber, getDeviceName, getVersionName } from 'utils/deviceData'
+import { useTheme } from 'utils/hooks'
+
+type LoginIssuesProps = Record<string, unknown>
+
+function LoginIssues({}: LoginIssuesProps) {
+  const theme = useTheme()
+  const snackbar = useSnackbar()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const navigation = useNavigation()
+
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [loginIssue, setLoginIssue] = useState('')
+  const [loginProvider, setLoginProvider] = useState('')
+  const [loginPreviously, setLoginPreviously] = useState('')
+  const [loginFrequency, setLoginFrequency] = useState('')
+
+  console.log(getDeviceName().then((v) => console.log(v)))
+  console.log(getVersionName().then((v) => console.log(v)))
+  console.log(getBuildNumber().then((v) => console.log(v)))
+
+  const onSave = () => {
+    snackbar.show(t('personalInformation.preferredName.saved'))
+    navigation.goBack()
+  }
+
+  const formFieldsList: Array<FormFieldType<string>> = [
+    {
+      fieldType: FieldType.Radios,
+      fieldProps: {
+        labelKey: 'loginIssues.whatIssue',
+        value: loginIssue,
+        onChange: setLoginIssue,
+        options: [
+          {
+            optionLabelKey: t('loginIssues.existingAccount'),
+            value: t('loginIssues.existingAccount'),
+          },
+          {
+            optionLabelKey: t('loginIssues.newAccount'),
+            value: t('loginIssues.newAccount'),
+          },
+          {
+            optionLabelKey: t('loginIssues.identity'),
+            value: t('loginIssues.identity'),
+          },
+        ],
+      },
+    },
+    {
+      fieldType: FieldType.Radios,
+      fieldProps: {
+        labelKey: 'loginIssues.loginProvider',
+        value: loginProvider,
+        onChange: setLoginProvider,
+        options: [
+          {
+            optionLabelKey: t('login.gov'),
+            value: t('login.gov'),
+          },
+          {
+            optionLabelKey: t('id.me'),
+            value: t('id.me'),
+          },
+          {
+            optionLabelKey: t('ds.logon'),
+            value: t('ds.logon'),
+          },
+        ],
+      },
+    },
+    {
+      fieldType: FieldType.Radios,
+      fieldProps: {
+        labelKey: 'loginIssues.loginPreviously',
+        value: loginPreviously,
+        onChange: setLoginPreviously,
+        options: [
+          {
+            optionLabelKey: t('yes'),
+            value: t('yes'),
+          },
+          {
+            optionLabelKey: t('no'),
+            value: t('no'),
+          },
+        ],
+      },
+    },
+    {
+      fieldType: FieldType.Radios,
+      fieldProps: {
+        labelKey: 'loginIssues.frequency',
+        value: loginFrequency,
+        onChange: setLoginFrequency,
+        options: [
+          {
+            optionLabelKey: t('always'),
+            value: t('always'),
+          },
+          {
+            optionLabelKey: t('often'),
+            value: t('often'),
+          },
+          {
+            optionLabelKey: t('sometimes'),
+            value: t('sometimes'),
+          },
+          {
+            optionLabelKey: t('rarely'),
+            value: t('rarely'),
+          },
+          {
+            optionLabelKey: t('never'),
+            value: t('never'),
+          },
+        ],
+      },
+    },
+  ]
+
+  return (
+    <FullScreenSubtask title={t('login.issues')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <FormWrapper
+          fieldsList={formFieldsList}
+          onSave={onSave}
+          onSaveClicked={onSaveClicked}
+          setOnSaveClicked={setOnSaveClicked}
+        />
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <Button
+            label={t('secureMessaging.formMessage.send')}
+            onPress={() => {
+              setOnSaveClicked(true)
+            }}
+          />
+        </Box>
+      </Box>
+    </FullScreenSubtask>
+  )
+}
+
+export default LoginIssues

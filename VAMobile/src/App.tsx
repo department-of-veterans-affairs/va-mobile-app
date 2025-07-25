@@ -58,6 +58,7 @@ import WebviewScreen from 'screens/WebviewScreen'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
 import LoaGate from 'screens/auth/LoaGate'
+import LoginIssues from 'screens/auth/LoginIssues'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
@@ -118,6 +119,7 @@ type StackNavParamList = WebviewStackParams & {
   RequestNotifications: undefined
   Sync: undefined
   Login: undefined
+  LoginIssues: undefined
   LoaGate: undefined
   VeteransCrisisLine: undefined
 }
@@ -401,6 +403,7 @@ export function AuthGuard() {
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={LARGE_PANEL_OPTIONS} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="LoaGate" component={LoaGate} options={{ headerShown: false }} />
+        <Stack.Screen name="LoginIssues" component={LoginIssues} options={{ headerShown: false }} />
       </Stack.Navigator>
     )
   }

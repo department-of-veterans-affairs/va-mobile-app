@@ -12,6 +12,7 @@ import {
   AlertWithHaptics,
   Box,
   CrisisLineButton,
+  LinkWithAnalytics,
   LoadingComponent,
   TextView,
   VALogo,
@@ -21,6 +22,7 @@ import {
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
 import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
@@ -30,8 +32,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
-
-import DemoAlert from './DemoAlert'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -164,6 +164,14 @@ function LoginScreen() {
                 label={t('findLocation.title')}
                 a11yLabel={a11yLabelVA(t('findLocation.title'))}
                 buttonType={ButtonVariants.Secondary}
+              />
+            </Box>
+            <Box alignItems={'center'}>
+              <LinkWithAnalytics
+                type="custom"
+                text={t('loginIssues.reportIssues')}
+                onPress={() => navigateTo('LoginIssues')}
+                testID="loginIssuesTestID"
               />
             </Box>
             <AppVersionAndBuild textColor={'appVersionAndBuild'} />
