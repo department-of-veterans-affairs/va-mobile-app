@@ -1,8 +1,7 @@
 import React from 'react'
 
+import VASelector, { SelectorType } from 'components/FormWrapper/FormFields/VASelector'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import VASelector, { SelectorType } from './VASelector'
 
 import Mock = jest.Mock
 

@@ -6,10 +6,9 @@ import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import UploadFile from './UploadFile'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()

@@ -4,10 +4,9 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AddressData, ValidateAddressData } from 'api/types'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen//AddressSummary'
+import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation/AddressValidation'
 import { render } from 'testUtils'
-
-import { profileAddressOptions } from '../AddressSummary'
-import AddressValidation from './AddressValidation'
 
 const mockAddress: AddressData = {
   addressLine1: '2248 San Miguel Ave.',

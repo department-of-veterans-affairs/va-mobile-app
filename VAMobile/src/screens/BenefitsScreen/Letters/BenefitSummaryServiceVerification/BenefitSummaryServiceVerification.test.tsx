@@ -4,11 +4,10 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { CharacterOfServiceConstants } from 'api/types'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
-
-import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {
