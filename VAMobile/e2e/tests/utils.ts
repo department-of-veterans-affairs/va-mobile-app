@@ -625,7 +625,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
  * @param AFUseCaseName: Name of the AF type.
  * @param AFAppUpdate: Boolean value that tells the script whether to enable the update now button or not
  * */
-export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName) {
+export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName, AFUseCaseName, skipAppInstall) {
   if (AFUseCaseName === 'AllowFunction') {
     await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
   } else {
@@ -655,8 +655,10 @@ export async function disableAF(featureNavigationArray, AFFeature, AFFeatureName
     await expect(element(by.text(CommonE2eIdConstants.AF_ERROR_MSG_TITLE_ENTERED_TEXT))).not.toExist()
     await expect(element(by.text(CommonE2eIdConstants.AF_BODY_ENTERED_TEXT))).not.toExist()
   }
-  await device.uninstallApp()
-  await device.installApp()
+  if (!skipAppInstall) {
+    await device.uninstallApp()
+    await device.installApp()
+  }
 }
 
 /** Function that allows the AF script to navigate to a certain feature
