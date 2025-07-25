@@ -18,7 +18,7 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
 }
-
+console.log('testing file outside src')
 beforeAll(async () => {
   await loginToDemoMode()
   await openHealth()

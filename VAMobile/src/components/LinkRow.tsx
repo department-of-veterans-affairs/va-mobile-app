@@ -5,7 +5,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-
+console.log('testing file with no lint err')
 type LinkRowProps = {
   /** Text for row title */
   title: string
