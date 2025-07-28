@@ -323,7 +323,7 @@ jobs:
   commit-screenshots:
     name: Commit Screenshots
     runs-on: ubuntu-latest
-    # needs: [combine-and-frame-images]
+    needs: [combine-and-frame-images]
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout PR branch
