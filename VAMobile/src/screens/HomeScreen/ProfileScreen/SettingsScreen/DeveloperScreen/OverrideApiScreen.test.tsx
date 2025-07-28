@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, within } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import OverrideAPIScreen, {
@@ -30,11 +30,11 @@ context('OverrideApiScreen', () => {
     expect(screen.getByRole('header', { name: t('overrideAPI') })).toBeTruthy()
     const allEndpoints = APIGroupings.flatMap((group) => group.endpoints)
 
-    allEndpoints.forEach((endpoint) => {
+    allEndpoints.forEach((endpoint, index) => {
       const networkCheckbox = screen.getByTestId(`${endpoint}_network`)
-      expect(networkCheckbox.props.accessibilityState.checked).toBe(false)
+      expect(screen.queryAllByA11yState({ checked: true })).toHaveLength(index)
       fireEvent.press(networkCheckbox)
-      expect(networkCheckbox.props.accessibilityState.checked).toBe(true)
+      expect(screen.queryAllByA11yState({ checked: true })).toHaveLength(index + 1)
     })
   })
 
@@ -48,13 +48,13 @@ context('OverrideApiScreen', () => {
       const beBody = `${endpoint}_backendOverride_body`
       const bePhone = `${endpoint}_backendOverride_telephone`
       const beRefreshable = `${endpoint}_backendOverride_refreshable`
-      expect(beOverrideCheckbox.props.accessibilityState.checked).toBe(false)
+      expect(within(beOverrideCheckbox).getByRole('checkbox').props.accessibilityState.checked).toBe(false)
       expect(screen.queryByTestId(beTitle)).toBeFalsy()
       expect(screen.queryByTestId(beBody)).toBeFalsy()
       expect(screen.queryByTestId(bePhone)).toBeFalsy()
       expect(screen.queryByTestId(beRefreshable)).toBeFalsy()
       fireEvent.press(beOverrideCheckbox)
-      expect(beOverrideCheckbox.props.accessibilityState.checked).toBe(true)
+      expect(within(beOverrideCheckbox).getByRole('checkbox').props.accessibilityState.checked).toBe(true)
 
       const beTitleInput = screen.getByTestId(beTitle)
       expect(beTitleInput).toBeTruthy()
@@ -73,9 +73,9 @@ context('OverrideApiScreen', () => {
 
       const refreshableCheckBox = screen.getByTestId(beRefreshable)
       expect(refreshableCheckBox).toBeTruthy()
-      expect(refreshableCheckBox.props.accessibilityState.checked).toBe(false)
+      expect(within(refreshableCheckBox).getByRole('checkbox').props.accessibilityState.checked).toBe(false)
       fireEvent.press(refreshableCheckBox)
-      expect(refreshableCheckBox.props.accessibilityState.checked).toBe(true)
+      expect(within(refreshableCheckBox).getByRole('checkbox').props.accessibilityState.checked).toBe(true)
     })
   })
 
@@ -85,12 +85,12 @@ context('OverrideApiScreen', () => {
 
     allEndpoints.forEach((endpoint) => {
       const otherCodesCheckbox = screen.getByTestId(`otherSelector-${endpoint}`)
-      expect(otherCodesCheckbox.props.accessibilityState.checked).toBe(false)
+      expect(within(otherCodesCheckbox).getByRole('checkbox').props.accessibilityState.checked).toBe(false)
       expect(screen.queryByTestId(`otherStatus-${endpoint}`)).toBeFalsy()
 
       fireEvent.press(otherCodesCheckbox)
 
-      expect(otherCodesCheckbox.props.accessibilityState.checked).toBe(true)
+      expect(within(otherCodesCheckbox).getByRole('checkbox').props.accessibilityState.checked).toBe(true)
       const otherStatusInput = screen.getByTestId(`otherStatus-${endpoint}`)
       expect(otherStatusInput).toBeTruthy()
       fireEvent.changeText(otherStatusInput, '12345')
