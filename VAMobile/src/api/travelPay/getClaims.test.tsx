@@ -44,7 +44,7 @@ jest.mock('utils/remoteConfig', () => ({
 }))
 
 const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
-  metadata: {
+  meta: {
     totalRecordCount: 1,
     pageNumber: 1,
     status: 200,

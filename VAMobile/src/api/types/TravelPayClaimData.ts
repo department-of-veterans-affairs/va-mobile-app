@@ -40,7 +40,7 @@ export type GetTravelPayClaimsParams = {
 }
 
 export type GetTravelPayClaimsResponse = {
-  metadata: {
+  meta: {
     totalRecordCount: number
     pageNumber: number
     status: number // will be either 200 if all claims returned, 206 if only some claims returned
