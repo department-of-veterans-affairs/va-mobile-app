@@ -246,6 +246,13 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
   return { queryClient, screen: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
+/**
+ * Used to unit test query hooks.
+ * @param useHook - The query hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `result`: The result of the hook
+ */
 const renderQuery = (useHook: () => UseQueryResult<any, Error>) => {
   const queryClient = new QueryClient()
   const wrapper = ({ children }: { children: React.ReactNode }) => {
@@ -261,8 +268,14 @@ const renderQuery = (useHook: () => UseQueryResult<any, Error>) => {
   return { queryClient, result }
 }
 
-// renderMutation is used to unit test mutation hooks. Returned is the queryClient to test the state before and after the mutation is called,
-// a function to trigger the mutation and the result to check error/success state
+/**
+ * Used to unit test mutation hooks
+ * @param useHook - The mutation hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `mutate`: Function to trigger the mutation
+ * - `result`: The result of the hook
+ */
 const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) => {
   const queryClient = new QueryClient()
   const wrapper = ({ children }: { children: Element }) => (
