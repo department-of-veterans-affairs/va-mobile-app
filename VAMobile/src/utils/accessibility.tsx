@@ -82,6 +82,13 @@ export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
 }
 
 /**
+ * Returns testID given a ListItems textLines with hyphen
+ */
+export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join('—')
+}
+
+/**
  * Sets focus point for screen reader.
  */
 export const setAccessibilityFocus = (ref: MutableRefObject<null> | ForwardedRef<unknown>) => {

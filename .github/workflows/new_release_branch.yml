@@ -36,8 +36,8 @@ jobs:
           token: ${{ secrets.GH_ACTIONS_PAT }}
       - name: Set username and email
         run: |
-          git config --global user.name 'VA Automation Bot'
-          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git config --global user.name 'VA Mobile Automation Bot'
+          git config --global user.email 'VAFlagshipMobile@va.gov'
       - name: Cut release branch
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
