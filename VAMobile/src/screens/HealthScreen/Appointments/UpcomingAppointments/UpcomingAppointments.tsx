@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -35,11 +35,15 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   }
   const { perPage, totalEntries } = pagination
 
+  const filteredAppointments = useMemo(
+    () => filterAppointments(appointmentsData?.data || [], true),
+    [appointmentsData?.data],
+  )
+
   useEffect(() => {
-    const filteredAppointments = filterAppointments(appointmentsData?.data || [])
     const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
     setAppointmentsToShow(appointmentsList || [])
-  }, [appointmentsData?.data, page, perPage])
+  }, [filteredAppointments, page, perPage])
 
   if (loading && isFocused) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
