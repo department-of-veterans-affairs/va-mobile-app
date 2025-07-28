@@ -372,7 +372,7 @@ jobs:
 
   failure-slack-message:
     name: Failure Slack thread
-    needs: combine-screenshots
+    needs: commit-screenshots
     if: ${{ failure() }}
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
