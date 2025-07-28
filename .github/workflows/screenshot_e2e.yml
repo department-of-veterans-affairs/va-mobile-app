@@ -340,7 +340,8 @@ jobs:
       - name: Move framed images
         run: |
           pwd
-          ls al ../.github
+          ls -al ../.github
+          ls -al ../.github/scripts/app-store-images
           mkdir -p VAMobile/ios/fastlane/screenshots/en-US/
           mkdir -p VAMobile/ios/fastlane/screenshots_ipad/en-US/
           mkdir -p VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
