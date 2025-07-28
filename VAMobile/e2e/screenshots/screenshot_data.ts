@@ -37,6 +37,13 @@ export const screenshotData: ScreenshotData[] = [
     setupFunction: 'appointmentDetails',
   },
   {
+    testId: 'AppointmentDetails2',
+    imageName: 'AppointmentDetails2',
+    description: ['Review and cancel your VA', 'medical appointments'],
+    deviceType: ['ios', 'android', 'ipad'],
+    setupFunction: 'appointmentDetails',
+  },
+  {
     testId: 'MessagesInbox',
     imageName: 'MessagesInbox',
     description: ['Send and receive messages', 'with your VA health care team'],
