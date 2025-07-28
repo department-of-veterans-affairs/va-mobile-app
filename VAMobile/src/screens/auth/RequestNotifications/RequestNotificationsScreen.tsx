@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -9,6 +10,7 @@ import { Box, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { useAppDispatch, useTheme } from 'utils/hooks'
+import { isAndroid } from 'utils/platform'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
@@ -25,6 +27,12 @@ function RequestNotificationsScreen({}: SyncScreenProps) {
     AsyncStorage.setItem(NOTIFICATION_COMPLETED_KEY, FIRST_NOTIFICATION_STORAGE_VAL)
     //This sets the state variable for the session
     dispatch(setNotificationsPreferenceScreen(false))
+
+    // Android 12 and lower defaults notifications to ON, set preferences
+    // @ts-expect-error
+    if (isAndroid() && parseFloat(Platform.constants.Release) <= 12) {
+      dispatch(setRequestNotifications(true))
+    }
   }
 
   const onUseNotifications = (): void => {
