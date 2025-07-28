@@ -1,14 +1,9 @@
-import React from 'react'
-
-import { NavigationContainer } from '@react-navigation/native'
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { renderHook, waitFor } from '@testing-library/react-native'
+import { waitFor } from '@testing-library/react-native'
 
 import { useTravelPayClaims } from 'api/travelPay/getClaims'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
 import { DowntimeFeatureTypeConstants, get } from 'store/api'
-import { context, when } from 'testUtils'
+import { context, renderQuery, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
@@ -75,15 +70,6 @@ const params: GetTravelPayClaimsParams = {
   page: 1,
 }
 
-const wrapper = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient()
-  return (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
-    </QueryClientProvider>
-  )
-}
-
 context('getClaims', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -102,7 +88,7 @@ context('getClaims', () => {
         .mockReturnValue(true)
 
       // useTravelPayClaims will call the get claims endpoint and populate the query data
-      const { result } = renderHook(() => useTravelPayClaims(params), { wrapper })
+      const { result } = renderQuery(() => useTravelPayClaims(params))
       const response = await waitFor(() => {
         expect(result.current.data).toBeDefined()
         return result.current.data
@@ -120,7 +106,7 @@ context('getClaims', () => {
         .calledWith('travelPaySMOC')
         .mockReturnValue(true)
 
-      renderHook(() => useTravelPayClaims(params), { wrapper })
+      renderQuery(() => useTravelPayClaims(params))
 
       // Should not be called when Travel Pay is in downtime
       expect(get).not.toHaveBeenCalled()
@@ -133,7 +119,7 @@ context('getClaims', () => {
         .calledWith('travelPaySMOC')
         .mockReturnValue(false)
 
-      renderHook(() => useTravelPayClaims(params), { wrapper })
+      renderQuery(() => useTravelPayClaims(params))
 
       // Should not be called when Travel Pay is in downtime
       expect(get).not.toHaveBeenCalled()

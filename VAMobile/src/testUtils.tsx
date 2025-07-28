@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
 import { AnyAction, Store, configureStore } from '@reduxjs/toolkit'
-import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult, UseQueryResult } from '@tanstack/react-query'
 import { render as rtlRender } from '@testing-library/react-native'
 import { renderHook as rtlRenderHook } from '@testing-library/react-native/build/render-hook'
 import path from 'path'
@@ -246,6 +246,21 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
   return { queryClient, screen: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
+const renderQuery = (useHook: () => UseQueryResult<any, Error>) => {
+  const queryClient = new QueryClient()
+  const wrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
+      </QueryClientProvider>
+    )
+  }
+
+  const { result } = rtlRenderHook(useHook, { wrapper })
+
+  return { queryClient, result }
+}
+
 // renderMutation is used to unit test mutation hooks. Returned is the queryClient to test the state before and after the mutation is called,
 // a function to trigger the mutation and the result to check error/success state
 const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) => {
@@ -270,5 +285,5 @@ const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) 
 // re-export everything
 export * from '@testing-library/react-native'
 // override render method
-export { render, renderMutation }
+export { render, renderQuery, renderMutation }
 export * from 'jest-when'
