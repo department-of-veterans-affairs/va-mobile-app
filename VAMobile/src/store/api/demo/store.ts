@@ -138,7 +138,9 @@ const transformDates = (fileObject: Record<string, unknown>) => {
  */
 export const initDemoStore = async (): Promise<void> => {
   const data = await Promise.all([
-    import('./mocks/appointments.json'),
+    featureEnabled('appointmentsTestTime')
+      ? import('./mocks/appointmentsTestTime.json')
+      : import('./mocks/appointments.json'),
     import('./mocks/claims.json'),
     import('./mocks/profile.json'),
     import('./mocks/secureMessaging.json'),

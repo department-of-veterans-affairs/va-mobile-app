@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -10,15 +10,14 @@ import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, V
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { getGroupedAppointments } from 'utils/appointments'
+import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -67,11 +66,6 @@ function PastAppointments({
   }
   const { perPage, totalEntries } = pagination
 
-  useEffect(() => {
-    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
-    setAppointmentsToShow(appointmentsList || [])
-  }, [appointmentsData?.data, page, perPage])
-
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
   }
@@ -118,7 +112,7 @@ function PastAppointments({
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
@@ -155,7 +149,7 @@ function PastAppointments({
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
@@ -170,6 +164,19 @@ function PastAppointments({
 
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+
+  const filteredAppointments = useMemo(
+    () =>
+      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
+        ? filterAppointments(appointmentsData?.data || [], true)
+        : appointmentsData?.data,
+    [appointmentsData?.data, datePickerOption],
+  )
+
+  useEffect(() => {
+    const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
+    setAppointmentsToShow(appointmentsList || [])
+  }, [filteredAppointments, page, perPage])
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
