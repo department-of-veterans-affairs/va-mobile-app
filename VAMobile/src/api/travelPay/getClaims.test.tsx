@@ -84,7 +84,7 @@ context('getClaims', () => {
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
 
       when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
+        .calledWith('travelPayStatusList')
         .mockReturnValue(true)
 
       // useTravelPayClaims will call the get claims endpoint and populate the query data
@@ -103,7 +103,7 @@ context('getClaims', () => {
       mockUseDowntime.mockImplementation((feature) => feature === DowntimeFeatureTypeConstants.travelPayFeatures)
 
       when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
+        .calledWith('travelPayStatusList')
         .mockReturnValue(true)
 
       renderQuery(() => useTravelPayClaims(params))
@@ -116,7 +116,7 @@ context('getClaims', () => {
       mockUseDowntime.mockImplementation(() => false)
 
       when(featureEnabled as jest.Mock)
-        .calledWith('travelPaySMOC')
+        .calledWith('travelPayStatusList')
         .mockReturnValue(false)
 
       renderQuery(() => useTravelPayClaims(params))

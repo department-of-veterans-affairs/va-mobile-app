@@ -21,7 +21,7 @@ const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPay
  */
 export const useTravelPayClaims = (params: GetTravelPayClaimsParams) => {
   const travelPayEnabled =
-    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
+    !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPayStatusList')
 
   return useQuery({
     queryKey: [travelPayKeys.claims, TimeFrameTypeConstants.PAST_THREE_MONTHS],
