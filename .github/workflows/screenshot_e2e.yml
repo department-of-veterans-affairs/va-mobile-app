@@ -339,12 +339,9 @@ jobs:
 
       - name: Move framed images
         run: |
-          mkdir -p VAMobile/ios/fastlane/screenshots/en-US/
-          mkdir -p VAMobile/ios/fastlane/screenshots_ipad/en-US/
-          mkdir -p VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          mv framed_images/ios/* VAMobile/ios/fastlane/screenshots/en-US/
-          mv framed_images/ipad/* VAMobile/ios/fastlane/screenshots_ipad/en-US/
-          mv framed_images/android/* VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          mv ../.github/scripts/app-store-images/framed_images/ios/* VAMobile/ios/fastlane/screenshots/en-US/
+          mv ../.github/scripts/app-store-images/framed_images/ipad/* VAMobile/ios/fastlane/screenshots_ipad/en-US/
+          mv ../.github/scripts/app-store-images/framed_images/android/* VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
 
       - name: Commit and push screenshots
         run: |
