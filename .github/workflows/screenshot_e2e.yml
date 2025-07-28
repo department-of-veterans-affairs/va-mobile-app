@@ -4,10 +4,18 @@
 
 name: "[Utils] Gather iOS and Android screenshots"
 
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
-  #  paths:
-  #    - "VAMobile/e2e/screenshots/screenshot_data.ts"
+  pull_request:
+    paths:
+      - "VAMobile/e2e/screenshots/screenshot_data.ts"
   workflow_dispatch:
 
 defaults:
@@ -312,6 +320,44 @@ jobs:
         with:
           name: "app-store-images-framed"
           path: .github/scripts/app-store-images/framed_images/*
+
+  commit-screenshots:
+    name: Commit Screenshots
+    runs-on: ubuntu-latest
+    needs: [combine-and-frame-images]
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Download framed screenshots
+        uses: actions/download-artifact@v4
+        with:
+          name: "app-store-images-framed"
+          path: framed_images
+
+      - name: Move framed images
+        run: |
+          mkdir -p VAMobile/ios/fastlane/screenshots/en-US/
+          mkdir -p VAMobile/ios/fastlane/screenshots_ipad/en-US/
+          mkdir -p VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          mv framed_images/ios/* VAMobile/ios/fastlane/screenshots/en-US/
+          mv framed_images/ipad/* VAMobile/ios/fastlane/screenshots_ipad/en-US/
+          mv framed_images/android/* VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+
+      - name: Commit and push screenshots
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "ci: update app store screenshots"
+            git push
+          fi
 
   success-slack-message:
     name: Success Slack thread
