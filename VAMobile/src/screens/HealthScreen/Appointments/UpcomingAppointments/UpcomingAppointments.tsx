@@ -35,10 +35,7 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   }
   const { perPage, totalEntries } = pagination
 
-  const filteredAppointments = useMemo(
-    () => filterAppointments(appointmentsData?.data || [], true),
-    [appointmentsData?.data],
-  )
+  const filteredAppointments = useMemo(() => filterAppointments(appointmentsData?.data || []), [appointmentsData?.data])
 
   useEffect(() => {
     const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
