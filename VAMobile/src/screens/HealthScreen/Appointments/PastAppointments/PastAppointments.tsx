@@ -167,7 +167,8 @@ function PastAppointments({
 
   const filteredAppointments = useMemo(
     () =>
-      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
+      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS ||
+      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR
         ? filterAppointments(appointmentsData?.data || [], true)
         : appointmentsData?.data,
     [appointmentsData?.data, datePickerOption],
