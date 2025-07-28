@@ -13,7 +13,7 @@ export const screenshotData: ScreenshotData[] = [
     imageName: 'HomeScreen',
     description: ['Complete health care and', 'benefits transactions'],
     deviceType: ['ios', 'android', 'ipad'],
-    setupFunction: 'goHome',
+    setupFunction: ['goHome', 'skipUpdate'],
   },
   {
     testId: 'HealthScreen',
