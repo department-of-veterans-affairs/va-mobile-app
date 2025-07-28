@@ -342,14 +342,14 @@ jobs:
           pwd
           ls -al ../.github
           ls -al ../.github/scripts/app-store-images
-          ls -al VAMobile
-          ls -al VAMobile/artifacts
+          ls -al 
+          ls -al artifacts
           # mkdir -p VAMobile/ios/fastlane/screenshots/en-US/
           # mkdir -p VAMobile/ios/fastlane/screenshots_ipad/en-US/
           # mkdir -p VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          mv VAMobile/artifacts/ios/* VAMobile/ios/fastlane/screenshots/en-US/
-          mv VAMobile/artifacts/ipad/* VAMobile/ios/fastlane/screenshots_ipad/en-US/
-          mv VAMobile/artifacts/android/* VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+          mv VAMobile/artifacts/ios/* ios/fastlane/screenshots/en-US/
+          mv VAMobile/artifacts/ipad/* ios/fastlane/screenshots_ipad/en-US/
+          mv VAMobile/artifacts/android/* android/fastlane/metadata/android/en-US/images/phoneScreenshots/
 
       - name: Commit and push screenshots
         run: |
