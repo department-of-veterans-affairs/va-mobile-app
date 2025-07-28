@@ -47,7 +47,6 @@ export default function TravelPayContextProvider({
       return
     }
 
-    console.log('smocFlowStartDate.current', smocFlowStartDate.current)
     if (smocFlowStartDate.current) {
       const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate.current)).toMillis()
       logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
