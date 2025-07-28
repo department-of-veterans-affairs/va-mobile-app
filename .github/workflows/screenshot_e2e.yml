@@ -323,7 +323,7 @@ jobs:
   commit-screenshots:
     name: Commit Screenshots
     runs-on: ubuntu-latest
-    needs: [combine-and-frame-images]
+    # needs: [combine-and-frame-images]
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout PR branch
@@ -340,6 +340,10 @@ jobs:
       - name: Move framed images
         run: |
           pwd
+          ls al ../.github
+          mkdir -p VAMobile/ios/fastlane/screenshots/en-US/
+          mkdir -p VAMobile/ios/fastlane/screenshots_ipad/en-US/
+          mkdir -p VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
           mv ../.github/scripts/app-store-images/framed_images/ios/* VAMobile/ios/fastlane/screenshots/en-US/
           mv ../.github/scripts/app-store-images/framed_images/ipad/* VAMobile/ios/fastlane/screenshots_ipad/en-US/
           mv ../.github/scripts/app-store-images/framed_images/android/* VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
@@ -358,7 +362,7 @@ jobs:
 
   success-slack-message:
     name: Success Slack thread
-    needs: combine-and-frame-images
+    needs: commit-screenshots
     if: ${{ success() }}
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
@@ -368,7 +372,7 @@ jobs:
 
   failure-slack-message:
     name: Failure Slack thread
-    needs: combine-and-frame-images
+    needs: combine-screenshots
     if: ${{ failure() }}
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
