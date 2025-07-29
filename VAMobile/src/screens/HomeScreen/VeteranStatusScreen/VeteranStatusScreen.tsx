@@ -21,6 +21,7 @@ import {
   ClickToCallPhoneNumber,
   ClickToCallPhoneNumberDeprecated,
   LargePanel,
+  LoadingComponent,
   MilitaryBranchEmblem,
   TextView,
   VALogo,
@@ -49,19 +50,24 @@ type VeteranStatusScreenProps = StackScreenProps<HomeStackParamList, 'VeteranSta
 
 function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
   const isCardAllowed = screenContentAllowed('WG_VeteranStatusCard')
-  const { data: militaryServiceHistoryAttributes } = useServiceHistory()
+  const { data: militaryServiceHistoryAttributes, isLoading: isServiceHistoryLoading } = useServiceHistory()
   const serviceHistory = militaryServiceHistoryAttributes?.serviceHistory || ([] as ServiceHistoryData)
   const mostRecentBranch = militaryServiceHistoryAttributes?.mostRecentBranch
-  const { data: ratingData } = useDisabilityRating()
+  const { data: ratingData, isLoading: isDisabilityRatingLoading } = useDisabilityRating()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { data: personalInfo } = usePersonalInformation()
-  const { data: veteranStatus, isError } = useVeteranStatus({
+  const {
+    data: veteranStatus,
+    isError,
+    isLoading: isVeteranStatusLoading,
+  } = useVeteranStatus({
     enabled: isCardAllowed,
   })
+  const isVSCLoading = isServiceHistoryLoading || isDisabilityRatingLoading || isVeteranStatusLoading
   const registerReviewEvent = useReviewEvent(true)
   const accessToMilitaryInfo = userAuthorizedServices?.militaryServiceHistory && serviceHistory.length > 0
   const veteranStatusConfirmed = veteranStatus?.data?.attributes?.veteranStatus === 'confirmed'
-  const showError = !veteranStatusConfirmed || (veteranStatusConfirmed && !serviceHistory.length)
+  const showError = !isVSCLoading && (!veteranStatusConfirmed || (veteranStatusConfirmed && !serviceHistory.length))
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -252,11 +258,10 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       removeInsets={shouldRemoveInsets}
       testID="veteranStatusTestID"
       rightButtonTestID="veteranStatusCloseID">
-      {showError ? (
-        <>
-          {getError()}
-          {isVSCFeatureEnabled && getHelperText()}
-        </>
+      {isVSCLoading ? (
+        <LoadingComponent />
+      ) : showError ? (
+        <>{getError()}</>
       ) : isVSCFeatureEnabled ? (
         <>
           <WaygateWrapper waygateName="WG_VeteranStatusCard">
@@ -268,7 +273,6 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
               getLatestPeriodOfService={getLatestPeriodOfService}
             />
           </WaygateWrapper>
-          {getHelperText()}
         </>
       ) : (
         <>
@@ -364,6 +368,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </Box>
         </>
       )}
+      {isVSCFeatureEnabled && getHelperText()}
     </LargePanel>
   )
 }
