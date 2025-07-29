@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { each } from 'underscore'
 
 import { useDeletePhoneNumber, useSavePhoneNumber } from 'api/contactInformation'
 import { useContactInformation } from 'api/contactInformation/getContactInformation'
@@ -12,20 +14,60 @@ import { PhoneData, PhoneType, PhoneTypeToFormattedNumber, UserContactInformatio
 import {
   AlertWithHaptics,
   Box,
+  ComboBoxItem,
+  ComboBoxOptions,
   FieldType,
   FormFieldType,
   FormWrapper,
   FullScreenSubtask,
   LoadingComponent,
+  TextView,
+  VAIcon,
+  VAIcons,
 } from 'components'
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
+import { DefaultFlagCode, FlagT, Flags } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
+const INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED = '@intl_number_notification_settings_dismissed'
+
+const FlagIcon = ({ name }: { name: VAIcons }) => {
+  const theme = useTheme()
+
+  const borderStyles = { borderColor: theme.colors.border.primary, borderWidth: 1 }
+
+  // Overflow hidden is required here to prevent some svgs from overlapping with pressable areas of the list
+  // specifically in the case of the svg for Tajikistan and New Zealand
+  return <VAIcon name={name} width={32} height={24} maxHeight={26} style={borderStyles} overflow="hidden" />
+}
+
+const FlagCountryToFlag: Record<string, FlagT> = {}
+// Todo: Will be replaced with saving the country code with phone data
+const FlagCodeToFlag: Record<string, FlagT> = {}
+const FlagOptions: ComboBoxOptions = { Flags: [] }
+each(Flags, (flag) => {
+  FlagOptions.Flags.push({
+    value: flag.iso_code,
+    label: `${flag.name} +${flag.calling_code}`,
+    icon: <FlagIcon name={flag.iso_code as VAIcons} />,
+  })
+  FlagCountryToFlag[flag.iso_code] = flag
+  FlagCodeToFlag[flag.calling_code] = flag
+})
+
+// returns the combobox item for a given country calling code
+const getComboboxItemFromCountryCode = (countryCode: string) => {
+  return {
+    label: `${FlagCountryToFlag[countryCode].name} +${FlagCountryToFlag[countryCode].calling_code}`,
+    value: countryCode,
+  }
+}
 
 function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const snackbar = useSnackbar()
@@ -34,8 +76,16 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useAlert()
   const confirmAlert = useDestructiveActionSheet()
+  const displayInternationalPhoneNumberSelect = featureEnabled('internationalPhoneNumber')
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
+
+  // TODO Remove this once country codes can be saved
+  const countryCode =
+    !phoneData?.countryCode || phoneData?.countryCode === '1'
+      ? DefaultFlagCode
+      : FlagCodeToFlag[phoneData?.countryCode].iso_code
+  const [newCountry, setNewCountry] = useState<ComboBoxItem>(getComboboxItemFromCountryCode(countryCode))
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -98,7 +148,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     let phoneDataPayload: PhoneData = {
       areaCode: onlyDigitsNum.substring(0, 3),
-      countryCode: '1',
+      countryCode: `${FlagCountryToFlag[newCountry.value].calling_code}`,
       phoneNumber: onlyDigitsNum.substring(3),
       phoneType,
     }
@@ -123,7 +173,8 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
     const save = (): void => {
       const mutateOptions = {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await AsyncStorage.setItem(INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED, 'false')
           snackbar.show(t('contactInformation.phoneNumber.saved', { type: displayTitle }))
         },
         onError: (error: unknown) =>
@@ -189,6 +240,25 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
+      hideField: !displayInternationalPhoneNumberSelect,
+      fieldType: FieldType.ComboBox,
+      fieldProps: {
+        titleKey: 'editPhoneNumber.selectCountryCode',
+        labelKey: 'editPhoneNumber.countryCode',
+        selectedValue: newCountry,
+        onSelectionChange: (code?: ComboBoxItem) =>
+          setNewCountry(code || getComboboxItemFromCountryCode(DefaultFlagCode)),
+        comboBoxOptions: FlagOptions,
+        testID: 'countryCode',
+        startIcon: <FlagIcon name={newCountry.value as VAIcons} />,
+        virtualized: true,
+        hideRemoveButton: true,
+        hideGroupsHeaders: true,
+      },
+      fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
+      validationList: [],
+    },
+    {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
@@ -199,6 +269,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         onEndEditing: onEndEditingPhoneNumber,
         isRequiredField: true,
         testID: 'phoneNumberTestID',
+        preAdornment: <TextView variant="MobileBody">+{FlagCountryToFlag[newCountry.value].calling_code}</TextView>,
       },
       fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
       validationList: [
@@ -257,16 +328,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         <LoadingComponent text={loadingText} />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {getFormattedPhoneNumber(phoneData) !== '' && (
-            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-              <Button
-                onPress={onDeletePressed}
-                label={t('contactInformation.removeData', { pageName: buttonTitle })}
-                buttonType={ButtonVariants.Destructive}
-              />
-            </Box>
-          )}
-          <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
           {formContainsError && (
             <Box mt={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
@@ -277,7 +338,16 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               />
             </Box>
           )}
-          <Box mt={theme.dimensions.formMarginBetween} mx={theme.dimensions.gutter}>
+          {!displayInternationalPhoneNumberSelect && (
+            <AlertWithHaptics variant="info" description={t('editPhoneNumber.weCanOnlySupportUSNumbers')} />
+          )}
+          <Box mx={theme.dimensions.gutter} gap={theme.dimensions.smallMarginBetween}>
+            {displayInternationalPhoneNumberSelect && (
+              <>
+                <TextView variant="MobileBody">{t('editPhoneNumber.numberTitle')}</TextView>
+                <TextView variant="ActivityFooter">{t('editPhoneNumber.disableSMSMessage')}</TextView>
+              </>
+            )}
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={onSave}
@@ -286,6 +356,15 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
               setOnSaveClicked={setOnSaveClicked}
             />
           </Box>
+          {getFormattedPhoneNumber(phoneData) !== '' && (
+            <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+              <Button
+                onPress={onDeletePressed}
+                label={t('contactInformation.removeData', { pageName: buttonTitle })}
+                buttonType={ButtonVariants.Destructive}
+              />
+            </Box>
+          )}
         </Box>
       )}
     </FullScreenSubtask>
