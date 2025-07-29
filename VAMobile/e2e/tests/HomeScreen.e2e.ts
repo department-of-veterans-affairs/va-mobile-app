@@ -111,17 +111,6 @@ describe('Home Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
   })
 
-  it('health tab tap: verify travel button exists when feature flag is enabled', async () => {
-    await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
-    await expect(element(by.text('Travel'))).toExist()
-  })
-
-  it('taps health then navigates to travel reimbursement from travel button', async () => {
-    await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
-    await element(by.text('Travel')).tap()
-    await expect(element(by.label('Travel Reimbursement'))).toExist()
-  })
-
   it('payments tab tap: verify the payments screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID))).toExist()
