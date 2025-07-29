@@ -1,11 +1,11 @@
-import React, { RefObject, useEffect, useMemo, useState } from 'react'
+import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
 
-import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
@@ -51,7 +51,6 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -174,10 +173,10 @@ function PastAppointments({
     [appointmentsData?.data, datePickerOption],
   )
 
-  useEffect(() => {
-    const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
-    setAppointmentsToShow(appointmentsList || [])
-  }, [filteredAppointments, page, perPage])
+  const appointmentsToShow = useMemo(
+    () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
+    [filteredAppointments, page, perPage],
+  )
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />

@@ -1,10 +1,10 @@
-import React, { RefObject, useEffect, useMemo, useState } from 'react'
+import React, { RefObject, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
-import { AppointmentData, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { AppointmentData, AppointmentsGetData } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -26,7 +26,6 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
-  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
 
   const pagination = {
     currentPage: page,
@@ -37,9 +36,8 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
 
   const filteredAppointments = useMemo(() => filterAppointments(appointmentsData?.data || []), [appointmentsData?.data])
 
-  useEffect(() => {
-    const appointmentsList = filteredAppointments?.slice((page - 1) * perPage, page * perPage)
-    setAppointmentsToShow(appointmentsList || [])
+  const appointmentsToShow = useMemo(() => {
+    return filteredAppointments?.slice((page - 1) * perPage, page * perPage) || []
   }, [filteredAppointments, page, perPage])
 
   if (loading && isFocused) {
