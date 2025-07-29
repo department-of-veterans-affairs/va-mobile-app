@@ -9,7 +9,7 @@ import {
 } from './utils'
 
 export const TravelReimbursementE2eIdConstants = {
-  TRAVEL_REIMBURSEMENT_TITLE_TEXT: 'Travel Reimbursement',
+  TRAVEL_REIMBURSEMENT_TEST_ID: 'travelListReimbursementTestID',
 }
 
 beforeAll(async () => {
@@ -20,8 +20,7 @@ beforeAll(async () => {
 })
 
 describe('Travel Reimbursement Screen', () => {
-  it('should navigate to Travel Reimbursement screen and display title', async () => {
-    await expect(element(by.label(TravelReimbursementE2eIdConstants.TRAVEL_REIMBURSEMENT_TITLE_TEXT))).toExist()
+  it('should navigate to Travel List Reimbursement screen and display title', async () => {
+    await expect(element(by.id(TravelReimbursementE2eIdConstants.TRAVEL_REIMBURSEMENT_TEST_ID))).toExist()
   })
 })
-
