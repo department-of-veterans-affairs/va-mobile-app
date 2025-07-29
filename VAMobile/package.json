@@ -42,7 +42,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-assets": "0.14.0",
+    "@department-of-veterans-affairs/mobile-assets": "0.15.1",
     "@department-of-veterans-affairs/mobile-component-library": "0.30.3",
     "@department-of-veterans-affairs/mobile-tokens": "0.23.0",
     "@expo/react-native-action-sheet": "^4.1.1",
@@ -82,8 +82,8 @@
     "react-native-keychain": "^9.2.3",
     "react-native-localize": "^3.3.0",
     "react-native-notifications": "^5.1.0",
-    "react-native-safe-area-context": "^5.4.0",
     "react-native-quick-base64": "^2.1.2",
+    "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "^3.37.0",
     "react-native-shadow-2": "^7.1.1",
     "react-native-svg": "15.8.0",
