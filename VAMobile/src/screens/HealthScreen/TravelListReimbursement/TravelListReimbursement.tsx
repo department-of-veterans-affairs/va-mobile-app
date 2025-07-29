@@ -7,19 +7,19 @@ import { FeatureLandingTemplate } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 
-type TravelReimbursementProps = StackScreenProps<HealthStackParamList, 'TravelReimbursement'>
+type TravelListReimbursementProps = StackScreenProps<HealthStackParamList, 'TravelListReimbursement'>
 
-export function TravelReimbursement({ navigation }: TravelReimbursementProps) {
+export function TravelListReimbursement({ navigation }: TravelListReimbursementProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('travel.reimbursement')}
-      testID="travelReimbursementTestID"
+      title={t('travelPay.statusList.reimbursement.title')}
+      testID="travelListReimbursementTestID"
     />
   )
 }
 
-export default TravelReimbursement
+export default TravelListReimbursement

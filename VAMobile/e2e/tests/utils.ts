@@ -106,7 +106,6 @@ export const CommonE2eIdConstants = {
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
   LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
-  TRAVEL_BUTTON_ID: 'toTravelID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
   CLAIMS_HISTORY_BUTTON_ID: 'toClaimsHistoryID',
@@ -187,6 +186,7 @@ export const CommonE2eIdConstants = {
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
+  TRAVEL_LIST_BUTTON_ID: 'toTravelListID',
 }
 
 /** Logs into demo mode.
@@ -407,7 +407,7 @@ export async function openAppointments() {
 }
 
 export async function openTravelReimbursement() {
-  await element(by.id(CommonE2eIdConstants.TRAVEL_BUTTON_ID)).tap()
+  await element(by.id(CommonE2eIdConstants.TRAVEL_LIST_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
@@ -742,10 +742,24 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 }
 
 /** Toggle the specified remote config feature flag
- * @param flagName - name of flag to toggle or array of flag names to toggle
+ * @param flagName - name of flag to toggle
  * */
-export async function toggleRemoteConfigFlag(flagName: string | string[]) {
-  const flagNames = Array.isArray(flagName) ? flagName : [flagName]
+export async function toggleRemoteConfigFlag(flagName: string) {
+  await loginToDemoMode()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
+  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+}
+
+/** Toggle the specified remote config feature flag
+ * @param flagNames - array of flag names to toggle
+ * */
+export async function toggleRemoteConfigFlags(flagNames: string[]) {
+  // Sort flags alphabetically to match the order in RemoteConfigScreen
+  const sortedFlagNames = flagNames.sort()
 
   await loginToDemoMode()
   await openProfile()
@@ -753,7 +767,7 @@ export async function toggleRemoteConfigFlag(flagName: string | string[]) {
   await openDeveloperScreen()
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
 
-  for (const flag of flagNames) {
+  for (const flag of sortedFlagNames) {
     await scrollToThenTap(flag, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   }
 

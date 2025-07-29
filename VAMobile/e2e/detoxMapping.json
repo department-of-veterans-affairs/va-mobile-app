@@ -133,7 +133,15 @@
     "PaymentHistory": ["Payments"],
     "SplashScreen": ["Onboarding", "LoginScreen"],
     "BenefitsScreen": ["DisabilityRatings", "Claims", "Appeals", "VALetters"],
-    "HealthScreen": ["Appointments", "AppointmentsExpanded", "Cerner", "Prescriptions", "Messages", "VaccineRecords"],
+    "HealthScreen": [
+      "Appointments",
+      "AppointmentsExpanded",
+      "Cerner",
+      "Prescriptions",
+      "Messages",
+      "VaccineRecords",
+      "TravelListReimbursement"
+    ],
     "HomeScreen": ["HomeScreen", "ProfileScreen", "VeteranStatusCard"],
     "SettingsScreen": ["SettingsScreen"],
     "PaymentsScreen": ["Payments", "DirectDeposit"],
@@ -198,6 +206,7 @@
       "VeteranStatusCard"
     ],
     "travelPay": ["TravelPay"],
+    "TravelListReimbursement": ["TravelListReimbursement"],
     "utils": [
       "Allergies",
       "LabsAndTests",

@@ -8,6 +8,7 @@ import {
   enableAF,
   loginToDemoMode,
   toggleRemoteConfigFlag,
+  toggleRemoteConfigFlags,
   verifyAF,
 } from './utils'
 
@@ -37,7 +38,7 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag([
+  await toggleRemoteConfigFlags([
     CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT,
     CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT,
   ])
@@ -54,7 +55,7 @@ describe('Home Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await toggleRemoteConfigFlag([
+    await toggleRemoteConfigFlags([
       CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT,
       CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT,
     ])
@@ -103,8 +104,12 @@ describe('Home Screen', () => {
   })
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
+
+    // Pause for 10 seconds to view the screen
+    await setTimeout(10000)
+
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_LIST_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()

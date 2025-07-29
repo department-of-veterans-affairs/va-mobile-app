@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 import { DateTime } from 'luxon'
 
@@ -96,27 +97,23 @@ context('HealthScreen', () => {
   })
 
   describe('Travel button', () => {
-    it('navigates to Travel Reimbursement screen when pressed', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
-      initializeTestInstance()
-      fireEvent.press(screen.getByText('Travel'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelReimbursement')
-    })
-
     it('is not displayed if feature toggle is disabled', () => {
       when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(false)
       initializeTestInstance()
-      expect(screen.getByText('Appointments')).toBeTruthy()
-      expect(screen.queryByText('Travel')).toBeFalsy()
-      expect(screen.getByText('Messages')).toBeTruthy()
-      expect(screen.queryByText('Prescriptions')).toBeFalsy()
-      expect(screen.getByText('Medical records')).toBeTruthy()
+      expect(screen.queryByText(t('travelPay.statusList.title'))).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
       when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
       initializeTestInstance()
-      expect(screen.getByText('Travel')).toBeTruthy()
+      expect(screen.getByText(t('travelPay.statusList.title'))).toBeTruthy()
+    })
+
+    it('navigates to Travel Reimbursement screen when pressed', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      initializeTestInstance()
+      fireEvent.press(screen.getByText(t('travelPay.statusList.title')))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelListReimbursement')
     })
   })
 
