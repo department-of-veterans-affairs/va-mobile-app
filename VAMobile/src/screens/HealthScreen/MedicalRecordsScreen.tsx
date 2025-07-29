@@ -30,13 +30,11 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {featureEnabled('labsAndTests') && (
-          <LargeNavButton
-            title={t('labsAndTests.buttonTitle')}
-            onPress={() => navigateTo('LabsAndTestsList')}
-            testID="toLabsAndTestListID"
-          />
-        )}
+        <LargeNavButton
+          title={t('labsAndTests.buttonTitle')}
+          onPress={() => navigateTo('LabsAndTestsList')}
+          testID="toLabsAndTestListID"
+        />
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           onPress={() => navigateTo('VaccineList')}

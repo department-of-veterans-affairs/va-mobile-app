@@ -26,11 +26,11 @@ module.exports = {
   rules: {
     'react/no-unstable-nested-components': 0,
     '@typescript-eslint/ban-ts-comment': 0,
-    'no-restricted-imports': [
-      'error',
-      {
-        patterns: ['.*'],
-      },
-    ],
+    // 'no-restricted-imports': [
+    //   'error',
+    //   {
+    //     patterns: ['.*'],
+    //   },
+    // ],
   },
 }
