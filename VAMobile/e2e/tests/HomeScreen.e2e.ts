@@ -104,10 +104,6 @@ describe('Home Screen', () => {
   })
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
-
-    // Pause for 10 seconds to view the screen
-    await setTimeout(10000)
-
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.TRAVEL_LIST_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
