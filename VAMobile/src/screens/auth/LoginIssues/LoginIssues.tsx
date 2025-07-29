@@ -7,7 +7,6 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getBuildNumber, getDeviceName, getVersionName } from 'utils/deviceData'
 import { useTheme } from 'utils/hooks'
 
 type LoginIssuesProps = Record<string, unknown>
@@ -20,16 +19,15 @@ function LoginIssues({}: LoginIssuesProps) {
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [loginIssue, setLoginIssue] = useState('')
+  const [loginIssueOtherText, setLoginIssueOtherText] = useState('')
   const [loginProvider, setLoginProvider] = useState('')
   const [loginPreviously, setLoginPreviously] = useState('')
   const [loginFrequency, setLoginFrequency] = useState('')
-
-  console.log(getDeviceName().then((v) => console.log(v)))
-  console.log(getVersionName().then((v) => console.log(v)))
-  console.log(getBuildNumber().then((v) => console.log(v)))
+  const [loginAdditionalFeedback, setLoginAdditionalFeedback] = useState('')
 
   const onSave = () => {
-    snackbar.show(t('personalInformation.preferredName.saved'))
+    // logAnalyticsEvent...
+    snackbar.show(t('loginIssues.feedbackSubmitted'))
     navigation.goBack()
   }
 
@@ -40,6 +38,7 @@ function LoginIssues({}: LoginIssuesProps) {
         labelKey: 'loginIssues.whatIssue',
         value: loginIssue,
         onChange: setLoginIssue,
+        boldLabelKey: true,
         options: [
           {
             optionLabelKey: t('loginIssues.existingAccount'),
@@ -53,6 +52,12 @@ function LoginIssues({}: LoginIssuesProps) {
             optionLabelKey: t('loginIssues.identity'),
             value: t('loginIssues.identity'),
           },
+          {
+            optionLabelKey: t('other.describe'),
+            value: t('other.describe'),
+            textInput: loginIssueOtherText,
+            setTextInput: setLoginIssueOtherText,
+          },
         ],
       },
     },
@@ -62,6 +67,7 @@ function LoginIssues({}: LoginIssuesProps) {
         labelKey: 'loginIssues.loginProvider',
         value: loginProvider,
         onChange: setLoginProvider,
+        boldLabelKey: true,
         options: [
           {
             optionLabelKey: t('login.gov'),
@@ -84,6 +90,7 @@ function LoginIssues({}: LoginIssuesProps) {
         labelKey: 'loginIssues.loginPreviously',
         value: loginPreviously,
         onChange: setLoginPreviously,
+        boldLabelKey: true,
         options: [
           {
             optionLabelKey: t('yes'),
@@ -102,6 +109,7 @@ function LoginIssues({}: LoginIssuesProps) {
         labelKey: 'loginIssues.frequency',
         value: loginFrequency,
         onChange: setLoginFrequency,
+        boldLabelKey: true,
         options: [
           {
             optionLabelKey: t('always'),
@@ -126,10 +134,25 @@ function LoginIssues({}: LoginIssuesProps) {
         ],
       },
     },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        value: loginAdditionalFeedback,
+        onChange: setLoginAdditionalFeedback,
+        labelKey: 'loginIssues.additionalFeedback',
+        isTextArea: true,
+        setInputCursorToBeginning: true,
+        boldLabelKey: true,
+      },
+    },
   ]
 
   return (
-    <FullScreenSubtask title={t('login.issues')} leftButtonText={t('cancel')} onLeftButtonPress={navigation.goBack}>
+    <FullScreenSubtask
+      title={t('loginIssues.reportIssue')}
+      leftButtonText={t('cancel')}
+      onLeftButtonPress={navigation.goBack}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <FormWrapper
           fieldsList={formFieldsList}

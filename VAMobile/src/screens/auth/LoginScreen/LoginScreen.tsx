@@ -169,7 +169,7 @@ function LoginScreen() {
             <Box alignItems={'center'}>
               <LinkWithAnalytics
                 type="custom"
-                text={t('loginIssues.reportIssues')}
+                text={t('loginIssues.reportLoginIssue')}
                 onPress={() => navigateTo('LoginIssues')}
                 testID="loginIssuesTestID"
               />

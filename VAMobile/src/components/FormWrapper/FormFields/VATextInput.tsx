@@ -47,6 +47,7 @@ export type VATextInputProps = {
   setInputCursorToBeginning?: boolean
   /** optional element rendered before text input */
   preAdornment?: ReactElement
+  boldLabelKey?: boolean
 }
 
 /**
@@ -69,6 +70,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     isTextArea,
     setInputCursorToBeginning,
     preAdornment,
+    boldLabelKey,
   } = props
   const { t } = useTranslation()
   const theme = useTheme()
@@ -142,7 +144,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onFocus,
     onBlur,
     selection,
-    multiline: isTextArea ? true : false,
+    multiline: !!isTextArea,
     testID,
   }
 
@@ -168,7 +170,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
     const content = (
       <Box>
-        {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, helperTextKey)}
+        {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, helperTextKey, boldLabelKey)}
         {!!error && renderInputError(error)}
         {textInputBox}
       </Box>

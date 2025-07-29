@@ -37,6 +37,10 @@ export type radioOption<T> = {
   notSelectableRadioBtn?: boolean
   /** Optional TestID */
   testID?: string
+  /** Optional text input */
+  textInput?: string
+  /** Optional onChange text input */
+  setTextInput?: (val: string) => void
 }
 
 /**
@@ -64,6 +68,8 @@ export type RadioGroupProps<T> = {
   isRadioList?: boolean
   /** optional text to show as the radio list title */
   radioListTitle?: string
+  /** bold label text */
+  boldLabelKey?: boolean
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
@@ -78,6 +84,7 @@ const RadioGroup = <T,>({
   error,
   isRadioList,
   radioListTitle,
+  boldLabelKey,
 }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -91,7 +98,7 @@ const RadioGroup = <T,>({
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { optionLabelKey, labelArgs, a11yLabel, testID } = option
+    const { optionLabelKey, labelArgs, a11yLabel, testID, textInput, setTextInput } = option
 
     // Render option as simple text
     if (hasSingleOption) {
@@ -121,6 +128,8 @@ const RadioGroup = <T,>({
         disabled={disabled}
         a11yLabel={a11yLabel}
         testID={testID}
+        textInput={textInput}
+        setTextInput={setTextInput}
       />
     )
   }
@@ -200,7 +209,7 @@ const RadioGroup = <T,>({
   const getRadios = (): ReactElement => {
     return (
       <Box>
-        {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, '')}
+        {labelKey && renderInputLabelSection(error, isRequiredField, labelKey, t, '', !!boldLabelKey)}
         {!!error && <Box>{renderInputError(error)}</Box>}
         {isRadioList ? getRadioGroupList() : getStandardRadioGroup()}
       </Box>

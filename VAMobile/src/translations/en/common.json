@@ -1028,7 +1028,8 @@
   "id.me": "ID.me",
   "ds.logon": "DS Logon",
   "login.issues": "Login Issues",
-  "loginIssues.reportIssues": "Report a Login Issue",
+  "loginIssues.reportLoginIssue": "Report a Login Issue",
+  "loginIssues.reportIssue": "Report an issue",
   "loginIssues.whatIssue": "1. What login issue are you having?",
   "loginIssues.existingAccount": "Logging into an existing account",
   "loginIssues.newAccount": "Creating a new account",
@@ -1036,6 +1037,8 @@
   "loginIssues.loginProvider": "2. Which login provider are you using?",
   "loginIssues.loginPreviously": "3. Were you previously able to successfully login with this provider?",
   "loginIssues.frequency": "4. Have you experienced this issue before?",
+  "loginIssues.additionalFeedback": "5. Do you have any additional feedback related to your login issue?",
+  "loginIssues.feedbackSubmitted": "Feedback submitted",
   "logout.confirm.text": "Sign out?",
   "logout.title": "Sign out",
   "messages": "Messages",
@@ -1755,5 +1758,6 @@
   "often": "Often",
   "sometimes": "Sometimes",
   "rarely": "Rarely",
-  "never": "Never"
+  "never": "Never",
+  "other.describe": "Other *Please describe the issue you're experiencing"
 }

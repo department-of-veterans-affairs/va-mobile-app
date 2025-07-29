@@ -15,9 +15,10 @@ export const renderInputLabelSection = (
   labelKey: string,
   t: TFunction,
   helperTextKey: string | undefined,
+  boldLabelKey?: boolean,
 ): ReactElement => {
   const isHelperText = !!helperTextKey
-  const variant = error ? 'MobileBodyBold' : 'MobileBody'
+  const variant = error || boldLabelKey ? 'MobileBodyBold' : 'MobileBody'
   return (
     <Box>
       <Box display="flex" flexDirection="row" flexWrap="wrap" mb={isHelperText ? 0 : 8}>
