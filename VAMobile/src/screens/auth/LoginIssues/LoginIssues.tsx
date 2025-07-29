@@ -37,8 +37,15 @@ function LoginIssues({}: LoginIssuesProps) {
       fieldProps: {
         labelKey: 'loginIssues.whatIssue',
         value: loginIssue,
-        onChange: setLoginIssue,
+        onChange: (evt: string) => {
+          // Clears other text when a new option is selected
+          if (evt !== t('other.describe')) {
+            setLoginIssueOtherText('')
+          }
+          setLoginIssue(evt)
+        },
         boldLabelKey: true,
+        radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
             optionLabelKey: t('loginIssues.existingAccount'),
@@ -68,6 +75,7 @@ function LoginIssues({}: LoginIssuesProps) {
         value: loginProvider,
         onChange: setLoginProvider,
         boldLabelKey: true,
+        radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
             optionLabelKey: t('login.gov'),
@@ -91,6 +99,7 @@ function LoginIssues({}: LoginIssuesProps) {
         value: loginPreviously,
         onChange: setLoginPreviously,
         boldLabelKey: true,
+        radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
             optionLabelKey: t('yes'),
@@ -110,6 +119,7 @@ function LoginIssues({}: LoginIssuesProps) {
         value: loginFrequency,
         onChange: setLoginFrequency,
         boldLabelKey: true,
+        radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
             optionLabelKey: t('always'),
@@ -162,7 +172,7 @@ function LoginIssues({}: LoginIssuesProps) {
         />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <Button
-            label={t('secureMessaging.formMessage.send')}
+            label={t('submit')}
             onPress={() => {
               setOnSaveClicked(true)
             }}

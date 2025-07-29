@@ -47,6 +47,7 @@ export type VATextInputProps = {
   setInputCursorToBeginning?: boolean
   /** optional element rendered before text input */
   preAdornment?: ReactElement
+  /** bold label text */
   boldLabelKey?: boolean
 }
 

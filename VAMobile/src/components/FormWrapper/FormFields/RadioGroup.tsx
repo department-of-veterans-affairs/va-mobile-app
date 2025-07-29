@@ -70,6 +70,8 @@ export type RadioGroupProps<T> = {
   radioListTitle?: string
   /** bold label text */
   boldLabelKey?: boolean
+  /** optional specific spacing between radio options */
+  radioOptionSpacing?: number
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
@@ -85,6 +87,7 @@ const RadioGroup = <T,>({
   isRadioList,
   radioListTitle,
   boldLabelKey,
+  radioOptionSpacing,
 }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -134,7 +137,7 @@ const RadioGroup = <T,>({
     )
   }
 
-  /** creates the radio group with an optiona title and the radio button on the left side */
+  /** creates the radio group with an optional title and the radio button on the left side */
   const getStandardRadioGroup = () => {
     return map(options, (option, index) => {
       const { headerText } = option
@@ -148,7 +151,7 @@ const RadioGroup = <T,>({
             </Box>
           )}
           <Box
-            mb={theme.dimensions.standardMarginBetween}
+            mb={radioOptionSpacing ? radioOptionSpacing : theme.dimensions.standardMarginBetween}
             key={index}
             mt={headerText ? theme.dimensions.contentMarginTop : 0}>
             {getOption(option)}

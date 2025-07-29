@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Checkbox as CheckboxButton, RadioButton } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, VATextInput } from 'components'
+import theme from 'styles/themes/standardTheme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 
@@ -40,7 +41,9 @@ export type VASelectorProps = {
   isRequiredField?: boolean
   /** Optional TestID */
   testID?: string
+  /** Optional text input */
   textInput?: string
+  /** Optional onChange text input */
   setTextInput?: (val: string) => void
 }
 
@@ -98,13 +101,15 @@ const VASelector: FC<VASelectorProps> = ({
         error={error}
       />
       {selected && setTextInput && (
-        <VATextInput
-          inputType="none"
-          isTextArea={true}
-          value={textInput}
-          testID="AppFeedbackTaskID"
-          onChange={setTextInput}
-        />
+        <Box mt={theme.dimensions.smallMarginBetween}>
+          <VATextInput
+            inputType="none"
+            isTextArea={true}
+            value={textInput}
+            testID="optionTextInputID"
+            onChange={setTextInput}
+          />
+        </Box>
       )}
     </Box>
   )
