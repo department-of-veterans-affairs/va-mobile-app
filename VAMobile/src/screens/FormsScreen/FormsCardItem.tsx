@@ -25,7 +25,7 @@ export type FormsCardProps = {
 function FormsCardItem({ data, onFormClose, key }: FormsCardProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const statusDateStr = `From 21-4138 | ${data.status === FORM_STATUS.draft ? 'Draft saved' : 'Submitted'} on ${formatDateMMMMDDYYYY(data.statusDate)}`
+  const statusDateStr = `Form 21-4138 | ${data.status === FORM_STATUS.draft ? 'Draft saved' : 'Submitted'} on ${formatDateMMMMDDYYYY(data.statusDate)}`
 
   // Draft(blue), In-progress(blue after its been submitted), Action needed(yellow), Received(light grey),
   const tags = [data.status]

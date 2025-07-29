@@ -90,7 +90,7 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
   }
 
   const formDescription =
-    'Drafts are saved for 30 days from the date you begin working on them. Drafts auto-save as you work work.'
+    'Drafts are saved for 30 days from the date you begin working on them. Drafts auto-save as you work.'
   return (
     <FeatureLandingTemplate
       backLabel={'Back'}
