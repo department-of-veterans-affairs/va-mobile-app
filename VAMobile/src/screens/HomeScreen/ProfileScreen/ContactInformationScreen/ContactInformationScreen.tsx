@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { TFunction } from 'i18next'
@@ -22,9 +23,11 @@ import {
   TextArea,
   TextLine,
   TextView,
+  VABulletList,
   VAScrollView,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { DefaultCallingCode } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import AddressSummary, {
@@ -37,6 +40,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED = '@intl_number_notification_settings_dismissed'
 
 const getTextForPhoneData = (
   contactInformation: UserContactInformation | undefined,
@@ -147,12 +152,35 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   const registerReviewEvent = useReviewEvent(true)
   const contactInformationInDowntime = useDowntimeByScreenID(ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID)
   const { contentMarginBottom, gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const [displayIntlNumberSettingsAlert, setDisplayIntlNumberSettingsAlert] = useState(false)
 
   useEffect(() => {
     if (!userAuthorizedServices?.userProfileUpdate && !loadingUserAuthorizedServices) {
       logAnalyticsEvent(Events.vama_prof_contact_noauth())
     }
   }, [loadingUserAuthorizedServices, userAuthorizedServices?.userProfileUpdate])
+
+  useEffect(() => {
+    const checkIntlNumberNotificationSettingsDismissed = async () => {
+      const dismissed = await AsyncStorage.getItem(INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED)
+
+      if (dismissed === 'false') {
+        setDisplayIntlNumberSettingsAlert(true)
+      }
+    }
+
+    // Only check notification dismissal if any phone number is an international phone number
+    if (contactInformation) {
+      const { workPhone, homePhone, mobilePhone } = contactInformation
+      // TODO This should instead check the iso code instead of the calling code
+      const intlMobilePhone = mobilePhone && mobilePhone.countryCode !== DefaultCallingCode
+      const intlWorkPhone = workPhone && workPhone.countryCode !== DefaultCallingCode
+      const intlHomePhone = homePhone && homePhone.countryCode !== DefaultCallingCode
+      if (intlMobilePhone || intlWorkPhone || intlHomePhone) {
+        checkIntlNumberNotificationSettingsDismissed()
+      }
+    }
+  }, [contactInformation])
 
   const navigateTo = useRouteNavigation()
 
@@ -212,6 +240,11 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     navigateTo('HowWillYou')
   }
 
+  const handleAlertDismiss = (): void => {
+    AsyncStorage.setItem(INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED, 'true')
+    setDisplayIntlNumberSettingsAlert(false)
+  }
+
   const addressData: Array<addressDataField> = [
     { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onMailingAddress },
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
@@ -264,6 +297,24 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
         getNoAuth()
       ) : (
         <>
+          {displayIntlNumberSettingsAlert && (
+            <AlertWithHaptics
+              variant="info"
+              expandable
+              initializeExpanded
+              header={t('contactInformation.intlWarningTitle')}
+              description={t('contactInformation.intlWarningDescription')}
+              descriptionA11yLabel={t('contactInformation.intlWarningDescription')}
+              secondaryButton={{ label: t('contactInformation.dismissMessage'), onPress: handleAlertDismiss }}>
+              <VABulletList
+                listOfText={[
+                  t('contactInformation.appointments'),
+                  t('contactInformation.rxShipping'),
+                  t('contactInformation.appealHearingReminders'),
+                ]}
+              />
+            </AlertWithHaptics>
+          )}
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView accessibilityLabel={a11yLabelVA(t('contactInformation.editNote'))} variant="MobileBody" mx={gutter}>
             {t('contactInformation.editNote')}
