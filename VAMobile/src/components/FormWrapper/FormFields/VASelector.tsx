@@ -1,16 +1,10 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TouchableWithoutFeedback } from 'react-native'
 
-import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
-import { colors } from '@department-of-veterans-affairs/mobile-tokens'
+import { Checkbox as CheckboxButton, RadioButton } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, TextView, VAIcon, VAIconProps } from 'components'
-import { renderInputError } from 'components/FormWrapper/FormFields/formFieldUtils'
-import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',
@@ -61,9 +55,7 @@ const VASelector: FC<VASelectorProps> = ({
   testID,
   setError,
 }) => {
-  const theme = useTheme()
   const { t } = useTranslation()
-  const iconWidth = 22
 
   const selectorOnPress = (): void => {
     if (!disabled) {
@@ -72,100 +64,33 @@ const VASelector: FC<VASelectorProps> = ({
     }
   }
 
-  const getIconsProps = (
-    name: string,
-    stroke?: keyof VAIconColors | string,
-    fill?: keyof VAIconColors | keyof VATextColors | string,
-  ): IconProps => {
-    return {
-      name,
-      stroke,
-      width: iconWidth,
-      height: 22,
-      fill,
-    } as IconProps
-  }
-
-  const errorBoxProps: BoxProps = {
-    ml: 10 + iconWidth,
-  }
-
-  const selectorBoxProps: BoxProps = {
-    ml: 10,
-    flex: 1,
-  }
-
-  const getCheckBoxIcon = (): React.ReactNode => {
-    const buttonSelectedFill =
-      theme.mode === 'dark' ? colors.vadsColorFormsForegroundActiveOnDark : colors.vadsColorFormsForegroundActiveOnLight
-    const buttonUnselectedFill =
-      theme.mode === 'dark' ? colors.vadsColorFormsBorderDefaultOnDark : colors.vadsColorFormsBorderDefaultOnLight
-
-    if (disabled && selectorType === SelectorType.Radio) {
-      return (
-        <Icon
-          {...getIconsProps(
-            'RadioButtonUnchecked',
-            theme.colors.icon.checkboxDisabled,
-            theme.colors.icon.radioDisabled,
-          )}
-          testID="RadioEmpty"
-        />
-      )
-    }
-
-    if (!!error && selectorType === SelectorType.Checkbox) {
-      const errorIconProps: VAIconProps = {
-        name: 'CheckBoxError',
-        stroke: theme.colors.icon.error,
-        width: iconWidth,
-        height: 22,
-        fill: 'checkboxDisabledContrast',
-      }
-      return (
-        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-        <VAIcon {...errorIconProps} testID="Error" accessibilityLabel="CheckBoxError" />
-      )
-    }
-
-    const filledName = selectorType === SelectorType.Checkbox ? 'CheckBox' : 'RadioButtonChecked'
-    const emptyName = selectorType === SelectorType.Checkbox ? 'CheckBoxOutlineBlank' : 'RadioButtonUnchecked'
-
-    const name = selected ? filledName : emptyName
-    const fill = selected ? buttonSelectedFill : buttonUnselectedFill
-    const stroke = selected ? undefined : theme.colors.icon.checkboxDisabled
-
-    return <Icon {...getIconsProps(name, stroke, fill)} testID={name} />
-  }
-
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
-  const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
-  const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
-  const labelToUse = `${a11yLabel || getTranslation(labelKey, t, labelArgs)} ${error ? t('error', { error }) : ''}`
+  const errorText = error ? ` ${t('error', { error })}` : ''
+  const text = `${getTranslation(labelKey, t, labelArgs)}`
+  const textWithA11y = { text, a11yLabel: a11yLabel ? `${a11yLabel}${errorText}` : '' }
+
+  if (selectorType === SelectorType.Checkbox) {
+    return (
+      <CheckboxButton
+        checked={selected}
+        label={textWithA11y}
+        onPress={selectorOnPress}
+        testID={testID}
+        hint={{ text: '', a11yLabel: hintProp.accessibilityHint }}
+        error={error}
+      />
+    )
+  }
 
   return (
-    // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-    <TouchableWithoutFeedback
+    <RadioButton
+      selectedItem={selected ? text : undefined}
+      items={[textWithA11y]}
+      onSelectionChange={selectorOnPress}
       testID={testID}
-      onPress={selectorOnPress}
-      accessibilityState={a11yState}
-      accessibilityRole={a11yRole}
-      accessibilityLabel={labelToUse}
-      {...hintProp}>
-      <Box>
-        {!!error && <Box {...errorBoxProps}>{renderInputError(error)}</Box>}
-        <Box flexDirection="row">
-          <Box testID="checkbox-with-label" mt={5}>
-            {getCheckBoxIcon()}
-          </Box>
-          <Box {...selectorBoxProps}>
-            <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'bodyText'}>
-              {getTranslation(labelKey, t, labelArgs)}
-            </TextView>
-          </Box>
-        </Box>
-      </Box>
-    </TouchableWithoutFeedback>
+      hint={{ text: '', a11yLabel: hintProp.accessibilityHint }}
+      error={error}
+    />
   )
 }
 

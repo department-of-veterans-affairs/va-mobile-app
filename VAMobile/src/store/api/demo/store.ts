@@ -138,7 +138,9 @@ const transformDates = (fileObject: Record<string, unknown>) => {
  */
 export const initDemoStore = async (): Promise<void> => {
   const data = await Promise.all([
-    import('./mocks/appointments.json'),
+    featureEnabled('appointmentsTestTime')
+      ? import('./mocks/appointmentsTestTime.json')
+      : import('./mocks/appointments.json'),
     import('./mocks/claims.json'),
     import('./mocks/profile.json'),
     import('./mocks/secureMessaging.json'),
@@ -233,7 +235,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getVaccineList(store, params, endpoint)
     }
     case '/v1/health/labs-and-tests': {
-      return getLabsAndTestsList(store, params, endpoint)
+      return getLabsAndTestsList(store, params)
     }
     case '/v0/health/allergy-intolerances': {
       return getAllergyList(store, params, endpoint)

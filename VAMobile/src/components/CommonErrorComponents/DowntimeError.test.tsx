@@ -1,9 +1,8 @@
 import React from 'react'
 
+import { DowntimeError } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { context, render, screen } from 'testUtils'
-
-import DowntimeError from './DowntimeError'
 
 context('DowntimeError', () => {
   beforeEach(() => {

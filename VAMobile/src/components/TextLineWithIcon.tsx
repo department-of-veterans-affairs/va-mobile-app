@@ -2,11 +2,8 @@ import React, { FC } from 'react'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, TextLine, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-
-import Box from './Box'
-import TextView from './TextView'
-import { TextLine } from './types'
 
 export type TextLineWithIconProps = {
   /** Props for icon you want to display in this line of text */

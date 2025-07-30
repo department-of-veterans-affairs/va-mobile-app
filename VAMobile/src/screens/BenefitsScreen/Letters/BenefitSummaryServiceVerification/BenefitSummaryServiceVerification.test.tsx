@@ -1,14 +1,13 @@
 import React from 'react'
 
-import { screen } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { CharacterOfServiceConstants } from 'api/types'
+import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
-
-import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 
 const mockExternalLinkSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -24,14 +23,14 @@ context('BenefitSummaryServiceVerification', () => {
   const enteredDate = '1990-01-01T15:00:00.000+00:00'
   const releasedDate = '1993-10-01T15:00:00.000+00:00'
 
-  const initializeTestInstance = (
+  const initializeMockApiResponse = (
     monthlyAwardAmount?: number,
     awardEffectiveDate?: string,
     serviceConnectedPercentage?: number,
   ) => {
     when(api.get as jest.Mock)
       .calledWith('/v0/letters/beneficiary')
-      .mockResolvedValue({
+      .mockResolvedValueOnce({
         data: {
           attributes: {
             militaryService: [{ branch: 'Army', characterOfService: HONORABLE, enteredDate, releasedDate }],
@@ -52,6 +51,14 @@ context('BenefitSummaryServiceVerification', () => {
           },
         },
       })
+  }
+
+  const initializeTestInstance = (
+    monthlyAwardAmount?: number,
+    awardEffectiveDate?: string,
+    serviceConnectedPercentage?: number,
+  ) => {
+    initializeMockApiResponse(monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage)
     render(<BenefitSummaryServiceVerification {...mockNavProps()} />)
   }
 
@@ -189,6 +196,36 @@ context('BenefitSummaryServiceVerification', () => {
           }),
         ).toBeFalsy(),
       )
+    })
+  })
+
+  describe('when the service fails to load letter beneficiary data', () => {
+    it('should show alert to reload the letter', async () => {
+      // Failed api response
+      when(api.get as jest.Mock)
+        .calledWith('/v0/letters/beneficiary', expect.anything())
+        .mockRejectedValueOnce({
+          status: 400,
+          networkError: true,
+        })
+
+      render(<BenefitSummaryServiceVerification {...mockNavProps()} />)
+
+      // Alert should render with reload letter button
+      await waitFor(() => {
+        expect(screen.getByTestId('letterBeneficiaryError')).toBeTruthy()
+      })
+
+      // Successful api response
+      initializeMockApiResponse()
+
+      // Press reload letter button
+      fireEvent.press(screen.getByTestId('reloadLetter'))
+
+      // Alert should no longer be rendered after reloading letter successfully
+      await waitFor(() => {
+        expect(screen.queryByTestId('letterBeneficiaryError')).toBeNull()
+      })
     })
   })
 })

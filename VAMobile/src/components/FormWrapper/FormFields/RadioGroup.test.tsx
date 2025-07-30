@@ -41,8 +41,8 @@ context('RadioGroup', () => {
   it('initializes correctly', () => {
     initializeTestInstance(1)
     expect(screen.getAllByRole('radio').length).toEqual(mockOptions.length)
-    expect(screen.getAllByTestId('RadioButtonUnchecked').length).toEqual(mockOptions.length - 1)
-    expect(screen.getAllByTestId('RadioButtonChecked').length).toEqual(1)
+    expect(screen.getAllByRole('radio', { checked: false })).toHaveLength(mockOptions.length - 1)
+    expect(screen.getAllByRole('radio', { checked: true })).toHaveLength(1)
   })
 
   it('initializes correctly as a list', () => {
