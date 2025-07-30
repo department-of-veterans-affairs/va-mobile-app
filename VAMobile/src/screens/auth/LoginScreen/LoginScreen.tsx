@@ -33,6 +33,8 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 
+const { LINK_URL_TROUBLESHOOT_LOGIN } = getEnv()
+
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { firstTimeLogin, loadingRefreshToken } = useSelector<RootState, AuthState>((state) => state.auth)
@@ -164,6 +166,15 @@ function LoginScreen() {
                 label={t('findLocation.title')}
                 a11yLabel={a11yLabelVA(t('findLocation.title'))}
                 buttonType={ButtonVariants.Secondary}
+              />
+            </Box>
+            <Box alignItems={'center'}>
+              <LinkWithAnalytics
+                type="url"
+                text={t('loginIssues.troubleshootLoginIssue')}
+                url={LINK_URL_TROUBLESHOOT_LOGIN}
+                icon="no icon"
+                testID="loginIssuesTestID"
               />
             </Box>
             <Box alignItems={'center'}>

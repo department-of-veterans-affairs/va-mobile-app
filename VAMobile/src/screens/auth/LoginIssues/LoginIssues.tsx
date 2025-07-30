@@ -7,8 +7,11 @@ import { useNavigation } from '@react-navigation/native'
 import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { checkStringForPII } from 'utils/common'
+import { getBuildNumber, getDeviceName, getVersionName } from 'utils/deviceData'
 import { useTheme } from 'utils/hooks'
 
 type LoginIssuesProps = Record<string, unknown>
@@ -27,7 +30,27 @@ function LoginIssues({}: LoginIssuesProps) {
   const [loginFrequency, setLoginFrequency] = useState('')
   const [loginAdditionalFeedback, setLoginAdditionalFeedback] = useState('')
 
-  const onSave = () => {
+  const logFeedback = async () => {
+    const buildNumber = await getBuildNumber()
+    const version = await getVersionName()
+    const device = await getDeviceName()
+
+    const answers = {
+      q1: loginIssue,
+      q2: loginIssueOtherText,
+      q3: loginProvider,
+      q4: loginPreviously,
+      q5: loginFrequency,
+      q6: loginAdditionalFeedback,
+      q7: buildNumber,
+      q8: version,
+      q9: device,
+    }
+
+    await logAnalyticsEvent(Events.vama_login_issue(answers))
+  }
+
+  const onSave = async () => {
     const { found: otherTextFound } = checkStringForPII(loginIssueOtherText)
     const { found: additionalFeedbackFound } = checkStringForPII(loginAdditionalFeedback)
     if (otherTextFound || additionalFeedbackFound) {
@@ -38,8 +61,8 @@ function LoginIssues({}: LoginIssuesProps) {
         },
         {
           text: t('loginIssues.submitAnyway'),
-          onPress: () => {
-            // logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
+          onPress: async () => {
+            await logFeedback()
             // submittedCheck = true
             navigation.goBack()
             snackbar.show(t('loginIssues.feedbackSubmitted'))
@@ -48,7 +71,7 @@ function LoginIssues({}: LoginIssuesProps) {
         },
       ])
     } else {
-      // logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
+      await logFeedback()
       // submittedCheck = true
       navigation.goBack()
       snackbar.show(t('loginIssues.feedbackSubmitted'))

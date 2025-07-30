@@ -1031,6 +1031,7 @@
   "login.issues": "Login Issues",
   "loginIssues.reportLoginIssue": "Report a Login Issue",
   "loginIssues.reportIssue": "Report an issue",
+  "loginIssues.troubleshootLoginIssue": "Troubleshoot login issues",
   "loginIssues.whatIssue": "1. What login issue are you having?",
   "loginIssues.existingAccount": "Logging into an existing account",
   "loginIssues.newAccount": "Creating a new account",

@@ -1217,6 +1217,12 @@ export const Events = {
       },
     }
   },
+  vama_login_issue: (surveyAnswers: EventParams): Event => {
+    return {
+      name: 'vama_login_issue',
+      params: surveyAnswers,
+    }
+  },
 }
 
 export const UserAnalytics = {
