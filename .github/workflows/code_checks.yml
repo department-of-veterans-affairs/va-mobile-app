@@ -50,7 +50,7 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Get changed files
         id: get-changed-apps
-        uses: ./.github/workflows/get-changed-files
+        uses: ./.github/actions/get-changed-files
       - name: lint-changed-files
         env:
           CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
