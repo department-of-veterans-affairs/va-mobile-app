@@ -173,7 +173,7 @@ const RadioGroup = <T,>({
         }
       }
       const textLines: Array<TextLine> = [
-        { text: option.optionLabelKey, variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' },
+        { text: t(option.optionLabelKey), variant: 'VASelector', color: disabled ? 'checkboxDisabled' : 'primary' },
       ]
 
       if (option.additionalLabelText && option.additionalLabelText.length > 0) {
@@ -196,7 +196,7 @@ const RadioGroup = <T,>({
         a11yRole: 'radio',
         a11yState: { selected: selected },
         backgroundColor: selected ? 'listActive' : undefined,
-        testId: `${option.a11yLabel || option.optionLabelKey} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
+        testId: `${option.a11yLabel || t(option.optionLabelKey)} ${t('optionOutOfTotal', { count: index + 1, totalOptions: options.length })}`,
       }
 
       return radioButton

@@ -1040,6 +1040,8 @@
   "loginIssues.frequency": "4. Have you experienced this issue before?",
   "loginIssues.additionalFeedback": "5. Do you have any additional feedback related to your login issue?",
   "loginIssues.feedbackSubmitted": "Feedback submitted",
+  "loginIssues.edit": "Edit feedback",
+  "loginIssues.submitAnyway": "Submit anyway",
   "logout.confirm.text": "Sign out?",
   "logout.title": "Sign out",
   "messages": "Messages",

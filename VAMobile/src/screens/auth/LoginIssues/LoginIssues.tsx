@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Alert } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -7,6 +8,7 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { checkStringForPII } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
 type LoginIssuesProps = Record<string, unknown>
@@ -26,9 +28,31 @@ function LoginIssues({}: LoginIssuesProps) {
   const [loginAdditionalFeedback, setLoginAdditionalFeedback] = useState('')
 
   const onSave = () => {
-    // logAnalyticsEvent...
-    snackbar.show(t('loginIssues.feedbackSubmitted'))
-    navigation.goBack()
+    const { found: otherTextFound } = checkStringForPII(loginIssueOtherText)
+    const { found: additionalFeedbackFound } = checkStringForPII(loginAdditionalFeedback)
+    if (otherTextFound || additionalFeedbackFound) {
+      Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
+        {
+          text: t('loginIssues.edit'),
+          style: 'cancel',
+        },
+        {
+          text: t('loginIssues.submitAnyway'),
+          onPress: () => {
+            // logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
+            // submittedCheck = true
+            navigation.goBack()
+            snackbar.show(t('loginIssues.feedbackSubmitted'))
+          },
+          style: 'default',
+        },
+      ])
+    } else {
+      // logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
+      // submittedCheck = true
+      navigation.goBack()
+      snackbar.show(t('loginIssues.feedbackSubmitted'))
+    }
   }
 
   const formFieldsList: Array<FormFieldType<string>> = [
@@ -48,19 +72,19 @@ function LoginIssues({}: LoginIssuesProps) {
         radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
-            optionLabelKey: t('loginIssues.existingAccount'),
+            optionLabelKey: 'loginIssues.existingAccount',
             value: t('loginIssues.existingAccount'),
           },
           {
-            optionLabelKey: t('loginIssues.newAccount'),
+            optionLabelKey: 'loginIssues.newAccount',
             value: t('loginIssues.newAccount'),
           },
           {
-            optionLabelKey: t('loginIssues.identity'),
+            optionLabelKey: 'loginIssues.identity',
             value: t('loginIssues.identity'),
           },
           {
-            optionLabelKey: t('other.describe'),
+            optionLabelKey: 'other.describe',
             value: t('other.describe'),
             textInput: loginIssueOtherText,
             setTextInput: setLoginIssueOtherText,
@@ -78,15 +102,15 @@ function LoginIssues({}: LoginIssuesProps) {
         radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
-            optionLabelKey: t('login.gov'),
+            optionLabelKey: 'login.gov',
             value: t('login.gov'),
           },
           {
-            optionLabelKey: t('id.me'),
+            optionLabelKey: 'id.me',
             value: t('id.me'),
           },
           {
-            optionLabelKey: t('ds.logon'),
+            optionLabelKey: 'ds.logon',
             value: t('ds.logon'),
           },
         ],
@@ -102,11 +126,11 @@ function LoginIssues({}: LoginIssuesProps) {
         radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
-            optionLabelKey: t('yes'),
+            optionLabelKey: 'yes',
             value: t('yes'),
           },
           {
-            optionLabelKey: t('no'),
+            optionLabelKey: 'no',
             value: t('no'),
           },
         ],
@@ -122,23 +146,23 @@ function LoginIssues({}: LoginIssuesProps) {
         radioOptionSpacing: theme.dimensions.condensedMarginBetween,
         options: [
           {
-            optionLabelKey: t('always'),
-            value: t('always'),
+            optionLabelKey: 'always',
+            value: 'always',
           },
           {
-            optionLabelKey: t('often'),
+            optionLabelKey: 'often',
             value: t('often'),
           },
           {
-            optionLabelKey: t('sometimes'),
+            optionLabelKey: 'sometimes',
             value: t('sometimes'),
           },
           {
-            optionLabelKey: t('rarely'),
+            optionLabelKey: 'rarely',
             value: t('rarely'),
           },
           {
-            optionLabelKey: t('never'),
+            optionLabelKey: 'never',
             value: t('never'),
           },
         ],
