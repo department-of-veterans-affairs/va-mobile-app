@@ -84,10 +84,6 @@ const { ENVIRONMENT, IS_TEST } = getEnv()
 enableScreens(true)
 injectStore(store)
 
-if (__DEV__) {
-  require('../ReactotronConfig')
-}
-
 const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
