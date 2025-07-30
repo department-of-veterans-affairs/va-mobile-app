@@ -49,8 +49,22 @@ describe('Screenshot Generation', () => {
         }
       }
 
-      const screenshotName = isIpad ? `${data.imageName}-ipad` : data.imageName
-      await device.takeScreenshot(screenshotName)
+      let screenshotName = ''
+      if (typeof data.imageName === 'string') {
+        screenshotName = data.imageName
+      } else {
+        if (isIpad) {
+          screenshotName = data.imageName.ipad || ''
+        } else if (platform === 'ios') {
+          screenshotName = data.imageName.ios || ''
+        } else {
+          screenshotName = data.imageName.android || ''
+        }
+      }
+
+      if (screenshotName) {
+        await device.takeScreenshot(screenshotName)
+      }
     })
   }
 })

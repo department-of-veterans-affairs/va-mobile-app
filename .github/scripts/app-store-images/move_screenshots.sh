@@ -3,65 +3,43 @@
 # This script moves screenshots from the VAMobile/artifacts directory
 # into the fastlane/screenshots/en-US/ directory for processing.
 
-# Exit immediately if a command exits with a non-zero status.
-# set -e
+set -e
 
 # Define the source and destination directories
 ARTIFACTS_DIR="../../../VAMobile/artifacts"
 DEST_DIR="fastlane/screenshots/en-US"
+INPUT_FILE="screenshot_data.ts"
 
 # Create the destination directory if it doesn't exist
 echo "Creating destination directory: $DEST_DIR"
 mkdir -p "$DEST_DIR"
 
-# Flag to check if we processed any directories
-PROCESSED=false
+# Clear out the destination directory to start fresh
+rm -f "$DEST_DIR"/*
 
-# Use nullglob to prevent errors if no matches are found
-shopt -s nullglob
+# Read the image names from the screenshot_data.ts file
+# and move them from the artifacts directory.
+while IFS= read -r line; do
+  regex="(ios|android|ipad):[[:space:]]*'([^']*)'"
+  if [[ "$line" =~ $regex ]]; then
+    device_type="${BASH_REMATCH[1]}"
+    image_name="${BASH_REMATCH[2]}"
 
-# Find and process directories starting with 'ios', 'android', or 'ipad' in the artifacts folder
-for SOURCE_DIR in "$ARTIFACTS_DIR"/ios* "$ARTIFACTS_DIR"/android* "$ARTIFACTS_DIR"/ipad*; do
-    if [ -d "$SOURCE_DIR" ]; then
-        PROCESSED=true
-        echo "Processing directory: $SOURCE_DIR"
+    # Find the image in any of the artifact subdirectories
+    found_image=$(find "$ARTIFACTS_DIR" -name "${image_name}.png" -print -quit)
 
-        # Determine device type from source directory name
-        DEVICE_TYPE=""
-        DIR_BASENAME=$(basename "$SOURCE_DIR")
-        if [[ "$DIR_BASENAME" == ios* ]]; then
-            DEVICE_TYPE="_ios"
-        elif [[ "$DIR_BASENAME" == android* ]]; then
-            DEVICE_TYPE="_android"
-        elif [[ "$DIR_BASENAME" == ipad* ]]; then
-            DEVICE_TYPE="_ipad"
-        fi
-
-        echo "Moving .png files from $SOURCE_DIR to $DEST_DIR..."
-        # Use find to get all .png files, excluding those with "done" in their name
-        # and move them, appending the device type suffix.
-        find "$SOURCE_DIR" -type f -name "*.png" -not -iname "*done*" -print0 | while IFS= read -r -d '' file; do
-            BASENAME=$(basename "$file" .png)
-            if [[ "$DEVICE_TYPE" == "_ipad" && "$BASENAME" == *-ipad ]]; then
-                BASENAME="${BASENAME%-ipad}"
-            fi
-            mv -v "$file" "$DEST_DIR/${BASENAME}${DEVICE_TYPE}.png"
-        done
-
-        # Delete the source directory after moving files.
-        echo "Deleting source directory: $SOURCE_DIR"
-        rm -rf "$SOURCE_DIR"
+    if [ -n "$found_image" ]; then
+      echo "Moving $image_name for $device_type"
+      mv -v "$found_image" "$DEST_DIR/"
+    else
+      echo "Warning: Could not find image ${image_name}.png in $ARTIFACTS_DIR"
     fi
-done
+  fi
+done < "$INPUT_FILE"
 
-# Unset nullglob
-shopt -u nullglob
-
-if [ "$PROCESSED" = false ]; then
-    echo "No directories matching 'ios*', 'android*', or 'ipad*' found in '$ARTIFACTS_DIR' to process."
-fi
 
 echo "Copying Letters Images.."
 cp LettersDownload* fastlane/screenshots/en-US/
 
 echo "Script Complete."
+
