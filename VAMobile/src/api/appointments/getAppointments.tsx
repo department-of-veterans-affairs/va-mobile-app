@@ -12,7 +12,7 @@ import { useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 import { appointmentsKeys } from './queryKeys'
-console.log('this will fail')
+
 /**
  * Fetch user appointments
  */
