@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { CrisisLineButton } from 'components'
 import { context, render } from 'testUtils'
-
-import CrisisLineButton from './CrisisLineButton'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

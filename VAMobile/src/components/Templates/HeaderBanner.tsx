@@ -78,7 +78,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   shadow: bannerShadow,
 }) => {
   const theme = useTheme()
-  const [focusRef, setFocus] = useAccessibilityFocus<TouchableWithoutFeedback>()
+  const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
@@ -276,25 +276,24 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
             <Box flex={4} alignItems="flex-start">
               {leftButton?.descriptiveBack ? (
                 <DescriptiveBackButton
+                  ref={focusRef}
                   label={leftButton.text}
                   labelA11y={leftButton.a11yLabel}
                   onPress={leftButton.onPress}
-                  focusOnButton={focus === 'Left'}
                   backButtonTestID={leftButton.testID}
                 />
               ) : leftButton ? (
-                <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
-                  <TouchableWithoutFeedback
-                    ref={focus === 'Left' ? focusRef : () => {}}
-                    onPress={leftButton.onPress}
-                    accessibilityRole="button">
-                    <Box {...commonBoxProps}>
-                      <Box display="flex" flexDirection="row" alignItems="center">
-                        <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                <View ref={focusRef}>
+                  <Box ml={theme.dimensions.buttonPadding} mt={theme.dimensions.buttonPadding}>
+                    <TouchableWithoutFeedback accessibilityRole="button" onPress={leftButton.onPress}>
+                      <Box {...commonBoxProps}>
+                        <Box display="flex" flexDirection="row" alignItems="center">
+                          <TextView {...leftTextViewProps}>{leftButton.text}</TextView>
+                        </Box>
                       </Box>
-                    </Box>
-                  </TouchableWithoutFeedback>
-                </Box>
+                    </TouchableWithoutFeedback>
+                  </Box>
+                </View>
               ) : null}
             </Box>
 
@@ -312,23 +311,24 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
               flex={4}
               alignItems={'flex-end'}>
               {rightButton && (
-                <TouchableWithoutFeedback
-                  ref={focus === 'Right' ? focusRef : () => {}}
-                  onPress={rightButton.onPress}
-                  accessibilityRole={rightButton.accessibilityRole || 'button'}>
-                  <Box {...commonBoxProps}>
-                    {rightButton.icon ? (
-                      <IconWithText
-                        testID={rightButton.testID}
-                        label={rightButton.text}
-                        labelA11y={rightButton.a11yLabel}
-                        {...rightButton.icon}
-                      />
-                    ) : (
-                      <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
-                    )}
-                  </Box>
-                </TouchableWithoutFeedback>
+                <View ref={focus === 'Right' ? focusRef : () => {}}>
+                  <TouchableWithoutFeedback
+                    onPress={rightButton.onPress}
+                    accessibilityRole={rightButton.accessibilityRole || 'button'}>
+                    <Box {...commonBoxProps}>
+                      {rightButton.icon ? (
+                        <IconWithText
+                          testID={rightButton.testID}
+                          label={rightButton.text}
+                          labelA11y={rightButton.a11yLabel}
+                          {...rightButton.icon}
+                        />
+                      ) : (
+                        <TextView {...rightTextViewProps}>{rightButton.text}</TextView>
+                      )}
+                    </Box>
+                  </TouchableWithoutFeedback>
+                </View>
               )}
               {!rightButton && menuViewActions && (
                 <Box {...commonBoxProps}>

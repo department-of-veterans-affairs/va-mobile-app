@@ -454,6 +454,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       {
         fieldType: FieldType.ComboBox,
         fieldProps: {
+          titleKey: 'secureMessaging.formMessage.careTeam',
           labelKey: 'secureMessaging.formMessage.to',
           selectedValue: to,
           onSelectionChange: setTo,

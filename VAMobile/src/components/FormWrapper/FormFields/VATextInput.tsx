@@ -2,10 +2,7 @@ import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 
 import { useTranslation } from 'react-i18next'
 import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 
-import { useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
-
-import { Box, BoxProps } from '../../index'
+import { Box, BoxProps } from 'components'
 import {
   getInputBorderColor,
   getInputBorderWidth,
@@ -13,7 +10,9 @@ import {
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
-} from './formFieldUtils'
+} from 'components/FormWrapper/FormFields/formFieldUtils'
+import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 export type VATextInputTypes = 'none' | 'email' | 'phone'
 
@@ -46,6 +45,8 @@ export type VATextInputProps = {
   isTextArea?: boolean
   /** optional boolean to set the cursor to the beginning of a string value */
   setInputCursorToBeginning?: boolean
+  /** optional element rendered before text input */
+  preAdornment?: ReactElement
 }
 
 /**
@@ -67,6 +68,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     error,
     isTextArea,
     setInputCursorToBeginning,
+    preAdornment,
   } = props
   const { t } = useTranslation()
   const theme = useTheme()
@@ -132,9 +134,10 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
-      marginRight: 40,
+      paddingRight: 40,
       color: isFocused ? theme.colors.text.inputFocused : theme.colors.text.input,
       height: isTextArea ? textAreaHeight - inputBorderWidth * 2 : undefined,
+      width: '100%',
     },
     onFocus,
     onBlur,
@@ -155,8 +158,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
     const textInputBox = (
-      <Box {...wrapperProps}>
-        <Box width="100%">
+      <Box display="flex" flexDirection="row" gap={theme.dimensions.smallMarginBetween} alignItems="center">
+        {preAdornment}
+        <Box flex={1} {...wrapperProps}>
           <TextInput testID={testID} {...inputProps} ref={inputRef || ref} />
         </Box>
       </Box>

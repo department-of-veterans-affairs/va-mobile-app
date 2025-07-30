@@ -4,53 +4,53 @@ import { SvgProps } from 'react-native-svg'
 import { useSelector } from 'react-redux'
 
 import { Box, BoxProps } from 'components'
+import FlagIconSvgs from 'components/VAIcon/flags'
+// See VAIcon function documentation below for guidance on adding new SVGs
+import Add from 'components/VAIcon/svgs/Add.svg'
+import Building from 'components/VAIcon/svgs/Building.svg'
+import CheckMark from 'components/VAIcon/svgs/CheckMark.svg'
+import CircleCheckMark from 'components/VAIcon/svgs/CircleCheckMark.svg'
+import Compose from 'components/VAIcon/svgs/Compose.svg'
+import ExclamationTriangle from 'components/VAIcon/svgs/ExclamationTriangle.svg'
+import ExternalLink from 'components/VAIcon/svgs/ExternalLink.svg'
+import Folder from 'components/VAIcon/svgs/Folder.svg'
+import Inbox from 'components/VAIcon/svgs/Inbox.svg'
+import Info from 'components/VAIcon/svgs/Info.svg'
+import Lock from 'components/VAIcon/svgs/Lock.svg'
+import Minus from 'components/VAIcon/svgs/Minus.svg'
+import PaperClip from 'components/VAIcon/svgs/PaperClip.svg'
+import Phone from 'components/VAIcon/svgs/Phone.svg'
+import QuestionMark from 'components/VAIcon/svgs/QuestionMark.svg'
+import Redo from 'components/VAIcon/svgs/Redo.svg'
+import Remove from 'components/VAIcon/svgs/Remove.svg'
+import Reply from 'components/VAIcon/svgs/Reply.svg'
+import Trash from 'components/VAIcon/svgs/Trash.svg'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
+import UploadPhoto from 'components/VAIcon/svgs/UploadPhoto.svg'
+import VASeal from 'components/VAIcon/svgs/VASeal.svg'
+import VideoCamera from 'components/VAIcon/svgs/VideoCamera.svg'
+// VASelector
+import CheckBoxEmpty from 'components/VAIcon/svgs/checkbox/CheckBoxEmpty.svg'
+import CheckBoxError from 'components/VAIcon/svgs/checkbox/CheckBoxError.svg'
+import CheckBoxFilled from 'components/VAIcon/svgs/checkbox/CheckBoxFilled.svg'
+import CheckBoxIntermediate from 'components/VAIcon/svgs/checkbox/CheckBoxIntermediate.svg'
+// Links
+import Calendar from 'components/VAIcon/svgs/links/Calendar.svg'
+import Chat from 'components/VAIcon/svgs/links/Chat.svg'
+import CircleExternalLink from 'components/VAIcon/svgs/links/CircleExternalLink.svg'
+import CirclePhone from 'components/VAIcon/svgs/links/CirclePhone.svg'
+import Directions from 'components/VAIcon/svgs/links/Directions.svg'
+import PhoneTTY from 'components/VAIcon/svgs/links/PhoneTTY.svg'
+import Text from 'components/VAIcon/svgs/links/Text.svg'
+import RightArrowInCircle from 'components/VAIcon/svgs/links/right-arrow-blue-circle.svg'
+// Navigation
+import RadioEmpty from 'components/VAIcon/svgs/radio/RadioEmpty.svg'
+import RadioFilled from 'components/VAIcon/svgs/radio/RadioFilled.svg'
 import { RootState } from 'store'
 import { AccessibilityState } from 'store/slices'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { updateFontScale } from 'utils/accessibility'
 import { useAppDispatch, useFontScale, useTheme } from 'utils/hooks'
-
-// See VAIcon function documentation below for guidance on adding new SVGs
-import Add from './svgs/Add.svg'
-import Building from './svgs/Building.svg'
-import CheckMark from './svgs/CheckMark.svg'
-import CircleCheckMark from './svgs/CircleCheckMark.svg'
-import Compose from './svgs/Compose.svg'
-import ExclamationTriangle from './svgs/ExclamationTriangle.svg'
-import ExternalLink from './svgs/ExternalLink.svg'
-import Folder from './svgs/Folder.svg'
-import Inbox from './svgs/Inbox.svg'
-import Info from './svgs/Info.svg'
-import Lock from './svgs/Lock.svg'
-import Minus from './svgs/Minus.svg'
-import PaperClip from './svgs/PaperClip.svg'
-import Phone from './svgs/Phone.svg'
-import QuestionMark from './svgs/QuestionMark.svg'
-import Redo from './svgs/Redo.svg'
-import Remove from './svgs/Remove.svg'
-import Reply from './svgs/Reply.svg'
-import Trash from './svgs/Trash.svg'
-import Unread from './svgs/Unread.svg'
-import UploadPhoto from './svgs/UploadPhoto.svg'
-import VASeal from './svgs/VASeal.svg'
-import VideoCamera from './svgs/VideoCamera.svg'
-// VASelector
-import CheckBoxEmpty from './svgs/checkbox/CheckBoxEmpty.svg'
-import CheckBoxError from './svgs/checkbox/CheckBoxError.svg'
-import CheckBoxFilled from './svgs/checkbox/CheckBoxFilled.svg'
-import CheckBoxIntermediate from './svgs/checkbox/CheckBoxIntermediate.svg'
-// Links
-import Calendar from './svgs/links/Calendar.svg'
-import Chat from './svgs/links/Chat.svg'
-import CircleExternalLink from './svgs/links/CircleExternalLink.svg'
-import CirclePhone from './svgs/links/CirclePhone.svg'
-import Directions from './svgs/links/Directions.svg'
-import PhoneTTY from './svgs/links/PhoneTTY.svg'
-import Text from './svgs/links/Text.svg'
-import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
-// Navigation
-import RadioEmpty from './svgs/radio/RadioEmpty.svg'
-import RadioFilled from './svgs/radio/RadioFilled.svg'
 
 export const VA_ICON_MAP = {
   Add,
@@ -90,14 +90,17 @@ export const VA_ICON_MAP = {
   UploadPhoto,
   VASeal,
   VideoCamera,
+  ...FlagIconSvgs,
 }
+
+export type VAIcons = keyof typeof VA_ICON_MAP
 
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
 export type VAIconProps = BoxProps & {
   /**  enum name of the icon to use {@link VA_ICON_MAP} **/
-  name: keyof typeof VA_ICON_MAP
+  name: VAIcons
 
   /** Fill color for the icon */
   fill?: keyof VAIconColors | keyof VATextColors | string
