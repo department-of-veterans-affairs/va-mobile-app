@@ -30,18 +30,18 @@ function LoginIssues({}: LoginIssuesProps) {
   const [loginFrequency, setLoginFrequency] = useState('')
   const [loginAdditionalFeedback, setLoginAdditionalFeedback] = useState('')
 
-  const logFeedback = async () => {
+  const logFeedback = async (newOtherText: string, newFeedbackText: string) => {
     const buildNumber = await getBuildNumber()
     const version = await getVersionName()
     const device = await getDeviceName()
 
     const answers = {
       q1: loginIssue,
-      q2: loginIssueOtherText,
+      q2: newOtherText,
       q3: loginProvider,
       q4: loginPreviously,
       q5: loginFrequency,
-      q6: loginAdditionalFeedback,
+      q6: newFeedbackText,
       q7: buildNumber,
       q8: version,
       q9: device,
@@ -51,8 +51,8 @@ function LoginIssues({}: LoginIssuesProps) {
   }
 
   const onSave = async () => {
-    const { found: otherTextFound } = checkStringForPII(loginIssueOtherText)
-    const { found: additionalFeedbackFound } = checkStringForPII(loginAdditionalFeedback)
+    const { found: otherTextFound, newText: newOtherText } = checkStringForPII(loginIssueOtherText)
+    const { found: additionalFeedbackFound, newText: newFeedbackText } = checkStringForPII(loginAdditionalFeedback)
     if (otherTextFound || additionalFeedbackFound) {
       Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
         {
@@ -62,8 +62,7 @@ function LoginIssues({}: LoginIssuesProps) {
         {
           text: t('loginIssues.submitAnyway'),
           onPress: async () => {
-            await logFeedback()
-            // submittedCheck = true
+            await logFeedback(newOtherText, newFeedbackText)
             navigation.goBack()
             snackbar.show(t('loginIssues.feedbackSubmitted'))
           },
@@ -71,8 +70,7 @@ function LoginIssues({}: LoginIssuesProps) {
         },
       ])
     } else {
-      await logFeedback()
-      // submittedCheck = true
+      await logFeedback(newOtherText, newFeedbackText)
       navigation.goBack()
       snackbar.show(t('loginIssues.feedbackSubmitted'))
     }
