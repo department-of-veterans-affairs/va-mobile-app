@@ -808,6 +808,7 @@
   "fileUpload.submit": "Submit file",
   "fileUpload.submit.confirm.message": "You can't edit this file after you submit it.",
   "fileUpload.submit.confirm.title": "Submit your file?",
+  "fileUpload.submit.error.message": "To submit this file, provide this information:",
   "fileUpload.submitted": "File submitted",
   "fileUpload.submitted.error": "File not submitted",
   "fileUpload.takeOrSelectPhotos": "Take or select photos",
