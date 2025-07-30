@@ -1,9 +1,8 @@
 import { DateTime, Interval } from 'luxon'
 
 import { AppointmentData, AppointmentsGetData } from 'api/types'
-
-import { Params } from '../api'
-import { DemoStore } from './store'
+import { Params } from 'store/api/api'
+import { DemoStore } from 'store/api/demo/store'
 
 /**
  * Type denoting the demo data store
@@ -27,9 +26,11 @@ export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData
 export const getAppointments = (store: DemoStore, params: Params): AppointmentsGetData | undefined => {
   const endDate = params.endDate
   const startDate = params.startDate as string
+  const sortDirection = params.sort
 
-  if (endDate && typeof endDate === 'string') {
-    if (DateTime.fromISO(endDate) < DateTime.now()) {
+  if (endDate && typeof endDate === 'string' && sortDirection && typeof sortDirection === 'string') {
+    // Changed from prior check because now past 3 months goes until current end of day
+    if (sortDirection.startsWith('-')) {
       // Filter data from json file with dates in specified time range
       const pastAppts = JSON.parse(JSON.stringify(store['/v0/appointments'].past))
       const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))

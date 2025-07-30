@@ -1,18 +1,17 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { useIsFocused } from '@react-navigation/native'
 
-import { AppointmentData, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { AppointmentData, AppointmentsGetData } from 'api/types'
 import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { getGroupedAppointments } from 'utils/appointments'
+import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import NoAppointments from '../NoAppointments/NoAppointments'
 
 type UpcomingAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -27,7 +26,6 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
-  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
 
   const pagination = {
     currentPage: page,
@@ -36,10 +34,11 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   }
   const { perPage, totalEntries } = pagination
 
-  useEffect(() => {
-    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
-    setAppointmentsToShow(appointmentsList || [])
-  }, [appointmentsData?.data, page, perPage])
+  const filteredAppointments = useMemo(() => filterAppointments(appointmentsData?.data || []), [appointmentsData?.data])
+
+  const appointmentsToShow = useMemo(() => {
+    return filteredAppointments?.slice((page - 1) * perPage, page * perPage) || []
+  }, [filteredAppointments, page, perPage])
 
   if (loading && isFocused) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
