@@ -246,6 +246,7 @@
     "BiometricsPreferenceScreen": [],
     "SyncScreen": [],
     "WebviewScreen": [],
+    "LoginIssues": [],
     "styles": [],
     "TravelPay": ["TravelPay"]
   },
