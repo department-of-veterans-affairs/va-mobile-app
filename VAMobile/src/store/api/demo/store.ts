@@ -136,31 +136,82 @@ const transformDates = (fileObject: Record<string, unknown>) => {
 /**
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
-export const initDemoStore = async (): Promise<void> => {
-  const data = await Promise.all([
-    featureEnabled('appointmentsTestTime')
-      ? import('./mocks/appointmentsTestTime.json')
-      : import('./mocks/appointments.json'),
-    import('./mocks/claims.json'),
-    import('./mocks/profile.json'),
-    import('./mocks/secureMessaging.json'),
-    import('./mocks/vaccine.json'),
-    import('./mocks/disablityRating.json'),
-    import('./mocks/decisionLetters.json'),
-    import('./mocks/labsAndTests.json'),
-    import('./mocks/letters.json'),
-    import('./mocks/payments.json'),
-    import('./mocks/prescriptions.json'),
-    import('./mocks/notifications.json'),
-    import('./mocks/contactInformation.json'),
-    import('./mocks/getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo')
-      ? import('./mocks/getFacilitiesInfoCerner.json')
-      : import('./mocks/getFacilitiesInfo.json'),
-    import('./mocks/demographics.json'),
-    import('./mocks/personalInformation.json'),
-    import('./mocks/allergies.json'),
-  ])
+export const initDemoStore = async (demoUser: string | null = 'kimberlyWashington'): Promise<void> => {
+  let userData
+  switch (demoUser) {
+    case 'benjaminAdams':
+      userData = [
+        featureEnabled('appointmentsTestTime')
+          ? import('./mocks/benjaminAdams/appointmentsTestTime.json')
+          : import('./mocks/benjaminAdams/appointments.json'),
+        import('./mocks/benjaminAdams/appointments.json'),
+        import('./mocks/benjaminAdams/claims.json'),
+        import('./mocks/benjaminAdams/profile.json'),
+        import('./mocks/benjaminAdams/secureMessaging.json'),
+        import('./mocks/benjaminAdams/vaccine.json'),
+        import('./mocks/benjaminAdams/disabilityRating.json'),
+        import('./mocks/benjaminAdams/decisionLetters.json'),
+        import('./mocks/benjaminAdams/labsAndTests.json'),
+        import('./mocks/benjaminAdams/letters.json'),
+        import('./mocks/benjaminAdams/payments.json'),
+        import('./mocks/benjaminAdams/prescriptions.json'),
+        import('./mocks/benjaminAdams/notifications.json'),
+        import('./mocks/benjaminAdams/contactInformation.json'),
+        import('./mocks/benjaminAdams/getAuthorizedServices.json'),
+        featureEnabled('cernerTrueForDemo')
+          ? import('./mocks/benjaminAdams/getFacilitiesInfoCerner.json')
+          : import('./mocks/benjaminAdams/getFacilitiesInfo.json'),
+        import('./mocks/benjaminAdams/demographics.json'),
+        import('./mocks/benjaminAdams/personalInformation.json'),
+        import('./mocks/benjaminAdams/allergies.json'),
+      ]
+      break
+    case 'claraJefferson':
+      userData = [
+        import('./mocks/claraJefferson/profile.json'),
+        import('./mocks/claraJefferson/vaccine.json'),
+        import('./mocks/claraJefferson/labsAndTests.json'),
+        import('./mocks/claraJefferson/notifications.json'),
+        import('./mocks/claraJefferson/contactInformation.json'),
+        import('./mocks/claraJefferson/getAuthorizedServices.json'),
+        featureEnabled('cernerTrueForDemo')
+          ? import('./mocks/claraJefferson/getFacilitiesInfoCerner.json')
+          : import('./mocks/claraJefferson/getFacilitiesInfo.json'),
+        import('./mocks/claraJefferson/demographics.json'),
+        import('./mocks/claraJefferson/personalInformation.json'),
+        import('./mocks/claraJefferson/allergies.json'),
+      ]
+      break
+    case 'kimberlyWashington':
+    default:
+      userData = [
+        featureEnabled('appointmentsTestTime')
+          ? import('./mocks/kimberlyWashington/appointmentsTestTime.json')
+          : import('./mocks/kimberlyWashington/appointments.json'),
+        import('./mocks/kimberlyWashington/appointments.json'),
+        import('./mocks/kimberlyWashington/claims.json'),
+        import('./mocks/kimberlyWashington/profile.json'),
+        import('./mocks/kimberlyWashington/secureMessaging.json'),
+        import('./mocks/kimberlyWashington/vaccine.json'),
+        import('./mocks/kimberlyWashington/disabilityRating.json'),
+        import('./mocks/kimberlyWashington/decisionLetters.json'),
+        import('./mocks/kimberlyWashington/labsAndTests.json'),
+        import('./mocks/kimberlyWashington/letters.json'),
+        import('./mocks/kimberlyWashington/payments.json'),
+        import('./mocks/kimberlyWashington/prescriptions.json'),
+        import('./mocks/kimberlyWashington/notifications.json'),
+        import('./mocks/kimberlyWashington/contactInformation.json'),
+        import('./mocks/kimberlyWashington/getAuthorizedServices.json'),
+        featureEnabled('cernerTrueForDemo')
+          ? import('./mocks/kimberlyWashington/getFacilitiesInfoCerner.json')
+          : import('./mocks/kimberlyWashington/getFacilitiesInfo.json'),
+        import('./mocks/kimberlyWashington/demographics.json'),
+        import('./mocks/kimberlyWashington/personalInformation.json'),
+        import('./mocks/kimberlyWashington/allergies.json'),
+      ]
+  }
+
+  const data = await Promise.all(userData)
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }

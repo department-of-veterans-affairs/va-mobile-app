@@ -1,9 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import { AppThunk } from 'store'
 import * as api from 'store/api'
-
-import { initDemoStore } from '../api/demo/store'
+import { initDemoStore } from 'store/api/demo/store'
 
 export type DemoState = {
   demoMode: boolean
@@ -26,7 +28,8 @@ export const updateDemoMode =
     api.setDemoMode(demoMode)
     dispatch(dispatchUpdateDemoMode(demoMode))
     if (!loginOut) {
-      await initDemoStore()
+      const demoUser = await AsyncStorage.getItem(DEMO_USER)
+      await initDemoStore(demoUser)
     }
     if (!demoMode) {
       dispatch(dispatchUpdateErrors([]))

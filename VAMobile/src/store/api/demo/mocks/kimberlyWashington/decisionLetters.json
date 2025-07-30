@@ -1,0 +1,42 @@
+{
+  "/v0/claims/decision-letters": {
+    "data": [
+      {
+        "id": "{87B6DE5D-CD79-4D15-B6DC-A5F9A324DC4F}",
+        "type": "decisionLetter",
+        "attributes": {
+          "seriesId": "{EC1B5F0C-E3FB-4A41-B93F-E1A88D549CCA}",
+          "version": "1",
+          "typeDescription": "Notification Letter (e.g. VA 20-8993, VA 21-0290, PCGL)",
+          "typeId": "184",
+          "docType": "184",
+          "subject": null,
+          "receivedAt": "2023-03-11",
+          "source": "VBMS",
+          "mimeType": "application/pdf",
+          "altDocTypes": "",
+          "restricted": false,
+          "uploadDate": "2023-03-12"
+        }
+      },
+      {
+        "id": "{87B6DE5D-CD79-4D15-B6DC-A5F9A324DC3E}",
+        "type": "decisionLetter",
+        "attributes": {
+          "seriesId": "{EC1B5F0C-E3FB-4A41-B93F-E1A88D549CDF}",
+          "version": "1",
+          "typeDescription": "Decision Rating Letter",
+          "typeId": "184",
+          "docType": "184",
+          "subject": null,
+          "receivedAt": "2022-09-21",
+          "source": "VBMS",
+          "mimeType": "application/pdf",
+          "altDocTypes": "",
+          "restricted": false,
+          "uploadDate": "2022-09-22"
+        }
+      }
+    ]
+  }
+}
