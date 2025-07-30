@@ -88,6 +88,7 @@ const TravelPayE2eIdConstants = {
   APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID: 'appointmentFileTravelPayAlert',
   ERROR_SCREEN_ID: 'SMOCErrorScreen',
   FINISH_TRAVEL_CLAIM_LINK_ID: 'finishTravelClaimLinkID',
+  CLOSE_BUTTON_ID: 'closeButtonID',
 }
 
 const fillHomeAddressFields = async () => {
@@ -323,6 +324,12 @@ const checkBurdenStatementScreen = async () => {
   await element(by.id(TravelPayE2eIdConstants.BURDEN_STATEMENT_SCREEN_ID)).scrollTo('bottom')
   await expect(element(by.id(TravelPayE2eIdConstants.BURDEN_STATEMENT_ACT_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.BURDEN_STATEMENT_ACT_TEXT_ID))).toExist()
+
+  await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
+
+  await waitFor(element(by.id(TravelPayE2eIdConstants.BURDEN_STATEMENT_SCREEN_ID)))
+    .not.toExist()
+    .withTimeout(6000)
 }
 
 const checkTravelPayHelpComponent = async () => {
@@ -359,7 +366,6 @@ const checkInterstitialScreen = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_PRIVACY_STATEMENT_LINK_ID))).toExist()
   await element(by.id(TravelPayE2eIdConstants.REVIEW_PRIVACY_STATEMENT_LINK_ID)).tap()
   await checkBurdenStatementScreen()
-  await element(by.id('closeButtonID')).tap()
 }
 
 const checkTravelPayFlow = async (existingAddress: boolean, checkHelp: boolean = false) => {
@@ -395,7 +401,7 @@ describe('Travel Pay', () => {
     await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
   })
 
-  it('is correctly displays the cancel and keep going buttons when the top left cancel button is tapped', async () => {
+  it('correctly displays the cancel and keep going buttons when the top left cancel button is tapped', async () => {
     await startTravelPayFlow()
     await element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID)).tap()
     await waitFor(element(by.text(TravelPayE2eIdConstants.CANCEL_TRAVEL_CLAIM_TEXT)))

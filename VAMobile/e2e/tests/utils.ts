@@ -352,6 +352,11 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
+
+  // Wait for the modal to be dismissed (contained element no longer exists)
+  await waitFor(element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)))
+    .not.toExist()
+    .withTimeout(6000)
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
