@@ -1,5 +1,107 @@
 [
   {
+    "title": "v2.56.0",
+    "due_on": "2025-08-12T07:00:00Z",
+    "issues": [
+      {
+        "title": "chore/vaos 114237 Match web upcoming/past appt logic",
+        "number": 11378,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11378",
+        "isPR": true
+      },
+      {
+        "title": "666 - Adding Loading Indicator for VSC",
+        "number": 11377,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11377",
+        "isPR": true
+      },
+      {
+        "title": "Removing Vet Status API Call from HomeScreen ",
+        "number": 11354,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11354",
+        "isPR": true
+      },
+      {
+        "title": "Replace custom checkbox implementation with design library implementation in form wrapper",
+        "number": 11328,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11328",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 1 - All - Odd error state and poor a11y with Claims checkboxes",
+        "number": 11317,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11317",
+        "isPR": false
+      },
+      {
+        "title": "Mhv/labs and tests/date picker",
+        "number": 11303,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11303",
+        "isPR": true
+      },
+      {
+        "title": "532 - Add Availability Framework to Mobile VSC",
+        "number": 11295,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11295",
+        "isPR": true
+      },
+      {
+        "title": "What's New: SMOC (MERGE by 7/29)",
+        "number": 11294,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11294",
+        "isPR": false
+      },
+      {
+        "title": "chore: Changes to UI and content for prepare for your appointment information",
+        "number": 11188,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11188",
+        "isPR": true
+      },
+      {
+        "title": "BUG - 3 - All - Accessibility: Dollar amounts are being read inconsistently when 3 or less digits.",
+        "number": 11129,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11129",
+        "isPR": false
+      },
+      {
+        "title": "Implement International Phone Number",
+        "number": 10924,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10924",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 3)",
+        "number": 10873,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10873",
+        "isPR": false
+      },
+      {
+        "title": "Add E2E test for non urgent messages alert",
+        "number": 10546,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10546",
+        "isPR": false
+      },
+      {
+        "title": "BUG - Sev-3 - Android - Selecting 'skip for now' in the push notifications onboarding screen causing settings > notifications to error out",
+        "number": 10133,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10133",
+        "isPR": false
+      },
+      {
+        "title": "BUG - 3 - All -Benefit summary and service verification letter stuck showing loading component when beneficiary data request fails",
+        "number": 6951,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/6951",
+        "isPR": false
+      },
+      {
+        "title": "Add field error to Claims Decision page",
+        "number": 582,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/582",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.55.0",
     "due_on": "2025-07-29T07:00:00Z",
     "issues": [
