@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
 
@@ -28,6 +30,23 @@ export const Events = {
   vama_allergy_list: (): Event => {
     return {
       name: 'vama_allergy_list',
+    }
+  },
+  vama_lab_or_test_list: (timeFrame: string, count?: number): Event => {
+    return {
+      name: 'vama_lab_or_test_list',
+      params: {
+        timeFrame,
+        count,
+      },
+    }
+  },
+  vama_lab_or_test_details: (labType: string): Event => {
+    return {
+      name: 'vama_lab_or_test_details',
+      params: {
+        labType,
+      },
     }
   },
   vama_appt_cancel: (
@@ -72,12 +91,6 @@ export const Events = {
         apt_type: apt_type,
         days_to_apt: days_to_apt,
       },
-    }
-  },
-  // Issue#2273 Track appointment pagination discrepancies
-  vama_appts_page_warning: (): Event => {
-    return {
-      name: 'vama_appts_page_warning',
     }
   },
   vama_apt_add_cal: (apt_id: string, apt_status: string | undefined, apt_type: string, days_to_apt: number): Event => {
@@ -127,16 +140,6 @@ export const Events = {
   vama_be_af_shown: (): Event => {
     return {
       name: 'vama_be_af_shown',
-    }
-  },
-  vama_claim_call: (claim_id: string, claim_type: string, claim_step: number): Event => {
-    return {
-      name: 'vama_claim_call',
-      params: {
-        claim_id,
-        claim_type,
-        claim_step,
-      },
     }
   },
   vama_claim_details_exp: (
@@ -353,22 +356,6 @@ export const Events = {
       },
     }
   },
-  vama_claim_upload_fail: (
-    claim_id: string,
-    claim_request_id: number | null,
-    claim_request_type: string,
-    evidence_method: string,
-  ): Event => {
-    return {
-      name: 'vama_claim_upload_fail',
-      params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
-      },
-    }
-  },
   vama_claim_upload_start: (
     claim_id: string,
     claim_request_id: number | null,
@@ -405,19 +392,17 @@ export const Events = {
       },
     }
   },
-  vama_ddl_button_shown: (): Event => {
-    return {
-      name: 'vama_ddl_button_shown',
-    }
-  },
   vama_ddl_landing_click: (): Event => {
     return {
       name: 'vama_ddl_landing_click',
     }
   },
-  vama_ddl_letter_view: (): Event => {
+  vama_ddl_letter_view: (letterName: string): Event => {
     return {
       name: 'vama_ddl_letter_view',
+      params: {
+        letterName,
+      },
     }
   },
   vama_ddl_status_click: (): Event => {
@@ -659,6 +644,17 @@ export const Events = {
       },
     }
   },
+  vama_feedback: (satisfaction: string, meetsMyNeeds: string, easyToUse: string, task: string): Event => {
+    return {
+      name: 'vama_feedback',
+      params: {
+        satisfaction,
+        meetsMyNeeds,
+        easyToUse,
+        task,
+      },
+    }
+  },
   vama_hs_appts_load_time: (loadTime: number): Event => {
     return {
       name: 'vama_hs_appts_load_time',
@@ -790,6 +786,16 @@ export const Events = {
       name: 'vama_login_token_store',
       params: {
         success,
+      },
+    }
+  },
+  vama_mw_shown: (feature: string, start: DateTime, end: DateTime): Event => {
+    return {
+      name: 'vama_mw_shown',
+      params: {
+        feature,
+        start,
+        end,
       },
     }
   },
@@ -951,19 +957,6 @@ export const Events = {
       },
     }
   },
-  vama_rx_sort: (): Event => {
-    return {
-      name: 'vama_rx_sort',
-    }
-  },
-  vama_rx_sort_sel: (sort: string): Event => {
-    return {
-      name: 'vama_rx_sort_sel',
-      params: {
-        sort,
-      },
-    }
-  },
   vama_rx_status: (status: string, ttv: number): Event => {
     return {
       name: 'vama_rx_status',
@@ -1103,14 +1096,6 @@ export const Events = {
       },
     }
   },
-  vama_ttv_appt_details: (totalTime: number): Event => {
-    return {
-      name: 'vama_ttv_appt_details',
-      params: {
-        totalTime,
-      },
-    }
-  },
   vama_update_dir_dep: (): Event => {
     return {
       name: 'vama_update_dir_dep',
@@ -1214,6 +1199,22 @@ export const Events = {
   vama_goto_payment_hist: (): Event => {
     return {
       name: 'vama_goto_payment_hist',
+    }
+  },
+  vama_smoc_time_taken: (totalTime: number): Event => {
+    return {
+      name: 'vama_smoc_time_taken',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_smoc_error: (error: string): Event => {
+    return {
+      name: 'vama_smoc_error',
+      params: {
+        error,
+      },
     }
   },
 }

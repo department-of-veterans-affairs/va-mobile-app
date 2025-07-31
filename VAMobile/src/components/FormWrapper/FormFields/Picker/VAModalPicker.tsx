@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   AccessibilityProps,
@@ -14,10 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Icon, IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, BoxProps, TextView, TextViewProps, VAScrollView } from 'components'
-import { a11yHintProp, a11yValueProp } from 'utils/accessibility'
-import { getTranslation } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
-
+import PickerList, { PickerListItemObj } from 'components/FormWrapper/FormFields/Picker/PickerList'
 import {
   generateA11yValue,
   generateInputA11yLabel,
@@ -25,8 +22,10 @@ import {
   removeInputErrorMessage,
   renderInputError,
   renderInputLabelSection,
-} from '../formFieldUtils'
-import PickerList, { PickerListItemObj } from './PickerList'
+} from 'components/FormWrapper/FormFields/formFieldUtils'
+import { a11yHintProp, a11yValueProp, setAccessibilityFocus } from 'utils/accessibility'
+import { getTranslation } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -38,6 +37,8 @@ export type PickerItem = {
   value: string
   /** icon to show */
   icon?: IconProps
+  /** Test ID for the item */
+  testID?: string
 }
 
 export type VAModalPickerProps = {
@@ -105,6 +106,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const theme = useTheme()
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
+  const ref = useRef(null)
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
   const [focusUpdated, setFocusUpdated] = useState(false)
@@ -131,6 +133,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
+    setAccessibilityFocus(ref)
   }
 
   const onCancel = (): void => {
@@ -141,6 +144,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
+    setAccessibilityFocus(ref)
   }
 
   const handleSelection = (selectionVal: string): void => {
@@ -164,6 +168,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       },
       isSelected: currentSelectedValue === pickerOption.value,
       icon: pickerOption.icon,
+      testId: pickerOption.testID,
     }
   })
 
@@ -201,7 +206,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     return (
       // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-      <Pressable onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
+      <Pressable ref={ref} onPress={showModal} accessible={true} accessibilityLabel={inputA11yLabel} {...parentProps}>
         {content}
       </Pressable>
     )

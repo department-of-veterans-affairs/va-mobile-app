@@ -1,10 +1,16 @@
 import { ParamListBase } from '@react-navigation/native'
 
+import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
+import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
+import { RouteNavigationFunction } from 'utils/hooks'
 
-import { RouteNavigationFunction } from './hooks'
+const { LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS } = getEnv()
 
 /**
  * Strips the timezone offset from a datetime string
@@ -89,7 +95,10 @@ export const getCommonSubtaskProps = (
     ...(hasErrorScreen
       ? {
           secondaryContentButtonText: t('no'),
-          onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
+          onSecondaryContentButtonPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_error('unsupportedType'))
+            navigateTo('SMOCErrorScreen', { error: 'unsupportedType' })
+          },
         }
       : {}),
   }
@@ -104,4 +113,27 @@ export const getCommonSubtaskProps = (
   }
 
   return props
+}
+
+/**
+ * Navigates to the travel pay website in a authenticated webview
+ * @param t - The translation function
+ * @param navigateTo - The navigation function
+ */
+export const navigateToTravelPayWebsite = (t: TFunction, navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS))
+  navigateTo('Webview', {
+    url: LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS,
+    displayTitle: t('travelPay.webview.fileForTravelPay.title'),
+    loadingMessage: t('loading.vaWebsite'),
+    useSSO: true,
+  })
+}
+
+export const useTravelClaimSubmissionMutationState = (appointmentId: string) => {
+  const [mutationState] = useMutationState({
+    filters: { mutationKey: [travelPayMutationKeys.submitClaim, appointmentId] },
+  })
+
+  return mutationState
 }

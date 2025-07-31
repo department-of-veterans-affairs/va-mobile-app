@@ -5,11 +5,10 @@ import { t } from 'i18next'
 
 import { paymentsKeys } from 'api/payments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import PaymentHistoryScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentHistoryScreen'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
 import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
-
-import PaymentHistoryScreen from './PaymentHistoryScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -195,7 +194,7 @@ context('PaymentHistoryScreen', () => {
         })
         .mockResolvedValue(mockData)
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill $1,172.60')))
+      await waitFor(() => fireEvent.press(screen.getByLabelText('Post-9/11 GI Bill—$1,172.60')))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('PaymentDetails', {
           payment: {

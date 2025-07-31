@@ -9,6 +9,13 @@ export const AppointmentsExpandede2eConstants = {
   VA_APPT_CANCEL_ID: 'vaLinkApptsCancelTestID',
   TRAVEL_PAY_FILE_CLAIM_ALERT_ID: 'appointmentFileTravelPayAlert',
   TRAVEL_PAY_CLAIM_DETAILS_ID: 'travelClaimDetails',
+  WHAT_TO_BRING: 'Find out what to bring to your appointment',
+  VIDEO_BULLET_2: 'Get your device ready to join',
+  CLAIM_EXAM_BULLET_1: 'You don’t need to bring anything to your exam',
+  CLAIM_EXAM_BULLET_2:
+    'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment',
+  CLAIM_EXAM_WEB_LINK: 'Learn more about claim exam appointments',
+  GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID: 'goToVAGovTravelClaimStatus',
 }
 
 const checkTravelClaimAvailability = async (
@@ -68,49 +75,34 @@ const checkMedicationWording = async ({
         appointmentType === 'GFE' ||
         appointmentType === 'Home'
       ) {
-        await expect(element(by.text('Find a full list of things to bring to your appointment'))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).toExist()
       }
 
       if (appointmentType === 'ATLAS' || appointmentType === 'Home' || appointmentType === 'GFE') {
-        await expect(element(by.text('Get your device ready to join.'))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.VIDEO_BULLET_2))).toExist()
         await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID))).toExist()
         await waitFor(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID)))
           .toBeVisible()
           .whileElement(by.id(pastAppointment ? 'PastApptDetailsTestID' : 'UpcomingApptDetailsTestID'))
           .scroll(300, 'down')
-        await element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID)).tap()
-        await expect(element(by.text('Appointments help'))).toExist()
-        await element(by.text('Close')).tap()
       } else if (appointmentType === 'Claim') {
-        await expect(element(by.text('You don’t need to bring anything to your exam.'))).toExist()
-        await expect(
-          element(
-            by.text(
-              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
-            ),
-          ),
-        ).toExist()
-        await expect(element(by.text('Learn more about claim exam appointments'))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_1))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_2))).toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_WEB_LINK))).toExist()
       } else {
-        await expect(element(by.text('You don’t need to bring anything to your exam.'))).not.toExist()
-        await expect(
-          element(
-            by.text(
-              'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment.',
-            ),
-          ),
-        ).not.toExist()
-        await expect(element(by.text('Learn more about claim exam appointments'))).not.toExist()
-        await expect(element(by.text('Get your device ready to join.'))).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_1))).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_BULLET_2))).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.CLAIM_EXAM_WEB_LINK))).not.toExist()
+        await expect(element(by.text(AppointmentsExpandede2eConstants.VIDEO_BULLET_2))).not.toExist()
         await expect(element(by.id(AppointmentsExpandede2eConstants.VIDEO_VISIT_PREP_LINK_ID))).not.toExist()
       }
     } else {
       await expect(element(by.text('Prepare for your appointment'))).not.toExist()
-      await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+      await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).not.toExist()
     }
   } else {
     await expect(element(by.text('Prepare for your appointment'))).not.toExist()
-    await expect(element(by.text('Find a full list of things to bring to your appointment'))).not.toExist()
+    await expect(element(by.text(AppointmentsExpandede2eConstants.WHAT_TO_BRING))).not.toExist()
   }
 }
 
@@ -128,6 +120,7 @@ const checkUpcomingApptDetails = async (
   locationAddress?: string,
   travelClaimId?: string,
   daysSinceAppointmentStart?: number,
+  travelPayClaimsFullHistory?: boolean,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -233,14 +226,14 @@ const checkUpcomingApptDetails = async (
     if (appointmentStatus === 'Confirmed') {
       await expect(element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID))).toExist()
       if (
-        appointmentType === 'Atlas' ||
+        appointmentType === 'ATLAS' ||
         appointmentType === 'Home' ||
         appointmentType === 'Onsite' ||
         appointmentType === 'Phone' ||
         appointmentType === 'CC'
       ) {
         await expect(element(by.text('Need to reschedule or cancel?'))).toExist()
-        if (appointmentType === 'Atlas' || appointmentType === 'Home') {
+        if (appointmentType === 'ATLAS' || appointmentType === 'Home') {
           await expect(
             element(by.text('If you need to reschedule or cancel this appointment, call the scheduling facility.')),
           ).toExist()
@@ -262,14 +255,14 @@ const checkUpcomingApptDetails = async (
       }
     } else if (appointmentStatus === 'Canceled') {
       if (
-        appointmentType === 'Atlas' ||
+        appointmentType === 'ATLAS' ||
         appointmentType === 'Home' ||
         appointmentType === 'Onsite' ||
         appointmentType === 'Phone' ||
         appointmentType === 'CC'
       ) {
         await expect(element(by.text('Need to reschedule?'))).toExist()
-        if (appointmentType === 'Atlas' || appointmentType === 'Home') {
+        if (appointmentType === 'ATLAS' || appointmentType === 'Home') {
           await expect(
             element(
               by.text(
@@ -300,7 +293,6 @@ const checkUpcomingApptDetails = async (
         }
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1)).toExist()
         await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1)).toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.VA_APPT_CANCEL_ID))).toExist()
       }
     } else if (appointmentStatus === 'Pending') {
       if (appointmentType !== 'CC') {
@@ -327,14 +319,14 @@ const checkUpcomingApptDetails = async (
   if (pastAppointment && appointmentStatus === 'Confirmed') {
     await expect(element(by.text('This appointment happened in the past.'))).toExist()
     if (
-      appointmentType === 'Atlas' ||
+      appointmentType === 'ATLAS' ||
       appointmentType === 'Home' ||
       appointmentType === 'Onsite' ||
       appointmentType === 'Phone' ||
       appointmentType === 'CC'
     ) {
       await expect(element(by.text('Need to schedule another appointment?'))).toExist()
-      if (appointmentType === 'Atlas' || appointmentType === 'Home') {
+      if (appointmentType === 'ATLAS' || appointmentType === 'Home') {
         await expect(
           element(
             by.text(
@@ -374,19 +366,35 @@ const checkUpcomingApptDetails = async (
     daysSinceAppointmentStart,
   )
 
-  if (travelClaimId && pastAppointment) {
-    if (!daysSinceAppointmentStart || daysSinceAppointmentStart < 30) {
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
-    } else {
-      await expect(
-        element(
-          by.text(
-            'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
-          ),
-        ),
-      ).toExist()
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+  if (pastAppointment && appointmentStatus === 'Confirmed') {
+    // We can only check if we know the days since the appointment started
+    if (daysSinceAppointmentStart) {
+      if (daysSinceAppointmentStart < 30) {
+        if (travelClaimId) {
+          await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+          await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+          await expect(element(by.id('travelPayHelp'))).toExist()
+        }
+      } else {
+        if (travelPayClaimsFullHistory) {
+          await expect(
+            element(
+              by.text(
+                'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
+              ),
+            ),
+          ).toExist()
+        } else {
+          await expect(
+            element(
+              by.text('Your appointment is older than 30 days. You can still view your travel claim status on VA.gov.'),
+            ),
+          ).toExist()
+          await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
+        }
+        await expect(element(by.id('travelPayHelp'))).toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+      }
     }
   } else {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
@@ -474,6 +482,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       '2341 North Ave',
       '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
+      1,
     )
   })
 
@@ -494,6 +503,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Smoke test 5/21 - 1',
       undefined,
       '2341 North Ave',
+      undefined,
+      1,
     )
   })
 
@@ -541,6 +552,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Middletown VA Clinic',
       '4337 North Union Road',
+      undefined,
+      5,
     )
   })
 
@@ -620,6 +633,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Other details test',
       'Middletown VA Clinic',
       '4337 North Union Road',
+      undefined,
+      6,
     )
   })
 
@@ -683,6 +698,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      7,
     )
   })
 
@@ -732,6 +749,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      7,
     )
   })
 
@@ -818,6 +837,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       'Fort Collins VA Clinic - Claim - Confirmed',
       '2509 Research Boulevard',
+      undefined,
+      13,
     )
   })
 
@@ -843,6 +864,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'San Francisco VA Health Care System',
       '2360 East Pershing Boulevard',
       '20d73591-ff18-4b66-9838-1429ebbf1b6e',
+      26,
     )
   })
 
@@ -1122,6 +1144,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
+      undefined,
+      47,
     )
   })
 

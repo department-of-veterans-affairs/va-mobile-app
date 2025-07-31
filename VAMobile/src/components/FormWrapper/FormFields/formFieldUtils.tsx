@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { VATheme } from '../../../styles/theme'
-import { BorderColorVariant, Box, BoxProps, TextView } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView } from 'components'
+import { VATheme } from 'styles/theme'
 
 /**
  * Renders the label section consisting of the label, potential required text, and potential helper text
@@ -62,7 +62,6 @@ export const getInputBorderWidth = (theme: VATheme, error: string | undefined, i
  */
 export const getInputWrapperProps = (theme: VATheme, error: string | undefined, isFocused: boolean): BoxProps => {
   return {
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: isFocused || !!error ? 'textBox' : 'textBoxInactive',

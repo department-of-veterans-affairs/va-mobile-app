@@ -1,59 +1,29 @@
 ---
-title: Devops
+title: Environment Variables, Secrets, and the Parameter Store
 ---
 
-When storing sensitive information that cannot be publicly exposed. It must be added to all the following locations:
+When storing sensitive information that cannot be publicly exposed, it must be stored in AWS and referenced in a specific manner.
 
-:::tip
-All Devops and Manifests PRs will need a Platform support ticket created for devops team to review.
-:::
+## Creating and Referencing Settings in the Parameter Store
 
-## AWS
+Please consult the detailed and evolving process for using the Parameter Store in the Platform Documentation: [Settings and Parameter Store](https://depo-platform-documentation.scrollhelp.site/developer-docs/settings-and-parameter-store)
 
-All variables should first be put in AWS. If it is not done first, when Manifests repo looks for the new variables, it will fail deployment if it is not found. This can be done at [AWS](https://dsvagovcloud.signin.amazonaws-us-gov.com/console) with the following steps:
+### Mobile-specific Naming Conventions
 
-* Login and find service `Systems Manager`
-* Goto `Parameter Store` in left column
-* In search bar, type in `mobile` and use other mobile keys and urls as reference to how to format new ones. The path need to match exactly what is added to Manifests.
-  
-## Manifests Repo
-
-Once AWS has the variable, add it to the [vsp-infra-application-manifests repo](https://github.com/department-of-veterans-affairs/vsp-infra-application-manifests) in the following locations:
-
-`apps/vets-api/staging/templates/secrets.yaml`: This file maps the AWS path to a variable name.
-
-```bash
-- key: /dsva-vagov/vets-api/prod/mobile_lighthouse_letters/api_url
-  name: mobile_lighthouse_letters_api_url
-  ```
-
-`apps/vets-api/staging/values.yaml`: This file needs two additions: mapping that name from `secrets.yaml` to an env variables and fetching env variable.
-
-```bash
-- name: mobile_lighthouse_letters_api_url
-  path: /dsva-vagov/vets-api/prod/mobile_lighthouse_letters/api_url
-  env_var: MOBILE_LIGHTHOUSE_LETTERS_API_URL
+If a setting is different between modalities (web and mobile), consider appending `_mobile` to a setting key. For example, the tokens and API keys are different between mobile and web for MHV/RX, so we've defined the following:
+```
+mhv:
+  rx:
+    app_token: <%= ENV['mhv__rx__app_token'] %>
+    x_api_key: <%= ENV['mhv__rx__x_api_key'] %>
+mhv_mobile:
+  rx:
+    app_token: <%= ENV['mhv_mobile__rx__app_token'] %>
+    x_api_key: <%= ENV['mhv_mobile__rx__x_api_key'] %>
 ```
 
-```bash
-mobile_lighthouse_letters:
-  api_url: <%= ENV['MOBILE_LIGHTHOUSE_LETTERS_API_URL'] %>
-```
-
-Repeat these steps for the production files in `apps/vets-api/prod`. Dev env is not used by mobile and does not need to be added there.
+Otherwise, use the same conventions, i.e. `/dsva-vagov/vets-api/staging/env_vars/my_setting/value`, as defined in the documentation or the setting will not be properly loaded.
 
 ## Devops Repo
 
-If you'd like to use these values in review instances, after updating Manifests repo, add the variables to [devops repo](https://github.com/department-of-veterans-affairs/devops) in `ansible/roles/review-instance-configure/vars/settings.local.yml`
-
-## Adding Local Settings
-
-Add a new section to `config/settings.yml` in the vets-api. See mobile entry `lighthouse_health_immunization` as reference.
-
-This file populates these variables in local spec environment. Variables will get overwritten by the Devops/Manifest values in staging and production.
-
-The names of the variables should be identical to what is in Devops/Manifests repos but the values can be dummy values. They can then be referenced by `Settings` variable in specs.
-
-## Forward Proxy
-
-If updating forward proxies to a URL is necessary, this can be done at `ansible/deployment/config, fwdproxy-vagov-staging.yml`, and `ansible/deployment/config/fwdproxy-vagov-prod.yml`
+If you'd like to use these values in review instances, after updating the vets-api repo, add the variables to the [devops repo](https://github.com/department-of-veterans-affairs/devops) in `ansible/roles/review-instance-configure/vars/settings.local.yml`

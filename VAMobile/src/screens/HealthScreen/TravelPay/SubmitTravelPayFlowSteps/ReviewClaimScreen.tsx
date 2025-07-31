@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CommonActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
@@ -20,22 +19,26 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
-
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey } = route.params
+function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
+  const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
-  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
+  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(
+    appointment.id,
+    appointmentRouteKey,
+  )
 
   useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
 
@@ -58,6 +61,11 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
   const contactInformationQuery = useContactInformation({ enabled: true })
   const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
 
+  const navigateToErrorScreen = (error: string) => {
+    logAnalyticsEvent(Events.vama_smoc_error(error))
+    navigateTo('SMOCErrorScreen', { error })
+  }
+
   const submitTravelClaim = async () => {
     if (!isCheckboxChecked) {
       setCheckBoxError(t('required'))
@@ -65,8 +73,13 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
     }
 
     if (!attributes.location.id) {
-      navigateTo('ErrorScreen', { error: 'error' })
+      navigateToErrorScreen('error')
       return
+    }
+
+    if (smocFlowStartDate) {
+      const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+      logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
     }
 
     submitClaim(
@@ -79,20 +92,13 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       },
       {
         onSuccess: (data) => {
-          navigation.dispatch({
-            ...CommonActions.setParams({
-              appointment: appendClaimDataToAppointment(appointment, data?.data.attributes),
-            }),
-            source: appointmentRouteKey,
-          })
           navigateTo('SubmitSuccessScreen', {
             appointmentDateTime: attributes.startDateLocal,
             facilityName: attributes.location.name,
+            status: data?.data.attributes.claimStatus,
           })
         },
-        onError: () => {
-          navigateTo('ErrorScreen', { error: 'error' })
-        },
+        onError: () => navigateToErrorScreen('error'),
       },
     )
   }
@@ -143,11 +149,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.where')}
             </TextView>
             {address.map((line: TextLine) => (
-              <>
-                <TextView key={line.text} variant="MobileBody">
-                  {line.text}
-                </TextView>
-              </>
+              <TextView key={line.text} variant="MobileBody">
+                {line.text}
+              </TextView>
             ))}
           </Box>
         </TextArea>

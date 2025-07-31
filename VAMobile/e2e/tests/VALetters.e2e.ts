@@ -5,7 +5,7 @@ Note: This test does not cover verifying that the correct letter is downloaded b
 When to update:
 This script should be updated whenever new things are added/changed in src/screens/BenefitsScreen/Letters, anything is added/changed in src/api/letters or if anything is changed in src/store/api/demo/mocks/letters.json.
 */
-import { by, device, element, expect } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
 import {
@@ -125,7 +125,7 @@ describe('VA Letters', () => {
   })
 
   for (const letterType of LettersConstants.LETTER_TYPES) {
-    it.skip(`should view ${letterType.name}`, async () => {
+    it(`should view ${letterType.name}`, async () => {
       await element(by.text(letterType.name)).tap()
       await expect(element(by.text(letterType.name))).toExist()
       await expect(element(by.text(letterType.description))).toExist()
@@ -140,11 +140,14 @@ describe('VA Letters', () => {
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
           await device.launchApp({ newInstance: false })
-        }
 
-        await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
-        await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
-        await element(by.text('Done')).tap()
+          await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
+          await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
+            .toBeVisible()
+            .withTimeout(20000)
+          await expect(element(by.text(LettersConstants.LETTER_FILE_NAME))).toExist()
+          await element(by.text('Done')).tap()
+        }
       }
 
       await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_BACK_ID)).tap()

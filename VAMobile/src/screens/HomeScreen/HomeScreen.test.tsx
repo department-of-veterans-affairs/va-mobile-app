@@ -17,6 +17,7 @@ import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { formatDateUtc } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -25,6 +26,8 @@ import {
 } from 'utils/tests/personalization'
 
 import { HomeScreen } from './HomeScreen'
+
+jest.mock('utils/remoteConfig')
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -94,6 +97,7 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
 })
 
 context('HomeScreen', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (options?: RenderParams) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     render(<HomeScreen {...props} />, { ...options })
@@ -103,7 +107,7 @@ context('HomeScreen', () => {
     it('displays error message when one of the API calls fails', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 5))
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(3))
         .calledWith('/v0/messaging/health/folders')
@@ -118,7 +122,7 @@ context('HomeScreen', () => {
     it('displays error message when one of the features are in downtime', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 5))
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(3))
         .calledWith('/v0/messaging/health/folders')
@@ -149,7 +153,7 @@ context('HomeScreen', () => {
       }
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 5))
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(3))
         .calledWith('/v0/messaging/health/folders')
@@ -177,7 +181,7 @@ context('HomeScreen', () => {
     it('does not display an error message when all API calls succeed', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 5))
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(3))
         .calledWith('/v0/messaging/health/folders')
@@ -208,19 +212,18 @@ context('HomeScreen', () => {
     })
   })
 
-  describe('Appointments module', () => {
+  describe('Upcoming Appointments module', () => {
     it('displays upcoming appointment count when there are upcoming appointments', async () => {
-      const upcomingAppointmentsCount = 3
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(upcomingAppointmentsCount))
+        .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance()
-      await waitFor(() => expect(screen.getByRole('link', { name: t('appointments') })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('link', { name: t('upcomingAppointments') })).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByRole('link', {
-            name: t('appointments.activityButton.subText', {
-              count: upcomingAppointmentsCount,
+            name: t('upcomingAppointments.activityButton.subText', {
+              count: 3,
               dayCount: DEFAULT_UPCOMING_DAYS_LIMIT,
             }),
           }),
@@ -231,19 +234,19 @@ context('HomeScreen', () => {
     it('navigates to Appointments screen when pressed', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance()
-      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('appointments') })))
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('upcomingAppointments') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://appointments'))
     })
 
     it('is not displayed when there are no upcoming appointments', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(0))
+        .mockResolvedValue(getAppointmentsPayload(0, 0))
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('upcomingAppointments') })).toBeFalsy())
     })
 
     it('is not displayed when the API call throws an error', async () => {
@@ -252,13 +255,13 @@ context('HomeScreen', () => {
         .mockRejectedValue('fail')
       initializeTestInstance()
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('upcomingAppointments') })).toBeFalsy())
     })
 
     it('is not displayed when appointments is in downtime', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
-        .mockResolvedValue(getAppointmentsPayload(3))
+        .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance({
         preloadedState: {
           errors: {
@@ -272,7 +275,75 @@ context('HomeScreen', () => {
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
-      await waitFor(() => expect(screen.queryByRole('link', { name: t('appointments') })).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('upcomingAppointments') })).toBeFalsy())
+    })
+  })
+
+  describe('Past Appointments module', () => {
+    it('displays travel pay reimbursement eligible appointments when they exist', async () => {
+      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(0, 5))
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByRole('link', { name: t('pastAppointments') })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByRole('link', {
+            name: t('pastAppointments.activityButton.subText', {
+              count: 5,
+            }),
+          }),
+        ).toBeTruthy(),
+      )
+    })
+
+    it('navigates to Appointments screen when pressed', async () => {
+      when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(true)
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(0, 5))
+      initializeTestInstance()
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('pastAppointments') })))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://pastAppointments'))
+    })
+
+    it('is not displayed when there are no upcoming appointments', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(0, 0))
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('pastAppointments') })).toBeFalsy())
+    })
+
+    it('is not displayed when the API call throws an error', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockRejectedValue('fail')
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('pastAppointments') })).toBeFalsy())
+    })
+
+    it('is not displayed when appointments is in downtime', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValue(getAppointmentsPayload(0, 3))
+      initializeTestInstance({
+        preloadedState: {
+          errors: {
+            downtimeWindowsByFeature: {
+              appointments: {
+                startTime: DateTime.now(),
+                endTime: DateTime.now().plus({ minutes: 1 }),
+              },
+            },
+          } as ErrorsState,
+        },
+      })
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('pastAppointments') })).toBeFalsy())
     })
   })
 

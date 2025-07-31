@@ -5,10 +5,12 @@ on:
   pull_request:
     types:
       - opened
-      - ready_for_review
 
     branches:
       - develop #targeting develop
+
+    branches-ignore:
+      - "dependabot/**"
 
 permissions:
   contents: read
