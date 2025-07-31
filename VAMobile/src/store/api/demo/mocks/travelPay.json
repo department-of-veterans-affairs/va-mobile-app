@@ -17,8 +17,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -32,8 +32,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 25.0
         }
       },
       {
@@ -47,8 +47,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 3 days}}",
           "modifiedOn": "{{now - 3 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 20.0
         }
       },
       {
@@ -62,8 +62,8 @@
           "facilityName": "Minnepolis VA Medical Center",
           "createdOn": "{{now - 4 days}}",
           "modifiedOn": "{{now - 4 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 40.0
         }
       },
       {
@@ -77,8 +77,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 5 days}}",
           "modifiedOn": "{{now - 5 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -92,8 +92,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 6 days}}",
           "modifiedOn": "{{now - 6 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -107,8 +107,8 @@
           "facilityName": "Minnepolis VA Medical Center",
           "createdOn": "{{now - 7 days}}",
           "modifiedOn": "{{now - 7 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 150.0,
+          "reimbursementAmount": 100.0
         }
       },
       {
@@ -122,8 +122,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 10 days}}",
           "modifiedOn": "{{now - 10 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 150.0,
+          "reimbursementAmount": 150.0
         }
       },
       {
@@ -137,8 +137,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 12 days}}",
           "modifiedOn": "{{now - 12 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 150.0,
+          "reimbursementAmount": 150.0
         }
       },
       {
@@ -152,7 +152,7 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 14 days}}",
           "modifiedOn": "{{now - 14 days}}",
-          "totalCostRequested": 0.0,
+          "totalCostRequested": 50.0,
           "reimbursementAmount": 0.0
         }
       },
@@ -167,8 +167,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 16 days}}",
           "modifiedOn": "{{now - 16 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -197,8 +197,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 24 days}}",
           "modifiedOn": "{{now - 24 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 45.1
         }
       },
       {
@@ -212,8 +212,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 28 days}}",
           "modifiedOn": "{{now - 28 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 75.0
         }
       },
       {
@@ -227,8 +227,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 30 days}}",
           "modifiedOn": "{{now - 30 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -242,8 +242,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 31 days}}",
           "modifiedOn": "{{now - 31 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -257,8 +257,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 32 days}}",
           "modifiedOn": "{{now - 32 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -272,8 +272,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 250.0
         }
       },
       {
@@ -287,8 +287,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 250.0
         }
       },
       {
@@ -302,8 +302,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 4 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 200.0
         }
       },
       {
@@ -317,8 +317,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 3 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 40.0
         }
       },
       {
@@ -332,8 +332,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 5 minutes}}",
           "modifiedOn": "{{now - 1 minute}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 30.0
         }
       },
       {
@@ -347,8 +347,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -362,8 +362,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 30 minutes}}",
           "modifiedOn": "{{now - 30 minutes}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -377,8 +377,8 @@
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -392,8 +392,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -407,8 +407,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -422,8 +422,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -437,8 +437,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -452,8 +452,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       },
       {
@@ -467,8 +467,8 @@
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 45 minutes}}",
           "modifiedOn": "{{now - 45 minutes}}",
-          "totalCostRequested": 0.0,
-          "reimbursementAmount": 0.0
+          "totalCostRequested": 50.0,
+          "reimbursementAmount": 50.0
         }
       }
     ]
