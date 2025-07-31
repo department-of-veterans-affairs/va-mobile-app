@@ -168,24 +168,24 @@ function LoginScreen() {
                 buttonType={ButtonVariants.Secondary}
               />
             </Box>
-            <Box alignItems={'center'}>
+            <Box alignItems={'center'} gap={theme.dimensions.buttonPadding}>
               <LinkWithAnalytics
                 type="url"
                 text={t('loginIssues.troubleshootLoginIssue')}
                 url={LINK_URL_TROUBLESHOOT_LOGIN}
                 icon="no icon"
                 testID="loginIssuesTestID"
+                disablePadding
               />
-            </Box>
-            <Box alignItems={'center'}>
               <LinkWithAnalytics
                 type="custom"
                 text={t('loginIssues.reportLoginIssue')}
                 onPress={() => navigateTo('LoginIssues')}
                 testID="loginIssuesTestID"
+                disablePadding
               />
+              <AppVersionAndBuild textColor={'appVersionAndBuild'} />
             </Box>
-            <AppVersionAndBuild textColor={'appVersionAndBuild'} />
           </>
         )}
       </Box>
