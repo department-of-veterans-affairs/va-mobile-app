@@ -98,21 +98,21 @@ context('HealthScreen', () => {
 
   describe('Travel button', () => {
     it('is not displayed if feature toggle is disabled', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(false)
+      when(mockFeatureEnabled).calledWith('travelPayClaims').mockReturnValue(false)
       initializeTestInstance()
-      expect(screen.queryByText(t('travelPay.statusList.title'))).toBeFalsy()
+      expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('travelPayClaims').mockReturnValue(true)
       initializeTestInstance()
-      expect(screen.getByText(t('travelPay.statusList.title'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
     })
 
     it('navigates to Travel Reimbursement screen when pressed', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('travelPayClaims').mockReturnValue(true)
       initializeTestInstance()
-      fireEvent.press(screen.getByText(t('travelPay.statusList.title')))
+      fireEvent.press(screen.getByText(t('travelPay.title')))
       expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
     })
   })

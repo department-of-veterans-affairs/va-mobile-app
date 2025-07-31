@@ -11,8 +11,8 @@ context('TravelPayClaims', () => {
     render(<TravelPayClaims {...mockNavProps()} />)
   }
 
-  it('should show travel reimbursement header', () => {
+  it('should show travel claims header', () => {
     initializeTestInstance()
-    expect(screen.getByLabelText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
+    expect(screen.getByLabelText(t('travelPay.statusList.title'))).toBeTruthy()
   })
 })

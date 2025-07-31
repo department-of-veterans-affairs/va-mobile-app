@@ -16,7 +16,7 @@ export function TravelPayClaims({ navigation }: TravelPayClaimsProps) {
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('travelPay.travelClaimFiledDetails.header')}
+      title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
     />
   )
