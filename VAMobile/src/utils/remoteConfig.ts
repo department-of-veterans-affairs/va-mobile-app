@@ -18,6 +18,7 @@ export type FeatureToggleType =
   | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
@@ -49,6 +50,7 @@ export type FeatureToggleType =
 type FeatureToggleValues = {
   allergies: boolean
   appointmentRequests: boolean
+  appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
@@ -82,6 +84,7 @@ type FeatureToggleValues = {
 export const defaults: FeatureToggleValues = {
   allergies: true,
   appointmentRequests: false,
+  appointmentsTestTime: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,

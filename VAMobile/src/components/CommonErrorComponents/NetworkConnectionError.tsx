@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { BasicError } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-
-import BasicError from './BasicError'
 
 export type NetworkConnectionErrorProps = {
   /** function called when the Try again button is pressed */
