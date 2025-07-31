@@ -24,6 +24,16 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+const mockMutationState = { status: 'success' }
+let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+jest.mock('utils/travelPay', () => {
+  const original = jest.requireActual('utils/travelPay')
+  return {
+    ...original,
+    useTravelClaimSubmissionMutationState: () => mockTravelClaimSubmissionMutationState,
+  }
+})
+
 const baseAppointmentAttributes: AppointmentAttributes = {
   appointmentType: AppointmentTypeConstants.VA,
   status: AppointmentStatusConstants.BOOKED,
@@ -67,6 +77,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travelPayEligible: true,
 }
 
 type createProps = {
@@ -76,6 +87,7 @@ type createProps = {
   isPending: AppointmentAttributes['isPending']
   appointmentType: AppointmentType
   phoneOnly: AppointmentAttributes['phoneOnly']
+  travelPayEligible?: boolean
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -87,12 +99,13 @@ const mockStartDateUtc = DateTime.utc().toISO()
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travelPayEligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travelPayEligible }
 }
 
 const claimExamAttributes = createTestAppointmentAttributes({
@@ -101,6 +114,7 @@ const claimExamAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: true,
 })
 
 const communityCareAttributes = createTestAppointmentAttributes({
@@ -109,6 +123,7 @@ const communityCareAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: false,
 })
 
 const inPersonVAAttributes = createTestAppointmentAttributes({
@@ -117,6 +132,7 @@ const inPersonVAAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: true,
 })
 
 const phoneAppointmentAttributes = createTestAppointmentAttributes({
@@ -125,6 +141,7 @@ const phoneAppointmentAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: true,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: false,
 })
 
 const videoAtlasAttributes = createTestAppointmentAttributes({
@@ -133,6 +150,7 @@ const videoAtlasAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: true,
 })
 
 const videoGFEAttributes = createTestAppointmentAttributes({
@@ -141,6 +159,7 @@ const videoGFEAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: false,
 })
 
 const videoHomeAttributes = createTestAppointmentAttributes({
@@ -149,6 +168,7 @@ const videoHomeAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: false,
 })
 
 const videoOnsiteAttributes = createTestAppointmentAttributes({
@@ -157,6 +177,7 @@ const videoOnsiteAttributes = createTestAppointmentAttributes({
   isPending: false,
   phoneOnly: false,
   travelPayClaim: travelPayClaimData,
+  travelPayEligible: true,
 })
 
 const tests = [
@@ -171,6 +192,10 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
+  afterEach(() => {
+    mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+  })
+
   const initializeTestInstance = (attributes: AppointmentAttributes, appointmentID: string = '123') => {
     const appointment = {
       ...defaultAppointment,
@@ -195,6 +220,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -207,6 +233,7 @@ context('AppointmentFileTravelPayAlert', () => {
       travelPayClaim: undefined,
       isPending: false,
       phoneOnly: false,
+      travelPayEligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -220,6 +247,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     })
     initializeTestInstance(attributes)
     expect(screen.getByText(t('travelPay.fileClaimAlert.description', { count: 0, days: 0 }))).toBeTruthy()
@@ -233,6 +261,7 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: false,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -245,6 +274,31 @@ context('AppointmentFileTravelPayAlert', () => {
       isPending: true,
       phoneOnly: false,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
+    })
+    initializeTestInstance(attributes)
+    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
+  })
+
+  it('should not render if a claim has already been filed', async () => {
+    const attributes = createTestAppointmentAttributes({
+      status: AppointmentStatusConstants.BOOKED,
+      appointmentType: AppointmentTypeConstants.VA,
+      isPending: false,
+      phoneOnly: false,
+      travelPayEligible: true,
+      travelPayClaim: {
+        ...travelPayClaimData,
+        claim: {
+          id: '1234',
+          claimNumber: 'string',
+          claimStatus: 'In Process',
+          appointmentDateTime: '2024-01-01T16:45:34.465Z',
+          facilityName: 'Cheyenne VA Medical Center',
+          createdOn: '2024-03-22T21:22:34.465Z',
+          modifiedOn: '2024-01-01T16:44:34.465Z',
+        },
+      },
     })
     initializeTestInstance(attributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
@@ -280,26 +334,15 @@ context('AppointmentFileTravelPayAlert', () => {
     })
   })
 
-  it('should not render if a claim has already been filed', async () => {
-    const attributes = createTestAppointmentAttributes({
-      status: AppointmentStatusConstants.BOOKED,
-      appointmentType: AppointmentTypeConstants.VA,
-      isPending: false,
-      phoneOnly: false,
-      travelPayClaim: {
-        ...travelPayClaimData,
-        claim: {
-          id: '1234',
-          claimNumber: 'string',
-          claimStatus: 'In Process',
-          appointmentDateTime: '2024-01-01T16:45:34.465Z',
-          facilityName: 'Cheyenne VA Medical Center',
-          createdOn: '2024-03-22T21:22:34.465Z',
-          modifiedOn: '2024-01-01T16:44:34.465Z',
-        },
-      },
-    })
-    initializeTestInstance(attributes)
+  it('should render an error message if the claim submission fails', async () => {
+    mockTravelClaimSubmissionMutationState = { status: 'error' }
+    initializeTestInstance(inPersonVAAttributes)
+    expect(screen.getByText(t('travelPay.fileClaimAlert.error'))).toBeTruthy()
+  })
+
+  it('should NOT render if the claim submission is pending', async () => {
+    mockTravelClaimSubmissionMutationState = { status: 'pending' }
+    initializeTestInstance(inPersonVAAttributes)
     expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
   })
 })

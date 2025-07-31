@@ -59,6 +59,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   isPending: false,
   cancelId: '12',
   vetextId: '600;3210206',
+  travelPayEligible: true,
 }
 
 export const defaultAppointment: AppointmentData = {

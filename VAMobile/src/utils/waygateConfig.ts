@@ -63,7 +63,6 @@ export type WaygateToggleType =
   | 'WG_LabsAndTestsDetails'
   | 'WG_LabsAndTestsList'
   | 'WG_ViewMessage'
-  | 'WG_PrepareForVideoVisit'
   | 'WG_StartNewMessage'
   | 'WG_ReplyMessage'
   | 'WG_EditDraft'
@@ -108,6 +107,7 @@ export type WaygateToggleType =
   | 'WG_Webview'
   | 'WG_InAppRecruitment'
   | 'WG_HealthHelp'
+  | 'WG_VeteranStatusCard'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -147,7 +147,6 @@ type WaygateToggleValues = {
   WG_LabsAndTestsDetails: Waygate
   WG_LabsAndTestsList: Waygate
   WG_ViewMessage: Waygate
-  WG_PrepareForVideoVisit: Waygate
   WG_SubmitEvidence: Waygate
   WG_StartNewMessage: Waygate
   WG_ReplyMessage: Waygate
@@ -192,6 +191,7 @@ type WaygateToggleValues = {
   WG_Webview: Waygate
   WG_InAppRecruitment: Waygate
   WG_HealthHelp: Waygate
+  WG_VeteranStatusCard: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -240,7 +240,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_LabsAndTestsDetails: { ...waygateDefault },
   WG_LabsAndTestsList: { ...waygateDefault },
   WG_ViewMessage: { ...waygateDefault },
-  WG_PrepareForVideoVisit: { ...waygateDefault },
   WG_StartNewMessage: { ...waygateDefault },
   WG_ReplyMessage: { ...waygateDefault },
   WG_EditDraft: { ...waygateDefault },
@@ -285,6 +284,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_Webview: { ...waygateDefault },
   WG_InAppRecruitment: { ...waygateDefault },
   WG_HealthHelp: { ...waygateDefault },
+  WG_VeteranStatusCard: { ...waygateDefault },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
