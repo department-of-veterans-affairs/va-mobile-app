@@ -330,8 +330,8 @@
           "claimStatus": "On hold",
           "appointmentDateTime": "{{now - 8 days}}",
           "facilityName": "Tomah VA Medical Center",
-          "createdOn": "{{now - 2 days}}",
-          "modifiedOn": "{{now - 2 days}}",
+          "createdOn": "{{now - 1 minute}}",
+          "modifiedOn": "{{now - 1 minute}}",
           "totalCostRequested": 0.0,
           "reimbursementAmount": 0.0
         }
@@ -360,8 +360,8 @@
           "claimStatus": "Closed",
           "appointmentDateTime": "{{now - 3 days}}",
           "facilityName": "Tomah VA Medical Center",
-          "createdOn": "{{now - 2 days}}",
-          "modifiedOn": "{{now - 2 days}}",
+          "createdOn": "{{now - 30 minutes}}",
+          "modifiedOn": "{{now - 30 minutes}}",
           "totalCostRequested": 0.0,
           "reimbursementAmount": 0.0
         }
@@ -465,8 +465,8 @@
           "claimStatus": "Closed",
           "appointmentDateTime": "{{now - 3 days}}",
           "facilityName": "Tomah VA Medical Center",
-          "createdOn": "{{now - 2 days}}",
-          "modifiedOn": "{{now - 2 days}}",
+          "createdOn": "{{now - 45 minutes}}",
+          "modifiedOn": "{{now - 45 minutes}}",
           "totalCostRequested": 0.0,
           "reimbursementAmount": 0.0
         }
