@@ -3,16 +3,16 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { TravelListReimbursement } from 'screens/HealthScreen/TravelListReimbursement/TravelListReimbursement'
+import { TravelPayClaims } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaims'
 import { context, mockNavProps, render } from 'testUtils'
 
-context('TravelListReimbursement', () => {
+context('TravelPayClaims', () => {
   const initializeTestInstance = () => {
-    render(<TravelListReimbursement {...mockNavProps()} />)
+    render(<TravelPayClaims {...mockNavProps()} />)
   }
 
   it('should show travel reimbursement header', () => {
     initializeTestInstance()
-    expect(screen.getByLabelText(t('travelPay.statusList.reimbursement.title'))).toBeTruthy()
+    expect(screen.getByLabelText(t('travelPay.travelClaimFiledDetails.header'))).toBeTruthy()
   })
 })

@@ -113,7 +113,7 @@ context('HealthScreen', () => {
       when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
       initializeTestInstance()
       fireEvent.press(screen.getByText(t('travelPay.statusList.title')))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelListReimbursement')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
     })
   })
 

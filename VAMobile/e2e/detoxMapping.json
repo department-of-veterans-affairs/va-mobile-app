@@ -144,7 +144,7 @@
       "Prescriptions",
       "Messages",
       "VaccineRecords",
-      "TravelListReimbursement"
+      "TravelPayClaims"
     ],
     "HomeScreen": ["HomeScreen", "ProfileScreen", "VeteranStatusCard"],
     "SettingsScreen": ["SettingsScreen"],
@@ -212,7 +212,7 @@
       "VeteranStatusCard"
     ],
     "travelPay": ["TravelPay"],
-    "TravelListReimbursement": ["TravelListReimbursement"],
+    "TravelPayClaims": ["TravelPayClaims"],
     "utils": [
       "Allergies",
       "LabsAndTests",
