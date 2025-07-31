@@ -19,6 +19,16 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+const mockMutationState = { status: 'success' }
+let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+jest.mock('utils/travelPay', () => {
+  const original = jest.requireActual('utils/travelPay')
+  return {
+    ...original,
+    useTravelClaimSubmissionMutationState: () => mockTravelClaimSubmissionMutationState,
+  }
+})
+
 const baseAppointmentAttributes: AppointmentAttributes = {
   appointmentType: AppointmentTypeConstants.VA,
   status: AppointmentStatusConstants.BOOKED,
@@ -150,6 +160,10 @@ const tests = [
 ]
 
 describe('AppointmentTravelClaimDetails', () => {
+  afterEach(() => {
+    mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+  })
+
   const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (
     subType: AppointmentDetailsSubType,
@@ -161,7 +175,11 @@ describe('AppointmentTravelClaimDetails', () => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     when(mockFeatureEnabled).calledWith('travelPayClaimsFullHistory').mockReturnValue(travelPayClaimsFullHistoryEnabled)
     render(
-      <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+      <AppointmentTravelClaimDetails
+        appointmentID="appointmentID-123"
+        attributes={{ ...baseAppointmentAttributes, ...attributes }}
+        subType={subType}
+      />,
       { ...options },
     )
   }
@@ -397,6 +415,22 @@ describe('AppointmentTravelClaimDetails', () => {
               ),
             ).toBeTruthy()
           })
+        })
+      })
+
+      describe('when the claim submission is in progress', () => {
+        it('should render status of Submitting and a link to the claim status page', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined, true)
+          expect(
+            screen.getByText(
+              t('travelPay.travelClaimFiledDetails.status', {
+                status: t('travelPay.travelClaimFiledDetails.status.submitting'),
+              }),
+            ),
+          ).toBeTruthy()
+          expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
+          expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
         })
       })
     })
