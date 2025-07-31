@@ -6,11 +6,10 @@ import { TFunction } from 'i18next'
 import { AppealEventData, AppealEventTypes } from 'api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import PhaseIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateMMMMDDYYYY, snakeToCamelCase } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-
-import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
 const getEventName = (type: AppealEventTypes, t: TFunction) => {
   const translated = t(`appealDetails.${snakeToCamelCase(type)}`)

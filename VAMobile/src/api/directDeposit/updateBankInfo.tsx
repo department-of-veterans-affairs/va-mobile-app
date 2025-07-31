@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { includes } from 'underscore'
 
+import { directDepositKeys } from 'api/directDeposit/queryKeys'
 import { DirectDepositData, PaymentAccountData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { DirectDepositErrors } from 'constants/errors'
@@ -13,8 +14,6 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty
 import { isErrorObject } from 'utils/common'
 import { getErrorKeys } from 'utils/errors'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { directDepositKeys } from './queryKeys'
 
 /**
  * Updates a user's direct deposit information

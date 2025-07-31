@@ -4,15 +4,12 @@ import { Link, LinkProps } from '@department-of-veterans-affairs/mobile-componen
 import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
 import _ from 'underscore'
 
+import { Box, ClickForActionLinkDeprecated, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import Box from './Box'
-import ClickForActionLinkDeprecated, { LinkTypeOptionsConstants, LinkUrlIconType } from './ClickForActionLinkDeprecated'
-import TextView from './TextView'
 
 export type LinkWithAnalyticsProps = LinkProps & {
   /** optional additional analytics function */
