@@ -11,7 +11,7 @@
     "target": "es6",
     "module": "commonjs",
     "lib": ["es5", "es6", "dom"],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "strict": false,
     "removeComments": true,
     "types": ["node", "jest"],

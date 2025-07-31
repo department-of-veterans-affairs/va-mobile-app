@@ -18,6 +18,7 @@ export type FeatureToggleType =
   | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
@@ -45,10 +46,12 @@ export type FeatureToggleType =
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
+  | 'internationalPhoneNumber'
 
 type FeatureToggleValues = {
   allergies: boolean
   appointmentRequests: boolean
+  appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
@@ -77,11 +80,13 @@ type FeatureToggleValues = {
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
+  internationalPhoneNumber: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   allergies: true,
   appointmentRequests: false,
+  appointmentsTestTime: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,
@@ -110,6 +115,7 @@ export const defaults: FeatureToggleValues = {
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
+  internationalPhoneNumber: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
