@@ -65,9 +65,9 @@ const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
 }
 
 const params: GetTravelPayClaimsParams = {
-  startDate: '2025-01-01',
-  endDate: '2025-03-31',
-  page: 1,
+  startDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+  endDate: new Date().toISOString(),
+  pageNumber: 1,
 }
 
 context('getClaims', () => {
@@ -79,8 +79,14 @@ context('getClaims', () => {
     it('should return the travel pay claims data from the hook', async () => {
       mockUseDowntime.mockImplementation(() => false)
 
+      const adjustedParams = {
+        start_date: params.startDate,
+        end_date: params.endDate,
+        page_number: params.pageNumber,
+      }
+
       when(get as jest.Mock)
-        .calledWith('/v0/travel-pay/claims', params)
+        .calledWith('/v0/travel-pay/claims', adjustedParams)
         .mockResolvedValueOnce(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
 
       when(featureEnabled as jest.Mock)
@@ -95,7 +101,7 @@ context('getClaims', () => {
       })
 
       // Check the hook called the correct endpoint and received the correct response
-      expect(get).toBeCalledWith('/v0/travel-pay/claims', params)
+      expect(get).toBeCalledWith('/v0/travel-pay/claims', adjustedParams)
       expect(response).toEqual(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
     })
 
