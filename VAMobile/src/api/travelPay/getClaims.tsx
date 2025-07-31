@@ -13,10 +13,17 @@ import { featureEnabled } from 'utils/remoteConfig'
 const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPayClaimsResponse | undefined> => {
   const url = `/v0/travel-pay/claims`
 
-  const adjustedParams = {
+  const adjustedParams: {
+    start_date: string
+    end_date: string
+    page_number?: number
+  } = {
     start_date: params.startDate,
     end_date: params.endDate,
-    page_number: params.pageNumber,
+  }
+
+  if (params.pageNumber !== undefined) {
+    adjustedParams.page_number = params.pageNumber
   }
 
   const response = await get<GetTravelPayClaimsResponse>(url, adjustedParams as unknown as Params)
