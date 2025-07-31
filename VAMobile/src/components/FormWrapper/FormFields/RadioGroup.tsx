@@ -37,10 +37,6 @@ export type radioOption<T> = {
   notSelectableRadioBtn?: boolean
   /** Optional TestID */
   testID?: string
-  /** Optional text input */
-  textInput?: string
-  /** Optional onChange text input */
-  setTextInput?: (val: string) => void
 }
 
 /**
@@ -101,7 +97,7 @@ const RadioGroup = <T,>({
   }, [hasSingleOption, value, options, onChange])
 
   const getOption = (option: radioOption<T>): ReactElement => {
-    const { optionLabelKey, labelArgs, a11yLabel, testID, textInput, setTextInput } = option
+    const { optionLabelKey, labelArgs, a11yLabel, testID } = option
 
     // Render option as simple text
     if (hasSingleOption) {
@@ -131,8 +127,6 @@ const RadioGroup = <T,>({
         disabled={disabled}
         a11yLabel={a11yLabel}
         testID={testID}
-        textInput={textInput}
-        setTextInput={setTextInput}
       />
     )
   }

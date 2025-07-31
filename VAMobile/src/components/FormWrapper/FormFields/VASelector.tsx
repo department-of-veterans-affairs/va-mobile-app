@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Checkbox as CheckboxButton, RadioButton } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, VATextInput } from 'components'
-import theme from 'styles/themes/standardTheme'
 import { a11yHintProp } from 'utils/accessibility'
 import { getTranslation } from 'utils/formattingUtils'
 
@@ -41,10 +39,6 @@ export type VASelectorProps = {
   isRequiredField?: boolean
   /** Optional TestID */
   testID?: string
-  /** Optional text input */
-  textInput?: string
-  /** Optional onChange text input */
-  setTextInput?: (val: string) => void
 }
 
 /**A common component to display a checkbox with text*/
@@ -60,8 +54,6 @@ const VASelector: FC<VASelectorProps> = ({
   error,
   testID,
   setError,
-  textInput,
-  setTextInput,
 }) => {
   const { t } = useTranslation()
 
@@ -91,27 +83,14 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   return (
-    <Box>
-      <RadioButton
-        selectedItem={selected ? text : undefined}
-        items={[textWithA11y]}
-        onSelectionChange={selectorOnPress}
-        testID={testID}
-        hint={{ text: '', a11yLabel: hintProp.accessibilityHint }}
-        error={error}
-      />
-      {selected && setTextInput && (
-        <Box mt={theme.dimensions.smallMarginBetween}>
-          <VATextInput
-            inputType="none"
-            isTextArea={true}
-            value={textInput}
-            testID="optionTextInputID"
-            onChange={setTextInput}
-          />
-        </Box>
-      )}
-    </Box>
+    <RadioButton
+      selectedItem={selected ? text : undefined}
+      items={[textWithA11y]}
+      onSelectionChange={selectorOnPress}
+      testID={testID}
+      hint={{ text: '', a11yLabel: hintProp.accessibilityHint }}
+      error={error}
+    />
   )
 }
 

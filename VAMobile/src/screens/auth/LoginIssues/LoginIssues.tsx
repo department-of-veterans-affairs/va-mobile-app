@@ -107,10 +107,20 @@ function LoginIssues({}: LoginIssuesProps) {
           {
             optionLabelKey: 'other.describe',
             value: t('other.describe'),
-            textInput: loginIssueOtherText,
-            setTextInput: setLoginIssueOtherText,
           },
         ],
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      hideField: loginIssue !== t('other.describe'),
+      fieldProps: {
+        inputType: 'none',
+        value: loginIssueOtherText,
+        onChange: setLoginIssueOtherText,
+        isTextArea: true,
+        setInputCursorToBeginning: true,
+        boldLabelKey: true,
       },
     },
     {
