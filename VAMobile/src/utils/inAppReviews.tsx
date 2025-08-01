@@ -3,12 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
-
-import { logAnalyticsEvent } from './analytics'
-import { getVersionName } from './deviceData'
-import { useGiveFeedback } from './hooks'
-import { featureEnabled } from './remoteConfig'
-import { requestReview } from './rnReviews'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { getVersionName } from 'utils/deviceData'
+import { useGiveFeedback } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+import { requestReview } from 'utils/rnReviews'
 
 export const STORAGE_REVIEW_EVENT_KEY = '@review_event'
 export const STORAGE_FEEDBACK_EVENT_KEY = '@feedback_event_'
@@ -24,7 +23,7 @@ export const useReviewEvent = (screenView?: boolean, feedbackScreen?: string): (
   const inAppFeedback = useGiveFeedback()
 
   const reviewEvent = async () => {
-    if (!featureEnabled('inAppReview') && !featureEnabled('inAppFeedback')) return
+    if (!featureEnabled('inAppFeedback')) return
     //Checked for feedbackScreen triggers first.
     if (featureEnabled('inAppFeedback') && feedbackScreen) {
       const feedbackKey = STORAGE_FEEDBACK_EVENT_KEY.concat(feedbackScreen)

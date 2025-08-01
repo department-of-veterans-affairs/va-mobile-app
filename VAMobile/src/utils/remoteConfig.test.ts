@@ -25,7 +25,6 @@ const mockOverrides = {
   hsScrollAnalytics: false,
   inAppFeedback: false,
   inAppRecruitment: false,
-  inAppReview: true,
   inAppUpdates: false,
   labsAndTests: false,
   logDowntimeAnalytics: true,
