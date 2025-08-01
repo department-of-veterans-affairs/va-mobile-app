@@ -21,7 +21,6 @@ export type FeatureToggleType =
   | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
-  | 'homeScreenPrefetch'
   | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
@@ -54,7 +53,6 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
-  homeScreenPrefetch: boolean
   hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
@@ -88,7 +86,6 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,
-  homeScreenPrefetch: true,
   hsScrollAnalytics: false,
   inAppRecruitment: false,
   inAppFeedback: false,

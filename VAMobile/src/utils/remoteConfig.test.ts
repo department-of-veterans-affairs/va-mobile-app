@@ -22,7 +22,6 @@ const mockOverrides = {
   cernerTrueForDemo: false,
   decisionLettersWaygate: false,
   haptics: false,
-  homeScreenPrefetch: false,
   hsScrollAnalytics: false,
   inAppFeedback: false,
   inAppRecruitment: false,
