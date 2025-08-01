@@ -26,7 +26,6 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'labsAndTests'
   | 'nonVAMedsLink'
-  | 'prescriptions'
   | 'rescheduleLink'
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
@@ -52,7 +51,6 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   labsAndTests: boolean
   nonVAMedsLink: boolean
-  prescriptions: boolean
   rescheduleLink: boolean
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
@@ -79,7 +77,6 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   labsAndTests: false,
   nonVAMedsLink: false,
-  prescriptions: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: false,
