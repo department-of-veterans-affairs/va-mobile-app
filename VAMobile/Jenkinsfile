@@ -36,6 +36,7 @@ pipeline {
 
                         nvm use
                         yarn install
+                        yarn ios
                     '''
                     // sh 'yarn ios'
                 }
