@@ -26,8 +26,6 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'labsAndTests'
   | 'nonVAMedsLink'
-  | 'patientCheckIn'
-  | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
   | 'rescheduleLink'
@@ -55,8 +53,6 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   labsAndTests: boolean
   nonVAMedsLink: boolean
-  patientCheckIn: boolean
-  patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
   rescheduleLink: boolean
@@ -85,8 +81,6 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   labsAndTests: false,
   nonVAMedsLink: false,
-  patientCheckIn: false,
-  patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
   rescheduleLink: true,
