@@ -35,7 +35,6 @@ export type FeatureToggleType =
   | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
-  | 'veteranStatusCardRedesign'
   | 'internationalPhoneNumber'
 
 type FeatureToggleValues = {
@@ -59,7 +58,6 @@ type FeatureToggleValues = {
   travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
-  veteranStatusCardRedesign: boolean
   internationalPhoneNumber: boolean
 }
 
@@ -84,7 +82,6 @@ export const defaults: FeatureToggleValues = {
   travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
-  veteranStatusCardRedesign: true,
   internationalPhoneNumber: false,
 }
 
