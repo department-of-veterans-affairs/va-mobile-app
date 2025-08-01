@@ -2,7 +2,7 @@
 
 // This variable holds the path to your mobile app repository on the Mac mini.
 // You will need to change this to the actual path.
-def repoPath = 'Users/oddball/repos/va-mobile-app/VAMobile'
+def repoPath = '/Users/oddball/repos/va-mobile-app/VAMobile'
 
 pipeline {
     // This 'agent' block tells Jenkins to run the entire pipeline on a node
@@ -27,11 +27,9 @@ pipeline {
                 dir(repoPath) {
                     // Update the repository with the latest changes from the remote.
                     // This assumes the Mac mini has access to the Git remote.
-                    sh 'git checkout develop'
                     sh 'git pull'
                     sh 'yarn install'
-                    sh 'pwd'
-                    sh 'ls -al'
+                    sh 'yarn start'
                 }
             }
         }
