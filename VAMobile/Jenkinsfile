@@ -29,9 +29,9 @@ pipeline {
                     // This assumes the Mac mini has access to the Git remote.
                     sh 'git checkout .'
                     sh 'git pull'
-                    sh 'nvm use'
-                    sh 'yarn install'
-                    sh 'yarn ios'
+                    sh 'nvm use && yarn install'
+                    // sh 'yarn install'
+                    // sh 'yarn ios'
                 }
             }
         }
