@@ -38,7 +38,6 @@ const mockOverrides = {
   useOldLinkComponent: false,
   whatsNewUI: false,
   veteranStatusCardRedesign: true,
-  allergies: true,
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
 }
