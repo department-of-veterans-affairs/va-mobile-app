@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-# set -x # Uncomment for deep debugging
 
 # --- Pre-flight checks ---
 if [ ! -d "fastlane/screenshots/en-US" ] || [ -z "$(ls -A fastlane/screenshots/en-US)" ]; then
@@ -8,47 +7,41 @@ if [ ! -d "fastlane/screenshots/en-US" ] || [ -z "$(ls -A fastlane/screenshots/e
   exit 1
 fi
 
-# --- Generate mapping file ---
-echo "Generating image mapping..."
-MAP_FILE="image_mapping.txt"
+# --- Define the mapping file ---
+MAP_FILE="image_config.tsv"
 
-# Use the robust Node.js script to generate the mapping
-node generate_mapping.js > "$MAP_FILE"
-
-# --- Verify mapping file ---
-echo "--- Generated image_mapping.txt ---"
-cat "$MAP_FILE"
-echo "-------------------------------------"
-
-# --- Cleanup and setup ---
-echo "Cleaning up old files..."
-rm -f fastlane/screenshots/en-US/*_framed.png # Clean up previous frameit runs
-rm -rf framed_images
-mkdir -p framed_images/ios framed_images/android framed_images/ipad
-
-# --- Pre-resize all screenshots to standard sizes ---
+# --- Pre-resize images for frameit compatibility ---
 echo "Pre-resizing images for frameit compatibility..."
 while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
-  SRC_IMG="fastlane/screenshots/en-US/${original_img_name}.png"
-  if [ -f "$SRC_IMG" ]; then
-    if [[ "$DEVICE_TYPE" == "ios" ]]; then
-      magick "$SRC_IMG" -resize 1290x2796! "$SRC_IMG"
-    elif [[ "$DEVICE_TYPE" == "ipad" ]]; then
-      magick "$SRC_IMG" -resize 2048x2732! "$SRC_IMG"
-    elif [[ "$DEVICE_TYPE" == "android" ]]; then
-      magick "$SRC_IMG" -resize 1080x2280! "$SRC_IMG"
-    fi
+  if [[ "$original_img_name" == "LettersDownload_ios" || "$original_img_name" == "LettersDownload_android" || "$original_img_name" == "LettersDownload_ipad" ]]; then
+    SRC_IMG="fastlane/screenshots/en-US/${original_img_name}.png"
+  else
+    SRC_IMG="fastlane/screenshots/en-US/${DEVICE_TYPE}-${original_img_name}.png"
+  fi
+
+  if [ ! -f "$SRC_IMG" ]; then
+      echo "Warning: Could not find image ${SRC_IMG} to resize."
+      continue
+  fi
+
+  if [[ "$DEVICE_TYPE" == "ios" ]]; then
+    convert "$SRC_IMG" -resize 1284x2778 -background transparent -gravity center -extent 1284x2778 "$SRC_IMG"
+  elif [[ "$DEVICE_TYPE" == "ipad" ]]; then
+    convert "$SRC_IMG" -resize 2048x2732 -background transparent -gravity center -extent 2048x2732 "$SRC_IMG"
+  elif [[ "$DEVICE_TYPE" == "android" ]]; then
+    convert "$SRC_IMG" -resize 1080x2340 -background transparent -gravity center -extent 1080x2340 "$SRC_IMG"
   fi
 done < "$MAP_FILE"
 
-# --- Frame images with fastlane ---
-cd fastlane
-echo "Framing images with fastlane..."
-fastlane frameit &> frameit.log
-cd ..
+# --- Frame images ---
+echo "Framing images..."
+fastlane frameit
 
 # --- Stage 2: Add Background and Titles with ImageMagick ---
 echo "Stage 2: Adding background and titles with ImageMagick..."
+
+# Create output directories
+mkdir -p framed_images/{ios,android,ipad}
 
 # Settings
 BACKGROUND_IMG="gradient.png"
@@ -60,21 +53,23 @@ TEXT_AREA_PADDING=40
 TEXT_VERTICAL_OFFSET=30
 TEXT_HORIZONTAL_INSET=20
 HORIZONTAL_PADDING=120
-TOP_PADDING=240
-BOTTOM_PADDING=120
+TOP_PADDING=500
+BOTTOM_PADDING=200
 
 while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
-  source_img="fastlane/screenshots/en-US/${original_img_name}_framed.png"
+  if [[ "$original_img_name" == "LettersDownload_ios" || "$original_img_name" == "LettersDownload_android" || "$original_img_name" == "LettersDownload_ipad" ]]; then
+    source_img="fastlane/screenshots/en-US/${original_img_name}_framed.png"
+  else
+    source_img="fastlane/screenshots/en-US/${DEVICE_TYPE}-${original_img_name}_framed.png"
+  fi
 
   if [ ! -f "$source_img" ]; then
-    echo "Skipping $original_img_name, framed image not found at '$source_img'."
+    echo "Skipping $original_img_name, source image not found at '$source_img'."
     continue
-  }
+  fi
 
-  # Remove quotes from the description
-  TITLE=$(echo "$DESCRIPTION" | tr -d '"')
-
-  echo "Processing $original_img_name -> framed_images/${DEVICE_TYPE}/${original_img_name}.png"
+  # Remove the surrounding quotes from the description and replace placeholder with newline
+  TITLE=$(echo "$DESCRIPTION" | tr -d '"' | sed 's/_NEWLINE_/\n/g')
 
   # Get image dimensions
   IMG_WIDTH=$(magick identify -format "%w" "$source_img")
@@ -92,18 +87,18 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
   OUTPUT_PATH="framed_images/${DEVICE_TYPE}/${original_img_name}.png"
 
   if [[ "$DEVICE_TYPE" == "ipad" ]]; then
-    ADJUSTED_TITLE_FONT_SIZE=35
+    ADJUSTED_TITLE_FONT_SIZE=80
   else
-    ADJUSTED_TITLE_FONT_SIZE=$TITLE_FONT_SIZE
+    ADJUSTED_TITLE_FONT_SIZE=60
   fi
 
   # ImageMagick Command
   echo -e "$TITLE" | magick \
-    "$BACKGROUND_IMG" -resize "${CANVAS_WIDTH}x${CANVAS_HEIGHT}!" \
+    "$BACKGROUND_IMG" -resize "${CANVAS_WIDTH}x${CANVAS_HEIGHT}" \
     \( "$source_img" \) -gravity North -geometry "+0+${TOP_PADDING}" -composite \
     -font "$FONT" -pointsize "$ADJUSTED_TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
-    \( -gravity Center -background none -size "${TEXT_BOX_WIDTH}x${TEXT_BOX_HEIGHT}" caption:@- \) \
-    -gravity NorthWest -geometry "+${TEXT_HORIZONTAL_INSET}+${TEXT_VERTICAL_OFFSET}" -composite \
+    \( -gravity Center -background none -size "${TEXT_BOX_WIDTH}x${TEXT_BOX_HEIGHT}" caption:@- \)\
+    -gravity North -geometry "+0+${TEXT_VERTICAL_OFFSET}" -composite \
     "$OUTPUT_PATH"
 done < "$MAP_FILE"
 
@@ -116,14 +111,14 @@ echo "Final resizing and moving of images"
 # iOS
 for f in framed_images/ios/*.png; do
   [ -f "$f" ] || continue
-  magick "$f" -resize 1242x2208! "$f"
+  magick "$f" -resize 1242x "$f"
   cp "$f" ../../../VAMobile/ios/fastlane/screenshots/en-US/
 done
 
 # Android
 for f in framed_images/android/*.png; do
   [ -f "$f" ] || continue
-  magick "$f" -resize 1280x2276! "$f"
+  magick "$f" -resize 1280x "$f"
   cp "$f" ../../../VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
 done
 
@@ -131,7 +126,7 @@ done
 mkdir -p ../../../VAMobile/ios/fastlane/screenshots_ipad/en-US
 for f in framed_images/ipad/*.png; do
   [ -f "$f" ] || continue
-  magick "$f" -resize 2048x2732! "$f"
+  magick "$f" -resize 2048x "$f"
   cp "$f" ../../../VAMobile/ios/fastlane/screenshots_ipad/en-US/
 done
 

@@ -13,6 +13,7 @@ rm -rf fastlane/screenshots/en-US/android_original fastlane/screenshots/en-US/io
 
 # Remove any leftover images from the main directory
 rm -rf fastlane/screenshots/en-US/*
+rm -rf framed_images/
 
 echo "Listing Fastlane Dir.."
 ls -al fastlane/screenshots/en-US

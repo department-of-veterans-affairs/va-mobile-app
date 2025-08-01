@@ -8,7 +8,7 @@ set -e
 # Define the source and destination directories
 ARTIFACTS_DIR="../../../VAMobile/artifacts"
 DEST_DIR="fastlane/screenshots/en-US"
-INPUT_FILE="screenshot_data.ts"
+CONFIG_FILE="image_config.tsv"
 
 # Create the destination directory if it doesn't exist
 echo "Creating destination directory: $DEST_DIR"
@@ -17,29 +17,24 @@ mkdir -p "$DEST_DIR"
 # Clear out the destination directory to start fresh
 rm -f "$DEST_DIR"/*
 
-# Read the image names from the screenshot_data.ts file
+# Read the image names from the config file
 # and move them from the artifacts directory.
-while IFS= read -r line; do
-  regex="(ios|android|ipad):[[:space:]]*'([^']*)'"
-  if [[ "$line" =~ $regex ]]; then
-    device_type="${BASH_REMATCH[1]}"
-    image_name="${BASH_REMATCH[2]}"
+while IFS=$'\t' read -r image_name test_id device_type description; do
+  # Find the image in any of the artifact subdirectories
+  found_image=$(find "$ARTIFACTS_DIR" -name "${image_name}.png" -print -quit)
 
-    # Find the image in any of the artifact subdirectories
-    found_image=$(find "$ARTIFACTS_DIR" -name "${image_name}.png" -print -quit)
-
-    if [ -n "$found_image" ]; then
-      echo "Moving $image_name for $device_type"
-      mv -v "$found_image" "$DEST_DIR/"
+  if [ -n "$found_image" ]; then
+    echo "Moving $image_name for $device_type"
+    mv -v "$found_image" "$DEST_DIR/${device_type}-${image_name}.png"
+  else
+    # The LettersDownload images are not in the artifacts directory, so we need to copy them from the root directory
+    if [[ "$image_name" == "LettersDownload_ios" || "$image_name" == "LettersDownload_android" || "$image_name" == "LettersDownload_ipad" ]]; then
+      echo "Copying $image_name for $device_type"
+      cp "${image_name}.png" "$DEST_DIR/"
     else
       echo "Warning: Could not find image ${image_name}.png in $ARTIFACTS_DIR"
     fi
   fi
-done < "$INPUT_FILE"
-
-
-echo "Copying Letters Images.."
-cp LettersDownload* fastlane/screenshots/en-US/
+done < "$CONFIG_FILE"
 
 echo "Script Complete."
-
