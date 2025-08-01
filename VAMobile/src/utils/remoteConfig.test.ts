@@ -25,6 +25,7 @@ const mockOverrides = {
   hsScrollAnalytics: false,
   inAppFeedback: false,
   inAppRecruitment: false,
+  inAppReview: true,
   labsAndTests: false,
   nonVAMedsLink: false,
   rescheduleLink: true,
