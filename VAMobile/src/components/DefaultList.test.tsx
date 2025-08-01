@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { DefaultList } from 'components'
 import { context, render } from 'testUtils'
-
-import DefaultList from './DefaultList'
 
 context('DefaultList', () => {
   const onPressSpy = jest.fn()

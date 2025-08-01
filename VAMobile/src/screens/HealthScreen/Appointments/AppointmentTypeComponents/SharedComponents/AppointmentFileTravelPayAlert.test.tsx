@@ -24,6 +24,16 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+const mockMutationState = { status: 'success' }
+let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+jest.mock('utils/travelPay', () => {
+  const original = jest.requireActual('utils/travelPay')
+  return {
+    ...original,
+    useTravelClaimSubmissionMutationState: () => mockTravelClaimSubmissionMutationState,
+  }
+})
+
 const baseAppointmentAttributes: AppointmentAttributes = {
   appointmentType: AppointmentTypeConstants.VA,
   status: AppointmentStatusConstants.BOOKED,
@@ -182,6 +192,10 @@ const tests = [
 ]
 
 context('AppointmentFileTravelPayAlert', () => {
+  afterEach(() => {
+    mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+  })
+
   const initializeTestInstance = (attributes: AppointmentAttributes, appointmentID: string = '123') => {
     const appointment = {
       ...defaultAppointment,
@@ -318,5 +332,17 @@ context('AppointmentFileTravelPayAlert', () => {
       },
       appointmentRouteKey: 'key',
     })
+  })
+
+  it('should render an error message if the claim submission fails', async () => {
+    mockTravelClaimSubmissionMutationState = { status: 'error' }
+    initializeTestInstance(inPersonVAAttributes)
+    expect(screen.getByText(t('travelPay.fileClaimAlert.error'))).toBeTruthy()
+  })
+
+  it('should NOT render if the claim submission is pending', async () => {
+    mockTravelClaimSubmissionMutationState = { status: 'pending' }
+    initializeTestInstance(inPersonVAAttributes)
+    expect(screen.queryByTestId('appointmentFileTravelPayAlert')).toBeNull()
   })
 })

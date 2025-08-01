@@ -443,7 +443,7 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
           mb={theme.dimensions.contentMarginBottom}
           mt={theme.dimensions.standardMarginBetween}>
           <Box mb={theme.dimensions.standardMarginBetween}>
-            <Button label="Set API Errors" onPress={saveErrors} />
+            <Button label="Set API Errors" onPress={saveErrors} testID="saveErrors" />
           </Box>
           <Button label="Clear API Errors" onPress={clearErrors} />
         </Box>
