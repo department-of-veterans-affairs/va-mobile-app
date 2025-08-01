@@ -24,7 +24,6 @@ export type FeatureToggleType =
   | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
-  | 'inAppUpdates'
   | 'labsAndTests'
   | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
@@ -55,7 +54,6 @@ type FeatureToggleValues = {
   hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
-  inAppUpdates: boolean
   labsAndTests: boolean
   logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
@@ -87,7 +85,6 @@ export const defaults: FeatureToggleValues = {
   hsScrollAnalytics: false,
   inAppRecruitment: false,
   inAppFeedback: false,
-  inAppUpdates: true,
   labsAndTests: false,
   logDowntimeAnalytics: true,
   nonVAMedsLink: false,

@@ -17,7 +17,6 @@ import {
 } from 'utils/homeScreenAlerts'
 import { useOpenAppStore, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export const EncourageUpdateAlert = () => {
   const theme = useTheme()
@@ -30,7 +29,6 @@ export const EncourageUpdateAlert = () => {
   const openAppStore = useOpenAppStore()
 
   const displayEU =
-    featureEnabled('inAppUpdates') &&
     storeVersion &&
     localVersionName &&
     skippedVersion &&
