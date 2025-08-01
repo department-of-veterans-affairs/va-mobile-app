@@ -1,1 +1,5 @@
-We added general improvements and fixed a few bugs.
+We added mileage-only travel claims submission to the Health section.
+
+ - Submit simple mileage-only claims for past in-person VA appointments.
+ - View submitted travel claim status and history from your past appointment.
+ - No paperwork or waiting—just a few taps.
