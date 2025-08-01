@@ -27,7 +27,6 @@ const mockOverrides = {
   inAppRecruitment: false,
   labsAndTests: false,
   nonVAMedsLink: false,
-  preferredNameGenderWaygate: false,
   prescriptions: true,
   rescheduleLink: true,
   shareMyHealthDataLink: true,
