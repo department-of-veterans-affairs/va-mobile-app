@@ -15,9 +15,9 @@ pipeline {
     // if you have them configured in Jenkins. This is a good practice.
     // Replace 'node-18' with the name of your Node.js installation.
     // If not configured, ensure Node.js and Yarn are in the system PATH on the Mac mini.
-    tools {
-        nodejs 'node-22'
-    }
+    // tools {
+    //     nodejs 'node-22'
+    // }
 
     stages {
         stage('Update Repository') {
