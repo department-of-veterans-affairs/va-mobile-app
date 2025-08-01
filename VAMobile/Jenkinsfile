@@ -27,6 +27,7 @@ pipeline {
                 dir(repoPath) {
                     // Update the repository with the latest changes from the remote.
                     // This assumes the Mac mini has access to the Git remote.
+                    sh 'git checkout .'
                     sh 'git pull'
                     sh 'yarn install'
                     sh 'yarn start'
