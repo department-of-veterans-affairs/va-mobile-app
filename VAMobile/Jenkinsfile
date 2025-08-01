@@ -38,6 +38,7 @@ pipeline {
                         nvm use
                         yarn install
                         yarn ios
+                        cd android && ./gradlew clean && cd ..
                         yarn android
                     '''
                     // sh 'yarn ios'
