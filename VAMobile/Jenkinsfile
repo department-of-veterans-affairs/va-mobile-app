@@ -2,7 +2,7 @@
 
 // This variable holds the path to your mobile app repository on the Mac mini.
 // You will need to change this to the actual path.
-// def repoPath = '/path/to/your/mobile-app-repo'
+def repoPath = 'Users/oddball/repos/va-mobile-app/VAMobile'
 
 pipeline {
     // This 'agent' block tells Jenkins to run the entire pipeline on a node
