@@ -36,9 +36,8 @@ pipeline {
 
                         nvm use
                         yarn install
-                        cd ios && pod install && cd ..
-                        cd ../.github/scripts/app-store-images/
-                        ./generate_images.sh
+                        yarn ios
+                        yarn android
                     '''
                     // sh 'yarn ios'
                 }
