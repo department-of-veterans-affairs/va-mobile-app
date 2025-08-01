@@ -38,9 +38,10 @@ pipeline {
                         yarn install
                         cd ios && pod install && cd ..
                         pwd
-                        ls al
+                        ls -al
                         cd ..
                         ls -al
+                        cd .github/scripts/app-store-images
                         ./generate_images.sh
                     '''
                     // sh 'yarn ios'
