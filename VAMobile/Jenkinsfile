@@ -30,8 +30,8 @@ pipeline {
                     sh 'git checkout develop'
                     sh 'git pull'
                     sh 'yarn install'
-                    sh 'yarn start'
-                    sh 'yarn ios'
+                    sh 'pwd'
+                    sh 'ls -al'
                 }
             }
         }
