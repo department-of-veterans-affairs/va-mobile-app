@@ -171,7 +171,7 @@ function LoginScreen() {
             <Box alignItems={'center'} gap={theme.dimensions.buttonPadding}>
               <LinkWithAnalytics
                 type="url"
-                text={t('loginIssues.troubleshootLoginIssue')}
+                text={t('loginIssues.support')}
                 url={LINK_URL_TROUBLESHOOT_LOGIN}
                 icon="no icon"
                 testID="loginIssuesTestID"
