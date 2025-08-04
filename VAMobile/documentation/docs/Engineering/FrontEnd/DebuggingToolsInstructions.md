@@ -3,7 +3,7 @@ title: Debugging Tools
 ---
 
 # Debugging Instructions 
-This page shows the different debug tools that we use to debug the VAMobile app. You can use your prefer method.
+This page shows the different debug tools that we use to debug the VAMobile app. You can use your preferred method.
 
 :::important
   For all the debugging tools you need to `yarn start` the `metro server` so that the debugger can  connect to it or it will not work.
@@ -14,72 +14,76 @@ This section will apply to all the tools. More information on the [react native 
 
 ### IOS
    1. If on `physical device Shake your device`. If using a `simulator` press the shortcut  `⌘D` or by selecting the `Shake Gesture` inside the hardware menu in the simulator.
-   2. On the Action Sheet select `Debug with Chrome`
+   2. On the Action Sheet select `Open DevTools`
 
-    ![IOS Debug Menu](/img/debuggingToolsImage/ios-debug-action-sheet.png) 
+    ![IOS Debug Menu](/img/debuggingToolsImage/ios-debug-dialog.png) 
 
 
 ### Android
-   1. Ff on `physical device Shake your device`. If using a `emulator` press the shortcut  `⌘M`.
-   2. On the dialog select `Debug`
+   1. If using a `physical device` use `Shake your device`
+   2. Android emulators: `Cmd ⌘ + M (macOS)` or `Ctrl + M (Windows and Linux)`
+   3. On the dialog select `Open DevTools`
 
-    ![Android Debug Menu](/img/debuggingToolsImage/android-debug-dialog.jpg) 
+Alternatively on Android: `adb shell input keyevent 82`
+
+    ![Android Debug Menu](/img/debuggingToolsImage/android-debug-dialog.png) 
    
 
-## Debugging Tools
- This sections shows the different debugging tools you can use. By default the chrome developers tools will open if no other tool is already open.
+## React Native DevTools
+[React Native DevTools](https://reactnative.dev/docs/react-native-devtools) is the built-in debugger for React Native, providing tools to inspect and debug your JavaScript code, similar to browser devtools.
 
-:::important
-You must have only the tool you want to use open so that the debugger connects to it.
-:::
+> [!NOTE]  
+> React Native Devtools is only available with the Hermes engine, and requires Google Chrome or Microsoft Edge installed.
 
-### Chrome Developers Tools
+On first launch, it opens to a welcome panel with a console drawer for logs and runtime interaction. Use the top navigation to access features like the React Components Inspector and Profiler.
 
-1. Launch the debugger from the device debug menu.
+    ![Dev Tools Welcome](/img/debuggingToolsImage/dev-tools-welcome.png)
 
-2. The `React Native Debugger` page will open in Chrome on url `http://localhost:8081/debugger-ui/`. You will know if the device is connected in the `Status` section.
+### Console
+The console panel allows you to view logs, evaluate Javascript, inspect object properties, [and more](https://developer.chrome.com/docs/devtools/console/reference). 
 
-    ![React Native Debugger](/img/debuggingToolsImage/chrome-debug-screen.png) 
+    ![Dev Tools Console](/img/debuggingToolsImage/dev-tools-console.png)
 
-3. Open the developers tools. From the developers tools you can see the elements, console outputs and source files.
+### Sources and breakpoints
+The Sources panel lets you view your app’s source files and set breakpoints to pause execution and inspect the live state of your code.
+[Pause your code with breakpoints](https://developer.chrome.com/docs/devtools/javascript/breakpoints)
 
-    In the element you can see the html tree.
+    ![Dev Tools Breakpoints](/img/debuggingToolsImage/dev-tools-breakpoints.png)
 
-    ![Chrome Dev Tools Element](/img/debuggingToolsImage/chrome-dev-tools-element.png) 
-    
-    In the console you can see the redux logout messages and other console outputs.
+> [!TIP]  
+> Use `Cmd ⌘ + P`/`Ctrl ⌘ + P` to navigate to a source file
+> Click the line number on the left hand side to add a breakpoint
+> Use navigation tools at the top right to step through code
 
-    ![Chrome Dev Tools Console](/img/debuggingToolsImage/chrome-dev-tools-console.png) 
-    
-    In the source under debuggerWorker you can find the javascript files that you can put breakpoints.
+### Memory
+The memory panel allows you to take a heap snapshot and view the memory usage of your Javascript code over time.
+[Record heap snapshots](https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots)
 
-    ![Chrome Dev Tools Source](/img/debuggingToolsImage/chrome-dev-tools-source.png) 
+    ![Dev Tools Memory](/img/debuggingToolsImage/dev-tools-memory.png)
 
+## React DevTool Features
+The integrated Components and Profiler panels contain all the features of the [React DevTools](https://react.dev/learn/react-developer-tools) browser extension.
 
-### React Native Developer Tools (standalone application)
+### Components
+The React Components panel allows you to inspect and update the rendered React component tree.
 
- 1. If not installed yet follow the installation instructions in the [react-devtools](https://github.com/facebook/react/tree/main/packages/react-devtools) to install the react dev tools globally on your machine not in the project. And than install [standalone react native debugger app](https://github.com/jhen0409/react-native-debugger)
+    ![Dev Tools Components](/img/debuggingToolsImage/dev-tools-components.png)
 
- 2. If installed or after the installation launch the react native debugger standalone app.
-
- 3. Launch the debugger from your device.
-
-    With the standalone you can see the redux messages with the redux devtools, see the element tree and console logs in the console tab.
-
-    ![React Dev Tools](/img/debuggingToolsImage/react-dev-tools.png) 
-
-    In the source tab under RNDebuggerWorker you can find the javascripts to add breakpoints to.
-
-    ![React Dev Tools Source](/img/debuggingToolsImage/react-dev-tools-source.png) 
-
-    If you right click on the redux devtools section you will get a popup to enable network calls. This will allow you to see the calls and response done to the api.
-
-    ![React Dev Tools Enable Network](/img/debuggingToolsImage/react-dev-tools-enable-network.png) 
-
-    ![React Dev Tools Network](/img/debuggingToolsImage/react-dev-tools-network.png) 
+> [!TIP]
+> Hover or select an element on the tree to highlight it on the device
+> Props and state on a component can be viewed and modified at runtime
+> To locate an element, click on the top-left `Select element` button, then tap any element on the app
 
 
-### VSCode React Native Tools Extension
+### Profiler
+The React Profiler panel allows you to record performance profiles and understand timings of component renders.
+
+    ![Dev Tools Profiler](/img/debuggingToolsImage/dev-tools-profiler.png)
+
+## Reactotron
+
+
+## VSCode React Native Tools Extension
  This extension will allow you to add breakpoints on the actual code in VSCode.
 
  1. If not installed install the React Native Tools extension in VSCode and follow the setup instructions in the extensions document.
