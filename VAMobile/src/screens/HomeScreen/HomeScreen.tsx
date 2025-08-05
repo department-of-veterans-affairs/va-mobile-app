@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Platform } from 'react-native'
+import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
 import { useSelector } from 'react-redux'
 
@@ -25,7 +25,6 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { ServiceHistoryData } from 'api/types'
-import { useVeteranStatus } from 'api/veteranStatus'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -46,31 +45,33 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import PaymentBreakdownModal from 'screens/HomeScreen/PaymentBreakdownModal/PaymentBreakdownModal'
+import ContactInformationScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen'
+import MilitaryInformationScreen from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen'
+import PersonalInformationScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen'
+import ProfileScreen from 'screens/HomeScreen/ProfileScreen/ProfileScreen'
+import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen'
+import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
+import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
+import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
+import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
+import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
+import NotificationsSettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AnalyticsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { getUpcomingAppointmentDateRange } from 'utils/appointments'
+import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import { HomeStackParamList } from './HomeStackScreens'
-import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
-import ContactInformationScreen from './ProfileScreen/ContactInformationScreen'
-import MilitaryInformationScreen from './ProfileScreen/MilitaryInformationScreen'
-import PersonalInformationScreen from './ProfileScreen/PersonalInformationScreen'
-import ProfileScreen from './ProfileScreen/ProfileScreen'
-import SettingsScreen from './ProfileScreen/SettingsScreen'
-import AccountSecurity from './ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
-import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
-import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
-import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -82,6 +83,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+  const ref = useRef(null)
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -102,6 +104,17 @@ export function HomeScreen({}: HomeScreenProps) {
       enabled: isFocused,
     },
   )
+
+  const pastAppointmentsRange = getPastAppointmentDateRange()
+  const pastAppointmentsQuery = useAppointments(
+    pastAppointmentsRange.startDate,
+    pastAppointmentsRange.endDate,
+    TimeFrameTypeConstants.PAST_THREE_MONTHS,
+    {
+      enabled: isFocused,
+    },
+  )
+
   const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
   const foldersQuery = useFolders({ enabled: isFocused })
   const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
@@ -112,7 +125,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
-  const veteranStatusQuery = useVeteranStatus()
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -223,6 +235,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const activityNotFetched =
     activityFeatureActive &&
     !appointmentsQuery.isFetched &&
+    !pastAppointmentsQuery.isFetched &&
     !claimsAndAppealsQuery.isFetched &&
     !foldersQuery.isFetched &&
     !prescriptionsQuery.isFetched
@@ -230,6 +243,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const loadingActivity =
     activityNotFetched ||
     appointmentsQuery.isFetching ||
+    pastAppointmentsQuery.isFetching ||
     claimsAndAppealsQuery.isFetching ||
     foldersQuery.isFetching ||
     prescriptionsQuery.isFetching
@@ -238,11 +252,13 @@ export function HomeScreen({}: HomeScreenProps) {
     !!appointmentsQuery.data?.meta?.upcomingAppointmentsCount ||
     !!claimsAndAppealsQuery.data?.meta.activeClaimsCount ||
     !!foldersQuery.data?.inboxUnreadCount ||
+    !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount ||
     !!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable
 
   const claimsError = claimsAndAppealsQuery.isError || !!claimsAndAppealsQuery.data?.meta.errors?.length
   const hasActivityError = !!(
     appointmentsQuery.isError ||
+    pastAppointmentsQuery.isError ||
     claimsError ||
     foldersQuery.isError ||
     prescriptionsQuery.isError
@@ -259,15 +275,13 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouFeatureActive &&
     !serviceHistoryQuery.isFetched &&
     !disabilityRatingQuery.isFetched &&
-    !paymentHistoryQuery.isFetched &&
-    !veteranStatusQuery.isFetched
+    !paymentHistoryQuery.isFetched
 
   const loadingAboutYou =
     aboutYouNotFetched ||
     serviceHistoryQuery.isLoading ||
     disabilityRatingQuery.isLoading ||
-    paymentHistoryQuery.isLoading ||
-    veteranStatusQuery.isLoading
+    paymentHistoryQuery.isLoading
 
   const hasAboutYouInfo = hasDisabilityRating || hasRecurringPaymentInfo || !!serviceHistoryQuery.data?.mostRecentBranch
 
@@ -373,14 +387,23 @@ export function HomeScreen({}: HomeScreenProps) {
               {!!appointmentsQuery.data?.meta?.upcomingAppointmentsCount &&
                 !!appointmentsQuery.data?.meta?.upcomingDaysLimit && (
                   <ActivityButton
-                    title={t('appointments')}
-                    subText={t('appointments.activityButton.subText', {
+                    title={t('upcomingAppointments')}
+                    subText={t('upcomingAppointments.activityButton.subText', {
                       count: appointmentsQuery.data.meta.upcomingAppointmentsCount,
                       dayCount: appointmentsQuery.data.meta.upcomingDaysLimit,
                     })}
                     deepLink={'appointments'}
                   />
                 )}
+              {featureEnabled('travelPaySMOC') && !!pastAppointmentsQuery.data?.meta?.travelPayEligibleCount && (
+                <ActivityButton
+                  title={t('pastAppointments')}
+                  subText={t('pastAppointments.activityButton.subText', {
+                    count: pastAppointmentsQuery.data.meta.travelPayEligibleCount,
+                  })}
+                  deepLink={'pastAppointments'}
+                />
+              )}
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
@@ -573,15 +596,17 @@ export function HomeScreen({}: HomeScreenProps) {
                         testID={'showCompensationTestID'}
                       />
                       <Box mt={theme.dimensions.condensedMarginBetween} />
-                      <Button
-                        onPress={() => {
-                          setPaymentBreakdownVisible(true)
-                          logAnalyticsEvent(Events.vama_payment_bd_details())
-                        }}
-                        label={t('monthlyCompensationPayment.seeDetails')}
-                        buttonType={ButtonVariants.Secondary}
-                        testID={'seePaymentBreakdownButtonTestID'}
-                      />
+                      <View ref={ref} accessibilityRole="button">
+                        <Button
+                          onPress={() => {
+                            setPaymentBreakdownVisible(true)
+                            logAnalyticsEvent(Events.vama_payment_bd_details())
+                          }}
+                          label={t('monthlyCompensationPayment.seeDetails')}
+                          buttonType={ButtonVariants.Secondary}
+                          testID={'seePaymentBreakdownButtonTestID'}
+                        />
+                      </View>
                     </Box>
                   </Box>
                 )}
@@ -631,7 +656,7 @@ export function HomeScreen({}: HomeScreenProps) {
           </Box>
         </InView>
       </Box>
-      <PaymentBreakdownModal visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
+      <PaymentBreakdownModal ref={ref} visible={paymentBreakdownVisible} setVisible={setPaymentBreakdownVisible} />
     </CategoryLanding>
   )
 }
@@ -684,6 +709,21 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Settings" component={SettingsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="GiveFeedback"
+        component={GiveFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="SendUsFeedback"
+        component={SendUsFeedbackScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="FeedbackSent"
+        component={FeedbackSentScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="AccountSecurity"
         component={AccountSecurity}

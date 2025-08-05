@@ -28,6 +28,7 @@ import { ThemeProvider } from 'styled-components'
 import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
+import NotificationManager, { useNotificationContext } from 'components/NotificationManager'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
@@ -47,8 +48,16 @@ import FileRequestSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetails
 import SubmitEvidenceSubtask from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { profileAddressType } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen'
-import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppFeedbackScreen/InAppFeedbackScreen'
+import FeedbackInterceptScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/FeedbackInterceptScreen'
+import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import OnboardingCarousel from 'screens/OnboardingCarousel'
+import EditDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
+import SplashScreen from 'screens/SplashScreen/SplashScreen'
+import { SyncScreen } from 'screens/SyncScreen'
+import WebviewScreen from 'screens/WebviewScreen'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen'
+import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
@@ -62,23 +71,13 @@ import {
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
+import { updateFontScale, updateIsVoiceOverTalkBackRunning } from 'utils/accessibility'
 import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
-
-import NotificationManager, { useNotificationContext } from './components/NotificationManager'
-import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
-import OnboardingCarousel from './screens/OnboardingCarousel'
-import EditDirectDepositScreen from './screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen'
-import SplashScreen from './screens/SplashScreen/SplashScreen'
-import { SyncScreen } from './screens/SyncScreen'
-import WebviewScreen from './screens/WebviewScreen'
-import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import LoaGate from './screens/auth/LoaGate'
-import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 
 const { ENVIRONMENT, IS_TEST } = getEnv()
 
@@ -109,7 +108,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   SubmitEvidenceSubtask: {
     claimID: string
   }
-  InAppFeedback: { screen: string }
+  FeedbackIntercept: { screen: string }
   Tabs: undefined
 }
 
@@ -133,6 +132,11 @@ type RootTabNavParamList = {
 ;`
   background-color: ${theme.colors.icon.active};
 `
+
+type AuthedAppProps = {
+  /** Deep link that was used to launch the app to be opened after authentication */
+  initialDeepLink?: string
+}
 
 function MainApp() {
   const navigationRef = useNavigationContainerRef()
@@ -225,6 +229,7 @@ export function AuthGuard() {
   // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
   const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
   const [currNewState, setCurrNewState] = useState('active')
+  const [initialDeepLink, setInitialDeepLink] = useState<string>()
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
@@ -295,6 +300,9 @@ export function AuthGuard() {
       const listener = (event: { url: string }): void => {
         if (event.url?.startsWith('vamobile://login-success?')) {
           dispatch(handleTokenCallbackUrl(event.url))
+        } else if (event.url?.startsWith('vamobile://')) {
+          // Store non-auth result url for navigation after login
+          setInitialDeepLink(event.url)
         }
       }
       const sub = Linking.addEventListener('url', listener)
@@ -306,35 +314,39 @@ export function AuthGuard() {
 
   useEffect(() => {
     // Log campaign analytics if the app is launched by a campaign link
-    const logCampaignAnalytics = async () => {
-      const initialUrl = await Linking.getInitialURL()
+    const logCampaignAnalytics = async (initialUrl: string) => {
+      const urlParts = decodeURIComponent(initialUrl).split('?')
+      const queryString = urlParts[1]
+      const queryParts = queryString?.split('&') || []
 
-      if (initialUrl) {
-        const urlParts = decodeURIComponent(initialUrl).split('?')
-        const queryString = urlParts[1]
-        const queryParts = queryString?.split('&') || []
+      const queryParams = queryParts.reduce(
+        (params, queryPart) => {
+          const [key, value] = queryPart.split('=')
+          params[key] = value
+          return params
+        },
+        {} as { [key: string]: string | undefined },
+      )
 
-        const queryParams = queryParts.reduce(
-          (params, queryPart) => {
-            const [key, value] = queryPart.split('=')
-            params[key] = value
-            return params
-          },
-          {} as { [key: string]: string | undefined },
-        )
-
-        if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
-          await analytics().logCampaignDetails({
-            campaign: queryParams.utm_campaign || '',
-            medium: queryParams.utm_medium || '',
-            source: queryParams.utm_source || '',
-            term: queryParams.utm_term,
-          })
-        }
+      if (queryParams.utm_campaign || queryParams.utm_medium || queryParams.utm_source || queryParams.utm_term) {
+        await analytics().logCampaignDetails({
+          campaign: queryParams.utm_campaign || '',
+          medium: queryParams.utm_medium || '',
+          source: queryParams.utm_source || '',
+          term: queryParams.utm_term,
+        })
       }
     }
 
-    logCampaignAnalytics()
+    const handleAppLaunchedByLink = async () => {
+      const initialUrl = await Linking.getInitialURL()
+      if (initialUrl) {
+        setInitialDeepLink(initialUrl)
+        logCampaignAnalytics(initialUrl)
+      }
+    }
+
+    handleAppLaunchedByLink()
   }, [])
 
   let content
@@ -377,7 +389,7 @@ export function AuthGuard() {
       </Stack.Navigator>
     )
   } else if (loggedIn) {
-    content = <AuthedApp />
+    content = <AuthedApp initialDeepLink={initialDeepLink} />
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
@@ -414,7 +426,7 @@ export function AppTabs() {
   )
 }
 
-export function AuthedApp() {
+export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   const snackbar = useSnackbar()
   const headerStyles = useHeaderStyles()
   const { initialUrl } = useNotificationContext()
@@ -430,6 +442,17 @@ export function AuthedApp() {
       Linking.openURL(initialUrl)
     }
   }, [initialUrl])
+
+  // Open non-notification deep link that launched the app once sign in is complete.
+  useEffect(() => {
+    if (initialDeepLink) {
+      Linking.canOpenURL(initialDeepLink).then((canOpenDeepLink) => {
+        if (canOpenDeepLink) {
+          Linking.openURL(initialDeepLink)
+        }
+      })
+    }
+  }, [initialDeepLink])
 
   return (
     <>
@@ -468,7 +491,11 @@ export function AuthedApp() {
           component={FileRequestSubtask}
           options={FULLSCREEN_SUBTASK_OPTIONS}
         />
-        <RootNavStack.Screen name="InAppFeedback" component={InAppFeedbackScreen} options={LARGE_PANEL_OPTIONS} />
+        <RootNavStack.Screen
+          name="FeedbackIntercept"
+          component={FeedbackInterceptScreen}
+          options={LARGE_PANEL_OPTIONS}
+        />
         {homeScreens}
         {paymentsScreens}
         {benefitsScreens}

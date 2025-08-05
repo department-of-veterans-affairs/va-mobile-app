@@ -144,7 +144,7 @@ jobs:
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-large
+    runs-on: ubuntu-16-cores-latest
     needs: [start_slack_thread, output_detox_tests_to_run]
     strategy:
       fail-fast: false
@@ -156,10 +156,23 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      # https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # Required for the emulator on Linux
+      - name: Install LibPulse
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpulse-dev
+
       - name: Set git config
         run: |
-          git config --global user.name 'VA Automation Bot'
-          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git config --global user.name 'VA Mobile Automation Bot'
+          git config --global user.email 'VAFlagshipMobile@va.gov'
 
       - name: Decode base64 encoded keys
         working-directory: VAMobile/android

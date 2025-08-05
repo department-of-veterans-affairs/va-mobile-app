@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { loadWaygateOverrides } from 'utils/waygateConfig'
-
-import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
@@ -19,6 +18,7 @@ export type FeatureToggleType =
   | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'homeScreenPrefetch'
@@ -27,24 +27,30 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'inAppUpdates'
+  | 'labsAndTests'
+  | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
   | 'patientCheckIn'
   | 'patientCheckInWaygate'
   | 'preferredNameGenderWaygate'
   | 'prescriptions'
+  | 'rescheduleLink'
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
+  | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
   | 'whatsNewUI'
   | 'veteranStatusCardRedesign'
+  | 'internationalPhoneNumber'
 
 type FeatureToggleValues = {
   allergies: boolean
   appointmentRequests: boolean
+  appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
@@ -54,25 +60,31 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   inAppUpdates: boolean
+  labsAndTests: boolean
+  logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
   patientCheckIn: boolean
   patientCheckInWaygate: boolean
   preferredNameGenderWaygate: boolean
   prescriptions: boolean
+  rescheduleLink: boolean
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
+  travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
   whatsNewUI: boolean
   veteranStatusCardRedesign: boolean
+  internationalPhoneNumber: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   allergies: true,
   appointmentRequests: false,
+  appointmentsTestTime: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,
@@ -82,20 +94,25 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: false,
   inAppReview: true,
   inAppUpdates: true,
+  labsAndTests: false,
+  logDowntimeAnalytics: true,
   nonVAMedsLink: false,
   patientCheckIn: false,
   patientCheckInWaygate: true,
   preferredNameGenderWaygate: true,
   prescriptions: true,
+  rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: false,
   sso: true,
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
+  travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
   whatsNewUI: true,
   veteranStatusCardRedesign: true,
+  internationalPhoneNumber: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults

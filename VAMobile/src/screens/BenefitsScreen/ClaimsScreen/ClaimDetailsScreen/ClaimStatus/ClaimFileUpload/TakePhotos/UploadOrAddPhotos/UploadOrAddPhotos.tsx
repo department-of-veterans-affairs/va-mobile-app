@@ -23,12 +23,14 @@ import {
   TextView,
   VAScrollView,
 } from 'components'
+import FormValidationAlert from 'components/FormValidationAlert'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants, MAX_NUM_PHOTOS } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
@@ -41,8 +43,6 @@ import {
   useTheme,
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
-
-import { FileRequestStackParams } from '../../FileRequestSubtask'
 
 type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
 
@@ -69,6 +69,10 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
   const [imagesEmptyError, setImagesEmptyError] = useState(false)
+
+  const [formContainsError, setFormContainsError] = useState(false)
+  const [formErrorList, setFormErrorList] = useState<{ [key: number]: string }>({})
+  const [validationErrors, setValidationErrors] = useState<Array<string>>([])
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
 
@@ -119,6 +123,17 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       })
     }
   }, [documentType, originalRequest])
+
+  useEffect(() => {
+    const validationErrorsList = []
+    if (imagesEmptyError) validationErrorsList.push(t('fileUpload.requiredPhoto'))
+    for (const key in formErrorList) {
+      if (formErrorList[key] !== '') {
+        validationErrorsList.push(`${formErrorList[key]}`)
+      }
+    }
+    setValidationErrors(validationErrorsList)
+  }, [formErrorList, imagesEmptyError, t])
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
@@ -374,6 +389,13 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
                 />
               </Box>
             )}
+            <FormValidationAlert
+              description={t('fileUpload.submit.error.message')}
+              hasValidationError={formContainsError || imagesEmptyError}
+              scrollViewRef={scrollViewRef}
+              focusOnError={onSaveClicked}
+              errorList={validationErrors}
+            />
             {request && (
               <TextView variant="MobileBodyBold" accessibilityRole="header" mx={theme.dimensions.gutter}>
                 {request.displayName}
@@ -418,6 +440,8 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
                 onSave={onUpload}
                 onSaveClicked={onSaveClicked}
                 setOnSaveClicked={setOnSaveClicked}
+                setErrorList={setFormErrorList}
+                setFormContainsError={setFormContainsError}
               />
             </Box>
           </Box>

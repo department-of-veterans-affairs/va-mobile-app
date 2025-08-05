@@ -44,7 +44,7 @@ const ActivityButton: FC<ActivityButtonProps> = ({ title, subText, deepLink }: A
 
   const onActivityPress = () => {
     let useCaseOneString = ''
-    if (deepLink === 'appointments') {
+    if (deepLink === 'appointments' || deepLink === 'pastAppointments') {
       useCaseOneString = 'Appointments'
     } else if (deepLink === 'claims') {
       useCaseOneString = 'ClaimsHistoryScreen'

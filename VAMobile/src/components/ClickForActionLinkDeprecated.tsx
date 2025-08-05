@@ -4,11 +4,9 @@ import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackP
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
 
+import { Box, ColorVariant, TextView, TextViewProps } from 'components'
 import { useExternalLink, useTheme } from 'utils/hooks'
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
-
-import Box from './Box'
-import TextView, { ColorVariant, TextViewProps } from './TextView'
 
 /** Icon type for links, defaults to Chat */
 export enum LinkUrlIconType {
@@ -193,7 +191,6 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   const textViewProps: TextViewProps = {
     color: colorOverride ? (colorOverride as ColorVariant) : 'link',
     variant: 'MobileBody',
-    ml: 4,
     textDecoration: 'underline',
     textDecorationColor: colorOverride ? (colorOverride as ColorVariant) : 'link',
   }
@@ -209,11 +206,9 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
-        {!hideIcon && (
-          <Box pr={3}>
-            {linkType ? (
-              <Icon name={getIconName()} fill={iconColorOverride ?? theme.colors.icon.link} width={25} height={25} />
-            ) : undefined}
+        {!hideIcon && linkType && (
+          <Box pr={7}>
+            <Icon name={getIconName()} fill={iconColorOverride ?? theme.colors.icon.link} width={25} height={25} />
           </Box>
         )}
         <Box flexShrink={1}>

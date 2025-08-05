@@ -129,7 +129,7 @@ interface Props {
   /** set the style for the menu container */
   style?: StyleProp<ViewStyle>
   /** method to run when menu is hidden */
-  onHidden?: () => Record<string, unknown>
+  onHidden?: () => void
   /** translation function */
   t: TFunction
 }
@@ -394,10 +394,12 @@ export class Menu extends React.Component<Props, State> {
               onPress={this.hide}
               accessibilityLabel={t('closeMenu')}
               accessibilityRole={'button'}
+              testID="menu-modal-close-button"
             />
             <Animated.View
               {...(!animationStarted ? { onLayout: this._onMenuLayout } : {})}
-              style={[styles.shadowMenuContainer, shadowMenuContainerStyle, style]}>
+              style={[styles.shadowMenuContainer, shadowMenuContainerStyle, style]}
+              testID="menu-modal-content">
               <Animated.View style={[styles.menuContainer, animationStarted && menuSize]}>{children}</Animated.View>
             </Animated.View>
           </View>
