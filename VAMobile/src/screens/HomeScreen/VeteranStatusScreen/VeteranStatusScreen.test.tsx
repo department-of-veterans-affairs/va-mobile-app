@@ -156,7 +156,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      expect(screen.getByText(t('veteranStatus.error.notTitle38.title'))).toBeTruthy()
+      expect(screen.findByText(t('veteranStatus.error.notTitle38.title'))).toBeTruthy()
     })
 
     it('shows the ERROR warning when users not-confirmed reason is ERROR', async () => {
@@ -167,7 +167,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      expect(screen.getByText(t('errors.somethingWentWrong'))).toBeTruthy()
+      expect(screen.findByText(t('errors.somethingWentWrong'))).toBeTruthy()
     })
 
     it('shows the catch-all warning when users not-confirmed reason is MORE_RESEARCH_NEEDED', async () => {
@@ -178,7 +178,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      expect(screen.getByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
 
     it('shows the catch-all warning when users not-confirmed reason is PERSON_NOT_FOUND', async () => {
@@ -189,7 +189,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      expect(screen.getByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
 
     it('shows the catch-all warning when user is confirmed, but has no military history', async () => {
@@ -206,7 +206,7 @@ context('VeteranStatusScreen', () => {
         },
       ])
 
-      expect(screen.getByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
+      expect(screen.findByText(t('veteranStatus.error.catchAll.title'))).toBeTruthy()
     })
   })
 

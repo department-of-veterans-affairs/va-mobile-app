@@ -533,7 +533,7 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
 
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
-    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+    endDate: todaysDate.endOf('day').toISO(),
   }
 }
 
@@ -592,4 +592,34 @@ export const AppointmentDetailsSubTypeConstants: {
   Canceled: 'Canceled',
   CanceledAndPending: 'CanceledAndPending',
   PastPending: 'PastPending',
+}
+
+/**
+ * Filters appointments based on logic from web for upcoming and past appointments.
+ * - Upcoming:
+ *   - If it is a video appointment, show it in upcoming up to 4 hours in the past
+ *   - If it is not a video appointment, show it in upcoming up to 1 hour in the past
+ * - Past:
+ *   - If it is a video appointment, show it in past if it started more than 4 hours ago
+ *   - If it is not a video appointment, show it in past
+ */
+export const filterAppointments = (
+  appointments?: AppointmentsList,
+  isPast: boolean = false,
+): AppointmentsList | undefined => {
+  if (!appointments) {
+    return undefined
+  }
+  const todaysDate = DateTime.local()
+  const fourHoursAgo = todaysDate.minus({ hours: 4 }).valueOf()
+  const oneHourAgo = todaysDate.minus({ hours: 1 }).valueOf()
+  // If, by chance appointments is not undefined but is not an array, return undefined
+  return appointments.filter?.((appointment) => {
+    const startDate = DateTime.fromISO(appointment.attributes.startDateLocal).valueOf()
+
+    // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
+    const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
+    const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
+    return isPast ? startDate <= filterDateTime : startDate > filterDateTime
+  })
 }

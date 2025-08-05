@@ -397,9 +397,12 @@ export const Events = {
       name: 'vama_ddl_landing_click',
     }
   },
-  vama_ddl_letter_view: (): Event => {
+  vama_ddl_letter_view: (letterName: string): Event => {
     return {
       name: 'vama_ddl_letter_view',
+      params: {
+        letterName,
+      },
     }
   },
   vama_ddl_status_click: (): Event => {

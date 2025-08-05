@@ -25,7 +25,6 @@ import { usePersonalInformation } from 'api/personalInformation/getPersonalInfor
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { ServiceHistoryData } from 'api/types'
-import { useVeteranStatus } from 'api/veteranStatus'
 import {
   ActivityButton,
   AnnouncementBanner,
@@ -73,7 +72,6 @@ import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -127,9 +125,6 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
-  const veteranStatusQuery = useVeteranStatus({
-    enabled: screenContentAllowed('WG_VeteranStatusCard'),
-  })
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -280,15 +275,13 @@ export function HomeScreen({}: HomeScreenProps) {
     aboutYouFeatureActive &&
     !serviceHistoryQuery.isFetched &&
     !disabilityRatingQuery.isFetched &&
-    !paymentHistoryQuery.isFetched &&
-    !veteranStatusQuery.isFetched
+    !paymentHistoryQuery.isFetched
 
   const loadingAboutYou =
     aboutYouNotFetched ||
     serviceHistoryQuery.isLoading ||
     disabilityRatingQuery.isLoading ||
-    paymentHistoryQuery.isLoading ||
-    veteranStatusQuery.isLoading
+    paymentHistoryQuery.isLoading
 
   const hasAboutYouInfo = hasDisabilityRating || hasRecurringPaymentInfo || !!serviceHistoryQuery.data?.mostRecentBranch
 
