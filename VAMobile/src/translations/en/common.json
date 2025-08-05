@@ -1160,6 +1160,7 @@
   "pastAppointments.fiveMonthsToThreeMonths": "5 months to 3 months",
   "pastAppointments.pastThreeMonths": "Past 3 months",
   "pastAppointments.selectADateRange": "Select a date range",
+  "pastAppointments.selectAPastDateRange": "Select a past date range",
   "paymentBreakdownModal.title": "Latest payment",
   "paymentBreakdownModal.close.a11yHint": "Close payment breakdown modal",
   "paymentBreakdownModal.goToPaymentHistory": "Go to payment history",

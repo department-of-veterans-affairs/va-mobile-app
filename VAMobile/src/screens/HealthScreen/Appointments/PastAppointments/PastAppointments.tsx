@@ -237,18 +237,7 @@ function PastAppointments({
 
   return (
     <Box>
-      <Box mx={theme.dimensions.gutter} accessible={true}>
-        <VAModalPicker
-          selectedValue={datePickerOption.value}
-          onSelectionChange={setValuesOnPickerSelect}
-          pickerOptions={pickerOptions}
-          labelKey={'pastAppointments.selectADateRange'}
-          testID="getDateRangeTestID"
-          confirmTestID="pastApptsDateRangeConfirmID"
-          cancelTestID="pastApptsDateRangeCancelID"
-        />
-      </Box>
-      <DatePicker />
+      <DatePicker labelKey={'pastAppointments.selectAPastDateRange'} />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
