@@ -27,9 +27,9 @@ function ReviewClaimScreen() {
     submitTravelClaim,
     submittingTravelClaim,
     userContactInformation,
-    isCheckboxChecked,
-    setIsCheckboxChecked,
-    checkboxError,
+    penaltyStatementAccepted,
+    setPenaltyStatementAccepted,
+    penaltyStatementError,
   } = useTravelPayContext()
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -132,10 +132,10 @@ function ReviewClaimScreen() {
           <Checkbox
             label={t('travelPay.penaltyStatement.checkbox')}
             onPress={() => {
-              setIsCheckboxChecked(!isCheckboxChecked)
+              setPenaltyStatementAccepted(!penaltyStatementAccepted)
             }}
-            checked={isCheckboxChecked}
-            error={checkboxError ? t('required') : undefined}
+            checked={penaltyStatementAccepted}
+            error={penaltyStatementError ? t('required') : undefined}
             testID="checkboxTestID"
           />
         </Box>

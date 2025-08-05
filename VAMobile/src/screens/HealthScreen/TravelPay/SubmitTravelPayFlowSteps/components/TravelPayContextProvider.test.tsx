@@ -3,12 +3,11 @@ import React, { useContext } from 'react'
 import { contactInformationKeys } from 'api/contactInformation'
 import { AppointmentData, UserContactInformation } from 'api/types'
 import { Events } from 'constants/analytics'
-import { TravelPayContextValue } from 'constants/travelPay'
 import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { act, render } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'
-import { TravelPayContext } from 'utils/travelPay'
+import { TravelPayContext, TravelPayContextValue } from 'utils/travelPay'
 
 const residentialAddress: UserContactInformation['residentialAddress'] = {
   id: 0,
@@ -115,8 +114,8 @@ describe('TravelPayContextProvider', () => {
     const ctx = getCtx()
 
     expect(ctx.appointment).toEqual(mockAppointment)
-    expect(ctx.isCheckboxChecked).toBe(false)
-    expect(ctx.checkboxError).toBe(false)
+    expect(ctx.penaltyStatementAccepted).toBe(false)
+    expect(ctx.penaltyStatementError).toBe(false)
     expect(ctx.submittingTravelClaim).toBe(false)
     expect(ctx.userContactInformation).toEqual({
       residentialAddress,
@@ -127,10 +126,10 @@ describe('TravelPayContextProvider', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
-      getCtx().setIsCheckboxChecked(true)
+      getCtx().setPenaltyStatementAccepted(true)
     })
 
-    expect(getCtx().isCheckboxChecked).toBe(true)
+    expect(getCtx().penaltyStatementAccepted).toBe(true)
   })
 
   it('sets checkboxError when submitting without checking the box', () => {
@@ -140,7 +139,7 @@ describe('TravelPayContextProvider', () => {
       getCtx().submitTravelClaim()
     })
 
-    expect(getCtx().checkboxError).toBe(true)
+    expect(getCtx().penaltyStatementError).toBe(true)
     expect(mutateMock).not.toHaveBeenCalled()
   })
 
@@ -159,7 +158,7 @@ describe('TravelPayContextProvider', () => {
 
     act(() => {
       getCtx().startSmocFlow()
-      getCtx().setIsCheckboxChecked(true)
+      getCtx().setPenaltyStatementAccepted(true)
     })
     // advance the clock by 1 second
     jest.advanceTimersByTime(1000)
@@ -176,7 +175,7 @@ describe('TravelPayContextProvider', () => {
 
     act(() => {
       getCtx().startSmocFlow()
-      getCtx().setIsCheckboxChecked(true)
+      getCtx().setPenaltyStatementAccepted(true)
     })
 
     act(() => {
@@ -196,7 +195,7 @@ describe('TravelPayContextProvider', () => {
 
     act(() => {
       getCtx().startSmocFlow()
-      getCtx().setIsCheckboxChecked(true)
+      getCtx().setPenaltyStatementAccepted(true)
     })
 
     act(() => {
@@ -220,7 +219,7 @@ describe('TravelPayContextProvider', () => {
 
     act(() => {
       getCtx().startSmocFlow()
-      getCtx().setIsCheckboxChecked(true)
+      getCtx().setPenaltyStatementAccepted(true)
     })
 
     act(() => {

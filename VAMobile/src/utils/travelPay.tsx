@@ -6,9 +6,8 @@ import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimSummary, UserContactInformation } from 'api/types'
 import { Events } from 'constants/analytics'
-import { TravelPayContextValue } from 'constants/travelPay'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction } from 'utils/hooks'
@@ -139,6 +138,49 @@ export const useTravelClaimSubmissionMutationState = (appointmentId: string) => 
   })
 
   return mutationState
+}
+
+export type TravelPayContextValue = {
+  /**
+   * The appointment for which the user is filing a travel pay claim.
+   */
+  appointment: AppointmentData
+  /**
+   * Whether the user has checked the certification/acknowledgement checkbox on
+   * the Review Claim screen indicating they agree with the penalty statement.
+   */
+  penaltyStatementAccepted: boolean
+  /**
+   * Setter to update {@link TravelPayContextValue.penaltyStatementAccepted}. Typically
+   * invoked when the user toggles the review-screen checkbox to agree to the penalty statement.
+   */
+  setPenaltyStatementAccepted: (penaltyStatementAccepted: boolean) => void
+  /**
+   * Flag indicating the penalty statement checkbox is required but has not been selected.
+   */
+  penaltyStatementError: boolean
+  /**
+   * Fires the network request that submits the travel pay claim for the current
+   * appointment. Also handles navigation to the success or error screens based
+   * on the result.
+   */
+  submitTravelClaim: () => void
+  /**
+   * True while the claim is actively being submitted; used to show loading
+   * indicators and disable duplicate submissions.
+   */
+  submittingTravelClaim: boolean
+  /**
+   * The veteran’s contact information (address, phone, etc.) fetched from the
+   * backend. Optional because the data may still be loading when the context is
+   * first created or the user has not yet provided their contact information.
+   */
+  userContactInformation?: UserContactInformation
+  /**
+   * Initiates the SMOC (Simple Mileage Only Claim) flow by navigating to the
+   * mileage entry screen and marking the start time for analytics.
+   */
+  startSmocFlow: () => void
 }
 
 /**
