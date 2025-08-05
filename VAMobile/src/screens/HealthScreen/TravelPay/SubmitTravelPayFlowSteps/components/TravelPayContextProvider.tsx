@@ -20,8 +20,8 @@ export default function TravelPayContextProvider({
   appointmentRouteKey: string
 }) {
   const smocFlowStartDate = useRef<string | undefined>(undefined)
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
-  const [checkboxError, setCheckboxError] = useState<boolean>(false)
+  const [penaltyStatementAccepted, setPenaltyStatementAccepted] = useState(false)
+  const [penaltyStatementError, setPenaltyStatementError] = useState<boolean>(false)
 
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(
     appointment.id,
@@ -37,8 +37,8 @@ export default function TravelPayContextProvider({
   }
 
   const submitTravelClaim = async () => {
-    if (!isCheckboxChecked) {
-      setCheckboxError(true)
+    if (!penaltyStatementAccepted) {
+      setPenaltyStatementError(true)
       return
     }
 
@@ -68,8 +68,8 @@ export default function TravelPayContextProvider({
               facilityName: data.data.attributes.facilityName,
               status: data.data.attributes.claimStatus,
             })
-            setIsCheckboxChecked(false)
-            setCheckboxError(false)
+            setPenaltyStatementAccepted(false)
+            setPenaltyStatementError(false)
             smocFlowStartDate.current = undefined
           } else {
             navigateToErrorScreen('error')
@@ -89,9 +89,9 @@ export default function TravelPayContextProvider({
     <TravelPayContext.Provider
       value={{
         appointment,
-        isCheckboxChecked,
-        setIsCheckboxChecked,
-        checkboxError,
+        penaltyStatementAccepted,
+        setPenaltyStatementAccepted,
+        penaltyStatementError,
         submitTravelClaim,
         submittingTravelClaim,
         userContactInformation: userContactInformationQuery.data,
