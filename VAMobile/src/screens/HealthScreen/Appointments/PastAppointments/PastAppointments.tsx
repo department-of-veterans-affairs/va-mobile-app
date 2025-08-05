@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import DatePicker from 'components/DatePicker/DatePicker'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -247,6 +248,7 @@ function PastAppointments({
           cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
+      <DatePicker />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
