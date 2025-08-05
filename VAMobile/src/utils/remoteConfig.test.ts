@@ -47,6 +47,8 @@ const mockOverrides = {
   whatsNewUI: false,
   veteranStatusCardRedesign: true,
   allergies: true,
+  appointmentsTestTime: true,
+  internationalPhoneNumber: false,
 }
 
 describe('activate', () => {

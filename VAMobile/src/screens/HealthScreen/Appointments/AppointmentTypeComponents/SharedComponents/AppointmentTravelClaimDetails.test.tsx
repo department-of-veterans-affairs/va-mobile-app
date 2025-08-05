@@ -19,6 +19,16 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+const mockMutationState = { status: 'success' }
+let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+jest.mock('utils/travelPay', () => {
+  const original = jest.requireActual('utils/travelPay')
+  return {
+    ...original,
+    useTravelClaimSubmissionMutationState: () => mockTravelClaimSubmissionMutationState,
+  }
+})
+
 const baseAppointmentAttributes: AppointmentAttributes = {
   appointmentType: AppointmentTypeConstants.VA,
   status: AppointmentStatusConstants.BOOKED,
@@ -61,6 +71,7 @@ const baseAppointmentAttributes: AppointmentAttributes = {
   isCovidVaccine: false,
   isPending: false,
   vetextId: '600;3210206',
+  travelPayEligible: true,
 }
 
 const travelPayClaimData: AppointmentTravelPayClaim = {
@@ -82,17 +93,19 @@ type createProps = {
   startDateUtc?: AppointmentAttributes['startDateUtc']
   travelPayClaim?: AppointmentTravelPayClaim
   appointmentType: AppointmentType
+  travelPayEligible?: boolean
 }
 
 const createTestAppointmentAttributes = ({
   startDateUtc = mockStartDateUtc,
   travelPayClaim,
+  travelPayEligible = true,
   ...rest
 }: createProps): AppointmentAttributes => {
   const { timeZone } = baseAppointmentAttributes
   // Convert the UTC date to the local date
   const startDateLocal = new Date(startDateUtc).toLocaleString('en-US', { timeZone })
-  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim }
+  return { ...baseAppointmentAttributes, ...rest, startDateUtc, startDateLocal, travelPayClaim, travelPayEligible }
 }
 
 const tests = [
@@ -100,6 +113,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.COMMUNITY_CARE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Community Care',
   },
@@ -107,6 +121,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'In Person VA',
   },
@@ -114,6 +129,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video Atlas',
   },
@@ -121,6 +137,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video GFE',
   },
@@ -128,6 +145,7 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: false,
     }),
     testName: 'Video Home',
   },
@@ -135,12 +153,17 @@ const tests = [
     attributes: createTestAppointmentAttributes({
       appointmentType: AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE,
       travelPayClaim: travelPayClaimData,
+      travelPayEligible: true,
     }),
     testName: 'Video On Site',
   },
 ]
 
 describe('AppointmentTravelClaimDetails', () => {
+  afterEach(() => {
+    mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+  })
+
   const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (
     subType: AppointmentDetailsSubType,
@@ -152,7 +175,11 @@ describe('AppointmentTravelClaimDetails', () => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     when(mockFeatureEnabled).calledWith('travelPayClaimsFullHistory').mockReturnValue(travelPayClaimsFullHistoryEnabled)
     render(
-      <AppointmentTravelClaimDetails attributes={{ ...baseAppointmentAttributes, ...attributes }} subType={subType} />,
+      <AppointmentTravelClaimDetails
+        appointmentID="appointmentID-123"
+        attributes={{ ...baseAppointmentAttributes, ...attributes }}
+        subType={subType}
+      />,
       { ...options },
     )
   }
@@ -388,6 +415,22 @@ describe('AppointmentTravelClaimDetails', () => {
               ),
             ).toBeTruthy()
           })
+        })
+      })
+
+      describe('when the claim submission is in progress', () => {
+        it('should render status of Submitting and a link to the claim status page', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined, true)
+          expect(
+            screen.getByText(
+              t('travelPay.travelClaimFiledDetails.status', {
+                status: t('travelPay.travelClaimFiledDetails.status.submitting'),
+              }),
+            ),
+          ).toBeTruthy()
+          expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
+          expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
         })
       })
     })

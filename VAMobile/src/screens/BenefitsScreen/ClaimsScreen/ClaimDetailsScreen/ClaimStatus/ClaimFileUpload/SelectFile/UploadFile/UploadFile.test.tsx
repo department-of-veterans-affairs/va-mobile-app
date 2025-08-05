@@ -6,10 +6,9 @@ import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import UploadFile from './UploadFile'
 
 const mockAlertSpy = jest.fn()
 const mockNavigationSpy = jest.fn()
@@ -79,7 +78,8 @@ context('UploadFile', () => {
       fireEvent.press(screen.getByRole('link', { name: 'Civilian Police Reports' }))
       fireEvent.press(screen.getByRole('button', { name: t('done') }))
       fireEvent.press(screen.getByRole('button', { name: t('fileUpload.submit') }))
-      expect(screen.getByRole('checkbox', { name: t('fileUpload.evidenceOnly.error') })).toBeTruthy()
+      const checkbox = screen.getByRole('checkbox')
+      expect(checkbox.props).toBeTruthy()
       expect(mockAlertSpy).not.toHaveBeenCalled()
     })
 

@@ -2,12 +2,12 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
+import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
 import { context, mockNavProps, render } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'
-
-import UpcomingAppointments from './UpcomingAppointments'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -19,11 +19,15 @@ jest.mock('../../../../utils/hooks', () => {
 })
 
 context('UpcomingAppointments', () => {
+  const currentDate = DateTime.local().plus({ hours: 1 })
+
   const appointmentData: AppointmentsList = [
     {
       ...defaultAppointment,
       attributes: {
         ...defaultAppointment.attributes,
+        startDateLocal: currentDate.toISO(),
+        startDateUtc: currentDate.toUTC().toISO(),
         healthcareService: undefined,
       },
     },
@@ -59,10 +63,12 @@ context('UpcomingAppointments', () => {
 
   describe('on appointment press', () => {
     it('calls useRouteNavigation', async () => {
+      const dateForAppointment = DateTime.fromISO(appointmentData[0].attributes.startDateLocal)
+        .setZone(appointmentData[0].attributes.timeZone)
+        .toFormat('cccc, LLLL d, yyyy h:mm a ZZZZ')
+
       initializeTestInstance({ data: appointmentData })
-      fireEvent.press(
-        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
-      )
+      fireEvent.press(screen.getByTestId(`${dateForAppointment} Confirmed At VA Long Beach Healthcare System`))
       expect(mockNavigationSpy).toHaveBeenCalledWith('UpcomingAppointmentDetails', {
         appointment: appointmentData[0],
         page: 1,

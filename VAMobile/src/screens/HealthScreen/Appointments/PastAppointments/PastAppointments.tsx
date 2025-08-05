@@ -1,24 +1,23 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
 
-import { AppointmentData, AppointmentsDateRange, AppointmentsGetData, AppointmentsList } from 'api/types'
+import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { getGroupedAppointments } from 'utils/appointments'
+import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -52,7 +51,6 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const [appointmentsToShow, setAppointmentsToShow] = useState<AppointmentsList>([])
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -66,11 +64,6 @@ function PastAppointments({
     totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
   }
   const { perPage, totalEntries } = pagination
-
-  useEffect(() => {
-    const appointmentsList = appointmentsData?.data.slice((page - 1) * perPage, page * perPage)
-    setAppointmentsToShow(appointmentsList || [])
-  }, [appointmentsData?.data, page, perPage])
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -118,7 +111,7 @@ function PastAppointments({
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
@@ -155,7 +148,7 @@ function PastAppointments({
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ days: 1 }).endOf('day') },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.endOf('day') },
         timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
@@ -170,6 +163,20 @@ function PastAppointments({
 
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+
+  const filteredAppointments = useMemo(
+    () =>
+      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS ||
+      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR
+        ? filterAppointments(appointmentsData?.data || [], true)
+        : appointmentsData?.data,
+    [appointmentsData?.data, datePickerOption],
+  )
+
+  const appointmentsToShow = useMemo(
+    () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
+    [filteredAppointments, page, perPage],
+  )
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Keyboard, Pressable, PressableProps, TextInput, TextInputProps, ViewStyle } from 'react-native'
+import { Keyboard, Pressable, PressableProps, SectionList, TextInput, TextInputProps, ViewStyle } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
@@ -11,13 +11,23 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
 export type ComboBoxProps = {
+  titleKey: string
   selectedValue?: ComboBoxItem
   onSelectionChange: (item?: ComboBoxItem) => void
   comboBoxOptions: ComboBoxOptions
   onClose: () => void
+  virtualized?: boolean
+  hideGroupsHeaders?: boolean
 }
 
-const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBoxOptions, onClose }) => {
+const ComboBox: FC<ComboBoxProps> = ({
+  onSelectionChange,
+  comboBoxOptions,
+  onClose,
+  titleKey,
+  hideGroupsHeaders = false,
+  virtualized = false,
+}) => {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -75,6 +85,10 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   }
 
   const listItemStyle: BoxProps = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.dimensions.smallMarginBetween,
     pl: theme.dimensions.listItemComboBoxMarginLeft,
     py: theme.dimensions.smallMarginBetween,
     borderColor: 'primary',
@@ -101,10 +115,6 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
       fontFamily: theme.fontFace.regular,
     },
   }
-
-  useEffect(() => {
-    setFilterStr(selectedValue?.label || '')
-  }, [selectedValue])
 
   useEffect(() => {
     const updatedFilteredOpts: ComboBoxOptions = {}
@@ -142,25 +152,78 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   }
 
   const renderItems = () => {
+    if (virtualized) {
+      const sections = Object.entries(filteredOptions).map((keys) => {
+        return {
+          title: keys[0],
+          data: keys[1] as Array<ComboBoxItem>,
+        }
+      })
+
+      const renderItem = ({ item }: { item: ComboBoxItem }) => {
+        const handleSelection = () => {
+          onSelectionChange(item)
+          onClose()
+        }
+
+        return (
+          <Pressable accessibilityRole="button" onPress={handleSelection}>
+            <Box {...listItemStyle}>
+              {item.icon}
+              {renderFilterableItem(item.label)}
+            </Box>
+          </Pressable>
+        )
+      }
+
+      const renderSectionHeader = ({ section: { title } }: { section: { title: string } }) => {
+        return (
+          <Box {...listGroupHeaderStyle}>
+            <TextView variant={'MobileBodyBold'}>{title}</TextView>
+          </Box>
+        )
+      }
+
+      return (
+        <SectionList
+          sections={sections}
+          renderItem={renderItem}
+          renderSectionHeader={hideGroupsHeaders ? undefined : renderSectionHeader}
+          keyExtractor={(item, index) => `${item.value}-${index}`}
+        />
+      )
+    }
+
     return Object.entries(filteredOptions).map((keys) => {
       const groupName = keys[0]
       const items = keys[1] as ComboBoxItem[]
       if (!items.length) {
         return <></>
       }
-      return (
-        <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
+
+      let header
+      if (!hideGroupsHeaders) {
+        header = (
           <Box {...listGroupHeaderStyle}>
             <TextView variant={'MobileBodyBold'}>{groupName}</TextView>
           </Box>
-          {items.map(({ value, label }) => {
+        )
+      }
+
+      return (
+        <Box borderBottomWidth={1} borderColor={'primary'} key={groupName}>
+          {header}
+          {items.map(({ value, label, icon }) => {
             const handleSelection = () => {
               onSelectionChange({ value, label })
               onClose()
             }
             return (
               <Pressable accessibilityRole="button" onPress={handleSelection} key={value}>
-                <Box {...listItemStyle}>{renderFilterableItem(label)}</Box>
+                <Box {...listItemStyle}>
+                  {icon}
+                  {renderFilterableItem(label)}
+                </Box>
               </Pressable>
             )
           })}
@@ -172,7 +235,7 @@ const ComboBox: FC<ComboBoxProps> = ({ selectedValue, onSelectionChange, comboBo
   return (
     <Box {...containerStyle}>
       <Box {...headerStyle}>
-        <TextView variant={'MobileBodyBold'}>{t('secureMessaging.formMessage.careTeam')}</TextView>
+        <TextView variant={'MobileBodyBold'}>{t(titleKey)}</TextView>
         <Pressable {...closeIconProps}>
           <Icon name={'Close'} width={30} height={30} fill={'base'} />
         </Pressable>

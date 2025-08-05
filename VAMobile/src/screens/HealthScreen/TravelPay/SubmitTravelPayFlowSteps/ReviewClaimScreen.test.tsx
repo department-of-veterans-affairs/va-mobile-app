@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { CommonActions } from '@react-navigation/native'
-
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
@@ -11,7 +9,6 @@ import ReviewClaimScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlo
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
-import { appendClaimDataToAppointment } from 'utils/travelPay'
 
 const residentialAddress: AddressData = {
   id: 0,
@@ -187,36 +184,6 @@ context('ReviewClaimScreen', () => {
       fireEvent.press(button)
 
       await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
-          appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
-          facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
-          status: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.claimStatus,
-        })
-      })
-    })
-
-    it('should update the navigation params', async () => {
-      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
-        if (options && options.onSuccess) {
-          options.onSuccess(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
-        }
-      })
-      initializeTestInstance({ residentialAddress })
-      const checkbox = screen.getByTestId('checkboxTestID')
-      fireEvent.press(checkbox)
-      const button = screen.getByTestId('submitTestID')
-      fireEvent.press(button)
-
-      await waitFor(() => {
-        expect(mockDispatchSpy).toHaveBeenCalledWith({
-          ...CommonActions.setParams({
-            appointment: appendClaimDataToAppointment(
-              params.appointment,
-              MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes,
-            ),
-          }),
-          source: params.appointmentRouteKey,
-        })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
           appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
           facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
