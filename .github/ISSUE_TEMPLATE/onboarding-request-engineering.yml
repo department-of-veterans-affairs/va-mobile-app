@@ -66,17 +66,19 @@ body:
       value: |
         The checklist items below should be left blank, as they will be filled out during the onboarding process.
 
-  - type: checkboxes
-    attributes:
-      label: Process Documentation
-      description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
-      options:
-        - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
-        - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Features/PushNotifications)
-        - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/AccessibilityInformation)
-        - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
-        - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
-        - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+- type: checkboxes
+  attributes:
+    label: Process Documentation
+    description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
+    options:
+    - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
+    - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Features/PushNotifications)
+    - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/AccessibilityInformation)
+    - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
+    - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
+    - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+    - label: Review [office hours](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Contributing/OfficeHours) documentation
+   
 
   - type: checkboxes
     attributes:
