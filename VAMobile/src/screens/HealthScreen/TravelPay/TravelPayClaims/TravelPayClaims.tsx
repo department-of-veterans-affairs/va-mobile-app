@@ -6,6 +6,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { FeatureLandingTemplate } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { TravelPayClaimsFilters } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilters'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
@@ -17,8 +18,9 @@ export function TravelPayClaims({ navigation }: TravelPayClaimsProps) {
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('travelPay.statusList.title')}
-      testID="travelPayClaimsTestID"
-    />
+      testID="travelPayClaimsTestID">
+      <TravelPayClaimsFilters />
+    </FeatureLandingTemplate>
   )
 }
 
