@@ -327,6 +327,8 @@ const checkBurdenStatementScreen = async () => {
 
   await element(by.id(TravelPayE2eIdConstants.CLOSE_BUTTON_ID)).tap()
 
+  // 115452: Added to fix race conditions with the modal not being fully closed
+  // and interfering with view visibility in subsequent steps.
   await waitFor(element(by.id(TravelPayE2eIdConstants.BURDEN_STATEMENT_SCREEN_ID)))
     .not.toExist()
     .withTimeout(6000)

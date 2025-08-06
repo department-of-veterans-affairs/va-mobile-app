@@ -354,7 +354,8 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
 
-  // Wait for the modal to be dismissed (contained element no longer exists)
+  // 115452: Added to fix race conditions with the popup not being fully gone
+  // and interfering with view visibility in subsequent steps.
   await waitFor(element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)))
     .not.toExist()
     .withTimeout(6000)
