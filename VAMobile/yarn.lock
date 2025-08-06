@@ -1503,10 +1503,10 @@
   dependencies:
     eslint-plugin-deprecate "^0.8.4"
 
-"@department-of-veterans-affairs/mobile-assets@0.14.0":
-  version "0.14.0"
-  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.14.0.tgz#d035e01d646d5d3a596f52612dad6e443abbd669"
-  integrity sha512-yz3UK4TrmZJePII/MZEpOY1L8dDYGgtrGB6nk4omXE8DX4mJGWXn7D3D05qHNI7EtkjPUjnWHuQlrcIIp40vyQ==
+"@department-of-veterans-affairs/mobile-assets@0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@department-of-veterans-affairs/mobile-assets/-/mobile-assets-0.15.1.tgz#c7bbc0490addd15f5b4b3e56fe178e4891d99f7c"
+  integrity sha512-5rEBxn8AxAYxx7dX3vbMMCalxIXFOPJE7IwK9jTt3VC9Unz29rSFxk1ujy7ew3ZBbS2gADm57VYpZ6dORfeXXg==
 
 "@department-of-veterans-affairs/mobile-component-library@0.30.3":
   version "0.30.3"
@@ -6457,12 +6457,14 @@ foreground-child@^3.1.0:
     signal-exit "^4.0.1"
 
 form-data@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
-  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.4.tgz#784cdcce0669a9d68e94d11ac4eea98088edd2c4"
+  integrity sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
+    es-set-tostringtag "^2.1.0"
+    hasown "^2.0.2"
     mime-types "^2.1.12"
 
 fresh@0.5.2:

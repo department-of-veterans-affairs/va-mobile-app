@@ -77,6 +77,7 @@ body:
     - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
     - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
     - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+    - label: Review [office hours](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Contributing/OfficeHours) documentation
    
 
 - type: checkboxes
