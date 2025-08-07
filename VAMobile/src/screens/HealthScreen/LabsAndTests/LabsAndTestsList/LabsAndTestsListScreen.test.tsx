@@ -6,6 +6,7 @@ import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { MONTHS } from 'utils/dateUtils'
 
 context('LabsAndTestsListScreen', () => {
   afterEach(() => {
@@ -29,8 +30,8 @@ context('LabsAndTestsListScreen', () => {
     },
   ]
 
-  const initializeTestInstance = (labAndTest: Array<LabsAndTests> = defaultLabsAndTests) => {
-    const props = mockNavProps(undefined, undefined, { params: { labOrTest: labAndTest } })
+  const initializeTestInstance = () => {
+    const props = mockNavProps(undefined, undefined, undefined)
     return render(<LabsAndTestsListScreen {...props} />)
   }
 
@@ -51,10 +52,15 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to 3 months in date picker', async () => {
+  it('defaults to current month and year in pickers', async () => {
     initializeTestInstance()
-    expect(screen.getByTestId('labsAndTestDataRangeTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeTestID').children[0]).toEqual('Past 3 months')
+    const currentTime = new Date()
+    expect(screen.getByTestId('labsAndTestDataRangeYearTestID')).toBeTruthy()
+    expect(screen.getByTestId('labsAndTestDataRangeYearTestID').children[0]).toEqual(
+      currentTime.getFullYear().toString(),
+    )
+    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID')).toBeTruthy()
+    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID').children[0]).toEqual(MONTHS[currentTime.getMonth()])
   })
 
   it('renders the correct availability timing', async () => {

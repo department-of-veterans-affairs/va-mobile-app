@@ -191,7 +191,6 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   const textViewProps: TextViewProps = {
     color: colorOverride ? (colorOverride as ColorVariant) : 'link',
     variant: 'MobileBody',
-    ml: 4,
     textDecoration: 'underline',
     textDecorationColor: colorOverride ? (colorOverride as ColorVariant) : 'link',
   }
@@ -207,11 +206,9 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   return (
     <TouchableWithoutFeedback testID={testID} {...pressableProps}>
       <Box flexDirection={'row'} alignItems={'center'} py={py} pr={pr}>
-        {!hideIcon && (
-          <Box pr={3}>
-            {linkType ? (
-              <Icon name={getIconName()} fill={iconColorOverride ?? theme.colors.icon.link} width={25} height={25} />
-            ) : undefined}
+        {!hideIcon && linkType && (
+          <Box pr={7}>
+            <Icon name={getIconName()} fill={iconColorOverride ?? theme.colors.icon.link} width={25} height={25} />
           </Box>
         )}
         <Box flexShrink={1}>

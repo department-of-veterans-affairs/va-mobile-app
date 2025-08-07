@@ -1,4 +1,13 @@
-import { AccessibilityValue, AppStateStatus, NativeModules, PixelRatio } from 'react-native'
+import { Component, ForwardedRef, MutableRefObject } from 'react'
+import {
+  AccessibilityInfo,
+  AccessibilityValue,
+  AppStateStatus,
+  NativeModules,
+  PixelRatio,
+  UIManager,
+  findNodeHandle,
+} from 'react-native'
 
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
@@ -8,6 +17,7 @@ import { TextLine } from 'components/types'
 import { RootState } from 'store'
 import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/slices/accessibilitySlice'
 import getEnv from 'utils/env'
+import { isAndroid } from 'utils/platform'
 
 const { RNCheckVoiceOver } = NativeModules
 
@@ -69,4 +79,33 @@ export const updateIsVoiceOverTalkBackRunning = async (
  */
 export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
   return _.map(textLines, 'text').join(' ')
+}
+
+/**
+ * Returns testID given a ListItems textLines with hyphen
+ */
+export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join('—')
+}
+
+/**
+ * Sets focus point for screen reader.
+ */
+export const setAccessibilityFocus = (ref: MutableRefObject<null> | ForwardedRef<unknown>) => {
+  let focusPoint
+  if (ref != null && 'current' in ref) {
+    focusPoint = findNodeHandle(ref.current as Component)
+  }
+  if (focusPoint) {
+    if (isAndroid()) {
+      // @ts-ignore: sendAccessibilityEvent is missing from @types/react-native
+      UIManager.sendAccessibilityEvent(
+        focusPoint,
+        // @ts-ignore: AccessibilityEventTypes is missing from @types/react-native
+        UIManager.AccessibilityEventTypes.typeViewFocused,
+      )
+    } else {
+      AccessibilityInfo.setAccessibilityFocus(focusPoint)
+    }
+  }
 }

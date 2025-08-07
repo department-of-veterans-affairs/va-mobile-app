@@ -16,21 +16,23 @@ graph LR
         Appeals([Appeals])
 
         Claims([Claims])
-        DisabilityRating([Disability Rating])
-        PaymentInfo([Payment Info])
 
+        DisabilityRating([Disability Rating])
+        VeteranVerification([Veteran Verification])
+
+        PaymentInfo([Payment Info])
+    
         Allergies([Allergies])
         Immunizations([Immunizations])
-
         LabsAndTests([Labs And Tests])
         Locations([Locations])
         Observations([Observations])
 
+        Letters([Letters])
+
         Dependents([Dependents])
         Awards([Awards])
         PaymentHistory([Payment History])
-
-        Letters([Letters])
 
         DecisionLetters([Decision Letters])
         Efolder([Efolder])
@@ -74,7 +76,6 @@ graph LR
         Checkin([Check In])
         Pensions([Pensions])
         PushNotifications([Push Notifications])
-
     end
     
     subgraph Upstream[Upstream Services]
@@ -83,7 +84,7 @@ graph LR
         subgraph Lighthouse
             LHBenefitsClaims([Benefits Claims API])
             LHVetService([Vet Service History and Eligibility API])
-            %% LHLetters([VA Letter Generator API]) %% In Progress
+            LHLetters([VA Letter Generator API])
             LHDirectDeposit([Direct Deposit Management API])
             LHVetHealth(["Veterans Health /
                 Patient Health API (FHIR)"])
@@ -96,7 +97,7 @@ graph LR
         VistA([VistA])
         VEText([VEText])
         SIS([SIS])
-        BGS([BGS])
+        BEP([BEP])
         VBMS([VBMS])
         CorpDB([CorpDB])
         DSLogon([DSLogon])
@@ -105,7 +106,6 @@ graph LR
         VAProfile([VAProfile])
         MPI([MPI])
         TooManyToList([Too Many To List])
-        EVSS([EVSS])
         subgraph MHV
             RX(["RX (Prescriptions)"])
             SM(["SM (Secure Messaging)"])
@@ -128,34 +128,29 @@ graph LR
 
     Claims --> LHBenefitsClaims
     DisabilityRating --> LHVetService
+    VeteranVerification --> LHVetService
     Dependents --> LHBenefitsIntake
     PaymentInfo --> LHDirectDeposit
-    %% Letters --> LHLetters # In Progress
 
     Allergies --> LHVetHealth
     Immunizations --> LHVetHealth
     LabsAndTests --> LHVetHealth
     Locations --> LHVetHealth
     Observations --> LHVetHealth
+    Letters --> LHLetters
 
-    Lighthouse ---> DEERS
+    Lighthouse --> DEERS
     Lighthouse --> ArcGIS
     Lighthouse --> CDW
     Lighthouse ---> VBMS
-    Lighthouse --> BGS
+    Lighthouse --> BEP
 
     Dependents --> VBMS
-    Dependents --> BGS
-    Awards --> BGS
-    PaymentHistory --> BGS
-    BGS --> CorpDB
+    Dependents --> BEP
+    Awards --> BEP
+    PaymentHistory --> BEP
+    BEP --> CorpDB
 
-    Letters --> EVSS
-    EVSS --> BGS
-    EVSS --> DEERS
-    EVSS --> VBMS
-    EVSS --> MPI
-    
     DecisionLetters --> VBMS
     Efolder --> VBMS
     VBMS --> CorpDB
@@ -204,7 +199,6 @@ graph LR
     PushNotifications ---> VEText
     VEText --> APNsGCM
     VEText --> AWS
-
 ```
 Image: Diagram mapping all the upstream services used by the VA Mobile API
 
@@ -216,7 +210,6 @@ Image: Diagram mapping all the upstream services used by the VA Mobile API
 | Caseflow   | [#caseflow-support-team](https://dsva.slack.com/archives/C0200QGKPKR)                                                                                                                                 | n/a                                       |
 | CHIP (Check-in)   | [#check-in-experience](https://dsva.slack.com/archives/C022AC2STBM)                                                                                                                                   | n/a                                       |
 | DSLogon    | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN)                                                                                                                                            | n/a                                       |
-| EVSS       | [#evss-prod](https://dsva.slack.com/archives/C8R3JS8BU)                                                                                                                                               | n/a                                       |
 | ID.ME      | [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN)                                                                                                                                            | n/a                                       |
 | Lighthouse | [#lighthouse-infrastructure](https://dsva.slack.com/archives/C013VCQKSE7)                                                                                                                             | n/a                                       |
 | MHV        | [#mhv-secure-messaging](https://dsva.slack.com/archives/C03ECSBGSKX), [#mhv-medical-records](https://dsva.slack.com/archives/C03Q2UQL1AS), [#vsp-identity](https://dsva.slack.com/archives/CSFV4QTKN) | n/a                                       |
