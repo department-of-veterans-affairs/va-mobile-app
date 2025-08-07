@@ -1,9 +1,10 @@
 import Foundation
+import React
 
 @objc(RNDatePickerManager)
 class RNDatePickerManager: RCTViewManager {
   override func view() -> UIView! {
-    return RNDatePickerView()
+    return RNDatePicker()
   }
 
   override static func requiresMainQueueSetup() -> Bool {

@@ -1,6 +1,7 @@
 import UIKit
+import React
 
-class RNDatePickerView: UIView {
+class RNDatePicker: UIView {
   let datePicker = UIDatePicker()
 
   var onDateChange: RCTBubblingEventBlock?

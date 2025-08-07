@@ -4,6 +4,7 @@ import { Pressable } from 'react-native'
 import { DateTime } from 'luxon'
 
 import { Box, TextView } from 'components'
+import RNDatePicker from 'components/DatePicker/RNDatePicker'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -16,6 +17,10 @@ export type DatePickerFieldProps = {
 const DatePickerField: FC<DatePickerFieldProps> = ({ label, date }) => {
   const [showCal, setShowCal] = useState(false)
   const theme = useTheme()
+
+  const datePickerStyle = {
+    height: 330,
+  }
 
   return (
     <>
@@ -30,8 +35,8 @@ const DatePickerField: FC<DatePickerFieldProps> = ({ label, date }) => {
         </Pressable>
       </Box>
       {showCal ? (
-        <Box>
-          <TextView>Calendar stuff</TextView>
+        <Box flex={1}>
+          <RNDatePicker style={datePickerStyle} />
         </Box>
       ) : (
         <></>

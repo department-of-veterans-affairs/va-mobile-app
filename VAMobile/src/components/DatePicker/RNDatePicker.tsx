@@ -7,6 +7,6 @@ interface Props extends ViewProps {
   onDateChange?: (event: DateChangeEvent) => void
 }
 
-const RNDatePicker = requireNativeComponent<Props>('RNDatePickerManager')
+const RNDatePicker = requireNativeComponent<Props>('RNDatePicker')
 
 export default RNDatePicker
