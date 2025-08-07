@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -21,6 +21,8 @@ export type ComboBoxItem = {
   label: string
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
   value: string
+  /** optional icon for each row */
+  icon?: Element
 }
 
 export type ComboBoxOptions = Record<string, Array<unknown>>
@@ -50,6 +52,16 @@ export type ComboBoxInputProps = {
   comboBoxOptions: ComboBoxOptions
   /** Optional TestID */
   testID?: string
+  /** An icon to be rendered left of the selector */
+  startIcon?: ReactElement
+  /** An optional boolean to use a virtualized list */
+  virtualized?: boolean
+  /** An optional boolean to hide the remove button */
+  hideRemoveButton?: boolean
+  /** An optional boolean to hide the group header titles */
+  hideGroupsHeaders?: boolean
+  /** i18n id for the title of the selector modal*/
+  titleKey: string
 }
 
 const ComboBoxInput: FC<ComboBoxInputProps> = ({
@@ -61,6 +73,11 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   error,
   labelKey,
   testID,
+  startIcon,
+  virtualized,
+  titleKey,
+  hideGroupsHeaders = false,
+  hideRemoveButton = false,
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -91,10 +108,15 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
               flexDirection={'row'}
               justifyContent={'space-between'}
               alignItems={'center'}>
+              {startIcon && (
+                <Box ml={theme.dimensions.tinyMarginBetween} mr={theme.dimensions.smallMarginBetween}>
+                  {startIcon}
+                </Box>
+              )}
               <TextView testID={testID} variant="MobileBody" flex={1}>
                 {selectedValue?.label}
               </TextView>
-              {selectedValue && (
+              {selectedValue && !hideRemoveButton && (
                 <Pressable accessibilityRole="button" onPress={() => onSelectionChange(undefined)}>
                   <Box ml={16} my={12}>
                     <Icon name="Close" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
@@ -112,9 +134,12 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
   }
 
   const comboboxProps: ComboBoxProps = {
+    titleKey,
     selectedValue,
     comboBoxOptions,
     onSelectionChange,
+    virtualized,
+    hideGroupsHeaders,
     onClose: () => {
       setModalVisible(false)
       setFocusUpdated(true)

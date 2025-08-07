@@ -267,6 +267,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     {
       fieldType: FieldType.ComboBox,
       fieldProps: {
+        titleKey: 'secureMessaging.formMessage.careTeam',
         labelKey: 'secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,

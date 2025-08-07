@@ -10,16 +10,15 @@ import { BackButton } from 'components/BackButton'
 import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
+import WebviewControlButton from 'screens/WebviewScreen/WebviewControlButton'
+import WebviewControls, { WebviewControlsProps } from 'screens/WebviewScreen/WebviewControls'
+import WebviewTitle from 'screens/WebviewScreen/WebviewTitle'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { fetchSSOCookies } from 'utils/auth'
 import { useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import WebviewControlButton from './WebviewControlButton'
-import WebviewControls, { WebviewControlsProps } from './WebviewControls'
-import WebviewTitle from './WebviewTitle'
 
 type ReloadButtonProps = {
   reloadPressed: () => void
@@ -159,9 +158,11 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
   // VA website does not allow scroll when the feedback screen is up
   // Only visually hiding the screen, so adjust overflow style to enable scrolling
+  // Use visibility to maintain spacing provided by mobile-nav so elements don't collide
   const css = `
   body.merger { overflow: scroll !important; }
-  header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
+  header, footer, va-breadcrumbs, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
+  .mobile-nav { visibility: hidden; height: 1.5rem }
   nav[aria-label="My HealtheVet"] { display: none; }
 `
 
