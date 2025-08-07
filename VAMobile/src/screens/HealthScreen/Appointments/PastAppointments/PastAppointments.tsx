@@ -3,10 +3,19 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
-import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import {
+  AlertWithHaptics,
+  Box,
+  LoadingComponent,
+  Pagination,
+  PaginationProps,
+  TextView,
+  VAModalPicker,
+} from 'components'
 import DatePicker from 'components/DatePicker/DatePicker'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
@@ -19,6 +28,7 @@ import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { datePicker } from 'utils/rnDatePicker'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -52,6 +62,7 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [androidDate, setAndroidDate] = useState(DateTime.local().toString())
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -237,6 +248,16 @@ function PastAppointments({
 
   return (
     <Box>
+      <Box>
+        <Button
+          label="Pick a Date"
+          onPress={async () => {
+            const selected = await datePicker()
+            if (selected) setAndroidDate(selected)
+          }}
+        />
+        <TextView>Selected date: {androidDate ? androidDate : 'none'}</TextView>
+      </Box>
       <DatePicker labelKey={'pastAppointments.selectAPastDateRange'} />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
