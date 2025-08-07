@@ -239,7 +239,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
-    // Recent recipients must be included in allRecipients
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within the allRecipients list
     const allRecipientsIds = allRecipients.map((r) => r.value)
     const filteredRecentRecipients = recentRecipients.filter((r) => {
       if (!r.value) return false
