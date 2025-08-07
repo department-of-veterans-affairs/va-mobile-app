@@ -241,11 +241,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
     // Recent recipients must match
     // 1. Selected care system
-    // 2. Included within the allRecipients list
-    const allRecipientsIds = allRecipients.map((r) => r.value)
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
     const filteredRecentRecipients = recentRecipients.filter((r) => {
       if (!r.value) return false
-      return allRecipientsIds.includes(r.value)
+      return allRecipientsIds.has(r.value)
     })
 
     return {
