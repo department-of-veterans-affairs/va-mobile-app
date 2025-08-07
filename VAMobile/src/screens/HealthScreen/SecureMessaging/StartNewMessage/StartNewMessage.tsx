@@ -239,8 +239,15 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
+    // Recent recipients must be included in allRecipients
+    const allRecipientsIds = allRecipients.map((r) => r.value)
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.includes(r.value)
+    })
+
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
       [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
     }
   }
