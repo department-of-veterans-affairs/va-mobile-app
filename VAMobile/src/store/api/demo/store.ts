@@ -16,6 +16,9 @@ import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredN
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
 import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
+import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
+import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
@@ -38,7 +41,6 @@ import {
 } from 'store/api/demo/secureMessaging'
 import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Intersection type denoting the demo data store
@@ -140,75 +142,14 @@ export const initDemoStore = async (demoUser: string | null = 'kimberlyWashingto
   let userData
   switch (demoUser) {
     case 'benjaminAdams':
-      userData = [
-        featureEnabled('appointmentsTestTime')
-          ? import('./mocks/benjaminAdams/appointmentsTestTime.json')
-          : import('./mocks/benjaminAdams/appointments.json'),
-        import('./mocks/benjaminAdams/appointments.json'),
-        import('./mocks/benjaminAdams/claims.json'),
-        import('./mocks/benjaminAdams/profile.json'),
-        import('./mocks/benjaminAdams/secureMessaging.json'),
-        import('./mocks/benjaminAdams/vaccine.json'),
-        import('./mocks/benjaminAdams/disabilityRating.json'),
-        import('./mocks/benjaminAdams/decisionLetters.json'),
-        import('./mocks/benjaminAdams/labsAndTests.json'),
-        import('./mocks/benjaminAdams/letters.json'),
-        import('./mocks/benjaminAdams/payments.json'),
-        import('./mocks/benjaminAdams/prescriptions.json'),
-        import('./mocks/benjaminAdams/notifications.json'),
-        import('./mocks/benjaminAdams/contactInformation.json'),
-        import('./mocks/benjaminAdams/getAuthorizedServices.json'),
-        featureEnabled('cernerTrueForDemo')
-          ? import('./mocks/benjaminAdams/getFacilitiesInfoCerner.json')
-          : import('./mocks/benjaminAdams/getFacilitiesInfo.json'),
-        import('./mocks/benjaminAdams/demographics.json'),
-        import('./mocks/benjaminAdams/personalInformation.json'),
-        import('./mocks/benjaminAdams/allergies.json'),
-      ]
+      userData = importBenjaminAdamsData()
       break
     case 'claraJefferson':
-      userData = [
-        import('./mocks/claraJefferson/profile.json'),
-        import('./mocks/claraJefferson/vaccine.json'),
-        import('./mocks/claraJefferson/labsAndTests.json'),
-        import('./mocks/claraJefferson/notifications.json'),
-        import('./mocks/claraJefferson/contactInformation.json'),
-        import('./mocks/claraJefferson/getAuthorizedServices.json'),
-        featureEnabled('cernerTrueForDemo')
-          ? import('./mocks/claraJefferson/getFacilitiesInfoCerner.json')
-          : import('./mocks/claraJefferson/getFacilitiesInfo.json'),
-        import('./mocks/claraJefferson/demographics.json'),
-        import('./mocks/claraJefferson/personalInformation.json'),
-        import('./mocks/claraJefferson/allergies.json'),
-      ]
+      userData = importClaraJeffersonData()
       break
     case 'kimberlyWashington':
     default:
-      userData = [
-        featureEnabled('appointmentsTestTime')
-          ? import('./mocks/kimberlyWashington/appointmentsTestTime.json')
-          : import('./mocks/kimberlyWashington/appointments.json'),
-        import('./mocks/kimberlyWashington/appointments.json'),
-        import('./mocks/kimberlyWashington/claims.json'),
-        import('./mocks/kimberlyWashington/profile.json'),
-        import('./mocks/kimberlyWashington/secureMessaging.json'),
-        import('./mocks/kimberlyWashington/vaccine.json'),
-        import('./mocks/kimberlyWashington/disabilityRating.json'),
-        import('./mocks/kimberlyWashington/decisionLetters.json'),
-        import('./mocks/kimberlyWashington/labsAndTests.json'),
-        import('./mocks/kimberlyWashington/letters.json'),
-        import('./mocks/kimberlyWashington/payments.json'),
-        import('./mocks/kimberlyWashington/prescriptions.json'),
-        import('./mocks/kimberlyWashington/notifications.json'),
-        import('./mocks/kimberlyWashington/contactInformation.json'),
-        import('./mocks/kimberlyWashington/getAuthorizedServices.json'),
-        featureEnabled('cernerTrueForDemo')
-          ? import('./mocks/kimberlyWashington/getFacilitiesInfoCerner.json')
-          : import('./mocks/kimberlyWashington/getFacilitiesInfo.json'),
-        import('./mocks/kimberlyWashington/demographics.json'),
-        import('./mocks/kimberlyWashington/personalInformation.json'),
-        import('./mocks/kimberlyWashington/allergies.json'),
-      ]
+      userData = importKimberlyWashingtonData()
   }
 
   const data = await Promise.all(userData)
