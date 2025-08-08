@@ -172,7 +172,7 @@ export const getFeatureToggles = (): FeatureToggleValues => {
   }
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
-    if (!key.startsWith('WG')) {
+    if (!key.startsWith('WG') && key in defaults) {
       toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
     }
   })
