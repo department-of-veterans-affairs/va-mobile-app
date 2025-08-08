@@ -1,0 +1,14 @@
+{
+  "default": {
+    "background": "./background.png",
+    "title": {
+      "color": "#545454"
+    }
+  },
+  "data": [
+    {
+      "filter": "ios",
+      "frame": "IPHONE_14_PRO_SILVER"
+    }
+  ]
+}
