@@ -104,17 +104,17 @@ Reactotron can be used for the following:
 
  1. If not installed install the React Native Tools extension in VSCode and follow the setup instructions in the extensions document.
 
-    ![React Tools VSCode](/img/debuggingToolsImage/vscode-react-tools-ext.png) 
+    ![React Tools VSCode](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-react-tools-ext.png) 
 
 2. After the extension is installed launch the debugger. Select the Run and Debug Icon on the left explorer and click the play button on the Attach tp packager dropdown.
 
-    ![Launch Debugger](/img/debuggingToolsImage/vscode-launch-debugger.png) 
+    ![Launch Debugger](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-launch-debugger.png) 
 
 3. Launch the debugger from your device.
 
     The debugger should attach to the VSCode debugger and stop on any breakpoints
 
-    ![VSCode breakpoint](/img/debuggingToolsImage/vscode-debugger-breakpoint.png) 
+    ![VSCode breakpoint](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-debugger-breakpoint.png) 
 
 
     
