@@ -28,7 +28,7 @@ pipeline {
                     // Update the repository with the latest changes from the remote.
                     // This assumes the Mac mini has access to the Git remote.
                     sh 'git checkout .'
-                    sh 'git checkout develop'
+                    sh 'git checkout chore-jbergman-jenkinsfile'
                     sh 'git pull'
                     sh '''
                         export NVM_DIR="$HOME/.nvm"
@@ -37,7 +37,8 @@ pipeline {
 
                         nvm use
                         yarn install
-                        cd ../.github/scripts/app-store-images/generate_images.sh
+                        cd ../.github/scripts/app-store-imagesi
+                        ./generate_images.sh
                     '''
                     // sh 'yarn ios'
                 }
