@@ -1,9 +1,10 @@
 import { requireNativeComponent } from 'react-native'
 import { NativeSyntheticEvent, ViewProps } from 'react-native'
 
-type DateChangeEvent = NativeSyntheticEvent<{ date: string }>
+export type DateChangeEvent = NativeSyntheticEvent<{ date: string }>
 
 interface Props extends ViewProps {
+  date?: string
   onDateChange?: (event: DateChangeEvent) => void
 }
 

@@ -1,25 +1,25 @@
 import React, { FC, useState } from 'react'
 import { Pressable } from 'react-native'
 
-import { DateTime } from 'luxon'
-
 import { Box, TextView } from 'components'
-import RNDatePicker from 'components/DatePicker/RNDatePicker'
+import RNDatePicker, { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 export type DatePickerFieldProps = {
-  /** label */
+  /** Label text for the date picker field */
   label: string
-  /** selected date value */
-  date: DateTime
+  /** Selected date value */
+  date: string
+  /** Callback called when a new date is selected */
+  onDateChange: (e: DateChangeEvent) => void
 }
-const DatePickerField: FC<DatePickerFieldProps> = ({ label, date }) => {
+const DatePickerField: FC<DatePickerFieldProps> = ({ label, date, onDateChange }) => {
   const [showCal, setShowCal] = useState(false)
   const theme = useTheme()
 
   const datePickerStyle = {
-    height: 330,
+    height: 350,
   }
 
   return (
@@ -31,12 +31,12 @@ const DatePickerField: FC<DatePickerFieldProps> = ({ label, date }) => {
           onPress={() => {
             setShowCal((prevShowCal) => !prevShowCal)
           }}>
-          <TextView color={'link'}>{getFormattedDate(date.toISO(), 'MMMM dd, yyyy')}</TextView>
+          <TextView color={'link'}>{getFormattedDate(date, 'MMMM dd, yyyy')}</TextView>
         </Pressable>
       </Box>
       {showCal ? (
         <Box flex={1}>
-          <RNDatePicker style={datePickerStyle} />
+          <RNDatePicker style={datePickerStyle} date={date} onDateChange={onDateChange} />
         </Box>
       ) : (
         <></>

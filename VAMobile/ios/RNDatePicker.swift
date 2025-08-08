@@ -4,7 +4,17 @@ import React
 class RNDatePicker: UIView {
   let datePicker = UIDatePicker()
 
-  var onDateChange: RCTBubblingEventBlock?
+  @objc var onDateChange: RCTBubblingEventBlock?
+ 
+ @objc var date: NSString? {
+   didSet {
+    guard let dateStr = date as String?,
+              let parsedDate = ISO8601DateFormatter().date(from: dateStr) else {
+          return
+        }
+        datePicker.date = parsedDate
+   }
+ }
 
   override init(frame: CGRect) {
     super.init(frame: frame)

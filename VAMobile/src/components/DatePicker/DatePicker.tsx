@@ -7,8 +7,10 @@ import { DateTime } from 'luxon'
 
 import { BorderColorVariant, Box, TextView } from 'components'
 import DatePickerField from 'components/DatePicker/DatePickerField'
+import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 
 export type DatePickerProps = {
   /** i18n key for the text label next the picker field */
@@ -26,13 +28,26 @@ export const renderInputLabelSection = (labelKey: string, t: TFunction): ReactEl
   )
 }
 
+const getNativePickerDate = (date: DateTime) => {
+  // iOS fails to parse date with fractional seconds
+  if (isIOS()) return date.toFormat("yyyy-MM-dd'T'HH:mm:ssZZ")
+  return date.toISO() || ''
+}
+
 const initialDate = DateTime.local()
 
 const DatePicker: FC<DatePickerProps> = ({ labelKey }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [startDate] = useState(initialDate.minus({ months: 5 }).startOf('day'))
-  const [endDate] = useState(initialDate.minus({ months: 3 }).endOf('day'))
+  const [dateRange, setDateRange] = useState({
+    startDate: getNativePickerDate(initialDate.minus({ months: 5 })),
+    endDate: getNativePickerDate(initialDate.minus({ months: 3 })),
+  })
+
+  const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
+    const { date } = e.nativeEvent
+    setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: date }))
+  }
 
   return (
     <Box mx={theme.dimensions.gutter}>
@@ -43,13 +58,17 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey }) => {
         backgroundColor={'list'}
         borderStyle="solid"
         borderColor="primary">
-        <DatePickerField label="From" date={startDate} />
+        <DatePickerField
+          label="From"
+          date={dateRange.startDate}
+          onDateChange={(e) => handleDateChange(e, 'startDate')}
+        />
         <Box
           my={theme.dimensions.condensedMarginBetween}
           borderBottomWidth={1}
           borderColor={theme.colors.border.aboutYou as BorderColorVariant}
         />
-        <DatePickerField label="To" date={endDate} />
+        <DatePickerField label="To" date={dateRange.endDate} onDateChange={(e) => handleDateChange(e, 'endDate')} />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
         <Button onPress={() => {}} label={t('apply')} buttonType={ButtonVariants.Primary} />
