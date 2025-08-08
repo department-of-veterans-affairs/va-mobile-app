@@ -3,7 +3,7 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { TravelPayClaims } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaims'
+import { TravelPayClaims } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { context, mockNavProps, render } from 'testUtils'
 
 context('TravelPayClaims', () => {

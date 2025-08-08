@@ -3,12 +3,12 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { TravelPayClaimsFilters } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilters'
+import { TravelPayClaimsFilter } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import { context, render } from 'testUtils'
 
-context('TravelPayClaimsFilters', () => {
+context('TravelPayClaimsFilter', () => {
   const initializeTestInstance = () => {
-    render(<TravelPayClaimsFilters />)
+    render(<TravelPayClaimsFilter />)
   }
 
   it('initializes correctly', () => {

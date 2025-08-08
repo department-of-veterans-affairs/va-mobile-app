@@ -31,7 +31,7 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
-import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaims'
+import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'

@@ -8,8 +8,8 @@ import { Box, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { TravelPayClaimsFilters } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilters'
-import TravelPaySummaryList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPaySummaryList'
+import { TravelPayClaimsFilter } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import TravelPaySummaryList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
@@ -28,7 +28,7 @@ export function TravelPayClaims({ navigation }: TravelPayClaimsProps) {
       title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
-      <TravelPayClaimsFilters />
+      <TravelPayClaimsFilter />
 
       <Box flex={1}>
         <TravelPaySummaryList scrollViewRef={scrollViewRef} />

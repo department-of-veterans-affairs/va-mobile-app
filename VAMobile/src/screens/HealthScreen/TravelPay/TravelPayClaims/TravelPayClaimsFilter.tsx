@@ -21,7 +21,7 @@ type TravelClaimsDatePickerOption = {
   dates: TravelClaimsDatePickerValue
 }
 
-export const TravelPayClaimsFilters = () => {
+export const TravelPayClaimsFilter = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 

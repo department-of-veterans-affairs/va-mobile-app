@@ -11,7 +11,7 @@ const TravelPayClaimsFiltersE2eIdConstants = {
   CLEAR_FILTERS_BUTTON_TEXT: 'Clear Filters',
 }
 
-describe('TravelPayClaimsFilters', () => {
+describe('TravelPayClaimsFilter', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
     await loginToDemoMode()
