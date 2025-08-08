@@ -37,9 +37,7 @@ pipeline {
 
                         nvm use
                         yarn install
-                        yarn ios
-                        cd android && ./gradlew clean && cd ..
-                        yarn android
+                        cd ../.github/scripts/app-store-images/generate_images.sh
                     '''
                     // sh 'yarn ios'
                 }
