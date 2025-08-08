@@ -13,20 +13,19 @@ This page shows the different debug tools that we use to debug the VAMobile app.
 This section will apply to all the tools. More information on the [react native debugging page](https://reactnative.dev/docs/debugging)
 
 ### IOS
-   1. If on `physical device Shake your device`. If using a `simulator` press the shortcut  `⌘D` or by selecting the `Shake Gesture` inside the hardware menu in the simulator.
+   1. If on physical device `Shake your device`. If using a `simulator` press the shortcut  `⌘D` or by selecting the `Shake Gesture` inside the hardware menu in the simulator.
    2. On the Action Sheet select `Open DevTools`
 
-    ![IOS Debug Menu](/img/debuggingToolsImage/ios-debug-dialog.png) 
-
+![IOS Debug Menu](/VAMobile/documentation/static/img/debuggingToolsImage/ios-debug-dialog.png) 
 
 ### Android
-   1. If using a `physical device` use `Shake your device`
+   1. If using a physical device use `Shake your device`
    2. Android emulators: `Cmd ⌘ + M (macOS)` or `Ctrl + M (Windows and Linux)`
    3. On the dialog select `Open DevTools`
 
 Alternatively on Android: `adb shell input keyevent 82`
 
-    ![Android Debug Menu](/img/debuggingToolsImage/android-debug-dialog.png) 
+![Android Debug Menu](/VAMobile/documentation/static/img/debuggingToolsImage/android-debug-dialog.png) 
    
 
 ## React Native DevTools
@@ -37,29 +36,29 @@ Alternatively on Android: `adb shell input keyevent 82`
 
 On first launch, it opens to a welcome panel with a console drawer for logs and runtime interaction. Use the top navigation to access features like the React Components Inspector and Profiler.
 
-    ![Dev Tools Welcome](/img/debuggingToolsImage/dev-tools-welcome.png)
+![Dev Tools Welcome](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-welcome.png)
 
 ### Console
 The console panel allows you to view logs, evaluate Javascript, inspect object properties, [and more](https://developer.chrome.com/docs/devtools/console/reference). 
 
-    ![Dev Tools Console](/img/debuggingToolsImage/dev-tools-console.png)
+![Dev Tools Console](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-console.png)
 
 ### Sources and breakpoints
 The Sources panel lets you view your app’s source files and set breakpoints to pause execution and inspect the live state of your code.
 [Pause your code with breakpoints](https://developer.chrome.com/docs/devtools/javascript/breakpoints)
 
-    ![Dev Tools Breakpoints](/img/debuggingToolsImage/dev-tools-breakpoints.png)
-
 > [!TIP]  
 > Use `Cmd ⌘ + P`/`Ctrl ⌘ + P` to navigate to a source file
 > Click the line number on the left hand side to add a breakpoint
 > Use navigation tools at the top right to step through code
+> 
+![Dev Tools Breakpoints](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-breakpoints.png)
 
 ### Memory
 The memory panel allows you to take a heap snapshot and view the memory usage of your Javascript code over time.
 [Record heap snapshots](https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots)
 
-    ![Dev Tools Memory](/img/debuggingToolsImage/dev-tools-memory.png)
+![Dev Tools Memory](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-memory.png)
 
 ## React DevTool Features
 The integrated Components and Profiler panels contain all the features of the [React DevTools](https://react.dev/learn/react-developer-tools) browser extension.
@@ -67,7 +66,7 @@ The integrated Components and Profiler panels contain all the features of the [R
 ### Components
 The React Components panel allows you to inspect and update the rendered React component tree.
 
-    ![Dev Tools Components](/img/debuggingToolsImage/dev-tools-components.png)
+![Dev Tools Components](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-components.png)
 
 > [!TIP]
 > Hover or select an element on the tree to highlight it on the device
@@ -78,9 +77,26 @@ The React Components panel allows you to inspect and update the rendered React c
 ### Profiler
 The React Profiler panel allows you to record performance profiles and understand timings of component renders.
 
-    ![Dev Tools Profiler](/img/debuggingToolsImage/dev-tools-profiler.png)
+![Dev Tools Profiler](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-profiler.png)
 
 ## Reactotron
+Reactotron is a debugging tool for both React and React Native applications. It offers a user-friendly interface that allows developers to inspect application state, track network requests, and analyze performance metrics.
+
+Reactotron can be used for the following:
+- view your application state
+- show API requests & responses
+- perform quick performance benchmarks
+- subscribe to parts of your application state
+- display messages similar to `console.log`
+- track global errors with source-mapped stack traces including saga stack traces!
+- dispatch actions like a government-run mind control experiment
+- hot swap your app's state using Redux or mobx-state-tree
+- show image overlay in React Native
+- track your Async Storage in React Native
+
+[Quick Start Guide for Reactotron](https://docs.infinite.red/reactotron/quick-start/react-native/)
+
+![Reactotron](/VAMobile/documentation/static/img/debuggingToolsImage/reactotron-example.jpg)
 
 
 ## VSCode React Native Tools Extension
