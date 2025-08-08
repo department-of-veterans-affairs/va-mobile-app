@@ -46,6 +46,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
         selectedSortBy={selectedSortBy}
         setSelectedSortBy={setSelectedSortBy}
       />
+
       <Box flex={1}>
         <TravelPayClaimsList
           claims={claims}
