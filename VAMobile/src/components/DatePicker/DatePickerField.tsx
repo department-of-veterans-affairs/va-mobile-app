@@ -12,7 +12,7 @@ export type DatePickerFieldProps = {
   /** Selected date value */
   date: string
   /** Callback called when a new date is selected */
-  onDateChange: (e: DateChangeEvent) => void
+  onDateChange?: (e: DateChangeEvent) => void
 }
 const DatePickerField: FC<DatePickerFieldProps> = ({ label, date, onDateChange }) => {
   const [showCal, setShowCal] = useState(false)
