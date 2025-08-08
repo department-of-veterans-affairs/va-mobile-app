@@ -1,0 +1,1 @@
+2_en-US	HealthScreen	android	"Access health care tools"

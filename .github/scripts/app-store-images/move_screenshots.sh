@@ -8,7 +8,7 @@ set -e
 # Define the source and destination directories
 ARTIFACTS_DIR="../../../VAMobile/artifacts"
 DEST_DIR="fastlane/screenshots/en-US"
-CONFIG_FILE="image_config.tsv"
+CONFIG_FILE="image_mapping.txt"
 
 # Create the destination directory if it doesn't exist
 echo "Creating destination directory: $DEST_DIR"
@@ -30,7 +30,7 @@ while IFS=$'\t' read -r image_name test_id device_type description; do
     # The LettersDownload images are not in the artifacts directory, so we need to copy them from the root directory
     if [[ "$image_name" == "LettersDownload_ios" || "$image_name" == "LettersDownload_android" || "$image_name" == "LettersDownload_ipad" ]]; then
       echo "Copying $image_name for $device_type"
-      cp "${image_name}.png" "$DEST_DIR/"
+      cp "${image_name}.png" "$DEST_DIR/${device_type}-${image_name}.png"
     else
       echo "Warning: Could not find image ${image_name}.png in $ARTIFACTS_DIR"
     fi
