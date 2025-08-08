@@ -4,7 +4,6 @@ import { ScrollView } from 'react-native'
 
 import { DateTime } from 'luxon'
 
-import { useTravelPayClaims } from 'api/travelPay'
 import { TravelPayClaimData } from 'api/types'
 import {
   Box,
@@ -16,6 +15,7 @@ import {
   TextLine,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   capitalizeFirstLetter,
   getFormattedDateOrTimeWithFormatOption,
@@ -23,34 +23,40 @@ import {
 } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-type TravelPaySummaryListProps = {
+type TravelPayClaimsListProps = {
+  claims: Array<TravelPayClaimData>
+  isLoading: boolean
+  filter: string // TODO: will change in next ticket
+  sortBy: string // TODO: will change in next ticket
   scrollViewRef: RefObject<ScrollView>
 }
 
-export default function TravelPaySummaryList({ scrollViewRef }: TravelPaySummaryListProps) {
+function TravelPayClaimsList({
+  claims,
+  isLoading,
+  filter: _filter,
+  sortBy: _sortBy,
+  scrollViewRef,
+}: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
+  const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
   const [page, setPage] = useState(1)
-  const { data: summariesPayload, isLoading: isLoadingSummaries } = useTravelPayClaims({ startDate: '', endDate: '' })
-  const [summariesToShow, setSummariesToShow] = useState<Array<TravelPayClaimData>>([])
 
-  const summaries = summariesPayload?.data
-
-  const metadata = summariesPayload?.meta
   const { perPage, totalEntries } = {
     perPage: 10,
-    totalEntries: metadata?.totalRecordCount || 0,
+    totalEntries: claims.length || 0,
   }
 
   useEffect(() => {
-    const summaryList = summaries?.slice((page - 1) * perPage, page * perPage)
-    setSummariesToShow(summaryList || [])
-  }, [summaries, page, perPage])
+    const summaryList = claims?.slice((page - 1) * perPage, page * perPage)
+    setClaimsToShow(summaryList || [])
+  }, [claims, page, perPage])
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    summariesToShow?.forEach((summary) => {
+    claimsToShow?.forEach((summary, index) => {
       const { attributes } = summary
       const { appointmentDateTime, claimStatus } = attributes
 
@@ -58,7 +64,8 @@ export default function TravelPaySummaryList({ scrollViewRef }: TravelPaySummary
 
       const dateString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.DATE_FULL, undefined, {
         weekday: 'long',
-      }) // TODO: SC - timezone?
+      }) // TODO: do we want to show timezone here?
+
       const timeString = getFormattedTimeNoTimeZone(appointmentDateTime) // TODO: SC - formatting
       textLines.push({
         text: t('travelPay.statusList.appointmentDateLine1', { date: dateString }),
@@ -68,22 +75,24 @@ export default function TravelPaySummaryList({ scrollViewRef }: TravelPaySummary
         text: t('travelPay.statusList.appointmentDateLine2', { time: timeString }),
         variant: 'MobileBodyBold',
       })
+
+      // TODO: does 'claim status' need to be first translated into display friendly enum string?
       textLines.push({ text: t('travelPay.statusList.claimStatus', { status: capitalizeFirstLetter(claimStatus) }) })
 
-      const a11yValue = `test-a11y`
+      const a11yValue = t('listPosition', { position: index + 1, total: totalEntries }) // TODO: add "travel claims" or something here?
 
       listItems.push({
         textLines,
         a11yValue,
-        onPress: () => {},
-        testId: 'test',
+        onPress: () => {}, // TODO: go to claim details
+        testId: getTestIDFromTextLines(textLines),
       })
     })
 
     return listItems
   }
 
-  if (isLoadingSummaries) {
+  if (isLoading) {
     return <LoadingComponent text={t('travelPay.statusList.loadingClaims')} />
   }
 
@@ -110,3 +119,5 @@ export default function TravelPaySummaryList({ scrollViewRef }: TravelPaySummary
     </Box>
   )
 }
+
+export default TravelPayClaimsList

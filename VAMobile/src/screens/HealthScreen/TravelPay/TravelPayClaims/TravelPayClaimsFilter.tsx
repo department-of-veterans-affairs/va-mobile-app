@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -21,18 +21,31 @@ type TravelClaimsDatePickerOption = {
   dates: TravelClaimsDatePickerValue
 }
 
-export const TravelPayClaimsFilter = () => {
+type TravelPayClaimsFilterProps = {
+  totalClaims: number
+  selectedFilter: string
+  setSelectedFilter: Dispatch<SetStateAction<string>>
+  selectedSortBy: string
+  setSelectedSortBy: Dispatch<SetStateAction<string>>
+}
+
+function TravelPayClaimsFilter({
+  totalClaims,
+  selectedFilter,
+  setSelectedFilter,
+  selectedSortBy,
+  setSelectedSortBy,
+}: TravelPayClaimsFilterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   // TODO - need to replace with actual data from props or state
-  const travelClaimsCount = 15
   const currentFilter = 'All'
   const currentSort = 'most recent'
 
   const travelClaimsListTitle = () => {
     const keys = {
-      count: travelClaimsCount,
+      count: totalClaims,
       filter: currentFilter,
       sort: currentSort,
     }
@@ -56,10 +69,6 @@ export const TravelPayClaimsFilter = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
-
-  // TODO- add filter and sort state
-  const [selectedFilter, setSelectedFilter] = useState('')
-  const [selectedSortBy, setSelectedSortBy] = useState('')
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
@@ -167,3 +176,5 @@ export const TravelPayClaimsFilter = () => {
     </Box>
   )
 }
+
+export default TravelPayClaimsFilter
