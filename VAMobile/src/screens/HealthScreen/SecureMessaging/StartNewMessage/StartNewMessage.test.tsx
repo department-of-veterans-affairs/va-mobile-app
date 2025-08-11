@@ -72,6 +72,22 @@ context('StartNewMessage', () => {
       },
     },
   }
+  const singleFacility: FacilitiesPayload = {
+    data: {
+      attributes: {
+        facilities: [
+          {
+            id: '357',
+            name: 'Cary VA Medical Center',
+            city: 'Cary',
+            state: 'WY',
+            cerner: false,
+            miles: '3.63',
+          },
+        ],
+      },
+    },
+  }
   const folderMessages: SecureMessagingFolderMessagesGetData = {
     data: [
       {
@@ -166,14 +182,14 @@ context('StartNewMessage', () => {
     render(<StartNewMessage {...props} />, {})
   }
 
-  const initializeApiCalls = () => {
+  const initializeApiCalls = (facilityMock: FacilitiesPayload) => {
     when(api.get as jest.Mock)
       .calledWith('/v0/messaging/health/allrecipients')
       .mockResolvedValue(recipients)
       .calledWith('/v0/messaging/health/messages/signature')
       .mockResolvedValue(signature)
       .calledWith('/v0/facilities-info')
-      .mockResolvedValue(facilities)
+      .mockResolvedValue(facilityMock)
       .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
         page: '1',
         per_page: LARGE_PAGE_SIZE.toString(),
@@ -229,7 +245,7 @@ context('StartNewMessage', () => {
 
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
-      initializeApiCalls()
+      initializeApiCalls(facilities)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -242,14 +258,14 @@ context('StartNewMessage', () => {
 
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
-      initializeApiCalls()
+      initializeApiCalls(facilities)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByText(t('cancel'))))
       await waitFor(() => expect(goBack).toHaveBeenCalled())
     })
 
     it('should ask for confirmation if any field filled in', async () => {
-      initializeApiCalls()
+      initializeApiCalls(facilities)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -262,7 +278,7 @@ context('StartNewMessage', () => {
   describe('on click of save (draft)', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        initializeApiCalls()
+        initializeApiCalls(facilities)
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('save'))))
         await waitFor(() =>
@@ -276,10 +292,26 @@ context('StartNewMessage', () => {
     })
   })
 
+  describe('when user has multiple facilities on record', () => {
+    it('should display select a care system', async () => {
+      initializeApiCalls(facilities)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeTruthy())
+    })
+  })
+
+  describe('when user has only one facility on record', () => {
+    it('should hide select a care system', async () => {
+      initializeApiCalls(singleFacility)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeFalsy())
+    })
+  })
+
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        initializeApiCalls()
+        initializeApiCalls(facilities)
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send'))))
         await waitFor(() =>
@@ -295,7 +327,7 @@ context('StartNewMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      initializeApiCalls()
+      initializeApiCalls(facilities)
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText(t('secureMessaging.formMessage.addFiles'))))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -304,7 +336,7 @@ context('StartNewMessage', () => {
 
   describe('when displaying the form', () => {
     it('should display an alert about urgent messages', async () => {
-      initializeApiCalls()
+      initializeApiCalls(facilities)
       initializeTestInstance()
       await waitFor(() =>
         expect(

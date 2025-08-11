@@ -237,6 +237,22 @@ context('EditDraft', () => {
       },
     },
   }
+  const singleFacility: FacilitiesPayload = {
+    data: {
+      attributes: {
+        facilities: [
+          {
+            id: '357',
+            name: 'Cary VA Medical Center',
+            city: 'Cary',
+            state: 'WY',
+            cerner: false,
+            miles: '3.63',
+          },
+        ],
+      },
+    },
+  }
   const folderMessages: SecureMessagingFolderMessagesGetData = {
     data: [
       {
@@ -401,6 +417,54 @@ context('EditDraft', () => {
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText('Only use messages for non-urgent needs')))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
+    })
+  })
+
+  describe('when the user only has multiple facilities on record', () => {
+    it('should hide care systems selection box', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(facilities)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeTruthy())
+    })
+  })
+
+  describe('when the user only has one facility on record', () => {
+    it('should hide care systems selection box', async () => {
+      when(api.get as jest.Mock)
+        .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
+          useCache: 'false',
+        })
+        .mockResolvedValue(thread)
+        .calledWith(`/v0/messaging/health/messages/${3}`)
+        .mockResolvedValue(message)
+        .calledWith('/v0/messaging/health/allrecipients')
+        .mockResolvedValue(recipients)
+        .calledWith('/v0/facilities-info')
+        .mockResolvedValue(singleFacility)
+        .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
+          page: '1',
+          per_page: LARGE_PAGE_SIZE.toString(),
+          useCache: 'false',
+        } as api.Params)
+        .mockResolvedValue(folderMessages)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeFalsy())
     })
   })
 
