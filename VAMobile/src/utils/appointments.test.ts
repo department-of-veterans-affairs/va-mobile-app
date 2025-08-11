@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash'
 import { DateTime, type DateTimeUnit } from 'luxon'
 
 import { AppointmentData } from 'api/types'
-import mocks from 'store/api/demo/mocks/kimberlyWashington/appointments.json'
+import mocks from 'store/api/demo/mocks/default/appointments.json'
 import { filterAppointments } from 'utils/appointments'
 
 type AppointmentDataMod = Omit<AppointmentData, 'attributes'> & {

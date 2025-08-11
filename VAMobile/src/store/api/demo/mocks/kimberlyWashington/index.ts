@@ -2,25 +2,29 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 const importKimberlyWashingtonData = () => {
   return [
-    featureEnabled('appointmentsTestTime') ? import('./appointmentsTestTime.json') : import('./appointments.json'),
-    import('./appointments.json'),
-    import('./claims.json'),
-    import('./profile.json'),
-    import('./secureMessaging.json'),
-    import('./vaccine.json'),
-    import('./disabilityRating.json'),
-    import('./decisionLetters.json'),
-    import('./labsAndTests.json'),
-    import('./letters.json'),
-    import('./payments.json'),
-    import('./prescriptions.json'),
-    import('./notifications.json'),
-    import('./contactInformation.json'),
-    import('./getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo') ? import('./getFacilitiesInfoCerner.json') : import('./getFacilitiesInfo.json'),
-    import('./demographics.json'),
-    import('./personalInformation.json'),
-    import('./allergies.json'),
+    featureEnabled('appointmentsTestTime')
+      ? import('store/api/demo/mocks/default/appointmentsTestTime.json')
+      : import('store/api/demo/mocks/default/appointments.json'),
+    import('store/api/demo/mocks/default/appointments.json'),
+    import('store/api/demo/mocks/default/claims.json'),
+    import('store/api/demo/mocks/default/profile.json'),
+    import('store/api/demo/mocks/default/secureMessaging.json'),
+    import('store/api/demo/mocks/default/vaccine.json'),
+    import('store/api/demo/mocks/default/disabilityRating.json'),
+    import('store/api/demo/mocks/default/decisionLetters.json'),
+    import('store/api/demo/mocks/default/labsAndTests.json'),
+    import('store/api/demo/mocks/default/letters.json'),
+    import('store/api/demo/mocks/default/payments.json'),
+    import('store/api/demo/mocks/default/prescriptions.json'),
+    import('store/api/demo/mocks/default/notifications.json'),
+    import('store/api/demo/mocks/default/contactInformation.json'),
+    import('store/api/demo/mocks/default/getAuthorizedServices.json'),
+    featureEnabled('cernerTrueForDemo')
+      ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
+      : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
+    import('store/api/demo/mocks/default/demographics.json'),
+    import('store/api/demo/mocks/kimberlyWashington/personalInformation.json'),
+    import('store/api/demo/mocks/default/allergies.json'),
   ]
 }
 

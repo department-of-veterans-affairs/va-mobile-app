@@ -5,13 +5,15 @@ const importClaraJeffersonData = () => {
     import('./profile.json'),
     import('./vaccine.json'),
     import('./labsAndTests.json'),
-    import('./notifications.json'),
-    import('./contactInformation.json'),
+    import('store/api/demo/mocks/default/notifications.json'),
+    import('store/api/demo/mocks/default/contactInformation.json'),
     import('./getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo') ? import('./getFacilitiesInfoCerner.json') : import('./getFacilitiesInfo.json'),
-    import('./demographics.json'),
+    featureEnabled('cernerTrueForDemo')
+      ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
+      : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
+    import('store/api/demo/mocks/default/demographics.json'),
     import('./personalInformation.json'),
-    import('./allergies.json'),
+    import('store/api/demo/mocks/default/allergies.json'),
   ]
 }
 

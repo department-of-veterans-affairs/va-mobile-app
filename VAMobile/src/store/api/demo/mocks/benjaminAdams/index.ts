@@ -11,14 +11,16 @@ const importBenjaminAdamsData = () => {
     import('./disabilityRating.json'),
     import('./decisionLetters.json'),
     import('./labsAndTests.json'),
-    import('./letters.json'),
+    import('store/api/demo/mocks/default/letters.json'),
     import('./payments.json'),
     import('./prescriptions.json'),
-    import('./notifications.json'),
-    import('./contactInformation.json'),
-    import('./getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo') ? import('./getFacilitiesInfoCerner.json') : import('./getFacilitiesInfo.json'),
-    import('./demographics.json'),
+    import('store/api/demo/mocks/default/notifications.json'),
+    import('store/api/demo/mocks/default/contactInformation.json'),
+    import('store/api/demo/mocks/default/getAuthorizedServices.json'),
+    featureEnabled('cernerTrueForDemo')
+      ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
+      : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
+    import('store/api/demo/mocks/default/demographics.json'),
     import('./personalInformation.json'),
     import('./allergies.json'),
   ]
