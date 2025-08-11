@@ -45,21 +45,23 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   }, [isFocused, waygateToggles])
 
   function toggleList() {
-    const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
-      return {
-        text: `${key}`,
-        decorator: ButtonDecoratorType.Switch,
-        decoratorProps: {
-          on: toggles[key as FeatureToggleType],
-        },
-        onPress: () => {
-          setToggles({
-            ...toggles,
-            [key]: !toggles[key as FeatureToggleType],
-          })
-        },
-      }
-    })
+    const toggleItems = Object.keys(toggles)
+      .sort()
+      .map((key): SimpleListItemObj => {
+        return {
+          text: `${key}`,
+          decorator: ButtonDecoratorType.Switch,
+          decoratorProps: {
+            on: toggles[key as FeatureToggleType],
+          },
+          onPress: () => {
+            setToggles({
+              ...toggles,
+              [key]: !toggles[key as FeatureToggleType],
+            })
+          },
+        }
+      })
 
     return (
       <Box mt={condensedMarginBetween}>

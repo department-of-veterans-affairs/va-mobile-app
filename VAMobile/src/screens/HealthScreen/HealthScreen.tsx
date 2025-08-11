@@ -31,6 +31,7 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
+import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaims'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -139,6 +140,13 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton
+            title={t('travelPay.title')}
+            onPress={() => navigateTo('TravelPayClaims')}
+            testID="toTravelPayClaimsID"
+          />
+        )}
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
@@ -236,6 +244,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
         component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaims}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen

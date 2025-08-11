@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 import { DateTime } from 'luxon'
 
@@ -8,13 +9,12 @@ import { appointmentsKeys } from 'api/appointments'
 import { prescriptionKeys } from 'api/prescriptions'
 import { secureMessagingKeys } from 'api/secureMessaging'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
+import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
-
-import { HealthScreen } from './HealthScreen'
 
 const mockNavigationSpy = jest.fn()
 
@@ -93,6 +93,27 @@ context('HealthScreen', () => {
       await waitFor(() =>
         expect(screen.queryByText(`in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`, { exact: false })).toBeFalsy(),
       )
+    })
+  })
+
+  describe('Travel button', () => {
+    it('is not displayed if feature toggle is disabled', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(false)
+      initializeTestInstance()
+      expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      initializeTestInstance()
+      expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
+    })
+
+    it('navigates to Travel Reimbursement screen when pressed', () => {
+      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      initializeTestInstance()
+      fireEvent.press(screen.getByText(t('travelPay.title')))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
     })
   })
 

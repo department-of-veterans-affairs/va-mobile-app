@@ -186,6 +186,8 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
+  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
+  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
 }
 
 /** Logs into demo mode.
@@ -409,6 +411,10 @@ export async function openHealth() {
 
 export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
+}
+
+export async function openTravelPayClaims() {
+  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
@@ -746,13 +752,39 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
  * @param flagName - name of flag to toggle
  * */
 export async function toggleRemoteConfigFlag(flagName: string) {
+  await toggleFlags([flagName])
+}
+
+/** Toggle the specified remote config feature flag
+ * @param flagNames - array of flag names to toggle
+ * */
+export async function toggleRemoteConfigFlags(flagNames: string[]) {
+  await toggleFlags(flagNames)
+}
+
+/** Toggle the specified remote config feature flags
+ * @param flagNames - array of flag names to toggle
+ * Shared core logic for both single and multiple toggle functions
+ */
+async function toggleFlags(flagNames: string[]) {
+  // Sort flags alphabetically to match the order in RemoteConfigScreen
+  const names = [...flagNames].sort()
+
+  await openRemoteConfig()
+  for (const name of names) {
+    await scrollToThenTap(name, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  }
+
+  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+}
+
+/** Open the Remote Config screen from demo mode */
+async function openRemoteConfig() {
   await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
   await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
-  await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 
 /**
