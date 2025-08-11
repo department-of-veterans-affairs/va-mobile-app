@@ -158,8 +158,11 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
+  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
+  const [careSystem, setCareSystem] = useState(
+    messageRecipient?.attributes.stationNumber || careSystems.length < 2 ? careSystems[0].value : '',
+  )
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
@@ -443,12 +446,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           labelKey: 'secureMessaging.formMessage.careSystem',
           selectedValue: careSystem,
           onSelectionChange: handleSetCareSystem,
-          pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+          pickerOptions: careSystems,
           includeBlankPlaceholder: true,
           isRequiredField: true,
           testID: 'care system field',
           confirmTestID: 'careSystemPickerConfirmID',
         },
+        hideField: careSystems.length < 2,
         fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
       },
       {
