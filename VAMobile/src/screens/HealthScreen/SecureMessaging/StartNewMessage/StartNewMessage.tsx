@@ -125,7 +125,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   })
   const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState(careSystems.length < 2 ? careSystems[0].value : '')
+  const [careSystem, setCareSystem] = useState(careSystems.length < 2 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')

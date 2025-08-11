@@ -296,7 +296,7 @@ context('StartNewMessage', () => {
     it('should display select a care system', async () => {
       initializeApiCalls(facilities)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeTruthy())
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
   })
 
@@ -304,7 +304,7 @@ context('StartNewMessage', () => {
     it('should hide select a care system', async () => {
       initializeApiCalls(singleFacility)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeFalsy())
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
   })
 

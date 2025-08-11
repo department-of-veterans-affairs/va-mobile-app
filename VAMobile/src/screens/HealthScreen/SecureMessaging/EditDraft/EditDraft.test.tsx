@@ -97,6 +97,28 @@ context('EditDraft', () => {
       },
     ],
   }
+  const nonReplyDraftThread: SecureMessagingThreadGetData = {
+    data: [
+      {
+        id: 1,
+        type: '1',
+        attributes: {
+          messageId: 1,
+          category: CategoryTypeFields.other,
+          subject: 'mock subject 1: The initial message sets the overall thread subject header',
+          body: 'message 1 body text',
+          hasAttachments: false,
+          attachment: false,
+          sentDate: '1',
+          senderId: 2,
+          senderName: 'mock sender 1',
+          recipientId: 3,
+          recipientName: 'mock recipient name 1',
+          readReceipt: 'mock read receipt 1',
+        },
+      },
+    ],
+  }
   const oldThread: SecureMessagingThreadGetData = {
     data: [
       {
@@ -421,12 +443,12 @@ context('EditDraft', () => {
   })
 
   describe('when the user only has multiple facilities on record', () => {
-    it('should hide care systems selection box', async () => {
+    it('should display care systems selection box', async () => {
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
           useCache: 'false',
         })
-        .mockResolvedValue(thread)
+        .mockResolvedValue(nonReplyDraftThread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
@@ -440,7 +462,7 @@ context('EditDraft', () => {
         } as api.Params)
         .mockResolvedValue(folderMessages)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeTruthy())
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
   })
 
@@ -450,7 +472,7 @@ context('EditDraft', () => {
         .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
           useCache: 'false',
         })
-        .mockResolvedValue(thread)
+        .mockResolvedValue(nonReplyDraftThread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
@@ -464,7 +486,7 @@ context('EditDraft', () => {
         } as api.Params)
         .mockResolvedValue(folderMessages)
       initializeTestInstance()
-      await waitFor(() => expect(screen.queryByText('secureMessaging.formMessage.careSystem')).toBeFalsy())
+      await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
   })
 
