@@ -450,6 +450,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           testID: 'care system field',
           confirmTestID: 'careSystemPickerConfirmID',
         },
+        hideField: careSystems.length < 2,
         fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
       },
       {
