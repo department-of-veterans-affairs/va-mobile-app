@@ -19,7 +19,7 @@ import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   capitalizeFirstLetter,
   getFormattedDateOrTimeWithFormatOption,
-  getFormattedTimeNoTimeZone,
+  getFormattedTimeForTimeZone,
 } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -66,7 +66,7 @@ function TravelPayClaimsList({
         weekday: 'long',
       }) // TODO: do we want to show timezone here?
 
-      const timeString = getFormattedTimeNoTimeZone(appointmentDateTime) // TODO: SC - formatting
+      const timeString = getFormattedTimeForTimeZone(appointmentDateTime) // TODO: SC - formatting possibly without timezone per specs
       textLines.push({
         text: t('travelPay.statusList.appointmentDateLine1', { date: dateString }),
         variant: 'MobileBodyBold',

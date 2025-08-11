@@ -90,17 +90,6 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
 }
 
 /**
- * Returns the date formatted in the format HH:MM aa
- *
- * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
- *
- * @returns  the date formatted in the format HH:MM aa
- */
-export const getFormattedTimeNoTimeZone = (dateTime: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE)
-}
-
-/**
  * Returns the datetime formatted in the format: Month DD, YYYY, HH:MM PM TIMEZONE
  *
  * @param dateTime - Full ISO 8601 datetime, i.e. 2013-06-06T04:00:00.000+00:00
