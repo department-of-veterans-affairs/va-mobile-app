@@ -237,7 +237,11 @@ function PastAppointments({
 
   return (
     <Box>
-      <DatePicker labelKey={'pastAppointments.selectAPastDateRange'} />
+      <DatePicker
+        labelKey={'pastAppointments.selectAPastDateRange'}
+        minimumDate={DateTime.local().minus({ years: 2 })}
+        maximumDate={DateTime.local()}
+      />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics

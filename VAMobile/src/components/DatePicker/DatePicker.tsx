@@ -10,11 +10,14 @@ import DatePickerField from 'components/DatePicker/DatePickerField'
 import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-import { isIOS } from 'utils/platform'
 
 export type DatePickerProps = {
   /** i18n key for the text label next the picker field */
   labelKey?: string
+  /** Optional DateTime object that represents the minimum selectable date on each date picker */
+  minimumDate?: DateTime
+  /** Optional DateTime object that represents the maximum selectable date on each date picker */
+  maximumDate?: DateTime
 }
 
 export const renderInputLabelSection = (labelKey: string, t: TFunction): ReactElement => {
@@ -28,25 +31,19 @@ export const renderInputLabelSection = (labelKey: string, t: TFunction): ReactEl
   )
 }
 
-const getNativePickerDate = (date: DateTime) => {
-  // iOS fails to parse date with fractional seconds
-  if (isIOS()) return date.toFormat("yyyy-MM-dd'T'HH:mm:ssZZ")
-  return date.toISO() || ''
-}
-
 const initialDate = DateTime.local()
 
-const DatePicker: FC<DatePickerProps> = ({ labelKey }) => {
+const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [dateRange, setDateRange] = useState({
-    startDate: getNativePickerDate(initialDate.minus({ months: 5 })),
-    endDate: getNativePickerDate(initialDate.minus({ months: 3 })),
+    startDate: initialDate.minus({ months: 5 }),
+    endDate: initialDate.minus({ months: 3 }),
   })
 
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
-    setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: date }))
+    setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: DateTime.fromISO(date).toLocal() }))
   }
 
   return (
@@ -61,6 +58,8 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey }) => {
         <DatePickerField
           label="From"
           date={dateRange.startDate}
+          minimumDate={minimumDate}
+          maximumDate={maximumDate}
           onDateChange={(e) => handleDateChange(e, 'startDate')}
         />
         <Box
@@ -68,7 +67,13 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey }) => {
           borderBottomWidth={1}
           borderColor={theme.colors.border.aboutYou as BorderColorVariant}
         />
-        <DatePickerField label="To" date={dateRange.endDate} onDateChange={(e) => handleDateChange(e, 'endDate')} />
+        <DatePickerField
+          label="To"
+          date={dateRange.endDate}
+          minimumDate={minimumDate}
+          maximumDate={maximumDate}
+          onDateChange={(e) => handleDateChange(e, 'endDate')}
+        />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
         <Button onPress={() => {}} label={t('apply')} buttonType={ButtonVariants.Primary} />

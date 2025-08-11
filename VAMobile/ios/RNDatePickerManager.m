@@ -2,5 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(RNDatePickerManager, RCTViewManager)
 RCT_EXPORT_VIEW_PROPERTY(date, NSString)
+RCT_EXPORT_VIEW_PROPERTY(minimumDate, NSString)
+RCT_EXPORT_VIEW_PROPERTY(maximumDate, NSString)
 RCT_EXPORT_VIEW_PROPERTY(onDateChange, RCTBubblingEventBlock)
 @end

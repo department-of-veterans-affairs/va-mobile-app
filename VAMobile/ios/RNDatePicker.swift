@@ -1,18 +1,34 @@
 import UIKit
 import React
 
+private func parseDate(date: NSString?) -> Date?  {
+ guard let dateStr = date as String?,
+           let parsedDate = ISO8601DateFormatter().date(from: dateStr) else {
+  return nil
+     }
+ return parsedDate
+}
+
 class RNDatePicker: UIView {
   let datePicker = UIDatePicker()
 
   @objc var onDateChange: RCTBubblingEventBlock?
  
  @objc var date: NSString? {
+  didSet {
+   if let parsedDate = parseDate(date: date) { datePicker.date = parsedDate }
+  }
+ }
+ 
+ @objc var minimumDate: NSString? {
    didSet {
-    guard let dateStr = date as String?,
-              let parsedDate = ISO8601DateFormatter().date(from: dateStr) else {
-          return
-        }
-        datePicker.date = parsedDate
+    if let parsedDate = parseDate(date: minimumDate) { datePicker.minimumDate = parsedDate }
+   }
+ }
+ 
+ @objc var maximumDate: NSString? {
+   didSet {
+    if let parsedDate = parseDate(date: maximumDate) { datePicker.maximumDate = parsedDate }
    }
  }
 

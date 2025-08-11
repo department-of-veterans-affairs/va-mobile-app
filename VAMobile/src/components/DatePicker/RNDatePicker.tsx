@@ -5,6 +5,8 @@ export type DateChangeEvent = NativeSyntheticEvent<{ date: string }>
 
 interface Props extends ViewProps {
   date?: string
+  minimumDate?: string
+  maximumDate?: string
   onDateChange?: (event: DateChangeEvent) => void
 }
 
