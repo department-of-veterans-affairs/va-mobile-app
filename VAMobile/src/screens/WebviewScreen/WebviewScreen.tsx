@@ -2,6 +2,7 @@ import React, { MutableRefObject, ReactElement, ReactNode, useEffect, useRef, us
 import { useTranslation } from 'react-i18next'
 import { Linking, StatusBar, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -10,6 +11,8 @@ import { BackButton } from 'components/BackButton'
 import { Events } from 'constants/analytics'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { AccessibilityState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { fetchSSOCookies } from 'utils/auth'
@@ -99,6 +102,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   const isSSOSession = featureEnabled('sso') && useSSO
 
   const theme = useTheme()
+  const { fontScale } = useSelector<RootState, AccessibilityState>((state) => state.accessibility)
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)
@@ -159,9 +163,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   // The following two consts are an effort to reduce the 'noise' of the websites we are linking to
   // via webview and make them a more specific path for the user to experience. This code ignores headers,
   // footers, breadcrumbs, intercept feedback screens, mobile specific navigation, and the feedback button.
+  // We also apply font-size scaling here for IOS because a11y large text settings work on Android but not on IOS
   const css = `
   header, footer, va-breadcrumbs, .mobile-nav, #mdFormButton, #MDigitalInvitationWrapper { display: none; }
-  nav[aria-label="My HealtheVet"] { display: none; }
+  nav[aria-label="My HealtheVet"] { display: none; } ${isIOS() ? `html { font-size: ${fontScale}em; }` : ''}
 `
 
   const INJECTED_JAVASCRIPT = `(function() {
