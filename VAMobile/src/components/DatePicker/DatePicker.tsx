@@ -34,7 +34,7 @@ export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset:
       <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={8}>
         <TextView variant={variant}>{t(labelKey)}</TextView>
         <Pressable accessibilityRole="button" onPress={onReset}>
-          <TextView {...resetButtonTextProps}>Reset</TextView>
+          <TextView {...resetButtonTextProps}>{t('reset')}</TextView>
         </Pressable>
       </Box>
     </Box>
