@@ -111,7 +111,7 @@ function TravelPayClaimsList({
   }
 
   return (
-    <Box>
+    <Box testID="travelPayClaimsListTestId">
       <DefaultList items={getListItemVals()} />
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
