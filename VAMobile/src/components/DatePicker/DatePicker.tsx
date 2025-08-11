@@ -1,11 +1,12 @@
 import React, { FC, ReactElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pressable } from 'react-native'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { BorderColorVariant, Box, TextView } from 'components'
+import { BorderColorVariant, Box, TextView, TextViewProps } from 'components'
 import DatePickerField from 'components/DatePicker/DatePickerField'
 import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,12 +21,21 @@ export type DatePickerProps = {
   maximumDate?: DateTime
 }
 
-export const renderInputLabelSection = (labelKey: string, t: TFunction): ReactElement => {
+export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset: () => void): ReactElement => {
   const variant = 'MobileBody'
+  const resetButtonTextProps: TextViewProps = {
+    variant: 'MobileBody',
+    color: 'link',
+    textDecoration: 'underline',
+    textDecorationColor: 'link',
+  }
   return (
     <Box>
-      <Box display="flex" flexDirection="row" flexWrap="wrap" mb={8}>
+      <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={8}>
         <TextView variant={variant}>{t(labelKey)}</TextView>
+        <Pressable accessibilityRole="button" onPress={onReset}>
+          <TextView {...resetButtonTextProps}>Reset</TextView>
+        </Pressable>
       </Box>
     </Box>
   )
@@ -41,6 +51,13 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate })
     endDate: initialDate.minus({ months: 3 }),
   })
 
+  const handleReset = () => {
+    setDateRange({
+      startDate: DateTime.local(),
+      endDate: DateTime.local(),
+    })
+  }
+
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
     setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: DateTime.fromISO(date).toLocal() }))
@@ -48,7 +65,7 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate })
 
   return (
     <Box mx={theme.dimensions.gutter}>
-      {labelKey ? renderInputLabelSection(labelKey, t) : <></>}
+      {labelKey ? renderInputLabelSection(labelKey, t, handleReset) : <></>}
       <Box
         px={theme.dimensions.smallMarginBetween}
         borderRadius={8}
