@@ -65,7 +65,7 @@ context('TravelPayClaimsFilter', () => {
       expect(clearFiltersButton).toBeTruthy()
       expect(clearFiltersButton.props.accessibilityRole).toBe('button')
       expect(clearFiltersButton.props.accessibilityLabel).toBe(t('travelPay.statusList.clearFilters'))
-      expect(clearFiltersButton.props.accessibilityHint).toBe('Clears all applied filters and sorting options')
+      expect(clearFiltersButton.props.accessibilityHint).toBe(t('travelPay.statusList.clearFilters.a11yHint'))
     })
   })
 })

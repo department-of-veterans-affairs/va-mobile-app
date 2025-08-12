@@ -31,6 +31,8 @@ type TravelPayClaimsListProps = {
   scrollViewRef: RefObject<ScrollView>
 }
 
+const CLAIMS_PER_PAGE = 10
+
 function TravelPayClaimsList({
   claims,
   isLoading,
@@ -45,7 +47,7 @@ function TravelPayClaimsList({
   const [page, setPage] = useState(1)
 
   const { perPage, totalEntries } = {
-    perPage: 10,
+    perPage: CLAIMS_PER_PAGE,
     totalEntries: claims.length || 0,
   }
 

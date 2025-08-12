@@ -29,6 +29,28 @@ type TravelPayClaimsFilterProps = {
   setSelectedSortBy: Dispatch<SetStateAction<string>>
 }
 
+type FilterOptionType = 'all' | 'paid' | 'denied'
+
+const FilterOption: {
+  All: FilterOptionType
+  Paid: FilterOptionType
+  Denied: FilterOptionType
+} = {
+  All: 'all',
+  Paid: 'paid',
+  Denied: 'denied',
+}
+
+type SortOptionType = 'recent' | 'oldest'
+
+const SortOption: {
+  Recent: SortOptionType
+  Oldest: SortOptionType
+} = {
+  Recent: 'recent',
+  Oldest: 'oldest',
+}
+
 function TravelPayClaimsFilter({
   totalClaims,
   selectedFilter,
@@ -82,26 +104,26 @@ function TravelPayClaimsFilter({
     groups: [
       {
         items: [
-          { optionLabelKey: 'All', value: 'all' },
-          { optionLabelKey: 'Paid', value: 'paid' },
-          { optionLabelKey: 'Denied', value: 'denied' },
+          { optionLabelKey: t('travelPay.statusList.filterOption.all'), value: FilterOption.All },
+          { optionLabelKey: t('travelPay.statusList.filterOption.paid'), value: FilterOption.Paid },
+          { optionLabelKey: t('travelPay.statusList.filterOption.denied'), value: FilterOption.Denied },
         ],
         onSetOption: (newFilter: string) => {
           setSelectedFilter(newFilter)
         },
         selectedValue: selectedFilter,
-        title: 'Filter by',
+        title: t('travelPay.statusList.filterBy'),
       },
       {
         items: [
-          { optionLabelKey: 'Most recent', value: 'recent' },
-          { optionLabelKey: 'Oldest', value: 'oldest' },
+          { optionLabelKey: t('travelPay.statusList.sortOption.recent'), value: SortOption.Recent },
+          { optionLabelKey: t('travelPay.statusList.sortOption.oldest'), value: SortOption.Oldest },
         ],
         onSetOption: (newSortBy: string) => {
           setSelectedSortBy(newSortBy)
         },
         selectedValue: selectedSortBy,
-        title: 'Sort by',
+        title: t('travelPay.statusList.sortBy'),
       },
     ],
     buttonText: t('filterAndSort'),
@@ -109,7 +131,6 @@ function TravelPayClaimsFilter({
     buttonTestID: 'openFilterAndSortTestID',
     headerText: t('filterAndSort'),
     onApply: () => {
-      // TODO- add apply logic
       console.log('Apply filters:', selectedFilter, selectedSortBy)
     },
     onCancel: () => {
