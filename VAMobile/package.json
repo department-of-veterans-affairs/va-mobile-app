@@ -167,7 +167,8 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "prettier --write",
     "*.{yml,yaml}": "yamllint --strict -c .github/linters/.yaml-lint.yml",
-    ".github/workflows/*.{yml,yaml}": "actionlint -config-file .github/linters/actionlint.yml"
+    ".github/workflows/*.{yml,yaml}": "actionlint -config-file .github/linters/actionlint.yml",
+    "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed"
   },
   "engines": {
     "node": ">=22.0.0"
