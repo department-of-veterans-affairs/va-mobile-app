@@ -90,13 +90,14 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
     timeZoneName: 'short',
   })
 
-  // Specific non-location timezones are currently unavailable in date-fns, so right now these tokens fall back to GMT timezones.
+  // Specific non-location timezones are currently unavailable in DateTime
+  // and formatting will fall back to GMT timezones (e.g. GMT+8).
   // This is a workaround to replace them with more user friendly timezone abbreviations.
   if (formattedTime.includes('GMT')) {
     formattedTime = formattedTime
-      .replace('GMT+10', 'ChT') // Replace GMT+10 with ChT for Chamorro Time - Pacific/Guam, Pacific/Saipan
-      .replace('GMT+8', 'PHT') // Replace GMT+8 with PHT for Philippine Time - Asia/Manila
-      .replace('GMT-11', 'ST') // Replace GMT-11 with PHT for Samoa Time - Pacific/Pago_Pago
+      .replace('GMT+10', 'ChT') // Pacific/Guam, Pacific/Saipan: GMT+10 => ChT for Chamorro Time
+      .replace('GMT+8', 'PHT') // Asia/Manila: GMT+8 => PHT for Philippine Time
+      .replace('GMT-11', 'ST') // Pacific/Pago_Pago: GMT-11 => ST for Samoa Time
   }
 
   return formattedTime
