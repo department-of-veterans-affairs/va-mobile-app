@@ -3,7 +3,6 @@ import { featureEnabled } from 'utils/remoteConfig'
 const importBenjaminAdamsData = () => {
   return [
     featureEnabled('appointmentsTestTime') ? import('./appointmentsTestTime.json') : import('./appointments.json'),
-    import('./appointments.json'),
     import('./claims.json'),
     import('./profile.json'),
     import('./secureMessaging.json'),

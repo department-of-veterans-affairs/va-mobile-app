@@ -5,7 +5,6 @@ const importKimberlyWashingtonData = () => {
     featureEnabled('appointmentsTestTime')
       ? import('store/api/demo/mocks/default/appointmentsTestTime.json')
       : import('store/api/demo/mocks/default/appointments.json'),
-    import('store/api/demo/mocks/default/appointments.json'),
     import('store/api/demo/mocks/default/claims.json'),
     import('store/api/demo/mocks/default/profile.json'),
     import('store/api/demo/mocks/default/secureMessaging.json'),
