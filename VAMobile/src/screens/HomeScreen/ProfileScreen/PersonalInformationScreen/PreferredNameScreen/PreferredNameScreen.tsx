@@ -11,7 +11,7 @@ import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingC
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -23,7 +23,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const confirmAlert = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
 
   const getInitialState = (): string => {
     const item = demographics?.preferredName
@@ -53,24 +53,6 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
           }
         },
       )
-      // confirmAlert({
-      //   title: '',
-      //   message: t('personalInformation.preferredName.cancelMessage'),
-      //   cancelButtonIndex: 0,
-      //   destructiveButtonIndex: 1,
-      //   buttons: [
-      //     {
-      //       text: t('keepEditing'),
-      //       onPress: () => {},
-      //     },
-      //     {
-      //       text: t('deleteChanges'),
-      //       onPress: () => {
-      //         navigation.goBack()
-      //       },
-      //     },
-      //   ],
-      // })
       return
     } else {
       navigation.goBack()

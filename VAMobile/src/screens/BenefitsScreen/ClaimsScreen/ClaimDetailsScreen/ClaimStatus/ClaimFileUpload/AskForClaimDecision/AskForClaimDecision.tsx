@@ -29,7 +29,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<FileRequestStackParams, 'AskForClaimDecision'>
 
@@ -48,7 +48,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const [submittedDecision, setSubmittedDecision] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
-  const requestEvalAlert2 = useShowActionSheet2()
+  const requestEvalAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
@@ -119,7 +119,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     }
 
     const options = [t('askForClaimDecision.alertBtnTitle'), t('cancelRequest')]
-    requestEvalAlert2(
+    requestEvalAlert(
       {
         options,
         title: t('askForClaimDecision.alertTitle'),
@@ -133,19 +133,6 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
         }
       },
     )
-    // requestEvalAlert({
-    //   title: t('askForClaimDecision.alertTitle'),
-    //   cancelButtonIndex: 0,
-    //   buttons: [
-    //     {
-    //       text: t('cancelRequest'),
-    //     },
-    //     {
-    //       text: t('askForClaimDecision.alertBtnTitle'),
-    //       onPress: onSubmit,
-    //     },
-    //   ],
-    // })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

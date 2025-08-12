@@ -21,7 +21,7 @@ import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { isErrorObject } from 'utils/common'
-import { useAlert, useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -37,7 +37,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const { mutate: deleteEmail, isPending: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -61,7 +61,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
     }
     e.preventDefault()
     const options = [t('deleteChanges'), t('keepEditing')]
-    confirmAlert2(
+    confirmAlert(
       {
         options,
         title: t('contactInformation.emailAddress.deleteChanges'),

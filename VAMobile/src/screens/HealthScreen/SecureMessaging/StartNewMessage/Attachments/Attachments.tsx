@@ -22,7 +22,7 @@ import {
   bytesToFinalSizeDisplayA11y,
   getMaxWidthAndHeightOfImage,
 } from 'utils/common'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { themeFn } from 'utils/theme'
 
@@ -38,7 +38,7 @@ function Attachments({ navigation, route }: AttachmentsProps) {
   const { t: tFunction } = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const showActionSheetWithOptions2 = useShowActionSheet2()
+  const showActionSheetWithOptions = useShowActionSheet()
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
@@ -115,7 +115,7 @@ function Attachments({ navigation, route }: AttachmentsProps) {
     logAnalyticsEvent(Events.vama_sm_attach('Select a file'))
     onAddFileAttachments(
       t,
-      showActionSheetWithOptions2,
+      showActionSheetWithOptions,
       setError,
       setErrorA11y,
       callbackOnSuccessfulFileSelection,

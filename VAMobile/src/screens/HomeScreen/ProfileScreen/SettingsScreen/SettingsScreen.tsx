@@ -26,7 +26,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { useAppDispatch, useExternalLink, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -42,7 +42,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const dispatchLogout = useAppDispatch()
-  const signOutAlert2 = useShowActionSheet2()
+  const signOutAlert = useShowActionSheet()
   const _logout = () => {
     dispatchLogout(logout())
   }
@@ -50,7 +50,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const onShowConfirm = (): void => {
     logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
     const options = [t('logout.title'), t('cancel')]
-    signOutAlert2(
+    signOutAlert(
       {
         options,
         title: t('logout.confirm.text'),

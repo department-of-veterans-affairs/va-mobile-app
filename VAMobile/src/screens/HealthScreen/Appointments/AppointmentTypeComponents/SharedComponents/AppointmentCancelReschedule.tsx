@@ -22,7 +22,7 @@ import {
   getAppointmentAnalyticsStatus,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { ActionSheetProps, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { ActionSheetProps, useShowActionSheet, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -44,7 +44,7 @@ const cancelButton = (
   t: TFunction,
   theme: VATheme,
   snackbar: ReturnType<typeof useSnackbar>,
-  confirmAlert2: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
+  confirmAlert: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   cancelId?: string,
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>,
 ) => {
@@ -98,7 +98,7 @@ const cancelButton = (
     const actionText = pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment')
     const cancelText = pendingAppointment ? t('cancelRequest') : t('appointments.cancelAppointment')
     const options = [actionText, cancelText]
-    confirmAlert2(
+    confirmAlert(
       {
         options,
         title: pendingAppointment ? t('appointments.cancelRequest') : t('appointments.cancelThisAppointment'),
@@ -113,20 +113,6 @@ const cancelButton = (
         }
       },
     )
-    // confirmAlert({
-    //   title: pendingAppointment ? t('appointments.cancelRequest') : t('appointments.cancelThisAppointment'),
-    //   cancelButtonIndex: 1,
-    //   destructiveButtonIndex: 0,
-    //   buttons: [
-    //     {
-    //       text: pendingAppointment ? t('cancelRequest') : t('appointments.cancelAppointment'),
-    //       onPress: onPress,
-    //     },
-    //     {
-    //       text: pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment'),
-    //     },
-    //   ],
-    // })
   }
 
   return (
@@ -292,7 +278,7 @@ function AppointmentCancelReschedule({
   const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
   const { location, cancelId, showScheduleLink } = attributes || ({} as AppointmentAttributes)
 
   const header = getHeader(subType, t)
@@ -314,7 +300,7 @@ function AppointmentCancelReschedule({
           t,
           theme,
           snackbar,
-          confirmAlert2,
+          confirmAlert,
           cancelId,
           cancelAppointment,
         )
@@ -370,7 +356,7 @@ function AppointmentCancelReschedule({
           t,
           theme,
           snackbar,
-          confirmAlert2,
+          confirmAlert,
           cancelId,
           cancelAppointment,
         )}

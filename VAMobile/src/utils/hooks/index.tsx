@@ -361,7 +361,7 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert2 = useShowActionSheet2()
+  const destructiveAlert2 = useShowActionSheet()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
@@ -518,12 +518,9 @@ export type useDestructiveActionSheetProps = {
   buttons: Array<useDestructiveActionSheetButtonProps>
 }
 
-export type ActionSheetProps = ActionSheetOptions & {
-  buttons?: Array<useDestructiveActionSheetButtonProps>
-  destructiveButtonIndex?: number
-}
+export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }
 
-export function useShowActionSheet2(): (
+export function useShowActionSheet(): (
   options: ActionSheetProps,
   callback: (i?: number) => void | Promise<void>,
 ) => void {

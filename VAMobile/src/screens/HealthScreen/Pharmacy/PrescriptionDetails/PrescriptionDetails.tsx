@@ -24,7 +24,7 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
@@ -35,7 +35,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const { prescription } = route.params
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const submitRefillAlert2 = useShowActionSheet2()
+  const submitRefillAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
@@ -95,7 +95,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
       logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
 
       const options = [t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }), t('cancel')]
-      submitRefillAlert2(
+      submitRefillAlert(
         {
           options,
           title: t('prescriptions.refill.confirmationTitle', { count: 1 }),

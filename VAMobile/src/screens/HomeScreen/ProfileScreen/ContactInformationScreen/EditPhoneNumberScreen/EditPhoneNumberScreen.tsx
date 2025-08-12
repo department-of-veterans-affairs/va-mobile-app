@@ -31,7 +31,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
-import { useAlert, useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
@@ -75,7 +75,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { displayTitle, phoneType, phoneData } = route.params
   const deletePhoneAlert = useAlert()
-  const confirmAlert = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
   const displayInternationalPhoneNumberSelect = featureEnabled('internationalPhoneNumber')
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
@@ -127,22 +127,6 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
         }
       },
     )
-    // confirmAlert({
-    //   title: t('contactInformation.phoneNumber.deleteChanges', { type: displayTitle.toLowerCase() }),
-    //   cancelButtonIndex: 0,
-    //   destructiveButtonIndex: 1,
-    //   buttons: [
-    //     {
-    //       text: t('keepEditing'),
-    //     },
-    //     {
-    //       text: t('deleteChanges'),
-    //       onPress: () => {
-    //         navigation.dispatch(e.data.action)
-    //       },
-    //     },
-    //   ],
-    // })
   })
 
   //returns true when no edits have been made.

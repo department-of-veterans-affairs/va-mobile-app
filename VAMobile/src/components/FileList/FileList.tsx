@@ -8,7 +8,7 @@ import { TextLine } from 'components/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { getA11yLabelText, getFileDisplay } from 'utils/common'
-import { useShowActionSheet2 } from 'utils/hooks'
+import { useShowActionSheet } from 'utils/hooks'
 
 export type FileListProps = {
   /** List of files to display */
@@ -19,7 +19,7 @@ export type FileListProps = {
 
 const FileList: FC<FileListProps> = ({ files, onDelete }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const deleteFileAlert2 = useShowActionSheet2()
+  const deleteFileAlert = useShowActionSheet()
 
   const listObjs: Array<DefaultListItemObj> = files.map((file) => {
     const { fileName, fileSize: formattedFileSize, fileSizeA11y: fileSizeA11y } = getFileDisplay(file, t, false)
@@ -35,7 +35,7 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
       testId: getA11yLabelText(textLinesA11y),
       decorator: ButtonDecoratorType.Delete,
       onPress: () => {
-        deleteFileAlert2(
+        deleteFileAlert(
           {
             options,
             title: t('file.removeFile'),
@@ -50,22 +50,6 @@ const FileList: FC<FileListProps> = ({ files, onDelete }) => {
             }
           },
         )
-        // deleteFileAlert({
-        //   title: t('file.removeFile'),
-        //   destructiveButtonIndex: 1,
-        //   cancelButtonIndex: 0,
-        //   buttons: [
-        //     {
-        //       text: t('keep'),
-        //     },
-        //     {
-        //       text: t('remove'),
-        //       onPress: () => {
-        //         onDelete(file)
-        //       },
-        //     },
-        //   ],
-        // })
       },
     }
 

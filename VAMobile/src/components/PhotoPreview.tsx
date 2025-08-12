@@ -10,7 +10,7 @@ import Box, { BoxProps } from 'components/Box'
 import TextView, { TextViewProps } from 'components/TextView'
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
 type PhotoPreviewProps = {
@@ -46,7 +46,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
   const photoPreviewIconSize = 24
   const photoPreviewMaxIconSize = 50
   const photoPreviewBorderRadius = 5
@@ -61,7 +61,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
 
     const options = [t('remove'), t('keep')]
 
-    confirmAlert2(
+    confirmAlert(
       {
         options,
         title: t('removePhoto'),
@@ -80,27 +80,6 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
         }
       },
     )
-
-    // confirmAlert({
-    //   title: t('removePhoto'),
-    //   cancelButtonIndex: 0,
-    //   destructiveButtonIndex: 1,
-    //   buttons: [
-    //     {
-    //       text: t('keep'),
-    //       onPress: () => {
-    //         setSelected(false)
-    //       },
-    //     },
-    //     {
-    //       text: t('remove'),
-    //       onPress: () => {
-    //         setSelected(false)
-    //         onDeleteCallback()
-    //       },
-    //     },
-    //   ],
-    // })
   }
 
   const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined

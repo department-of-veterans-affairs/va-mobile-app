@@ -21,7 +21,7 @@ import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
@@ -31,8 +31,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const submitRefillAlert2 = useShowActionSheet2()
-  const confirmAlert2 = useShowActionSheet2()
+  const submitRefillAlert = useShowActionSheet()
+  const confirmAlert = useShowActionSheet()
 
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -78,7 +78,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     }
     e.preventDefault()
     const options = [t('cancelRequest'), t('prescriptions.refillRequest.continueRequest')]
-    confirmAlert2(
+    confirmAlert(
       {
         options,
         title: t('prescriptions.refillRequest.cancelMessage'),
@@ -111,7 +111,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
         : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
 
     const options = [actionText, t('cancel')]
-    submitRefillAlert2(
+    submitRefillAlert(
       {
         options,
         title:

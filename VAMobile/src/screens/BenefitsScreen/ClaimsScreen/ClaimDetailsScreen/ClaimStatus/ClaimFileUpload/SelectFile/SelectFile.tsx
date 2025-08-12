@@ -19,7 +19,7 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import getEnv from 'utils/env'
 import { isPdfEncrypted } from 'utils/filesystem'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { IS_TEST } = getEnv()
 
@@ -34,7 +34,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
   const { claimID, request } = route.params
-  const showActionSheet2 = useShowActionSheet2()
+  const showActionSheet = useShowActionSheet()
 
   useBeforeNavBackListener(navigation, (e) => {
     if (isActionSheetVisible) {
@@ -102,7 +102,7 @@ function SelectFile({ navigation, route }: SelectFilesProps) {
     const options = [t('fileUpload.fileFolder'), t('cancel')]
 
     setIsActionSheetVisible(true)
-    showActionSheet2(
+    showActionSheet(
       {
         options,
         cancelButtonIndex: 1,

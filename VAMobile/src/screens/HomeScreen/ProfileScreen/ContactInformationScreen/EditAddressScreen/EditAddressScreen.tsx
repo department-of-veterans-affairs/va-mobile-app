@@ -30,7 +30,7 @@ import { States } from 'constants/states'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { GenerateAddressMessage } from 'translations/en/functions'
-import { useAlert, useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -86,7 +86,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const { mutate: validateAddress, isPending: validatingAddress, data: validationData } = useValidateAddress()
   const [addressValidated, setAddressValidated] = useState(false)
   const deleteAddressAlert = useAlert()
-  const destructiveActionSheet = useShowActionSheet2()
+  const destructiveActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
 
   const addressLine1Ref = useRef<TextInput>(null)
@@ -183,22 +183,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         }
       },
     )
-    // destructiveActionSheet({
-    //   title,
-    //   destructiveButtonIndex: 1,
-    //   cancelButtonIndex: 0,
-    //   buttons: [
-    //     {
-    //       text: t('keepEditing'),
-    //     },
-    //     {
-    //       text: t('deleteChanges'),
-    //       onPress: () => {
-    //         navigation.dispatch(e.data.action)
-    //       },
-    //     },
-    //   ],
-    // })
   })
 
   const isDomestic = (countryVal: string): boolean => {

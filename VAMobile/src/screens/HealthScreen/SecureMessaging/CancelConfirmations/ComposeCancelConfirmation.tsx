@@ -10,7 +10,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -33,7 +33,7 @@ export function useComposeCancelConfirmation(): [
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const confirmationAlert2 = useShowActionSheet2()
+  const confirmationAlert = useShowActionSheet()
   const goToDrafts = useGoToDrafts()
   const queryClient = useQueryClient()
   const [isDiscarded, setIsDiscarded] = useState(false)
@@ -106,7 +106,7 @@ export function useComposeCancelConfirmation(): [
       const discardText = origin === 'Draft' ? t('deleteChanges') : t('delete')
       const saveText = origin === 'Draft' ? t('saveChanges') : t('save')
       const options = [discardText, saveText, t('keepEditing')]
-      confirmationAlert2(
+      confirmationAlert(
         {
           options,
           title:

@@ -18,7 +18,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { onAddPhotos } from 'utils/claims'
 import getEnv from 'utils/env'
-import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_VA_GOV } = getEnv()
 
@@ -28,13 +28,11 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const showActionSheetWithOptions2 = useShowActionSheet2()
+  const showActionSheetWithOptions = useShowActionSheet()
   const { claimID, request } = route.params
   const [error, setError] = useState('')
   const scrollViewRef = useRef<ScrollView>(null)
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
-
-  console.log('TAKE PHOTOS!!')
 
   useBeforeNavBackListener(navigation, (e) => {
     if (isActionSheetVisible) {
@@ -134,7 +132,7 @@ function TakePhotos({ navigation, route }: TakePhotosProps) {
           onPress={(): void =>
             onAddPhotos(
               t,
-              showActionSheetWithOptions2,
+              showActionSheetWithOptions,
               setError,
               callbackIfUri,
               0,

@@ -12,7 +12,7 @@ import Box, { BoxProps } from 'components/Box'
 import TextView from 'components/TextView'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
-import { useShowActionSheet2 } from 'utils/hooks'
+import { useShowActionSheet } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
 
 type PhotoUploadProps = {
@@ -45,7 +45,7 @@ const StyledImage = styled(Image)<StyledImageProps>`
 //TODO: Add this back to the VeteranStatusScreen when decided upon
 const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
   const photoUploadBorderRadius = 50
   const photoUploadBorderWidth = 2
   const VETERAN_STATUS_PHOTO_KEY = '@store_veteran_status_photo'
@@ -96,7 +96,7 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const onPress = (): void => {
     if (uri) {
       const actionOptions = [t('remove'), t('keep')]
-      confirmAlert2(
+      confirmAlert(
         {
           options: actionOptions,
           title: t('removePhoto'),
@@ -112,26 +112,8 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
           }
         },
       )
-      // confirmAlert({
-      //   title: t('removePhoto'),
-      //   cancelButtonIndex: 0,
-      //   destructiveButtonIndex: 1,
-      //   buttons: [
-      //     {
-      //       text: t('keep'),
-      //       onPress: () => {},
-      //     },
-      //     {
-      //       text: t('remove'),
-      //       onPress: () => {
-      //         setUri('')
-      //         AsyncStorage.setItem(VETERAN_STATUS_PHOTO_KEY, '')
-      //       },
-      //     },
-      //   ],
-      // })
     } else {
-      confirmAlert2(
+      confirmAlert(
         {
           options,
           cancelButtonIndex: 2,

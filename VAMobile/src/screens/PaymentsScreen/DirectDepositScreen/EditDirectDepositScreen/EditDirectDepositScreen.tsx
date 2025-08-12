@@ -26,7 +26,7 @@ import { AccountOptions } from 'constants/accounts'
 import { NAMESPACE } from 'constants/namespaces'
 import { isErrorObject } from 'utils/common'
 import { getTranslation } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -42,7 +42,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
   const theme = useTheme()
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [invalidRoutingNumberError, setIsInvalidRoutingNumberError] = useState(false)
@@ -62,7 +62,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
     }
     e.preventDefault()
     const options = [t('deleteChanges'), t('keepEditing')]
-    confirmAlert2(
+    confirmAlert(
       {
         options,
         title: t('directDeposit.deleteChanges'),

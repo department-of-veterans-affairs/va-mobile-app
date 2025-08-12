@@ -52,7 +52,7 @@ import {
   useBeforeNavBackListener,
   useMessageWithSignature,
   useRouteNavigation,
-  useShowActionSheet2,
+  useShowActionSheet,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -64,7 +64,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert2 = useShowActionSheet2()
+  const draftAttachmentAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
 
@@ -199,7 +199,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const sendReplyOrSaveDraft = (): void => {
     const reducedMessageData = { body: messageReply, category } as SecureMessagingFormData
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert2, attachmentsList, t, () => {
+      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
         const params: SaveDraftParameters = { messageData: reducedMessageData, replyID: message.messageId }
         const mutateOptions = {
           onSuccess: () => {

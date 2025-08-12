@@ -13,7 +13,7 @@ import { MenuViewActionsType } from 'components/Menu'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { NAMESPACE } from 'constants/namespaces'
-import { useShowActionSheet2, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -95,7 +95,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert2 = useShowActionSheet2()
+  const confirmAlert = useShowActionSheet()
 
   const message = t('areYouSure')
 
@@ -105,7 +105,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       return
     } else {
       const options = [t('close'), t('cancel')]
-      confirmAlert2(
+      confirmAlert(
         {
           options,
           title: '',
