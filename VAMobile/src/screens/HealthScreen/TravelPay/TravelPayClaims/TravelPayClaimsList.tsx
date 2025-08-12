@@ -66,7 +66,7 @@ function TravelPayClaimsList({
         weekday: 'long',
       }) // TODO: do we want to show timezone here?
 
-      const timeString = getFormattedTimeForTimeZone(appointmentDateTime) // TODO: SC - formatting possibly without timezone per specs
+      const timeString = getFormattedTimeForTimeZone(appointmentDateTime) // TODO: formatting possibly without timezone per specs
       textLines.push({
         text: t('travelPay.statusList.appointmentDateLine1', { date: dateString }),
         variant: 'MobileBodyBold',

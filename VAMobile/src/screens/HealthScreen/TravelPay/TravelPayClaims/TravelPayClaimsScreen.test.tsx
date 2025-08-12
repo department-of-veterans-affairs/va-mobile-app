@@ -46,7 +46,7 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   meta: {
     status: 200,
     pageNumber: 1,
-    totalRecordCount: 31,
+    totalRecordCount: 3,
   },
   data: [
     {
