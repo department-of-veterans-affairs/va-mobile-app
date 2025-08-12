@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { FacilitiesPayload, Facility } from 'api/types/FacilityData'
-import { get } from 'store/api'
+import { get, offlineQueryCache } from 'store/api'
 
 import { facilitiesKeys } from './queryKeys'
 

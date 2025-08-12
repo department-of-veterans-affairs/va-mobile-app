@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { VeteranVerificationStatusPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
-import { get } from 'store/api'
+import { get, offlineQueryCache } from 'store/api'
 
 import { veteranStatusKeys } from './queryKeys'
 

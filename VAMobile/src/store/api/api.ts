@@ -1,5 +1,10 @@
 import { Platform } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { fetch as fetchNetworkInfo } from '@react-native-community/netinfo'
+import NetInfo from '@react-native-community/netinfo'
+
+import { onlineManager } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
@@ -12,6 +17,12 @@ import getEnv from 'utils/env'
 
 import { transform } from './demo/store'
 import { APIError } from './types'
+
+onlineManager.setEventListener((setOnline) => {
+  return NetInfo.addEventListener((state) => {
+    setOnline(!!state.isConnected)
+  })
+})
 
 const { API_ROOT } = getEnv()
 
@@ -232,6 +243,7 @@ const call = async function <T>(
 }
 
 export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+  console.log('get', endpoint)
   return call<T>('GET', endpoint, params, undefined)
 }
 
@@ -258,4 +270,21 @@ export const patch = async function <T>(endpoint: string, params: Params = {}): 
 
 export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
   return call<T>('DELETE', endpoint, params)
+}
+
+export const offlineQueryCache = async <T>(cb: () => Promise<T>, endpoint: string): Promise<T> => {
+  const { isConnected } = await fetchNetworkInfo()
+
+  // Connected? Fetch data and save it to the cache
+  // if (isConnected) {
+    const res = await cb()
+    // await AsyncStorage.setItem(endpoint, JSON.stringify(res))
+    // console.log('cached', endpoint)
+    return res
+  // }
+  //
+  // // Pull cached data if it exists
+  // console.log('pulling cached data for', endpoint)
+  // const res = await AsyncStorage.getItem(endpoint)
+  // return JSON.parse(res || '') as T
 }

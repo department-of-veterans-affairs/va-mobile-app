@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -22,7 +23,8 @@ import {
   useSnackbar,
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
@@ -94,6 +96,10 @@ if (isIOS()) {
   KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
+
+const persister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+})
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -174,7 +180,7 @@ function MainApp() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         <ActionSheetProvider>
           <ThemeProvider theme={currentTheme}>
             <Provider store={store}>
@@ -200,7 +206,7 @@ function MainApp() {
             </Provider>
           </ThemeProvider>
         </ActionSheetProvider>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </>
   )
 }
