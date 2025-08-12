@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash'
 import { DateTime, type DateTimeUnit } from 'luxon'
 
 import { AppointmentData } from 'api/types'
@@ -18,7 +17,7 @@ const modifyAppt = (
   amount: number,
 ): AppointmentDataMod | undefined => {
   if (!inappt) return undefined
-  const appt = cloneDeep(inappt) as AppointmentDataMod
+  const appt = structuredClone(inappt) as AppointmentDataMod
   const startDate = DateTime.now().plus({ [unit]: amount })
   appt.attributes.startDateLocal = startDate.toISO()
   appt.attributes.startDateUtc = startDate.toUTC().toISO()
