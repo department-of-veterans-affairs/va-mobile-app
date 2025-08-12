@@ -314,6 +314,7 @@ jobs:
         id: run_images
         working-directory: VAMobile
         run: |
+          pwd
           ls -al ../.github/scripts/app-store-images/fastlane
           ../.github/scripts/app-store-images/generate_images.sh
 
