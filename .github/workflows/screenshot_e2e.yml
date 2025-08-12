@@ -303,6 +303,7 @@ jobs:
 
       - name: Combine screenshots
         run: |
+          yarn
           mkdir -p VAMobile/artifacts
           mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
           mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
