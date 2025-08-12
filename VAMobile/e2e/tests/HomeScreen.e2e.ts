@@ -1,15 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { setTimeout } from 'timers/promises'
 
-import {
-  CommonE2eIdConstants,
-  checkImages,
-  disableAF,
-  enableAF,
-  loginToDemoMode,
-  toggleRemoteConfigFlag,
-  verifyAF,
-} from './utils'
+import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, verifyAF } from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
@@ -37,7 +29,6 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -51,7 +42,6 @@ describe('Home Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
     await loginToDemoMode()
   })
 
