@@ -315,7 +315,8 @@ jobs:
         working-directory: VAMobile
         run: |
           pwd
-          ls -al ../.github/scripts/app-store-images/fastlane
+          cd ../.github/scripts/app-store-images/fastlane
+          ls -al 
           ../.github/scripts/app-store-images/generate_images.sh
 
       - name: Upload framed artifacts
