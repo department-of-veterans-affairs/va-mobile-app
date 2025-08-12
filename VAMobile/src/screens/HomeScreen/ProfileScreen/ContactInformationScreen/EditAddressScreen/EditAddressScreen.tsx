@@ -27,12 +27,11 @@ import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { States } from 'constants/states'
+import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
+import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { GenerateAddressMessage } from 'translations/en/functions'
-import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useAlert, useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
-
-import { profileAddressOptions } from '../AddressSummary'
-import AddressValidation from '../AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -87,7 +86,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const { mutate: validateAddress, isPending: validatingAddress, data: validationData } = useValidateAddress()
   const [addressValidated, setAddressValidated] = useState(false)
   const deleteAddressAlert = useAlert()
-  const destructiveActionSheet = useDestructiveActionSheet()
+  const destructiveActionSheet = useShowActionSheet2()
   const scrollViewRef = useRef<ScrollView>(null)
 
   const addressLine1Ref = useRef<TextInput>(null)
@@ -168,22 +167,38 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         ? t('editAddress.validation.cancelConfirm.home.title')
         : t('editAddress.validation.cancelConfirm.mailing.title')
 
-    destructiveActionSheet({
-      title,
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('deleteChanges'),
-          onPress: () => {
+    const options = [t('deleteChanges'), t('keepEditing')]
+    destructiveActionSheet(
+      {
+        options,
+        title,
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
+    // destructiveActionSheet({
+    //   title,
+    //   destructiveButtonIndex: 1,
+    //   cancelButtonIndex: 0,
+    //   buttons: [
+    //     {
+    //       text: t('keepEditing'),
+    //     },
+    //     {
+    //       text: t('deleteChanges'),
+    //       onPress: () => {
+    //         navigation.dispatch(e.data.action)
+    //       },
+    //     },
+    //   ],
+    // })
   })
 
   const isDomestic = (countryVal: string): boolean => {

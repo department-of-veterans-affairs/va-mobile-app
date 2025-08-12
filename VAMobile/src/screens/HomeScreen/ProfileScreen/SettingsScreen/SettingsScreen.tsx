@@ -26,7 +26,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -42,27 +42,29 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const dispatchLogout = useAppDispatch()
-  const signOutAlert = useDestructiveActionSheet()
+  const signOutAlert2 = useShowActionSheet2()
   const _logout = () => {
     dispatchLogout(logout())
   }
 
   const onShowConfirm = (): void => {
     logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
-    signOutAlert({
-      title: t('logout.confirm.text'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('logout.title'),
-          onPress: _logout,
-        },
-      ],
-    })
+    const options = [t('logout.title'), t('cancel')]
+    signOutAlert2(
+      {
+        options,
+        title: t('logout.confirm.text'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            _logout()
+            break
+        }
+      },
+    )
   }
 
   const onToggleTouchId = (): void => {

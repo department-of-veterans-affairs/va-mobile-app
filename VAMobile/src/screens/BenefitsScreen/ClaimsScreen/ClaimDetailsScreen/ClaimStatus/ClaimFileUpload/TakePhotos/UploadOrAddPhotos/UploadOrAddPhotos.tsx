@@ -36,10 +36,10 @@ import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import {
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useOrientation,
   useRouteNavigation,
   useShowActionSheet,
+  useShowActionSheet2,
   useTheme,
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
@@ -64,7 +64,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
   )
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -76,28 +76,52 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
 
+  console.log('upload pgototshH!!!')
+
   useBeforeNavBackListener(navigation, (e) => {
     if (imagesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title.photos'),
-      message: request
-        ? t('fileUpload.discard.confirm.message.requestPhotos')
-        : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('fileUpload.continueUpload'),
-        },
-        {
-          text: t('fileUpload.cancelUpload'),
-          onPress: () => navigation.dispatch(e.data.action),
-        },
-      ],
-    })
+
+    const options = [t('fileUpload.cancelUpload'), t('fileUpload.continueUpload')]
+
+    confirmAlert2(
+      {
+        options,
+        title: t('fileUpload.discard.confirm.title.photos'),
+        message: request
+          ? t('fileUpload.discard.confirm.message.requestPhotos')
+          : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.dispatch(e.data.action)
+            break
+        }
+      },
+    )
+
+    // confirmAlert({
+    //   title: t('fileUpload.discard.confirm.title.photos'),
+    //   message: request
+    //     ? t('fileUpload.discard.confirm.message.requestPhotos')
+    //     : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
+    //   cancelButtonIndex: 0,
+    //   destructiveButtonIndex: 1,
+    //   buttons: [
+    //     {
+    //       text: t('fileUpload.continueUpload'),
+    //     },
+    //     {
+    //       text: t('fileUpload.cancelUpload'),
+    //       onPress: () => navigation.dispatch(e.data.action),
+    //     },
+    //   ],
+    // })
   })
 
   useSubtaskProps({
@@ -195,20 +219,36 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       ),
     )
 
-    confirmAlert({
-      title: t('fileUpload.submit.confirm.title'),
-      message: t('fileUpload.submit.confirm.message'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('fileUpload.submit'),
-          onPress: onUploadConfirmed,
-        },
-      ],
-    })
+    const options = [t('fileUpload.submit'), t('cancel')]
+    confirmAlert2(
+      {
+        options,
+        title: t('fileUpload.submit.confirm.title'),
+        message: t('fileUpload.submit.confirm.message'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onUploadConfirmed()
+            break
+        }
+      },
+    )
+    // confirmAlert({
+    //   title: t('fileUpload.submit.confirm.title'),
+    //   message: t('fileUpload.submit.confirm.message'),
+    //   cancelButtonIndex: 0,
+    //   buttons: [
+    //     {
+    //       text: t('cancel'),
+    //     },
+    //     {
+    //       text: t('fileUpload.submit'),
+    //       onPress: onUploadConfirmed,
+    //     },
+    //   ],
+    // })
   }
 
   const onDocumentTypeChange = (selectedType: string) => {

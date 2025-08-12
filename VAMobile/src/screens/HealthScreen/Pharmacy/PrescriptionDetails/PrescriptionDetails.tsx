@@ -13,16 +13,19 @@ import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea,
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import {
+  RefillTag,
+  getDateTextAndLabel,
+  getRxNumberTextAndLabel,
+} from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import DetailsTextSections from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/DetailsTextSections'
+import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import DetailsTextSections from './DetailsTextSections'
-import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -32,7 +35,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const { prescription } = route.params
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
-  const submitRefillAlert = useDestructiveActionSheet()
+  const submitRefillAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
@@ -90,19 +93,17 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     const requestRefillButtonPress = () => {
       const prescriptionIds = [prescription].map((prescriptions) => prescriptions.id)
       logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
-      submitRefillAlert({
-        title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
-        cancelButtonIndex: 0,
-        buttons: [
-          {
-            text: t('cancel'),
-            onPress: () => {
-              logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
-            },
-          },
-          {
-            text: t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }),
-            onPress: () => {
+
+      const options = [t('prescriptions.refill.RequestRefillButtonTitle', { count: 1 }), t('cancel')]
+      submitRefillAlert2(
+        {
+          options,
+          title: t('prescriptions.refill.confirmationTitle', { count: 1 }),
+          cancelButtonIndex: 1,
+        },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
               // Call refill request so its starts the loading screen and then go to the modal
               if (!prescriptionInDowntime) {
                 logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
@@ -113,10 +114,13 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
                 }
                 requestRefill([prescription], mutateOptions)
               }
-            },
-          },
-        ],
-      })
+              break
+            case 1:
+              logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
+              break
+          }
+        },
+      )
     }
     return (
       <Box mb={theme.dimensions.buttonPadding} mx={theme.dimensions.buttonPadding}>

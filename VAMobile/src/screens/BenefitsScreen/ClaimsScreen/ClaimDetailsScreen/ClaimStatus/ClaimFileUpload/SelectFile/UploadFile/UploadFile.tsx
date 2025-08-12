@@ -39,9 +39,9 @@ import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { isPdfEncrypted } from 'utils/filesystem'
 import {
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useRouteNavigation,
   useShowActionSheet,
+  useShowActionSheet2,
   useTheme,
 } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
@@ -61,7 +61,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     originalRequest,
     filesList,
   )
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert2 = useShowActionSheet2()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
@@ -86,24 +86,27 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     if (filesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
+    console.log('upoad file')
     e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title'),
-      message: request
-        ? t('fileUpload.discard.confirm.message.requestFile')
-        : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('fileUpload.continueUpload'),
-        },
-        {
-          text: t('fileUpload.cancelUpload'),
-          onPress: () => navigation.dispatch(e.data.action),
-        },
-      ],
-    })
+    const options = [t('fileUpload.cancelUpload'), t('fileUpload.continueUpload')]
+    confirmAlert2(
+      {
+        options,
+        title: t('fileUpload.discard.confirm.title'),
+        message: request
+          ? t('fileUpload.discard.confirm.message.requestFile')
+          : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.dispatch(e.data.action)
+            break
+        }
+      },
+    )
   })
 
   useEffect(() => {
@@ -191,20 +194,23 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         filesList.length,
       ),
     )
-    confirmAlert({
-      title: t('fileUpload.submit.confirm.title'),
-      message: t('fileUpload.submit.confirm.message'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('fileUpload.submit'),
-          onPress: onUploadConfirmed,
-        },
-      ],
-    })
+
+    const options = [t('fileUpload.submit'), t('cancel')]
+    confirmAlert2(
+      {
+        options,
+        title: t('fileUpload.submit.confirm.title'),
+        message: t('fileUpload.submit.confirm.message'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onUploadConfirmed()
+            break
+        }
+      },
+    )
   }
 
   const onDocumentTypeChange = (selectedType: string) => {

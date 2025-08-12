@@ -303,6 +303,7 @@ export function useDestructiveActionSheet(): (props: useDestructiveActionSheetPr
         destructiveColor: currentTheme.colors.text.error,
         options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+
         cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
       },
       (buttonIndex) => {
@@ -439,7 +440,7 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert = useDestructiveActionSheet()
+  const destructiveAlert2 = useShowActionSheet2()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
@@ -451,22 +452,22 @@ export function useAttachments(): [
   }
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
-    destructiveAlert({
-      title: t('secureMessaging.attachments.removeAttachment'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('secureMessaging.attachments.keep'),
-        },
-        {
-          text: t('remove'),
-          onPress: () => {
+    const options = [t('remove'), t('secureMessaging.attachments.keep')]
+    destructiveAlert2(
+      {
+        options,
+        title: t('secureMessaging.attachments.removeAttachment'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             onRemove(attachmentFileToRemove)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   }
 
   return [attachmentsList, addAttachment, removeAttachment]
@@ -618,4 +619,63 @@ export function useOpenAppStore(): () => void {
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
 
   return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
+}
+
+export type ActionSheetProps = ActionSheetOptions & {
+  buttons?: Array<useDestructiveActionSheetButtonProps>
+  destructiveButtonIndex?: number
+}
+
+export function useShowActionSheet2(): (
+  options: ActionSheetProps,
+  callback: (i?: number) => void | Promise<void>,
+) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
+
+  return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
+    // For destructive action sheets
+    // Ensure cancel button is always last for UX consistency
+    // const { buttons, cancelButtonIndex, destructiveButtonIndex } = options
+    // const newButtons: useDestructiveActionSheetButtonProps[] = []
+    // let newDestructiveButtonIndex = destructiveButtonIndex
+    // if (cancelButtonIndex !== undefined && destructiveButtonIndex !== undefined) {
+    //   // newButtons = [...buttons]
+    //   // if (cancelButtonIndex < buttons.length - 1) {
+    //   //   newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
+    //   // }
+    //   if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+    //     newDestructiveButtonIndex = destructiveButtonIndex - 1
+    //   }
+    // }
+    // let newDestructiveButtonIndex = destructiveButtonIndex
+    // if (destructiveButtonIndex !== undefined && cancelButtonIndex !== undefined && cancelButtonIndex < destructiveButtonIndex) {
+    //   newDestructiveButtonIndex = destructiveButtonIndex - 1
+    // }
+
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+    const casedOptionsText = options.options.map((optionText) =>
+      stringToTitleCase(isIOS() ? optionText : optionText + ' '),
+    )
+
+    Keyboard.dismiss()
+
+    const sheetOptions: ActionSheetOptions = {
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: textAlign,
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
+      textStyle: { color: currentTheme.colors.text.primary },
+      destructiveColor: currentTheme.colors.text.error,
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      ...options,
+      // destructiveButtonIndex: newDestructiveButtonIndex,
+      options: casedOptionsText,
+      cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,
+    }
+
+    showActionSheetWithOptions(sheetOptions, callback)
+  }
 }

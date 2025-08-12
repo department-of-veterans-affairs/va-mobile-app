@@ -26,7 +26,7 @@ import { AccountOptions } from 'constants/accounts'
 import { NAMESPACE } from 'constants/namespaces'
 import { isErrorObject } from 'utils/common'
 import { getTranslation } from 'utils/formattingUtils'
-import { useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useBeforeNavBackListener, useShowActionSheet2, useTheme } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -42,7 +42,7 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
   const { t: tc } = useTranslation()
   const { displayTitle } = route.params
   const theme = useTheme()
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert2 = useShowActionSheet2()
   const accountNumRef = useRef<TextInput>(null)
   const scrollViewRef = useRef<ScrollView>(null)
   const [invalidRoutingNumberError, setIsInvalidRoutingNumberError] = useState(false)
@@ -61,22 +61,22 @@ function EditDirectDepositScreen({ navigation, route }: EditDirectDepositProps) 
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('directDeposit.deleteChanges'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('deleteChanges'),
-          onPress: () => {
+    const options = [t('deleteChanges'), t('keepEditing')]
+    confirmAlert2(
+      {
+        options,
+        title: t('directDeposit.deleteChanges'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   })
 
   //returns true when no edits have been made.

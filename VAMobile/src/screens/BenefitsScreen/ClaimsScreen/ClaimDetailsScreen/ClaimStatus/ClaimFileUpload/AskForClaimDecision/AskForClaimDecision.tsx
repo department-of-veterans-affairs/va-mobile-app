@@ -24,13 +24,12 @@ import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
-import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { FileRequestStackParams } from '../FileRequestSubtask'
+import { useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<FileRequestStackParams, 'AskForClaimDecision'>
 
@@ -49,7 +48,7 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
   const [submittedDecision, setSubmittedDecision] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const { standardMarginBetween, contentMarginBottom, gutter } = theme.dimensions
-  const requestEvalAlert = useDestructiveActionSheet()
+  const requestEvalAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
@@ -118,19 +117,35 @@ function AskForClaimDecision({ navigation, route }: AskForClaimDecisionProps) {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
     }
-    requestEvalAlert({
-      title: t('askForClaimDecision.alertTitle'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancelRequest'),
-        },
-        {
-          text: t('askForClaimDecision.alertBtnTitle'),
-          onPress: onSubmit,
-        },
-      ],
-    })
+
+    const options = [t('askForClaimDecision.alertBtnTitle'), t('cancelRequest')]
+    requestEvalAlert2(
+      {
+        options,
+        title: t('askForClaimDecision.alertTitle'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onSubmit()
+            break
+        }
+      },
+    )
+    // requestEvalAlert({
+    //   title: t('askForClaimDecision.alertTitle'),
+    //   cancelButtonIndex: 0,
+    //   buttons: [
+    //     {
+    //       text: t('cancelRequest'),
+    //     },
+    //     {
+    //       text: t('askForClaimDecision.alertBtnTitle'),
+    //       onPress: onSubmit,
+    //     },
+    //   ],
+    // })
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

@@ -55,9 +55,9 @@ import { hasErrorCode } from 'utils/errors'
 import {
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
+  useShowActionSheet2,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -77,7 +77,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
 
@@ -357,7 +357,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
   const onMessageSendOrSave = (): void => {
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
+      saveDraftWithAttachmentAlert(draftAttachmentAlert2, attachmentsList, t, () => {
         const params: SaveDraftParameters = { messageData: messageData }
         const mutateOptions = {
           onSuccess: () => {

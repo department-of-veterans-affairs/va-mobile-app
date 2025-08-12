@@ -11,7 +11,7 @@ import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingC
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { stringToTitleCase } from 'utils/formattingUtils'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useShowActionSheet2, useTheme } from 'utils/hooks'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -23,7 +23,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const preferredNameMutation = useUpdatePreferredName()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet2()
 
   const getInitialState = (): string => {
     const item = demographics?.preferredName
@@ -36,24 +36,41 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
 
   const onConfirmCancel = (): void => {
     if (preferredName !== getInitialState()) {
-      confirmAlert({
-        title: '',
-        message: t('personalInformation.preferredName.cancelMessage'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('keepEditing'),
-            onPress: () => {},
-          },
-          {
-            text: t('deleteChanges'),
-            onPress: () => {
+      const options = [t('deleteChanges'), t('keepEditing')]
+      confirmAlert(
+        {
+          options,
+          title: '',
+          message: t('personalInformation.preferredName.cancelMessage'),
+          cancelButtonIndex: 1,
+          destructiveButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
               navigation.goBack()
-            },
-          },
-        ],
-      })
+              break
+          }
+        },
+      )
+      // confirmAlert({
+      //   title: '',
+      //   message: t('personalInformation.preferredName.cancelMessage'),
+      //   cancelButtonIndex: 0,
+      //   destructiveButtonIndex: 1,
+      //   buttons: [
+      //     {
+      //       text: t('keepEditing'),
+      //       onPress: () => {},
+      //     },
+      //     {
+      //       text: t('deleteChanges'),
+      //       onPress: () => {
+      //         navigation.goBack()
+      //       },
+      //     },
+      //   ],
+      // })
       return
     } else {
       navigation.goBack()

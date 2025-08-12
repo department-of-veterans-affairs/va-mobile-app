@@ -8,13 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import styled from 'styled-components'
 
+import Box, { BoxProps } from 'components/Box'
+import TextView from 'components/TextView'
 import { NAMESPACE } from 'constants/namespaces'
 import theme from 'styles/themes/standardTheme'
-import { useDestructiveActionSheet, useShowActionSheet } from 'utils/hooks'
+import { useShowActionSheet2 } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-
-import Box, { BoxProps } from './Box'
-import TextView from './TextView'
 
 type PhotoUploadProps = {
   /** width of the photo */
@@ -46,10 +45,9 @@ const StyledImage = styled(Image)<StyledImageProps>`
 //TODO: Add this back to the VeteranStatusScreen when decided upon
 const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert2 = useShowActionSheet2()
   const photoUploadBorderRadius = 50
   const photoUploadBorderWidth = 2
-  const showActionSheetWithOptions = useShowActionSheet()
   const VETERAN_STATUS_PHOTO_KEY = '@store_veteran_status_photo'
   const [uri, setUri] = useState('')
   const options = [t('fileUpload.camera'), t('fileUpload.photoGallery'), t('cancel')]
@@ -97,26 +95,43 @@ const PhotoUpload: FC<PhotoUploadProps> = ({ width, height }) => {
 
   const onPress = (): void => {
     if (uri) {
-      confirmAlert({
-        title: t('removePhoto'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('keep'),
-            onPress: () => {},
-          },
-          {
-            text: t('remove'),
-            onPress: () => {
+      const actionOptions = [t('remove'), t('keep')]
+      confirmAlert2(
+        {
+          options: actionOptions,
+          title: t('removePhoto'),
+          cancelButtonIndex: 1,
+          destructiveButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
               setUri('')
               AsyncStorage.setItem(VETERAN_STATUS_PHOTO_KEY, '')
-            },
-          },
-        ],
-      })
+              break
+          }
+        },
+      )
+      // confirmAlert({
+      //   title: t('removePhoto'),
+      //   cancelButtonIndex: 0,
+      //   destructiveButtonIndex: 1,
+      //   buttons: [
+      //     {
+      //       text: t('keep'),
+      //       onPress: () => {},
+      //     },
+      //     {
+      //       text: t('remove'),
+      //       onPress: () => {
+      //         setUri('')
+      //         AsyncStorage.setItem(VETERAN_STATUS_PHOTO_KEY, '')
+      //       },
+      //     },
+      //   ],
+      // })
     } else {
-      showActionSheetWithOptions(
+      confirmAlert2(
         {
           options,
           cancelButtonIndex: 2,

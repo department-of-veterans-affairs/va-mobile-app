@@ -15,21 +15,14 @@ import { SelectionListItemObj } from 'components/SelectionList/SelectionListItem
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
 import { logAnalyticsEvent } from 'utils/analytics'
-import {
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useDowntime,
-  useRouteNavigation,
-  useTheme,
-} from 'utils/hooks'
+import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { PrescriptionListItem } from '../PrescriptionCommon'
-import NoRefills from './NoRefills'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
@@ -38,8 +31,8 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const submitRefillAlert = useDestructiveActionSheet()
-  const confirmAlert = useDestructiveActionSheet()
+  const submitRefillAlert2 = useShowActionSheet2()
+  const confirmAlert2 = useShowActionSheet2()
 
   const { t } = useTranslation(NAMESPACE.COMMON)
 
@@ -84,22 +77,22 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('prescriptions.refillRequest.cancelMessage'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('prescriptions.refillRequest.continueRequest'),
-        },
-        {
-          text: t('cancelRequest'),
-          onPress: () => {
+    const options = [t('cancelRequest'), t('prescriptions.refillRequest.continueRequest')]
+    confirmAlert2(
+      {
+        options,
+        title: t('prescriptions.refillRequest.cancelMessage'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   })
 
   const onSubmitPressed = () => {
@@ -111,25 +104,25 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     })
     const prescriptionIds = prescriptionList.map((prescription) => prescription.id)
     logAnalyticsEvent(Events.vama_rx_request_start(prescriptionIds))
-    submitRefillAlert({
-      title:
-        selectedPrescriptionsCount === refillablePrescriptions?.length
-          ? t('prescriptions.refill.confirmationTitle.all')
-          : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-          onPress: () => {
-            logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
-          },
-        },
-        {
-          text:
-            selectedPrescriptionsCount === refillablePrescriptions?.length
-              ? t('prescriptions.refill.RequestRefillButtonTitle.all')
-              : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount }),
-          onPress: () => {
+
+    const actionText =
+      selectedPrescriptionsCount === refillablePrescriptions?.length
+        ? t('prescriptions.refill.RequestRefillButtonTitle.all')
+        : t('prescriptions.refill.RequestRefillButtonTitle', { count: selectedPrescriptionsCount })
+
+    const options = [actionText, t('cancel')]
+    submitRefillAlert2(
+      {
+        options,
+        title:
+          selectedPrescriptionsCount === refillablePrescriptions?.length
+            ? t('prescriptions.refill.confirmationTitle.all')
+            : t('prescriptions.refill.confirmationTitle', { count: selectedPrescriptionsCount }),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             logAnalyticsEvent(Events.vama_rx_request_confirm(prescriptionIds))
             const mutateOptions: MutateOptions<RefillRequestSummaryItems, Error, PrescriptionsList, void> = {
               onSettled(data) {
@@ -139,10 +132,13 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               },
             }
             requestRefill(prescriptionList, mutateOptions)
-          },
-        },
-      ],
-    })
+            break
+          case 1:
+            logAnalyticsEvent(Events.vama_rx_request_cancel(prescriptionIds))
+            break
+        }
+      },
+    )
   }
 
   const getListItems = () => {

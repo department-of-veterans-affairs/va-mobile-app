@@ -13,7 +13,7 @@ import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/Tra
 import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 
@@ -25,25 +25,25 @@ function InterstitialScreen({ navigation, route }: InterstitialScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert2 = useShowActionSheet2()
 
   const onLeftButtonPress = () => {
-    confirmAlert({
-      title: t('travelPay.cancelClaim.title'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('travelPay.cancelClaim.continue'),
-        },
-        {
-          text: t('travelPay.cancelClaim.cancel'),
-          onPress: () => {
+    const options = [t('travelPay.cancelClaim.cancel'), t('travelPay.cancelClaim.continue')]
+    confirmAlert2(
+      {
+        options,
+        title: t('travelPay.cancelClaim.title'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.goBack()
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   }
 
   useSubtaskProps({

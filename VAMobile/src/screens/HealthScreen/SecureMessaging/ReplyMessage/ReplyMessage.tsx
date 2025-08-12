@@ -42,22 +42,21 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import {
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
+  useShowActionSheet2,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import { formatSubject, saveDraftWithAttachmentAlert } from 'utils/secureMessaging'
-
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
-import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -65,7 +64,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
 
@@ -200,7 +199,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
   const sendReplyOrSaveDraft = (): void => {
     const reducedMessageData = { body: messageReply, category } as SecureMessagingFormData
     if (onSaveDraftClicked) {
-      saveDraftWithAttachmentAlert(draftAttachmentAlert, attachmentsList, t, () => {
+      saveDraftWithAttachmentAlert(draftAttachmentAlert2, attachmentsList, t, () => {
         const params: SaveDraftParameters = { messageData: reducedMessageData, replyID: message.messageId }
         const mutateOptions = {
           onSuccess: () => {
