@@ -56,6 +56,7 @@ import getEnv from 'utils/env'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 
+import { GoToFormsButton } from '../FormsScreen/GoToFormsButton'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from './HomeStackScreens'
 import PaymentBreakdownModal from './PaymentBreakdownModal/PaymentBreakdownModal'
@@ -69,7 +70,6 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
-import {GoToFormsButton} from "../FormsScreen/GoToFormsButton";
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
