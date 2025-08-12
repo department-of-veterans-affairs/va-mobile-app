@@ -449,8 +449,8 @@
     "namespaces.ts": [],
     "store.ts": [],
     "utils.ts": [],
-    "allergies.json": [],
-    "labsAndTests.json": [],
+    "allergies.json": ["Allergies"],
+    "labsAndTests.json": ["LabsAndTests"],
     "users.ts": []
   }
 }
