@@ -1180,6 +1180,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
+
   await openHealth()
   await openAppointments()
   await waitFor(element(by.text('Upcoming')))
