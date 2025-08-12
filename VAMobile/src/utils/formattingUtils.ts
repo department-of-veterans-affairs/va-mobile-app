@@ -86,7 +86,20 @@ export const getFormattedMessageTime = (dateTime: string): string => {
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
 export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
+  let formattedTime = getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, {
+    timeZoneName: 'short',
+  })
+
+  // Specific non-location timezones are currently unavailable in date-fns, so right now these tokens fall back to GMT timezones.
+  // This is a workaround to replace them with more user friendly timezone abbreviations.
+  if (formattedTime.includes('GMT')) {
+    formattedTime = formattedTime
+      .replace('GMT+10', 'ChT') // Replace GMT+10 with ChT for Chamorro Time - Pacific/Guam, Pacific/Saipan
+      .replace('GMT+8', 'PHT') // Replace GMT+8 with PHT for Philippine Time - Asia/Manila
+      .replace('GMT-11', 'ST') // Replace GMT-11 with PHT for Samoa Time - Pacific/Pago_Pago
+  }
+
+  return formattedTime
 }
 
 /**
