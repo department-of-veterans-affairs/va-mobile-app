@@ -44,7 +44,7 @@ const AlertWithHaptics: FC<AlertWithHapticsProps> = ({
   }
 
   return (
-    <View ref={viewRef}>
+    <View ref={viewRef} accessibilityRole="alert">
       <Alert {...alertProps}>{children}</Alert>
       {shouldFocus && vibrate()}
     </View>

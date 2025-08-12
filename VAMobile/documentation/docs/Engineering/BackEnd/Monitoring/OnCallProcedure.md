@@ -30,3 +30,77 @@ There are other slack channels that the on-call enginner should pay attention to
 - [#vfs-platform-support Slack channel](https://dsva.slack.com/archives/CBU0KDSB1)
 - [#vfs-change-announcements Slack channel](https://dsva.slack.com/archives/C03R5SBELQM)
 - [#vfs-all-teams Slack channel](https://dsva.slack.com/archives/CE4304QPK)
+
+## Alert flow
+
+The mobile app receives its alerts from Pager Duty.  Below is the alert flow.
+
+```mermaid
+---
+config:
+  theme: redux
+---
+flowchart LR
+    subgraph maf [Mobile Alert Flow]
+        direction TB
+        subgraph anomaly [Mobile API services volume anomaly]
+            direction TB
+            K("Threshold monitored (Below 100% for 120 minutes")
+            A("'>=100")
+            B("'<=100'")
+            E("Alert triggered in Datadog")
+            G("Alert is sent to PD")
+            H("va-mobile-alerts slack channel receives PD notification")
+            I("'On-call' user ack's alert and verifies issue")
+            J("Alert self resolves")
+
+        end
+        K --> A
+        K --> B
+        B --> E --> G --> H --> I
+        I --> A
+        A --> J
+        J --> K
+        subgraph 5xx [Resource serving 5XX errors]
+            direction TB
+            Q("Threshold monitored (over 60% for 60 minutes")
+            C("'>'60") 
+            D("'<'60")
+            L("Alert triggered in Datadog")
+            M("Alert is sent to PD")
+            N("va-mobile-alerts slack channel receives PD notification")
+            O("'On-call' user ack's alert and verifies issue")
+            P("Alert self resolves")
+        end
+        Q --> C --> L --> M --> N --> O --> D
+        D --> P
+        P --> Q
+        Q --> D
+    end
+
+%%Color Classes%%
+classDef blue fill:#ADD8E6,stroke:#333,stroke-width:2px;
+classDef gray fill:#DCDCDC,stroke:#333,stroke-width:2px;
+classDef white fill:#FFFFFF,stroke:#000000,stroke-width:2px;
+classDef rose stroke-width:1px, stroke-dasharray:none, stroke:#FF5978, fill:#FFDFE5, color:#8E2236
+classDef green fill:#90EE90,stroke:#333,stroke-width:2px;
+maf:::white
+anomaly:::gray
+5xx:::gray
+K:::blue
+Q:::blue
+C:::rose
+B:::rose
+E:::rose
+G:::rose
+H:::rose
+I:::rose
+J:::green
+A:::green
+L:::rose
+M:::rose
+N:::rose
+O:::rose
+P:::green
+D:::green
+```

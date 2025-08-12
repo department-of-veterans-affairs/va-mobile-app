@@ -425,10 +425,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       }
     })
 
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
     // not crazy about the keys here being the labels we eventually display in the combobox
     // open to suggestions here
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
       [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
     }
   }
