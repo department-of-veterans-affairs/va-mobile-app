@@ -247,7 +247,10 @@
     "SyncScreen": [],
     "WebviewScreen": [],
     "styles": [],
-    "TravelPay": ["TravelPay"]
+    "TravelPay": ["TravelPay"],
+    "benjaminAdams": [],
+    "claraJefferson": [],
+    "kimberlyWashington": []
   },
   "files": {
     "allergies.ts": ["Allergies"],
@@ -445,6 +448,9 @@
     "linking.tsx": [],
     "namespaces.ts": [],
     "store.ts": [],
-    "utils.ts": []
+    "utils.ts": [],
+    "allergies.json": [],
+    "labsAndTests.json": [],
+    "users.ts": []
   }
 }
