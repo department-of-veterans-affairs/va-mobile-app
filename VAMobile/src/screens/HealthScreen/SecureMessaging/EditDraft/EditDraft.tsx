@@ -160,7 +160,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const replyDisabled = isReplyDraft && !hasRecentMessages
   const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
   const [careSystem, setCareSystem] = useState(
-    messageRecipient?.attributes.stationNumber || careSystems.length < 2 ? careSystems[0]?.value : '',
+    messageRecipient?.attributes.stationNumber || careSystems.length === 1 ? careSystems[0]?.value : '',
   )
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
@@ -450,7 +450,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           testID: 'care system field',
           confirmTestID: 'careSystemPickerConfirmID',
         },
-        hideField: careSystems.length < 2,
+        hideField: careSystems.length === 1,
         fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
       },
       {

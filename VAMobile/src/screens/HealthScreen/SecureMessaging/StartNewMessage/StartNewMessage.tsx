@@ -125,7 +125,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   })
   const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState(careSystems.length < 2 ? careSystems[0]?.value : '')
+  console.log('CARE SYSTEMS: ', careSystems)
+  const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -263,7 +264,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         testID: 'care system field',
         confirmTestID: 'careSystemPickerConfirmID',
       },
-      hideField: careSystems.length < 2,
+      hideField: careSystems.length === 1,
       fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
     },
     {
