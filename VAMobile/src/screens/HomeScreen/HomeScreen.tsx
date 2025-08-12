@@ -69,6 +69,7 @@ import DeveloperScreen from './ProfileScreen/SettingsScreen/DeveloperScreen'
 import OverrideAPIScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from './ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import NotificationsSettingsScreen from './ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
+import {GoToFormsButton} from "../FormsScreen/GoToFormsButton";
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -403,15 +404,11 @@ export function HomeScreen({}: HomeScreenProps) {
               {(hasActivityError || activityFeatureInDowntime) && (
                 <CategoryLandingAlert text={t('activity.error.cantShowAllActivity')} isError={hasActivityError} />
               )}
-              <Button
-                buttonType={ButtonVariants.Primary}
-                label={'Go to forms'}
-                onPress={() => {
-                  navigateTo('FormsTab')
-                }}
-              />
             </Box>
           )}
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+            <GoToFormsButton />
+          </Box>
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
               {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
