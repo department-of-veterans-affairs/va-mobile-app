@@ -47,14 +47,15 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate })
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [dateRange, setDateRange] = useState({
-    startDate: initialDate.minus({ months: 5 }),
-    endDate: initialDate.minus({ months: 3 }),
+    startDate: initialDate.minus({ months: 3 }),
+    endDate: initialDate,
   })
 
   const handleReset = () => {
+    const currentDate = DateTime.local()
     setDateRange({
-      startDate: DateTime.local(),
-      endDate: DateTime.local(),
+      startDate: currentDate.minus({ months: 3 }),
+      endDate: currentDate,
     })
   }
 
