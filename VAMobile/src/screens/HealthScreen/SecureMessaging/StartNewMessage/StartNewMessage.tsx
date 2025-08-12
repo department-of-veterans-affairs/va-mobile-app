@@ -239,8 +239,17 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
       [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
     }
   }
