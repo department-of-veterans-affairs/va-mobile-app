@@ -38,7 +38,6 @@ import {
   useBeforeNavBackListener,
   useOrientation,
   useRouteNavigation,
-  useShowActionSheet,
   useShowActionSheet2,
   useTheme,
 } from 'utils/hooks'
@@ -50,7 +49,8 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const showActionSheetWithOptions = useShowActionSheet()
+  const showActionSheetWithOptions2 = useShowActionSheet2()
+  const confirmAlert2 = useShowActionSheet2()
   const { claimID, request: originalRequest, firstImageResponse } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const isPortrait = useOrientation()
@@ -64,7 +64,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
   )
-  const confirmAlert2 = useShowActionSheet2()
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -75,8 +74,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const [validationErrors, setValidationErrors] = useState<Array<string>>([])
 
   const waygate = getWaygateToggles().WG_UploadOrAddPhotos
-
-  console.log('upload pgototshH!!!')
 
   useBeforeNavBackListener(navigation, (e) => {
     if (imagesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
@@ -104,24 +101,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
         }
       },
     )
-
-    // confirmAlert({
-    //   title: t('fileUpload.discard.confirm.title.photos'),
-    //   message: request
-    //     ? t('fileUpload.discard.confirm.message.requestPhotos')
-    //     : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
-    //   cancelButtonIndex: 0,
-    //   destructiveButtonIndex: 1,
-    //   buttons: [
-    //     {
-    //       text: t('fileUpload.continueUpload'),
-    //     },
-    //     {
-    //       text: t('fileUpload.cancelUpload'),
-    //       onPress: () => navigation.dispatch(e.data.action),
-    //     },
-    //   ],
-    // })
   })
 
   useSubtaskProps({
@@ -347,7 +326,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
               onPress={(): void => {
                 onAddPhotos(
                   t,
-                  showActionSheetWithOptions,
+                  showActionSheetWithOptions2,
                   setErrorMessage,
                   callbackIfUri,
                   totalBytesUsed || 0,

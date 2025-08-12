@@ -6,7 +6,6 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
@@ -404,7 +403,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  */
 export const onAddFileAttachments = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+  showActionSheetWithOptions: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,

@@ -37,13 +37,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { isPdfEncrypted } from 'utils/filesystem'
-import {
-  useBeforeNavBackListener,
-  useRouteNavigation,
-  useShowActionSheet,
-  useShowActionSheet2,
-  useTheme,
-} from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet2, useTheme } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
 type UploadFileProps = StackScreenProps<FileRequestStackParams, 'UploadFile'>
@@ -62,12 +56,12 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     filesList,
   )
   const confirmAlert2 = useShowActionSheet2()
+  const showActionSheet2 = useShowActionSheet2()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
-  const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
   const [formContainsError, setFormContainsError] = useState(false)
   const [formErrorList, setFormErrorList] = useState<{ [key: number]: string }>({})
@@ -86,7 +80,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     if (filesList?.length === 0 || filesUploadedSuccess || (!waygate.enabled && waygate.type === 'DenyContent')) {
       return
     }
-    console.log('upoad file')
     e.preventDefault()
     const options = [t('fileUpload.cancelUpload'), t('fileUpload.continueUpload')]
     confirmAlert2(
@@ -290,7 +283,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     const options = [t('fileUpload.fileFolder'), t('cancel')]
 
     setIsActionSheetVisible(true)
-    showActionSheet(
+    showActionSheet2(
       {
         options,
         cancelButtonIndex: 1,

@@ -255,65 +255,65 @@ export type useDestructiveActionSheetProps = {
   /** options to show in alert */
   buttons: Array<useDestructiveActionSheetButtonProps>
 }
-/**
- * Hook to create appropriate actionSheet for a destructive event
- * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
- * @param title - optional title of the ActionSheet
- * @param message - optional message for the ActionSheet
- * @param destructiveButtonIndex - optional destructive index
- * @param cancelButtonIndex - ios cancel index
- * @param buttons - options to show in the ActionSheet
- * @returns an action sheet
- */
-export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
-  const { showActionSheetWithOptions } = useActionSheet()
-  const currentTheme = getTheme()
-  return (props: useDestructiveActionSheetProps) => {
-    const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
-
-    // Ensure cancel button is always last for UX consisency
-    const newButtons = [...buttons]
-    if (cancelButtonIndex < buttons.length - 1) {
-      newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-    }
-
-    let newDestructiveButtonIndex = destructiveButtonIndex
-    if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
-      newDestructiveButtonIndex = destructiveButtonIndex - 1
-    }
-
-    Keyboard.dismiss()
-    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
-    showActionSheetWithOptions(
-      {
-        title: props.title,
-        titleTextStyle: {
-          fontWeight: 'bold',
-          textAlign: textAlign,
-          color: currentTheme.colors.text.primary,
-        },
-        message: props.message,
-        messageTextStyle: {
-          fontWeight: 'normal',
-          textAlign: textAlign,
-          color: currentTheme.colors.text.primary,
-        },
-        textStyle: { color: currentTheme.colors.text.primary },
-        destructiveButtonIndex: newDestructiveButtonIndex,
-        destructiveColor: currentTheme.colors.text.error,
-        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
-        containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
-
-        cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
-      },
-      (buttonIndex) => {
-        if (buttonIndex || buttonIndex === 0) {
-          newButtons[buttonIndex]?.onPress?.()
-        }
-      },
-    )
-  }
-}
+// /**
+//  * Hook to create appropriate actionSheet for a destructive event
+//  * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
+//  * @param title - optional title of the ActionSheet
+//  * @param message - optional message for the ActionSheet
+//  * @param destructiveButtonIndex - optional destructive index
+//  * @param cancelButtonIndex - ios cancel index
+//  * @param buttons - options to show in the ActionSheet
+//  * @returns an action sheet
+//  */
+// export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
+//   const { showActionSheetWithOptions } = useActionSheet()
+//   const currentTheme = getTheme()
+//   return (props: useDestructiveActionSheetProps) => {
+//     const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
+//
+//     // Ensure cancel button is always last for UX consisency
+//     const newButtons = [...buttons]
+//     if (cancelButtonIndex < buttons.length - 1) {
+//       newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
+//     }
+//
+//     let newDestructiveButtonIndex = destructiveButtonIndex
+//     if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
+//       newDestructiveButtonIndex = destructiveButtonIndex - 1
+//     }
+//
+//     Keyboard.dismiss()
+//     // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+//     showActionSheetWithOptions(
+//       {
+//         title: props.title,
+//         titleTextStyle: {
+//           fontWeight: 'bold',
+//           textAlign: textAlign,
+//           color: currentTheme.colors.text.primary,
+//         },
+//         message: props.message,
+//         messageTextStyle: {
+//           fontWeight: 'normal',
+//           textAlign: textAlign,
+//           color: currentTheme.colors.text.primary,
+//         },
+//         textStyle: { color: currentTheme.colors.text.primary },
+//         destructiveButtonIndex: newDestructiveButtonIndex,
+//         destructiveColor: currentTheme.colors.text.error,
+//         options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
+//         containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+//
+//         cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
+//       },
+//       (buttonIndex) => {
+//         if (buttonIndex || buttonIndex === 0) {
+//           newButtons[buttonIndex]?.onPress?.()
+//         }
+//       },
+//     )
+//   }
+// }
 
 export type UseAlertProps = {
   /** title of alert */
