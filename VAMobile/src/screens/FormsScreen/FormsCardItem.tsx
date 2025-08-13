@@ -65,7 +65,7 @@ function FormsCardItem({ data, onFormClose, key }: FormsCardProps) {
         </TextView>
         <Icon
           name={'ChevronRight'}
-          fill={theme.colors.icon.deleteFill}
+          fill={theme.colors.icon.ussf}
           width={theme.dimensions.chevronListItemWidth}
           height={theme.dimensions.chevronListItemHeight}
         />
