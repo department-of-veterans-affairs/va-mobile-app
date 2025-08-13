@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
-import DatePicker from 'components/DatePicker/DatePicker'
+import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -22,6 +22,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
+  dateRange: AppointmentsDateRange
   loading: boolean
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -42,6 +43,7 @@ type PastAppointmentsProps = {
 
 function PastAppointments({
   appointmentsData,
+  dateRange,
   loading,
   page,
   setPage,
@@ -197,6 +199,22 @@ function PastAppointments({
     }
   }
 
+  const handleDatePickerApply = (datePickerRange: DatePickerRange) => {
+    const startDate = datePickerRange.startDate.toISO()
+    const endDate = datePickerRange.endDate.toISO()
+    if (startDate && endDate) {
+      setDateRange({ startDate, endDate })
+      setPage(1)
+    }
+  }
+
+  const getDatePickerRange = (apptsDateRange: AppointmentsDateRange) => {
+    return {
+      startDate: DateTime.fromISO(apptsDateRange.startDate).toLocal(),
+      endDate: DateTime.fromISO(apptsDateRange.endDate).toLocal(),
+    }
+  }
+
   if (!appointmentsData || appointmentsData.data.length < 1) {
     return (
       <Box>
@@ -239,8 +257,10 @@ function PastAppointments({
     <Box>
       <DatePicker
         labelKey={'pastAppointments.selectAPastDateRange'}
+        initialDateRange={getDatePickerRange(dateRange)}
         minimumDate={DateTime.local().minus({ years: 2 })}
         maximumDate={DateTime.local()}
+        onApply={handleDatePickerApply}
       />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>

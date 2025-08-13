@@ -12,13 +12,20 @@ import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
+export type DatePickerRange = {
+  startDate: DateTime
+  endDate: DateTime
+}
+
 export type DatePickerProps = {
   /** i18n key for the text label next the picker field */
   labelKey?: string
+  initialDateRange?: DatePickerRange
   /** Optional DateTime object that represents the minimum selectable date on each date picker */
   minimumDate?: DateTime
   /** Optional DateTime object that represents the maximum selectable date on each date picker */
   maximumDate?: DateTime
+  onApply: (dateRange: DatePickerRange) => void
 }
 
 export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset: () => void): ReactElement => {
@@ -43,13 +50,17 @@ export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset:
 
 const initialDate = DateTime.local()
 
-const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate }) => {
+const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDate, maximumDate, onApply }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [dateRange, setDateRange] = useState({
-    startDate: initialDate.minus({ months: 3 }),
-    endDate: initialDate,
-  })
+  const [dateRange, setDateRange] = useState<DatePickerRange>(
+    initialDateRange
+      ? initialDateRange
+      : {
+          startDate: initialDate.minus({ months: 3 }),
+          endDate: initialDate,
+        },
+  )
 
   const handleReset = () => {
     const currentDate = DateTime.local()
@@ -62,6 +73,11 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate })
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
     setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: DateTime.fromISO(date).toLocal() }))
+  }
+
+  const handleApply = () => {
+    // TODO: Error Handling
+    onApply(dateRange)
   }
 
   return (
@@ -94,7 +110,7 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, minimumDate, maximumDate })
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
-        <Button onPress={() => {}} label={t('apply')} buttonType={ButtonVariants.Primary} />
+        <Button onPress={handleApply} label={t('apply')} buttonType={ButtonVariants.Primary} />
       </Box>
     </Box>
   )
