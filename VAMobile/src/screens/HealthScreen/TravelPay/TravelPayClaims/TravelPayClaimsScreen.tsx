@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTravelPayClaims } from 'api/travelPay'
-import { Box, FeatureLandingTemplate } from 'components'
+import { FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -46,15 +46,13 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
         setSelectedSortBy={setSelectedSortBy}
       />
 
-      <Box flex={1}>
-        <TravelPayClaimsList
-          claims={claims}
-          isLoading={isLoading}
-          filter={selectedFilter}
-          sortBy={selectedSortBy}
-          scrollViewRef={scrollViewRef}
-        />
-      </Box>
+      <TravelPayClaimsList
+        claims={claims}
+        isLoading={isLoading}
+        filter={selectedFilter}
+        sortBy={selectedSortBy}
+        scrollViewRef={scrollViewRef}
+      />
     </FeatureLandingTemplate>
   )
 }
