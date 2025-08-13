@@ -257,6 +257,17 @@ export const camelToIndividualWords = (originalStr: string): string => {
   return originalStr.replace(/([A-Z])/g, ' $1')
 }
 
+/**
+ * Returns original string formatted in camel case from snake case input
+ *
+ * @param originalStr - snake case string split by underscores
+ *
+ * @returns original string in camel case
+ */
+export const snakeToCamelCase = (originalStr: string): string => {
+  return originalStr.toLowerCase().replace(/_([a-z])/g, (_, char) => char.toUpperCase())
+}
+
 /**s
  * Returns a luxon DateTime object from an ISO 8601 string
  *

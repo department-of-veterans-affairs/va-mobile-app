@@ -1065,6 +1065,48 @@
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
           }
+        },
+        {
+          "id": "2095018",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2095018,
+            "category": "TEST_RESULTS",
+            "subject": "Test Inquiry",
+            "body": null,
+            "hasAttachments": false,
+            "attachment": false,
+            "sentDate": "2024-10-28T18:47:43.000Z",
+            "senderId": 523757,
+            "senderName": "FREEMAN, MELVIN  V",
+            "recipientId": 7840123,
+            "recipientName": "SHOULDNT_SHOW_IN_RECENTS",
+            "readReceipt": null
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
+          }
+        },
+        {
+          "id": "2095017",
+          "type": "messages",
+          "attributes": {
+            "messageId": 2095017,
+            "category": "TEST_RESULTS",
+            "subject": "Test Inquiry",
+            "body": null,
+            "hasAttachments": false,
+            "attachment": false,
+            "sentDate": "2024-10-28T18:47:43.000Z",
+            "senderId": 523757,
+            "senderName": "FREEMAN, MELVIN  V",
+            "recipientId": 7840491,
+            "recipientName": "Rajesh-PCMM-WEB_TST",
+            "readReceipt": null
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
+          }
         }
       ],
       "links": {
@@ -2374,6 +2416,20 @@
         "attributes": {
           "triageTeamId": 1918816,
           "name": "UAT_Reg_Jun5 ++",
+          "stationNumber": "357",
+          "relationType": "PATIENT",
+          "locationName": null,
+          "preferredTeam": true,
+          "suggestedNameDisplay": null,
+          "healthCareSystemName": null
+        }
+      },
+      {
+        "id": "7840491",
+        "type": "all_triage_teams",
+        "attributes": {
+          "triageTeamId": 7840491,
+          "name": "Rajesh-PCMM-WEB_TST",
           "stationNumber": "357",
           "relationType": "PATIENT",
           "locationName": null,
