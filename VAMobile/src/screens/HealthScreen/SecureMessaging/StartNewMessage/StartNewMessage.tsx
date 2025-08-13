@@ -249,9 +249,15 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       return allRecipientsIds.has(r.value)
     })
 
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
     }
   }
 
