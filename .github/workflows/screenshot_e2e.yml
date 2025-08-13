@@ -306,7 +306,7 @@ jobs:
           yarn
           pwd
           ls -alp
-          cd ../.github/scripts/app-store-images
+          cd .github/scripts/app-store-images
           pwd
           ls -alp
           mkdir -p VAMobile/artifacts
