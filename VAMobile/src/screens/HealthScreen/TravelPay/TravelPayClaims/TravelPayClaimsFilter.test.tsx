@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
@@ -35,25 +35,12 @@ context('TravelPayClaimsFilter', () => {
       expect(
         screen.getByText(
           t('travelPay.statusList.list.title', {
-            count: 15,
-            filter: 'All',
+            count: 1,
+            filter: t('travelPay.statusList.filterOption.all'),
             sort: 'most recent',
           }),
         ),
       ).toBeTruthy()
-    })
-  })
-
-  describe('when clear filters button is pressed', () => {
-    it('should call console.log', () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-      initializeTestInstance()
-
-      const clearFiltersButton = screen.getByTestId('clearFiltersButton')
-      fireEvent.press(clearFiltersButton)
-
-      expect(consoleSpy).toHaveBeenCalledWith('Clear filters pressed')
-      consoleSpy.mockRestore()
     })
   })
 

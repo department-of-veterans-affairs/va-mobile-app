@@ -165,7 +165,7 @@ function TravelPayClaimsFilter({
           onPress={onClearFiltersPress}
           accessibilityRole="button"
           accessibilityLabel={t('travelPay.statusList.clearFilters')}
-          accessibilityHint="Clears all applied filters and sorting options"
+          accessibilityHint={t('travelPay.statusList.clearFilters.a11yHint')}
           color="link"
           testID="clearFiltersButton">
           {t('travelPay.statusList.clearFilters')}
