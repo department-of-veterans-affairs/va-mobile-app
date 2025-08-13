@@ -123,8 +123,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
+  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState('')
+  const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -271,12 +272,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         labelKey: 'secureMessaging.formMessage.careSystem',
         selectedValue: careSystem,
         onSelectionChange: handleSetCareSystem,
-        pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+        pickerOptions: careSystems,
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'care system field',
         confirmTestID: 'careSystemPickerConfirmID',
       },
+      hideField: careSystems.length === 1,
       fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
     },
     {
