@@ -85,7 +85,7 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDa
       {labelKey ? renderInputLabelSection(labelKey, t, handleReset) : <></>}
       <Box
         px={theme.dimensions.smallMarginBetween}
-        borderRadius={8}
+        borderRadius={6}
         backgroundColor={'list'}
         borderStyle="solid"
         borderColor="primary">
@@ -97,7 +97,7 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDa
           onDateChange={(e) => handleDateChange(e, 'startDate')}
         />
         <Box
-          my={theme.dimensions.condensedMarginBetween}
+          my={theme.dimensions.smallMarginBetween}
           borderBottomWidth={1}
           borderColor={theme.colors.border.aboutYou as BorderColorVariant}
         />

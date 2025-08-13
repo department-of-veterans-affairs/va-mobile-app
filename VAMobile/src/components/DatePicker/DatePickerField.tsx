@@ -31,14 +31,29 @@ const DatePickerField: FC<DatePickerFieldProps> = ({ label, date, minimumDate, m
   const theme = useTheme()
 
   const datePickerStyle = {
-    height: 350,
+    height: 340,
+  }
+
+  const dateLabelStyle = {
+    backgroundColor: theme.colors.background.main,
+    paddingVertical: 6,
+    paddingHorizontal: 11,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: theme.colors.background.main,
   }
 
   return (
     <>
-      <Box py={theme.dimensions.standardMarginBetween} flex={1} flexDirection="row" justifyContent="space-between">
+      <Box
+        p={theme.dimensions.smallMarginBetween}
+        flex={1}
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center">
         <TextView>{label}</TextView>
         <Pressable
+          style={dateLabelStyle}
           accessibilityRole="button"
           onPress={() => {
             setShowCal((prevShowCal) => !prevShowCal)
