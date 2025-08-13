@@ -304,6 +304,11 @@ jobs:
       - name: Combine screenshots
         run: |
           yarn
+          pwd
+          ls -alp
+          cd ../.github/scripts/app-store-images
+          pwd
+          ls -alp
           mkdir -p VAMobile/artifacts
           mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
           mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
