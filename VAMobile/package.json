@@ -46,6 +46,7 @@
     "@department-of-veterans-affairs/mobile-component-library": "0.30.3",
     "@department-of-veterans-affairs/mobile-tokens": "0.23.0",
     "@expo/react-native-action-sheet": "^4.1.1",
+    "@op-engineering/op-sqlite": "^14.1.4",
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-cookies/cookies": "^6.2.1",

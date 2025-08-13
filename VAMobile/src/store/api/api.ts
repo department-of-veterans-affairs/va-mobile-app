@@ -1,7 +1,6 @@
 import { Platform } from 'react-native'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { fetch as fetchNetworkInfo } from '@react-native-community/netinfo'
+// import { fetch as fetchNetworkInfo } from '@react-native-community/netinfo'
 import NetInfo from '@react-native-community/netinfo'
 
 import { onlineManager } from '@tanstack/react-query'
@@ -11,12 +10,11 @@ import { deviceKeys } from 'api/device/queryKeys'
 import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
+import { transform } from 'store/api/demo/store'
+import { APIError } from 'store/api/types'
 import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-
-import { transform } from './demo/store'
-import { APIError } from './types'
 
 onlineManager.setEventListener((setOnline) => {
   return NetInfo.addEventListener((state) => {
@@ -272,19 +270,19 @@ export const del = async function <T>(endpoint: string, params: Params = {}): Pr
   return call<T>('DELETE', endpoint, params)
 }
 
-export const offlineQueryCache = async <T>(cb: () => Promise<T>, endpoint: string): Promise<T> => {
-  const { isConnected } = await fetchNetworkInfo()
-
-  // Connected? Fetch data and save it to the cache
-  // if (isConnected) {
-    const res = await cb()
-    // await AsyncStorage.setItem(endpoint, JSON.stringify(res))
-    // console.log('cached', endpoint)
-    return res
-  // }
-  //
-  // // Pull cached data if it exists
-  // console.log('pulling cached data for', endpoint)
-  // const res = await AsyncStorage.getItem(endpoint)
-  // return JSON.parse(res || '') as T
-}
+// export const offlineQueryCache = async <T>(cb: () => Promise<T>, endpoint: string): Promise<T> => {
+//   const { isConnected } = await fetchNetworkInfo()
+//
+//   // Connected? Fetch data and save it to the cache
+//   // if (isConnected) {
+//     const res = await cb()
+//     // await AsyncStorage.setItem(endpoint, JSON.stringify(res))
+//     // console.log('cached', endpoint)
+//     return res
+//   // }
+//   //
+//   // // Pull cached data if it exists
+//   // console.log('pulling cached data for', endpoint)
+//   // const res = await AsyncStorage.getItem(endpoint)
+//   // return JSON.parse(res || '') as T
+// }

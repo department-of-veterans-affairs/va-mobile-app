@@ -8,7 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -23,6 +22,7 @@ import {
   useSnackbar,
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
+import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { ThemeProvider } from 'styled-components'
@@ -97,8 +97,12 @@ if (isIOS()) {
   KeyboardManager.setEnableAutoToolbar(false)
 }
 
+const storage = new Storage({
+  location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
+})
+
 const persister = createAsyncStoragePersister({
-  storage: AsyncStorage,
+  storage: storage,
 })
 
 export type RootNavStackParamList = WebviewStackParams & {
