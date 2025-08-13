@@ -26,8 +26,8 @@ import { useTheme } from 'utils/hooks'
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   isLoading: boolean
-  filter: string // TODO: will change in next ticket
-  sortBy: string // TODO: will change in next ticket
+  filter: string // TODO 112328: hook up to affect results
+  sortBy: string // TODO 112328: hook up to affect results
   scrollViewRef: RefObject<ScrollView>
 }
 
@@ -66,9 +66,9 @@ function TravelPayClaimsList({
 
       const dateString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.DATE_FULL, undefined, {
         weekday: 'long',
-      }) // TODO: do we want to show timezone here?
+      }) // TODO 112328: check with design on timezone display
 
-      const timeString = getFormattedTimeForTimeZone(appointmentDateTime) // TODO: formatting possibly without timezone per specs
+      const timeString = getFormattedTimeForTimeZone(appointmentDateTime)
       textLines.push({
         text: t('travelPay.statusList.appointmentDateLine1', { date: dateString }),
         variant: 'MobileBodyBold',
@@ -78,15 +78,15 @@ function TravelPayClaimsList({
         variant: 'MobileBodyBold',
       })
 
-      // TODO: does 'claim status' need to be first translated into display friendly enum string?
+      // TODO 112328: does 'claim status' need to be first translated into display friendly enum string?
       textLines.push({ text: t('travelPay.statusList.claimStatus', { status: capitalizeFirstLetter(claimStatus) }) })
 
-      const a11yValue = t('listPosition', { position: index + 1, total: totalEntries }) // TODO: add "travel claims" or something here?
+      const a11yValue = t('listPosition', { position: index + 1, total: totalEntries }) // TODO 112328: add "travel claims" or something here?
 
       listItems.push({
         textLines,
         a11yValue,
-        onPress: () => {}, // TODO: go to claim details
+        onPress: () => {}, // TODO 112328: go to claim details
         testId: getTestIDFromTextLines(textLines),
       })
     })

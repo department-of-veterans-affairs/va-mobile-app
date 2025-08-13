@@ -21,6 +21,7 @@ context('TravelPayClaimsFilter', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance()
+
     expect(screen.getByTestId('getDateRangeTestID')).toBeTruthy()
     expect(screen.getByRole('header')).toBeTruthy()
     expect(screen.getByTestId('openFilterAndSortTestID')).toBeTruthy()
@@ -32,6 +33,7 @@ context('TravelPayClaimsFilter', () => {
   describe('travel claims list title', () => {
     it('should display formatted title using translation', () => {
       initializeTestInstance()
+
       expect(
         screen.getByText(
           t('travelPay.statusList.list.title', {
@@ -47,6 +49,7 @@ context('TravelPayClaimsFilter', () => {
   describe('accessibility', () => {
     it('should have proper accessibility properties for clear filters button', () => {
       initializeTestInstance()
+
       const clearFiltersButton = screen.getByTestId('clearFiltersButton')
 
       expect(clearFiltersButton).toBeTruthy()

@@ -17,11 +17,10 @@ type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayCla
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  // TODO - will factor in filter and sort by - for now just placeholder
   const [selectedFilter, setSelectedFilter] = useState('')
   const [selectedSortBy, setSelectedSortBy] = useState('')
 
-  // TODO: fill in start and end date (part of filter state)
+  // TODO 112328: fill in start and end date (part of filter state)
   const { data: claimsPayload, isLoading } = useTravelPayClaims({ startDate: '', endDate: '' })
 
   const claims = claimsPayload?.data ?? []

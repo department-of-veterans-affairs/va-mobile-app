@@ -61,7 +61,7 @@ function TravelPayClaimsFilter({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  // TODO - need to replace with actual data from props or state
+  // TODO 112328: need to replace with actual data from props or state
   const currentFilter = 'All'
   const currentSort = 'most recent'
 
@@ -99,7 +99,7 @@ function TravelPayClaimsFilter({
     }
   }
 
-  // TODO- add modal props
+  // TODO 112328: add modal props
   const modalProps: RadioGroupModalProps = {
     groups: [
       {
@@ -134,7 +134,7 @@ function TravelPayClaimsFilter({
       console.log('Apply filters:', selectedFilter, selectedSortBy)
     },
     onCancel: () => {
-      // TODO- add cancel logic
+      // TODO 112328: add cancel logic
       console.log('Cancel filters')
     },
     testID: 'TravelPayFilterModalTestID',
@@ -151,7 +151,7 @@ function TravelPayClaimsFilter({
   }
 
   const onClearFiltersPress = () => {
-    // TODO- add clear filters functionality
+    // TODO 112328: add clear filters functionality
     console.log('Clear filters pressed')
   }
 
