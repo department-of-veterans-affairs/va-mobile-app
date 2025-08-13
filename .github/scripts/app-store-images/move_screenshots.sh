@@ -2,7 +2,8 @@
 
 set -e
 
-ARTIFACTS_DIR="../../../VAMobile/artifacts"
+ARTIFACTS_DIR="artifacts"
+# ARTIFACTS_DIR="../../../VAMobile/artifacts"
 DEST_DIR="fastlane/screenshots/en-US"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
