@@ -1,7 +1,9 @@
 #!/bin/bash
+set -x
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo $SCRIPT_DIR
 
 if [ ! -d "$SCRIPT_DIR/fastlane/screenshots/en-US" ] || [ -z "$(ls -A "$SCRIPT_DIR/fastlane/screenshots/en-US")" ]; then
   echo "Error: Source screenshot directory '$SCRIPT_DIR/fastlane/screenshots/en-US' is missing or empty."
