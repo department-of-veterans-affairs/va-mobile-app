@@ -12,6 +12,14 @@
             "state": "WY",
             "cerner": false,
             "miles": "3.63"
+          },
+          {
+            "id": "358",
+            "name": "Cheyenne VA Medical Center",
+            "city": "Cheyenne",
+            "state": "WY",
+            "cerner": false,
+            "miles": "3.17"
           }
         ]
       }
