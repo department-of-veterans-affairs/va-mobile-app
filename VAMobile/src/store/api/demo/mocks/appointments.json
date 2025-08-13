@@ -3639,7 +3639,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "Jim Jones",
+            "healthcareProvider": "Jimmy Jones",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -3686,7 +3686,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "Jim Jones",
+            "healthcareProvider": "Jimmy Jones",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -3733,7 +3733,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "Jim Jones",
+            "healthcareProvider": "Jimmy Jones",
             "healthcareService": null,
             "location": {
               "id": "442",
