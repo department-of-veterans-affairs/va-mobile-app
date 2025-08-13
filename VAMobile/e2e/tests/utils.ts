@@ -788,5 +788,5 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
   }
 
-  await element(by.label('Set API Errors')).tap()
+  await element(by.id('saveErrors')).tap()
 }
