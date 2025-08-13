@@ -130,13 +130,8 @@ function TravelPayClaimsFilter({
     buttonA11yLabel: t('filterAndSort'),
     buttonTestID: 'openFilterAndSortTestID',
     headerText: t('filterAndSort'),
-    onApply: () => {
-      console.log('Apply filters:', selectedFilter, selectedSortBy)
-    },
-    onCancel: () => {
-      // TODO 112328: add cancel logic
-      console.log('Cancel filters')
-    },
+    onApply: () => {}, // TODO 112328: add apply logic
+    onCancel: () => {}, // TODO 112328: add cancel logic
     testID: 'TravelPayFilterModalTestID',
   }
 
@@ -150,10 +145,7 @@ function TravelPayClaimsFilter({
     mb: theme.dimensions.standardMarginBetween,
   }
 
-  const onClearFiltersPress = () => {
-    // TODO 112328: add clear filters functionality
-    console.log('Clear filters pressed')
-  }
+  const onClearFiltersPress = () => {} // TODO 112328: add clear filters functionality
 
   const filterModal = () => {
     return (
