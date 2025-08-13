@@ -434,11 +434,17 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       return allRecipientsIds.has(r.value)
     })
 
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
     // not crazy about the keys here being the labels we eventually display in the combobox
     // open to suggestions here
     return {
       [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
     }
   }
 
