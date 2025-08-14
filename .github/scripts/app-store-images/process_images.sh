@@ -10,6 +10,49 @@ if [ ! -d "$SCRIPT_DIR/fastlane/screenshots/en-US" ] || [ -z "$(ls -A "$SCRIPT_D
   exit 1
 fi
 
+echo "=== Image Processing Dependencies Check ==="
+# Check required commands
+echo "Checking required tools..."
+command -v node >/dev/null 2>&1 || { echo "❌ node is required but not installed"; exit 1; }
+command -v magick >/dev/null 2>&1 || command -v convert >/dev/null 2>&1 || { echo "❌ ImageMagick is required but not installed"; exit 1; }
+
+echo "✓ node version: $(node --version)"
+if command -v magick >/dev/null 2>&1; then
+    echo "✓ ImageMagick version: $(magick --version | head -1)"
+else
+    echo "✓ ImageMagick convert version: $(convert --version | head -1)"
+fi
+
+# Check required files
+echo "Checking required files..."
+required_files=(
+    "$SCRIPT_DIR/generate_image_mapping.js"
+    "$SCRIPT_DIR/gradient.png"
+    "$SCRIPT_DIR/source-sans-pro.regular.ttf"
+    "$SCRIPT_DIR/fastlane/google-pixel-6-pro-medium.png"
+    "$SCRIPT_DIR/../../../VAMobile/e2e/screenshots/screenshot_data.ts"
+)
+
+for file in "${required_files[@]}"; do
+    if [ -f "$file" ]; then
+        echo "✓ Found: $file"
+    else
+        echo "❌ Missing: $file"
+        exit 1
+    fi
+done
+
+# Test TypeScript parsing
+echo "Testing TypeScript data parsing..."
+DEBUG=1 node "$SCRIPT_DIR/generate_image_mapping.js" >/dev/null 2>&1 || {
+    echo "❌ TypeScript parsing failed. Debugging output:"
+    DEBUG=1 node "$SCRIPT_DIR/generate_image_mapping.js" 2>&1 | head -10
+    exit 1
+}
+echo "✓ TypeScript parsing successful"
+
+echo "=== Dependencies Check Complete ==="
+
 echo "Reading screenshot data from TypeScript file..."
 
 echo "Debug: Listing available screenshots in fastlane/screenshots/en-US:"
@@ -203,7 +246,9 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
   echo "  Debug: Creating directory: $(dirname "$OUTPUT_PATH")"
   mkdir -p "$(dirname "$OUTPUT_PATH")"
   
-  echo "  Creating ${FINAL_WIDTH}x${FINAL_HEIGHT} image with background and title text"  if [ "$needs_custom_android_frame" = true ]; then
+  echo "  Creating ${FINAL_WIDTH}x${FINAL_HEIGHT} image with background and title text"
+  
+  if [ "$needs_custom_android_frame" = true ]; then
     ANDROID_FRAME="$SCRIPT_DIR/fastlane/google-pixel-6-pro-medium.png"
     
     echo "    Using provided Android device frame: $(basename "$ANDROID_FRAME")"

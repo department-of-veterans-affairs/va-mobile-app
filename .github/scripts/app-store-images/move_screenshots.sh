@@ -4,11 +4,17 @@ set -e
 
 # The workflow calls this script from VAMobile/ directory, so adjust paths accordingly
 # Check multiple possible locations for artifacts
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 POSSIBLE_PATHS=(
-  "artifacts"                    # When run from VAMobile/ (CI)
-  "../VAMobile/artifacts"        # When run from .github/scripts/app-store-images/ (local)
-  "../../../VAMobile/artifacts"  # Alternative local path
+  "$SCRIPT_DIR/../../../VAMobile/artifacts"  # When run from .github/scripts/app-store-images/ (standard)
+  "artifacts"                               # When run from VAMobile/ (direct)
+  "../VAMobile/artifacts"                   # Alternative relative path
 )
+
+echo "Debug: Checking for artifacts directory..."
+echo "  Script directory: $SCRIPT_DIR"
+echo "  Current working directory: $(pwd)"
 
 ARTIFACTS_DIR=""
 for path in "${POSSIBLE_PATHS[@]}"; do
