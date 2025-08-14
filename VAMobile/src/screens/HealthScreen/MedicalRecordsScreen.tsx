@@ -42,13 +42,11 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        {featureEnabled('allergies') && (
-          <LargeNavButton
-            title={t('vaAllergies.buttonTitle')}
-            onPress={() => navigateTo('AllergyList')}
-            testID="toAllergyListID"
-          />
-        )}
+        <LargeNavButton
+          title={t('vaAllergies.buttonTitle')}
+          onPress={() => navigateTo('AllergyList')}
+          testID="toAllergyListID"
+        />
       </Box>
       <Box mx={gutter}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}

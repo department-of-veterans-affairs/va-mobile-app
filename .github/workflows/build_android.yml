@@ -111,7 +111,7 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
-        run: yarn env:staging
+        run: yarn env:${{ inputs.environment }}
       - name: Bundle app
         run: yarn bundle:android
       - name: Update fastlane
