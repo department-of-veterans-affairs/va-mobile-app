@@ -12,6 +12,12 @@ fi
 
 echo "Reading screenshot data from TypeScript file..."
 
+echo "Debug: Listing available screenshots in fastlane/screenshots/en-US:"
+ls -la "$SCRIPT_DIR/fastlane/screenshots/en-US/"
+
+echo "Debug: Testing TypeScript data parsing:"
+node "$SCRIPT_DIR/generate_image_mapping.js" | head -5
+
 echo "Cleaning up old files..."
 rm -f "$SCRIPT_DIR/fastlane/screenshots/en-US/"*_framed.png
 rm -rf "$SCRIPT_DIR/framed_images"
@@ -191,9 +197,13 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
   TEXT_AREA_HEIGHT=$((INPUT_Y - TEXT_AREA_PADDING))
   TEXT_CENTER_Y=$((TEXT_AREA_PADDING + TEXT_AREA_HEIGHT / 2))
 
-  OUTPUT_PATH="$SCRIPT_DIR/framed_images/${DEVICE_TYPE}/${original_img_name}.png"  echo "  Creating ${FINAL_WIDTH}x${FINAL_HEIGHT} image with background and title text"
+  OUTPUT_PATH="$SCRIPT_DIR/framed_images/${DEVICE_TYPE}/${original_img_name}.png"
+
+  echo "  Debug: Output path: $OUTPUT_PATH"
+  echo "  Debug: Creating directory: $(dirname "$OUTPUT_PATH")"
+  mkdir -p "$(dirname "$OUTPUT_PATH")"
   
-  if [ "$needs_custom_android_frame" = true ]; then
+  echo "  Creating ${FINAL_WIDTH}x${FINAL_HEIGHT} image with background and title text"  if [ "$needs_custom_android_frame" = true ]; then
     ANDROID_FRAME="$SCRIPT_DIR/fastlane/google-pixel-6-pro-medium.png"
     
     echo "    Using provided Android device frame: $(basename "$ANDROID_FRAME")"
@@ -223,6 +233,11 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
       -font "$FONT" -pointsize "$ADJUSTED_TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
       -gravity center -annotate "+0+$((TEXT_CENTER_Y - FINAL_HEIGHT/2))" "$TITLE" \
       "$OUTPUT_PATH"
+      
+    echo "  Debug: Android frame ImageMagick command completed. File exists: $([ -f "$OUTPUT_PATH" ] && echo "YES" || echo "NO")"
+    if [ -f "$OUTPUT_PATH" ]; then
+      echo "    File size: $(ls -lh "$OUTPUT_PATH" | awk '{print $5}')"
+    fi
   else
     magick "$BACKGROUND_IMG" -resize "${FINAL_WIDTH}x${FINAL_HEIGHT}!" \
       \( "$input_img" -resize "${NEW_INPUT_WIDTH}x${NEW_INPUT_HEIGHT}!" \) \
@@ -230,11 +245,27 @@ while IFS=$'\t' read -r original_img_name TEST_ID DEVICE_TYPE DESCRIPTION; do
       -font "$FONT" -pointsize "$ADJUSTED_TITLE_FONT_SIZE" -fill "$FONT_COLOR" -interline-spacing "$INTERLINE_SPACING" \
       -gravity center -annotate "+0+$((TEXT_CENTER_Y - FINAL_HEIGHT/2))" "$TITLE" \
       "$OUTPUT_PATH"
+      
+    echo "  Debug: iOS/iPad ImageMagick command completed. File exists: $([ -f "$OUTPUT_PATH" ] && echo "YES" || echo "NO")"
+    if [ -f "$OUTPUT_PATH" ]; then
+      echo "    File size: $(ls -lh "$OUTPUT_PATH" | awk '{print $5}')"
+    fi
   fi
 done < <(node "$SCRIPT_DIR/generate_image_mapping.js")
 
 echo "--- Image processing complete! ---"
 echo "Final images are in the '$SCRIPT_DIR/framed_images' directory."
+
+echo "Debug: Checking framed_images directory contents:"
+ls -la "$SCRIPT_DIR/framed_images" || echo "framed_images directory does not exist"
+for dir in ios ipad android; do
+  if [ -d "$SCRIPT_DIR/framed_images/$dir" ]; then
+    echo "  $dir directory contents:"
+    ls -la "$SCRIPT_DIR/framed_images/$dir/"
+  else
+    echo "  $dir directory: NOT FOUND"
+  fi
+done
 
 echo "Moving final images to fastlane directories"
 
