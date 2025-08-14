@@ -49,6 +49,17 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
     setClaimsToShow(summaryList || [])
   }, [claims, page, perPage])
 
+  const goToClaimDetails = (claimId: string) => {
+    logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+    navigateTo('Webview', {
+      url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+      displayTitle: t('travelPay.webview.claims.displayTitle'),
+      loadingMessage: t('travelPay.webview.claims.loading'),
+      useSSO: true,
+      backButtonTestID: `webviewBack`,
+    })
+  }
+
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
     claimsToShow?.forEach((summary, index) => {
@@ -79,23 +90,12 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
       listItems.push({
         textLines,
         a11yValue,
-        onPress: () => goToClaimDetails(id), // TODO 112328: go to claim details
+        onPress: () => goToClaimDetails(id),
         testId: `claim_summary_${id}`,
       })
     })
 
     return listItems
-  }
-
-  const goToClaimDetails = (claimId: string) => {
-    logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-    navigateTo('Webview', {
-      url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-      displayTitle: t('travelPay.webview.claims.displayTitle'),
-      loadingMessage: t('travelPay.webview.claims.loading'),
-      useSSO: true,
-      backButtonTestID: `webviewBack`,
-    })
   }
 
   if (isLoading) {
