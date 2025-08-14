@@ -128,7 +128,10 @@ const DatePicker: FC<DatePickerProps> = ({
           maximumDate={maximumDate}
           isInvalid={fromFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'startDate')}
-          onPress={() => setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)}
+          onPress={() => {
+            setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)
+            setToFieldOpen(false)
+          }}
         />
         <Box
           my={theme.dimensions.smallMarginBetween}
@@ -143,7 +146,10 @@ const DatePicker: FC<DatePickerProps> = ({
           maximumDate={maximumDate}
           isInvalid={toFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'endDate')}
-          onPress={() => setToFieldOpen((prevFieldOpen) => !prevFieldOpen)}
+          onPress={() => {
+            setToFieldOpen((prevFieldOpen) => !prevFieldOpen)
+            setFromFieldOpen(false)
+          }}
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>
