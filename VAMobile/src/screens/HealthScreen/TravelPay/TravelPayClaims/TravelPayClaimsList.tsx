@@ -14,9 +14,14 @@ import {
   PaginationProps,
   TextLine,
 } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
+import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
@@ -29,6 +34,7 @@ const CLAIMS_PER_PAGE = 10
 function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
   const [page, setPage] = useState(1)
@@ -73,12 +79,23 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
       listItems.push({
         textLines,
         a11yValue,
-        onPress: () => {}, // TODO 112328: go to claim details
+        onPress: () => goToClaimDetails(id), // TODO 112328: go to claim details
         testId: `claim_summary_${id}`,
       })
     })
 
     return listItems
+  }
+
+  const goToClaimDetails = (claimId: string) => {
+    logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+    navigateTo('Webview', {
+      url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+      displayTitle: t('travelPay.webview.claims.displayTitle'),
+      loadingMessage: t('travelPay.webview.claims.loading'),
+      useSSO: true,
+      backButtonTestID: `webviewBack`,
+    })
   }
 
   if (isLoading) {
@@ -103,7 +120,7 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
     <Box testID="travelPayClaimsListTestId">
       <DefaultList items={getListItemVals()} />
       <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-        <Pagination {...paginationProps} />
+        {!isLoading && <Pagination {...paginationProps} />}
       </Box>
     </Box>
   )
