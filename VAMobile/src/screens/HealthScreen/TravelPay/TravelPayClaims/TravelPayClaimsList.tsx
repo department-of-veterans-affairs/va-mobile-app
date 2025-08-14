@@ -15,11 +15,7 @@ import {
   TextLine,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import {
-  capitalizeFirstLetter,
-  getFormattedDateOrTimeWithFormatOption,
-  getFormattedTimeForTimeZone,
-} from 'utils/formattingUtils'
+import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type TravelPayClaimsListProps = {
@@ -70,7 +66,7 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
       })
 
       // TODO 112328: does 'claim status' need to be first translated into display friendly enum string?
-      textLines.push({ text: t('travelPay.statusList.claimStatus', { status: capitalizeFirstLetter(claimStatus) }) })
+      textLines.push({ text: t('travelPay.statusList.claimStatus', { status: claimStatus }) })
 
       const a11yValue = t('listPosition', { position: index + 1, total: totalEntries }) // TODO 112328: add "travel claims" or something here?
 
