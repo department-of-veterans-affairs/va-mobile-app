@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 
@@ -20,12 +20,16 @@ export type DatePickerRange = {
 export type DatePickerProps = {
   /** i18n key for the text label next the picker field */
   labelKey?: string
-  initialDateRange?: DatePickerRange
+  /** Initial date range set on the date picker  */
+  initialDateRange: DatePickerRange
   /** Optional DateTime object that represents the minimum selectable date on each date picker */
   minimumDate?: DateTime
   /** Optional DateTime object that represents the maximum selectable date on each date picker */
   maximumDate?: DateTime
-  onApply: (dateRange: DatePickerRange) => void
+  /** Callback when the apply button is pressed */
+  onApply: (selectedDateRange: DatePickerRange) => void
+  /** Callback when the reset button is pressed */
+  onReset: () => void
 }
 
 export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset: () => void): ReactElement => {
@@ -48,36 +52,44 @@ export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset:
   )
 }
 
-const initialDate = DateTime.local()
-
-const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDate, maximumDate, onApply }) => {
+const DatePicker: FC<DatePickerProps> = ({
+  labelKey,
+  initialDateRange,
+  minimumDate,
+  maximumDate,
+  onApply,
+  onReset,
+}) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [dateRange, setDateRange] = useState<DatePickerRange>(
-    initialDateRange
-      ? initialDateRange
-      : {
-          startDate: initialDate.minus({ months: 3 }),
-          endDate: initialDate,
-        },
-  )
+  const [selectedDateRange, setSelectedDateRange] = useState<DatePickerRange>(initialDateRange)
+  const [fromFieldOpen, setFromFieldOpen] = useState(false)
+  const [toFieldOpen, setToFieldOpen] = useState(false)
 
-  const handleReset = () => {
-    const currentDate = DateTime.local()
-    setDateRange({
-      startDate: currentDate.minus({ months: 3 }),
-      endDate: currentDate,
-    })
-  }
+  useEffect(() => {
+    console.log(initialDateRange)
+    setSelectedDateRange(initialDateRange)
+  }, [initialDateRange])
 
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
-    setDateRange((prevDateRange) => ({ ...prevDateRange, [fieldName]: DateTime.fromISO(date).toLocal() }))
+    setSelectedDateRange((prevDatePickerRange) => ({
+      ...prevDatePickerRange,
+      [fieldName]: DateTime.fromISO(date).toLocal(),
+    }))
   }
 
   const handleApply = () => {
     // TODO: Error Handling
-    onApply(dateRange)
+    onApply(selectedDateRange)
+    setFromFieldOpen(false)
+    setToFieldOpen(false)
+  }
+
+  const handleReset = () => {
+    onReset()
+    setFromFieldOpen(false)
+    setToFieldOpen(false)
   }
 
   return (
@@ -90,11 +102,13 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDa
         borderStyle="solid"
         borderColor="primary">
         <DatePickerField
+          open={fromFieldOpen}
           label="From"
-          date={dateRange.startDate}
+          date={selectedDateRange.startDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           onDateChange={(e) => handleDateChange(e, 'startDate')}
+          onPress={() => setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)}
         />
         <Box
           my={theme.dimensions.smallMarginBetween}
@@ -102,11 +116,13 @@ const DatePicker: FC<DatePickerProps> = ({ labelKey, initialDateRange, minimumDa
           borderColor={theme.colors.border.aboutYou as BorderColorVariant}
         />
         <DatePickerField
+          open={toFieldOpen}
           label="To"
-          date={dateRange.endDate}
+          date={selectedDateRange.endDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           onDateChange={(e) => handleDateChange(e, 'endDate')}
+          onPress={() => setToFieldOpen((prevFieldOpen) => !prevFieldOpen)}
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>

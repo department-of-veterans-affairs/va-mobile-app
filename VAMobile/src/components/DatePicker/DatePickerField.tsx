@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { Pressable } from 'react-native'
 
 import { DateTime } from 'luxon'
@@ -15,6 +15,8 @@ const getNativePickerDate = (date: DateTime) => {
 }
 
 export type DatePickerFieldProps = {
+  /** Boolean to open or close the date picker's calendar view  */
+  open: boolean
   /** Label text for the date picker field */
   label: string
   /** Selected date value */
@@ -25,9 +27,18 @@ export type DatePickerFieldProps = {
   maximumDate?: DateTime
   /** Callback called when a new date is selected */
   onDateChange?: (e: DateChangeEvent) => void
+  /** Callback called when the field is pressed */
+  onPress: () => void
 }
-const DatePickerField: FC<DatePickerFieldProps> = ({ label, date, minimumDate, maximumDate, onDateChange }) => {
-  const [showCal, setShowCal] = useState(false)
+const DatePickerField: FC<DatePickerFieldProps> = ({
+  open,
+  label,
+  date,
+  minimumDate,
+  maximumDate,
+  onDateChange,
+  onPress,
+}) => {
   const theme = useTheme()
 
   const datePickerStyle = {
@@ -52,16 +63,11 @@ const DatePickerField: FC<DatePickerFieldProps> = ({ label, date, minimumDate, m
         justifyContent="space-between"
         alignItems="center">
         <TextView>{label}</TextView>
-        <Pressable
-          style={dateLabelStyle}
-          accessibilityRole="button"
-          onPress={() => {
-            setShowCal((prevShowCal) => !prevShowCal)
-          }}>
+        <Pressable style={dateLabelStyle} accessibilityRole="button" onPress={onPress}>
           <TextView color={'link'}>{date.toFormat('MMMM dd, yyyy')}</TextView>
         </Pressable>
       </Box>
-      {showCal ? (
+      {open ? (
         <Box flex={1}>
           <RNDatePicker
             style={datePickerStyle}

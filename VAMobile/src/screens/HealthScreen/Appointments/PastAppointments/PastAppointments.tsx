@@ -15,7 +15,7 @@ import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoA
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
+import { filterAppointments, getGroupedAppointments, getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -199,13 +199,18 @@ function PastAppointments({
     }
   }
 
-  const handleDatePickerApply = (datePickerRange: DatePickerRange) => {
-    const startDate = datePickerRange.startDate.toISO()
-    const endDate = datePickerRange.endDate.toISO()
+  const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
+    const startDate = selectedDateRange.startDate.toISO()
+    const endDate = selectedDateRange.endDate.toISO()
     if (startDate && endDate) {
       setDateRange({ startDate, endDate })
       setPage(1)
     }
+  }
+
+  const handleDatePickerReset = () => {
+    setDateRange(getPastAppointmentDateRange())
+    setPage(1)
   }
 
   const getDatePickerRange = (apptsDateRange: AppointmentsDateRange) => {
@@ -261,6 +266,7 @@ function PastAppointments({
         minimumDate={DateTime.local().minus({ years: 2 })}
         maximumDate={DateTime.local()}
         onApply={handleDatePickerApply}
+        onReset={handleDatePickerReset}
       />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
