@@ -2,8 +2,12 @@ import React, { useContext } from 'react'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AppointmentData, UserContactInformation } from 'api/types'
-import { TravelPayContext, TravelPayContextProvider, TravelPayContextValue } from 'components/TravelPayContext'
 import { Events } from 'constants/analytics'
+import {
+  TravelPayContext,
+  TravelPayContextProvider,
+  TravelPayContextValue,
+} from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { act, render } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'

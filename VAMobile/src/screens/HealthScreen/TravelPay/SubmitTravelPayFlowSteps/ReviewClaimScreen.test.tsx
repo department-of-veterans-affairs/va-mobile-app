@@ -5,8 +5,8 @@ import { DateTime } from 'luxon'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
-import { TravelPayContextProvider } from 'components/TravelPayContext'
 import ReviewClaimScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/ReviewClaimScreen'
+import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
