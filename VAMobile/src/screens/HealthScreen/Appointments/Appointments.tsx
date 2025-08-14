@@ -17,6 +17,7 @@ import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
+import PastAppointmentsOld from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointmentsOld'
 import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
 import CernerAlert from 'screens/HealthScreen/CernerAlert'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -184,18 +185,29 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           {serviceErrorAlert()}
           <CernerAlert />
           <Box mb={theme.dimensions.floatingButtonOffset}>
-            {selectedTab === 1 && (
-              <PastAppointments
-                appointmentsData={apptsData}
-                dateRange={dateRange}
-                page={page}
-                setPage={setPage}
-                loading={loadingAppointments || fetchingAuthServices}
-                setDateRange={setDateRange}
-                setTimeFrame={setTimeFrame}
-                scrollViewRef={scrollViewRef}
-              />
-            )}
+            {selectedTab === 1 &&
+              (featureEnabled('datePickerUpdate') ? (
+                <PastAppointments
+                  appointmentsData={apptsData}
+                  dateRange={dateRange}
+                  page={page}
+                  setPage={setPage}
+                  loading={loadingAppointments || fetchingAuthServices}
+                  setDateRange={setDateRange}
+                  setTimeFrame={setTimeFrame}
+                  scrollViewRef={scrollViewRef}
+                />
+              ) : (
+                <PastAppointmentsOld
+                  appointmentsData={apptsData}
+                  page={page}
+                  setPage={setPage}
+                  loading={loadingAppointments || fetchingAuthServices}
+                  setDateRange={setDateRange}
+                  setTimeFrame={setTimeFrame}
+                  scrollViewRef={scrollViewRef}
+                />
+              ))}
             {selectedTab === 0 && (
               <UpcomingAppointments
                 appointmentsData={apptsData}
