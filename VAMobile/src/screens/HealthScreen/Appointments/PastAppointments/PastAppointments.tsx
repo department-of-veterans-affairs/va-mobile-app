@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { DateTime } from 'luxon'
 
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
-import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
@@ -48,7 +48,6 @@ function PastAppointments({
   page,
   setPage,
   setDateRange,
-  setTimeFrame,
   scrollViewRef,
 }: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -165,7 +164,7 @@ function PastAppointments({
   }
 
   const pickerOptions = getPickerOptions()
-  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+  const [datePickerOption] = useState(pickerOptions[0])
 
   const filteredAppointments = useMemo(
     () =>
@@ -183,20 +182,6 @@ function PastAppointments({
 
   if (loading) {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
-
-  const setValuesOnPickerSelect = (selectValue: string): void => {
-    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
-    if (curSelectedRange) {
-      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
-      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
-      if (startDate && endDate) {
-        setTimeFrame(curSelectedRange.timeFrame)
-        setDateRange({ startDate: startDate, endDate: endDate })
-        setPage(1)
-      }
-      setDatePickerOption(curSelectedRange)
-    }
   }
 
   const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
@@ -218,25 +203,6 @@ function PastAppointments({
       startDate: DateTime.fromISO(apptsDateRange.startDate).toLocal(),
       endDate: DateTime.fromISO(apptsDateRange.endDate).toLocal(),
     }
-  }
-
-  if (!appointmentsData || appointmentsData.data.length < 1) {
-    return (
-      <Box>
-        <Box mx={theme.dimensions.gutter} accessible={true}>
-          <VAModalPicker
-            selectedValue={datePickerOption.value}
-            onSelectionChange={setValuesOnPickerSelect}
-            pickerOptions={pickerOptions}
-            labelKey={'pastAppointments.selectADateRange'}
-            testID="getDateRangeTestID"
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
-        </Box>
-      </Box>
-    )
   }
 
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
@@ -278,18 +244,26 @@ function PastAppointments({
           />
         </Box>
       )}
-      {getGroupedAppointments(
-        appointmentsToShow,
-        theme,
-        { t },
-        onPastAppointmentPress,
-        true,
-        pagination,
-        includeTravelClaims,
+      {!appointmentsData || appointmentsData.data.length < 1 ? (
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+        </Box>
+      ) : (
+        <>
+          {getGroupedAppointments(
+            appointmentsToShow,
+            theme,
+            { t },
+            onPastAppointmentPress,
+            true,
+            pagination,
+            includeTravelClaims,
+          )}
+          <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+            <Pagination {...paginationProps} />
+          </Box>
+        </>
       )}
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-        <Pagination {...paginationProps} />
-      </Box>
     </Box>
   )
 }
