@@ -65,31 +65,50 @@ const DatePicker: FC<DatePickerProps> = ({
   const [selectedDateRange, setSelectedDateRange] = useState<DatePickerRange>(initialDateRange)
   const [fromFieldOpen, setFromFieldOpen] = useState(false)
   const [toFieldOpen, setToFieldOpen] = useState(false)
+  const [fromFieldInvalid, setFromFieldInvalid] = useState(false)
+  const [toFieldInvalid, setToFieldInvalid] = useState(false)
 
   useEffect(() => {
-    console.log(initialDateRange)
     setSelectedDateRange(initialDateRange)
   }, [initialDateRange])
 
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
+    const newDate = DateTime.fromISO(date).toLocal()
+
+    const startDateInvalid = newDate.valueOf() > selectedDateRange.endDate.valueOf()
+    const endDateInvalid = newDate.valueOf() < selectedDateRange.startDate.valueOf()
+
+    if (fieldName === 'startDate' && startDateInvalid) {
+      startDateInvalid && setFromFieldInvalid(true)
+    } else if (fieldName === 'endDate' && endDateInvalid) {
+      endDateInvalid && setToFieldInvalid(true)
+    } else {
+      setFromFieldInvalid(false)
+      setToFieldInvalid(false)
+    }
+
     setSelectedDateRange((prevDatePickerRange) => ({
       ...prevDatePickerRange,
-      [fieldName]: DateTime.fromISO(date).toLocal(),
+      [fieldName]: newDate,
     }))
   }
 
   const handleApply = () => {
     // TODO: Error Handling
-    onApply(selectedDateRange)
-    setFromFieldOpen(false)
-    setToFieldOpen(false)
+    if (!fromFieldInvalid && !toFieldInvalid) {
+      onApply(selectedDateRange)
+      setFromFieldOpen(false)
+      setToFieldOpen(false)
+    }
   }
 
   const handleReset = () => {
     onReset()
     setFromFieldOpen(false)
     setToFieldOpen(false)
+    setFromFieldInvalid(false)
+    setToFieldInvalid(false)
   }
 
   return (
@@ -107,6 +126,7 @@ const DatePicker: FC<DatePickerProps> = ({
           date={selectedDateRange.startDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
+          isInvalid={fromFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'startDate')}
           onPress={() => setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)}
         />
@@ -121,6 +141,7 @@ const DatePicker: FC<DatePickerProps> = ({
           date={selectedDateRange.endDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
+          isInvalid={toFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'endDate')}
           onPress={() => setToFieldOpen((prevFieldOpen) => !prevFieldOpen)}
         />

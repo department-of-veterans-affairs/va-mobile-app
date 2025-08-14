@@ -25,6 +25,8 @@ export type DatePickerFieldProps = {
   minimumDate?: DateTime
   /** Optional DateTime object that represents the maximum selectable date on the date picker */
   maximumDate?: DateTime
+  /** Boolean to display selected date as invalid */
+  isInvalid?: boolean
   /** Callback called when a new date is selected */
   onDateChange?: (e: DateChangeEvent) => void
   /** Callback called when the field is pressed */
@@ -36,6 +38,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   date,
   minimumDate,
   maximumDate,
+  isInvalid,
   onDateChange,
   onPress,
 }) => {
@@ -64,7 +67,12 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
         alignItems="center">
         <TextView>{label}</TextView>
         <Pressable style={dateLabelStyle} accessibilityRole="button" onPress={onPress}>
-          <TextView color={'link'}>{date.toFormat('MMMM dd, yyyy')}</TextView>
+          <TextView
+            color={isInvalid ? 'error' : 'link'}
+            textDecoration={isInvalid ? 'line-through' : 'none'}
+            textDecorationColor={'error'}>
+            {date.toFormat('MMMM dd, yyyy')}
+          </TextView>
         </Pressable>
       </Box>
       {open ? (
