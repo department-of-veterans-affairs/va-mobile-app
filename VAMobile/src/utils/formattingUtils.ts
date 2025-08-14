@@ -4,6 +4,8 @@ import { TFunction } from 'i18next'
 import { $Dictionary } from 'i18next/typescript/helpers'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 
+import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
+
 /**
  * Returns the formatted phone number
  *
@@ -93,11 +95,10 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string)
   // Specific non-location timezones are currently unavailable in DateTime
   // and formatting will fall back to GMT timezones (e.g. GMT+8).
   // This is a workaround to replace them with more user friendly timezone abbreviations.
-  if (formattedTime.includes('GMT')) {
-    formattedTime = formattedTime
-      .replace('GMT+10', 'ChT') // Pacific/Guam, Pacific/Saipan: GMT+10 => ChT for Chamorro Time
-      .replace('GMT+8', 'PHT') // Asia/Manila: GMT+8 => PHT for Philippine Time
-      .replace('GMT-11', 'ST') // Pacific/Pago_Pago: GMT-11 => ST for Samoa Time
+  if (formattedTime.includes(GMTPrefix)) {
+    for (const { pattern, value } of GMTTimezones.values()) {
+      formattedTime = formattedTime.replace(pattern, value)
+    }
   }
 
   return formattedTime
