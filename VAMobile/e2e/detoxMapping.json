@@ -90,6 +90,7 @@
       "Prescriptions",
       "ProfileScreen",
       "SettingsScreen",
+      "TravelPay",
       "Allergies",
       "LabsAndTests",
       "VaccineRecords",
@@ -247,7 +248,8 @@
     "SyncScreen": [],
     "WebviewScreen": [],
     "styles": [],
-    "TravelPay": ["TravelPay"]
+    "TravelPay": ["TravelPay"],
+    "TravelPayContext": ["TravelPay"]
   },
   "files": {
     "allergies.ts": ["Allergies"],

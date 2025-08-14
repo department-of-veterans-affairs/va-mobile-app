@@ -2,12 +2,11 @@ import React, { useContext } from 'react'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AppointmentData, UserContactInformation } from 'api/types'
+import { TravelPayContext, TravelPayContextProvider, TravelPayContextValue } from 'components/TravelPayContext'
 import { Events } from 'constants/analytics'
-import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { act, render } from 'testUtils'
 import { defaultAppointment } from 'utils/tests/appointments'
-import { TravelPayContext, TravelPayContextValue } from 'utils/travelPay'
 
 const residentialAddress: UserContactInformation['residentialAddress'] = {
   id: 0,

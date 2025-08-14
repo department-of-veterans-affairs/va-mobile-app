@@ -1,12 +1,10 @@
-import { createContext, useContext } from 'react'
-
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimSummary, UserContactInformation } from 'api/types'
+import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -139,73 +137,3 @@ export const useTravelClaimSubmissionMutationState = (appointmentId: string) => 
 
   return mutationState
 }
-
-export type TravelPayContextValue = {
-  /**
-   * The appointment for which the user is filing a travel pay claim.
-   */
-  appointment: AppointmentData
-  /**
-   * Whether the user has checked the certification/acknowledgement checkbox on
-   * the Review Claim screen indicating they agree with the penalty statement.
-   */
-  penaltyStatementAccepted: boolean
-  /**
-   * Setter to update {@link TravelPayContextValue.penaltyStatementAccepted}. Typically
-   * invoked when the user toggles the review-screen checkbox to agree to the penalty statement.
-   */
-  setPenaltyStatementAccepted: (penaltyStatementAccepted: boolean) => void
-  /**
-   * Flag indicating the penalty statement checkbox is required but has not been selected.
-   */
-  penaltyStatementError: boolean
-  /**
-   * Fires the network request that submits the travel pay claim for the current
-   * appointment. Also handles navigation to the success or error screens based
-   * on the result.
-   */
-  submitTravelClaim: () => void
-  /**
-   * True while the claim is actively being submitted; used to show loading
-   * indicators and disable duplicate submissions.
-   */
-  submittingTravelClaim: boolean
-  /**
-   * The veteran’s contact information (address, phone, etc.) fetched from the
-   * backend. Optional because the data may still be loading when the context is
-   * first created or the user has not yet provided their contact information.
-   */
-  userContactInformation?: UserContactInformation
-  /**
-   * Initiates the SMOC (Simple Mileage Only Claim) flow by navigating to the
-   * mileage entry screen and marking the start time for analytics.
-   */
-  startSmocFlow: () => void
-}
-
-/**
- * React context that provides shared state and actions for the **Submit Travel Pay**
- * flow.
- *
- * @remarks The context value shape is described by {@link TravelPayContextValue}.
- * The context is created with a placeholder (empty object cast to that type) so
- * that it can be safely imported before the real value is supplied by
- * `TravelPayContextProvider`.
- *
- * Components should wrap their subtree with `TravelPayContextProvider` (located
- * in `SubmitTravelPayFlowSteps/components`) to supply the actual value.
- */
-export const TravelPayContext = createContext<TravelPayContextValue>({} as TravelPayContextValue)
-
-/**
- * React hook that returns the current value of {@link TravelPayContext}.
- *
- * @returns The current {@link TravelPayContextValue} provided higher in the
- * component tree.
- *
- * @example
- * ```tsx
- * const { appointment, startSmocFlow } = useTravelPayContext();
- * ```
- */
-export const useTravelPayContext = () => useContext(TravelPayContext)

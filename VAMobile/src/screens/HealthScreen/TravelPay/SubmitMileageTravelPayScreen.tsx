@@ -3,6 +3,7 @@ import React from 'react'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
+import { TravelPayContextProvider } from 'components/TravelPayContext'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -18,7 +19,6 @@ import {
   TravelClaimHelpScreen,
   VehicleScreen,
 } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
-import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
