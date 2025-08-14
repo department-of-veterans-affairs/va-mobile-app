@@ -15,7 +15,6 @@ import {
   TextLine,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   capitalizeFirstLetter,
   getFormattedDateOrTimeWithFormatOption,
@@ -26,20 +25,12 @@ import { useTheme } from 'utils/hooks'
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   isLoading: boolean
-  filter: string // TODO 112328: hook up to affect results
-  sortBy: string // TODO 112328: hook up to affect results
   scrollViewRef: RefObject<ScrollView>
 }
 
 const CLAIMS_PER_PAGE = 10
 
-function TravelPayClaimsList({
-  claims,
-  isLoading,
-  filter: _filter,
-  sortBy: _sortBy,
-  scrollViewRef,
-}: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -60,7 +51,7 @@ function TravelPayClaimsList({
     const listItems: Array<DefaultListItemObj> = []
     claimsToShow?.forEach((summary, index) => {
       const { attributes } = summary
-      const { appointmentDateTime, claimStatus } = attributes
+      const { id, appointmentDateTime, claimStatus } = attributes
 
       const textLines: Array<TextLine> = []
 
@@ -87,7 +78,7 @@ function TravelPayClaimsList({
         textLines,
         a11yValue,
         onPress: () => {}, // TODO 112328: go to claim details
-        testId: getTestIDFromTextLines(textLines),
+        testId: `claim_summary_${id}`,
       })
     })
 
