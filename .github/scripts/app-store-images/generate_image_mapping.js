@@ -19,15 +19,6 @@ try {
 
 const screenshotDataPath = path.join(__dirname, '../../../VAMobile/e2e/screenshots/screenshot_data.ts');
 
-// Debug information
-if (process.env.CI || process.env.DEBUG) {
-  console.error('Debug: generate_image_mapping.js starting...');
-  console.error('  Current working directory:', process.cwd());
-  console.error('  Script directory:', __dirname);
-  console.error('  Screenshot data path:', screenshotDataPath);
-  console.error('  Screenshot data exists:', fs.existsSync(screenshotDataPath));
-}
-
 const fileContents = fs.readFileSync(screenshotDataPath, 'utf8');
 const sourceFile = ts.createSourceFile('screenshot_data.ts', fileContents, ts.ScriptTarget.Latest, true);
 

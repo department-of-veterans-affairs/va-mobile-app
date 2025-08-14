@@ -67,11 +67,10 @@ export const screenshotData: ScreenshotData[] = [
     testId: 'ProfileScreen',
     imageName: {
       ios: 'iphone67-screen-7',
-      android: '7_en-US',
       ipad: 'ipadPro129-screen-7',
     },
     description: 'Manage your VA.gov profile',
-    deviceType: ['ios', 'android', 'ipad'],
+    deviceType: ['ios', 'ipad'],
     setupFunction: 'profileScreen',
   },
   {
@@ -91,9 +90,10 @@ export const screenshotData: ScreenshotData[] = [
     imageName: {
       ios: 'iphone67-screen-9',
       ipad: 'ipadPro129-screen-9',
+      android: '7_en-US',
     },
     description: 'Manage your VA prescriptions',
-    deviceType: ['ios', 'ipad'],
+    deviceType: ['ios', 'android', 'ipad'],
     setupFunction: 'prescriptions',
   },
   {
