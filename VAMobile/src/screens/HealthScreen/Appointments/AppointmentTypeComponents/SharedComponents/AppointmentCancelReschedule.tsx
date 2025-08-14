@@ -95,9 +95,9 @@ const cancelButton = (
       ),
     )
 
-    const actionText = pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment')
+    const keepText = pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment')
     const cancelText = pendingAppointment ? t('cancelRequest') : t('appointments.cancelAppointment')
-    const options = [actionText, cancelText]
+    const options = [cancelText, keepText]
     confirmAlert(
       {
         options,

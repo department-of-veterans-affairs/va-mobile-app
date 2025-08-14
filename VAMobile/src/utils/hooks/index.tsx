@@ -41,7 +41,7 @@ import { getTheme } from 'styles/themes/standardTheme'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { stringToTitleCase } from 'utils/formattingUtils'
+import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -498,26 +498,6 @@ export function useOpenAppStore(): () => void {
   return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
 }
 
-export type useDestructiveActionSheetButtonProps = {
-  /** text of button */
-  text: string
-  /** handler for onClick */
-  onPress?: () => void
-}
-
-export type useDestructiveActionSheetProps = {
-  /** title of alert */
-  title: string
-  /** message of alert */
-  message?: string // message for the alert
-  /** ios destructive index */
-  destructiveButtonIndex?: number
-  /** ios cancel index */
-  cancelButtonIndex: number
-  /** options to show in alert */
-  buttons: Array<useDestructiveActionSheetButtonProps>
-}
-
 export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }
 
 export function useShowActionSheet(): (
@@ -529,9 +509,13 @@ export function useShowActionSheet(): (
 
   return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
     // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
-    const casedOptionsText = options.options.map((optionText) =>
-      stringToTitleCase(isIOS() ? optionText : optionText + ' '),
-    )
+    const casedOptionsText = options.options.map((optionText) => {
+      if (typeof options.destructiveButtonIndex === 'number') {
+        return stringToTitleCase(isIOS() ? optionText : optionText + ' ')
+      } else {
+        return isIOS() ? stringToTitleCase(optionText) : capitalizeFirstLetter(optionText + ' ')
+      }
+    })
 
     Keyboard.dismiss()
 
@@ -546,7 +530,6 @@ export function useShowActionSheet(): (
       destructiveColor: currentTheme.colors.text.error,
       containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
       ...options,
-      // destructiveButtonIndex: newDestructiveButtonIndex,
       options: casedOptionsText,
       cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,
     }
