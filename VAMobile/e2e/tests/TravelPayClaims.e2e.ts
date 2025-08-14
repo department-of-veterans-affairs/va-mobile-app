@@ -16,11 +16,11 @@ beforeAll(async () => {
 })
 
 describe('Travel Pay Claims Screen', () => {
-  it('should navigate to the Travel Pay Claims screen and display title', async () => {
+  it('navigates to the Travel Pay Claims screen and display title', async () => {
     await expect(element(by.id(TravePayClaimsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
   })
 
-  it('should show the list of claims and can change pages', async () => {
+  it('shows the list of claims and can change pages', async () => {
     const { TRAVEL_PAY_CLAIM_1_ID, TRAVEL_PAY_CLAIM_11_ID, TRAVEL_PAY_CLAIMS_TEST_ID } = TravePayClaimsE2eIds
 
     // Check first claim
@@ -64,7 +64,7 @@ describe('Travel Pay Claims Screen', () => {
     await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).not.toExist()
   })
 
-  it('should open a webview to view claim details on web', async () => {
+  it('opens a webview to view claim details on web', async () => {
     const { TRAVEL_PAY_CLAIMS_TEST_ID, TRAVEL_PAY_CLAIM_1_ID } = TravePayClaimsE2eIds
 
     await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
