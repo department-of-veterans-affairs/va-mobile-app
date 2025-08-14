@@ -1,12 +1,12 @@
 #!/bin/bash
-set -x
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-echo $SCRIPT_DIR
 
 if [ ! -d "$SCRIPT_DIR/fastlane/screenshots/en-US" ] || [ -z "$(ls -A "$SCRIPT_DIR/fastlane/screenshots/en-US")" ]; then
   echo "Error: Source screenshot directory '$SCRIPT_DIR/fastlane/screenshots/en-US' is missing or empty."
+  echo "Make sure move_screenshots.sh has been run first and found screenshots to move."
+  echo "Check that either 'artifacts' or '../../../VAMobile/artifacts' contains PNG files."
   exit 1
 fi
 

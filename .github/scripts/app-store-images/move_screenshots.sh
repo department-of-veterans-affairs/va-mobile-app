@@ -2,8 +2,19 @@
 
 set -e
 
-ARTIFACTS_DIR="artifacts"
-# ARTIFACTS_DIR="../../../VAMobile/artifacts"
+# Try both local artifacts (for testing) and VAMobile artifacts (for production)
+if [ -d "artifacts" ] && [ "$(find artifacts -name "*.png" 2>/dev/null | wc -l)" -gt 0 ]; then
+  ARTIFACTS_DIR="artifacts"
+  echo "Using local artifacts directory"
+elif [ -d "../../../VAMobile/artifacts" ] && [ "$(find ../../../VAMobile/artifacts -name "*.png" 2>/dev/null | wc -l)" -gt 0 ]; then
+  ARTIFACTS_DIR="../../../VAMobile/artifacts"
+  echo "Using VAMobile artifacts directory"
+else
+  echo "Error: No artifacts directory with screenshots found."
+  echo "Checked: ./artifacts and ../../../VAMobile/artifacts"
+  exit 1
+fi
+
 DEST_DIR="fastlane/screenshots/en-US"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
