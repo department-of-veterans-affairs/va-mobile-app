@@ -7,7 +7,6 @@ import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { get } from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
-import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
@@ -97,12 +96,6 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
-const getClaimStatusText = (index: number) => {
-  // Look up claim status text for the mock data at the index
-  const claimStatus = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[index].attributes.claimStatus
-  return t('travelPay.statusList.claimStatus', { status: capitalizeFirstLetter(claimStatus) })
-}
-
 context('TravelPayClaims', () => {
   const initializeTestInstance = () => {
     render(<TravelPayClaims {...mockNavProps()} />)
@@ -129,9 +122,8 @@ context('TravelPayClaims', () => {
     await waitFor(() => expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy())
 
     // Should contain 3 entries in the list - identified by claim status
-    expect(screen.getAllByText(t('travelPay.statusList.claimStatus', { status: '' }), { exact: false })).toHaveLength(3)
-    expect(screen.getByText(getClaimStatusText(0))).toBeTruthy()
-    expect(screen.getByText(getClaimStatusText(1))).toBeTruthy()
-    expect(screen.getByText(getClaimStatusText(2))).toBeTruthy()
+    expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
+    expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
+    expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
   })
 })
