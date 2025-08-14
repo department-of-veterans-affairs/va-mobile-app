@@ -2,6 +2,10 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+echo "Debug: Starting generate_images.sh"
+echo "  Current working directory: $(pwd)"
+echo "  Script directory: $SCRIPT_DIR"
+
 # cd "$SCRIPT_DIR/../../../VAMobile/"
 
 # echo "Gathering iOS screens..."
