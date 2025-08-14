@@ -15,10 +15,10 @@ import {
   VAScrollView,
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { useTravelPayContext } from 'components/TravelPayContext'
 import { NAMESPACE } from 'constants/namespaces'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useTravelPayContext } from 'utils/travelPay'
 import { getCommonSubtaskProps } from 'utils/travelPay'
 
 function ReviewClaimScreen() {

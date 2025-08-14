@@ -6,13 +6,13 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
+import { useTravelPayContext } from 'components/TravelPayContext'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
 import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useTravelPayContext } from 'utils/travelPay'
 
 type SMOCErrorScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SMOCErrorScreen'>
 
