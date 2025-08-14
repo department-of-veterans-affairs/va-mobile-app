@@ -65,8 +65,8 @@ const TravelPayE2eIdConstants = {
   KEEP_GOING_CLAIM_TEXT_ANDROID: 'Keep Going ',
   LEFT_BACK_BUTTON_ID: 'leftBackTestID',
   LEFT_CANCEL_BUTTON_ID: 'leftCancelTestID',
-  MILAGE_ONLY_ID: 'milageOnlyID',
-  MILAGE_QUESTION_ID: 'milageQuestionID',
+  MILEAGE_ONLY_ID: 'mileageOnlyID',
+  MILEAGE_QUESTION_ID: 'mileageQuestionID',
   NO_BUTTON_TEXT: 'No',
   NOT_ELIGIBLE_SCREEN_ID: 'NotEligibleTypeScreen',
   OMB_CONTROL_NUMBER_ID: 'ombControlNumberID',
@@ -263,7 +263,7 @@ async function expectInterstitialScreen({
 }) {
   await expect(element(by.id(TravelPayE2eIdConstants.LEFT_CANCEL_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.CONTINUE_BUTTON_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_QUESTION_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.MILEAGE_QUESTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_DESCRIPTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.ELIGIBILITY_LINK_ID))).toExist()
@@ -286,8 +286,8 @@ async function expectInterstitialScreen({
   }
 }
 
-async function expectMilageScreen() {
-  await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_QUESTION_ID))).toExist()
+async function expectMileageScreen() {
+  await expect(element(by.id(TravelPayE2eIdConstants.MILEAGE_QUESTION_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.LEFT_BACK_BUTTON_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.YES_BUTTON_ID))).toExist()
   await expect(element(by.text(TravelPayE2eIdConstants.NO_BUTTON_TEXT))).toExist()
@@ -324,7 +324,7 @@ async function expectReviewClaimScreen({
   await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_CLAIM_SCREEN_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.REVIEW_TITLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.WHAT_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.MILAGE_ONLY_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.MILEAGE_ONLY_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.HOW_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.VEHICLE_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.WHERE_ID))).toExist()
@@ -532,15 +532,15 @@ describe('Travel Pay', () => {
     })
   })
 
-  it('navigates to the Milage screen when the user taps the Continue button on the Interstitial screen', async () => {
+  it('navigates to the Mileage screen when the user taps the Continue button on the Interstitial screen', async () => {
     await pressFileClaimButton()
     await pressContinue()
-    await expectMilageScreen()
+    await expectMileageScreen()
   })
 
-  describe('Milage screen', () => {
-    it('correctly displays the Milage screen', async () => {
-      await expectMilageScreen()
+  describe('Mileage screen', () => {
+    it('correctly displays the Mileage screen', async () => {
+      await expectMileageScreen()
     })
     it('navigates to the Help screen when the user taps the Help button', async () => {
       await pressHelpButton()
@@ -549,7 +549,7 @@ describe('Travel Pay', () => {
     })
   })
 
-  it('navigates to the Vehicle screen when the user taps the Yes button on the Milage screen', async () => {
+  it('navigates to the Vehicle screen when the user taps the Yes button on the Mileage screen', async () => {
     await answerYes()
     await expectVehicleScreen()
   })
@@ -630,18 +630,18 @@ describe('Travel Pay', () => {
     await expectVehicleScreen()
   })
 
-  it('navigates back to the Milage screen when the back button is tapped on the Vehicle screen', async () => {
+  it('navigates back to the Mileage screen when the back button is tapped on the Vehicle screen', async () => {
     await pressBack()
-    await expectMilageScreen()
+    await expectMileageScreen()
   })
 
-  it('navigates back to the Interstitial screen when the back button is tapped on the Milage screen', async () => {
+  it('navigates back to the Interstitial screen when the back button is tapped on the Mileage screen', async () => {
     await pressBack()
     await expectInterstitialScreen({ checkBurdenStatement: false, checkExternalLink: false })
   })
 
-  it('navigates to the error screen when the answer is NO to the Milage screen', async () => {
-    //Set up to get to the Milage screen
+  it('navigates to the error screen when the answer is NO to the Mileage screen', async () => {
+    //Set up to get to the Mileage screen
     await pressContinue()
     await answerNo()
     await expectErrorScreen({ errorType: 'unsupportedType', checkExternalLink: false })
