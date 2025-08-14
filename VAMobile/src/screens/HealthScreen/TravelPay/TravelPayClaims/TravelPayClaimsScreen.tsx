@@ -5,11 +5,12 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTravelPayClaims } from 'api/travelPay'
-import { FeatureLandingTemplate } from 'components'
+import { ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
+import { ScreenIDTypesConstants } from 'store/api'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
@@ -17,7 +18,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   // TODO 112328: fill in start and end date (part of filter state)
-  const { data: claimsPayload, isLoading } = useTravelPayClaims({ startDate: '', endDate: '' })
+  const { data: claimsPayload, isLoading, error, refetch } = useTravelPayClaims({ startDate: '', endDate: '' })
 
   const claims = claimsPayload?.data ?? []
 
@@ -33,7 +34,15 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
-      <TravelPayClaimsList claims={claims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
+      {error ? (
+        <ErrorComponent
+          onTryAgain={refetch}
+          screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}
+          error={error}
+        />
+      ) : (
+        <TravelPayClaimsList claims={claims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
+      )}
     </FeatureLandingTemplate>
   )
 }
