@@ -10,16 +10,6 @@ import { veteranStatusKeys } from 'api/veteranStatus'
 import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 
-jest.mock('utils/remoteConfig', () => ({
-  activateRemoteConfig: jest.fn(() => Promise.resolve()),
-  featureEnabled: jest.fn((flag: string) => {
-    if (flag === 'veteranStatusCardRedesign') {
-      return true
-    }
-    return false
-  }),
-}))
-
 context('VeteranStatusScreen', () => {
   const confirmedData = {
     data: {
