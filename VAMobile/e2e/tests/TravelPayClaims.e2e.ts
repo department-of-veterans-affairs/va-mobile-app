@@ -23,9 +23,7 @@ describe('Travel Pay Claims Screen', () => {
   it('shows the list of claims and can change pages', async () => {
     const { TRAVEL_PAY_CLAIM_1_ID, TRAVEL_PAY_CLAIM_11_ID, TRAVEL_PAY_CLAIMS_TEST_ID } = TravePayClaimsE2eIds
 
-    // Check first page of 10 claims
-    // await expect(element(by.id(TRAVEL_PAY_CLAIM_ID_PATTERN)).atIndex(9)).toExist()
-    // await expect(element(by.id(TRAVEL_PAY_CLAIM_ID_PATTERN)).atIndex(10)).not.toExist()
+    // Check first claim
     await expect(element(by.id(TRAVEL_PAY_CLAIM_1_ID))).toExist()
 
     // Check current page display at the bottom
