@@ -43,7 +43,8 @@ if (!screenshotData) {
 }
 
 screenshotData.forEach(item => {
-  if (!item.setupFunction) {
+  // Skip items without setupFunction, except for LettersDownload which uses static images
+  if (!item.setupFunction && item.testId !== 'LettersDownload') {
     return;
   }
   
