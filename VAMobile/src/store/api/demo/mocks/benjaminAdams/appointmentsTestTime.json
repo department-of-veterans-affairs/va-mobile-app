@@ -1,0 +1,45 @@
+{
+  "/v0/appointments": {
+    "past": {
+      "data": [],
+      "meta": {
+        "errors": null,
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 0,
+          "totalEntries": 0
+        },
+        "travelPayEligibleCount": 0
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10"
+      }
+    },
+    "upcoming": {
+      "data": [],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 0,
+          "totalEntries": 0
+        },
+        "upcomingAppointmentsCount": 0,
+        "upcomingDaysLimit": 30
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=0&page[size]=10"
+      }
+    }
+  }
+}

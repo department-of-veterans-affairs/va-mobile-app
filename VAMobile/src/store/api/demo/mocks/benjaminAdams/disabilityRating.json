@@ -1,0 +1,25 @@
+{
+  "/v0/disability-rating": {
+    "data": {
+      "id": "0",
+      "type": "disabilityRating",
+      "attributes": {
+        "combinedDisabilityRating": 0,
+        "individualRatings": [
+          {
+            "decision": "Service Connected",
+            "effectiveDate": "2017-06-06T05:00:00.000+00:00",
+            "ratingPercentage": 0,
+            "diagnosticText": "Dr Diagnosis (claimed as Heart disease"
+          },
+          {
+            "decision": "Not Service Connected",
+            "effectiveDate": null,
+            "ratingPercentage": null,
+            "diagnosticText": "abnormal weight loss"
+          }
+        ]
+      }
+    }
+  }
+}

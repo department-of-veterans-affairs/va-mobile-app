@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
-import { logout } from 'store/slices'
+import { logout } from 'store/slices/authSlice'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
 import { devConfig, setDebugConfig } from 'utils/remoteConfig'
