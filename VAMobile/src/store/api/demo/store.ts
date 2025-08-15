@@ -16,6 +16,9 @@ import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredN
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
 import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
+import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
+import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
 import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
@@ -38,7 +41,6 @@ import {
 } from 'store/api/demo/secureMessaging'
 import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Intersection type denoting the demo data store
@@ -136,31 +138,21 @@ const transformDates = (fileObject: Record<string, unknown>) => {
 /**
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
-export const initDemoStore = async (): Promise<void> => {
-  const data = await Promise.all([
-    featureEnabled('appointmentsTestTime')
-      ? import('./mocks/appointmentsTestTime.json')
-      : import('./mocks/appointments.json'),
-    import('./mocks/claims.json'),
-    import('./mocks/profile.json'),
-    import('./mocks/secureMessaging.json'),
-    import('./mocks/vaccine.json'),
-    import('./mocks/disablityRating.json'),
-    import('./mocks/decisionLetters.json'),
-    import('./mocks/labsAndTests.json'),
-    import('./mocks/letters.json'),
-    import('./mocks/payments.json'),
-    import('./mocks/prescriptions.json'),
-    import('./mocks/notifications.json'),
-    import('./mocks/contactInformation.json'),
-    import('./mocks/getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo')
-      ? import('./mocks/getFacilitiesInfoCerner.json')
-      : import('./mocks/getFacilitiesInfo.json'),
-    import('./mocks/demographics.json'),
-    import('./mocks/personalInformation.json'),
-    import('./mocks/allergies.json'),
-  ])
+export const initDemoStore = async (demoUser: string | null = 'kimberlyWashington'): Promise<void> => {
+  let userData
+  switch (demoUser) {
+    case 'benjaminAdams':
+      userData = importBenjaminAdamsData()
+      break
+    case 'claraJefferson':
+      userData = importClaraJeffersonData()
+      break
+    case 'kimberlyWashington':
+    default:
+      userData = importKimberlyWashingtonData()
+  }
+
+  const data = await Promise.all(userData)
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
