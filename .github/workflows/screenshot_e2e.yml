@@ -187,7 +187,7 @@ jobs:
 
   generate-android-screenshots:
     name: Generate Android Screenshots
-    runs-on: ubuntu-latest-xlarge
+    runs-on: ubuntu-4-cores-latest
     steps:
       - uses: actions/checkout@v3
         with:
