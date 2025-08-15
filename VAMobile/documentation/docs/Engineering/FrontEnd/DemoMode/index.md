@@ -38,6 +38,30 @@ title: Accessing Demo Mode
  7. After tapping the demo button, the login screen will update. The focus should shift back to the Veterans Crisis Line link, but depending on your phone's version, it might take you lower on the screen. If you have successfully activated demo mode, there will be an alert box that says "Demo mode, heading" directly below / after the Veterans Crisis Line link. Swipe past that and down to the "sign in" button.
  8. Double-tap the "sign in" button to login with demo mode.
 
+## Changing Demo Mode user
+The following are steps to change the demo mode user
+1. Login to the application in Demo Mode
+2. Navigate to the Developer Screen from Settings
+3. Scroll down to the Select Demo User UI
+4. Select the demo user and the app will automatically log out
+5. Login to demo mode again and the selected user's data will be loaded in
+
+## Creating a Demo Mode user
+The following are steps to create a new demo mode user
+1. Add a new directory in `src/store/api/demo/mocks` using the name of the new user in camelcase eg kimberlyWashington
+2. Each user will require at least two files: index.ts and profile.json
+    * index.ts will be used to create the import function for the user
+    * profile.json contains the response json with the user's name.
+3. Add the import function to the index file.
+    * The import function name should follow the format: import*FirstLast*Data
+    * The function returns an array of imported json files. Each json file contains response data for endpoints used throughout the application
+4. Add data json files to the new users directory
+    * Examples of these files can be found in `src/store/api/demo/mocks/default` which can also be used when you don't need to change the data.
+    * Be sure to import any files not recreated for the user from the `default` directory to avoid empty api responses
+5. In `src/store/api/demo/mocks/user.ts` add a user id to `DemoUserIds` and add a new entry to `DemoUsers` with the user's name and a short description of the user's data
+    * The user id should be the same as the user directory name
+6. In `src/store/api/demo/store.ts` add a new case to the switch statement to import the new user's data
+
 ## Troubleshooting
 
 ### Demo Mode’s password is not working
