@@ -1634,7 +1634,7 @@
   "travelPay.statusList.appointmentDateLine1": "{{date}} at",
   "travelPay.statusList.appointmentDateLine2": "{{time}} appointment",
   "travelPay.statusList.claimStatus": "Claim status: {{status}}",
-  "travelPay.statusList.loadingClaims": "Loading travel pay claims.",
+  "travelPay.statusList.loading": "Loading travel claims...",
   "tryAgain": "Try again",
   "upcoming": "upcoming",
   "upcomingAppointments": "Upcoming appointments",

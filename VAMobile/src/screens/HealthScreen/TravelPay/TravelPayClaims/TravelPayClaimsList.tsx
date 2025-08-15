@@ -99,7 +99,7 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
   }
 
   if (isLoading) {
-    return <LoadingComponent text={t('travelPay.statusList.loadingClaims')} />
+    return <LoadingComponent text={t('travelPay.statusList.loading')} />
   }
 
   const paginationProps: PaginationProps = {
