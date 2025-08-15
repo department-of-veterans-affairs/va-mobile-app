@@ -508,6 +508,8 @@ export function useShowActionSheet(): (
   const currentTheme = getTheme()
 
   return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
+    // Destructive action sheets are always title case
+    // Regular action sheets are title case for ios, sentence case for android
     // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
     const casedOptionsText = options.options.map((optionText) => {
       if (typeof options.destructiveButtonIndex === 'number') {
