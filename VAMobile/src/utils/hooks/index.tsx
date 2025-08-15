@@ -361,7 +361,7 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert2 = useShowActionSheet()
+  const destructiveAlert = useShowActionSheet()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
@@ -374,7 +374,7 @@ export function useAttachments(): [
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
     const options = [t('remove'), t('secureMessaging.attachments.keep')]
-    destructiveAlert2(
+    destructiveAlert(
       {
         options,
         title: t('secureMessaging.attachments.removeAttachment'),
