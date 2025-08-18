@@ -7,7 +7,6 @@ import {
   disableAF,
   enableAF,
   loginToDemoMode,
-  toggleRemoteConfigFlag,
   toggleRemoteConfigFlags,
   verifyAF,
 } from './utils'
