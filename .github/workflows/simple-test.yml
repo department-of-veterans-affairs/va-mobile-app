@@ -7,6 +7,11 @@ on:
         description: Test message to echo
         required: false
         default: Hello World
+  push:
+    branches:
+      - chore/11455-prod-app-check
+    paths:
+      - '.github/workflows/simple-test.yml'
 
 jobs:
   test:
