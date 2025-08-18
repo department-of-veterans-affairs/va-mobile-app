@@ -110,20 +110,66 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-      - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Bundle app
-        run: yarn bundle:android
-      - name: Update fastlane
+      - name: Validate environment and lane matrix
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+          SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
         run: |
-          bundle update fastlane
-          bundle exec fastlane update_plugins
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Run fastlane with retries
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+          # Define valid combinations as a matrix
+          declare -A valid_combinations
+          valid_combinations["production,review"]="✅"     # Release builds
+          valid_combinations["production,release"]="✅"    # Go Live builds  
+          valid_combinations["production,on_demand"]="✅"  # On-demand production
+          valid_combinations["staging,qa"]="✅"            # QA builds
+          valid_combinations["staging,rc"]="✅"            # RC builds
+          valid_combinations["staging,on_demand"]="✅"     # On-demand staging
+          valid_combinations["test,qa"]="✅"               # Test QA builds
+          
+          COMBO="${{ inputs.environment }},${{ inputs.lane }}"
+          
+          if [[ -z "${valid_combinations[$COMBO]}" ]]; then
+            echo "❌ ERROR: Invalid environment and lane combination"
+            echo "Environment: ${{ inputs.environment }}"
+            echo "Lane: ${{ inputs.lane }}"
+            echo "Valid combinations:"
+            for combo in "${!valid_combinations[@]}"; do
+              echo "  - $combo"
+            done
+            #TODO Change channel back to va-mobile-app
+            # Send Slack notification before failing
+            if [[ -n "$SLACK_THREAD_TS" && -n "$SLACK_API_TOKEN" ]]; then
+              ERROR_MSG="🚨 VALIDATION FAILED: Invalid environment/lane combination for ${{ github.workflow }}. Environment: ${{ inputs.environment }}, Lane: ${{ inputs.lane }}. See workflow run for valid combinations."
+              curl -X POST \
+                   -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
+                   -H 'Content-type: application/json' \
+                   -d '{"channel": "va-mobile-sandbox", "text": "'"$ERROR_MSG"'", "thread_ts": "'"$SLACK_THREAD_TS"'"}' \
+                   https://slack.com/api/chat.postMessage || true
+              echo "Slack notification sent"
+            else
+              echo "Slack notification skipped (missing thread_ts or token)"
+            fi
+            
+            exit 1
+          fi
+          
+          echo "✅ Valid combination: $COMBO"
+      - name: Set app environment variables
+        run: |
+           echo "Environment is: ${{ inputs.environment }}"
+          #  yarn env:${{ inputs.environment }}
+        #TODO Commenting out for testing #11455
+      # - name: Bundle app
+      #   run: yarn bundle:android
+      # - name: Update fastlane
+      #   run: |
+          # bundle update fastlane
+          # bundle exec fastlane update_plugins
+      # - name: Set SLACK_THREAD_TS environment variable
+      #   if: inputs.slack_thread_ts
+      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # - name: Run fastlane with retries
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_minutes: 20
+      #     max_attempts: 3
+      #     command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
