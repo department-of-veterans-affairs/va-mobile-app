@@ -1,12 +1,12 @@
-name: 'Simple Manual Test'
+name: Simple Manual Test
 
 on:
   workflow_dispatch:
     inputs:
       test_message:
-        description: 'Test message'
-        required: true
-        default: 'Hello World'
+        description: Test message to echo
+        required: false
+        default: Hello World
 
 jobs:
   test:
