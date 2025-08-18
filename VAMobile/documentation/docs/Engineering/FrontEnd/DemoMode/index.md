@@ -48,12 +48,12 @@ The following are steps to change the demo mode user
 
 ## Creating a Demo Mode user
 The following are steps to create a new demo mode user
-1. Add a new directory in `src/store/api/demo/mocks` using the name of the new user in camelcase eg kimberlyWashington
+1. Add a new directory in `src/store/api/demo/mocks` using the name of the new user in camelcase e.g. kimberlyWashington
 2. Each user will require at least two files: index.ts and profile.json
     * index.ts will be used to create the import function for the user
     * profile.json contains the response json with the user's name.
 3. Add the import function to the index file.
-    * The import function name should follow the format: import*FirstLast*Data
+    * The import function name should follow the format: import*FirstLast*Data e.g. importKimberlyWashington
     * The function returns an array of imported json files. Each json file contains response data for endpoints used throughout the application
 4. Add data json files to the new users directory
     * Examples of these files can be found in `src/store/api/demo/mocks/default` which can also be used when you don't need to change the data.
