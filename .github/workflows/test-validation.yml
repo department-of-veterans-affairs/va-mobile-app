@@ -1,0 +1,86 @@
+# .github/workflows/test_validation.yml
+name: '[Test] Validation Matrix'
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to test
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+          - test
+      lane:
+        description: Lane to test
+        required: true
+        type: choice
+        options:
+          - on_demand
+          - review
+          - release
+          - qa
+          - rc
+      platform:
+        description: Platform to test
+        required: true
+        type: choice
+        options:
+          - ios
+          - android
+          - both
+
+jobs:
+  test_validation:
+    name: Test Validation Matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Test validation logic
+        run: |
+          # Copy your validation logic here for testing
+          declare -A valid_combinations
+          valid_combinations["production,review"]="✅"
+          valid_combinations["production,release"]="✅"
+          valid_combinations["production,on_demand"]="✅"
+          valid_combinations["staging,qa"]="✅"
+          valid_combinations["staging,rc"]="✅"
+          valid_combinations["staging,on_demand"]="✅"
+          valid_combinations["test,qa"]="✅"
+          
+          COMBO="${{ inputs.environment }},${{ inputs.lane }}"
+          echo "Testing combination: $COMBO"
+          
+          if [[ -z "${valid_combinations[$COMBO]}" ]]; then
+            echo "❌ EXPECTED FAILURE: Invalid combination"
+            echo "This combination should fail validation"
+            # Don't exit 1 here, just show it would fail
+          else
+            echo "✅ VALID: This combination is allowed"
+          fi
+
+  test_ios_build:
+    name: Test iOS Build Validation
+    if: inputs.platform == 'ios' || inputs.platform == 'both'
+    uses: ./.github/workflows/build_ios.yml
+    secrets: inherit
+    with:
+      lane: ${{ inputs.lane }}
+      ref: ${{ github.ref_name }}
+      environment: ${{ inputs.environment }}
+      notes: "Testing validation matrix"
+      version: "test"
+
+  test_android_build:
+    name: Test Android Build Validation  
+    if: inputs.platform == 'android' || inputs.platform == 'both'
+    uses: ./.github/workflows/build_android.yml
+    secrets: inherit
+    with:
+      lane: ${{ inputs.lane }}
+      ref: ${{ github.ref_name }}
+      environment: ${{ inputs.environment }}
+      notes: "Testing validation matrix"
+      version: "test"
