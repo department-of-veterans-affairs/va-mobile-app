@@ -248,7 +248,11 @@
     "WebviewScreen": [],
     "styles": [],
     "TravelPay": ["TravelPay"],
-    "TravelPayContext": ["TravelPay"]
+    "TravelPayContext": ["TravelPay"],
+    "benjaminAdams": [],
+    "claraJefferson": [],
+    "kimberlyWashington": []
+
   },
   "files": {
     "allergies.ts": ["Allergies"],
@@ -326,7 +330,7 @@
     "claims.json": ["Claims", "Appeals", "AppealsExpanded"],
     "contactInformation.json": ["ContactInformation", "VALetters"],
     "decisionLetters.json": ["DecisionLetters"],
-    "disablityRating.json": ["DisabilityRatings"],
+    "disabilityRating.json": ["DisabilityRatings"],
     "getAuthorizedServices.json": [
       "Appeals",
       "AppealsExpanded",
@@ -446,6 +450,9 @@
     "linking.tsx": [],
     "namespaces.ts": [],
     "store.ts": [],
-    "utils.ts": []
+    "utils.ts": [],
+    "allergies.json": ["Allergies"],
+    "labsAndTests.json": ["LabsAndTests"],
+    "users.ts": []
   }
 }

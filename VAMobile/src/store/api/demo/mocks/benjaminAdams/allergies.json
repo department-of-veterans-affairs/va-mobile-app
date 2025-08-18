@@ -1,0 +1,22 @@
+{
+  "/v0/health/allergy-intolerances": {
+    "1": {
+      "data": [],
+      "meta": {
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 0,
+          "totalEntries": 0
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=1",
+        "first": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=1",
+        "prev": null,
+        "next": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=2",
+        "last": "https://staging-api.va.gov/mobile/v1/health/allergy-intolerances?useCache=true&page[size]=10&page[number]=2"
+      }
+    }
+  }
+}
