@@ -1,7 +1,27 @@
-import { QueryCache, QueryClient } from '@tanstack/react-query'
+import { useNetInfo } from '@react-native-community/netinfo'
+
+import { NetworkMode, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
+
+type CacheProps = {
+  networkMode: NetworkMode
+  staleTime: number
+  gcTime: number
+  refetchOnMount: boolean | 'always'
+}
+
+export const useQueryCacheOptions = (): CacheProps => {
+  const { isConnected } = useNetInfo()
+
+  return {
+    networkMode: isConnected === false ? 'offlineFirst' : 'online',
+    staleTime: isConnected === false ? Infinity : 0,
+    refetchOnMount: isConnected === false ? false : 'always',
+    gcTime: Infinity,
+  }
+}
 
 /**
   By default, the query client caches for 5 minutes with a max expiration of 24 days.

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { useQueryCacheOptions } from 'api/queryClient'
 import { VeteranVerificationStatusPayload } from 'api/types'
 import { veteranStatusKeys } from 'api/veteranStatus/queryKeys'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
@@ -19,8 +20,10 @@ const getVeteranStatus = async (): Promise<VeteranVerificationStatusPayload | un
  * Returns a query for a veterans verification status
  */
 export const useVeteranStatus = (options?: { enabled?: boolean }) => {
+  const queryCacheOptions = useQueryCacheOptions()
   return useQuery({
     ...options,
+    ...queryCacheOptions,
     queryKey: veteranStatusKeys.verification,
     queryFn: () => getVeteranStatus(),
     meta: {

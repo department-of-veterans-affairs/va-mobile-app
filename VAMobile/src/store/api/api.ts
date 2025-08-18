@@ -1,6 +1,5 @@
 import { Platform } from 'react-native'
 
-// import { fetch as fetchNetworkInfo } from '@react-native-community/netinfo'
 import NetInfo from '@react-native-community/netinfo'
 
 import { onlineManager } from '@tanstack/react-query'
@@ -16,6 +15,7 @@ import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 
+// Using rnc net info create event listener for network connection status
 onlineManager.setEventListener((setOnline) => {
   return NetInfo.addEventListener((state) => {
     setOnline(!!state.isConnected)
@@ -269,20 +269,3 @@ export const patch = async function <T>(endpoint: string, params: Params = {}): 
 export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
   return call<T>('DELETE', endpoint, params)
 }
-
-// export const offlineQueryCache = async <T>(cb: () => Promise<T>, endpoint: string): Promise<T> => {
-//   const { isConnected } = await fetchNetworkInfo()
-//
-//   // Connected? Fetch data and save it to the cache
-//   // if (isConnected) {
-//     const res = await cb()
-//     // await AsyncStorage.setItem(endpoint, JSON.stringify(res))
-//     // console.log('cached', endpoint)
-//     return res
-//   // }
-//   //
-//   // // Pull cached data if it exists
-//   // console.log('pulling cached data for', endpoint)
-//   // const res = await AsyncStorage.getItem(endpoint)
-//   // return JSON.parse(res || '') as T
-// }

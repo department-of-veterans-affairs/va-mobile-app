@@ -3,6 +3,7 @@ import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { disabilityRatingKeys } from 'api/disabilityRating/queryKeys'
+import { useQueryCacheOptions } from 'api/queryClient'
 import { DisabilityRatingData, RatingData } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -22,12 +23,13 @@ const getDisabilityRating = async (): Promise<RatingData | undefined> => {
  */
 export const useDisabilityRating = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
+  const queryCacheOptions = useQueryCacheOptions()
   const disabilityRatingInDowntime = useDowntime(DowntimeFeatureTypeConstants.disabilityRating)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,
-    networkMode: 'online',
+    ...queryCacheOptions,
     enabled: !!(authorizedServices?.disabilityRating && !disabilityRatingInDowntime && queryEnabled),
     queryKey: disabilityRatingKeys.disabilityRating,
     queryFn: () => getDisabilityRating(),
