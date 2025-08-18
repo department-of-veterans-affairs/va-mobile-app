@@ -2,6 +2,7 @@
 name: '[Test] Validation Matrix'
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       environment:
