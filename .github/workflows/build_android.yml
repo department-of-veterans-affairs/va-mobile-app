@@ -3,6 +3,7 @@
 name: "[Build] Reusable Android Workflow"
 
 on:
+  push:
   workflow_call:
     inputs:
       # Used to determine the environment variables to build the app with
