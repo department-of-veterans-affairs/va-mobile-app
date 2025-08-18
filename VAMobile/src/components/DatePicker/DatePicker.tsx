@@ -62,7 +62,10 @@ const DatePicker: FC<DatePickerProps> = ({
 }) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [selectedDateRange, setSelectedDateRange] = useState<DatePickerRange>(initialDateRange)
+  const [selectedDateRange, setSelectedDateRange] = useState<DatePickerRange>({
+    startDate: initialDateRange.startDate.startOf('day'),
+    endDate: initialDateRange.endDate.endOf('day'),
+  })
   const [fromFieldOpen, setFromFieldOpen] = useState(false)
   const [toFieldOpen, setToFieldOpen] = useState(false)
   const [fromFieldInvalid, setFromFieldInvalid] = useState(false)
@@ -74,15 +77,18 @@ const DatePicker: FC<DatePickerProps> = ({
 
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
     const { date } = e.nativeEvent
-    const newDate = DateTime.fromISO(date).toLocal()
+    const newDate =
+      fieldName === 'startDate'
+        ? DateTime.fromISO(date).toLocal().startOf('day')
+        : DateTime.fromISO(date).toLocal().endOf('day')
 
     const startDateInvalid = newDate.valueOf() > selectedDateRange.endDate.valueOf()
     const endDateInvalid = newDate.valueOf() < selectedDateRange.startDate.valueOf()
 
     if (fieldName === 'startDate' && startDateInvalid) {
-      startDateInvalid && setFromFieldInvalid(true)
+      setFromFieldInvalid(true)
     } else if (fieldName === 'endDate' && endDateInvalid) {
-      endDateInvalid && setToFieldInvalid(true)
+      setToFieldInvalid(true)
     } else {
       setFromFieldInvalid(false)
       setToFieldInvalid(false)

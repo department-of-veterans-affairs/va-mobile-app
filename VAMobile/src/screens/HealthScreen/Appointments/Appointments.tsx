@@ -194,7 +194,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
                   setPage={setPage}
                   loading={loadingAppointments || fetchingAuthServices}
                   setDateRange={setDateRange}
-                  setTimeFrame={setTimeFrame}
                   scrollViewRef={scrollViewRef}
                 />
               ) : (

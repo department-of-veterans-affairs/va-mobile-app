@@ -20,6 +20,7 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { DatePickerRange } from 'components/DatePicker/DatePicker'
 import { LabelTagTypeConstants } from 'components/LabelTag'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { getTestIDFromTextLines } from 'utils/accessibility'
@@ -534,6 +535,20 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
     endDate: todaysDate.endOf('day').toISO(),
+  }
+}
+
+/**
+ * Returns a date range to be used by DatePicker component
+ *
+ * @param apptsDateRange - type AppointmentsDateRange, with startDate and endDate as ISO strings
+ *
+ * @returns type DatePickerRange, with startDate and endDate as DateTime objs
+ */
+export const getDatePickerRange = (apptsDateRange: AppointmentsDateRange): DatePickerRange => {
+  return {
+    startDate: DateTime.fromISO(apptsDateRange.startDate).toLocal(),
+    endDate: DateTime.fromISO(apptsDateRange.endDate).toLocal(),
   }
 }
 
