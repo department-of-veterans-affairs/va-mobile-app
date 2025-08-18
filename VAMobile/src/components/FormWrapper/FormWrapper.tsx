@@ -1,6 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
-import _ from 'lodash'
+import _ from 'underscore'
 
 import {
   Box,

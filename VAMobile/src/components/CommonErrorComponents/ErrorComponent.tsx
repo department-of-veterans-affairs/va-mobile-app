@@ -14,7 +14,6 @@ import { isErrorObject } from 'utils/common'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { oneOfFeaturesInDowntime } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export type ErrorComponentProps = {
   /**The screen id for the screen that has the errors*/
@@ -42,7 +41,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     const errorType = errorsByScreenID[screenID] || ''
 
     if (isInDowntime) {
-      if (featureEnabled('logDowntimeAnalytics') && logDowntimeAnalytics) {
+      if (logDowntimeAnalytics) {
         features.forEach((feature) => {
           const downtimeWindow = downtimeWindowsByFeature[feature]
           if (downtimeWindow)
