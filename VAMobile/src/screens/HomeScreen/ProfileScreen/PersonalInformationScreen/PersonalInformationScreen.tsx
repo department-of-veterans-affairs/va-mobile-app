@@ -32,7 +32,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const getPreferredName = (demographics: UserDemographics | undefined, t: TFunction): string => {
@@ -200,7 +199,7 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
               testID="howToFixDOBID"
             />
           </Box>
-          {featureEnabled('preferredNameGenderWaygate') && <DefaultList items={personalInformationItems()} />}
+          <DefaultList items={personalInformationItems()} />
         </>
       )}
     </FeatureLandingTemplate>
