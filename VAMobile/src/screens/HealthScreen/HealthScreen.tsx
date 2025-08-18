@@ -156,21 +156,19 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toMessageInboxID"
         />
-        {featureEnabled('prescriptions') && (
-          <LargeNavButton
-            title={t('prescription.title')}
-            onPress={() => navigateTo('PrescriptionHistory')}
-            showLoading={fetchingPrescriptions}
-            subText={
-              prescriptionData?.meta.prescriptionStatusCount.isRefillable
-                ? t('prescriptions.activityButton.subText', {
-                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-                  })
-                : undefined
-            }
-            testID="toPrescriptionsID"
-          />
-        )}
+        <LargeNavButton
+          title={t('prescription.title')}
+          onPress={() => navigateTo('PrescriptionHistory')}
+          showLoading={fetchingPrescriptions}
+          subText={
+            prescriptionData?.meta.prescriptionStatusCount.isRefillable
+              ? t('prescriptions.activityButton.subText', {
+                  count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                })
+              : undefined
+          }
+          testID="toPrescriptionsID"
+        />
         <LargeNavButton
           title={t('vaMedicalRecords.buttonTitle')}
           onPress={() => navigateTo('MedicalRecordsList')}

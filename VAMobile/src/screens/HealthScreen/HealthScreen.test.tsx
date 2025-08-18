@@ -13,12 +13,9 @@ import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
 const mockNavigationSpy = jest.fn()
-
-jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -30,8 +27,6 @@ jest.mock('utils/hooks', () => {
 })
 
 context('HealthScreen', () => {
-  const mockFeatureEnabled = featureEnabled as jest.Mock
-
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -161,23 +156,12 @@ context('HealthScreen', () => {
 
   describe('Prescriptions button', () => {
     it('navigates to Prescription history screen when pressed', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
       initializeTestInstance()
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
-    it('is not displayed if feature toggle is disabled', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(false)
-      initializeTestInstance()
-      expect(screen.getByText('Appointments')).toBeTruthy()
-      expect(screen.getByText('Messages')).toBeTruthy()
-      expect(screen.queryByText('Prescriptions')).toBeFalsy()
-      expect(screen.getByText('Medical records')).toBeTruthy()
-    })
-
-    it('is displayed if feature toggle is enabled', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
+    it('is displayed correctly', () => {
       initializeTestInstance()
       expect(screen.getByText('Prescriptions')).toBeTruthy()
     })
