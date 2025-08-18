@@ -58,23 +58,25 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   }
 
   return (
-    <>
-      <Box
-        p={theme.dimensions.smallMarginBetween}
-        flex={1}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center">
-        <TextView>{label}</TextView>
-        <Pressable style={dateLabelStyle} accessibilityRole="button" onPress={onPress}>
-          <TextView
-            color={isInvalid ? 'error' : 'link'}
-            textDecoration={isInvalid ? 'line-through' : 'none'}
-            textDecorationColor={'error'}>
-            {date.toFormat('MMMM dd, yyyy')}
-          </TextView>
-        </Pressable>
-      </Box>
+    <Box>
+      <Pressable accessibilityRole="button" onPress={onPress}>
+        <Box
+          p={theme.dimensions.smallMarginBetween}
+          flex={1}
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center">
+          <TextView>{label}</TextView>
+          <Box style={dateLabelStyle}>
+            <TextView
+              color={isInvalid ? 'error' : 'link'}
+              textDecoration={isInvalid ? 'line-through' : 'none'}
+              textDecorationColor={'error'}>
+              {date.toFormat('MMMM dd, yyyy')}
+            </TextView>
+          </Box>
+        </Box>
+      </Pressable>
       {open ? (
         <Box flex={1}>
           <RNDatePicker
@@ -88,7 +90,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
       ) : (
         <></>
       )}
-    </>
+    </Box>
   )
 }
 
