@@ -31,11 +31,11 @@ const TravelPayE2eIdConstants = {
   HOW_ID: 'howID',
   VEHICLE_ID: 'vehicleID',
   WHERE_ID: 'whereID',
-  SUCCESS_TITLE_ID: 'successTitleID',
-  SUCCESS_TEXT_ID: 'successTextID',
-  SUCCESS_NEXT_TITLE_ID: 'successNextTitleID',
-  SUCCESS_NEXT_TEXT_ID: 'successNextTextID',
-  SUCCESS_NEXT_TEXT2_ID: 'successNextText2ID',
+  SUCCESS_CONTENT_HEADER_ID: 'successContentHeaderID',
+  SUCCESS_CONTENT_DESCRIPTION_ID: 'successContentDescriptionID',
+  SUCCESS_CONTENT_SECTION_TITLE_ID: 'successContentSectionTitleID',
+  SUCCESS_CONTENT_INSTRUCTION_TEXT_ID: 'successContentInstructionTextID',
+  SUCCESS_CONTENT_ADDITIONAL_TEXT_ID: 'successContentAdditionalTextID',
   COUNTRY_TEXT: 'United States',
   STATE_TEXT: 'Arizona',
   FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
@@ -266,22 +266,23 @@ const checkReviewClaimScreen = async () => {
 
 const checkSubmitSuccessScreen = async (partialSuccess: boolean = false) => {
   if (partialSuccess) {
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_DESCRIPTION_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_SECTION_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_INSTRUCTION_TEXT_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.FINISH_TRAVEL_CLAIM_LINK_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_ADDITIONAL_TEXT_ID))).toExist()
   } else {
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_DESCRIPTION_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_SECTION_TITLE_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_INSTRUCTION_TEXT_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_ADDITIONAL_TEXT_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
   }
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
   await openDismissLeavingAppPopup(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID)
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FINISH_TRAVEL_CLAIM_LINK_ID)
   await expect(element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID))).toExist()
 }
 
@@ -292,6 +293,7 @@ const checkTravelPayFileOnlineComponent = async () => {
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_ID))).toExist()
   await expect(element(by.id(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID))).toExist()
+  await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_ONE_LINK_ID)
   await openDismissLeavingAppPopup(TravelPayE2eIdConstants.FILE_ONLINE_METHOD_TWO_LINK_ID)
 }
 

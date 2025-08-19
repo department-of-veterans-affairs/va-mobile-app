@@ -22,6 +22,7 @@ import {
 import AppVersionAndBuild from 'components/AppVersionAndBuild'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DeveloperScreen'
 import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
@@ -79,8 +80,9 @@ function LoginScreen() {
     })
   }
 
-  const handleUpdateDemoMode = () => {
-    dispatch(updateDemoMode(true))
+  const handleUpdateDemoMode = async () => {
+    const demoUser = await AsyncStorage.getItem(DEMO_USER)
+    dispatch(updateDemoMode(true, demoUser))
   }
   const tapForDemo = () => {
     demoTaps++

@@ -34,14 +34,7 @@ import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/Clai
 import { logAnalyticsEvent } from 'utils/analytics'
 import { deletePhoto, onAddPhotos } from 'utils/claims'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import {
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useOrientation,
-  useRouteNavigation,
-  useShowActionSheet,
-  useTheme,
-} from 'utils/hooks'
+import { useBeforeNavBackListener, useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
 
 type UploadOrAddPhotosProps = StackScreenProps<FileRequestStackParams, 'UploadOrAddPhotos'>
@@ -51,6 +44,7 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const showActionSheetWithOptions = useShowActionSheet()
+  const confirmAlert = useShowActionSheet()
   const { claimID, request: originalRequest, firstImageResponse } = route.params
   const [filesUploadedSuccess, setFilesUploadedSuccess] = useState(false)
   const isPortrait = useOrientation()
@@ -64,7 +58,6 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
   const [totalBytesUsed, setTotalBytesUsed] = useState(
     firstImageResponse.assets?.reduce((total, asset) => (total += asset.fileSize || 0), 0),
   )
-  const confirmAlert = useDestructiveActionSheet()
   const navigateTo = useRouteNavigation()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -81,23 +74,27 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title.photos'),
-      message: request
-        ? t('fileUpload.discard.confirm.message.requestPhotos')
-        : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('fileUpload.continueUpload'),
-        },
-        {
-          text: t('fileUpload.cancelUpload'),
-          onPress: () => navigation.dispatch(e.data.action),
-        },
-      ],
-    })
+
+    const options = [t('fileUpload.cancelUpload'), t('fileUpload.continueUpload')]
+
+    confirmAlert(
+      {
+        options,
+        title: t('fileUpload.discard.confirm.title.photos'),
+        message: request
+          ? t('fileUpload.discard.confirm.message.requestPhotos')
+          : t('fileUpload.discard.confirm.message.submitEvidencePhotos'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.dispatch(e.data.action)
+            break
+        }
+      },
+    )
   })
 
   useSubtaskProps({
@@ -195,20 +192,22 @@ function UploadOrAddPhotos({ navigation, route }: UploadOrAddPhotosProps) {
       ),
     )
 
-    confirmAlert({
-      title: t('fileUpload.submit.confirm.title'),
-      message: t('fileUpload.submit.confirm.message'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('fileUpload.submit'),
-          onPress: onUploadConfirmed,
-        },
-      ],
-    })
+    const options = [t('fileUpload.submit'), t('cancel')]
+    confirmAlert(
+      {
+        options,
+        title: t('fileUpload.submit.confirm.title'),
+        message: t('fileUpload.submit.confirm.message'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onUploadConfirmed()
+            break
+        }
+      },
+    )
   }
 
   const onDocumentTypeChange = (selectedType: string) => {

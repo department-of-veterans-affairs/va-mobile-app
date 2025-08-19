@@ -2,8 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { AppThunk } from 'store'
 import * as api from 'store/api'
-
-import { initDemoStore } from '../api/demo/store'
+import { initDemoStore } from 'store/api/demo/store'
 
 export type DemoState = {
   demoMode: boolean
@@ -17,16 +16,17 @@ export const initialDemoState: DemoState = {
 
 /**
  * sets the demo mode on or off
- * @param demoMode- boolean to set as state.demo.demoMode
- * @param loginOut- boolean to set if user is login out
+ * @param demoMode - boolean to set as state.demo.demoMode
+ * @param demoUser - string demo user to use
+ * @param loginOut - boolean to set if user is login out
  */
 export const updateDemoMode =
-  (demoMode: boolean, loginOut = false): AppThunk =>
+  (demoMode: boolean, demoUser: string | null, loginOut = false): AppThunk =>
   async (dispatch) => {
     api.setDemoMode(demoMode)
     dispatch(dispatchUpdateDemoMode(demoMode))
     if (!loginOut) {
-      await initDemoStore()
+      await initDemoStore(demoUser)
     }
     if (!demoMode) {
       dispatch(dispatchUpdateErrors([]))

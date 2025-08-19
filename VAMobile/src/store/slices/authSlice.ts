@@ -598,7 +598,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
   const { demoMode } = getState().demo
 
   if (demoMode) {
-    dispatch(updateDemoMode(false, true))
+    await dispatch(updateDemoMode(false, null, true))
   }
 
   try {
