@@ -241,7 +241,6 @@ const call = async function <T>(
 }
 
 export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  console.log('get', endpoint)
   return call<T>('GET', endpoint, params, undefined)
 }
 

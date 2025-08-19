@@ -1,6 +1,7 @@
 import * as Keychain from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import NetInfo from '@react-native-community/netinfo'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -24,6 +25,8 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
 } from 'store/api/types'
+import { dispatchSetAnalyticsLogin } from 'store/slices'
+import { updateDemoMode } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { KEYCHAIN_DEVICE_SECRET_KEY, storeDeviceSecret } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
@@ -31,9 +34,6 @@ import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
-
-import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { updateDemoMode } from './demoSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -543,6 +543,10 @@ export const attemptIntializeAuthWithRefreshToken = async (
 
     if (!refreshTokenMatchesLoginType) {
       throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
+    }
+    const { isConnected } = await NetInfo.fetch()
+    if (!isConnected) {
+      return finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true)
     }
 
     const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {
