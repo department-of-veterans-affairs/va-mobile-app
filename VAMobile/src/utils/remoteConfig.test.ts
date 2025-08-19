@@ -39,6 +39,7 @@ const mockOverrides = {
   useOldLinkComponent: false,
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
+  showCernerAlertSM: true,
 }
 
 describe('activate', () => {

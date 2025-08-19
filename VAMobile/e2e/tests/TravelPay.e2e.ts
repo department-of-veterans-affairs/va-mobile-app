@@ -86,11 +86,11 @@ const TravelPayE2eIdConstants = {
   STATE_TEXT: 'Arizona',
   STATUS_SAVED_TEXT: 'Status: Saved',
   SUBMIT_BUTTON_ID: 'submitTestID',
-  SUCCESS_NEXT_TEXT2_ID: 'successNextText2ID',
-  SUCCESS_NEXT_TEXT_ID: 'successNextTextID',
-  SUCCESS_NEXT_TITLE_ID: 'successNextTitleID',
-  SUCCESS_TEXT_ID: 'successTextID',
-  SUCCESS_TITLE_ID: 'successTitleID',
+  SUCCESS_CONTENT_HEADER_ID: 'successContentHeaderID',
+  SUCCESS_CONTENT_DESCRIPTION_ID: 'successContentDescriptionID',
+  SUCCESS_CONTENT_SECTION_TITLE_ID: 'successContentSectionTitleID',
+  SUCCESS_CONTENT_INSTRUCTION_TEXT_ID: 'successContentInstructionTextID',
+  SUCCESS_CONTENT_ADDITIONAL_TEXT_ID: 'successContentAdditionalTextID',
   TAVEL_PAY_DETAILS_STATUS_TEXT: 'Status: In Progress',
   TRAVEL_AGREEMENT_HEADER_ID: 'travelAgreementHeaderID',
   TRAVEL_AGREEMENT_LINK_ID: 'travelAgreementLinkID',
@@ -362,15 +362,14 @@ const expectSubmitSuccessScreen = async ({
   partialSuccess: boolean
   checkExternalLink: boolean
 }) => {
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TITLE_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_TEXT_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TITLE_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_HEADER_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_DESCRIPTION_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_SECTION_TITLE_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_INSTRUCTION_TEXT_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_CONTENT_ADDITIONAL_TEXT_ID))).toExist()
   if (partialSuccess) {
     await expect(element(by.id(TravelPayE2eIdConstants.FINISH_TRAVEL_CLAIM_LINK_ID))).toExist()
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
   } else {
-    await expect(element(by.id(TravelPayE2eIdConstants.SUCCESS_NEXT_TEXT2_ID))).toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_APPOINTMENT_LINK_ID))).toExist()
   }
   await expect(element(by.id(TravelPayE2eIdConstants.SET_UP_DIRECT_DEPOSIT_LINK_ID))).toExist()
