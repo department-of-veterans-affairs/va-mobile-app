@@ -38,7 +38,7 @@ jobs:
     secrets: inherit
     with:
       #! Roll back to on_demand
-      lane: release
+      lane: qa
       # lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
@@ -51,7 +51,7 @@ jobs:
     secrets: inherit
     with:
       #! Roll back to on_demand
-      lane: release
+      lane: qa
       # lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
