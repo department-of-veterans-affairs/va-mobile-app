@@ -53,6 +53,11 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import {
+  useComposeCancelConfirmation,
+  useGoToDrafts,
+} from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -75,9 +80,6 @@ import {
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { useComposeCancelConfirmation, useGoToDrafts } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
-import { renderMessages } from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 
 type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
@@ -156,8 +158,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
-
-  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
+  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
+  const [careSystem, setCareSystem] = useState(
+    messageRecipient?.attributes.stationNumber || careSystems.length === 1 ? careSystems[0]?.value : '',
+  )
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
@@ -423,16 +427,30 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       }
     })
 
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
     // not crazy about the keys here being the labels we eventually display in the combobox
     // open to suggestions here
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
     }
   }
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
-
   if (!isReplyDraft) {
     formFieldsList = [
       {
@@ -441,17 +459,19 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           labelKey: 'secureMessaging.formMessage.careSystem',
           selectedValue: careSystem,
           onSelectionChange: handleSetCareSystem,
-          pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+          pickerOptions: careSystems,
           includeBlankPlaceholder: true,
           isRequiredField: true,
           testID: 'care system field',
           confirmTestID: 'careSystemPickerConfirmID',
         },
+        hideField: careSystems.length === 1,
         fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
       },
       {
         fieldType: FieldType.ComboBox,
         fieldProps: {
+          titleKey: 'secureMessaging.formMessage.careTeam',
           labelKey: 'secureMessaging.formMessage.to',
           selectedValue: to,
           onSelectionChange: setTo,

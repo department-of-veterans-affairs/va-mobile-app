@@ -2,19 +2,17 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TFunction } from 'i18next'
-import { camelCase } from 'lodash'
 
 import { AppealEventData, AppealEventTypes } from 'api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import PhaseIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 import { a11yLabelVA } from 'utils/a11yLabel'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, snakeToCamelCase } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
-import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
-
 const getEventName = (type: AppealEventTypes, t: TFunction) => {
-  const translated = t(`appealDetails.${camelCase(type)}`)
+  const translated = t(`appealDetails.${snakeToCamelCase(type)}`)
   return translated.startsWith('appealDetails') ? t('appealDetails.unknown') : translated
 }
 

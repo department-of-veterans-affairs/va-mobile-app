@@ -15,24 +15,17 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
-  | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
-  | 'homeScreenPrefetch'
   | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
   | 'inAppReview'
-  | 'inAppUpdates'
   | 'labsAndTests'
-  | 'logDowntimeAnalytics'
   | 'nonVAMedsLink'
-  | 'patientCheckIn'
-  | 'patientCheckInWaygate'
-  | 'preferredNameGenderWaygate'
-  | 'prescriptions'
   | 'rescheduleLink'
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
@@ -42,28 +35,21 @@ export type FeatureToggleType =
   | 'travelPaySMOC'
   | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
-  | 'whatsNewUI'
-  | 'veteranStatusCardRedesign'
+  | 'internationalPhoneNumber'
+  | 'showCernerAlertSM'
 
 type FeatureToggleValues = {
-  allergies: boolean
   appointmentRequests: boolean
+  appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
-  homeScreenPrefetch: boolean
   hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
   inAppReview: boolean
-  inAppUpdates: boolean
   labsAndTests: boolean
-  logDowntimeAnalytics: boolean
   nonVAMedsLink: boolean
-  patientCheckIn: boolean
-  patientCheckInWaygate: boolean
-  preferredNameGenderWaygate: boolean
-  prescriptions: boolean
   rescheduleLink: boolean
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
@@ -73,40 +59,33 @@ type FeatureToggleValues = {
   travelPaySMOC: boolean
   travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
-  whatsNewUI: boolean
-  veteranStatusCardRedesign: boolean
+  internationalPhoneNumber: boolean
+  showCernerAlertSM: boolean
 }
 
 export const defaults: FeatureToggleValues = {
-  allergies: true,
   appointmentRequests: false,
+  appointmentsTestTime: false,
   cernerTrueForDemo: false,
   decisionLettersWaygate: true,
   haptics: true,
-  homeScreenPrefetch: true,
   hsScrollAnalytics: false,
   inAppRecruitment: false,
-  inAppFeedback: false,
+  inAppFeedback: true,
   inAppReview: true,
-  inAppUpdates: true,
   labsAndTests: false,
-  logDowntimeAnalytics: true,
   nonVAMedsLink: false,
-  patientCheckIn: false,
-  patientCheckInWaygate: true,
-  preferredNameGenderWaygate: true,
-  prescriptions: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
-  shareMyHealthDataLink: false,
+  shareMyHealthDataLink: true,
   sso: true,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: false,
+  travelPaySMOC: true,
   travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
-  whatsNewUI: true,
-  veteranStatusCardRedesign: true,
+  internationalPhoneNumber: false,
+  showCernerAlertSM: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults
@@ -196,7 +175,7 @@ export const getFeatureToggles = (): FeatureToggleValues => {
   }
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
-    if (!key.startsWith('WG')) {
+    if (!key.startsWith('WG') && key in defaults) {
       toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
     }
   })

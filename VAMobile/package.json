@@ -21,7 +21,7 @@
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx && yarn run lint:changed",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
-    "lint:changed": "CHANGED_FILES=$(git diff --diff-filter=ACM --relative --name-only origin/develop -- \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./src/**/*.js\" \"./src/**/*.jsx\" \":(exclude)./src/**/index.ts\") && eslint --ignore-pattern '**/index.ts' --no-eslintrc -c ./.eslintrc.changed.js $CHANGED_FILES",
+    "lint:changed": "CURRENT_BRANCH=$(git branch --show-current) && CHANGED_FILES=$(git diff --diff-filter=ACM --relative --name-only $(git merge-base $CURRENT_BRANCH origin/develop) -- \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./src/**/*.js\" \"./src/**/*.jsx\" \":(exclude)./src/**/index.ts\") && eslint --ignore-pattern '**/index.ts' --no-eslintrc -c ./.eslintrc.changed.js $CHANGED_FILES",
     "lint:changed:ci": "eslint --ignore-pattern '**/index.ts' --no-eslintrc --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js $CHANGED_FILES && yarn run tsc:compile",
     "lint:ci": "eslint --max-warnings 0 --rule 'deprecate/import: off' ./src --ext .js,.jsx,.ts,.tsx && yarn run tsc:compile",
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
@@ -43,7 +43,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
-    "@department-of-veterans-affairs/mobile-assets": "0.14.0",
+    "@department-of-veterans-affairs/mobile-assets": "0.15.1",
     "@department-of-veterans-affairs/mobile-component-library": "0.30.3",
     "@department-of-veterans-affairs/mobile-tokens": "0.23.0",
     "@expo/react-native-action-sheet": "^4.1.1",
@@ -83,8 +83,8 @@
     "react-native-keychain": "^9.2.3",
     "react-native-localize": "^3.3.0",
     "react-native-notifications": "^5.1.0",
-    "react-native-safe-area-context": "^5.4.0",
     "react-native-quick-base64": "^2.1.2",
+    "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "^3.37.0",
     "react-native-shadow-2": "^7.1.1",
     "react-native-svg": "15.8.0",
@@ -97,12 +97,12 @@
     "underscore": "^1.13.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.10",
+    "@babel/core": "^7.27.4",
     "@babel/plugin-proposal-private-methods": "^7.18.6",
-    "@babel/plugin-transform-runtime": "^7.26.10",
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-typescript": "^7.26.0",
-    "@babel/runtime": "^7.27.0",
+    "@babel/plugin-transform-runtime": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-typescript": "^7.27.1",
+    "@babel/runtime": "^7.27.6",
     "@department-of-veterans-affairs/eslint-config-mobile": "0.15.0",
     "@react-native-community/cli": "15.0.1",
     "@react-native-community/cli-platform-android": "15.0.1",
@@ -117,7 +117,6 @@
     "@tsconfig/react-native": "^3.0.5",
     "@types/detox": "^18.1.0",
     "@types/jest-when": "^3.5.5",
-    "@types/lodash": "^4.17.13",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20.17.50",
     "@types/react-native": "0.73.0",
@@ -169,6 +168,6 @@
     "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   }
 }

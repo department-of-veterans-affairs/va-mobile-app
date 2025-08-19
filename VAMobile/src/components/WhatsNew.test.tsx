@@ -7,9 +7,6 @@ import WhatsNew from 'components/WhatsNew'
 import { InitialState } from 'store/slices'
 import { context, render, when } from 'testUtils'
 import { getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
-import { featureEnabled } from 'utils/remoteConfig'
-
-jest.mock('utils/remoteConfig')
 
 const mockT = jest.fn()
 jest.mock('react-i18next', () => {
@@ -32,10 +29,7 @@ const NEWS_LIST = {
 }
 
 context('WhatsNew', () => {
-  const initializeTestInstance = (mockWhatsNewUI: boolean, localVersion = '0.0', skippedVersion = '0.0') => {
-    when(featureEnabled as jest.Mock)
-      .calledWith('whatsNewUI')
-      .mockReturnValue(mockWhatsNewUI)
+  const initializeTestInstance = (localVersion = '0.0', skippedVersion = '0.0') => {
     when(getLocalVersion).mockReturnValue(Promise.resolve(localVersion))
     when(getVersionSkipped).mockReturnValue(Promise.resolve(skippedVersion))
 
@@ -65,18 +59,13 @@ context('WhatsNew', () => {
     })
   }
 
-  it('should not render when "whatsNewUI" is not enabled', async () => {
-    initializeTestInstance(false)
+  it('should not render when version is skipped', async () => {
+    initializeTestInstance('1.1', '1.1')
     await waitFor(() => expect(screen.queryByText(t('whatsNew.title'))).toBeFalsy())
   })
 
-  it('should not render when "whatsNewUI" is enabled and version is skipped', async () => {
-    initializeTestInstance(true, '1.1', '1.1')
-    await waitFor(() => expect(screen.queryByText(t('whatsNew.title'))).toBeFalsy())
-  })
-
-  it('should render when "whatsNewUI" is enabled and version is not skipped', async () => {
-    initializeTestInstance(true, '1.1', '1.0')
+  it('should render when version is not skipped', async () => {
+    initializeTestInstance('1.1', '1.0')
     await waitFor(async () => {
       const title = await screen.findByText(t('whatsNew.title'))
       return expect(title).toBeTruthy()
@@ -84,7 +73,7 @@ context('WhatsNew', () => {
   })
 
   it('should render details when expanded ', async () => {
-    initializeTestInstance(true, '1.1', '1.0')
+    initializeTestInstance('1.1', '1.0')
     await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: t('whatsNew.title') })))
     expect(screen.getByText(NEWS_LIST.SSO_TEXT)).toBeTruthy()
     expect(screen.getByText(NEWS_LIST.BULLET1)).toBeTruthy()
@@ -92,7 +81,7 @@ context('WhatsNew', () => {
   })
 
   it('should set the next skip version when dismissed ', async () => {
-    initializeTestInstance(true, '1.1', '1.0')
+    initializeTestInstance('1.1', '1.0')
     expect(setVersionSkipped).not.toBeCalled()
 
     await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: t('whatsNew.title') })))

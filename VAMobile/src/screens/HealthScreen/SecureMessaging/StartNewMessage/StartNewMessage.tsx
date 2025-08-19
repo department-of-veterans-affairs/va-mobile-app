@@ -46,6 +46,7 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -69,8 +70,6 @@ import {
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
@@ -124,8 +123,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
+  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState('')
+  const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -240,9 +240,24 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
     }
   }
 
@@ -257,17 +272,19 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         labelKey: 'secureMessaging.formMessage.careSystem',
         selectedValue: careSystem,
         onSelectionChange: handleSetCareSystem,
-        pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+        pickerOptions: careSystems,
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'care system field',
         confirmTestID: 'careSystemPickerConfirmID',
       },
+      hideField: careSystems.length === 1,
       fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
     },
     {
       fieldType: FieldType.ComboBox,
       fieldProps: {
+        titleKey: 'secureMessaging.formMessage.careTeam',
         labelKey: 'secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
@@ -427,6 +444,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           <AlertWithHaptics
             variant="info"
             header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            testID={'startNewMessageNonUrgentWarning'}
             scrollViewRef={scrollViewRef}>
             <TextView variant="MobileBody">
               {t('secureMessaging.startNewMessage.nonurgent.careTeam')}

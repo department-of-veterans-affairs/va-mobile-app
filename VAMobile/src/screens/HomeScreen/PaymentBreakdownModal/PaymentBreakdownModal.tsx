@@ -10,6 +10,8 @@ import { PaymentsData } from 'api/types'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yLabelPaymentTypeAmount } from 'utils/a11yLabel'
+import { setAccessibilityFocus } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -26,7 +28,7 @@ const MAX_WIDTH = 400
 /**
  * Payment Breakdown Modal that shows the breakdown of payments from the last recurring payment
  */
-const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalProps) => {
+const PaymentBreakdownModal = React.forwardRef(({ visible, setVisible }: PaymentBreakdownModalProps, ref) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -59,7 +61,13 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
     const payments: ReactNode[] = []
     paymentsByLastDate.forEach((payment, idx) => {
       payments.push(
-        <Box flexDirection="row" justifyContent="space-between" accessible={true} key={idx}>
+        // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          accessible={true}
+          key={idx}
+          accessibilityLabel={a11yLabelPaymentTypeAmount(payment.attributes.paymentType, payment.attributes.amount)}>
           <TextView flex={1} variant="MobileBody">
             {payment.attributes.paymentType}
           </TextView>
@@ -73,6 +81,7 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
 
   const onCancel = () => {
     setVisible(false)
+    setAccessibilityFocus(ref)
   }
 
   const pressableProps: PressableProps = {
@@ -170,6 +179,6 @@ const PaymentBreakdownModal = ({ visible, setVisible }: PaymentBreakdownModalPro
       </Modal>
     </View>
   )
-}
+})
 
 export default PaymentBreakdownModal

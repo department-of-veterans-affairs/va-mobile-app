@@ -87,6 +87,7 @@ export const CommonE2eIdConstants = {
   HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
   LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
   //health
+  APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
   APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
@@ -352,64 +353,12 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
-}
 
-/** This function will change the mock data for demo mode
- *
- * @param matchString - string: name of the json file ie appointments.json
- * @param jsonProperty - array of strings and dictionaries: should match the path to get to the
- * json obj you want changed that matches the path to get to the object you want changed
- * @param newJsonValue - string or boolean: new value for the json object
- */
-
-export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
-  const mockDirectory = './src/store/api/demo/mocks/'
-
-  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-
-    const jsonParsed = JSON.parse(data)
-    let mockDataVariable
-    let mockDataKeyValue
-    for (let x = 0; x < jsonProperty.length; x++) {
-      if (x === 0) {
-        mockDataVariable = jsonParsed[jsonProperty[x]]
-      } else if (x === jsonProperty.length - 1) {
-        mockDataVariable[jsonProperty[x]] = newJsonValue
-      } else {
-        if (jsonProperty[x].constructor === Object) {
-          const key = String(Object.keys(jsonProperty[x]))
-          const value = jsonProperty[x][key]
-          mockDataKeyValue = mockDataVariable[key]
-          mockDataVariable = mockDataKeyValue[value]
-        } else {
-          mockDataVariable = mockDataVariable[jsonProperty[x]]
-        }
-      }
-    }
-
-    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-      if (err) {
-        return console.log(err)
-      }
-    })
-  })
-
-  await device.uninstallApp()
-  await setTimeout(1000)
-  if (device.getPlatform() === 'ios') {
-    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
-  } else {
-    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
-  }
-  await device.installApp()
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
+  // 115452: Added to fix race conditions with the popup not being fully gone
+  // and interfering with view visibility in subsequent steps.
+  await waitFor(element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)))
+    .not.toExist()
+    .withTimeout(6000)
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder

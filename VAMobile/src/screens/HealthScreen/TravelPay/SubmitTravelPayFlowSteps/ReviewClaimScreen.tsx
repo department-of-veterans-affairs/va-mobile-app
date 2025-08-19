@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CommonActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
@@ -26,17 +25,20 @@ import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/Tra
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
 type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
 
-function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
+function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
   const { appointment, appointmentRouteKey, smocFlowStartDate } = route.params
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
-  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
+  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(
+    appointment.id,
+    appointmentRouteKey,
+  )
 
   useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
 
@@ -90,12 +92,6 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
       },
       {
         onSuccess: (data) => {
-          navigation.dispatch({
-            ...CommonActions.setParams({
-              appointment: appendClaimDataToAppointment(appointment, data?.data.attributes),
-            }),
-            source: appointmentRouteKey,
-          })
           navigateTo('SubmitSuccessScreen', {
             appointmentDateTime: attributes.startDateLocal,
             facilityName: attributes.location.name,

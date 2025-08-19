@@ -15,22 +15,24 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import {
   AppointmentDetailsSubType,
   AppointmentDetailsSubTypeConstants,
-  appointmentMeetsTravelPayCriteria,
   getDaysLeftToFileTravelPay,
+  isEligibleForTravelPay,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 type TravelClaimFiledDetailsProps = {
+  appointmentID: string
   attributes: AppointmentAttributes
   subType: AppointmentDetailsSubType
 }
 
-function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiledDetailsProps) {
+function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
@@ -40,6 +42,9 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
   const endTime = formatDateTimeReadable(
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime,
   )
+
+  const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
+  const isSubmitting = mutationState?.status === 'pending'
 
   if (!featureEnabled('travelPaySMOC')) {
     return null
@@ -66,6 +71,38 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment has a travel pay claim, display the claim details
     const { claim } = attributes.travelPayClaim || {}
     const claimError = attributes.travelPayClaim?.metadata.success === false
+
+    if (isSubmitting) {
+      // We are in the process of submitting a travel pay claim and don't yet have the claim details from the API
+      // so we're displaying a placeholder status
+      const status = t('travelPay.travelClaimFiledDetails.status.submitting')
+      return (
+        <>
+          <TextView my={theme.dimensions.tinyMarginBetween} variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.status', { status })}
+          </TextView>
+          <LinkWithAnalytics
+            type="custom"
+            onPress={() => {
+              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
+              // but the base web URL is actually /claims
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+              navigateTo('Webview', {
+                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+                useSSO: true,
+              })
+            }}
+            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
+            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            testID={`goToVAGovTravelClaimStatus`}
+          />
+          <TravelPayHelp />
+        </>
+      )
+    }
 
     if (claim && !travelPayInDowntime) {
       const status = claim.claimStatus
@@ -118,17 +155,11 @@ function AppointmentTravelClaimDetails({ attributes, subType }: TravelClaimFiled
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can’t tell if a claim exists.
+    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
     // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
     const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
 
-    if (
-      apiReturnsFullHistory &&
-      !claim &&
-      appointmentMeetsTravelPayCriteria(attributes) &&
-      daysLeftToFileTravelPay < 0 &&
-      !claimError
-    ) {
+    if (apiReturnsFullHistory && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {t('travelPay.travelClaimFiledDetails.noClaim')}
