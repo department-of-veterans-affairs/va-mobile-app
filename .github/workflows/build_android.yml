@@ -131,9 +131,6 @@ jobs:
             echo "❌ ERROR: Invalid environment and lane combination"
             echo "Environment: ${{ inputs.environment }}"
             echo "Lane: ${{ inputs.lane }}"
-            echo "Valid combinations:"
-            for combo in "${!valid_combinations[@]}"; do
-              echo "  - $combo"
             done
             #TODO Change channel back to va-mobile-app
             # Send Slack notification before failing

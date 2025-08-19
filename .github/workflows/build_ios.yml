@@ -70,7 +70,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    steps:
+    steps:	
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -118,9 +118,6 @@ jobs:
             echo "❌ ERROR: Invalid environment and lane combination"
             echo "Environment: ${{ inputs.environment }}"
             echo "Lane: ${{ inputs.lane }}"
-            echo "Valid combinations:"
-            for combo in "${!valid_combinations[@]}"; do
-              echo "  - $combo"
             done
             #TODO  Switch channel back to va-mobile-app
             # Send Slack notification before failing
