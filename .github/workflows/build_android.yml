@@ -13,10 +13,8 @@ on:
       # Specifies which fastlane lane to run
       # Options: qa, rc, review, release, on_demand
       lane:
-        #! TODO Change back to qa when done #BUG
         type: string
-        default: review
-        #! TODO default: qa
+        default: qa
       # Release notes that will show next to the version in Firebase
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
