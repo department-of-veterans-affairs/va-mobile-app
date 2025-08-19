@@ -4,6 +4,8 @@ import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { DateTime } from 'luxon'
+
 import { useTravelPayClaims } from 'api/travelPay'
 import { ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
@@ -17,8 +19,18 @@ type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayCla
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  // TODO 112328: fill in start and end date (part of filter state)
-  const { data: claimsPayload, isLoading, error, refetch } = useTravelPayClaims({ startDate: '', endDate: '' })
+  // TODO 112328: fill in start and end date from filtering view (part of filter state)
+  const startDate = DateTime.now().minus({ months: 3 }).toISO()
+  const endDate = DateTime.now().toISO()
+  const {
+    data: claimsPayload,
+    isLoading,
+    error,
+    refetch,
+  } = useTravelPayClaims({
+    startDate,
+    endDate,
+  })
 
   const claims = claimsPayload?.data ?? []
 
