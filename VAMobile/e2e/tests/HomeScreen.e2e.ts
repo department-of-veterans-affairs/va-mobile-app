@@ -7,7 +7,7 @@ import {
   disableAF,
   enableAF,
   loginToDemoMode,
-  toggleRemoteConfigFlags,
+  toggleRemoteConfigFlag,
   verifyAF,
 } from './utils'
 
@@ -37,10 +37,8 @@ export const HomeE2eIdConstants = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlags([
-    CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT,
-    CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT,
-  ])
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -54,10 +52,8 @@ describe('Home Screen', () => {
     await device.uninstallApp()
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-    await toggleRemoteConfigFlags([
-      CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT,
-      CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT,
-    ])
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
     await loginToDemoMode()
   })
 
