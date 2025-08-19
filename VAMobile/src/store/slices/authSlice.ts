@@ -54,6 +54,7 @@ const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_co
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
+const OFFLINE_LOGIN_KEY = '@offline_login'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
@@ -291,6 +292,10 @@ const finishInitialize = async (
     await analytics().setAnalyticsCollectionEnabled(false)
     await performance().setPerformanceCollectionEnabled(false)
   }
+
+  // save whether we are finishing authentication offline
+  const { isConnected } = await NetInfo.fetch()
+  await AsyncStorage.setItem(OFFLINE_LOGIN_KEY, JSON.stringify(!isConnected))
 
   dispatch(dispatchInitializeAction(payload))
 }
