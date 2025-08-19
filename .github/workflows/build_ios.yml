@@ -152,7 +152,7 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: | 
-          echo "Environment is: ${{ inputs.environment }}"
+          echo "Environment and lane are: ${{ inputs.environment }} ${{ inputs.lane }}"
       #TODO Commenting out for testing #11455
           # yarn env:${{ inputs.environment }}
 
