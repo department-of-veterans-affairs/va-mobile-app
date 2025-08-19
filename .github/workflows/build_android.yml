@@ -105,7 +105,7 @@ jobs:
             
             # Send Slack notification before failing
             if [[ -n "$SLACK_THREAD_TS" && -n "$SLACK_API_TOKEN" ]]; then
-              ERROR_MSG="🚨 VALIDATION FAILED: Invalid environment/lane combination for ${{ github.workflow }}. Environment: ${{ inputs.environment }}, Lane: ${{ inputs.lane }}. See workflow run for valid combinations."
+              ERROR_MSG="🚨 VALIDATION FAILED: Invalid environment/lane combination for ${{ github.workflow }}. Environment: ${{ inputs.environment }}, Lane: ${{ inputs.lane }}."
               curl -X POST \
                    -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                    -H 'Content-type: application/json' \
