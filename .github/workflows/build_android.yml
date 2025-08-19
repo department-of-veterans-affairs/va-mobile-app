@@ -78,22 +78,33 @@ jobs:
           SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
         shell: bash
         run: |
-          # Define valid combinations as a matrix
-          declare -A valid_combinations
-          valid_combinations["production,review"]="✅"     # Release builds
-          valid_combinations["production,release"]="✅"    # Go Live builds  
-          valid_combinations["production,on_demand"]="✅"  # On-demand production
-          valid_combinations["staging,qa"]="✅"            # QA builds
-          valid_combinations["staging,rc"]="✅"            # RC builds
-          valid_combinations["staging,on_demand"]="✅"     # On-demand staging
-          valid_combinations["test,qa"]="✅"               # Test QA builds
+          # Define valid combinations as a list
+          VALID_COMBINATIONS=(
+            "production,review"      # Release builds
+            "production,release"     # Go Live builds  
+            "production,on_demand"   # On-demand production
+            "staging,qa"             # QA builds
+            "staging,rc"             # RC builds
+            "staging,on_demand"      # On-demand staging
+            "test,qa"                # Test QA builds
+          )
           
           COMBO="${{ inputs.environment }},${{ inputs.lane }}"
           
-          if [[ -z "${valid_combinations[$COMBO]}" ]]; then
+          # Check if combination is valid
+          VALID=false
+          for valid_combo in "${VALID_COMBINATIONS[@]}"; do
+            if [[ "$COMBO" == "$valid_combo" ]]; then
+              VALID=true
+              break
+            fi
+          done
+          
+          if [[ "$VALID" == "false" ]]; then
             echo "❌ ERROR: Invalid environment and lane combination"
             echo "Environment: ${{ inputs.environment }}"
             echo "Lane: ${{ inputs.lane }}"
+            
             # Send Slack notification before failing
             if [[ -n "$SLACK_THREAD_TS" && -n "$SLACK_API_TOKEN" ]]; then
               ERROR_MSG="🚨 VALIDATION FAILED: Invalid environment/lane combination for ${{ github.workflow }}. Environment: ${{ inputs.environment }}, Lane: ${{ inputs.lane }}. See workflow run for valid combinations."
