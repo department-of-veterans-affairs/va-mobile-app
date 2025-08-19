@@ -89,7 +89,7 @@ export default function TravelPayContextProvider({
   appointmentRouteKey: string
 }) {
   const smocFlowStartDate = useRef<string | undefined>(undefined)
-  const [penaltyStatementAccepted, setPenaltyStatementAccepted] = useState(false)
+  const [penaltyStatementAccepted, setPenaltyStatementAccepted] = useState<boolean>(false)
   const [penaltyStatementError, setPenaltyStatementError] = useState<boolean>(false)
 
   const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(
