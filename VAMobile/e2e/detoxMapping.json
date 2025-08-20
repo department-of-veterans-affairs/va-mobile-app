@@ -382,6 +382,7 @@
       "Payments"
     ],
     "travelPay.ts": ["TravelPay"],
+    "TravelPay.e2e.ts": ["TravelPay"],
     "vaccine.ts": ["VaccineRecords"],
     "api.ts": [
       "Appeals",
