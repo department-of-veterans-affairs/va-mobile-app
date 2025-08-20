@@ -105,17 +105,21 @@ jobs:
     
     - name: Send Slack notification
       run: |
-        # Escape the message properly for JSON
+        # Build message components
         SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+        CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
         URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
         
-        # Build the JSON payload with proper escaping
-        cat << EOF | curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-          -H 'Content-type: application/json' \
-          --data @- \
+        # Create simple message text
+        MESSAGE_TEXT="🚨 *On-Call Alert rotation this week: $SLACK_MENTION*\n\nOn call procedure: <$URL>"
+        
+        # Create JSON payload using jq to ensure proper escaping
+        PAYLOAD=$(jq -n --arg channel "$CHANNEL_ID" --arg text "$MESSAGE_TEXT" '{channel: $channel, text: $text}')
+        
+        echo "Sending payload: $PAYLOAD"
+        
+        curl -X POST \
+          -H "Authorization: Bearer $SLACK_API_TOKEN" \
+          -H "Content-type: application/json" \
+          --data "$PAYLOAD" \
           https://slack.com/api/chat.postMessage
-        {
-          "channel": "${{ steps.get-channel.outputs.channel_id }}",
-          "text": "🚨 *On-Call Alert rotation this week: ${SLACK_MENTION}*\n\nOn call procedure: <${URL}>"
-        }
-        EOF
