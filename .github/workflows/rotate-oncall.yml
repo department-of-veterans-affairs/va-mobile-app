@@ -45,7 +45,28 @@ jobs:
         INDEX=$((WEEK_NUM % MEMBER_COUNT))
         ONCALL_PERSON=${MEMBERS[$INDEX]}
         
+        # GitHub username to Slack user ID mapping
+        # To find Slack user IDs: go to user's profile in Slack → More → Copy member ID
+        declare -A GITHUB_TO_SLACK=(
+          ["timwright12"]="U08H8A5Q00J"
+          ["jbergman-oddball"]="U08FHQEA8P7"
+          ["SMLuthi"]=U9YP3N7C7"
+          ["ryan-mcneil"]="U051N9T603X"
+        
+        # Get Slack user ID for the selected person
+        SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
+        
+        if [ -z "$SLACK_USER_ID" ]; then
+          echo "Warning: No Slack mapping found for GitHub user: $ONCALL_PERSON"
+          echo "Using GitHub username in Slack message"
+          SLACK_MENTION="@$ONCALL_PERSON"
+        else
+          echo "Mapped $ONCALL_PERSON to Slack user ID: $SLACK_USER_ID"
+          SLACK_MENTION="<@$SLACK_USER_ID>"
+        fi
+        
         echo "oncall_person=$ONCALL_PERSON" >> $GITHUB_OUTPUT
+        echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
         echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
         echo "Selected on-call person: $ONCALL_PERSON for week $WEEK_NUM"
     
@@ -83,7 +104,7 @@ jobs:
     
     - name: Send Slack notification
       run: |
-        MESSAGE="🚨 *On-Call Alert rotation this week:<@${{ steps.select-oncall.outputs.oncall_person }}>* \n\n On call procedure: <https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/>"
+        MESSAGE="🚨 *On-Call Alert rotation this week: ${{ steps.select-oncall.outputs.slack_mention }}* \n\n On call procedure: <https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/>"
         
         curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
           -H 'Content-type: application/json' \
