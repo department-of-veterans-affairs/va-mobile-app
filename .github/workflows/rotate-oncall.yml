@@ -21,33 +21,10 @@ jobs:
     - name: Get team members and select on-call person
       id: select-oncall
       run: |
-        # Get team members from GitHub API
+        # Get team members from GitHub API using PAT
         echo "Fetching team members from flagship-mobile-oncall..."
-        
-        # First, let's try to get the team ID by listing all teams
-        echo "Listing all teams to find the correct slug..."
-        ALL_TEAMS=$(curl -s \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/department-of-veterans-affairs/teams")
-        
-        echo "Raw teams response:"
-        echo "$ALL_TEAMS"
-        
-        # Check if the response is an error
-        if echo "$ALL_TEAMS" | jq -e '.message' > /dev/null 2>&1; then
-          echo "Error listing teams:"
-          echo "$ALL_TEAMS" | jq '.message'
-          echo "Proceeding with direct team lookup..."
-        else
-          echo "Successfully got teams list, looking for flagship-mobile-oncall..."
-          echo "$ALL_TEAMS" | jq -r '.[] | "\(.name) -> \(.slug)"' 2>/dev/null || echo "Could not parse team list"
-        fi
-        
-        # Try direct API call to the team
-        echo "Trying direct API call..."
         RESPONSE=$(curl -s \
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: token ${{ secrets.GH_ACTIONS_PAT }}" \
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
         
