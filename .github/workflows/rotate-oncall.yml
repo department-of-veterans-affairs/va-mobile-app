@@ -31,26 +31,25 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/orgs/department-of-veterans-affairs/teams")
         
-        echo "All teams response:"
-        echo "$ALL_TEAMS" | jq '.[] | {name: .name, slug: .slug}' || echo "Failed to parse teams"
+        echo "Raw teams response:"
+        echo "$ALL_TEAMS"
         
-        # Try to find the flagship-mobile-oncall team
-        TEAM_ID=$(echo "$ALL_TEAMS" | jq -r '.[] | select(.name == "flagship-mobile-oncall" or .slug == "flagship-mobile-oncall") | .id' | head -1)
-        echo "Found team ID: $TEAM_ID"
-        
-        if [ -n "$TEAM_ID" ] && [ "$TEAM_ID" != "null" ]; then
-          echo "Using team ID $TEAM_ID to get members..."
-          RESPONSE=$(curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/teams/$TEAM_ID/members")
+        # Check if the response is an error
+        if echo "$ALL_TEAMS" | jq -e '.message' > /dev/null 2>&1; then
+          echo "Error listing teams:"
+          echo "$ALL_TEAMS" | jq '.message'
+          echo "Proceeding with direct team lookup..."
         else
-          echo "Team not found, falling back to slug-based API..."
-          RESPONSE=$(curl -s \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
+          echo "Successfully got teams list, looking for flagship-mobile-oncall..."
+          echo "$ALL_TEAMS" | jq -r '.[] | "\(.name) -> \(.slug)"' 2>/dev/null || echo "Could not parse team list"
         fi
+        
+        # Try direct API call to the team
+        echo "Trying direct API call..."
+        RESPONSE=$(curl -s \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
         
         echo "API Response:"
         echo "$RESPONSE"
