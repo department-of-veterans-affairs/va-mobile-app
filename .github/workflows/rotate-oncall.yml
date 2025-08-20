@@ -22,11 +22,25 @@ jobs:
       id: select-oncall
       run: |
         # Get team members from GitHub API
-        TEAM_MEMBERS=$(curl -s \
+        echo "Fetching team members from flagship-mobile-oncall..."
+        RESPONSE=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members" \
-          | jq -r '.[].login')
+          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
+        
+        echo "API Response:"
+        echo "$RESPONSE"
+        
+        # Check if response contains an error
+        if echo "$RESPONSE" | jq -e '.message' > /dev/null 2>&1; then
+          echo "Error from GitHub API:"
+          echo "$RESPONSE" | jq '.message'
+          exit 1
+        fi
+        
+        # Extract team members
+        TEAM_MEMBERS=$(echo "$RESPONSE" | jq -r '.[].login')
+        echo "Team members found: $TEAM_MEMBERS"
         
         # Convert to array
         MEMBERS=($TEAM_MEMBERS)
