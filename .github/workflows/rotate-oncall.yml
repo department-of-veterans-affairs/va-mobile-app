@@ -128,3 +128,19 @@ jobs:
             \"text\": \"🚨 *On-Call Alert rotation this week: $SLACK_MENTION*\n\nOn call procedure: <$URL>\"
           }" \
           https://slack.com/api/chat.postMessage
+    
+    - name: Update channel topic
+      run: |
+        SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+        CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+        
+        # Create topic text with exact format requested (using \n for newline)
+        TOPIC_TEXT="Alert rotation this week: $SLACK_MENTION\nOn call procedure: https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
+        
+        echo "Updating channel topic..."
+        
+        curl -X POST \
+          -H "Authorization: Bearer $SLACK_API_TOKEN" \
+          -H "Content-type: application/json" \
+          -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC_TEXT\"}" \
+          https://slack.com/api/conversations.setTopic
