@@ -1,7 +1,6 @@
 name: Weekly On-Call Assignment
 
 on:
-  push:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
     - cron: '30 13 * * 1'
