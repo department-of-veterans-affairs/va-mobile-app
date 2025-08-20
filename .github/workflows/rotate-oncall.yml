@@ -42,24 +42,15 @@ jobs:
         
         # Use week number to determine who's on call
         WEEK_NUM=$(date +%U)
+        echo "Current week number: $WEEK_NUM"
         
-        # Special handling: jbergman-oddball is on call this week (week 34), then normal rotation
-        CURRENT_WEEK=34  # Week of August 20, 2025
-        if [ $WEEK_NUM -eq $CURRENT_WEEK ]; then
-          ONCALL_PERSON="jbergman-oddball"
-          echo "Special assignment: $ONCALL_PERSON is on call this week ($WEEK_NUM)"
-        else
-          # Normal rotation starting next week
-          # Adjust index so rotation starts properly after jbergman-oddball's week
-          ADJUSTED_WEEK=$((WEEK_NUM - CURRENT_WEEK - 1))
-          INDEX=$((ADJUSTED_WEEK % MEMBER_COUNT))
-          # Ensure positive index
-          if [ $INDEX -lt 0 ]; then
-            INDEX=$((INDEX + MEMBER_COUNT))
-          fi
-          ONCALL_PERSON=${MEMBERS[$INDEX]}
-          echo "Normal rotation: $ONCALL_PERSON is on call for week $WEEK_NUM (adjusted index: $INDEX)"
-        fi
+        # Force jbergman-oddball to be on call this week, then resume normal rotation
+        ONCALL_PERSON="jbergman-oddball"
+        echo "Forced assignment: $ONCALL_PERSON is on call this week ($WEEK_NUM)"
+        
+        # TODO: Remove this forced assignment after this week and restore normal rotation:
+        # INDEX=$((WEEK_NUM % MEMBER_COUNT))
+        # ONCALL_PERSON=${MEMBERS[$INDEX]}
         
         # GitHub username to Slack user ID mapping
         # To find Slack user IDs: go to user's profile in Slack → More → Copy member ID
