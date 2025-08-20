@@ -23,10 +23,34 @@ jobs:
       run: |
         # Get team members from GitHub API
         echo "Fetching team members from flagship-mobile-oncall..."
-        RESPONSE=$(curl -s \
+        
+        # First, let's try to get the team ID by listing all teams
+        echo "Listing all teams to find the correct slug..."
+        ALL_TEAMS=$(curl -s \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
+          "https://api.github.com/orgs/department-of-veterans-affairs/teams")
+        
+        echo "All teams response:"
+        echo "$ALL_TEAMS" | jq '.[] | {name: .name, slug: .slug}' || echo "Failed to parse teams"
+        
+        # Try to find the flagship-mobile-oncall team
+        TEAM_ID=$(echo "$ALL_TEAMS" | jq -r '.[] | select(.name == "flagship-mobile-oncall" or .slug == "flagship-mobile-oncall") | .id' | head -1)
+        echo "Found team ID: $TEAM_ID"
+        
+        if [ -n "$TEAM_ID" ] && [ "$TEAM_ID" != "null" ]; then
+          echo "Using team ID $TEAM_ID to get members..."
+          RESPONSE=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/teams/$TEAM_ID/members")
+        else
+          echo "Team not found, falling back to slug-based API..."
+          RESPONSE=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
+        fi
         
         echo "API Response:"
         echo "$RESPONSE"
