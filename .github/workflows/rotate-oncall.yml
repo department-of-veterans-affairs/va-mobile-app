@@ -50,8 +50,9 @@ jobs:
         declare -A GITHUB_TO_SLACK=(
           ["timwright12"]="U08H8A5Q00J"
           ["jbergman-oddball"]="U08FHQEA8P7"
-          ["SMLuthi"]=U9YP3N7C7"
+          ["SMLuthi"]="U9YP3N7C7"
           ["ryan-mcneil"]="U051N9T603X"
+        )
         
         # Get Slack user ID for the selected person
         SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
