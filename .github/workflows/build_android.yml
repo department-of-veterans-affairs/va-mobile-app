@@ -69,57 +69,14 @@ jobs:
   build_android:
     runs-on: ubuntu-4-cores-latest
     steps:
-      - name: Validate environment and lane matrix
+      - name: Set environment to production for release/review lanes
         working-directory: .
-        env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-          SLACK_THREAD_TS: ${{ inputs.slack_thread_ts }}
         shell: bash
         run: |
-          # Define valid combinations as a list
-          VALID_COMBINATIONS=(
-            "production,review"      # Release builds
-            "production,release"     # Go Live builds  
-            "production,on_demand"   # On-demand production
-            "staging,qa"             # QA builds
-            "staging,rc"             # RC builds
-            "staging,on_demand"      # On-demand staging
-            "test,qa"                # Test QA builds
-          )
-          
-          COMBO="${{ inputs.environment }},${{ inputs.lane }}"
-          
-          # Check if combination is valid
-          VALID=false
-          for valid_combo in "${VALID_COMBINATIONS[@]}"; do
-            if [[ "$COMBO" == "$valid_combo" ]]; then
-              VALID=true
-              break
-            fi
-          done
-          
-          if [[ "$VALID" == "false" ]]; then
-            echo "❌ ERROR: Invalid environment and lane combination"
-            echo "Environment: ${{ inputs.environment }}"
-            echo "Lane: ${{ inputs.lane }}"
-            
-            # Send Slack notification before failing
-            if [[ -n "$SLACK_THREAD_TS" && -n "$SLACK_API_TOKEN" ]]; then
-              ERROR_MSG="🚨 VALIDATION FAILED: Invalid environment/lane combination for ${{ github.workflow }}. Environment: ${{ inputs.environment }}, Lane: ${{ inputs.lane }}."
-              curl -X POST \
-                   -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
-                   -H 'Content-type: application/json' \
-                   -d '{"channel": "va-mobile-build-alerts", "text": "'"$ERROR_MSG"'", "thread_ts": "'"$SLACK_THREAD_TS"'"}' \
-                   https://slack.com/api/chat.postMessage || true
-              echo "Slack notification sent"
-            else
-              echo "Slack notification skipped (missing thread_ts or token)"
-            fi
-            
-            exit 1
+          if [[ "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ]]; then
+            echo "Overriding environment to production for lane: ${{ inputs.lane }}"
+            echo "environment=production" >> $GITHUB_ENV
           fi
-          
-          echo "✅ Valid combination: $COMBO"
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
