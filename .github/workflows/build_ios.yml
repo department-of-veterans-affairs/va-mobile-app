@@ -76,8 +76,10 @@ jobs:
         shell: bash
         run: |
           echo "Input environment: ${{ inputs.environment }}"
-          if [[ "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ]]; then
-            echo "Overriding environment to production for lane: ${{ inputs.lane }}"
+          if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) ]]; then
+            if [[ "${{ inputs.environment }}" != "production" ]]; then
+              echo "Overriding environment to production for lane: ${{ inputs.lane }}"
+            fi
             echo "environment=production" >> $GITHUB_ENV
           else
             echo "environment=${{ inputs.environment }}" >> $GITHUB_ENV
