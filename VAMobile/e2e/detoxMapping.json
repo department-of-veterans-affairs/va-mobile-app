@@ -252,7 +252,8 @@
     "TravelPay": ["TravelPay"],
     "benjaminAdams": [],
     "claraJefferson": [],
-    "kimberlyWashington": []
+    "kimberlyWashington": [],
+    "dennisMadison": []
   },
   "files": {
     "allergies.ts": ["Allergies"],
@@ -292,6 +293,7 @@
       "VeteranStatusCard"
     ],
     "countries.ts": ["ContactInformation"],
+    "gmtTimezones.ts": ["Appointments", "AppointmentsExpanded", "AppointmentsTestTime"],
     "militaryPostOffices.ts": ["ContactInformation"],
     "militaryStates.ts": ["ContactInformation"],
     "screens.ts": [
