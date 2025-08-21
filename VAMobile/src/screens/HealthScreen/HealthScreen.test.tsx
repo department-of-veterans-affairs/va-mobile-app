@@ -13,6 +13,7 @@ import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
 const mockNavigationSpy = jest.fn()
@@ -25,6 +26,10 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig', () => ({
+  featureEnabled: jest.fn(),
+}))
 
 context('HealthScreen', () => {
   afterEach(() => {
@@ -93,19 +98,25 @@ context('HealthScreen', () => {
 
   describe('Travel button', () => {
     it('is not displayed if feature toggle is disabled', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(false)
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(false)
       initializeTestInstance()
       expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
       initializeTestInstance()
       expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
     })
 
     it('navigates to Travel Reimbursement screen when pressed', () => {
-      when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(true)
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
       initializeTestInstance()
       fireEvent.press(screen.getByText(t('travelPay.title')))
       expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
