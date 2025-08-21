@@ -129,7 +129,7 @@ jobs:
         SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
         CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
         
-        TOPIC_TEXT="Reviewer rotation this week: $SLACK_MENTION\nReview procedure: https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/ReviewProcedure/"
+        TOPIC_TEXT="*Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\n<$URL>""
         
         echo "Updating channel topic..."
         
