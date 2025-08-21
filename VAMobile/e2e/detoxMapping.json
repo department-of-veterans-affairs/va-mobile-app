@@ -211,7 +211,7 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
-    "travelPay": ["TravelPay"],
+    "travelPay": ["TravelPay", "TravelPayClaims"],
     "TravelPayClaims": ["TravelPayClaims"],
     "utils": [
       "Allergies",
