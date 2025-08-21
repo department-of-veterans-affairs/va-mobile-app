@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 
+import { DateTime } from 'luxon'
+
 import { contactInformationKeys } from 'api/contactInformation'
 import { AppointmentData, UserContactInformation } from 'api/types'
 import { Events } from 'constants/analytics'
@@ -135,7 +137,7 @@ describe('TravelPayContextProvider', () => {
     expect(getCtx().penaltyStatementAccepted).toBe(true)
   })
 
-  it('sets checkboxError when submitting without checking the box', () => {
+  it('sets checkboxError when submitting without accepting the penalty statement', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
@@ -146,21 +148,11 @@ describe('TravelPayContextProvider', () => {
     expect(mutateMock).not.toHaveBeenCalled()
   })
 
-  it('navigates to MileageScreen when startSmocFlow is called', () => {
-    const getCtx = renderWithProvider()
-
-    act(() => {
-      getCtx().startSmocFlow()
-    })
-
-    expect(mockNavigationSpy).toHaveBeenCalledWith('MileageScreen')
-  })
-
   it('logs total time taken when submitTravelClaim is called', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
-      getCtx().startSmocFlow()
+      getCtx().setSmocFlowStartDate(DateTime.now().toISO())
       getCtx().setPenaltyStatementAccepted(true)
     })
     // advance the clock by 1 second
@@ -177,7 +169,7 @@ describe('TravelPayContextProvider', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
-      getCtx().startSmocFlow()
+      getCtx().setSmocFlowStartDate(DateTime.now().toISO())
       getCtx().setPenaltyStatementAccepted(true)
     })
 
@@ -197,7 +189,7 @@ describe('TravelPayContextProvider', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
-      getCtx().startSmocFlow()
+      getCtx().setSmocFlowStartDate(DateTime.now().toISO())
       getCtx().setPenaltyStatementAccepted(true)
     })
 
@@ -221,7 +213,7 @@ describe('TravelPayContextProvider', () => {
     const getCtx = renderWithProvider()
 
     act(() => {
-      getCtx().startSmocFlow()
+      getCtx().setSmocFlowStartDate(DateTime.now().toISO())
       getCtx().setPenaltyStatementAccepted(true)
     })
 

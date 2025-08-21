@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { DateTime } from 'luxon'
+
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,12 +21,17 @@ type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackPar
 
 function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const { startSmocFlow } = useTravelPayContext()
+  const { setSmocFlowStartDate } = useTravelPayContext()
 
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useShowActionSheet()
+
+  const onPrimaryContentButtonPress = () => {
+    navigateTo('MileageScreen')
+    setSmocFlowStartDate(DateTime.now().toISO())
+  }
 
   const onLeftButtonPress = () => {
     const options = [t('travelPay.cancelClaim.cancel'), t('travelPay.cancelClaim.continue')]
@@ -51,7 +58,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: startSmocFlow,
+    onPrimaryContentButtonPress,
   })
 
   return (

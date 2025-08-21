@@ -46,10 +46,9 @@ export type TravelPayContextValue = {
    */
   userContactInformation?: UserContactInformation
   /**
-   * Initiates the SMOC (Simple Mileage Only Claim) flow by navigating to the
-   * mileage entry screen and marking the start time for analytics.
+   * Setter to update {@link TravelPayContextValue.smocFlowStartDate}.
    */
-  startSmocFlow: () => void
+  setSmocFlowStartDate: (smocFlowStartDate: string) => void
 }
 
 /**
@@ -149,9 +148,8 @@ export default function TravelPayContextProvider({
     )
   }
 
-  const startSmocFlow = () => {
-    navigateTo('MileageScreen')
-    smocFlowStartDate.current = DateTime.now().toISO()
+  const setSmocFlowStartDate = (dateString: string) => {
+    smocFlowStartDate.current = dateString
   }
 
   return (
@@ -164,7 +162,7 @@ export default function TravelPayContextProvider({
         submitTravelClaim,
         submittingTravelClaim,
         userContactInformation: userContactInformationQuery.data,
-        startSmocFlow,
+        setSmocFlowStartDate,
       }}>
       {children}
     </TravelPayContext.Provider>
