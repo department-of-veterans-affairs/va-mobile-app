@@ -1,0 +1,142 @@
+name: Weekly On-Call Assignment
+
+on:
+  schedule:
+    # Run every Monday at 8:30 AM EST (1:30 PM UTC)
+    - cron: '30 13 * * 1'
+
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  assign-oncall:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Get team members and select on-call person
+      id: select-oncall
+      run: |
+        # Get team members from GitHub API
+        RESPONSE=$(curl -s \
+          -H "Authorization: token ${{ secrets.GH_ACTIONS_PAT }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-oncall/members")
+        
+        # Check if response contains an error
+        if echo "$RESPONSE" | jq -e '.message' > /dev/null 2>&1; then
+          echo "Error from GitHub API: $(echo "$RESPONSE" | jq '.message')"
+          exit 1
+        fi
+        
+        # Extract team members and select on-call person
+        TEAM_MEMBERS=$(echo "$RESPONSE" | jq -r '.[].login')
+        MEMBERS=($TEAM_MEMBERS)
+        MEMBER_COUNT=${#MEMBERS[@]}
+        
+        if [ $MEMBER_COUNT -eq 0 ]; then
+          echo "No team members found"
+          exit 1
+        fi
+        
+        # Use week number to determine who's on call
+        WEEK_NUM=$(date +%U)
+        echo "Current week number: $WEEK_NUM"
+        
+        # Force jbergman-oddball to be on call this week, then resume normal rotation
+        ONCALL_PERSON="jbergman-oddball"
+        echo "Forced assignment: $ONCALL_PERSON is on call this week ($WEEK_NUM)"
+        
+        # TODO: Remove this forced assignment after this week and restore normal rotation:
+        # INDEX=$((WEEK_NUM % MEMBER_COUNT))
+        # ONCALL_PERSON=${MEMBERS[$INDEX]}
+        
+        # GitHub username to Slack user ID mapping
+        # To find Slack user IDs: go to user's profile in Slack → More → Copy member ID
+        declare -A GITHUB_TO_SLACK=(
+          ["timwright12"]="U08H8A5Q00J"
+          ["jbergman-oddball"]="U08FHQEA8P7"
+          ["SMLuthi"]="U9YP3N7C7"
+          ["ryan-mcneil"]="U051N9T603X"
+        )
+        
+        # Get Slack user ID for the selected person
+        SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
+        
+        if [ -z "$SLACK_USER_ID" ]; then
+          echo "Warning: No Slack mapping found for GitHub user: $ONCALL_PERSON"
+          echo "Using GitHub username in Slack message"
+          SLACK_MENTION="@$ONCALL_PERSON"
+        else
+          echo "Mapped $ONCALL_PERSON to Slack user ID: $SLACK_USER_ID"
+          SLACK_MENTION="<@$SLACK_USER_ID>"
+        fi
+        
+        echo "oncall_person=$ONCALL_PERSON" >> $GITHUB_OUTPUT
+        echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
+        echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
+        echo "Selected on-call person: $ONCALL_PERSON for week $WEEK_NUM"
+    
+    - name: Get Slack channel ID
+      id: get-channel
+      run: |
+        CHANNEL_NAME="va-mobile-sandbox"
+        
+        fetch_page() {
+          last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+          -H 'Content-type: application/x-www-form-urlencoded' \
+          https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
+        }
+        get_id() {
+          id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
+        }
+          
+        get_cursor() {
+          cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
+        }
+        
+        id=""
+        cursor=""
+        last_response=""
+        fetch_page
+        get_id
+        
+        while [[ -z "$id" ]]
+        do
+          get_cursor
+          fetch_page
+          get_id
+        done
+        echo "channel_id=${id}" >> $GITHUB_OUTPUT
+    
+    - name: Send Slack notification
+      run: |
+        # Build message components
+        SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+        CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+        URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
+        
+        # Create message with proper formatting
+        echo "Sending Slack notification..."
+        
+        curl -X POST \
+          -H "Authorization: Bearer $SLACK_API_TOKEN" \
+          -H "Content-type: application/json" \
+          -d "{\n            \"channel\": \"$CHANNEL_ID\",\n            \"text\": \"🚨 *On-Call Alert rotation this week: $SLACK_MENTION*\\n\\nOn call procedure: <$URL>\"\n          }" \
+          https://slack.com/api/chat.postMessage
+    
+    - name: Update channel topic
+      run: |
+        SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+        CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+        
+        # Create topic text with exact format requested (using \n for newline)
+        TOPIC_TEXT="Alert rotation this week: $SLACK_MENTION\nOn call procedure: https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
+        
+        echo "Updating channel topic..."
+        
+        curl -X POST \
+          -H "Authorization: Bearer $SLACK_API_TOKEN" \
+          -H "Content-type: application/json" \
+          -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC_TEXT\"}" \
+          https://slack.com/api/conversations.setTopic
