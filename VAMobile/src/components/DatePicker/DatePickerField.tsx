@@ -45,7 +45,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   const theme = useTheme()
 
   const datePickerStyle = {
-    height: 340,
+    height: isIOS() ? 340 : 440,
   }
 
   const dateLabelStyle = {
