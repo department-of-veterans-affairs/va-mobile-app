@@ -1,6 +1,7 @@
 name: Weekly Reviewer Assignment
 
 on:
+  push:
   schedule:
     # Run every Monday at 8:33 AM EST (1:33 PM UTC)
     - cron: '33 13 * * 1'
@@ -21,7 +22,7 @@ jobs:
         RESPONSE=$(curl -s \
           -H "Authorization: token ${{ secrets.GH_ACTIONS_PAT }}" \
           -H "Accept: application/vnd.github.v3+json" \
-          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-reviewers/members")
+          "https://api.github.com/orgs/department-of-veterans-affairs/teams/flagship-mobile-pr-reviewers/members")
         
         # Check if response contains an error
         if echo "$RESPONSE" | jq -e '.message' > /dev/null 2>&1; then
