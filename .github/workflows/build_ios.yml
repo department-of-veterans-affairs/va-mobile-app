@@ -107,8 +107,8 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: | 
-          echo Environment: ${{ inputs.environment }} lane: ${{ inputs.lane }}
-      #     yarn env:${{ inputs.environment }}
+          echo Environment: ${{ env.environment }} lane: ${{ inputs.lane }}
+      #     yarn env:${{ env.environment }}
       # - name: Set SLACK_THREAD_TS environment variable
       #   if: inputs.slack_thread_ts
       #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
