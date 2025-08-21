@@ -73,6 +73,7 @@ jobs:
         working-directory: .
         shell: bash
         run: |
+          echo "Environment: ${{ env.environment }} lane: ${{ inputs.lane }}"
           if [[ "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ]]; then
             echo "Overriding environment to production for lane: ${{ inputs.lane }}"
             echo "environment=production" >> $GITHUB_ENV
