@@ -71,14 +71,15 @@ jobs:
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:	
-      - name: Set environment to production for release/review lanes
+      - name: Set environment variable for build
         working-directory: .
         shell: bash
         run: |
-          echo "Environment: ${{ env.environment }} lane: ${{ inputs.lane }}"
           if [[ "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ]]; then
             echo "Overriding environment to production for lane: ${{ inputs.lane }}"
             echo "environment=production" >> $GITHUB_ENV
+          else
+            echo "environment=${{ inputs.environment }}" >> $GITHUB_ENV
           fi
       - uses: actions/checkout@v3
         with:
