@@ -113,6 +113,7 @@ jobs:
       - name: Set app environment variables
         run: | 
           echo "environment: ${{ env.environment }} ENVIRONMENT: ${{ env.ENVIRONMENT }} "
+          echo "environment: ${{ inputs.environment }} ENVIRONMENT: ${{ inputs.ENVIRONMENT }} "
           # yarn env:${{ inputs.environment }}
       # - name: Bundle app
       #   run: yarn bundle:android
