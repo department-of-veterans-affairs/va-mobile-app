@@ -9,14 +9,12 @@ on:
     branches:
       - develop #targeting develop
 
-    branches-ignore:
-      - "dependabot/**"
-
 permissions:
   contents: read
 
 jobs:
   check_team_and_alert:
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && github.event.pull_request.user.login != 'dependabot-preview[bot]' }}
     runs-on: ubuntu-latest
     outputs:
       is_team_member: ${{ steps.fetch_and_check_team.outputs.is_team_member }}

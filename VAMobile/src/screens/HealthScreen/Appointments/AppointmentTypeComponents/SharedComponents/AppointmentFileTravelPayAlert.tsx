@@ -43,6 +43,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
               appointmentRouteKey,
             })
           },
+          testID: 'appointmentFileTravelPayAlertPrimaryButtonTestID',
         }}
         testID="appointmentFileTravelPayAlert">
         {mutationStatus === 'error' && (
