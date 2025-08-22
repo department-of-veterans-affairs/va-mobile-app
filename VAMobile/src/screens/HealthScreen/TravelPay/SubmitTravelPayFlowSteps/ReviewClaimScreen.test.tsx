@@ -102,7 +102,7 @@ context('ReviewClaimScreen', () => {
     initializeTestInstance({ residentialAddress })
     expect(screen.getByText(t('travelPay.reviewTitle'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.reviewDetails.what'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.mileageOnly'))).toBeTruthy()
     expect(
       screen.getByText(
         DateTime.fromISO(appointment.attributes.startDateLocal).toFormat(

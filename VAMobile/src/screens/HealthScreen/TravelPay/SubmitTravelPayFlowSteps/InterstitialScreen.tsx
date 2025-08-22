@@ -59,7 +59,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView testID="milageQuestionID" variant="BitterHeading" accessibilityRole="header">
+        <TextView testID="mileageQuestionID" variant="BitterHeading" accessibilityRole="header">
           {t('travelPay.beforeYouFileQuestion')}
         </TextView>
         <TextView testID="eligibilityTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
