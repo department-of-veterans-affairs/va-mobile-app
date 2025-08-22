@@ -111,19 +111,21 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Bundle app
-        run: yarn bundle:android
-      - name: Update fastlane
-        run: |
-          bundle update fastlane
-          bundle exec fastlane update_plugins
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Run fastlane with retries
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+        run: | 
+          echo "environment: ${{ env.environment }} ENVIRONMENT: ${{ env.ENVIRONMENT }} "
+          # yarn env:${{ inputs.environment }}
+      # - name: Bundle app
+      #   run: yarn bundle:android
+      # - name: Update fastlane
+      #   run: |
+          # bundle update fastlane
+          # bundle exec fastlane update_plugins
+      # - name: Set SLACK_THREAD_TS environment variable
+      #   if: inputs.slack_thread_ts
+      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # - name: Run fastlane with retries
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_minutes: 20
+      #     max_attempts: 3
+      #     command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"

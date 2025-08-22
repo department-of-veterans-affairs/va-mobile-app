@@ -98,25 +98,28 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Install pods
-        run: pod install
-      - name: Bundle app
-        run: yarn bundle:ios
-      - name: Install gems
-        run: bundle install
-      - name: Update fastlane
-        run: bundle update fastlane
-      - name: Run fastlane with retries
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 15
+        run: | 
+          echo "environment: ${{ env.environment }} ENVIRONMENT: ${{ env.ENVIRONMENT }} "
+      #     yarn env:${{ inputs.environment }}
+
+      # - name: Set SLACK_THREAD_TS environment variable
+      #   if: inputs.slack_thread_ts
+      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # - name: Install pods
+      #   run: pod install
+      # - name: Bundle app
+      #   run: yarn bundle:ios
+      # - name: Install gems
+      #   run: bundle install
+      # - name: Update fastlane
+      #   run: bundle update fastlane
+      # - name: Run fastlane with retries
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_minutes: 20
+      #     max_attempts: 3
+      #     command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      # - name: Setup tmate session
+      #   if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 15
