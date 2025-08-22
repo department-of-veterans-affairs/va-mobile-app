@@ -73,7 +73,7 @@ jobs:
         working-directory: .
         shell: bash
         run: |
-          echo "Input environment: ${{ inputs.environment }}"
+          echo "Input environment: ${{ inputs.environment }} ${{ env.ENVIRONMENT }}"
           if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) ]]; then
             if [[ "${{ inputs.environment }}" != "production" ]]; then
               echo "Overriding environment to production for lane: ${{ inputs.lane }}"
@@ -126,7 +126,7 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: |
-          echo Environment: ${{ env.environment }} lane: ${{ inputs.lane }}
+          echo Environment:  ${{ env.ENVIRONMENT }} ${{ env.environment }} lane: ${{ inputs.lane }}
           #  yarn env:${{ env.environment }}
       # - name: Bundle app
       #   run: yarn bundle:android
