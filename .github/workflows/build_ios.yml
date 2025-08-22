@@ -75,7 +75,7 @@ jobs:
         working-directory: .
         shell: bash
         run: |
-          echo "Input environment: ${{ inputs.environment }}" ${{ env.ENVIRONMENT }}
+          echo "Input environment: environment: ${{ inputs.environment }}" ENVIRONMENT:${{ env.ENVIRONMENT }}
           if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) ]]; then
             if [[ "${{ inputs.environment }}" != "production" ]]; then
               echo "Overriding environment to production for lane: ${{ inputs.lane }}"
@@ -84,7 +84,7 @@ jobs:
           else
             echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
           fi
-          echo "Final environment: $(grep '^ENVIRONMENT=' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }} ${{ env.ENVIRONMENT }} ${{ env.environment }}"
+          echo "Final environment: $(grep '^ENVIRONMENT=' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }} ENVIRONMENT: ${{ env.ENVIRONMENT }} environment: ${{ env.environment }}"
       # - uses: actions/checkout@v3
       #   with:
       #     ref: ${{ inputs.ref }}
