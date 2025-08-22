@@ -16,7 +16,7 @@ This section will apply to all the tools. More information on the [react native 
    1. If on physical device `Shake your device`. If using a `simulator` press the shortcut  `⌘D` or by selecting the `Shake Gesture` inside the hardware menu in the simulator.
    2. On the Action Sheet select `Open DevTools`
 
-![IOS Debug Menu](/VAMobile/documentation/static/img/debuggingToolsImage/ios-debug-dialog.png) 
+![IOS Debug Menu](/img/debuggingToolsImage/ios-debug-dialog.png) 
 
 ### Android
    1. If using a physical device use `Shake your device`
@@ -25,59 +25,60 @@ This section will apply to all the tools. More information on the [react native 
 
 Alternatively on Android: `adb shell input keyevent 82`
 
-![Android Debug Menu](/VAMobile/documentation/static/img/debuggingToolsImage/android-debug-dialog.png) 
+![Android Debug Menu](/img/debuggingToolsImage/android-debug-dialog.png) 
    
 
-## React Native DevTools
+### React Native DevTools
 [React Native DevTools](https://reactnative.dev/docs/react-native-devtools) is the built-in debugger for React Native, providing tools to inspect and debug your JavaScript code, similar to browser devtools.
 
-> [!NOTE]  
-> React Native Devtools is only available with the Hermes engine, and requires Google Chrome or Microsoft Edge installed.
-
+:::note
+  React Native Devtools is only available with the Hermes engine, and requires Google Chrome or Microsoft Edge installed.
+:::
 On first launch, it opens to a welcome panel with a console drawer for logs and runtime interaction. Use the top navigation to access features like the React Components Inspector and Profiler.
 
-![Dev Tools Welcome](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-welcome.png)
+![Dev Tools Welcome](/img/debuggingToolsImage/dev-tools-welcome.png)
 
-### Console
+#### Console
 The console panel allows you to view logs, evaluate Javascript, inspect object properties, [and more](https://developer.chrome.com/docs/devtools/console/reference). 
 
-![Dev Tools Console](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-console.png)
+![Dev Tools Console](/img/debuggingToolsImage/dev-tools-console.png)
 
-### Sources and breakpoints
+#### Sources and breakpoints
 The Sources panel lets you view your app’s source files and set breakpoints to pause execution and inspect the live state of your code.
 [Pause your code with breakpoints](https://developer.chrome.com/docs/devtools/javascript/breakpoints)
 
-> [!TIP]  
-> Use `Cmd ⌘ + P`/`Ctrl ⌘ + P` to navigate to a source file
-> Click the line number on the left hand side to add a breakpoint
-> Use navigation tools at the top right to step through code
-> 
-![Dev Tools Breakpoints](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-breakpoints.png)
+:::tip
+  Use `Cmd ⌘ + P`/`Ctrl ⌘ + P` to navigate to a source file
+  Click the line number on the left hand side to add a breakpoint
+  Use navigation tools at the top right to step through code
+:::
 
-### Memory
+![Dev Tools Breakpoints](/img/debuggingToolsImage/dev-tools-breakpoints.png)
+
+#### Memory
 The memory panel allows you to take a heap snapshot and view the memory usage of your Javascript code over time.
 [Record heap snapshots](https://developer.chrome.com/docs/devtools/memory-problems/heap-snapshots)
 
-![Dev Tools Memory](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-memory.png)
+![Dev Tools Memory](/img/debuggingToolsImage/dev-tools-memory.png)
 
-## React DevTool Features
+### React DevTool Features
 The integrated Components and Profiler panels contain all the features of the [React DevTools](https://react.dev/learn/react-developer-tools) browser extension.
 
-### Components
+#### Components
 The React Components panel allows you to inspect and update the rendered React component tree.
 
-![Dev Tools Components](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-components.png)
+![Dev Tools Components](/img/debuggingToolsImage/dev-tools-components.png)
 
-> [!TIP]
-> Hover or select an element on the tree to highlight it on the device
-> Props and state on a component can be viewed and modified at runtime
-> To locate an element, click on the top-left `Select element` button, then tap any element on the app
+:::tip
+  Hover or select an element on the tree to highlight it on the device
+  Props and state on a component can be viewed and modified at runtime
+  To locate an element, click on the top-left `Select element` button, then tap any element on the app
+:::
 
-
-### Profiler
+#### Profiler
 The React Profiler panel allows you to record performance profiles and understand timings of component renders.
 
-![Dev Tools Profiler](/VAMobile/documentation/static/img/debuggingToolsImage/dev-tools-profiler.png)
+![Dev Tools Profiler](/img/debuggingToolsImage/dev-tools-profiler.png)
 
 ## Reactotron
 Reactotron is a debugging tool for both React and React Native applications. It offers a user-friendly interface that allows developers to inspect application state, track network requests, and analyze performance metrics.
@@ -96,25 +97,25 @@ Reactotron can be used for the following:
 
 [Quick Start Guide for Reactotron](https://docs.infinite.red/reactotron/quick-start/react-native/)
 
-![Reactotron](/VAMobile/documentation/static/img/debuggingToolsImage/reactotron-example.jpg)
+![Reactotron](/img/debuggingToolsImage/reactotron-example.jpg)
 
 
 ## VSCode React Native Tools Extension
  This extension will allow you to add breakpoints on the actual code in VSCode.
 
- 1. If not installed install the React Native Tools extension in VSCode and follow the setup instructions in the extensions document.
+ 1. If not installed, install the React Native Tools extension in VSCode and follow the setup instructions in the extensions document.
 
-    ![React Tools VSCode](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-react-tools-ext.png) 
+    ![React Tools VSCode](/img/debuggingToolsImage/vscode-react-tools-ext.png) 
 
 2. After the extension is installed launch the debugger. Select the Run and Debug Icon on the left explorer and click the play button on the Attach tp packager dropdown.
 
-    ![Launch Debugger](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-launch-debugger.png) 
+    ![Launch Debugger](/img/debuggingToolsImage/vscode-launch-debugger.png) 
 
 3. Launch the debugger from your device.
 
     The debugger should attach to the VSCode debugger and stop on any breakpoints
 
-    ![VSCode breakpoint](/VAMobile/documentation/static/img/debuggingToolsImage/vscode-debugger-breakpoint.png) 
+    ![VSCode breakpoint](/img/debuggingToolsImage/vscode-debugger-breakpoint.png) 
 
 
     
