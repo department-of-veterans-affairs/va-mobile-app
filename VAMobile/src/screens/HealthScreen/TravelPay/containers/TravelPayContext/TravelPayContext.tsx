@@ -1,13 +1,12 @@
 import React, { createContext, useContext, useRef, useState } from 'react'
 
-import { DateTime } from 'luxon'
-
 import { useContactInformation } from 'api/contactInformation'
 import { useSubmitTravelClaim } from 'api/travelPay'
 import { AppointmentData, UserContactInformation } from 'api/types'
 import { Events } from 'constants/analytics'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation } from 'utils/hooks'
+import { logSMOCTimeTaken } from 'utils/travelPay'
 
 export type TravelPayContextValue = {
   /**
@@ -99,9 +98,13 @@ export default function TravelPayContextProvider({
   const navigateTo = useRouteNavigation()
   const userContactInformationQuery = useContactInformation({ enabled: true })
 
-  const navigateToErrorScreen = (error: string) => {
-    logAnalyticsEvent(Events.vama_smoc_error(error))
-    navigateTo('SMOCErrorScreen', { error })
+  const navigateToErrorScreen = () => {
+    logAnalyticsEvent(Events.vama_smoc_error('error'))
+    navigateTo('SMOCErrorScreen', { error: 'error' })
+  }
+
+  const setSmocFlowStartDate = (dateString?: string) => {
+    smocFlowStartDate.current = dateString
   }
 
   const submitTravelClaim = async () => {
@@ -111,14 +114,11 @@ export default function TravelPayContextProvider({
     }
 
     if (!appointment.attributes.location.id) {
-      navigateToErrorScreen('error')
+      navigateToErrorScreen()
       return
     }
 
-    if (smocFlowStartDate.current) {
-      const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate.current)).toMillis()
-      logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
-    }
+    logSMOCTimeTaken(smocFlowStartDate.current)
 
     submitClaim(
       {
@@ -136,20 +136,13 @@ export default function TravelPayContextProvider({
               facilityName: data.data.attributes.facilityName,
               status: data.data.attributes.claimStatus,
             })
-            setPenaltyStatementAccepted(false)
-            setPenaltyStatementError(false)
-            smocFlowStartDate.current = undefined
           } else {
-            navigateToErrorScreen('error')
+            navigateToErrorScreen()
           }
         },
-        onError: () => navigateToErrorScreen('error'),
+        onError: navigateToErrorScreen,
       },
     )
-  }
-
-  const setSmocFlowStartDate = (dateString: string) => {
-    smocFlowStartDate.current = dateString
   }
 
   return (
