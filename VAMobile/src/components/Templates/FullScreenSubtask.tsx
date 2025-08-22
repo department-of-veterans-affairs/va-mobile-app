@@ -13,7 +13,7 @@ import { MenuViewActionsType } from 'components/Menu'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -95,7 +95,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
 
   const message = t('areYouSure')
 
@@ -104,19 +104,18 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
       onLeftButtonPress()
       return
     } else {
-      confirmAlert({
-        title: '',
-        message,
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('cancel'),
-            onPress: () => {},
-          },
-          {
-            text: t('close'),
-            onPress: () => {
+      const options = [t('close'), t('cancel')]
+      confirmAlert(
+        {
+          options,
+          title: '',
+          message,
+          cancelButtonIndex: 1,
+          destructiveButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
               if (navigationMultiStepCancelScreen) {
                 if (navigationMultiStepCancelScreen === 1) {
                   //this works for refillsummary screen close button being dismissed. Had to grab parent to go back one screen
@@ -127,10 +126,10 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
               } else {
                 navigation.goBack()
               }
-            },
-          },
-        ],
-      })
+              break
+          }
+        },
+      )
       return
     }
   }
