@@ -21,6 +21,7 @@ platform :ios do
     setup_circle_ci
     import('../../fastfiles/slack_commands/fastfile')
     version = options[:version]
+    puts "IOS_SCHEME: #{ENV['IOS_SCHEME']}"
     app_store_connect_api_key(
               key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
               issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
