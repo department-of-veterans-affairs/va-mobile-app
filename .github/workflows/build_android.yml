@@ -83,6 +83,7 @@ jobs:
             echo "environment=${{ inputs.environment }}" >> $GITHUB_ENV
           fi
           echo "Final environment: $(grep '^environment=' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }}"
+          echo "Final ENVIRONMENT: $(grep '^ENVIRONMENT' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }}"
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
