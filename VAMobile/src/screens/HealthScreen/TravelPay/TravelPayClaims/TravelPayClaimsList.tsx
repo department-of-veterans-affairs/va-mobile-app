@@ -70,7 +70,7 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
 
       const dateString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.DATE_FULL, undefined, {
         weekday: 'long',
-      }) // TODO 112328: check with design on timezone display
+      })
 
       const timeString = getFormattedTimeForTimeZone(appointmentDateTime)
       textLines.push({
@@ -82,10 +82,9 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
         variant: 'MobileBodyBold',
       })
 
-      // TODO 112328: does 'claim status' need to be first translated into display friendly enum string?
       textLines.push({ text: t('travelPay.statusList.claimStatus', { status: claimStatus }) })
 
-      const a11yValue = t('listPosition', { position: index + 1, total: totalEntries }) // TODO 112328: add "travel claims" or something here?
+      const a11yValue = t('listPosition', { position: index + 1, total: totalEntries })
 
       listItems.push({
         textLines,
@@ -119,7 +118,11 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
   return (
     <Box testID="travelPayClaimsListTestId">
       <DefaultList items={getListItemVals()} />
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
         {!isLoading && <Pagination {...paginationProps} />}
       </Box>
     </Box>

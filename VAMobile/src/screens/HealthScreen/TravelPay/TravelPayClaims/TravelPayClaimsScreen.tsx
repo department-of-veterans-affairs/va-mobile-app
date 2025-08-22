@@ -19,7 +19,6 @@ type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayCla
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  // TODO 112328: fill in start and end date from filtering view (part of filter state)
   const startDate = DateTime.now().minus({ months: 3 }).toISO()
   const endDate = DateTime.now().toISO()
   const {

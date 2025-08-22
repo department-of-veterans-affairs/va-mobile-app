@@ -11,8 +11,6 @@ import { featureEnabled } from 'utils/remoteConfig'
  * Fetch paginated travel pay claims
  */
 const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPayClaimsResponse | undefined> => {
-  const url = `/v0/travel-pay/claims`
-
   const adjustedParams: {
     start_date: string
     end_date: string
@@ -26,8 +24,7 @@ const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPay
     adjustedParams.page_number = params.pageNumber
   }
 
-  const response = await get<GetTravelPayClaimsResponse>(url, adjustedParams as unknown as Params)
-  return response
+  return await get<GetTravelPayClaimsResponse>('/v0/travel-pay/claims', adjustedParams as unknown as Params)
 }
 
 /**
