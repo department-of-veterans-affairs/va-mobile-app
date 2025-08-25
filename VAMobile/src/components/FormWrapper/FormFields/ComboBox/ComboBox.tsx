@@ -111,7 +111,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     onFocus: () => setIsInputFocused(true),
     onBlur: () => setIsInputFocused(false),
     value: filterStr,
-    autoFocus: true,
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
