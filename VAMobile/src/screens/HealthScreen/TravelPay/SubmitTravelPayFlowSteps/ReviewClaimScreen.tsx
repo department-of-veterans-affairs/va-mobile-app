@@ -123,8 +123,8 @@ function ReviewClaimScreen({ route }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.what')}
             </TextView>
 
-            <TextView testID="milageOnlyID" variant="MobileBody">
-              {t('travelPay.reviewDetails.milageOnly')}
+            <TextView testID="mileageOnlyID" variant="MobileBody">
+              {t('travelPay.reviewDetails.mileageOnly')}
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList

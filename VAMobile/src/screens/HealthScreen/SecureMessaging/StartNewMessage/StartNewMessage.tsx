@@ -55,9 +55,9 @@ import { hasErrorCode } from 'utils/errors'
 import {
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
+  useShowActionSheet,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -77,7 +77,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
 
