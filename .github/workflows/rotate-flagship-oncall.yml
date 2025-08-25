@@ -1,6 +1,7 @@
 name: Weekly On-Call Assignment
 
 on:
+  push:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
     - cron: '30 13 * * 1'
@@ -43,11 +44,6 @@ jobs:
         WEEK_NUM=$(date +%U)
         echo "Current week number: $WEEK_NUM"
         
-        # Force jbergman-oddball to be on call this week, then resume normal rotation
-        ONCALL_PERSON="jbergman-oddball"
-        echo "Forced assignment: $ONCALL_PERSON is on call this week ($WEEK_NUM)"
-        
-        # TODO: Remove this forced assignment after this week and restore normal rotation:
         # INDEX=$((WEEK_NUM % MEMBER_COUNT))
         # ONCALL_PERSON=${MEMBERS[$INDEX]}
         
