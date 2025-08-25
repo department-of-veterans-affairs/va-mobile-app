@@ -71,21 +71,22 @@ jobs:
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:	
-      - name: Set environment variable for build
+      - name: Validate lane/environment combination and set environment variable
         working-directory: .
         shell: bash
         run: |
-          echo "Input environment: environment: ${{ inputs.environment }}" ENVIRONMENT:${{ env.ENVIRONMENT }}
-          if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) ]]; then
-            if [[ "${{ inputs.environment }}" != "production" ]]; then
-              echo "Overriding environment to production for lane: ${{ inputs.lane }}"
+          if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) && "${{ inputs.environment }}" != "production" ]]; then
+            echo "\033[31mERROR: Lane '${{ inputs.lane }}' cannot be used with environment '${{ inputs.environment }}'. Only 'production' is allowed for release/review lanes. Failing build and alerting Slack.\033[0m"
+            if [[ -n "${{ secrets.SLACK_API_TOKEN }}" ]]; then
+              curl -X POST -H 'Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}' --data-urlencode 'channel=#va-mobile-sandbox' --data-urlencode 'text=❌ *Build Failed*: Invalid lane/environment combination. Lane: ${{ inputs.lane }}, Environment: ${{ inputs.environment }}' https://slack.com/api/chat.postMessage
             fi
+            exit 1
+          fi
+          if [[ ( "${{ inputs.lane }}" == "release" || "${{ inputs.lane }}" == "review" ) ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_ENV
           else
             echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
           fi
-          echo "Final ENVIRONMENT: $(grep '^ENVIRONMENT=' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }}"
-          echo "Final environment: $(grep '^environment=' $GITHUB_ENV | tail -1 | cut -d'=' -f2) lane: ${{ inputs.lane }}"
       # - uses: actions/checkout@v3
       #   with:
       #     ref: ${{ inputs.ref }}
