@@ -37,6 +37,7 @@ export type FeatureToggleType =
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
+  | 'overpayCopay'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -61,6 +62,7 @@ type FeatureToggleValues = {
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
+  overpayCopay: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -86,6 +88,7 @@ export const defaults: FeatureToggleValues = {
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  overpayCopay: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults

@@ -40,6 +40,7 @@ const mockOverrides = {
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  overpayCopay: true,
 }
 
 describe('activate', () => {
