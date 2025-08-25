@@ -49,12 +49,10 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   }
 
   const dateLabelStyle = {
-    backgroundColor: theme.colors.background.main,
+    backgroundColor: theme.colors.background.datePickerLabel,
     paddingVertical: 6,
     paddingHorizontal: 11,
     borderRadius: 6,
-    borderWidth: 1,
-    borderColor: theme.colors.background.main,
   }
 
   return (
@@ -62,7 +60,6 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
       <Pressable accessibilityRole="button" onPress={onPress}>
         <Box
           p={theme.dimensions.smallMarginBetween}
-          flex={1}
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center">

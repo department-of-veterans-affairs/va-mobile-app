@@ -152,6 +152,8 @@ export type VABackgroundColors = {
   skeletonLoaderSecondary: string
   bullet: string
   carouselBullet: string
+  datePicker: string
+  datePickerLabel: string
 }
 
 export type VABorderColors = {

@@ -123,7 +123,7 @@ const DatePicker: FC<DatePickerProps> = ({
       <Box
         px={theme.dimensions.smallMarginBetween}
         borderRadius={6}
-        backgroundColor={'list'}
+        backgroundColor={'datePicker'}
         borderStyle="solid"
         borderColor="primary">
         <DatePickerField
