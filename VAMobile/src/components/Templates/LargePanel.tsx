@@ -9,7 +9,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { VAScrollView, WaygateWrapper } from 'components'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -67,7 +67,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const [showScrollView, setShowScrollView] = useState(false)
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
 
@@ -83,24 +83,23 @@ export const LargePanel: FC<LargePanelProps> = ({
   }, [hideModal])
 
   const leftTitleButtonPress = () => {
-    confirmAlert({
-      title: '',
-      message,
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-          onPress: () => {},
-        },
-        {
-          text: t('close'),
-          onPress: () => {
+    const options = [t('close'), t('cancel')]
+    confirmAlert(
+      {
+        options,
+        title: '',
+        message,
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.goBack()
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
     return
   }
 
