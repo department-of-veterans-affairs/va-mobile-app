@@ -91,6 +91,3 @@ Many issues can be detected / resolved by monitoring / reaching out to others in
 - #va-mobile-app-alerts
 - #vfs-platform-support
 - #identity-support
-
-## External Dependencies
-
