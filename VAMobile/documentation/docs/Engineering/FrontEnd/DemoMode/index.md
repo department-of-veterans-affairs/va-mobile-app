@@ -57,7 +57,7 @@ The following are steps to create a new demo mode user
     * The function returns an array of imported json files. Each json file contains response data for endpoints used throughout the application
 4. Add data json files to the new users directory
     * Examples of these files can be found in `src/store/api/demo/mocks/default` which can also be used when you don't need to change the data.
-    * Be sure to import any files not recreated for the user from the `default` directory to avoid empty api responses
+    * Be sure to import any data files from the `default` directory that are not in the user directory to avoid empty api responses
 5. In `src/store/api/demo/mocks/user.ts` add a user id to `DemoUserIds` and add a new entry to `DemoUsers` with the user's name and a short description of the user's data
     * The user id should be the same as the user directory name
 6. In `src/store/api/demo/store.ts` add a new case to the switch statement to import the new user's data
