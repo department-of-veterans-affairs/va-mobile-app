@@ -88,7 +88,7 @@ export const defaults: FeatureToggleValues = {
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
-  overpayCopay: true,
+  overpayCopay: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
