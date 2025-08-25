@@ -44,8 +44,8 @@ jobs:
         WEEK_NUM=$(date +%U)
         echo "Current week number: $WEEK_NUM"
         
-        # INDEX=$((WEEK_NUM % MEMBER_COUNT))
-        # ONCALL_PERSON=${MEMBERS[$INDEX]}
+        INDEX=$((WEEK_NUM % MEMBER_COUNT))
+        ONCALL_PERSON=${MEMBERS[$INDEX]}
         
         # GitHub username to Slack user ID mapping
         # To find Slack user IDs: go to user's profile in Slack → More → Copy member ID
