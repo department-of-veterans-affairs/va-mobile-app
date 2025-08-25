@@ -36,6 +36,7 @@ export type FeatureToggleType =
   | 'travelPayClaimsFullHistory'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
+  | 'showCernerAlertSM'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -59,6 +60,7 @@ type FeatureToggleValues = {
   travelPayClaimsFullHistory: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
+  showCernerAlertSM: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -83,6 +85,7 @@ export const defaults: FeatureToggleValues = {
   travelPayClaimsFullHistory: false,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
+  showCernerAlertSM: true,
 }
 
 export let devConfig: FeatureToggleValues = defaults

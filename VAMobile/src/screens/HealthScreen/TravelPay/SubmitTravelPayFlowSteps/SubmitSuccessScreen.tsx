@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { TFunction } from 'i18next'
@@ -11,54 +12,61 @@ import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayPartialSuccessStatusConstants } from 'constants/travelPay'
 import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
-import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
-import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { navigateToTravelPayWebsite } from 'utils/travelPay'
+import {
+  FileOnBTSSSLink,
+  SetUpDirectDepositWebLink,
+} from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
+import { useOrientation, useTheme } from 'utils/hooks'
 
 type SubmitSuccessScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'SubmitSuccessScreen'>
 
-type LinkAction = 'navigateToTravelPayWebsite' | 'goBack'
 interface SuccessScreenContent {
-  title: string
-  text: string
-  nextText: string
-  nextTitle: string
-  nextText2: string
-  linkText: string
-  linkTestID: string
-  linkAction: LinkAction
+  /** Main heading text displayed at the top of the screen */
+  heading: string
+  /** Primary descriptive text explaining the main message */
+  description: string
+  /** Bold title for the instructional section */
+  sectionTitle: string
+  /** Instructional text describing the next steps or actions */
+  instructionText: string
+  /** React component that renders the primary action (link, button, etc.) */
+  actionComponent: React.ReactNode
+  /** Additional descriptive text displayed after the action component */
+  additionalText: string
 }
 
 const ContentSection = ({
-  title,
-  text,
-  nextText,
-  nextTitle,
-  nextText2,
-  linkText,
-  linkTestID,
-  onLinkPress,
-}: SuccessScreenContent & { onLinkPress: () => void }) => {
+  heading,
+  description,
+  instructionText,
+  sectionTitle,
+  additionalText,
+  actionComponent,
+}: SuccessScreenContent) => {
   const theme = useTheme()
   return (
     <>
-      <TextView testID="successTitleID" variant="BitterHeading" accessibilityRole="header">
-        {title}
+      <TextView testID="successContentHeaderID" variant="BitterHeading" accessibilityRole="header">
+        {heading}
       </TextView>
-      <TextView testID="successTextID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-        {text}
+      <TextView testID="successContentDescriptionID" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        {description}
       </TextView>
-      <TextView testID="successNextTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
-        {nextTitle}
+      <TextView
+        testID="successContentSectionTitleID"
+        variant="MobileBodyBold"
+        mt={theme.dimensions.standardMarginBetween}>
+        {sectionTitle}
       </TextView>
-      <TextView testID="successNextTextID" variant="MobileBody">
-        {nextText}
+      <TextView testID="successContentInstructionTextID" variant="MobileBody">
+        {instructionText}
       </TextView>
-      <Box mt={theme.dimensions.condensedMarginBetween}>
-        <LinkWithAnalytics type="custom" text={linkText} onPress={onLinkPress} testID={linkTestID} />
-      </Box>
-      <TextView testID="successNextText2ID" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
-        {nextText2}
+      <Box mt={theme.dimensions.condensedMarginBetween}>{actionComponent}</Box>
+      <TextView
+        testID="successContentAdditionalTextID"
+        variant="MobileBody"
+        mt={theme.dimensions.condensedMarginBetween}>
+        {additionalText}
       </TextView>
     </>
   )
@@ -69,43 +77,48 @@ const getContent = (
   status: string,
   facilityName: string,
   appointmentDateTime: string,
+  navigation: NavigationProp<ParamListBase, 'SubmitSuccessScreen'>,
 ): SuccessScreenContent => {
   const isPartialSuccess =
     status === TravelPayPartialSuccessStatusConstants.INCOMPLETE ||
     status === TravelPayPartialSuccessStatusConstants.SAVED
   if (isPartialSuccess) {
     return {
-      title: t('travelPay.partialSuccess.title'),
-      text: t('travelPay.partialSuccess.text'),
-      nextText: t('travelPay.partialSuccess.nextText'),
-      nextTitle: t('travelPay.success.nextTitle'),
-      nextText2: t('travelPay.setUpDirectDeposit.eligible'),
-      linkText: t('travelPay.partialSuccess.link'),
-      linkTestID: 'finishTravelClaimLinkID',
-      linkAction: 'navigateToTravelPayWebsite',
+      heading: t('travelPay.partialSuccess.title'),
+      description: t('travelPay.partialSuccess.text'),
+      instructionText: t('travelPay.partialSuccess.nextText'),
+      sectionTitle: t('travelPay.success.nextTitle'),
+      additionalText: t('travelPay.setUpDirectDeposit.eligible'),
+      actionComponent: <FileOnBTSSSLink text={t('travelPay.partialSuccess.link')} testID="finishTravelClaimLinkID" />,
     }
   }
 
   return {
-    title: t('travelPay.success.title'),
-    text: t('travelPay.success.text', {
+    heading: t('travelPay.success.title'),
+    description: t('travelPay.success.text', {
       facilityName,
       date: DateTime.fromISO(appointmentDateTime).toFormat('LLLL dd, yyyy'),
       time: DateTime.fromISO(appointmentDateTime).toFormat('h:mm a'),
     }),
-    nextText: t('travelPay.success.nextText'),
-    nextTitle: t('travelPay.success.nextTitle'),
-    nextText2: t('travelPay.setUpDirectDeposit.eligible'),
-    linkText: t('travelPay.success.goToAppointment'),
-    linkTestID: 'goToAppointmentLinkID',
-    linkAction: 'goBack',
+    instructionText: t('travelPay.success.nextText'),
+    sectionTitle: t('travelPay.success.nextTitle'),
+    additionalText: t('travelPay.setUpDirectDeposit.eligible'),
+    actionComponent: (
+      <LinkWithAnalytics
+        type="custom"
+        text={t('travelPay.success.goToAppointment')}
+        onPress={() => {
+          navigation.getParent()?.goBack()
+        }}
+        testID="goToAppointmentLinkID"
+      />
+    ),
   }
 }
 
 function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
   const { appointmentDateTime, facilityName, status } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const navigateTo = useRouteNavigation()
 
   const handleClose = () => {
     // This screen lives in a MultiStepSubtask, so we need to get the parent to close the subtask
@@ -121,26 +134,14 @@ function SubmitSuccessScreen({ route, navigation }: SubmitSuccessScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
 
-  const content = getContent(t, status, facilityName, appointmentDateTime)
-
-  const handleLinkPress = () => {
-    switch (content.linkAction) {
-      case 'navigateToTravelPayWebsite':
-        navigateToTravelPayWebsite(t, navigateTo)
-        break
-      case 'goBack':
-      default:
-        handleClose()
-        break
-    }
-  }
+  const content = getContent(t, status, facilityName, appointmentDateTime, navigation)
 
   return (
     <VAScrollView>
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <ContentSection {...content} onLinkPress={handleLinkPress} />
+        <ContentSection {...content} />
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <SetUpDirectDepositWebLink />
         </Box>

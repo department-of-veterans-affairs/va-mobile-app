@@ -30,7 +30,7 @@
     "docusaurus-plugin-remote-content": "^4.0.0",
     "file-loader": "^6.2.0",
     "mdx-mermaid": "^2.0.0",
-    "mermaid": "^10.9.3",
+    "mermaid": "^11.10.0",
     "node-fetch": "2",
     "prism-react-renderer": "^2.4.1",
     "raw-loader": "^4.0.2",
