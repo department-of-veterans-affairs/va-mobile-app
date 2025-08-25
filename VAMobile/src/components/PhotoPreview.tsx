@@ -6,13 +6,12 @@ import { Asset } from 'react-native-image-picker/src/types'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import styled from 'styled-components'
 
+import Box, { BoxProps } from 'components/Box'
+import TextView, { TextViewProps } from 'components/TextView'
 import { NAMESPACE } from 'constants/namespaces'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-
-import Box, { BoxProps } from './Box'
-import TextView, { TextViewProps } from './TextView'
 
 type PhotoPreviewProps = {
   /** width of the photo */
@@ -47,7 +46,7 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const { t } = useTranslation(NAMESPACE.COMMON)
   const [selected, setSelected] = useState(false)
   const uri = image.uri
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
   const photoPreviewIconSize = 24
   const photoPreviewMaxIconSize = 50
   const photoPreviewBorderRadius = 5
@@ -60,26 +59,27 @@ const PhotoPreview: FC<PhotoPreviewProps> = ({ width, height, image, onDeleteCal
   const onPress = (): void => {
     setSelected(true)
 
-    confirmAlert({
-      title: t('removePhoto'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('keep'),
-          onPress: () => {
-            setSelected(false)
-          },
-        },
-        {
-          text: t('remove'),
-          onPress: () => {
+    const options = [t('remove'), t('keep')]
+
+    confirmAlert(
+      {
+        options,
+        title: t('removePhoto'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             setSelected(false)
             onDeleteCallback()
-          },
-        },
-      ],
-    })
+            break
+          case 1:
+            setSelected(false)
+            break
+        }
+      },
+    )
   }
 
   const imageSize = image.fileSize ? bytesToFinalSizeDisplay(image.fileSize, t, false) : undefined

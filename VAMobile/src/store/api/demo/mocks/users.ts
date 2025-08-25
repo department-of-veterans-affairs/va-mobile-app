@@ -1,4 +1,4 @@
-export type DemoUserIds = 'kimberlyWashington' | 'benjaminAdams' | 'claraJefferson'
+export type DemoUserIds = 'kimberlyWashington' | 'benjaminAdams' | 'claraJefferson' | 'dennisMadison'
 type DemoUsersT = Record<
   DemoUserIds,
   {
@@ -19,6 +19,10 @@ const DemoUsers: DemoUsersT = {
   claraJefferson: {
     name: 'Clara Jefferson',
     notes: 'US Air Force. All authorized services disabled',
+  },
+  dennisMadison: {
+    name: 'Dennis Madison',
+    notes: 'United States Marine Corps. Appointments in timezones GMT+10, GMT+8 and GMT-11 ',
   },
 }
 
