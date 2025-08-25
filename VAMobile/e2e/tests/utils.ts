@@ -101,7 +101,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
-  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
+  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
@@ -353,6 +353,12 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
+
+  // 115452: Added to fix race conditions with the popup not being fully gone
+  // and interfering with view visibility in subsequent steps.
+  await waitFor(element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)))
+    .not.toExist()
+    .withTimeout(6000)
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
@@ -782,5 +788,5 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
   }
 
-  await element(by.label('Set API Errors')).tap()
+  await element(by.id('saveErrors')).tap()
 }

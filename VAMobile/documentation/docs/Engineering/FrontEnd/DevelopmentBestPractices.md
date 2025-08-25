@@ -35,7 +35,7 @@ All engineering work requires a ticket.
 
 Every ticket must satisfy the requirements in the "Creating tickets" section above. If information is missing, add it or contact the relevant stakeholders.
 
-Before an engineer can begin work on a ticket, it must contain an estimate. Bugs get an initial estimate of 1 to cover a short investigation. Other tickets are left to the engineers' discretion, following our [estimation guidelines](/docs/About%20our%20team/team-charter/#estimation).
+Before an engineer can begin work on a ticket, it must contain an estimate. Bugs get an initial estimate of 1 to cover a short investigation. Other tickets are left to the engineers' discretion, following our [estimation guidelines](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/Teams/Team%20Charter.md#estimation).
 
 Once everything is in place, complete the following tasks:
 

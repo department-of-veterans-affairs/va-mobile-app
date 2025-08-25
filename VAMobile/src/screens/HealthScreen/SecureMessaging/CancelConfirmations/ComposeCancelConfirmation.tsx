@@ -10,7 +10,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { useDestructiveActionSheet, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type ComposeCancelConfirmationProps = {
   /** Contents of the message */
@@ -33,7 +33,7 @@ export function useComposeCancelConfirmation(): [
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const confirmationAlert = useDestructiveActionSheet()
+  const confirmationAlert = useShowActionSheet()
   const goToDrafts = useGoToDrafts()
   const queryClient = useQueryClient()
   const [isDiscarded, setIsDiscarded] = useState(false)
@@ -103,30 +103,33 @@ export function useComposeCancelConfirmation(): [
         }
       }
 
-      confirmationAlert({
-        title:
-          origin === 'Compose'
-            ? t('composeCancelConfirmation.compose.title')
-            : origin === 'Draft'
-              ? t('composeCancelConfirmation.draft.title')
-              : t('composeCancelConfirmation.reply.title'),
-        message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
-        cancelButtonIndex: 0,
-        destructiveButtonIndex: 1,
-        buttons: [
-          {
-            text: t('keepEditing'),
-          },
-          {
-            text: origin === 'Draft' ? t('deleteChanges') : t('delete'),
-            onPress: onDiscard,
-          },
-          {
-            text: origin === 'Draft' ? t('saveChanges') : t('save'),
-            onPress: onSaveDraft,
-          },
-        ],
-      })
+      const discardText = origin === 'Draft' ? t('deleteChanges') : t('delete')
+      const saveText = origin === 'Draft' ? t('saveChanges') : t('save')
+      const options = [discardText, saveText, t('keepEditing')]
+      confirmationAlert(
+        {
+          options,
+          title:
+            origin === 'Compose'
+              ? t('composeCancelConfirmation.compose.title')
+              : origin === 'Draft'
+                ? t('composeCancelConfirmation.draft.title')
+                : t('composeCancelConfirmation.reply.title'),
+          message: origin === 'Draft' ? t('composeCancelConfirmation.draft.body') : t('composeCancelConfirmation.body'),
+          cancelButtonIndex: 2,
+          destructiveButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          switch (buttonIndex) {
+            case 0:
+              onDiscard()
+              break
+            case 1:
+              onSaveDraft()
+              break
+          }
+        },
+      )
     },
   ]
 }

@@ -1,0 +1,43 @@
+{
+  "/v0/health/rx/prescriptions": {
+    "data": [],
+    "meta": {
+      "pagination": {
+        "currentPage": 0,
+        "perPage": 10000,
+        "totalPages": 0,
+        "totalEntries": 0
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",
+        "first": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
+        "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      },
+      "prescriptionStatusCount": {
+        "active": 0,
+        "isRefillable": 0,
+        "discontinued": 0,
+        "expired": 0,
+        "historical": 0,
+        "pending": 0,
+        "transferred": 0,
+        "submitted": 0,
+        "hold": 0,
+        "unknown": 0,
+        "total": 0
+      },
+      "hasNonVaMeds": false
+    }
+  },
+  "/v0/health/rx/prescriptions/21142592/tracking": {
+    "data": []
+  },
+  "/v0/health/rx/prescriptions/21142625/tracking": {
+    "data": []
+  },
+  "/v0/health/rx/prescriptions/21142623/tracking": {
+    "data": []
+  }
+}

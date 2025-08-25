@@ -6,16 +6,9 @@ import { t } from 'i18next'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { DemographicsPayload, UserDemographics } from 'api/types'
+import PersonalInformationScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen'
 import { get } from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import PersonalInformationScreen from './index'
-
-jest.mock('utils/remoteConfig')
-when(featureEnabled as jest.Mock)
-  .calledWith('preferredNameGenderWaygate')
-  .mockReturnValue(true)
 
 context('PersonalInformationScreen', () => {
   const renderWithData = (queriesData?: QueriesData, demographics?: UserDemographics) => {
