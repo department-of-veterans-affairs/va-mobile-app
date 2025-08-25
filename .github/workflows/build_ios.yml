@@ -80,7 +80,8 @@ jobs:
           if [[ ( "$LANE" == "release" || "$LANE" == "review" ) && "$ENVIRONMENT" != "production" ]]; then
             echo -e "\033[31mERROR: Lane '$LANE' cannot be used with environment '$ENVIRONMENT'. Only 'production' is allowed for release/review lanes. Failing build and alerting Slack.\033[0m"
             if [[ -n "${{ secrets.SLACK_API_TOKEN }}" ]]; then
-              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-sandbox" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT" https://slack.com/api/chat.postMessage
+              WORKFLOW_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-sandbox" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT\n<${WORKFLOW_URL}|View workflow run for details>" https://slack.com/api/chat.postMessage
             fi
             exit 1
           fi
