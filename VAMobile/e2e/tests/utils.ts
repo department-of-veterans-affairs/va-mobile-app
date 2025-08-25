@@ -101,7 +101,7 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
-  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
+  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
@@ -788,5 +788,5 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
   }
 
-  await element(by.label('Set API Errors')).tap()
+  await element(by.id('saveErrors')).tap()
 }
