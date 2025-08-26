@@ -5,7 +5,6 @@ import { DateTime } from 'luxon'
 
 import {
   CategoryTypeFields,
-  FacilitiesPayload,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingMessageGetData,
   SecureMessagingRecipients,
@@ -233,48 +232,19 @@ context('EditDraft', () => {
       sort: {
         name: 'ASC',
       },
+      careSystems: [
+        {
+          stationNumber: '357',
+          healthCareSystemName: 'test_healthcare_system_name',
+        },
+        {
+          healthCareSystemName: 'SM STAGING CARE SYSTEM',
+          stationNumber: '989',
+        },
+      ],
     },
   }
-  const facilities: FacilitiesPayload = {
-    data: {
-      attributes: {
-        facilities: [
-          {
-            id: '357',
-            name: 'Cary VA Medical Center',
-            city: 'Cary',
-            state: 'WY',
-            cerner: false,
-            miles: '3.63',
-          },
-          {
-            id: '358',
-            name: 'Cheyenne VA Medical Center',
-            city: 'Cheyenne',
-            state: 'WY',
-            cerner: false,
-            miles: '3.17',
-          },
-        ],
-      },
-    },
-  }
-  const singleFacility: FacilitiesPayload = {
-    data: {
-      attributes: {
-        facilities: [
-          {
-            id: '357',
-            name: 'Cary VA Medical Center',
-            city: 'Cary',
-            state: 'WY',
-            cerner: false,
-            miles: '3.63',
-          },
-        ],
-      },
-    },
-  }
+
   const folderMessages: SecureMessagingFolderMessagesGetData = {
     data: [
       {
@@ -349,8 +319,6 @@ context('EditDraft', () => {
             },
           },
         })
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -374,8 +342,6 @@ context('EditDraft', () => {
         .mockResolvedValue(thread)
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -400,8 +366,6 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -428,8 +392,6 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -453,8 +415,6 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -468,6 +428,14 @@ context('EditDraft', () => {
 
   describe('when the user only has one facility on record', () => {
     it('should hide care systems selection box', async () => {
+      const mockSingleCareSystemRecipientsResponse = recipients
+      mockSingleCareSystemRecipientsResponse.meta.careSystems = [
+        {
+          healthCareSystemName: '357',
+          stationNumber: '357',
+        },
+      ]
+
       when(api.get as jest.Mock)
         .calledWith(`/v1/messaging/health/messages/${3}/thread?excludeProvidedMessage=false`, {
           useCache: 'false',
@@ -476,9 +444,7 @@ context('EditDraft', () => {
         .calledWith(`/v0/messaging/health/messages/${3}`)
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
-        .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(singleFacility)
+        .mockResolvedValue(mockSingleCareSystemRecipientsResponse)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -501,8 +467,6 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -528,8 +492,6 @@ context('EditDraft', () => {
         .mockResolvedValue(message)
         .calledWith('/v0/messaging/health/allrecipients')
         .mockResolvedValue(recipients)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
