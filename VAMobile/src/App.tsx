@@ -288,14 +288,14 @@ export function AuthGuard() {
     const checkOfflineReauthentication = async () => {
       const ol = await AsyncStorage.getItem(OFFLINE_LOGIN_KEY)
       const offlineLogin = JSON.parse(ol || '')
-      console.log('checking offline re auth', ol)
       if (offlineLogin) {
-        console.log('starting re auth!')
         await AsyncStorage.setItem(OFFLINE_LOGIN_KEY, JSON.stringify(false))
         dispatch(initializeAuth())
       }
     }
-    checkOfflineReauthentication()
+    if (isConnected) {
+      checkOfflineReauthentication()
+    }
   }, [dispatch, isConnected])
 
   useEffect(() => {
