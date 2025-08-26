@@ -2,10 +2,9 @@ import React from 'react'
 
 import { CategoryTypeFields, SecureMessagingFormData } from 'api/types'
 import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 import { context, render } from 'testUtils'
-import { useDestructiveActionSheetProps } from 'utils/hooks'
-
-import { useComposeCancelConfirmation } from './ComposeCancelConfirmation'
+import { ActionSheetProps } from 'utils/hooks'
 
 const mockNavigationSpy = jest.fn()
 
@@ -15,11 +14,11 @@ jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
   return {
     ...original,
-    useDestructiveActionSheet: () => {
+    useShowActionSheet: () => {
       // grab a reference to the parameters passed in to test cancel and discard functionality
-      return (props: useDestructiveActionSheetProps) => {
-        discardButtonSpy = props.buttons[1].onPress
-        saveDraftButtonSpy = props.buttons[2].onPress
+      return (_options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
+        discardButtonSpy = () => callback(0)
+        saveDraftButtonSpy = () => callback(1)
       }
     },
     useRouteNavigation: () => mockNavigationSpy,

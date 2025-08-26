@@ -55,9 +55,9 @@ import { hasErrorCode } from 'utils/errors'
 import {
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
+  useShowActionSheet,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
@@ -77,7 +77,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
 
@@ -123,8 +123,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
+  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
 
-  const [careSystem, setCareSystem] = useState('')
+  const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -239,9 +240,24 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       }
     })
 
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
     return {
-      [t('secureMessaging.formMessage.recentCareTeams')]: recentRecipients,
-      [t('secureMessaging.formMessage.allCareTeams')]: allRecipients,
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
     }
   }
 
@@ -256,12 +272,13 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         labelKey: 'secureMessaging.formMessage.careSystem',
         selectedValue: careSystem,
         onSelectionChange: handleSetCareSystem,
-        pickerOptions: getCareSystemPickerOptions(facilitiesInfo || []),
+        pickerOptions: careSystems,
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'care system field',
         confirmTestID: 'careSystemPickerConfirmID',
       },
+      hideField: careSystems.length === 1,
       fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
     },
     {
