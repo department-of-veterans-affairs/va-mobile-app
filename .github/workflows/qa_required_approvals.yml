@@ -1,17 +1,17 @@
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
 
-name: "[Utils] QA required approval"
+name: '[Utils] QA required approval'
 
 on:
   pull_request:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
-      - "VAMobile/src"
-      - "VAMobile/e2e"
-      - "VAMobile/package.json"
-      - "VAMobile/.detoxrc.json"
-      - "!VAMobile/src/*.test.tsx"
-      - "!.github/**"
+      - 'VAMobile/src'
+      - 'VAMobile/e2e'
+      - 'VAMobile/package.json'
+      - 'VAMobile/.detoxrc.json'
+      - '!VAMobile/src/*.test.tsx'
+      - '!VAMobile/.github/**'
   pull_request_review:
     types: [submitted, dismissed]
 

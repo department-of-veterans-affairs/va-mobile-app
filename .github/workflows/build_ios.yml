@@ -70,7 +70,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    steps:  
+    steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}

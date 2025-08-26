@@ -1,12 +1,12 @@
 # Release builds that are triggered by the v*.*.* tag. Release tags occur when
 # someone comments /approve on the associated release ticket
 
-name: "[Build] Release Build"
+name: '[Build] Release Build'
 
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   queue_build:
@@ -19,8 +19,8 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: "va-mobile-app"
-      message: "Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while."
+      channel_name: 'va-mobile-app'
+      message: 'Automation starting release build for the app. This build will be sent to the app stores for review upon completion. Please see :thread: for results. This process may take a while.'
   ios:
     name: iOS Release Build
     needs: start_slack_thread

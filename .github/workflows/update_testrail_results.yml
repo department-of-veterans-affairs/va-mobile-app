@@ -1,13 +1,13 @@
-name: "[e2e] Update TestRail Results"
+name: '[e2e] Update TestRail Results'
 
 on:
   workflow_call:
     secrets:
       TEST_RAIL_USER:
-        description: "TestRail robot userid"
+        description: 'TestRail robot userid'
         required: true
       TEST_RAIL_KEY:
-        description: "TestRail api key"
+        description: 'TestRail api key'
         required: true
     inputs:
       testRail_name:
@@ -18,7 +18,7 @@ on:
         default: ""
     outputs:
       test_run_id_number:
-        description: "The id number for the test run"
+        description: 'The id number for the test run'
         value: ${{ jobs.send_test_results_to_testrail.outputs.output1 }}
 
 defaults:
@@ -37,7 +37,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           pattern: e2e-junit-*
-      - name: "Find run ID in testRail"
+      - name: 'Find run ID in testRail'
         id: run-id-selection
         run: |
           resp=$(curl -X GET -H 'Content-Type: application/json' \
@@ -68,7 +68,7 @@ jobs:
               echo "TEST_RUN_ID=$resp" >> "$GITHUB_OUTPUT"
             fi
           fi
-      - name: "Find section ID in testRail"
+      - name: 'Find section ID in testRail'
         id: section-id-selection
         run: |
           resp=$(curl -X GET -H 'Content-Type: application/json' \
@@ -80,7 +80,7 @@ jobs:
         if: always()
         uses: actions/setup-python@v3
         with:
-          python-version: "3.x"
+          python-version: '3.x'
       - name: TestRail CLI upload results
         if: always()
         run: |
