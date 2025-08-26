@@ -8,7 +8,6 @@ import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-comp
 import { useQueryClient } from '@tanstack/react-query'
 import _ from 'underscore'
 
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -88,16 +87,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isError: sendMessageError,
     error: sendMessageErrorDetails,
   } = useSendMessage()
-  const {
-    data: facilitiesInfo,
-    isFetched: hasLoadedFacilities,
-    error: facilitiesError,
-    refetch: refetchFacilities,
-    isFetching: refetchingFacilities,
-  } = useFacilitiesInfo()
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
   const {
-    data: recipients,
+    data: recipientsResponse,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
@@ -123,7 +115,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
-  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
+  const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
+  const recipients = recipientsResponse?.data
 
   const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
   const [to, setTo] = useState<ComboBoxItem>()
@@ -152,7 +145,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   messageDataRef.current = messageData
 
   const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = noRecipientsReceived && hasLoadedRecipients && hasLoadedFacilities
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = () => {
     composeCancelConfirmation({
@@ -486,7 +479,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const hasError = recipientsError || signatureError || folderMessagesError || facilitiesError
+  const hasError = recipientsError || signatureError || folderMessagesError
 
   const isLoading =
     !hasLoadedRecipients ||
@@ -497,9 +490,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     refetchingRecipients ||
     refetchingSignature ||
     !hasLoadedFolderMessages ||
-    refetchingFolderMessages ||
-    !hasLoadedFacilities ||
-    refetchingFacilities
+    refetchingFolderMessages
 
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
@@ -525,7 +516,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     if (recipientsError) return refetchRecipients
     if (signatureError) return refetchSignature
     if (folderMessagesError) return refetchFolderMessages
-    if (facilitiesError) return refetchFacilities
   }
 
   return (
@@ -543,7 +533,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || signatureError || folderMessagesError || facilitiesError}
+          error={recipientsError || signatureError || folderMessagesError}
           onTryAgain={refetchData}
         />
       ) : (

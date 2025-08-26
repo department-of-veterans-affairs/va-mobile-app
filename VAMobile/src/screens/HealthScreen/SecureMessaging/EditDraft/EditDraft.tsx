@@ -9,7 +9,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import {
   secureMessagingKeys,
   useAllMessageRecipients,
@@ -85,14 +84,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
   const {
-    data: facilitiesInfo,
-    isFetched: hasLoadedFacilities,
-    error: facilitiesError,
-    refetch: refetchFacilities,
-    isFetching: refetchingFacilities,
-  } = useFacilitiesInfo()
-  const {
-    data: recipients,
+    data: recipientsResponse,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
@@ -141,6 +133,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   })
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
   const message = messageDraftData?.data.attributes || ({} as SecureMessagingMessageAttributes)
+  const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
+  const recipients = recipientsResponse?.data
   const messageRecipient = recipients?.find((r) => r.id === message?.recipientId?.toString())
   const isReplyDraft = thread.length > 1
   const replyToID = thread?.find((id) => {
@@ -152,7 +146,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
-  const careSystems = getCareSystemPickerOptions(facilitiesInfo || [])
   const [careSystem, setCareSystem] = useState(
     messageRecipient?.attributes.stationNumber || careSystems.length === 1 ? careSystems[0]?.value : '',
   )
@@ -251,7 +244,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }
 
   const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = noRecipientsReceived && hasLoadedRecipients && hasLoadedFacilities
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const draftChanged = (): boolean => {
     if (isReplyDraft) {
@@ -717,7 +710,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     )
   }
 
-  const hasError = recipientsError || threadError || messageError || facilitiesError || folderMessagesError
+  const hasError = recipientsError || threadError || messageError || folderMessagesError
   const isLoading =
     (!isReplyDraft && !hasLoadedRecipients) ||
     loadingMessage ||
@@ -727,8 +720,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     isDiscarded ||
     refetchingRecipients ||
     refetchingThread ||
-    !hasLoadedFacilities ||
-    refetchingFacilities ||
     !hasLoadedFolderMessages ||
     refetchingFolderMessages
 
@@ -767,11 +758,9 @@ function EditDraft({ navigation, route }: EditDraftProps) {
                 ? refetchThread
                 : messageError
                   ? refetchMessage
-                  : facilitiesError
-                    ? refetchFacilities
-                    : folderMessagesError
-                      ? refetchFolderMessages
-                      : undefined
+                  : folderMessagesError
+                    ? refetchFolderMessages
+                    : undefined
           }
         />
       ) : (
