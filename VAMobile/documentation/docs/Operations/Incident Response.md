@@ -1,5 +1,6 @@
 ---
 title: Incident response
+sidebar_position: 3
 ---
 
 # Incident Response
