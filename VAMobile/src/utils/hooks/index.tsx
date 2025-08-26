@@ -236,84 +236,6 @@ export function useGiveFeedback(): (task: string) => void {
   }
 }
 
-export type useDestructiveActionSheetButtonProps = {
-  /** text of button */
-  text: string
-  /** handler for onClick */
-  onPress?: () => void
-}
-
-export type useDestructiveActionSheetProps = {
-  /** title of alert */
-  title: string
-  /** message of alert */
-  message?: string // message for the alert
-  /** ios destructive index */
-  destructiveButtonIndex?: number
-  /** ios cancel index */
-  cancelButtonIndex: number
-  /** options to show in alert */
-  buttons: Array<useDestructiveActionSheetButtonProps>
-}
-/**
- * Hook to create appropriate actionSheet for a destructive event
- * TODO: 6269-Combine useDestructiveActionSheet and useShowActionSheet
- * @param title - optional title of the ActionSheet
- * @param message - optional message for the ActionSheet
- * @param destructiveButtonIndex - optional destructive index
- * @param cancelButtonIndex - ios cancel index
- * @param buttons - options to show in the ActionSheet
- * @returns an action sheet
- */
-export function useDestructiveActionSheet(): (props: useDestructiveActionSheetProps) => void {
-  const { showActionSheetWithOptions } = useActionSheet()
-  const currentTheme = getTheme()
-  return (props: useDestructiveActionSheetProps) => {
-    const { buttons, cancelButtonIndex, destructiveButtonIndex } = props
-
-    // Ensure cancel button is always last for UX consisency
-    const newButtons = [...buttons]
-    if (cancelButtonIndex < buttons.length - 1) {
-      newButtons.push(newButtons.splice(cancelButtonIndex, 1)[0])
-    }
-
-    let newDestructiveButtonIndex = destructiveButtonIndex
-    if (destructiveButtonIndex && cancelButtonIndex < destructiveButtonIndex) {
-      newDestructiveButtonIndex = destructiveButtonIndex - 1
-    }
-
-    Keyboard.dismiss()
-    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
-    showActionSheetWithOptions(
-      {
-        title: props.title,
-        titleTextStyle: {
-          fontWeight: 'bold',
-          textAlign: textAlign,
-          color: currentTheme.colors.text.primary,
-        },
-        message: props.message,
-        messageTextStyle: {
-          fontWeight: 'normal',
-          textAlign: textAlign,
-          color: currentTheme.colors.text.primary,
-        },
-        textStyle: { color: currentTheme.colors.text.primary },
-        destructiveButtonIndex: newDestructiveButtonIndex,
-        destructiveColor: currentTheme.colors.text.error,
-        options: newButtons.map((button) => stringToTitleCase(isIOS() ? button.text : button.text + ' ')),
-        containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
-        cancelButtonIndex: isIpad() ? undefined : newButtons.length - 1,
-      },
-      (buttonIndex) => {
-        if (buttonIndex || buttonIndex === 0) {
-          newButtons[buttonIndex]?.onPress?.()
-        }
-      },
-    )
-  }
-}
-
 export type UseAlertProps = {
   /** title of alert */
   title: string
@@ -439,7 +361,7 @@ export function useAttachments(): [
   (attachmentFileToRemove: imageDocumentResponseType) => void,
 ] {
   const [attachmentsList, setAttachmentsList] = useState<Array<imageDocumentResponseType>>([])
-  const destructiveAlert = useDestructiveActionSheet()
+  const destructiveAlert = useShowActionSheet()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
   const addAttachment = (attachmentFileToAdd: imageDocumentResponseType) => {
@@ -451,72 +373,28 @@ export function useAttachments(): [
   }
 
   const removeAttachment = (attachmentFileToRemove: imageDocumentResponseType) => {
-    destructiveAlert({
-      title: t('secureMessaging.attachments.removeAttachment'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('secureMessaging.attachments.keep'),
-        },
-        {
-          text: t('remove'),
-          onPress: () => {
+    const options = [t('remove'), t('secureMessaging.attachments.keep')]
+    destructiveAlert(
+      {
+        options,
+        title: t('secureMessaging.attachments.removeAttachment'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             onRemove(attachmentFileToRemove)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   }
 
   return [attachmentsList, addAttachment, removeAttachment]
 }
 
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>()
-
-/**
- * Returns a wrapper to showActionSheetWithOptions that converts iOS options to title case
- * TODO: consolidate this and useDestructiveActionSheet into a single hook
- */
-export function useShowActionSheet(): (
-  options: ActionSheetOptions,
-  callback: (i?: number) => void | Promise<void>,
-) => void {
-  const { showActionSheetWithOptions } = useActionSheet()
-  const currentTheme = getTheme()
-
-  return (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => {
-    // Use title case for iOS, sentence case for Android
-    const casedOptionText = options.options.map((optionText) => {
-      if (isIOS()) {
-        return stringToTitleCase(optionText)
-      } else {
-        // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
-        return capitalizeFirstLetter(optionText + ' ')
-      }
-    })
-
-    const casedOptions: ActionSheetOptions = {
-      titleTextStyle: {
-        fontWeight: 'bold',
-        textAlign: textAlign,
-        color: currentTheme.colors.text.primary,
-      },
-      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
-      textStyle: { color: currentTheme.colors.text.primary },
-      destructiveColor: currentTheme.colors.text.error,
-      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
-      ...options,
-      options: casedOptionText,
-    }
-
-    if (isIpad()) {
-      delete casedOptions.cancelButtonIndex
-    }
-
-    showActionSheetWithOptions(casedOptions, callback)
-  }
-}
 
 // function that returns if the device is on portrait mode or not
 export function useOrientation(): boolean {
@@ -618,4 +496,46 @@ export function useOpenAppStore(): () => void {
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
 
   return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
+}
+
+export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }
+
+export function useShowActionSheet(): (
+  options: ActionSheetProps,
+  callback: (i?: number) => void | Promise<void>,
+) => void {
+  const { showActionSheetWithOptions } = useActionSheet()
+  const currentTheme = getTheme()
+
+  return (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => {
+    // Destructive action sheets are always title case
+    // Regular action sheets are title case for ios, sentence case for android
+    // TODO: Remove the + ' ' when #6345 is fixed by expo action sheets expo/react-native-action-sheet#298
+    const casedOptionsText = options.options.map((optionText) => {
+      if (typeof options.destructiveButtonIndex === 'number') {
+        return stringToTitleCase(isIOS() ? optionText : optionText + ' ')
+      } else {
+        return isIOS() ? stringToTitleCase(optionText) : capitalizeFirstLetter(optionText + ' ')
+      }
+    })
+
+    Keyboard.dismiss()
+
+    const sheetOptions: ActionSheetOptions = {
+      titleTextStyle: {
+        fontWeight: 'bold',
+        textAlign: textAlign,
+        color: currentTheme.colors.text.primary,
+      },
+      messageTextStyle: { textAlign: textAlign, color: currentTheme.colors.text.primary },
+      textStyle: { color: currentTheme.colors.text.primary },
+      destructiveColor: currentTheme.colors.text.error,
+      containerStyle: { backgroundColor: currentTheme.colors.background.contentBox },
+      ...options,
+      options: casedOptionsText,
+      cancelButtonIndex: isIpad() ? undefined : options.options.length - 1,
+    }
+
+    showActionSheetWithOptions(sheetOptions, callback)
+  }
 }

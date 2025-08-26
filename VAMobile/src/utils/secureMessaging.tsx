@@ -6,7 +6,6 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
@@ -39,7 +38,7 @@ import {
   getNumbersFromString,
   stringToTitleCase,
 } from 'utils/formattingUtils'
-import { imageDocumentResponseType, useDestructiveActionSheetProps } from 'utils/hooks'
+import { ActionSheetProps, imageDocumentResponseType } from 'utils/hooks'
 
 const MAX_SUBJECT_LENGTH = 50
 
@@ -404,7 +403,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  */
 export const onAddFileAttachments = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+  showActionSheetWithOptions: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
@@ -488,31 +487,33 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
 /**
  * Checks if the message has attachments before saving a draft and displays a message to the
  * user letting them know that the attachments wouldn't be saved with the draft
- * @param alert - Alert from useDestructiveActionSheet() hook
+ * @param alert - Alert from useShowActionSheet() hook
  * @param attachmentsList - List of attachments
- * @param t - Traslation function
+ * @param t - Translation function
  * @param dispatchSaveDraft - Dispatch save draft callback
  */
 export const saveDraftWithAttachmentAlert = (
-  alert: (props: useDestructiveActionSheetProps) => void,
+  alert: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   attachmentsList: Array<imageDocumentResponseType>,
   t: TFunction,
   dispatchSaveDraft: () => void,
 ) => {
   if (attachmentsList.length) {
-    alert({
-      title: t('secureMessaging.draft.cantSaveAttachments'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('secureMessaging.saveDraft'),
-          onPress: dispatchSaveDraft,
-        },
-      ],
-    })
+    const options = [t('secureMessaging.saveDraft'), t('keepEditing')]
+    alert(
+      {
+        options,
+        title: t('secureMessaging.draft.cantSaveAttachments'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            dispatchSaveDraft()
+            break
+        }
+      },
+    )
   } else {
     dispatchSaveDraft()
   }
