@@ -67,7 +67,7 @@ jobs:
     - name: Get Slack channel ID
       id: get-channel
       run: |
-        CHANNEL_NAME="va-mobile-sandbox"
+        CHANNEL_NAME="va-mobile-app"
         fetch_page() {
           last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
           -H 'Content-type: application/x-www-form-urlencoded' \
