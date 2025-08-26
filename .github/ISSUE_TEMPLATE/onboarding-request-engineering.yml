@@ -1,7 +1,7 @@
 name: Onboarding Request (Engineering)
-description: Fill out this form to request initiation of engineering onboarding for 
-title: "Onboarding: [name]"
-labels: [ user-onboarding ]
+description: Fill out this form to request initiation of engineering onboarding for
+title: 'Onboarding: [name]'
+labels: [user-onboarding]
 assignees: timwright12
 body:
   - type: markdown
@@ -23,7 +23,7 @@ body:
     attributes:
       label: GitHub Username
       description: Before mobile onboarding this user must already be within the VA Github Organization
-      placeholder: "@Alex-smith-va"
+      placeholder: '@Alex-smith-va'
     validations:
       required: true
 
@@ -57,7 +57,7 @@ body:
     attributes:
       label: What is the main Slack channel for this person's team primary team?
       description: Slack channels help when we need to contact the rest of the team or easily check in.
-      placeholder: "#va-mobile-app"
+      placeholder: '#va-mobile-app'
     validations:
       required: true
 
@@ -66,19 +66,18 @@ body:
       value: |
         The checklist items below should be left blank, as they will be filled out during the onboarding process.
 
-- type: checkboxes
-  attributes:
+  - type: checkboxes
+    attributes:
     label: Process Documentation
     description: As you've started onboarding, please check off the documentation as you read through it. All documentation should be reviewed, but we've called out some specifics below to help guide onboarding.
     options:
-    - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
-    - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Features/PushNotifications)
-    - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/AccessibilityInformation)
-    - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
-    - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
-    - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
-    - label: Review [office hours](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Contributing/OfficeHours) documentation
-   
+      - label: Read and bookmark [VA mobile general documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/)
+      - label: Read about [how push notifications work in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Features/PushNotifications)
+      - label: Review [accessibility information](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/AccessibilityInformation)
+      - label: Read about [how the QA team works with others](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others)
+      - label: Review the [release overview](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Release%20Management)
+      - label: Review the [release policies](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app/Teams/QA%20and%20Release/Policies)
+      - label: Review [office hours](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Contributing/OfficeHours) documentation
 
   - type: checkboxes
     attributes:
@@ -90,21 +89,21 @@ body:
         - label: Write access to applicable repositories (VA Mobile will provide)
         - label: Join [#va-mobile-app slack channel](https://dsva.slack.com/archives/C018V2JCWRJ)
 
-- type: checkboxes
-  attributes:
+  - type: checkboxes
+    attributes:
     label: Engineering-specific documentation
     description: After access has been granted, start getting the app set up locally and reviewing important implementation documentation
     options:
-    - label: Familiarize yourself with the [va-mobile-app repository](https://github.com/department-of-veterans-affairs/va-mobile-app)
-    - label: Review [mobile API documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/api/)
-    - label: Get a high level understanding about [how authentication works in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/Auth%20Diagrams)
-    - label: Read [remote configuration documentation](https://firebase.google.com/docs/remote-config/)
-    - label: Get up to speed on the [Mobile Design System](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Intro)
-    - label: Review [how to set up deep linking in th app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/PushNotifications/DeepLinking)
-    - label: Review [development best practices](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevelopmentBestPractices)
-    - label: Review [information about unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting)
-    - label: Review [information about end-to-end testing with Detox](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/)
-    - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/Detox%20Best%20Practices)
-    - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Releases/release-process)
-    - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
-    - label: Information about [accessing Demo Mode](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DemoMode/)
+      - label: Familiarize yourself with the [va-mobile-app repository](https://github.com/department-of-veterans-affairs/va-mobile-app)
+      - label: Review [mobile API documentation](https://department-of-veterans-affairs.github.io/va-mobile-app/api/)
+      - label: Get a high level understanding about [how authentication works in the app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/Auth%20Diagrams)
+      - label: Read [remote configuration documentation](https://firebase.google.com/docs/remote-config/)
+      - label: Get up to speed on the [Mobile Design System](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Intro)
+      - label: Review [how to set up deep linking in th app](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/PushNotifications/DeepLinking)
+      - label: Review [development best practices](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevelopmentBestPractices)
+      - label: Review [information about unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting)
+      - label: Review [information about end-to-end testing with Detox](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/)
+      - label: Review [best practice documentation around end-to-end testing](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation/Detox%20Best%20Practices)
+      - label: Review [technical details around the mobile release process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Operations/Releases/release-process)
+      - label: Start [getting the app setup locally](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+      - label: Information about [accessing Demo Mode](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DemoMode/)
