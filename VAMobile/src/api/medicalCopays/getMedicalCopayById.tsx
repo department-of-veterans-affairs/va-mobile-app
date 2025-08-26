@@ -18,8 +18,9 @@ export const useMedicalCopayById = (id: string, options?: { enabled?: boolean })
     ...options,
     queryKey: medicalCopayKeys.medicalCopayById,
     queryFn: () => getMedicalCopayById(id),
-    meta: { errorName: 'getMedicalCopayByID: Service error' },
+    meta: {
+      errorName: 'getMedicalCopayById: Service error',
+    },
     staleTime: ACTIVITY_STALE_TIME,
-    enabled: options?.enabled ?? Boolean(id),
   })
 }

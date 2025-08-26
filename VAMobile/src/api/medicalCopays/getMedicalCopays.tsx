@@ -18,7 +18,9 @@ export const useMedicalCopays = (options?: { enabled?: boolean }) => {
     ...options,
     queryKey: medicalCopayKeys.medicalCopays,
     queryFn: () => getMedicalCopays(),
-    meta: { errorName: 'getMedicalCopays: Service error' },
+    meta: {
+      errorName: 'getMedicalCopays: Service error',
+    },
     staleTime: ACTIVITY_STALE_TIME,
   })
 }

@@ -39,7 +39,8 @@ export const useDownloadCopayStatement = (id: string, options?: { enabled?: bool
     ...options,
     queryKey: [medicalCopayKeys.downloadCopayStatement, id],
     queryFn: () => downloadCopayStatement(id, options?.fileName),
-    meta: { errorName: 'downloadCopayStatement: Service error' },
-    enabled: options?.enabled ?? Boolean(id),
+    meta: {
+      errorName: 'downloadCopayStatement: Service error',
+    },
   })
 }
