@@ -32,7 +32,7 @@ body:
     attributes:
       label: VA Email Address
       description: Onboarding requires a VA email address to access developer systems
-      placeholder: "Alex.Smith1@va.gov"
+      placeholder: 'Alex.Smith1@va.gov'
     validations:
       required: true
 
