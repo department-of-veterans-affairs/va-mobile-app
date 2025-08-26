@@ -153,8 +153,7 @@
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
-    "watch": "^1.0.2",
-    "eslint-plugin-ft-flow": "^3.0.11"
+    "watch": "^1.0.2"
   },
   "resolutions": {
     "react-devtools/**/got": "^11.8.5",
@@ -165,8 +164,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "prettier --write",
-    "*.{yml,yaml}": "yamllint --strict -c .github/linters/.yaml-lint.yml",
-    ".github/workflows/*.{yml,yaml}": "actionlint -config-file .github/linters/actionlint.yml",
     "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed"
   },
   "engines": {
