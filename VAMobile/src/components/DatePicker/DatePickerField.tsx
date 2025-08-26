@@ -11,7 +11,7 @@ import { isIOS } from 'utils/platform'
 const getNativePickerDate = (date: DateTime) => {
   // iOS fails to parse date with fractional seconds
   if (isIOS()) return date.toFormat("yyyy-MM-dd'T'HH:mm:ssZZ")
-  return date.toISO() || ''
+  return date.toFormat('yyyy-MM-dd')
 }
 
 export type DatePickerFieldProps = {

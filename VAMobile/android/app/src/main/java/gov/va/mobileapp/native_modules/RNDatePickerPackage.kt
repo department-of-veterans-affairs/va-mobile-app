@@ -9,6 +9,11 @@ import com.facebook.react.uimanager.ViewManager
  * ReactPackage to export the RNDatePicker class to our react-native instance.
  */
 class RNDatePickerPackage : ReactPackage {
-    override fun createNativeModules(reactContext: ReactApplicationContext) = emptyList<NativeModule>()
-    override fun createViewManagers(reactContext: ReactApplicationContext) = listOf(RNDatePickerManager())
+    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+        return emptyList()
+    }
+
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+        return listOf(DatePickerViewManager())
+    }
 }

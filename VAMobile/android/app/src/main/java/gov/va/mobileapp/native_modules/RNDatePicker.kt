@@ -1,61 +1,36 @@
 package gov.va.mobileapp.native_modules
 
-import android.Manifest.permission.WRITE_CALENDAR
 import android.app.DatePickerDialog
-import android.content.Intent
-import android.content.Intent.ACTION_INSERT
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.os.Bundle
-import android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME
-import android.provider.CalendarContract.EXTRA_EVENT_END_TIME
-import android.provider.CalendarContract.Events.*
 import android.widget.DatePicker
-import android.content.Context
-import com.facebook.react.uimanager.SimpleViewManager
-import com.facebook.react.uimanager.ThemedReactContext
-import com.facebook.react.uimanager.annotations.ReactProp
-import android.util.Log
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import java.util.Calendar
+import com.facebook.react.bridge.*
 
-class RNDatePickerManager: SimpleViewManager<DatePicker>() {
+import java.util.*
 
-  override fun getName() = "RNDatePicker"
+class RNDatePicker(reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext), DatePickerDialog.OnDateSetListener {
 
-  override fun createViewInstance(reactContext: ThemedReactContext): DatePicker {
-    return DatePicker(reactContext)
+  private var promise: Promise? = null
+
+  override fun getName(): String = "DatePickerModule"
+
+  @ReactMethod
+  fun show(promise: Promise) {
+    val activity = currentActivity ?: run {
+      promise.reject("NO_ACTIVITY", "No activity attached")
+      return
+    }
+
+    this.promise = promise
+    val c = Calendar.getInstance()
+    val year = c.get(Calendar.YEAR)
+    val month = c.get(Calendar.MONTH)
+    val day = c.get(Calendar.DAY_OF_MONTH)
+
+    val dialog = DatePickerDialog(activity, this, year, month, day)
+    dialog.show()
   }
 
-  // @ReactProp(name = "date")
-  // fun setDate(view: DatePicker, timestamp: Double?) {
-  //   if (timestamp != null) {
-  //     val cal = java.util.Calendar.getInstance().apply { timeInMillis = timestamp.toLong() }
-  //     view.updateDate(cal.get(java.util.Calendar.YEAR),cal.get(java.util.Calendar.MONTH),cal.get(java.util.Calendar.DAY_OF_MONTH))
-  //   }
-  // }
-  // @ReactMethod
-  // fun showDatePicker(promise: Promise) {
-  //   val c = java.util.Calendar.getInstance()
-  //   val activity = currentActivity
-  //   if(activity != null) {
-  //   val dpd = DatePickerDialog(
-  //     activity,
-  //     { _, year, month, day ->
-  //       val date = "$year-${month + 1}-$day"
-  //       promise.resolve(date)
-  //     },
-  //     c.get(Calendar.YEAR),
-  //     c.get(Calendar.MONTH),
-  //     c.get(Calendar.DAY_OF_MONTH)
-  //   )
-  //   dpd.show()
-  //   } else {
-  //       promise.reject("NO_ACTIVITY", "No current activity available")
-  //   }
-  // }
-  
+  override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
+    promise?.resolve(mapOf("year" to year, "month" to month, "day" to day))
+  }
 }
