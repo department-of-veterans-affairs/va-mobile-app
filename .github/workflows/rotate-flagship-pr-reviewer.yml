@@ -113,7 +113,7 @@ jobs:
         BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
         CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
         URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/ReviewProcedure/"
-        TOPIC_TEXT="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.\nPull Request reviewer rotation this week: $SLACK_MENTION\n<$URL>"
+        TOPIC_TEXT="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.\nPull Request reviewer rotation this week: $SLACK_MENTION"
         echo "Updating channel topic..."
         curl -X POST \
           -H "Authorization: Bearer $SLACK_API_TOKEN" \
