@@ -1,7 +1,6 @@
-name: Flagship Mobile Alerts Weekly On-Call Assignment
+name: "[Admin] Flagship Mobile Alerts Weekly On-Call Assignment"
 
 on:
-  push:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
     - cron: '30 13 * * 1'
@@ -76,7 +75,7 @@ jobs:
     - name: Get Slack channel ID
       id: get-channel
       run: |
-        CHANNEL_NAME="va-mobile-sandbox"
+        CHANNEL_NAME="va-mobile-app-alerts"
         
         fetch_page() {
           last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
