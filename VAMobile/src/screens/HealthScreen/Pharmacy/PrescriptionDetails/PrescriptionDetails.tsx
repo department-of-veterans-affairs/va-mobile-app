@@ -13,16 +13,16 @@ import { Box, ChildTemplate, ClickToCallPhoneNumber, LoadingComponent, TextArea,
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import RefillTag from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/RefillTag'
+import DetailsTextSections from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/DetailsTextSections'
+import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDestructiveActionSheet, useDowntime, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { RefillTag, getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
-import DetailsTextSections from './DetailsTextSections'
-import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -37,7 +37,6 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const registerReviewEvent = useReviewEvent(true)
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const noneNoted = t('noneNoted')
 
   const { contentMarginBottom } = theme.dimensions
 
@@ -137,9 +136,23 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   }
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
-  const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(t, refillDate)
-  const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(t, expirationDate)
-  const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(t, orderedDate)
+  const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(
+    t,
+    refillDate,
+    t('prescription.details.dateNotAvailable'),
+  )
+  const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(
+    t,
+    expirationDate,
+    t('prescription.details.dateNotAvailable'),
+  )
+  const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(
+    t,
+    orderedDate,
+    t('prescription.details.dateNotAvailable'),
+  )
+  const refillRemainingText =
+    refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
 
   return (
     <ChildTemplate
@@ -167,18 +180,18 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               </Box>
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.instructionsHeader')}
-                leftSectionValue={instructions || noneNoted}
+                leftSectionValue={instructions || t('prescription.details.instructionsNotAvailable')}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.refillLeftHeader')}
-                leftSectionValue={refillRemaining ?? noneNoted}
+                leftSectionValue={refillRemainingText}
                 rightSectionTitle={t('fillDate')}
                 rightSectionValue={lastRefilledDateFormatted}
                 rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.quantityHeader')}
-                leftSectionValue={quantity ?? noneNoted}
+                leftSectionValue={quantity || t('prescription.details.quantityNotAvailable')}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.expiresOnHeader')}
@@ -190,7 +203,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.vaFacilityHeader')}
-                leftSectionValue={facilityName || noneNoted}
+                leftSectionValue={facilityName || t('prescription.details.facilityNameNotAvailable')}
                 leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
                 <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
               </DetailsTextSections>

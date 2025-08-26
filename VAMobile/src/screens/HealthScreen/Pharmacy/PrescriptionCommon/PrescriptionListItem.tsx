@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { PrescriptionAttributeData } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import RefillTag from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/RefillTag'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
-
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from './PrescriptionUtils'
-import RefillTag from './RefillTag'
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
 
 export type PrescriptionListItemProps = {
   /** the prescription info to present */
@@ -25,17 +24,20 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
-  const noneNoted = t('noneNoted')
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
-  const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate)
+  const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate, t('prescription.details.dateNotAvailable'))
+
+  const refillRemainingText =
+    refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
+  const refillDateText = `${t('prescription.refillsLeft')} ${refillRemainingText}`
 
   const renderInstructions = () => {
     if (hideInstructions) {
       return <></>
     }
 
-    const instructionsText = instructions || t('prescription.instructions.noneNoted')
+    const instructionsText = instructions || t('prescription.details.instructionsNotAvailable')
     return (
       <Box mt={condensedMarginBetween}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
@@ -45,8 +47,6 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       </Box>
     )
   }
-
-  const refillDateText = `${t('prescription.refillsLeft')} ${refillRemaining ?? noneNoted}`
 
   return (
     <Box>
@@ -82,8 +82,8 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
-        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || noneNoted}.`}>
-        {`${t('prescription.vaFacility')} ${facilityName || noneNoted}`}
+        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || t('prescription.details.facilityNameNotAvailable')}.`}>
+        {`${t('prescription.vaFacility')} ${facilityName || t('prescription.details.facilityNameNotAvailable')}`}
       </TextView>
     </Box>
   )
