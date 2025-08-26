@@ -12,10 +12,10 @@ on:
     inputs:
       testRail_name:
         type: string
-        default: ""
+        default: ''
       test_OS_name:
         type: string
-        default: ""
+        default: ''
     outputs:
       test_run_id_number:
         description: 'The id number for the test run'
