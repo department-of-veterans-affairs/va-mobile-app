@@ -79,7 +79,7 @@ jobs:
             echo -e "\033[31mERROR: Lane '$LANE' cannot be used with environment '$ENVIRONMENT'. Only 'production' is allowed for release/review lanes. Failing build and alerting Slack.\033[0m"
             if [[ -n "${{ secrets.SLACK_API_TOKEN }}" ]]; then
               WORKFLOW_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-sandbox" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT | <$WORKFLOW_URL|View workflow run>" https://slack.com/api/chat.postMessage
+              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-build-alerts" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT | <$WORKFLOW_URL|View workflow run>" https://slack.com/api/chat.postMessage
             fi
             exit 1
           fi
@@ -131,21 +131,19 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: |
-           echo "ENVIRONMENT:${{ inputs.environment }}"
-           echo "environment-env:${{ env.environment }}"
-      #      yarn env:${{ inputs.environment }}
-      # - name: Bundle app
-      #   run: yarn bundle:android
-      # - name: Update fastlane
-      #   run: |
-      #     bundle update fastlane
-      #     bundle exec fastlane update_plugins
-      # - name: Set SLACK_THREAD_TS environment variable
-      #   if: inputs.slack_thread_ts
-      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      # - name: Run fastlane with retries
-      #   uses: nick-fields/retry@v2
-      #   with:
-      #     timeout_minutes: 20
-      #     max_attempts: 3
-      #     command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+           yarn env:${{ inputs.environment }}
+      - name: Bundle app
+        run: yarn bundle:android
+      - name: Update fastlane
+        run: |
+          bundle update fastlane
+          bundle exec fastlane update_plugins
+      - name: Set SLACK_THREAD_TS environment variable
+        if: inputs.slack_thread_ts
+        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      - name: Run fastlane with retries
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 20
+          max_attempts: 3
+          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
