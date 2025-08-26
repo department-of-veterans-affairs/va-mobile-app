@@ -1,4 +1,4 @@
-import { useNetInfo } from '@react-native-community/netinfo'
+import NetInfo, { useNetInfo } from '@react-native-community/netinfo'
 
 import { NetworkMode, QueryCache, QueryClient } from '@tanstack/react-query'
 
@@ -21,6 +21,21 @@ export const useQueryCacheOptions = (): CacheProps => {
     refetchOnMount: isConnected === false ? false : 'always',
     gcTime: Infinity,
   }
+}
+
+export const customQueryCache = async <T>(
+  queryFn: (queryKey: string, ...p: never[]) => Promise<T | undefined>,
+  queryKey: string,
+  cacheGetter: () => Promise<T | undefined>,
+  ...params: never[]
+): Promise<T | undefined> => {
+  const { isConnected } = await NetInfo.fetch()
+
+  if (isConnected) {
+    return queryFn(queryKey, ...params)
+  }
+
+  return cacheGetter()
 }
 
 /**
