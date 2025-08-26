@@ -42,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
-          LINTER_RULES_PATH: ".github/linters/"
+          LINTER_RULES_PATH: '.github/linters/'
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_CHECKOV: false
           VALIDATE_CLANG_FORMAT: false
@@ -101,11 +101,11 @@ jobs:
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Get changed files
         id: get-changed-apps
-        uses: ./.github/workflows/get-changed-files
+        uses: ./.github/actions/get-changed-files
       - name: lint-changed-files
         env:
           CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
-        run: | 
+        run: |
           if [ "$CHANGED_FILES" ]; then
             yarn run lint:changed:ci; 
           fi
