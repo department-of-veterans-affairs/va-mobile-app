@@ -3,11 +3,16 @@ import FileViewer from 'react-native-file-viewer'
 import { useQuery } from '@tanstack/react-query'
 
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
+import store from 'store'
+import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
-import { downloadFile, unlinkFile } from 'utils/filesystem'
+import { downloadDemoFile, downloadFile, unlinkFile } from 'utils/filesystem'
 
 const { API_ROOT } = getEnv()
 
+/**
+ * Returns the copayment statement file name
+ */
 const createCopayStatementFileName = (id: string) => `VA-Medical-Copay-Statement-${id}.pdf`
 
 /**
@@ -20,7 +25,9 @@ export const downloadCopayStatement = async (id: string, fileName?: string): Pro
   const localName = (fileName ?? createCopayStatementFileName(id)).trim()
 
   try {
-    const filePath = await downloadFile('GET', url, localName, undefined, 3)
+    const filePath = store.getState().demo.demoMode
+      ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
+      : await downloadFile('GET', url, localName, undefined, 3)
     if (!filePath) throw new Error('Download returned no file path')
 
     await FileViewer.open(filePath, {
