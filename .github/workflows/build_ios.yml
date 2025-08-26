@@ -81,7 +81,7 @@ jobs:
             echo -e "\033[31mERROR: Lane '$LANE' cannot be used with environment '$ENVIRONMENT'. Only 'production' is allowed for release/review lanes. Failing build and alerting Slack.\033[0m"
             if [[ -n "${{ secrets.SLACK_API_TOKEN }}" ]]; then
               WORKFLOW_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-build-alerts" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT | <$WORKFLOW_URL|View workflow run>" https://slack.com/api/chat.postMessage
+              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-sandbox" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT | <$WORKFLOW_URL|View workflow run>" https://slack.com/api/chat.postMessage
             fi
             exit 1
           fi
@@ -116,25 +116,29 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Install pods
-        run: pod install
-      - name: Bundle app
-        run: yarn bundle:ios
-      - name: Install gems
-        run: bundle install
-      - name: Update fastlane
-        run: bundle update fastlane
-      - name: Run fastlane with retries
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 15
+      - name: Set app environment variables
+        run: |
+           echo "ENVIRONMENT:${{ inputs.environment }}"
+           echo "environment-env:${{ env.environment }}"
+      #     yarn env:${{ inputs.environment }}
+      # - name: Set SLACK_THREAD_TS environment variable
+      #   if: inputs.slack_thread_ts
+      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # - name: Install pods
+      #   run: pod install
+      # - name: Bundle app
+      #   run: yarn bundle:ios
+      # - name: Install gems
+      #   run: bundle install
+      # - name: Update fastlane
+      #   run: bundle update fastlane
+      # - name: Run fastlane with retries
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_minutes: 20
+      #     max_attempts: 3
+      #     command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+      # - name: Setup tmate session
+      #   if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 15
