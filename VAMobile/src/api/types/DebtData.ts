@@ -1,10 +1,10 @@
-export interface OverpaymentDebtHistoryEntry {
+export type DebtHistory = {
   date?: string
   letterCode?: string
   description?: string
 }
 
-export interface OverpaymentDebtRecord {
+export type DebtRecord = {
   id: string
   fileNumber?: string
   payeeNumber?: string
@@ -19,15 +19,10 @@ export interface OverpaymentDebtRecord {
   originalAr?: number
   currentAr?: number
 
-  debtHistory?: OverpaymentDebtHistoryEntry[]
+  debtHistory?: DebtHistory[]
 }
 
-export interface OverpaymentDebtPayload {
-  data: OverpaymentDebtRecord
-  status: number
-}
-
-export interface OverpaymentDebtsPayload {
-  data: OverpaymentDebtRecord[]
+export type DebtsPayload = {
+  data: DebtRecord[]
   status: number
 }
