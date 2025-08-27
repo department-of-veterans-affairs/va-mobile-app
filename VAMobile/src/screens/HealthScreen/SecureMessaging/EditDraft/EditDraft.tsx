@@ -146,9 +146,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
-  const [careSystem, setCareSystem] = useState(
-    messageRecipient?.attributes.stationNumber || careSystems.length === 1 ? careSystems[0]?.value : '',
-  )
+  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber)
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
@@ -392,6 +390,10 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     setCareSystem(cs)
     // Clear to recipient
     setTo(undefined)
+  }
+
+  if (careSystems.length === 1 && careSystem === '') {
+    handleSetCareSystem(careSystems[0].value)
   }
 
   const onAddFiles = () => {

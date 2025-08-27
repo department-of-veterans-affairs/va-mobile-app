@@ -118,8 +118,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
   const recipients = recipientsResponse?.data
 
-  console.log('CS: ', careSystems)
-  const [careSystem, setCareSystem] = useState(careSystems.length === 1 ? careSystems[0]?.value : '')
+  const [careSystem, setCareSystem] = useState('')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
@@ -215,6 +214,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     setCareSystem(cs)
     // Clear to recipient
     setTo(undefined)
+  }
+
+  if (careSystems.length === 1 && careSystem === '') {
+    handleSetCareSystem(careSystems[0].value)
   }
 
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
@@ -420,7 +423,6 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   }
 
   function renderContent() {
-    console.log('CSF: ', careSystem)
     if (noProviderError) {
       return (
         <AlertWithHaptics
