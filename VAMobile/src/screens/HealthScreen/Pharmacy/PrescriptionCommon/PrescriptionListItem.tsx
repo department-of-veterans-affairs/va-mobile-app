@@ -41,7 +41,7 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
     return (
       <Box mt={condensedMarginBetween}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-        <TextView variant={'HelperText'} my={condensedMarginBetween} accessibilityLabel={`${instructionsText}.`}>
+        <TextView variant={'HelperText'} my={condensedMarginBetween} accessibilityLabel={`${instructionsText}`}>
           {instructionsText}
         </TextView>
       </Box>
@@ -51,11 +51,11 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   return (
     <Box>
       {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-      <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}.`} accessibilityRole="header">
+      <TextView variant={'MobileBodyBold'} accessibilityLabel={`${prescriptionName}`} accessibilityRole="header">
         {prescriptionName}
       </TextView>
       {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-      <TextView variant={'HelperText'} color={'placeholder'} accessibilityLabel={`${rxNumberA11yLabel}.`}>
+      <TextView variant={'HelperText'} color={'placeholder'} accessibilityLabel={`${rxNumberA11yLabel}`}>
         {rxNumber}
       </TextView>
       {includeRefillTag && (
@@ -66,7 +66,7 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       {renderInstructions()}
       {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
-        accessibilityLabel={`${refillDateText}.`}
+        accessibilityLabel={`${refillDateText}`}
         variant={'HelperText'}
         mt={hideInstructions ? standardMarginBetween : condensedMarginBetween}>
         {refillDateText}
@@ -75,14 +75,14 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
-        accessibilityLabel={`${t('fillDate')} ${dateA11yLabel}.`}>
+        accessibilityLabel={`${t('fillDate')} ${dateA11yLabel}`}>
         {`${t('fillDate')}: ${dateMMddyyyy}`}
       </TextView>
       {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
-        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || t('prescription.details.facilityNameNotAvailable')}.`}>
+        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || t('prescription.details.facilityNameNotAvailable')}`}>
         {`${t('prescription.vaFacility')} ${facilityName || t('prescription.details.facilityNameNotAvailable')}`}
       </TextView>
     </Box>

@@ -139,20 +139,23 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const [lastRefilledDateFormatted, lastRefilledDateFormattedA11yLabel] = getDateTextAndLabel(
     t,
     refillDate,
-    t('prescription.details.dateNotAvailable'),
+    t('prescription.details.fillDateNotAvailable'),
   )
   const [expireDateFormatted, expireDateFormattedA11yLabel] = getDateTextAndLabel(
     t,
     expirationDate,
-    t('prescription.details.dateNotAvailable'),
+    t('prescription.details.expirationDateNotAvailable'),
   )
   const [dateOrderedFormatted, dateOrderedFormattedA11yLabel] = getDateTextAndLabel(
     t,
     orderedDate,
-    t('prescription.details.dateNotAvailable'),
+    t('prescription.details.orderedDateNotAvailable'),
   )
   const refillRemainingText =
     refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
+  const instructionsText = instructions || t('prescription.details.instructionsNotAvailable')
+  const facilityNameText = facilityName || t('prescription.details.facilityNameNotAvailable')
+  const quantityText = quantity || t('prescription.details.quantityNotAvailable')
 
   return (
     <ChildTemplate
@@ -180,18 +183,20 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               </Box>
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.instructionsHeader')}
-                leftSectionValue={instructions || t('prescription.details.instructionsNotAvailable')}
+                leftSectionValue={instructionsText}
+                leftSectionTitleLabel={instructionsText}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.refillLeftHeader')}
                 leftSectionValue={refillRemainingText}
+                leftSectionValueLabel={t('prescription.details.refillRemainingNotAvailable')}
                 rightSectionTitle={t('fillDate')}
                 rightSectionValue={lastRefilledDateFormatted}
                 rightSectionValueLabel={lastRefilledDateFormattedA11yLabel}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.quantityHeader')}
-                leftSectionValue={quantity || t('prescription.details.quantityNotAvailable')}
+                leftSectionValue={quantityText}
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.expiresOnHeader')}
@@ -203,7 +208,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
               />
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.vaFacilityHeader')}
-                leftSectionValue={facilityName || t('prescription.details.facilityNameNotAvailable')}
+                leftSectionValue={facilityNameText}
                 leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
                 <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
               </DetailsTextSections>
