@@ -19,47 +19,38 @@ jobs:
       - name: Set static on-call rotation through 2025
         id: select-oncall
         run: |
-          # Static rotation order
+          # Static rotation order and Slack mapping
           declare -A GITHUB_TO_SLACK=(
             ["timwright12"]="U08H8A5Q00J"
             ["ryan-mcneil"]="U051N9T603X"
             ["SMLuthi"]="U9YP3N7C7"
             ["jbergman-oddball"]="U08FHQEA8P7"
           )
-          ROTATION=("timwright12" "ryan-mcneil" "SMLuthi" "jbergman-oddball")
-          # Get current date
-          TODAY=$(date -u +%Y-%m-%d)
-          # Find the most recent Monday (including today if Monday)
-          DOW=$(date -u -d "$TODAY" +%u)
-          if [ "$DOW" -ne 1 ]; then
-            FIRST_MONDAY=$(date -u -d "$TODAY -$((DOW-1)) days" +%Y-%m-%d)
+          # Get current week number (ISO week, Monday-based)
+          WEEK_NUM=$(date -u +%V)
+          YEAR=$(date -u +%G)
+          # Set the rotation start week and order
+          # This week (Aug 25, 2025) is Tim Wright, then Ryan, Silvio, Josh, repeat
+          # Find the week number for this week as the anchor
+          ANCHOR_YEAR=2025
+          ANCHOR_WEEK=35
+          # Calculate offset from anchor
+          if [ "$YEAR" -lt "$ANCHOR_YEAR" ]; then
+            OFFSET=0
           else
-            FIRST_MONDAY="$TODAY"
+            OFFSET=$(( ( (YEAR-ANCHOR_YEAR)*52 + WEEK_NUM - ANCHOR_WEEK ) ))
+            if [ $OFFSET -lt 0 ]; then OFFSET=0; fi
           fi
-          END_DATE="2025-12-29"
-          # Build schedule from most recent Monday through end of 2025
-          SCHEDULE=()
-          d="$FIRST_MONDAY"
-          i=0
-          while [[ "$d" < "$END_DATE" || "$d" == "$END_DATE" ]]; do
-            SCHEDULE+=("$d:${ROTATION[$((i%4))]}")
-            d=$(date -u -d "$d +7 days" +%Y-%m-%d)
-            ((i++))
-          done
-          # Find this week's on-call
-          THIS_WEEK="$FIRST_MONDAY"
-          ONCALL_PERSON=""
-          for entry in "${SCHEDULE[@]}"; do
-            week_date="${entry%%:*}"
-            person="${entry##*:}"
-            if [ "$week_date" == "$THIS_WEEK" ]; then
-              ONCALL_PERSON="$person"
-              break
-            fi
-          done
+          case $((OFFSET % 4)) in
+            0) ONCALL_PERSON="timwright12";;
+            1) ONCALL_PERSON="ryan-mcneil";;
+            2) ONCALL_PERSON="SMLuthi";;
+            3) ONCALL_PERSON="jbergman-oddball";;
+            *) ONCALL_PERSON="timwright12";;
+          esac
+          # Fallback if for some reason not set
           if [ -z "$ONCALL_PERSON" ]; then
-            echo "No on-call person found for this week ($THIS_WEEK)" >&2
-            exit 1
+            ONCALL_PERSON="timwright12"
           fi
           SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
           if [ -z "$SLACK_USER_ID" ]; then
@@ -69,8 +60,8 @@ jobs:
           fi
           echo "oncall_person=$ONCALL_PERSON" >> $GITHUB_OUTPUT
           echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
-          echo "week_date=$THIS_WEEK" >> $GITHUB_OUTPUT
-          echo "Selected on-call person: $ONCALL_PERSON for week of $THIS_WEEK"
+          echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
+          echo "Selected on-call person: $ONCALL_PERSON for week $WEEK_NUM ($YEAR)"
       - name: Get Slack channel ID
         id: get-channel
         run: |
