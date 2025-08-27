@@ -39,7 +39,6 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
@@ -148,21 +147,19 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toMessageInboxID"
         />
-        {featureEnabled('prescriptions') && (
-          <LargeNavButton
-            title={t('prescription.title')}
-            onPress={() => navigateTo('PrescriptionHistory')}
-            showLoading={fetchingPrescriptions}
-            subText={
-              prescriptionData?.meta.prescriptionStatusCount.isRefillable
-                ? t('prescriptions.activityButton.subText', {
-                    count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
-                  })
-                : undefined
-            }
-            testID="toPrescriptionsID"
-          />
-        )}
+        <LargeNavButton
+          title={t('prescription.title')}
+          onPress={() => navigateTo('PrescriptionHistory')}
+          showLoading={fetchingPrescriptions}
+          subText={
+            prescriptionData?.meta.prescriptionStatusCount.isRefillable
+              ? t('prescriptions.activityButton.subText', {
+                  count: prescriptionData?.meta.prescriptionStatusCount.isRefillable,
+                })
+              : undefined
+          }
+          testID="toPrescriptionsID"
+        />
         <LargeNavButton
           title={t('vaMedicalRecords.buttonTitle')}
           onPress={() => navigateTo('MedicalRecordsList')}

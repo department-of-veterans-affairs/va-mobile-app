@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import _ from 'lodash'
+import _ from 'underscore'
 
 import queryClient from 'api/queryClient'
 import { Box, FeatureLandingTemplate, SelectorType, TextArea, TextView, VASelector, VATextInput } from 'components'

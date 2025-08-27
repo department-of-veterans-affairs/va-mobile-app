@@ -1,4 +1,4 @@
-import { flatten, includes, map, some } from 'lodash'
+import { flatten, includes, map, some } from 'underscore'
 
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
 import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
@@ -7,7 +7,7 @@ export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   if (!error) {
     return []
   }
-  const errors = error?.json?.errors
+  const errors = error?.json?.errors || []
   const messages = flatten(map(errors, (err) => err?.meta?.messages))
   return map(messages, (message) => message?.key)
 }
@@ -16,7 +16,7 @@ export const hasErrorCode = (errorCode: string, error?: APIError): boolean => {
   if (!error) {
     return false
   }
-  const errors = error?.json?.errors
+  const errors = error?.json?.errors || []
   return some(errors, (err) => err?.code === errorCode)
 }
 
