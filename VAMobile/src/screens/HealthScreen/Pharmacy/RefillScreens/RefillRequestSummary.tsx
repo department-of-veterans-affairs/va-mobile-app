@@ -20,12 +20,11 @@ import {
 import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useFontScale, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { getRxNumberTextAndLabel } from '../PrescriptionCommon'
+import { getRxNumberTextAndLabel } from 'utils/prescriptions'
 
 const enum REQUEST_STATUS {
   FAILED,
