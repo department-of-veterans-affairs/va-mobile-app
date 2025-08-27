@@ -1,4 +1,4 @@
-export interface MedicalCopayDetail {
+export type MedicalCopayDetail = {
   pDDatePosted?: string
   pDDatePostedOutput?: string
   pDTransDesc?: string
@@ -8,7 +8,7 @@ export interface MedicalCopayDetail {
   pDRefNo?: string
 }
 
-export interface MedicalCopayStation {
+export type MedicalCopayStation = {
   facilitYNum?: string
   visNNum?: string
   facilitYDesc?: string
@@ -41,7 +41,7 @@ export interface MedicalCopayStation {
   lbXFedexContactTelNum?: string
 }
 
-export interface MedicalCopayRecord {
+export type MedicalCopayRecord = {
   id: string
 
   pSSeqNum?: number
@@ -51,6 +51,7 @@ export interface MedicalCopayRecord {
   pSTotStatement?: number
   pSStatementVal?: string
   pSStatementDate?: string
+  accountNumber?: string
   pSStatementDateOutput?: string
   pSProcessDate?: string
   pSProcessDateOutput?: string
@@ -63,9 +64,11 @@ export interface MedicalCopayRecord {
   pHAddress3?: string
   pHCity?: string
   pHState?: string
+  pHStateOutput?: string
   pHZipCde?: string
   pHZipCdeOutput?: string
   pHCtryNme?: string
+  pHCtryNmeOutput?: string
 
   pHAmtDue?: number
   pHAmtDueOutput?: string
@@ -79,7 +82,7 @@ export interface MedicalCopayRecord {
   pHNewBalanceOutput?: string
 
   pHSpecialNotes?: string
-  pHROParaCdes?: string
+  pHroParaCdes?: string
   pHNumOfLines?: number
   pHDfnNumber?: number
 
@@ -95,12 +98,12 @@ export interface MedicalCopayRecord {
   details: MedicalCopayDetail[]
 }
 
-export interface MedicalCopayPayload {
+export type MedicalCopayPayload = {
   data: MedicalCopayRecord
   status: number
 }
 
-export interface MedicalCopaysPayload {
+export type MedicalCopaysPayload = {
   data: MedicalCopayRecord[]
   status: number
 }

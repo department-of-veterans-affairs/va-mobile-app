@@ -6,7 +6,8 @@ import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
 import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
-import { downloadDemoFile, downloadFile, unlinkFile } from 'utils/filesystem'
+import { downloadDemoFile, downloadFile } from 'utils/filesystem'
+import { useReviewEvent } from 'utils/inAppReviews'
 
 const { API_ROOT } = getEnv()
 
@@ -18,34 +19,32 @@ const createCopayStatementFileName = (id: string) => `VA-Medical-Copay-Statement
 /**
  * Downloads and opens the PDF statement for a given copay statement ID.
  */
-export const downloadCopayStatement = async (id: string, fileName?: string): Promise<boolean> => {
+export const downloadCopayStatement = async (
+  id: string,
+  fileName?: string,
+  func: () => Promise<void> = async () => {},
+): Promise<boolean | undefined> => {
   const escapedId = encodeURI(id)
   const url = `${API_ROOT}/v0/medical_copays/download/${escapedId}`
 
   const localName = (fileName ?? createCopayStatementFileName(id)).trim()
 
-  try {
-    const filePath = store.getState().demo.demoMode
-      ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
-      : await downloadFile('GET', url, localName, undefined, 3)
-    if (!filePath) throw new Error('Download returned no file path')
+  const filePath = store.getState().demo.demoMode
+    ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
+    : await downloadFile('GET', url, localName, undefined, 3)
 
-    await FileViewer.open(filePath, {
-      onDismiss: async (): Promise<void> => {
-        await unlinkFile(filePath)
-      },
-    })
+  if (filePath) {
+    await FileViewer.open(filePath, { onDismiss: () => func() })
     return true
-  } catch (err) {
-    throw err instanceof Error ? err : new Error('Failed to download or open statement')
   }
 }
 
 export const useDownloadCopayStatement = (id: string, options?: { enabled?: boolean; fileName?: string }) => {
+  const registerReviewEvent = useReviewEvent(false)
   return useQuery({
     ...options,
     queryKey: [medicalCopayKeys.downloadCopayStatement, id],
-    queryFn: () => downloadCopayStatement(id, options?.fileName),
+    queryFn: () => downloadCopayStatement(id, options?.fileName, registerReviewEvent),
     meta: {
       errorName: 'downloadCopayStatement: Service error',
     },
