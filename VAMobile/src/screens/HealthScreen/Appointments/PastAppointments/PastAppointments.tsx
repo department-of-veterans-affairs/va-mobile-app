@@ -1,4 +1,4 @@
-import React, { RefObject, useMemo } from 'react'
+import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -28,8 +28,6 @@ type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
   dateRange: AppointmentsDateRange
   loading: boolean
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
   setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
@@ -39,8 +37,6 @@ function PastAppointments({
   appointmentsData,
   dateRange,
   loading,
-  page,
-  setPage,
   setDateRange,
   setTimeFrame,
   scrollViewRef,
@@ -48,6 +44,7 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [page, setPage] = useState(1)
 
   const datePickerRange = getDatePickerRange(dateRange)
 
@@ -56,13 +53,6 @@ function PastAppointments({
   const endTime =
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
-
-  const pagination = {
-    currentPage: page,
-    perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
-  }
-  const { perPage, totalEntries } = pagination
 
   const filteredAppointments = useMemo(() => {
     const appointmentsToFilter = appointmentsData?.data.filter((appointment) => {
@@ -74,6 +64,13 @@ function PastAppointments({
       return filterAppointments(appointmentsToFilter || [], true)
     return appointmentsToFilter
   }, [appointmentsData?.data, datePickerRange])
+
+  const pagination = {
+    currentPage: page,
+    perPage: DEFAULT_PAGE_SIZE,
+    totalEntries: filteredAppointments?.length || 0,
+  }
+  const { perPage, totalEntries } = pagination
 
   const appointmentsToShow = useMemo(
     () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
