@@ -27,34 +27,19 @@ type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   isLoading: boolean
   scrollViewRef: RefObject<ScrollView>
-  filter: string
-  sortBy: string
 }
 
 const CLAIMS_PER_PAGE = 10
-
-const getFilteredClaims = (
-  claims: Array<TravelPayClaimData>,
-  filter: string,
-  sortBy: string
-) => {
-  const result = [...claims];
-
-  return result;
-}
 
 function TravelPayClaimsList({
   claims,
   isLoading,
   scrollViewRef,
-  filter,
-  sortBy,
  }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const [filteredClaims, setFilteredClaims] = useState<Array<TravelPayClaimData>>([]);
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
   const [page, setPage] = useState(1)
 
@@ -64,13 +49,9 @@ function TravelPayClaimsList({
   }
 
   useEffect(() => {
-    setFilteredClaims(getFilteredClaims(claims, filter, sortBy));
-  }, [claims, filter, sortBy])
-
-  useEffect(() => {
     const summaryList = claims?.slice((page - 1) * perPage, page * perPage)
     setClaimsToShow(summaryList || [])
-  }, [filteredClaims, page, perPage])
+  }, [claims, page, perPage])
 
   const goToClaimDetails = (claimId: string) => {
     logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))

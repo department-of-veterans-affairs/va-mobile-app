@@ -1,29 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Box, BoxProps, TextView } from 'components'
 import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModal'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
+import { TravelPayClaimData } from 'api/types'
+import { TravelClaimsFilter } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 
 type TravelPayClaimsFilterProps = {
-  totalClaims: number
-  selectedFilter: string
-  setSelectedFilter: Dispatch<SetStateAction<string>>
-  selectedSortBy: string
-  setSelectedSortBy: Dispatch<SetStateAction<string>>
-}
-
-type FilterOptionType = 'all' | 'paid' | 'denied'
-
-const FilterOption: {
-  All: FilterOptionType
-  Paid: FilterOptionType
-  Denied: FilterOptionType
-} = {
-  All: 'all',
-  Paid: 'paid',
-  Denied: 'denied',
+  claims: Array<TravelPayClaimData>
+  setClaimsFilter: Dispatch<SetStateAction<TravelClaimsFilter>>
 }
 
 type SortOptionType = 'recent' | 'oldest'
@@ -37,42 +24,40 @@ const SortOption: {
 }
 
 function TravelPayClaimsFilter({
-  totalClaims,
-  selectedFilter,
-  setSelectedFilter,
-  selectedSortBy,
-  setSelectedSortBy,
+  claims = [],
+  setClaimsFilter,
 }: TravelPayClaimsFilterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  // TODO 112328: need to replace with actual data from props or state
-  const currentFilter = 'All'
-  const currentSort = 'most recent'
+  const [selectedFilter, setSelectedFilter] = useState<TravelClaimsFilter>({
+    filter: '',
+    sortBy: '',
+  })
 
-  const travelClaimsListTitle = () => {
-    const keys = {
-      count: totalClaims,
-      filter: currentFilter,
-      sort: currentSort,
-    }
+  const totalClaims = claims.length;
 
-    return t('travelPay.statusList.list.title', keys)
-  }
+  // Allow filtering by any of the statuses that appear in the list, and 'All'
+  const statusToCount: Map<string, number> = new Map();
+  claims.forEach(claim => {
+    const status = claim.attributes.claimStatus;
+    const existingCount = statusToCount.get(status) ?? 0;
+    statusToCount.set(status, existingCount + 1);
+  })
 
-  // TODO 112328: add modal props
+  const filterOptions = Array.from(statusToCount.keys()).map(status => ({
+    optionLabelKey: `${status} (${statusToCount.get(status)!})`,
+    value: status,
+  }));
+  filterOptions.sort((a, b) => a.optionLabelKey > b.optionLabelKey ? 1 : -1);
+  filterOptions.unshift({ optionLabelKey: `${t('travelPay.statusList.filterOption.all')} (${totalClaims})`, value: 'all' }) // TODO: Union const
+
   const modalProps: RadioGroupModalProps = {
     groups: [
       {
-        items: [
-          { optionLabelKey: t('travelPay.statusList.filterOption.all'), value: FilterOption.All },
-          { optionLabelKey: t('travelPay.statusList.filterOption.paid'), value: FilterOption.Paid },
-          { optionLabelKey: t('travelPay.statusList.filterOption.denied'), value: FilterOption.Denied },
-        ],
-        onSetOption: (newFilter: string) => {
-          setSelectedFilter(newFilter)
-        },
-        selectedValue: selectedFilter,
+        items: filterOptions,
+        onSetOption: (filter: string) => setSelectedFilter(prev => ({ filter: filter, sortBy: prev.sortBy })),
+        selectedValue: selectedFilter.filter,
         title: t('travelPay.statusList.filterBy'),
       },
       {
@@ -80,10 +65,8 @@ function TravelPayClaimsFilter({
           { optionLabelKey: t('travelPay.statusList.sortOption.recent'), value: SortOption.Recent },
           { optionLabelKey: t('travelPay.statusList.sortOption.oldest'), value: SortOption.Oldest },
         ],
-        onSetOption: (newSortBy: string) => {
-          setSelectedSortBy(newSortBy)
-        },
-        selectedValue: selectedSortBy,
+        onSetOption: (sortBy: string) => setSelectedFilter(prev => ({ filter: prev.filter, sortBy: sortBy })),
+        selectedValue: selectedFilter.sortBy,
         title: t('travelPay.statusList.sortBy'),
       },
     ],
@@ -91,7 +74,7 @@ function TravelPayClaimsFilter({
     buttonA11yLabel: t('travelPay.statusList.filterAndSort'),
     buttonTestID: 'openFilterAndSortTestID',
     headerText: t('travelPay.statusList.filterAndSort'),
-    onApply: () => {}, // TODO 112328: add apply logic
+    onApply: () => setClaimsFilter(selectedFilter),
     onCancel: () => {}, // TODO 112328: add cancel logic
     testID: 'TravelPayFilterModalTestID',
   }
@@ -129,15 +112,6 @@ function TravelPayClaimsFilter({
 
   return (
     <Box>
-      <Box mx={theme.dimensions.gutter} accessible={true}>
-        <TextView
-          mt={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.condensedMarginBetween}
-          accessibilityRole="header"
-          variant={'MobileBodyBold'}>
-          {travelClaimsListTitle()}
-        </TextView>
-      </Box>
       {/* Filter and Sort Section */}
       {filterModal()}
     </Box>
