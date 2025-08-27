@@ -11,4 +11,4 @@ runs:
     - name: Get paths of changed files
       id: get-changed-files
       shell: bash
-      run: cd VAMobile && HEAD=$(git rev-parse HEAD) && echo changed_files=$(git diff --diff-filter=ACM --relative --name-only $HEAD $(git merge-base $HEAD origin/develop) -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx" ":(exclude)./src/**/index.ts") >> $GITHUB_OUTPUT
+      run: cd VAMobile && HEAD=$(git rev-parse HEAD) && echo changed_files=$(git diff --diff-filter=ACM --relative --name-only $(git merge-base $HEAD origin/develop) $HEAD -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx" ":(exclude)./src/**/index.ts") >> $GITHUB_OUTPUT

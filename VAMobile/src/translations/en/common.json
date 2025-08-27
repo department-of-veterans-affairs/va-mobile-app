@@ -1568,7 +1568,7 @@
   "travelPay.addressQuestion": "Did you travel from your home address?",
   "travelPay.reviewTitle": "Review your travel claim",
   "travelPay.reviewDetails.what": "What you're claiming",
-  "travelPay.reviewDetails.milageOnly": "Mileage-only reimbursement for your appointment: ",
+  "travelPay.reviewDetails.mileageOnly": "Mileage-only reimbursement for your appointment: ",
   "travelPay.reviewDetails.how": "How you traveled",
   "travelPay.reviewDetails.vehicle": "Your own vehicle",
   "travelPay.reviewDetails.where": "Where you traveled from",

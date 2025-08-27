@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -8,11 +8,10 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
-import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
+import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { checkStringForPII } from 'utils/common'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useExternalLink, useTheme } from 'utils/hooks'
 
@@ -25,7 +24,6 @@ function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenP
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [satisfaction, setSatisfaction] = useState('')
-  const [task, setTaskOverride] = useState('')
   const { screen } = route.params
   let submittedCheck = false
   const launchExternalLink = useExternalLink()
@@ -38,30 +36,10 @@ function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenP
   })
 
   const onSubmit = (): void => {
-    const { found, newText } = checkStringForPII(task)
-    if (found) {
-      Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
-        {
-          text: t('inAppFeedback.personalInfo.edit'),
-          style: 'cancel',
-        },
-        {
-          text: t('inAppFeedback.personalInfo.submit'),
-          onPress: () => {
-            logAnalyticsEvent(Events.vama_feedback_submitted(screen, newText, satisfaction))
-            submittedCheck = true
-            navigation.goBack()
-            snackbar.show(t('inAppFeedback.snackbar.success'))
-          },
-          style: 'default',
-        },
-      ])
-    } else {
-      logAnalyticsEvent(Events.vama_feedback_submitted(screen, task, satisfaction))
-      submittedCheck = true
-      navigation.goBack()
-      snackbar.show(t('inAppFeedback.snackbar.success'))
-    }
+    logAnalyticsEvent(Events.vama_feedback_submitted(screen, '', satisfaction))
+    submittedCheck = true
+    navigation.goBack()
+    snackbar.show(t('inAppFeedback.snackbar.success'))
   }
 
   const radioGroupProps: RadioGroupProps<string> = {
@@ -95,21 +73,8 @@ function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenP
   return (
     <LargePanel title={t('giveFeedback')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('inAppFeedback.whatTask.header')}
-        </TextView>
-        <TextView variant="MobileBody" mb={theme.dimensions.alertBorderWidth}>
-          {t('inAppFeedback.whatTask.body')}
-        </TextView>
-        <VATextInput
-          inputType="none"
-          isTextArea={true}
-          value={task}
-          testID="AppFeedbackTaskID"
-          onChange={setTaskOverride}
-        />
         <Box>
-          <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+          <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.overallSatisfaction.header')}
           </TextView>
           <RadioGroup {...radioGroupProps} />
