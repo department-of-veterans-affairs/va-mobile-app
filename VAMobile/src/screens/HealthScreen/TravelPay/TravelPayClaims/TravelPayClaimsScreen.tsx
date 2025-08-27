@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -7,17 +7,21 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { DateTime } from 'luxon'
 
 import { useTravelPayClaims } from 'api/travelPay'
-import { ErrorComponent, FeatureLandingTemplate } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
+import TravelPayClaimsFilter from './TravelPayClaimsFilter'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  const [selectedFilter, setSelectedFilter] = useState('')
+  const [selectedSortBy, setSelectedSortBy] = useState('')
 
   const startDate = DateTime.now().minus({ months: 3 }).toISO()
   const endDate = DateTime.now().toISO()
@@ -32,6 +36,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   })
 
   const claims = claimsPayload?.data ?? []
+  const totalClaims = claimsPayload?.meta.totalRecordCount ?? 0
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -52,7 +57,22 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
           error={error}
         />
       ) : (
-        <TravelPayClaimsList claims={claims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
+        <Box>
+          <TravelPayClaimsFilter 
+            totalClaims={totalClaims}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+            selectedSortBy={selectedSortBy}
+            setSelectedSortBy={setSelectedSortBy}
+          />
+          <TravelPayClaimsList
+            claims={claims}
+            isLoading={isLoading}
+            scrollViewRef={scrollViewRef}
+            filter={selectedFilter}
+            sortBy={selectedSortBy}
+          />
+        </Box>
       )}
     </FeatureLandingTemplate>
   )
