@@ -1,0 +1,33 @@
+---
+title: Release process
+---
+
+```mermaid
+%%{init: { 'themeVariables': { 'fontSize': '50px' } } }%%
+block-beta
+columns 2
+A("Release branch & RC build is created from develop
+(new_release_branch.yml)")
+B("Runs 2am ET, every Wednesday
+(Script exits if not a release week release_branch.sh")
+space
+C("Release approval issue is created
+(release_branch_issue.yml)")
+space
+D("When Github actions detects a branch named 'release/*' is pushed")
+space
+E("Time passes as QA tests the release canidate from Step 1"):2
+space
+F("Approval is sent to release approvers
+(approve_command.yml)")
+space
+G("Approvers will get an email at the time of the workflow run. Once the task is approved, it will wait for 7 days (10,080 minutes). Once this time passes, the workflows will continue.")
+space
+H("If necessary, the timer can be bypassed by navigating to the approval screen and clicking bypass. Only Admins of the repo can do this.")
+space
+I("Release branch is merged into main
+(release_pull_request.yml)")
+
+```
+
+<!-- <iframe width="800" height="650" title="Flagship mobile technical release process" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FuDs0x8clV8Df6P4Ldkh2Li%2FRelease-Process%3Fnode-id%3D0%253A1%26t%3D0A6XbacxiCx1k67E-1" allowfullscreen></iframe> -->

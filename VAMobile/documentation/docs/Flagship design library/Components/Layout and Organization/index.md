@@ -1,4 +1,0 @@
----
-title: Layout and organization
----
-

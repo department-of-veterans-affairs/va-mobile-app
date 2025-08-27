@@ -83,6 +83,33 @@ const config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'gettingStarted',
+        path: 'gettingStarted',
+        routeBasePath: 'gettingStarted',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'development',
+        path: 'development',
+        routeBasePath: 'development',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'communityAndSupport',
+        path: 'communityAndSupport',
+        routeBasePath: 'communityAndSupport',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
       'docusaurus-plugin-react-docgen-typescript',
       {
         // pass in a single string or an array of strings
@@ -146,6 +173,24 @@ const config = {
         },
         items: [
           {
+            to: '/gettingStarted/Intro', // ./gettingStarted/Intro.md
+            label: 'Getting started',
+            position: 'left',
+            activeBaseRegex: `/gettingStarted/`,
+          },
+          {
+            to: '/development/Intro', // ./development/Intro.md
+            label: 'Development guide',
+            position: 'left',
+            activeBaseRegex: `/development/`,
+          },
+          {
+            to: '/communityAndSupport/RequestingFeatures', // ./development/Intro.md
+            label: 'Community and Support',
+            position: 'left',
+            activeBaseRegex: `/communityAndSupport/`,
+          },
+          {
             to: '/docs/Intro', // ./docs/Intro.md
             label: 'Documentation',
             position: 'left',
@@ -170,6 +215,18 @@ const config = {
           {
             title: 'Docs',
             items: [
+              {
+                label: 'Getting started',
+                to: '/gettingStarted/Intro',
+              },
+              {
+                label: 'Development guide',
+                to: '/development/Intro',
+              },
+              {
+                label: 'Community and Support',
+                to: '/communityAndSupport/RequestingFeatures',
+              },
               {
                 label: 'Documentation',
                 to: '/docs/Intro',
