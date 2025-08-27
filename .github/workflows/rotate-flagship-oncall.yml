@@ -29,20 +29,17 @@ jobs:
           ROTATION=("timwright12" "ryan-mcneil" "SMLuthi" "jbergman-oddball")
           # Get current date
           TODAY=$(date -u +%Y-%m-%d)
-          # List of Mondays from this week through end of 2025
-          START_DATE=$(date -u -d "$TODAY" +%Y-%m-%d)
-          END_DATE="2025-12-29"
-          # Find the next Monday (or today if Monday)
-          DOW=$(date -u -d "$START_DATE" +%u)
+          # Find the most recent Monday (including today if Monday)
+          DOW=$(date -u -d "$TODAY" +%u)
           if [ "$DOW" -ne 1 ]; then
-            # Not Monday, find next Monday
-            NEXT_MONDAY=$(date -u -d "$START_DATE +$(( (8 - DOW) % 7 )) days" +%Y-%m-%d)
+            FIRST_MONDAY=$(date -u -d "$TODAY -$((DOW-1)) days" +%Y-%m-%d)
           else
-            NEXT_MONDAY="$START_DATE"
+            FIRST_MONDAY="$TODAY"
           fi
-          # Build schedule
+          END_DATE="2025-12-29"
+          # Build schedule from most recent Monday through end of 2025
           SCHEDULE=()
-          d="$NEXT_MONDAY"
+          d="$FIRST_MONDAY"
           i=0
           while [[ "$d" < "$END_DATE" || "$d" == "$END_DATE" ]]; do
             SCHEDULE+=("$d:${ROTATION[$((i%4))]}")
@@ -50,25 +47,18 @@ jobs:
             ((i++))
           done
           # Find this week's on-call
-          THIS_WEEK=$(date -u +%Y-%m-%d)
-          # Find the most recent Monday <= today
-          DOW=$(date -u -d "$THIS_WEEK" +%u)
-          if [ "$DOW" -ne 1 ]; then
-            THIS_MONDAY=$(date -u -d "$THIS_WEEK -$((DOW-1)) days" +%Y-%m-%d)
-          else
-            THIS_MONDAY="$THIS_WEEK"
-          fi
+          THIS_WEEK="$FIRST_MONDAY"
           ONCALL_PERSON=""
           for entry in "${SCHEDULE[@]}"; do
             week_date="${entry%%:*}"
             person="${entry##*:}"
-            if [ "$week_date" == "$THIS_MONDAY" ]; then
+            if [ "$week_date" == "$THIS_WEEK" ]; then
               ONCALL_PERSON="$person"
               break
             fi
           done
           if [ -z "$ONCALL_PERSON" ]; then
-            echo "No on-call person found for this week ($THIS_MONDAY)" >&2
+            echo "No on-call person found for this week ($THIS_WEEK)" >&2
             exit 1
           fi
           SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
@@ -79,8 +69,8 @@ jobs:
           fi
           echo "oncall_person=$ONCALL_PERSON" >> $GITHUB_OUTPUT
           echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
-          echo "week_date=$THIS_MONDAY" >> $GITHUB_OUTPUT
-          echo "Selected on-call person: $ONCALL_PERSON for week of $THIS_MONDAY"
+          echo "week_date=$THIS_WEEK" >> $GITHUB_OUTPUT
+          echo "Selected on-call person: $ONCALL_PERSON for week of $THIS_WEEK"
       - name: Get Slack channel ID
         id: get-channel
         run: |
