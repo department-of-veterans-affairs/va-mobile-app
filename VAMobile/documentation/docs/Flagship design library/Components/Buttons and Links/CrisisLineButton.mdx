@@ -1,0 +1,34 @@
+---
+title: Crisis Line button
+---
+
+import CodeBlock from '@theme/CodeBlock'
+import CrisisLineButtonString from '!!raw-loader!@componentsDocs/CrisisLineButton'
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+
+The Crisis Line button provides users quick access to crisis care.
+
+## Usage
+
+### When to use Crisis Line button
+- Crisis Line button button currently displays on the following screens:
+     - Login
+     - Home
+     - Contact VA
+     - Category screens, including Benefits, Health, and Payments
+- We don't include it on all screens to prevent banner fatigue / semantic satiation.
+- It should be considered on screens where there is a likelihood the Veteran is there because they're in crisis.
+- If the button is the only number on the page, it's possible it will be used as a general call center line.
+
+### Behavior
+- When the component is tapped, it opens a full panel with more information.
+
+### Placement
+- Component should appear near the top of the screen, directly below the top navigation bar.
+
+## Code usage
+
+export const exampleString = ` <CrisisLineButton />`
+
+<ComponentTopInfo componentName="CrisisLineButton" example={exampleString} codeString={CrisisLineButtonString} />

@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import TextAreaString from '!!raw-loader!@componentsDocs/TextArea'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<TextArea>
+    <Button 
+    onPress={resetInAppReview} 
+    label={'Reset In-App Review Actions'}  />
+</TextArea>`
+
+
+<ComponentTopInfo componentName="TextArea" example={exampleString} codeString={TextAreaString} />

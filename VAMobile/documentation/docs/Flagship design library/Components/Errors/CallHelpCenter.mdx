@@ -1,0 +1,13 @@
+import CodeBlock from '@theme/CodeBlock'
+import CallHelpCenterString from '!!raw-loader!@componentsDocs/CommonErrorComponents/CallHelpCenter'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<CallHelpCenter
+    titleText={t('profile:disabilityRating.errorTitle')}
+    titleA11yHint={t('profile:disabilityRating.errorTitleA11y')}
+    callPhone={t('profile:disabilityRating.errorPhoneNumber')}
+/>`
+
+
+<ComponentTopInfo componentName="CallHelpCenter" example={exampleString} codeString={CallHelpCenterString} />

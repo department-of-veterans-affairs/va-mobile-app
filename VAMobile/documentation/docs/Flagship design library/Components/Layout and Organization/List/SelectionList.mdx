@@ -1,0 +1,10 @@
+import CodeBlock from '@theme/CodeBlock'
+import SelectionListString from '!!raw-loader!@componentsDocs/SelectionList'
+
+import ComponentTopInfo from '../../../../../src/components/ComponentInfo'
+
+export const exampleString = `const listItems = [{ content: <TextView>my display content</TextView>}, { content: <TextView>my display content 2</TextView>}]
+<SelectionList items={listItems} />`
+
+
+<ComponentTopInfo componentName="SelectionList" example={exampleString} codeString={SelectionListString} />

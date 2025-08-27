@@ -1,0 +1,11 @@
+import CodeBlock from '@theme/CodeBlock'
+import CollapsibleViewString from '!!raw-loader!@componentsDocs/CollapsibleView'
+
+import ComponentTopInfo from '../../../../src/components/ComponentInfo'
+
+export const exampleString = `<CollapsibleView text={'title of dropdown'}> 
+    <TextView>expanded content revealed on click</TextView> 
+</CollapsibleView>`
+
+
+<ComponentTopInfo componentName="CollapsibleView" example={exampleString} codeString={CollapsibleViewString} />
