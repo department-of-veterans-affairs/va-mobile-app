@@ -1,5 +1,65 @@
 [
   {
+    "title": "v2.58.0",
+    "due_on": "2025-09-09T07:00:00Z",
+    "issues": [
+      {
+        "title": "Adding Feature Flag Toggle for Overpay Copay",
+        "number": 11534,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11534",
+        "isPR": true
+      },
+      {
+        "title": "Temporarily remove Freetext feedback screens from surveys",
+        "number": 11516,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11516",
+        "isPR": false
+      },
+      {
+        "title": "Add toggle for SM OH (cerner) alert",
+        "number": 11478,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11478",
+        "isPR": true
+      },
+      {
+        "title": "Update GMT timezones to use friendly abbreviations",
+        "number": 11454,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11454",
+        "isPR": true
+      },
+      {
+        "title": "BUG - LOW - All - duplicates in recent and all recipients for secure messaging",
+        "number": 11440,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11440",
+        "isPR": false
+      },
+      {
+        "title": "11435 hide care system selection",
+        "number": 11436,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11436",
+        "isPR": true
+      },
+      {
+        "title": "Update Demo Mode to enable multiple fake user states",
+        "number": 11268,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11268",
+        "isPR": false
+      },
+      {
+        "title": "Display Only Valid Feature Toggles On Remote Config Panel",
+        "number": 11167,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11167",
+        "isPR": false
+      },
+      {
+        "title": "CU - Combine useDestructiveActionSheet and useShowActionSheet",
+        "number": 6269,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/6269",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.57.0",
     "due_on": "2025-08-26T07:00:00Z",
     "issues": [
