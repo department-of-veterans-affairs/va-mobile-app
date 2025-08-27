@@ -25,17 +25,7 @@ type PastAppointmentsOldProps = {
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
-  setTimeFrame: React.Dispatch<
-    React.SetStateAction<
-      | 'upcoming'
-      | 'pastThreeMonths'
-      | 'pastFiveToThreeMonths'
-      | 'pastEightToSixMonths'
-      | 'pastElevenToNineMonths'
-      | 'pastAllCurrentYear'
-      | 'pastAllLastYear'
-    >
-  >
+  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
 }
 

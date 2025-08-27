@@ -8,6 +8,7 @@ import { DateTime } from 'luxon'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
@@ -30,6 +31,7 @@ type PastAppointmentsProps = {
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
+  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
 }
 
@@ -40,6 +42,7 @@ function PastAppointments({
   page,
   setPage,
   setDateRange,
+  setTimeFrame,
   scrollViewRef,
 }: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -61,13 +64,16 @@ function PastAppointments({
   }
   const { perPage, totalEntries } = pagination
 
-  const filteredAppointments = useMemo(
-    () =>
-      datePickerRange.endDate.valueOf() === DateTime.local().endOf('day').valueOf()
-        ? filterAppointments(appointmentsData?.data || [], true)
-        : appointmentsData?.data,
-    [appointmentsData?.data, datePickerRange],
-  )
+  const filteredAppointments = useMemo(() => {
+    const appointmentsToFilter = appointmentsData?.data.filter((appointment) => {
+      const apptTime = DateTime.fromISO(appointment.attributes.startDateLocal)
+      return apptTime >= datePickerRange.startDate && apptTime <= datePickerRange.endDate
+    })
+
+    if (datePickerRange.endDate.valueOf() === DateTime.local().endOf('day').valueOf())
+      return filterAppointments(appointmentsToFilter || [], true)
+    return appointmentsToFilter
+  }, [appointmentsData?.data, datePickerRange])
 
   const appointmentsToShow = useMemo(
     () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
@@ -78,16 +84,33 @@ function PastAppointments({
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
+  const calcTimeFrame = (selectedDateRange: DatePickerRange) => {
+    const todaysDate = DateTime.local().startOf('day')
+    const dateDiff = todaysDate.diff(selectedDateRange.startDate, 'months').months
+
+    // TODO: REMOVE
+    console.log(dateDiff)
+
+    if (dateDiff <= 3) return TimeFrameTypeConstants.PAST_THREE_MONTHS
+    else if (dateDiff <= 6) return TimeFrameTypeConstants.PAST_SIX_MONTHS
+    else if (dateDiff <= 9) return TimeFrameTypeConstants.PAST_NINE_MONTHS
+    else if (dateDiff <= 12) return TimeFrameTypeConstants.PAST_ONE_YEAR
+    else return TimeFrameTypeConstants.PAST_TWO_YEARS
+  }
+
   const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
     const startDate = selectedDateRange.startDate.toISO()
     const endDate = selectedDateRange.endDate.toISO()
     if (startDate && endDate) {
+      const timeFrame = calcTimeFrame(selectedDateRange)
+      setTimeFrame(timeFrame)
       setDateRange({ startDate, endDate })
       setPage(1)
     }
   }
 
   const handleDatePickerReset = () => {
+    setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
     setDateRange(getPastAppointmentDateRange())
     setPage(1)
   }
