@@ -216,9 +216,11 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     setTo(undefined)
   }
 
-  if (careSystems.length === 1 && careSystem === '') {
-    handleSetCareSystem(careSystems[0].value)
-  }
+  useEffect(() => {
+    if (careSystems.length === 1) {
+      handleSetCareSystem(careSystems[0].value)
+    }
+  }, [hasLoadedRecipients])
 
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
     return getRecentRecipients(folderMessagesData?.data || [])

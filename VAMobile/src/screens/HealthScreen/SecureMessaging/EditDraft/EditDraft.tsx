@@ -392,10 +392,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     setTo(undefined)
   }
 
-  if (careSystems.length === 1 && careSystem === '') {
-    handleSetCareSystem(careSystems[0].value)
-  }
-
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
