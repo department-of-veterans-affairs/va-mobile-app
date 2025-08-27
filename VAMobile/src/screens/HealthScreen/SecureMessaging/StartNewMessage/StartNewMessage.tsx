@@ -220,7 +220,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     if (careSystems.length === 1) {
       handleSetCareSystem(careSystems[0].value)
     }
-  }, [hasLoadedRecipients])
+  }, [hasLoadedRecipients, careSystems])
 
   const recentRecipients: Array<RecentRecipient> = useMemo(() => {
     return getRecentRecipients(folderMessagesData?.data || [])
