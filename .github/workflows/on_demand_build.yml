@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
-      lane: release
+      lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
@@ -48,7 +48,7 @@ jobs:
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
-      lane: release
+      lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
