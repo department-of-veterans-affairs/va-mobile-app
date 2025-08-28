@@ -1,4 +1,6 @@
-## QA Builds
+---
+title: QA builds
+---
 
 ### Daily Builds
 

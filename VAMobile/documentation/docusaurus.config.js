@@ -185,8 +185,8 @@ const config = {
             activeBaseRegex: `/development/`,
           },
           {
-            to: '/communityAndSupport/RequestingFeatures', // ./development/Intro.md
-            label: 'Community and Support',
+            to: '/communityAndSupport/Intro', // ./development/Intro.md
+            label: 'Community and support',
             position: 'left',
             activeBaseRegex: `/communityAndSupport/`,
           },
@@ -224,8 +224,8 @@ const config = {
                 to: '/development/Intro',
               },
               {
-                label: 'Community and Support',
-                to: '/communityAndSupport/RequestingFeatures',
+                label: 'Community and support',
+                to: '/communityAndSupport/Intro',
               },
               {
                 label: 'Documentation',

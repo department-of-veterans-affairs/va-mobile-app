@@ -5,7 +5,7 @@ sidebar_label: Build and Release Workflows
 
 # Build and Release Workflows
 
-This section contains all of the workflows that are related to our packaging our apps and automating our [Release Process](/docs/Operations/Releases/release-process). Use the sidebar to the right to jump directly to workflows.
+This section contains all of the workflows that are related to our packaging our apps and automating our [Release Process](../../../../gettingStarted/Releases/release-process). Use the sidebar to the right to jump directly to workflows.
 
 Each workflows has descriptions, triggers, and input/output parameters if applicable. See the [GitHub Actions Documentation](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows) for more details about [triggers](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow) and [input/output parameters](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#defining-inputs-outputs-and-secrets-for-reusable-workflows).
 
@@ -167,7 +167,7 @@ Creates a Slack thread in the channel and updates the thread with the results of
 
 #### Triggers
 
-Tags matching the regular expression `/^RC-v.d+.d+.d+$/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
+Tags matching the regular expression `/^RC-v.d+.d+.d+$/`. Our [`release_branch.sh`](../Scripts#release_branchsh) script creates this tag at the end of every sprint.
 
 ```yaml
 on:
@@ -190,7 +190,7 @@ Creates a Slack thread in the channel and updates the thread with the results of
 
 #### Triggers
 
-Tags matching the regular expression `/^vd+.d+.d+/`. Our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script creates this tag at the end of every sprint.
+Tags matching the regular expression `/^vd+.d+.d+/`. Our [`release_branch.sh`](../Scripts#release_branchsh) script creates this tag at the end of every sprint.
 
 ```yaml
 on:
@@ -219,7 +219,7 @@ Runs every Tuesday at 1400 UTC on only the main branch
 
 ## Release Workflows
 
-These workflows are related to are release process which occurs every 2 weeks. Check the [Release Process](/docs/Operations/Releases/release-process) for a high-level overview.
+These workflows are related to are release process which occurs every 2 weeks. Check the [Release Process](../../../../gettingStarted/Releases/release-process) for a high-level overview.
 
 ### New Release Branch (`new_release_branch`)
 
@@ -227,7 +227,7 @@ These workflows are related to are release process which occurs every 2 weeks. C
 
 #### Description
 
-Runs our [`release_branch.sh`](/docs/Engineering/DevOps/AutomationCodeDocs/Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
+Runs our [`release_branch.sh`](../Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
 
 #### Trigger
 

@@ -1,5 +1,5 @@
 ---
-title: Design Librarian
+title: Governance
 sidebar_position: 4
 ---
 

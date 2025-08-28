@@ -25,7 +25,7 @@ Since there is no specific guidance within WCAG for mobile app teams to follow, 
         * Previously, the WAI (Web Accessibility Initiative) had said that they would remain web-focused since the “W” stands for “web”.
     * WCAG 3 says: “The goal of WCAG 3 and supporting documents is to make digital products including web, ePub, PDF, applications, mobile apps, and other emerging technologies more accessible and usable to people with disabilities.”
 
-# Beyond WCAG: Additional MCAG Guidance
+## Beyond WCAG: Additional MCAG Guidance
 
 Although MCAG is based on the success criteria outlined in [WCAG 2.2](https://www.w3.org/TR/WCAG22/), there are many of these guidelines that they have expanded upon to be more inclusive of native mobile apps. The list below includes much of this additional guidance that should be considered when working in the VA: Health and Benefits app.
 
