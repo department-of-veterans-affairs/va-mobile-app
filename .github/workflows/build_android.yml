@@ -1,6 +1,6 @@
 # Reusable workflow that sets up environment, installs depdendencies, and
 # runs Android fastlane using provided inputs
-name: "[Build] Reusable Android Workflow"
+name: '[Build] Reusable Android Workflow'
 
 on:
   workflow_call:
@@ -19,22 +19,22 @@ on:
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
         type: string
-        default: ""
+        default: ''
       # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
-        default: ""
+        default: ''
       # The branch or tag that we want to build from.  Defaults to the branch/tag that triggered
       # the automation, otherwise uses develop
       ref:
         type: string
-        default: ""
+        default: ''
       # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
         type: string
-        default: ""
+        default: ''
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in Google Play Console
       version:
@@ -83,11 +83,11 @@ jobs:
             fi
             exit 1
           fi
-          if [[ ( "$LANE" == "release" || "$LANE" == "review" ) ]]; then
-            echo "environment=production" >> $GITHUB_ENV
-          else
-            echo "environment=$ENVIRONMENT" >> $GITHUB_ENV
-          fi
+          # if [[ ( "$LANE" == "release" || "$LANE" == "review" ) ]]; then
+          #   echo "environment=production" >> $GITHUB_ENV
+          # else
+          #   echo "environment=$ENVIRONMENT" >> $GITHUB_ENV
+          # fi
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -110,19 +110,19 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: "microsoft"
+          distribution: 'microsoft'
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: '3.1'
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: 'VAMobile/yarn.lock'
       - name: Install npm dependencies
         uses: nick-fields/retry@v2
         with:
@@ -130,19 +130,20 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - name: Set app environment variables
-        run: yarn env:${{ inputs.environment }}
-      - name: Bundle app
-        run: yarn bundle:android
-      - name: Update fastlane
-        run: |
-          bundle update fastlane
-          bundle exec fastlane update_plugins
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Run fastlane with retries
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 20
-          max_attempts: 3
-          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+        run: echo "Environment ${{ inputs.environment }} Lane ${{ inputs.lane }}"
+      #   run: yarn env:${{ inputs.environment }}
+      # - name: Bundle app
+      #   run: yarn bundle:android
+      # - name: Update fastlane
+      #   run: |
+      #     bundle update fastlane
+      #     bundle exec fastlane update_plugins
+      # - name: Set SLACK_THREAD_TS environment variable
+      #   if: inputs.slack_thread_ts
+      #   run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # - name: Run fastlane with retries
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_minutes: 20
+      #     max_attempts: 3
+      #     command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
