@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
-      lane: on_demand
+      lane: review
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
@@ -48,8 +48,9 @@ jobs:
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
-      lane: on_demand
+      lane: review
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ inputs.notes }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+
