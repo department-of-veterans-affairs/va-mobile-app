@@ -20,6 +20,7 @@ import {
   getDatePickerRange,
   getGroupedAppointments,
   getPastAppointmentDateRange,
+  getPastTimeFrame,
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -54,16 +55,10 @@ function PastAppointments({
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
-  const filteredAppointments = useMemo(() => {
-    const appointmentsToFilter = appointmentsData?.data.filter((appointment) => {
-      const apptTime = DateTime.fromISO(appointment.attributes.startDateLocal)
-      return apptTime >= datePickerRange.startDate && apptTime <= datePickerRange.endDate
-    })
-
-    if (datePickerRange.endDate.valueOf() === DateTime.local().endOf('day').valueOf())
-      return filterAppointments(appointmentsToFilter || [], true)
-    return appointmentsToFilter
-  }, [appointmentsData?.data, datePickerRange])
+  const filteredAppointments = useMemo(
+    () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
+    [appointmentsData?.data, datePickerRange],
+  )
 
   const pagination = {
     currentPage: page,
@@ -81,26 +76,11 @@ function PastAppointments({
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  const calcTimeFrame = (selectedDateRange: DatePickerRange) => {
-    const todaysDate = DateTime.local().startOf('day')
-    const dateDiff = todaysDate.diff(selectedDateRange.startDate, 'months').months
-
-    // TODO: REMOVE
-    console.log(dateDiff)
-
-    if (dateDiff <= 3) return TimeFrameTypeConstants.PAST_THREE_MONTHS
-    else if (dateDiff <= 6) return TimeFrameTypeConstants.PAST_SIX_MONTHS
-    else if (dateDiff <= 9) return TimeFrameTypeConstants.PAST_NINE_MONTHS
-    else if (dateDiff <= 12) return TimeFrameTypeConstants.PAST_ONE_YEAR
-    else return TimeFrameTypeConstants.PAST_TWO_YEARS
-  }
-
   const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
     const startDate = selectedDateRange.startDate.toISO()
     const endDate = selectedDateRange.endDate.toISO()
     if (startDate && endDate) {
-      const timeFrame = calcTimeFrame(selectedDateRange)
-      setTimeFrame(timeFrame)
+      setTimeFrame(getPastTimeFrame(selectedDateRange))
       setDateRange({ startDate, endDate })
       setPage(1)
     }
