@@ -1,6 +1,6 @@
 import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, ViewStyle, requireNativeComponent } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
@@ -18,6 +18,14 @@ import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+
+interface MaterialDatePickerProps {
+  style?: ViewStyle
+  // Optional: any events you want to expose
+  onDateChange?: (event: { nativeEvent: { timestamp: number } }) => void
+}
+
+const MaterialDatePicker = requireNativeComponent<MaterialDatePickerProps>('MaterialDatePicker')
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -247,6 +255,15 @@ function PastAppointments({
           cancelTestID="pastApptsDateRangeCancelID"
         />
       </Box>
+      <MaterialDatePicker
+        style={{
+          width: 350,
+          height: 500,
+          margin: 16,
+          borderWidth: 1,
+          borderColor: 'gray',
+        }}
+      />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics

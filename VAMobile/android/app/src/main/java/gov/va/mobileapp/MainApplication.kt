@@ -22,6 +22,7 @@ import com.wix.reactnativenotifications.core.JsIOHelper
 import com.wix.reactnativenotifications.core.notification.INotificationsApplication
 import com.wix.reactnativenotifications.core.notification.IPushNotification
 import gov.va.mobileapp.native_modules.CustomTabsIntentManager
+import gov.va.mobileapp.native_modules.DatePickerPackage
 import gov.va.mobileapp.native_modules.DeviceDataPackage
 import gov.va.mobileapp.native_modules.RNCalendarPackage
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage
@@ -41,6 +42,7 @@ class MainApplication : Application(), ReactApplication, INotificationsApplicati
                     add(DeviceDataPackage())
                     add(RNCalendarPackage())
                     add(RNCheckVoiceOverPackage())
+                    add(DatePickerPackage())
                     add(RNNotificationPrefsPackage())
                     add(RNSecureRandomPackage())
                     add(RNReviewPackage())
