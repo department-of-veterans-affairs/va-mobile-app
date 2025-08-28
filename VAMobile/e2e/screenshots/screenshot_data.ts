@@ -17,7 +17,7 @@ export const screenshotData: ScreenshotData[] = [
     },
     description: ['Complete health care and', 'benefits transactions'],
     deviceType: ['ios', 'android', 'ipad'],
-    setupFunction: ['goHome', 'skipUpdate'],
+    setupFunction: ['goHome', 'disableAF', 'skipUpdate', 'demoUser'],
   },
   {
     testId: 'HealthScreen',
@@ -28,7 +28,7 @@ export const screenshotData: ScreenshotData[] = [
     },
     description: 'Access health care tools',
     deviceType: ['ios', 'android', 'ipad'],
-    setupFunction: 'healthScreen',
+    setupFunction: ['goHome', 'healthScreen'],
   },
   {
     testId: 'AppointmentDetails',

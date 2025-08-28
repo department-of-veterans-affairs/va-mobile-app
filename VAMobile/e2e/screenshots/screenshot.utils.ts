@@ -3,15 +3,18 @@ import { by, element, expect, waitFor } from 'detox'
 import {
   CommonE2eIdConstants,
   disableAF,
+  loginToDemoMode,
   openAppointments,
   openBenefits,
   openClaims,
   openClaimsHistory,
+  openDeveloperScreen,
   openHealth,
   openMessages,
   openPayments,
   openPrescriptions,
   openProfile,
+  openSettings,
   openVAPaymentHistory,
 } from '../tests/utils'
 
@@ -25,6 +28,9 @@ export const claimsId = {
 const utils = {
   goHome: async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
+  },
+
+  disableAF: async () => {
     await disableAF(undefined, 'WG_Home', undefined, undefined, 'skipAppInstall')
   },
 
@@ -32,6 +38,20 @@ const utils = {
     try {
       await element(by.text('Skip this update')).tap()
     } catch (e) {}
+  },
+
+  demoUser: async () => {
+    await openProfile()
+    await openSettings()
+    await openDeveloperScreen()
+    await waitFor(element(by.text('Kimberly Washington')))
+      .toBeVisible()
+      .whileElement(by.type('UIScrollView'))
+      .scroll(200, 'down')
+    await element(by.text('Kimberly Washington')).tap()
+    await element(by.text('John Monroe')).tap()
+    await element(by.text('Done')).tap()
+    await loginToDemoMode()
   },
 
   healthScreen: async () => {

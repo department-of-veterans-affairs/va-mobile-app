@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --simulator='iPhone 16 Pro Max'",
+    "ios": "react-native run-ios",
     "ipad": "react-native run-ios --simulator='iPad Pro 13-inch (M4)'",
     "start:metro-server": "react-native start --reset-cache",
     "start": "yarn run env:staging && concurrently \"yarn run start:metro-server\" \"yarn run lint:watch\"",
