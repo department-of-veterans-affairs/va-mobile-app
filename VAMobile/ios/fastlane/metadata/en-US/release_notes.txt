@@ -1,6 +1,6 @@
 We updated the app with several improvements to secure messaging, privacy, and usability:
 
-- Added an alert directing Oracle Health users to MHV for now
+- Improved functionality to clearly direct Oracle Health users to health tools
 - Simplified secure messaging with auto-filled care systems and no duplicate recipients
 - Removed in-app survey comments to better protect Veteran privacy
 - Improved timezone display for Asia and Pacific regions
