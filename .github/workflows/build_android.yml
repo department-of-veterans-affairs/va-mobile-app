@@ -83,11 +83,6 @@ jobs:
             fi
             exit 1
           fi
-          # if [[ ( "$LANE" == "release" || "$LANE" == "review" ) ]]; then
-          #   echo "environment=production" >> $GITHUB_ENV
-          # else
-          #   echo "environment=$ENVIRONMENT" >> $GITHUB_ENV
-          # fi
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
