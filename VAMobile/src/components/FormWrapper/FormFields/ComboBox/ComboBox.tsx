@@ -8,6 +8,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { Box, BoxProps, ComboBoxItem, ComboBoxOptions, TextView, VAScrollView } from 'components'
 import { getInputWrapperProps } from 'components/FormWrapper/FormFields/formFieldUtils'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type ComboBoxProps = {
@@ -75,7 +76,8 @@ const ComboBox: FC<ComboBoxProps> = ({
   const closeIconProps: PressableProps = {
     onPress: onClose,
     accessibilityRole: 'button',
-    accessibilityHint: t('close'),
+    accessibilityLabel: t('close'),
+    ...a11yHintProp(t('secureMessaging.startNewMessage.combobox.close')),
   }
 
   const listGroupHeaderStyle: BoxProps = {
@@ -109,7 +111,6 @@ const ComboBox: FC<ComboBoxProps> = ({
     onFocus: () => setIsInputFocused(true),
     onBlur: () => setIsInputFocused(false),
     value: filterStr,
-    autoFocus: true,
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
