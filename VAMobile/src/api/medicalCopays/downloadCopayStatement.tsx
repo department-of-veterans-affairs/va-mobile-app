@@ -22,7 +22,7 @@ const createCopayStatementFileName = (id: string) => `VA-Medical-Copay-Statement
 export const downloadCopayStatement = async (
   id: string,
   fileName?: string,
-  func: () => Promise<void> = async () => {},
+  onPreviewDismiss: () => Promise<void> = async () => {},
 ): Promise<boolean | undefined> => {
   const escapedId = encodeURI(id)
   const url = `${API_ROOT}/v0/medical_copays/download/${escapedId}`
@@ -34,7 +34,7 @@ export const downloadCopayStatement = async (
     : await downloadFile('GET', url, localName, undefined, 3)
 
   if (filePath) {
-    await FileViewer.open(filePath, { onDismiss: () => func() })
+    await FileViewer.open(filePath, { onDismiss: () => onPreviewDismiss() })
     return true
   }
 }
