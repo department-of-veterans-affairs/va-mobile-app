@@ -326,7 +326,7 @@ jobs:
     name: Commit Screenshots
     runs-on: ubuntu-latest
     needs: [combine-and-frame-images]
-    # if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: VAMobile
@@ -341,16 +341,6 @@ jobs:
         with:
           name: 'app-store-images-framed'
           path: framed_images
-
-      # - name: Move framed images
-      #   run: |
-      #     mkdir -p ios/fastlane/screenshots/en-US/
-      #     mkdir -p ios/fastlane/screenshots_ipad/en-US/
-      #     mkdir -p android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-      #     shopt -s dotglob
-      #     mv ../framed_images/ios/* ios/fastlane/screenshots/en-US/
-      #     mv ../framed_images/ipad/* ios/fastlane/screenshots_ipad/en-US/
-      #     mv ../framed_images/android/* android/fastlane/metadata/android/en-US/images/phoneScreenshots/
 
       - name: Commit and push screenshots
         run: |
