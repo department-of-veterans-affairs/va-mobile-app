@@ -67,7 +67,7 @@ env:
 
 jobs:
   build_android:
-    runs-on: ubuntu-latest-4-cores
+    runs-on: ubuntu-latest
     steps:
       - name: Validate lane/environment combination and set environment variable
         working-directory: .
