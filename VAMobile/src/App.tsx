@@ -84,7 +84,7 @@ const { ENVIRONMENT, IS_TEST } = getEnv()
 enableScreens(true)
 injectStore(store)
 
-if (__DEV__) {
+if (__DEV__ || ENVIRONMENT === EnvironmentTypesConstants.Staging) {
   require('../ReactotronConfig')
 }
 

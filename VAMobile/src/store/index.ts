@@ -22,7 +22,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',
   enhancers: (getDefaultEnhancers) => {
-    const reactotronEnhancer = process.env.NODE_ENV !== 'production' ? [reactotron.createEnhancer!()] : []
+    // Add enhancer if env is not production
+    const reactotronEnhancer = process.env.NODE_ENV !== 'production' ? [reactotron.createEnhancer()] : []
     return getDefaultEnhancers().concat(reactotronEnhancer)
   },
 })
