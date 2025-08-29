@@ -3774,6 +3774,126 @@
           }
         },
         {
+          "id": "90",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 42 days}}",
+            "startDateUtc": "{{now + 42 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "Mock Cerner appointment - New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "isCerner": true
+          }
+        },
+        {
+          "id": "91",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 42 days}}",
+            "startDateUtc": "{{now + 42 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "Mock Non-Cerner appointment - New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 42 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "isCerner": false
+          }
+        },
+        {
           "id": "7a48912a6d02b0fc016d20b4ccb9001a2",
           "type": "appointment",
           "attributes": {
@@ -3918,6 +4038,66 @@
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
+        },
+        {
+          "id": "9a48e8db6d70a38a016d72b354240002",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "12",
+            "comment": null,
+            "healthcareProvider": "Jane Smith",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now + 26 days}}",
+            "startDateUtc": "{{now + 26 days utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": ["Morning"],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+          }
         }
       ],
       "meta": {
@@ -3925,8 +4105,8 @@
         "pagination": {
           "currentPage": 1,
           "perPage": 10,
-          "totalPages": 4,
-          "totalEntries": 36
+          "totalPages": 5,
+          "totalEntries": 41
         },
         "upcomingAppointmentsCount": 6,
         "upcomingDaysLimit": 30
