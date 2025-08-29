@@ -1,5 +1,5 @@
 ---
-title: Quality Assurance
+title: Quality assurance
 ---
 # How we work
 

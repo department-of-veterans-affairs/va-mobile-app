@@ -1,5 +1,5 @@
 ---
-title: Staging Instances
+title: Staging instances
 ---
 
 ## API Calls

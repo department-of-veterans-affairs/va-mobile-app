@@ -1,8 +1,8 @@
 ---
 sidebar_position: 4
-label: Code Quality Workflows
+label: Code quality workflows
 ---
-# Code Quality Workflows
+# Code quality workflows
 These workflows perform quality checks on our code to help prevent bugs or scan our code to keep them up to date or prevent vulnerabilities.
 
 ## Code Checks (`code_checks`)

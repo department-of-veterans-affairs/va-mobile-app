@@ -1,5 +1,5 @@
 ---
-title: Signing Keys
+title: Signing keys
 ---
 
 High level overview of keys you may encounter, what they do, where they are used, and where they can be regenerated if needed.

@@ -1,4 +1,4 @@
-# Apple Signing Keys
+# Apple signing keys
 
 ## Overview
 

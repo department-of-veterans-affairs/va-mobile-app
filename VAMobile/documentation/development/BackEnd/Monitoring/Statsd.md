@@ -1,5 +1,5 @@
 ---
-title: Statsd Metrics
+title: Statsd metrics
 ---
 
 You can create custom Mobile metrics within Vets API by adding new statsd entries to `modules/mobile/config/initializers/statsd.rb`.

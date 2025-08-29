@@ -1,5 +1,5 @@
 ---
-title: API Tokens
+title: API tokens
 ---
 
 ## Authorization and token types

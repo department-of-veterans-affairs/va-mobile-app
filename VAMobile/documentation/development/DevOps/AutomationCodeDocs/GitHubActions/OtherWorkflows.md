@@ -1,8 +1,8 @@
 ---
 sidebar_position: 5
-sidebar_label: Other Workflows
+sidebar_label: Other workflows
 ---
-# Other Workflows
+# Other workflows
 
 This is a list of all the reusable workflows in GitHub Actions and what they do.
 

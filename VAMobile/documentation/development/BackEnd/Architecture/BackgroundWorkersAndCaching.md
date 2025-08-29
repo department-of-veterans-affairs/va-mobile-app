@@ -1,5 +1,5 @@
 ---
-title: Background Workers and Caching
+title: Background workers and caching
 ---
 
 ## Background Workers

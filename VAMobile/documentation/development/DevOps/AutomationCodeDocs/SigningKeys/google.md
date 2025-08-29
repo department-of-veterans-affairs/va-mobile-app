@@ -1,4 +1,4 @@
-# Google Signing Keys 
+# Google signing keys 
 
 ## Overview
 Google .aab files are signed with an upload key and signed by Google's app signing process after upload and before distribution. 

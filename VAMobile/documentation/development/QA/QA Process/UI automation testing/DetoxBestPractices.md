@@ -1,9 +1,9 @@
 ---
-title: Detox Best Practices
+title: Detox best practices
 sidebar_position: 2
 ---
 
-# Detox Best Practices
+# Detox best practices
 
 This is a set of best practices around creating and maintaining the detox tests.
 

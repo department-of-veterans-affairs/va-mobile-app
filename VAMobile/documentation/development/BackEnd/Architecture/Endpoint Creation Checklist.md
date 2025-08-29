@@ -1,5 +1,5 @@
 ---
-title: Endpoint Creation Checklist
+title: Endpoint creation checklist
 ---
 
 ## Checklist for creating new endpoints

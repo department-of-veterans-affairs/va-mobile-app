@@ -1,9 +1,9 @@
 ---
 sidebar_position: 2
-sidebar_label: Build and Release Workflows
+sidebar_label: Build and release workflows
 ---
 
-# Build and Release Workflows
+# Build and release workflows
 
 This section contains all of the workflows that are related to our packaging our apps and automating our [Release Process](../../../../gettingStarted/Releases/release-process). Use the sidebar to the right to jump directly to workflows.
 

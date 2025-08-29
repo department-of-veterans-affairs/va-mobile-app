@@ -1,5 +1,5 @@
 ---
-title: Record Filtering
+title: Record filtering
 ---
 
 ## Overview

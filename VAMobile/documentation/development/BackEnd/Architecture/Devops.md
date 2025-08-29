@@ -1,5 +1,5 @@
 ---
-title: Environment Variables, Secrets, and the Parameter Store
+title: Environment variables, secrets, and the parameter store
 ---
 
 When storing sensitive information that cannot be publicly exposed, it must be stored in AWS and referenced in a specific manner.

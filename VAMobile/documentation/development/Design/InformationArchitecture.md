@@ -1,5 +1,5 @@
 ---
-title: Information Architecture
+title: Information architecture
 sidebar_position: 2
 ---
 

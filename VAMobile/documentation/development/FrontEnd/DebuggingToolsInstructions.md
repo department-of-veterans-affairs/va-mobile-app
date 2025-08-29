@@ -1,5 +1,5 @@
 ---
-title: Debugging Tools 
+title: Debugging tools 
 ---
 
 # Debugging Instructions 

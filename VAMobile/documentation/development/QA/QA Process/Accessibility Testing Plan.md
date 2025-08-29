@@ -1,8 +1,8 @@
 ---
-title: Accessibility Testing Plan
+title: Accessibility testing plan
 ---
 
-# Accessibility Testing Plan
+# Accessibility testing plan
 
 The VA.gov mobile app development team considers accessibility to be a priority requirement in the design and implementation of the app. The purpose of this document is to outline:
 1. The requirements that will guide the the VA.gov Mobile App build

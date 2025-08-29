@@ -1,5 +1,5 @@
 ---
-title: Remote Config
+title: Remote config
 ---
 
 Remote Configuration (Feature Flipper/Toggles)

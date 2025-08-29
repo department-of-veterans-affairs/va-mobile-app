@@ -1,5 +1,5 @@
 ---
-title: Parallel Calls
+title: Parallel calls
 ---
 
 The mobile API often needs to make requests to external services to fetch data to return to the client. In some cases, a single request from the client can require data from multiple external services. This can cause those requests to be slow and creates a bad user experience.

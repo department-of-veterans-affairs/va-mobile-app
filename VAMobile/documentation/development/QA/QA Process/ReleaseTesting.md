@@ -1,4 +1,4 @@
-# Release Testing
+# Release testing
 
 The purpose of release testing is to catch critical bugs before releasing new versions of the mobile app to the App and Play stores, by running the [Release Candidate (RC) regression script](https://dsvavsp.testrail.io/index.php?/suites/view/92&group_by=cases:section_id&group_order=desc&display_deleted_cases=0&group_id=1523) (and then, of course, deciding whether to fix bugs before release!). 
 

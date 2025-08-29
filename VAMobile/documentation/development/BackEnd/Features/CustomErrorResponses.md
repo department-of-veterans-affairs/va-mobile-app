@@ -1,5 +1,5 @@
 ---
-title: Custom Error Responses
+title: Custom error responses
 ---
 
 ## How it works

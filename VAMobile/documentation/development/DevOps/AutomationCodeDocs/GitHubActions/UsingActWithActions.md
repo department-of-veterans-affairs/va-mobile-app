@@ -1,6 +1,6 @@
 ---
 sidebar_position: 7
-sidebar_label: Using Act with Actions
+sidebar_label: Using act with actions
 ---
 
 # Using Act with Github actions

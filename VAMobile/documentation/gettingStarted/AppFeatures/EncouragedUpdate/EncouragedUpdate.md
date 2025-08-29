@@ -1,5 +1,5 @@
 ---
-title: Encouraged Update
+title: Encouraged update
 ---
 
 ## Feature Summary

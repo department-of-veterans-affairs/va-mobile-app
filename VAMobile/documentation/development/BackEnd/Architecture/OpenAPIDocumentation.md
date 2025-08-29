@@ -1,4 +1,4 @@
-# OpenAPI Documentation
+# OpenAPI documentation
 
 ## OpenAPI Creation and Artifact Generation
 

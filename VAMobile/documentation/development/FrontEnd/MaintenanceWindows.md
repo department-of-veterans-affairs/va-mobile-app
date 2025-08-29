@@ -1,5 +1,5 @@
 ---
-title: Maintenance Windows
+title: Maintenance windows
 ---
 
 # Downtime Messages

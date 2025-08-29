@@ -1,5 +1,5 @@
 ---
-title: UI Automation Testing
+title: UI automation testing
 sidebar_position: 1
 ---
 

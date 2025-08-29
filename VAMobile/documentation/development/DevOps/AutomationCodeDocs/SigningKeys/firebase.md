@@ -1,4 +1,4 @@
-# Firebase Signing Keys
+# Firebase signing keys
 
 ## Overview
 In order to use any of the Firebase plugins in our application we need to include the correct configuration keys in the build. 

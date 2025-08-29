@@ -1,5 +1,5 @@
 ---
-title: UX Resources
+title: UX resources
 sidebar_position: 6
 ---
 

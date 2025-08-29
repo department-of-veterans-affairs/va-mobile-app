@@ -1,5 +1,5 @@
 ---
-title: Availability Framework
+title: Availability framework
 ---
 
 ## Feature Summary

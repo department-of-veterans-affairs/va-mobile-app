@@ -1,5 +1,5 @@
 ---
-title: Schema Contract Testing
+title: Schema contract testing
 ---
 
 ## Background

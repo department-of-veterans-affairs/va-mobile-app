@@ -1,5 +1,5 @@
 ---
-title: Review Instances
+title: Review instances
 ---
 
 Our Github workflow creates a review instance based on your branch once a PR passes all its checks. You find the URLs for the website and API, as well as the instance name, when expanding the 'Show environments'  link within the 'This branch was successfully deployed' section of the PR.

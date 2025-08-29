@@ -1,5 +1,5 @@
 ---
-title: On-Call Procedure
+title: On-Call procedure
 ---
 
 This section outlines the steps to take should an alert occur while it's your turn to be on call. There are two sources of alerts: AlertManager and Firebase. Firebase alerts originate from the app. AlertManager alerts originating from Datadog, these alerts are caused by errors or latency from the back-end API.

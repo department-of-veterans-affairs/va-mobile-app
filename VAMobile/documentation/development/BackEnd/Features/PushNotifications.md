@@ -1,5 +1,5 @@
 ---
-title: Push Notifications
+title: Push notifications
 ---
 
 ## Architectural Overview

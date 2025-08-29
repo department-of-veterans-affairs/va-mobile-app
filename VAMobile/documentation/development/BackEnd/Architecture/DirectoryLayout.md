@@ -1,5 +1,5 @@
 ---
-title: Directory Layout
+title: Directory layout
 ---
 
 The backend code is located in the [vets-api](https://github.com/department-of-veterans-affairs/vets-api]) repo. The

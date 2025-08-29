@@ -1,4 +1,4 @@
-# Single Sign-On
+# Single sign-on
 
 Single sign-on (SSO) allows users to access the VA.gov website within the mobile app without having to manually authenticate in the browser.
 

@@ -1,5 +1,5 @@
 ---
-title: Native Mobile App Resources
+title: Native mobile app resources
 ---
 
 # Native Mobile App Accessibility Resources

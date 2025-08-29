@@ -1,5 +1,5 @@
 ---
-title: Feature Flagging
+title: Feature flagging
 ---
 
 ## Flipper

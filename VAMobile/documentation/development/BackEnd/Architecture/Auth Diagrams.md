@@ -1,5 +1,5 @@
 ---
-title: Authentication Diagrams
+title: Authentication diagrams
 ---
 
 ## Username and Password Authorization Flow

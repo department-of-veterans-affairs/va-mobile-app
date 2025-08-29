@@ -1,5 +1,5 @@
 ---
-title: Continuous Integration and Deployment
+title: Continuous integration and deployment
 ---
 
 ## Production Deployment

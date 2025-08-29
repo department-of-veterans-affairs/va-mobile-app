@@ -1,5 +1,5 @@
 ---
-title: Accessible Research Session Help
+title: Accessible research session help
 ---
 
 # Helpful tips for running an accessible research session
