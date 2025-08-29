@@ -110,7 +110,7 @@ jobs:
             yarn run lint:changed:ci; 
           fi
   test:
-    runs-on: ubuntu-latest-4-cores
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
@@ -132,7 +132,7 @@ jobs:
         # This should match the numbers of items in the matrix chunk array above
         run: bash ${GITHUB_WORKSPACE}/.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 5
   bundle_android:
-    runs-on: ubuntu-latest-4-cores
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
