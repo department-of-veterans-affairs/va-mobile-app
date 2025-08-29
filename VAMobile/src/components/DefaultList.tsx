@@ -33,6 +33,7 @@ const DefaultList: FC<DefaultListProps> = ({
   rightTitleTextA11yLabel,
   rightTitleText,
   selectable,
+  alertContent,
 }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
@@ -52,6 +53,7 @@ const DefaultList: FC<DefaultListProps> = ({
       titleA11yLabel={titleA11yLabel}
       rightTitleText={rightTitleText}
       rightTitleTextA11yLabel={rightTitleTextA11yLabel}
+      alertContent={alertContent}
     />
   )
 }

@@ -9,12 +9,14 @@ export type SettingsState = {
   haptics: boolean
   loadingRemoteConfig: boolean
   remoteConfigActivated: boolean
+  displayEmailConfirmationAlert: boolean
 }
 
 export const initialSettingsState: SettingsState = {
   haptics: false,
   loadingRemoteConfig: false,
   remoteConfigActivated: false,
+  displayEmailConfirmationAlert: false,
 }
 
 const STORAGE_HAPTICS_KEY = '@store_settings_haptics'
@@ -52,6 +54,12 @@ export const fetchAndActivateRemoteConfig = (): AppThunk => async (dispatch) => 
   }
 }
 
+export const updateDisplayEmailConfirmationAlert =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchDisplayEmailConfirmationAlert(value))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -69,9 +77,16 @@ const settingsSlice = createSlice({
       state.remoteConfigActivated = true
       state.loadingRemoteConfig = false
     },
+    dispatchDisplayEmailConfirmationAlert: (state, action: PayloadAction<boolean>) => {
+      state.displayEmailConfirmationAlert = action.payload
+    },
   },
 })
 
-const { dispatchUpdateHaptics, dispatchUpdateLoadingRemoteConfig, dispatchFinishLoadingRemoteConfig } =
-  settingsSlice.actions
+const {
+  dispatchUpdateHaptics,
+  dispatchUpdateLoadingRemoteConfig,
+  dispatchFinishLoadingRemoteConfig,
+  dispatchDisplayEmailConfirmationAlert,
+} = settingsSlice.actions
 export default settingsSlice.reducer

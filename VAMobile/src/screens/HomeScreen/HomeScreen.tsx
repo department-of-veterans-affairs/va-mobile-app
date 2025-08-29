@@ -41,6 +41,7 @@ import {
   ObfuscatedTextView,
   TextView,
 } from 'components'
+import EmailConfirmationAlert from 'components/EmailConfirmationAlert'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -337,6 +338,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
+        <EmailConfirmationAlert />
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <InView
             triggerOnce={true}

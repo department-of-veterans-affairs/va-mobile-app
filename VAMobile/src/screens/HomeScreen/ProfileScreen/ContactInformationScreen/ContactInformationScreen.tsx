@@ -26,6 +26,7 @@ import {
   VABulletList,
   VAScrollView,
 } from 'components'
+import EmailConfirmationAlert from 'components/EmailConfirmationAlert'
 import { Events } from 'constants/analytics'
 import { DefaultCallingCode } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
@@ -335,6 +336,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
           <DefaultList
             items={getEmailAddressData(contactInformation, t, onEmailAddress)}
             title={t('contactInformation.contactEmailAddress')}
+            alertContent={<EmailConfirmationAlert inContactInfoScreen />}
           />
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}

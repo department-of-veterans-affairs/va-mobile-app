@@ -14,6 +14,7 @@ import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
+import EmailConfirmationAlert from 'components/EmailConfirmationAlert'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -124,6 +125,7 @@ export function HealthScreen({}: HealthScreenProps) {
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
+        <EmailConfirmationAlert />
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
 import { BaseListItem, BaseListItemProps, Box, SwitchProps, TextView, TextViewProps } from 'components'
 import { useTheme } from 'utils/hooks'
@@ -41,12 +41,22 @@ export type ListProps = {
 
   /** optional a11y hint for the rightTitleText */
   rightTitleTextA11yLabel?: string
+
+  /** optional alert content */
+  alertContent?: ReactElement
 }
 
 /**
  * A common component for showing a list of <ListItem>.
  */
-const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rightTitleTextA11yLabel }) => {
+const List: FC<ListProps> = ({
+  items,
+  title,
+  titleA11yLabel,
+  rightTitleText,
+  rightTitleTextA11yLabel,
+  alertContent,
+}) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -93,6 +103,7 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel, rightTitleText, rig
           </TextView>
         )}
       </Box>
+      {alertContent}
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>
       </Box>
