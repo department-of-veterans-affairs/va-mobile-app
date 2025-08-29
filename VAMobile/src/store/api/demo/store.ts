@@ -18,6 +18,7 @@ import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList
 import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
 import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
 import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
+import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
 import importJohnMonroeData from 'store/api/demo/mocks/johnMonroe'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
@@ -150,6 +151,9 @@ export const initDemoStore = async (demoUser: string | null = 'kimberlyWashingto
       break
     case 'claraJefferson':
       userData = importClaraJeffersonData()
+      break
+    case 'dennisMadison':
+      userData = importDennisMadisonData()
       break
     case 'kimberlyWashington':
     default:

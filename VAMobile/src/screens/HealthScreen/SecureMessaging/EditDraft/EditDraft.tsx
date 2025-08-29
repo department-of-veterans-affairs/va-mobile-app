@@ -63,13 +63,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
-import {
-  useAttachments,
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useRouteNavigation,
-  useTheme,
-} from 'utils/hooks'
+import { useAttachments, useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import {
   RecentRecipient,
   SubjectLengthValidationFn,
@@ -115,8 +109,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
     enabled: screenContentAllowed('WG_FolderMessages'),
   })
-  const destructiveAlert = useDestructiveActionSheet()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const destructiveAlert = useShowActionSheet()
+  const draftAttachmentAlert = useShowActionSheet()
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const { mutate: deleteDraft, isPending: deletingDraft } = useDeleteMessage()
   const {
@@ -287,57 +281,59 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   }
 
   const onDeletePressed = (): void => {
-    const buttons = [
-      {
-        text: t('keepEditing'),
-      },
-      {
-        text: t('delete'),
-        onPress: () => {
-          const params: DeleteMessageParameters = { messageID: messageID }
-          const mutateOptions = {
-            onSuccess: () => {
-              snackbar.show(t('secureMessaging.deleteDraft.snackBarMessage'))
-              queryClient.invalidateQueries({
-                queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
-              })
-              navigateTo('FolderMessages', {
-                folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
-                folderName: FolderNameTypeConstants.drafts,
-                draftSaved: false,
-              })
-              goToDraftFolder(false)
-            },
-            onError: () => {
-              snackbar.show(t('secureMessaging.deleteDraft.snackBarErrorMessage'), {
-                isError: true,
-                offset: theme.dimensions.snackBarBottomOffset,
-                onActionPressed: () => deleteDraft(params, mutateOptions),
-              })
-            },
-          }
-          deleteDraft(params, mutateOptions)
-        },
-      },
-    ]
-
+    const options = [t('delete'), t('keepEditing')]
+    let cancelBtnIndex = 1
+    let saveButtonExists = false
     if (!replyDisabled) {
-      buttons.push({
-        text: t('save'),
-        onPress: () => {
-          setOnSaveDraftClicked(true)
-          setOnSendClicked(true)
-        },
-      })
+      saveButtonExists = true
+      options.splice(1, 0, t('save'))
+      cancelBtnIndex = 2
     }
 
-    destructiveAlert({
-      title: t('deleteDraft'),
-      message: t('secureMessaging.deleteDraft.deleteInfo'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons,
-    })
+    destructiveAlert(
+      {
+        options,
+        title: t('deleteDraft'),
+        message: t('secureMessaging.deleteDraft.deleteInfo'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: cancelBtnIndex,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            const params: DeleteMessageParameters = { messageID: messageID }
+            const mutateOptions = {
+              onSuccess: () => {
+                snackbar.show(t('secureMessaging.deleteDraft.snackBarMessage'))
+                queryClient.invalidateQueries({
+                  queryKey: [secureMessagingKeys.folderMessages, SecureMessagingSystemFolderIdConstants.DRAFTS],
+                })
+                navigateTo('FolderMessages', {
+                  folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+                  folderName: FolderNameTypeConstants.drafts,
+                  draftSaved: false,
+                })
+                goToDraftFolder(false)
+              },
+              onError: () => {
+                snackbar.show(t('secureMessaging.deleteDraft.snackBarErrorMessage'), {
+                  isError: true,
+                  offset: theme.dimensions.snackBarBottomOffset,
+                  onActionPressed: () => deleteDraft(params, mutateOptions),
+                })
+              },
+            }
+            deleteDraft(params, mutateOptions)
+            break
+          case 1:
+            if (saveButtonExists) {
+              setOnSaveDraftClicked(true)
+              setOnSendClicked(true)
+            }
+            break
+        }
+      },
+    )
   }
 
   const menuViewActions: MenuViewActionsType = []
