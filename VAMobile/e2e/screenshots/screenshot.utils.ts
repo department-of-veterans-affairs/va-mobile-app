@@ -1,4 +1,4 @@
-import { by, element, expect, waitFor } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 
 import {
   CommonE2eIdConstants,
@@ -44,10 +44,32 @@ const utils = {
     await openProfile()
     await openSettings()
     await openDeveloperScreen()
-    await waitFor(element(by.text('Kimberly Washington')))
-      .toBeVisible()
-      .whileElement(by.type('UIScrollView'))
-      .scroll(200, 'down')
+    if (device.getPlatform() === 'ios') {
+      await waitFor(element(by.text('Kimberly Washington')))
+        .toBeVisible()
+        .whileElement(by.type('UIScrollView'))
+        .scroll(200, 'down')
+    } else {
+      const scrollViewTypes = [
+        'androidx.recyclerview.widget.RecyclerView',
+        'android.widget.ScrollView',
+        'androidx.core.widget.NestedScrollView',
+      ]
+      let found = false
+      for (const type of scrollViewTypes) {
+        try {
+          await waitFor(element(by.text('Kimberly Washington')))
+            .toBeVisible()
+            .whileElement(by.type(type))
+            .scroll(200, 'down')
+          found = true
+          break
+        } catch (e) {
+          // Try next type
+        }
+      }
+      if (!found) throw new Error('No scrollable view found for scrolling.')
+    }
     await element(by.text('Kimberly Washington')).tap()
     await element(by.text('John Monroe')).tap()
     await element(by.text('Done')).tap()
