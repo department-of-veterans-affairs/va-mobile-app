@@ -53,7 +53,7 @@ jobs:
 
   generate-iphone-screenshots:
     name: Generate iPhone Screenshots
-    runs-on: macos-latest-xlarge
+    runs-on: macos-14-large
     steps:
       - uses: actions/checkout@v3
         with:
@@ -120,7 +120,7 @@ jobs:
 
   generate-ipad-screenshots:
     name: Generate iPad Screenshots
-    runs-on: macos-latest-xlarge
+    runs-on: macos-14-large
     steps:
       - uses: actions/checkout@v3
         with:
@@ -251,7 +251,7 @@ jobs:
 
   combine-and-frame-images:
     name: Combine and Frame Images
-    runs-on: macos-latest
+    runs-on: macos-14
     needs:
       [
         generate-iphone-screenshots,
