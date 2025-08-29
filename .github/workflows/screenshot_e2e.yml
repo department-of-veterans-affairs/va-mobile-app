@@ -2,7 +2,7 @@
 # Detox screenshot gathering in CI
 #
 
-name: "[Utils] Gather iOS and Android screenshots"
+name: '[Utils] Gather iOS and Android screenshots'
 
 permissions:
   contents: write
@@ -12,6 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  # push:
   # pull_request:
   #   paths:
   #     - "VAMobile/e2e/screenshots/screenshot_data.ts"
@@ -33,11 +34,11 @@ env:
   # App Store Connect Key Id
   APPSTORE_CONNECT_API_KEY_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ID }}
   # Path to write secret key to. Also used by fastlane
-  APPSTORE_CONNECT_FILEPATH: "./AppStoreConnectKey.p8"
+  APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
   # Xcode project file name
-  IOS_PROJ_FILE: "VAMobile.xcodeproj"
+  IOS_PROJ_FILE: 'VAMobile.xcodeproj'
   # Xcode scheme to build
-  IOS_SCHEME: "VAMobileRelease"
+  IOS_SCHEME: 'VAMobileRelease'
   # Fast lane patch password
   MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
@@ -48,7 +49,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "Generating new App Store images for iOS and Android. This process may take a while."
+      message: 'Generating new App Store images for iOS and Android. This process may take a while.'
 
   generate-iphone-screenshots:
     name: Generate iPhone Screenshots
@@ -67,14 +68,14 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "16.2"
+          xcode-version: '16.2'
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "./VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install macOS dependencies
         run: |
@@ -103,7 +104,7 @@ jobs:
       - name: Run iOS (iPhone) Emulator
         uses: futureware-tech/simulator-action@v4
         with:
-          model: "iPhone 15 Pro Max"
+          model: 'iPhone 15 Pro Max'
           shutdown_after_job: true
 
       - name: Run Detox iOS (iPhone) steps
@@ -114,7 +115,7 @@ jobs:
       - name: Upload iOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-iphone-screenshots-unaltered"
+          name: 'ios-iphone-screenshots-unaltered'
           path: VAMobile/artifacts/
 
   generate-ipad-screenshots:
@@ -134,14 +135,14 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "16.2"
+          xcode-version: '16.2'
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "./VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install macOS dependencies
         run: |
@@ -170,7 +171,7 @@ jobs:
       - name: Run iPad Emulator
         uses: futureware-tech/simulator-action@v4
         with:
-          model: "iPad Pro (12.9-inch) (6th generation)"
+          model: 'iPad Pro (12.9-inch) (6th generation)'
           shutdown_after_job: true
 
       - name: Run Detox iPad steps
@@ -181,7 +182,7 @@ jobs:
       - name: Upload iPad artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "ios-ipad-screenshots-unaltered"
+          name: 'ios-ipad-screenshots-unaltered'
           path: VAMobile/artifacts/
 
   generate-android-screenshots:
@@ -204,9 +205,9 @@ jobs:
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "./VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
@@ -245,7 +246,7 @@ jobs:
       - name: Upload android artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "android-screenshots-unaltered"
+          name: 'android-screenshots-unaltered'
           path: VAMobile/artifacts/*
 
   combine-and-frame-images:
@@ -267,7 +268,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: '3.1'
           working-directory: VAMobile/ios
 
       - name: Install Ruby gems
@@ -285,19 +286,19 @@ jobs:
       - name: Download iPhone screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "ios-iphone-screenshots-unaltered"
+          name: 'ios-iphone-screenshots-unaltered'
           path: VAMobile/artifacts_iphone
 
       - name: Download iPad screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "ios-ipad-screenshots-unaltered"
+          name: 'ios-ipad-screenshots-unaltered'
           path: VAMobile/artifacts_ipad
 
       - name: Download Android screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "android-screenshots-unaltered"
+          name: 'android-screenshots-unaltered'
           path: VAMobile/artifacts_android
 
       - name: Combine screenshots
@@ -318,14 +319,14 @@ jobs:
       - name: Upload framed artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: "app-store-images-framed"
+          name: 'app-store-images-framed'
           path: .github/scripts/app-store-images/framed_images/*
 
   commit-screenshots:
     name: Commit Screenshots
     runs-on: ubuntu-latest
     needs: [combine-and-frame-images]
-    if: github.event_name == 'pull_request'
+    # if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: VAMobile
@@ -338,18 +339,18 @@ jobs:
       - name: Download framed screenshots
         uses: actions/download-artifact@v4
         with:
-          name: "app-store-images-framed"
+          name: 'app-store-images-framed'
           path: framed_images
 
-      - name: Move framed images
-        run: |
-          mkdir -p ios/fastlane/screenshots/en-US/
-          mkdir -p ios/fastlane/screenshots_ipad/en-US/
-          mkdir -p android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-          shopt -s dotglob
-          mv ../framed_images/ios/* ios/fastlane/screenshots/en-US/
-          mv ../framed_images/ipad/* ios/fastlane/screenshots_ipad/en-US/
-          mv ../framed_images/android/* android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+      # - name: Move framed images
+      #   run: |
+      #     mkdir -p ios/fastlane/screenshots/en-US/
+      #     mkdir -p ios/fastlane/screenshots_ipad/en-US/
+      #     mkdir -p android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+      #     shopt -s dotglob
+      #     mv ../framed_images/ios/* ios/fastlane/screenshots/en-US/
+      #     mv ../framed_images/ipad/* ios/fastlane/screenshots_ipad/en-US/
+      #     mv ../framed_images/android/* android/fastlane/metadata/android/en-US/images/phoneScreenshots/
 
       - name: Commit and push screenshots
         run: |
@@ -371,7 +372,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "App store images generated successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: 'App store images generated successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
 
   failure-slack-message:
     name: Failure Slack thread
@@ -381,4 +382,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-sandbox
-      message: "App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: 'App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
