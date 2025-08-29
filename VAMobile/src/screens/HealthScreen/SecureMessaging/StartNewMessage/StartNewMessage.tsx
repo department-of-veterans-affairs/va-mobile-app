@@ -218,7 +218,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
 
   useEffect(() => {
     if (careSystems.length === 1) {
-      handleSetCareSystem(careSystems[0].value)
+      setCareSystem(careSystems[0].value)
     }
   }, [hasLoadedRecipients, careSystems])
 
