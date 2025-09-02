@@ -62,11 +62,11 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: npm install typescript -g
+        run: npm install typescript -g && npm install -g ts-node@10.9.2
       - name: Convert TypeScript mapping to JSON
         run: |
           # Compile TypeScript to JavaScript
-          npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop --skipLibCheck
+          npm tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop --skipLibCheck
           
           # Check if the compiled file exists
           if [ ! -f "/tmp/e2e/detoxMapping.js" ]; then
