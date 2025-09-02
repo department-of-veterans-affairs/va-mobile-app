@@ -8,7 +8,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useContactInformation } from 'api/contactInformation'
-import { AlertWithHaptics, Box } from 'components'
+import { AlertWithHaptics, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SettingsState, updateDisplayEmailConfirmationAlert } from 'store/slices'
@@ -30,8 +30,6 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { displayEmailConfirmationAlert } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  // const [displayEmailConfirmation, setDisplayEmailConfirmation] = useState(false)
 
   useEffect(() => {
     const checkEmailConfirmAlertDismissed = async () => {
@@ -56,10 +54,6 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   const emailOnFile = contactInformation?.contactEmail?.emailAddress
 
-  const headerText = emailOnFile ? t('email.alert.confirm.title') : t('email.alert.add.title')
-  const descriptionText = emailOnFile
-    ? t('email.alert.confirm.body', { email: emailOnFile })
-    : t('email.alert.add.body')
   const primaryButtonText = emailOnFile ? t('confirm') : t('email.alert.add.primary.action')
   const secondaryButtonText = emailOnFile
     ? t('email.alert.confirm.secondary.action')
@@ -89,13 +83,10 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   // A different variation of the alert is shown within the contact information screen
   if (inContactInfoScreen) {
-    const headerInContactScreen = emailOnFile
-      ? t('email.alert.contact.confirm.title')
-      : t('email.alert.contact.add.title')
     return (
       <AlertWithHaptics
         variant="warning"
-        header={headerInContactScreen}
+        header={t('email.alert.contact.title')}
         primaryButton={emailOnFile ? { label: primaryButtonText, onPress: handleDismiss } : undefined}
       />
     )
@@ -105,11 +96,17 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
     <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertWithHaptics
         variant="warning"
-        header={headerText}
-        description={descriptionText}
+        header={t('email.alert.title')}
+        description={t('email.alert.body')}
         primaryButton={{ label: primaryButtonText, onPress: onPrimaryAction }}
-        secondaryButton={{ label: secondaryButtonText, onPress: onSecondaryAction }}
-      />
+        secondaryButton={{ label: secondaryButtonText, onPress: onSecondaryAction }}>
+        <TextView variant="MobileBodyBold">{emailOnFile ? emailOnFile : t('email.alert.noneProvided')}</TextView>
+        {!emailOnFile && (
+          <TextView mt={theme.dimensions.contentMarginTop} variant="MobileBody">
+            {t('email.alert.addLater')}
+          </TextView>
+        )}
+      </AlertWithHaptics>
     </Box>
   )
 }

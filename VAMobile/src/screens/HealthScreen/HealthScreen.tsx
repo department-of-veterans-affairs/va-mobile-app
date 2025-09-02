@@ -13,8 +13,15 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
-import EmailConfirmationAlert from 'components/EmailConfirmationAlert'
+import {
+  AnnouncementBanner,
+  Box,
+  CategoryLanding,
+  CategoryLandingAlert,
+  EmailConfirmationAlert,
+  LargeNavButton,
+  TextView,
+} from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'

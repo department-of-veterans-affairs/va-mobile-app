@@ -16,6 +16,7 @@ import {
   BoxProps,
   DefaultList,
   DefaultListItemObj,
+  EmailConfirmationAlert,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
@@ -26,7 +27,6 @@ import {
   VABulletList,
   VAScrollView,
 } from 'components'
-import EmailConfirmationAlert from 'components/EmailConfirmationAlert'
 import { Events } from 'constants/analytics'
 import { DefaultCallingCode } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
