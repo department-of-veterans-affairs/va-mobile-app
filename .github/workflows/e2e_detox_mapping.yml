@@ -62,7 +62,7 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: npm install
+        run: npm install typescript -g
       - name: Convert TypeScript mapping to JSON
         run: |
           # Compile TypeScript to JavaScript
