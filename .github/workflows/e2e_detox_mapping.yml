@@ -57,12 +57,6 @@ jobs:
         with:
           base_sha: "${{ steps.get-sha.outputs.sha }}"
           path: './VAMobile/src'
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-      - name: Install dependencies
-        run: npm ci
       - name: Convert TypeScript mapping to JSON
         run: |
           npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop
