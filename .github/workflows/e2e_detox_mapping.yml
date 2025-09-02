@@ -62,7 +62,7 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: cd VAMobile && npm install
+        run: yarn install --frozen-lockfile --non-interactive
       - name: Convert TypeScript mapping to JSON
         run: |
           # Compile TypeScript to JavaScript
