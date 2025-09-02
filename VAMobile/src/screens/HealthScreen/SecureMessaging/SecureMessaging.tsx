@@ -17,20 +17,20 @@ import { Events } from 'constants/analytics'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, SegmentedControlIndexes } from 'constants/secureMessaging'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/CernerAlertSM'
+import Folders from 'screens/HealthScreen/SecureMessaging/Folders/Folders'
+import Inbox from 'screens/HealthScreen/SecureMessaging/Inbox/Inbox'
+import NoAccessSM from 'screens/HealthScreen/SecureMessaging/NoAccessSM/NoAccessSM'
+import TermsAndConditions from 'screens/HealthScreen/SecureMessaging/TermsAndConditions/TermsAndConditions'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { hasErrorCode } from 'utils/errors'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../HealthStackScreens'
-import CernerAlertSM from './CernerAlertSM/CernerAlertSM'
-import Folders from './Folders/Folders'
-import Inbox from './Inbox/Inbox'
-import NoAccessSM from './NoAccessSM/NoAccessSM'
-import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
@@ -179,7 +179,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                 testIDs={controlIDs}
               />
             </Box>
-            <CernerAlertSM />
+            {featureEnabled('showCernerAlertSM') && <CernerAlertSM />}
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
               {secureMessagingTab === SegmentedControlIndexes.INBOX &&
                 (otherError ? (

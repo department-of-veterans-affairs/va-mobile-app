@@ -1,7 +1,6 @@
-We added mileage-only travel claims submission to the Health section.
+We updated the app with several improvements to secure messaging, privacy, and usability:
 
-- Submit simple mileage-only claims for past in-person VA appointments.
-- View submitted travel claim status and history from your past appointment.
-- No paperwork or waiting—just a few taps.
-
-We also fixed an bug in secure messaging so that users will only see providers who are in their care system.
+- Improved functionality to clearly direct Oracle Health users to health tools
+- Simplified secure messaging with auto-filled care systems and no duplicate recipients
+- Removed in-app survey comments to better protect Veteran privacy
+- Improved timezone display for Asia and Pacific regions

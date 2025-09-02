@@ -4,6 +4,8 @@ import { TFunction } from 'i18next'
 import { $Dictionary } from 'i18next/typescript/helpers'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 
+import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
+
 /**
  * Returns the formatted phone number
  *
@@ -86,7 +88,20 @@ export const getFormattedMessageTime = (dateTime: string): string => {
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
 export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
+  let formattedTime = getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, {
+    timeZoneName: 'short',
+  })
+
+  // Specific non-location timezones are currently unavailable in DateTime
+  // and formatting will fall back to GMT timezones (e.g. GMT+8).
+  // This is a workaround to replace them with more user friendly timezone abbreviations.
+  if (formattedTime.includes(GMTPrefix)) {
+    for (const { pattern, value } of GMTTimezones.values()) {
+      formattedTime = formattedTime.replace(pattern, value)
+    }
+  }
+
+  return formattedTime
 }
 
 /**
