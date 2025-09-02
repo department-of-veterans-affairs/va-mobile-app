@@ -29,7 +29,7 @@ export type CarouselScreen = {
 }
 
 type CarouselStackComponentProps = {
-  /** list of screens with the screen name and the component in each item */
+  /** A list of screens with the screen name and the component in each item */
   screenList: Array<CarouselScreen>
 }
 
