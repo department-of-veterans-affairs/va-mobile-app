@@ -57,14 +57,40 @@ jobs:
         with:
           base_sha: "${{ steps.get-sha.outputs.sha }}"
           path: './VAMobile/src'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        run: npm ci
       - name: Convert TypeScript mapping to JSON
         run: |
-          npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop
-          node -e "
-            const { detoxMapping } = require('/tmp/e2e/detoxMapping.js');
-            const fs = require('fs');
-            fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
-          "
+          # Compile TypeScript to JavaScript
+          npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop --skipLibCheck
+          
+          # Check if the compiled file exists
+          if [ ! -f "/tmp/e2e/detoxMapping.js" ]; then
+            echo "Compiled file not found, trying alternative approach..."
+            # Alternative: use ts-node to directly execute and export
+            npx ts-node -e "
+              import { detoxMapping } from './e2e/detoxMapping';
+              import * as fs from 'fs';
+              fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
+            "
+          else
+            # Convert compiled JS to JSON
+            node -e "
+              const { detoxMapping } = require('/tmp/e2e/detoxMapping.js');
+              const fs = require('fs');
+              fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
+            "
+          fi
+          
+          # Verify the JSON file was created
+          if [ ! -f "/tmp/detoxMapping.json" ]; then
+            echo "Failed to create detoxMapping.json"
+            exit 1
+          fi
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
         run: |
