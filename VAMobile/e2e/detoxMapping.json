@@ -33,7 +33,6 @@
     ]
   },
   "directory": {
-    "allComponents": [],
     "allergies": ["Allergies"],
     "appointments": ["Appointments", "AppointmentsExpanded", "TravelPay"],
     "authorizedServices": [
