@@ -57,13 +57,27 @@ jobs:
         with:
           base_sha: "${{ steps.get-sha.outputs.sha }}"
           path: './VAMobile/src'
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        run: npm ci
+      - name: Convert TypeScript mapping to JSON
+        run: |
+          npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop
+          node -e "
+            const { detoxMapping } = require('/tmp/e2e/detoxMapping.js');
+            const fs = require('fs');
+            fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
+          "
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
         run: |
           directoryFound="false"
           noFileFound="false"
-          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
@@ -88,7 +102,7 @@ jobs:
       - name: Check if directory/file is spelled correctly
         id: detox_mapping_spell_check
         run: |
-          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
           for directory in $(echo $directoryNames | jq -r 'keys | .[]'); do
             if [[ "$(find ${{ github.workspace }}/VAMobile/src -type d -name "$directory")" == "" ]]; then
               directoryMisspelled="true"
@@ -96,7 +110,7 @@ jobs:
               exit 1
             fi
           done
-          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
           for file in $(echo $fileNames | jq -r 'keys | .[]'); do
             if [[ "$(find ${{ github.workspace }}/VAMobile/src -type f -name "$file")" == "" ]]; then
               fileMisspelled="true"
@@ -107,7 +121,7 @@ jobs:
       - name: Check if e2eNames is spelled correctly
         id: detox_mapping_e2e_names_spell_check
         run: |
-          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
           for directory in $(echo $directoryNames | jq 'keys | .[]'); do          
             for e2eTest in $(echo $directoryNames | jq --argjson directory "$directory" --raw-output '.[$directory] | .[]'); do
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
@@ -117,7 +131,7 @@ jobs:
               fi
             done
           done
-          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
           for file in $(echo $fileNames | jq 'keys | .[]'); do           
             for e2eTest in $(echo $fileNames | jq --argjson file "$file" --raw-output '.[$file] | .[]'); do
               if [[ "$(find ${{ github.workspace }}/VAMobile/e2e/tests -type f -name "${e2eTest}.e2e.ts")" == "" ]]; then
@@ -131,8 +145,8 @@ jobs:
         id: testing_matrix
         run: |
           firstInstanceFile="true"
-          directoryNames=$(jq -r '.directory' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
-          fileNames=$(jq -r '.files' ${{ github.workspace }}/VAMobile/e2e/detoxMapping.json)
+          directoryNames=$(jq -r '.directory' /tmp/detoxMapping.json)
+          fileNames=$(jq -r '.files' /tmp/detoxMapping.json)
           for file in ${{steps.changed_files_file_name.outputs.all_changed_and_modified_files}}; do
             baseFile=$(echo $file | sed 's#.*/##')
             baseFile=$(echo $baseFile | sed 's/ //g')
