@@ -65,42 +65,8 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
       - name: Convert TypeScript mapping to JSON
         run: |
-          # Try ts-node approach first (simpler and more reliable)
-          if npx ts-node -e "
-            const { detoxMapping } = require('./e2e/detoxMapping');
-            const fs = require('fs');
-            if (!detoxMapping) {
-              console.error('detoxMapping is undefined');
-              process.exit(1);
-            }
-            fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
-            console.log('Successfully created detoxMapping.json');
-          "; then
-            echo "ts-node approach succeeded"
-          else
-            echo "ts-node failed, trying compilation approach..."
-            # Compile TypeScript to JavaScript
-            npx tsc e2e/detoxMapping.ts --outDir /tmp --module commonjs --target es2015 --moduleResolution node --esModuleInterop --skipLibCheck
-            
-            # Check if the compiled file exists
-            if [ ! -f "/tmp/e2e/detoxMapping.js" ]; then
-              echo "Compilation failed"
-              exit 1
-            fi
-            
-            # Convert compiled JS to JSON
-            node -e "
-              const module = require('/tmp/e2e/detoxMapping.js');
-              const detoxMapping = module.detoxMapping || module.default || module;
-              const fs = require('fs');
-              if (!detoxMapping) {
-                console.error('detoxMapping is undefined after compilation');
-                process.exit(1);
-              }
-              fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
-              console.log('Successfully created detoxMapping.json from compiled JS');
-            "
-          fi
+          # Use the simple Node.js conversion script
+          node e2e/convertMapping.js /tmp/detoxMapping.json
           
           # Verify the JSON file was created and is valid
           if [ ! -f "/tmp/detoxMapping.json" ]; then
