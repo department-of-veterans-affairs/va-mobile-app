@@ -110,8 +110,6 @@
     "DisabilityRatingsScreen": ["DisabilityRatings", "VeteranStatusCard"],
     "Letters": ["VALetters"],
     "Appointments": ["Appointments", "AppointmentsExpanded", "AppointmentsTestTime"],
-    "CernerAlert": ["Cerner"],
-    "HealthHelp": ["Cerner"],
     "Pharmacy": ["Prescriptions"],
     "SecureMessaging": ["Messages"],
     "Vaccines": ["VaccineRecords"],
