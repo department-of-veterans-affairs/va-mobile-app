@@ -143,7 +143,8 @@
       "Cerner",
       "Prescriptions",
       "Messages",
-      "VaccineRecords"
+      "VaccineRecords",
+      "TravelPayClaims"
     ],
     "HomeScreen": ["HomeScreen", "ProfileScreen", "VeteranStatusCard"],
     "SettingsScreen": ["SettingsScreen"],
@@ -210,7 +211,8 @@
       "VeteransCrisisLine",
       "VeteranStatusCard"
     ],
-    "travelPay": ["TravelPay"],
+    "travelPay": ["TravelPay", "TravelPayClaims"],
+    "TravelPayClaims": ["TravelPayClaims"],
     "utils": [
       "Allergies",
       "LabsAndTests",

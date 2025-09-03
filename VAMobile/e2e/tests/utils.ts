@@ -186,6 +186,8 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
+  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
+  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
 }
 
 /** Logs into demo mode.
@@ -409,6 +411,10 @@ export async function openHealth() {
 
 export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
+}
+
+export async function openTravelPayClaims() {
+  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
