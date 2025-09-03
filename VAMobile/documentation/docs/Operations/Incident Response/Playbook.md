@@ -37,8 +37,11 @@ An issue affecting all users or a significant percentage of users – or affecti
 
 Issues will come to our attention through a variety of channels:
 
-- Automated alerts communicated via PagerDuty or Slack
+- Automated alerts communicated via PagerDuty or Slack through monitors
+  - [Mobile API services volume anomaly monitor](https://vagov.ddog-gov.com/monitors/183994) (monitored by WatchTower)
+  - [Mobile API error rate monitor](https://vagov.ddog-gov.com/monitors/90011) (monitored by WatchTower)
 - Manual observation of problematic events in DataDog/Crashlytics
+  - [View mobile crashlytics](https://console.firebase.google.com/u/2/project/va-mobile-app/crashlytics/app/android:gov.va.mobileapp/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount)
 - App store reviews
 - Escalation from Web Platform on call staff
 - Escalation from VA contact centers (help desks)
@@ -52,7 +55,7 @@ At this point you should also raise the incident to our team in the OCTO slack #
 
 ## Incident Classification
 
-1. First, determine as well as you can whether this issue is unique to VA Mobile, or is likely affecting VA.gov as well. In the latter case, check the #oncall and #vfs-platform-support channels in DSVA slack to ensure you are not duplicating effort (or working at cross purposes) with anybody else.
+1. First, determine as well as you can whether this issue is unique to VA Mobile, or is likely affecting VA.gov as well. In the latter case, check the #oncall and #vfs-platform-support channels in OCTO slack to ensure you are not duplicating effort (or working at cross purposes) with anybody else. If the incident is feature-specific notify the Experience team's product owner.
 
 2. Next, determine if this is a security incident. Per the [VA.gov incident response playbook](https://github.com/department-of-veterans-affairs/devops/blob/master/docs/Incident%20Response%20Playbook.md), "if at any point during your evaluation you determine that the system has been compromised by a third party, that there is a leak of personally identifiable information, or that the system is under attack". In this case you should immediately notify our product owner and the information system owner. They may take responsibility for further notification, but _if they do not_, you are accountable for notifying the information system security officer (ISSO) and/or privacy officer (PO) as appropriate. 
 
@@ -72,7 +75,7 @@ The process of isolating the cause of an incident and resolving it can't be pres
 - Rule out external factors. Given the nature of vets-api as a facade over other VA systems, check whether any relevant upstream dependencies are unavailable or experiencing elevated error rates. In this case the likely response process will be to notify the team responsible for the upstream system, and if possible, set a maintenance window in PagerDuty to trigger the downtime notification mechanism. 
   - Don't forget about non-API dependencies such as the VA network gateways that sit in front of our backend services. If these are experiencing an issue it's almost certainly also affecting VA.gov and possibly the VA as a whole. 
 - Look for what changed. If a behavior began suddenly, determine if anything changed recently that can account for it - did an API deployment occur? Did the Web Platform operations team change some infrastructure?
-- Look inward. Is there something we did that caused the issue? 
+- Look inward. Is there something we did that caused the issue? Sometimes certs expire and upstream terms of services need to be accepted without our knowledge.
 
 ## After the Incident
 

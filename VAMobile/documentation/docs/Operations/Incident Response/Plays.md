@@ -41,6 +41,7 @@ Problems usually manifest themselves as Veterans not being able to see their dat
 
 For these types of identity problems, we may be:
 
+- [Crashlytics](https://console.firebase.google.com/u/2/project/va-mobile-app/crashlytics/app/android:gov.va.mobileapp/issues?state=open&time=last-seven-days&types=crash&tag=all&sort=eventCount) alerting.
 - Alerted by the call center
 - Informed of the issue in an app review
 - Told of the issue through Slack
@@ -106,13 +107,6 @@ You may detect the problem in one of many ways, including (but not limited to):
 - If the problem is not widespread, alert the Product Owner and begin your investigation:
     - Have we changed anything lately that would impact logging in? Since we use SSOe OAuth, the answer is usually no. But perhaps we made some backend changes we should investigate.
 - At the point we've determined we've not made any changes that would impact login, use Slack to escalate to the Indentity team.
-
-
-
-
-
-
- 
 
 ### DNS
 
