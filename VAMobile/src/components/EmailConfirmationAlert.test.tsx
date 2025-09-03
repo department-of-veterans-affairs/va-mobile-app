@@ -48,7 +48,7 @@ context('EmailConfirmationAlert', () => {
 
     it('renders correctly with email associated', async () => {
       renderWithData({ contactEmail })
-      expect(screen.findByText(t('email.alert.title'))).toBeTruthy()
+      expect(screen.findByText(t('email.alert.confirm.title'))).toBeTruthy()
       expect(screen.findByText(t('email.alert.body'))).toBeTruthy()
       expect(screen.findByText(contactEmail.emailAddress)).toBeTruthy()
       expect(screen.findByRole('button', { name: t('confirm') })).toBeTruthy()
@@ -57,7 +57,7 @@ context('EmailConfirmationAlert', () => {
 
     it('renders correctly within contact information screen', async () => {
       renderWithData({ contactEmail }, true)
-      expect(screen.findByText(t('email.alert.contact.title'))).toBeTruthy()
+      expect(screen.findByText(t('email.alert.contact.confirm.title'))).toBeTruthy()
       expect(screen.findByRole('button', { name: t('confirm') })).toBeTruthy()
     })
 
@@ -82,7 +82,7 @@ context('EmailConfirmationAlert', () => {
 
     it('renders correctly for with no email associated', async () => {
       renderWithData({ contactEmail })
-      expect(screen.findByText(t('email.alert.title'))).toBeTruthy()
+      expect(screen.findByText(t('email.alert.add.title'))).toBeTruthy()
       expect(screen.findByText(t('email.alert.body'))).toBeTruthy()
       expect(screen.findByRole('button', { name: t('email.alert.add.primary.action') })).toBeTruthy()
       expect(screen.findByRole('button', { name: t('email.alert.add.secondary.action') })).toBeTruthy()
@@ -90,7 +90,7 @@ context('EmailConfirmationAlert', () => {
 
     it('renders within contact information screen', async () => {
       renderWithData({ contactEmail }, true)
-      expect(screen.findByText(t('email.alert.contact.title'))).toBeTruthy()
+      expect(screen.findByText(t('email.alert.contact.add.title'))).toBeTruthy()
     })
 
     it('navigates to edit email screen on primary click', async () => {
