@@ -1,10 +1,12 @@
 import { waitFor } from '@testing-library/react-native'
 
 import { useTravelPayClaims } from 'api/travelPay/getClaims'
-import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
+import { GetTravelPayClaimsResponse } from 'api/types'
+import { TimeFrameTypeConstants } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, get } from 'store/api'
 import { context, renderQuery, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getDateRangeFromTimeFrame } from 'utils/travelPay'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -64,12 +66,6 @@ const MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
-const params: GetTravelPayClaimsParams = {
-  startDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
-  endDate: new Date().toISOString(),
-  pageNumber: 1,
-}
-
 context('getClaims', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -79,10 +75,11 @@ context('getClaims', () => {
     it('should return the travel pay claims data from the hook', async () => {
       mockUseDowntime.mockImplementation(() => false)
 
+      const dateRange = getDateRangeFromTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
       const adjustedParams = {
-        start_date: params.startDate,
-        end_date: params.endDate,
-        page_number: params.pageNumber,
+        start_date: dateRange.startDate,
+        end_date: dateRange.endDate,
+        page_number: 1,
       }
 
       when(get as jest.Mock)
@@ -94,7 +91,7 @@ context('getClaims', () => {
         .mockReturnValue(true)
 
       // useTravelPayClaims will call the get claims endpoint and populate the query data
-      const { result } = renderQuery(() => useTravelPayClaims(params))
+      const { result } = renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
       const response = await waitFor(() => {
         expect(result.current.data).toBeDefined()
         return result.current.data
@@ -102,7 +99,8 @@ context('getClaims', () => {
 
       // Check the hook called the correct endpoint and received the correct response
       expect(get).toBeCalledWith('/v0/travel-pay/claims', adjustedParams)
-      expect(response).toEqual(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
+      // With useInfiniteQuery, data is structured as pages
+      expect(response?.pages?.[0]).toEqual(MOCK_GET_TRAVEL_PAY_CLAIMS_RESPONSE)
     })
 
     it('should not fetch data when downtime is active', async () => {
@@ -112,7 +110,7 @@ context('getClaims', () => {
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
 
-      renderQuery(() => useTravelPayClaims(params))
+      renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
 
       // Should not be called when Travel Pay is in downtime
       expect(get).not.toHaveBeenCalled()
@@ -125,7 +123,7 @@ context('getClaims', () => {
         .calledWith('travelPayStatusList')
         .mockReturnValue(false)
 
-      renderQuery(() => useTravelPayClaims(params))
+      renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
 
       // Should not be called when Travel Pay is in downtime
       expect(get).not.toHaveBeenCalled()
