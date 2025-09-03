@@ -12,7 +12,7 @@ const CarouselTabNav = createBottomTabNavigator()
 const CarouselStack = createStackNavigator()
 
 export type CarouselScreen = {
-  /** name of component? */
+  /** name of component */
   name: string
 
   /** component to display in carousel */
