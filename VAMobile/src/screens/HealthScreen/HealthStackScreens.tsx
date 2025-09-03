@@ -54,6 +54,7 @@ export type HealthStackParamList = WebviewStackParams & {
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
   TravelClaimHelpScreen: undefined
+  TravelPayClaims: undefined
   Messages: undefined
   SecureMessaging: {
     activeTab: number
