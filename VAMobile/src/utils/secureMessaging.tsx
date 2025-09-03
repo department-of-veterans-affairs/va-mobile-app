@@ -12,7 +12,7 @@ import _ from 'underscore'
 import {
   CategoryTypeFields,
   CategoryTypes,
-  Facility,
+  SecureMessagingCareSystemDataList,
   SecureMessagingFolderList,
   SecureMessagingMessageList,
 } from 'api/types'
@@ -700,11 +700,11 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
   )
 }
 
-export const getCareSystemPickerOptions = (facilitiesInfo: Array<Facility>): Array<PickerItem> => {
-  return facilitiesInfo.map((facility) => {
+export const getCareSystemPickerOptions = (careSystems: SecureMessagingCareSystemDataList): Array<PickerItem> => {
+  return careSystems.map((careSystem) => {
     return {
-      label: facility.name,
-      value: facility.id,
+      label: careSystem.healthCareSystemName,
+      value: careSystem.stationNumber,
     }
   })
 }
