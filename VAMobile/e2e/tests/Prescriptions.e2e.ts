@@ -247,7 +247,7 @@ describe('Prescriptions Screen', () => {
   validateFilter('Pending', 8, 'Includes refill requests you submitted and refills the VA pharmacy is processing')
   validateFilter('Tracking', 3, 'Includes refills with current tracking information available')
   validateFilter('Transferred', 1)
-  validateFilter('Unknown', 1)
+  validateFilter('Status Not Available', 1)
   validateFilter('All', 31)
 
   it('verify prescriptions screen after filters cancel', async () => {
@@ -274,7 +274,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text('Pending (8)'))).toExist()
     await expect(element(by.text('Tracking (3)'))).toExist()
     await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Unknown (1)'))).toExist()
+    await expect(element(by.text('Status Not Available (1)'))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
   })
 
@@ -491,5 +491,5 @@ describe('Prescriptions Screen', () => {
   validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)
   validateSort('Medication name (A to Z)', 'ACETAMINOPHEN 325MG TAB', 'ZIPRASIDONE HCL 40MG CAP')
   validateSort('Refills left (least to most)', 'ATORVASTATIN CALCIUM 10MG TAB', 'BERNA VACCINE CAP B/P')
-  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'LAMIVUDINE 10MG TAB')
+  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'ZIDOVUDINE 1MG CAP')
 })
