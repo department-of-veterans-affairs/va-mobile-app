@@ -42,7 +42,12 @@ import {
   SecureMessagingDemoStore,
   getFolderMessages,
 } from 'store/api/demo/secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import {
+  TravelPayDemoReturnTypes,
+  TravelPayDemoStore,
+  getTravelPayClaims,
+  submitAppointmentClaim,
+} from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
 
 /**
@@ -62,6 +67,7 @@ export type DemoStore = AppointmentsDemoStore &
   DemographicsDemoStore &
   AllergyDemoStore &
   LabsAndTestsDemoStore &
+  TravelPayDemoStore &
   MedicalCopaysDemoStore &
   DebtsDemoStore
 
@@ -247,6 +253,12 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return getTravelPayClaims(store, params, endpoint)
     }
     case '/v0/medical_copays': {
       return getMedicalCopays(store, params, endpoint)
