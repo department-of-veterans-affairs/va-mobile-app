@@ -60,7 +60,7 @@ const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
 const contactInfoArray = ['ContactInformation', 'VALetters']
 const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
-const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime']
+const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
 const profileScreenArray = [
   'ProfileScreen',
   'ContactInformation',
@@ -85,7 +85,6 @@ const benefitsScreenArray = ['DisabilityRatings', 'Claims', 'Appeals', 'VALetter
 const detoxMapping = {
   directory: {
     allergies: ['Allergies'],
-    appointments: ['Appointments', 'AppointmentsExpanded', 'TravelPay'],
     authorizedServices: authorizedServicesArray,
     claimsAndAppeals: claimsAndAppealsArray,
     contactInformation: contactInfoArray,
@@ -159,7 +158,7 @@ const detoxMapping = {
     'allergies.ts': ['Allergies'],
     'labsAndTests.ts': ['LabsAndTests'],
     'accounts.ts': ['DirectDeposit'],
-    'appointments.ts': ['Appointments', 'AppointmentsExpanded', 'TravelPay', 'AppointmentsTestTime'],
+    'appointments.ts': appointmentsArray,
     'claims.ts': ['Claims', 'Appeals', 'AppealsExpanded'],
     'common.ts': fullTestRun,
     'countries.ts': ['ContactInformation'],
