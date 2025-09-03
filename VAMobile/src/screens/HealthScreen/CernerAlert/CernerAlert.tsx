@@ -14,7 +14,7 @@ import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
-/* */
+
 function CernerAlert() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
