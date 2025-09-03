@@ -55,21 +55,6 @@ const authorizedServicesArray = [
   'VeteranStatusCard',
 ]
 
-// Commonly reused smaller arrays
-const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
-const contactInfoArray = ['ContactInformation', 'VALetters']
-const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
-const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
-const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
-const profileScreenArray = [
-  'ProfileScreen',
-  'ContactInformation',
-  'MilitaryInformation',
-  'PersonalInformationScreen',
-  'SettingsScreen',
-  'VALetters',
-  'Payments',
-]
 const healthScreenArray = [
   'Appointments',
   'AppointmentsExpanded',
@@ -82,6 +67,22 @@ const healthScreenArray = [
 ]
 const homeScreenArray = ['HomeScreen', 'ProfileScreen', 'VeteranStatusCard']
 const benefitsScreenArray = ['DisabilityRatings', 'Claims', 'Appeals', 'VALetters']
+const profileScreenArray = [
+  'ProfileScreen',
+  'ContactInformation',
+  'MilitaryInformation',
+  'PersonalInformationScreen',
+  'SettingsScreen',
+  'VALetters',
+  'Payments',
+]
+
+const claimsAndAppealsArray = ['Appeals', 'AppealsExpanded', 'Claims']
+const contactInfoArray = ['ContactInformation', 'VALetters']
+const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'HomeScreen', 'ProfileScreen']
+const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
+const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
+const notificationsArray = ['SettingsScreen', 'PushNotifications']
 
 const detoxMapping = {
   directory: {
@@ -126,7 +127,7 @@ const detoxMapping = {
     NeedHelpData: claimsAndAppealsArray,
     NoClaimsAndAppeals: claimsAndAppealsArray,
     NoClaimsAndAppealsAccess: claimsAndAppealsArray,
-    notifications: ['SettingsScreen', 'PushNotifications'],
+    notifications: notificationsArray,
     OnboardingCarousel: ['Onboarding'],
     payments: ['Payments'],
     PaymentHistory: ['Payments'],
@@ -191,8 +192,8 @@ const detoxMapping = {
     'militaryPostOffices.ts': ['ContactInformation'],
     'militaryStates.ts': ['ContactInformation'],
     'namespaces.ts': [],
-    'notifications.json': ['SettingsScreen', 'PushNotifications'],
-    'notifications.ts': ['SettingsScreen', 'PushNotifications'],
+    'notifications.json': notificationsArray,
+    'notifications.ts': notificationsArray,
     'payments.json': ['Payments'],
     'payments.ts': ['Payments'],
     'personalInformation.json': demographicsArray,
