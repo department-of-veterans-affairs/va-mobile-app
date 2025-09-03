@@ -78,7 +78,13 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
     }
   }
 
-  if (!enrolledInVAHealthCare || !displayEmailConfirmationAlert || loadingContactInformation) {
+  // Display email alert in contact screen if no email associated
+  const contactScreenNoEmail = inContactInfoScreen && !emailOnFile
+  if (
+    !enrolledInVAHealthCare ||
+    loadingContactInformation ||
+    (!displayEmailConfirmationAlert && !contactScreenNoEmail)
+  ) {
     return <></>
   }
 
