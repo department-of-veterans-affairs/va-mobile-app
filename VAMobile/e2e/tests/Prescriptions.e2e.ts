@@ -353,7 +353,7 @@ describe('Prescriptions Screen', () => {
     await loginToDemoMode()
     await openHealth()
     await openPrescriptions()
-    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB.')))
+    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
