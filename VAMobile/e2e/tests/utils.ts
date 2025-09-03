@@ -255,11 +255,13 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
   if (confirmEmailBtnExist) {
     await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
 
   const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
   if (skipEmailBtnExist) {
     await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
 }
 
