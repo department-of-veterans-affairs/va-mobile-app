@@ -187,9 +187,12 @@ const getClinicInfo = (
     case AppointmentDetailsTypeConstants.InPersonVA:
     case AppointmentDetailsTypeConstants.ClaimExam:
     case AppointmentDetailsTypeConstants.VideoVA:
+      if (attributes.isCerner) {
+        return Spacer({ size: 'lg' })
+      }
       return (
         <Box>
-          <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween} testID={'appointmentsClinicId'}>
             {t('appointments.clinic', {
               clinicName:
                 friendlyLocationName && friendlyLocationName.length > 1
@@ -197,7 +200,10 @@ const getClinicInfo = (
                   : t('appointments.notAvailable'),
             })}
           </TextView>
-          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+          <TextView
+            variant="MobileBody"
+            mb={theme.dimensions.standardMarginBetween}
+            testID={'appointmentsPhysicalLocationId'}>
             {t('appointments.physicalLocation', {
               physicalLocation:
                 physicalLocation && physicalLocation.length > 1 ? physicalLocation : t('appointments.notAvailable'),
