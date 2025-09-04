@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { I18nextProvider } from 'react-i18next'
-import { useTranslation } from 'react-i18next'
+import { I18nextProvider, useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
@@ -24,15 +23,12 @@ import {
   useSnackbar,
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { ThemeProvider } from 'styled-components'
 
-import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import NotificationManager, { useNotificationContext } from 'components/NotificationManager'
+import QueryClientProvider from 'components/QueryClientProvider/QueryClientProvider'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
@@ -65,8 +61,7 @@ import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { SettingsState } from 'store/slices'
+import { AnalyticsState, AuthState, SettingsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import {
   AccessibilityState,
   sendUsesLargeTextAnalytics,
@@ -98,14 +93,6 @@ if (isIOS()) {
   KeyboardManager.setKeyboardDistanceFromTextField(45)
   KeyboardManager.setEnableAutoToolbar(false)
 }
-
-const storage = new Storage({
-  location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
-})
-
-const persister = createAsyncStoragePersister({
-  storage: storage,
-})
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -185,35 +172,33 @@ function MainApp() {
   }
 
   return (
-    <>
-      <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
-        <ActionSheetProvider>
-          <ThemeProvider theme={currentTheme}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18n}>
-                <NavigationContainer
-                  ref={navigationRef}
-                  linking={linking}
-                  onReady={navOnReady}
-                  onStateChange={onNavStateChange}>
-                  <NotificationManager>
-                    <SafeAreaProvider>
-                      <StatusBar
-                        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
-                        backgroundColor={currentTheme.colors.background.main}
-                      />
-                      <SnackbarProvider>
-                        <AuthGuard />
-                      </SnackbarProvider>
-                    </SafeAreaProvider>
-                  </NotificationManager>
-                </NavigationContainer>
-              </I18nextProvider>
-            </Provider>
-          </ThemeProvider>
-        </ActionSheetProvider>
-      </PersistQueryClientProvider>
-    </>
+    <QueryClientProvider>
+      <ActionSheetProvider>
+        <ThemeProvider theme={currentTheme}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <NavigationContainer
+                ref={navigationRef}
+                linking={linking}
+                onReady={navOnReady}
+                onStateChange={onNavStateChange}>
+                <NotificationManager>
+                  <SafeAreaProvider>
+                    <StatusBar
+                      barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+                      backgroundColor={currentTheme.colors.background.main}
+                    />
+                    <SnackbarProvider>
+                      <AuthGuard />
+                    </SnackbarProvider>
+                  </SafeAreaProvider>
+                </NotificationManager>
+              </NavigationContainer>
+            </I18nextProvider>
+          </Provider>
+        </ThemeProvider>
+      </ActionSheetProvider>
+    </QueryClientProvider>
   )
 }
 

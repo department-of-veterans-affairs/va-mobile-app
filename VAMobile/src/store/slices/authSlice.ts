@@ -1,4 +1,5 @@
 import * as Keychain from 'react-native-keychain'
+import { ACCESSIBLE, ACCESS_CONTROL, SECURITY_LEVEL } from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import NetInfo from '@react-native-community/netinfo'
@@ -34,6 +35,7 @@ import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
+import { generateBase64 } from 'utils/rnSecureRandom'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -230,7 +232,7 @@ const deviceSupportedBiometrics = async (): Promise<string> => {
 /**
  * Checks if biometric is preferred
  */
-const isBiometricsPreferred = async (): Promise<boolean> => {
+export const isBiometricsPreferred = async (): Promise<boolean> => {
   try {
     const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
     console.debug(`shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY=${value}`)
@@ -369,6 +371,7 @@ const storeRefreshToken = async (
   const splitToken = refreshToken.split('.')
   await Promise.all([
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
+    storeEncryptedCacheKey(storageType),
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
     AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
@@ -414,6 +417,23 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
         dispatch(dispatchFinishLoadingRefreshToken())
       }
     }
+  }
+}
+
+const storeEncryptedCacheKey = async (storageType: AUTH_STORAGE_TYPE) => {
+  // Only store the encrypted key if biometrics are enabled
+  if (storageType !== AUTH_STORAGE_TYPE.BIOMETRIC) {
+    return
+  }
+
+  const key = await Keychain.getGenericPassword()
+  if (!key) {
+    const newKey = await generateBase64(42)
+    await Keychain.setGenericPassword('cache_key', newKey, {
+      accessControl: ACCESS_CONTROL.BIOMETRY_CURRENT_SET,
+      accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      securityLevel: SECURITY_LEVEL.SECURE_HARDWARE,
+    })
   }
 }
 
