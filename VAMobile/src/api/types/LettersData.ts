@@ -7,6 +7,7 @@ export const LetterTypeConstants: {
   civilService: LetterTypes
   benefitSummary: LetterTypes
   benefitVerification: LetterTypes
+  certificateOfEligibility: LetterTypes
 } = {
   commissary: 'commissary',
   proofOfService: 'proof_of_service',
@@ -16,6 +17,7 @@ export const LetterTypeConstants: {
   civilService: 'civil_service',
   benefitSummary: 'benefit_summary',
   benefitVerification: 'benefit_verification',
+  certificateOfEligibility: 'certificate_of_eligibility',
 }
 
 export type LetterTypes =
@@ -27,6 +29,7 @@ export type LetterTypes =
   | 'civil_service'
   | 'benefit_summary'
   | 'benefit_verification'
+  | 'certificate_of_eligibility'
 
 export type LetterData = {
   name: string

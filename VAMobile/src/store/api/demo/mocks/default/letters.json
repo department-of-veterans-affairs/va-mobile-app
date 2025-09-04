@@ -36,6 +36,10 @@
           {
             "name": "Service Verification Letter",
             "letterType": "service_verification"
+          },
+          {
+            "name": "certificate of eligibility letter",
+            "letterType": "certificate_of_eligibility"
           }
         ]
       }
