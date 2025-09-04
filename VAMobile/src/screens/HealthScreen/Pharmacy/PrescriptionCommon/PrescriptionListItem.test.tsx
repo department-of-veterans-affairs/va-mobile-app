@@ -54,7 +54,7 @@ context('PrescriptionListItem', () => {
             `${t('prescription.refillsLeft')} ${t('prescription.details.refillRemainingNotAvailable')}`,
           ),
         ).toBeTruthy()
-        expect(screen.getByLabelText(`${t('fillDate')} ${t('prescription.details.dateNotAvailable')}`)).toBeTruthy()
+        expect(screen.getByLabelText(`${t('fillDate')} ${t('prescription.details.fillDateNotAvailable')}`)).toBeTruthy()
         expect(
           screen.getByLabelText(
             `${a11yLabelVA(t('prescription.vaFacility'))} ${t('prescription.details.facilityNameNotAvailable')}`,
@@ -80,7 +80,7 @@ context('PrescriptionListItem', () => {
             `${t('prescription.refillsLeft')} ${t('prescription.details.refillRemainingNotAvailable')}`,
           ),
         ).toBeTruthy()
-        expect(screen.getByLabelText(`${t('fillDate')} ${t('prescription.details.dateNotAvailable')}`)).toBeTruthy()
+        expect(screen.getByLabelText(`${t('fillDate')} ${t('prescription.details.fillDateNotAvailable')}`)).toBeTruthy()
         expect(
           screen.getByLabelText(
             `${a11yLabelVA(t('prescription.vaFacility'))} ${t('prescription.details.facilityNameNotAvailable')}`,

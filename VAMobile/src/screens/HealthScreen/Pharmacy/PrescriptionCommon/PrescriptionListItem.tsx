@@ -26,11 +26,16 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
-  const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(t, refillDate, t('prescription.details.dateNotAvailable'))
+  const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(
+    t,
+    refillDate,
+    t('prescription.details.fillDateNotAvailable'),
+  )
 
   const refillRemainingText =
     refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
   const refillDateText = `${t('prescription.refillsLeft')} ${refillRemainingText}`
+  const facilityNameText = facilityName || t('prescription.details.facilityNameNotAvailable')
 
   const renderInstructions = () => {
     if (hideInstructions) {
@@ -82,8 +87,8 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       <TextView
         variant={'HelperText'}
         mt={condensedMarginBetween}
-        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityName || t('prescription.details.facilityNameNotAvailable')}`}>
-        {`${t('prescription.vaFacility')} ${facilityName || t('prescription.details.facilityNameNotAvailable')}`}
+        accessibilityLabel={`${a11yLabelVA(t('prescription.vaFacility'))} ${facilityNameText}`}>
+        {`${t('prescription.vaFacility')} ${facilityNameText}`}
       </TextView>
     </Box>
   )
