@@ -52,17 +52,17 @@ export const screenshotData: ScreenshotData[] = [
     deviceType: ['ios', 'android', 'ipad'],
     setupFunction: 'messagesInbox',
   },
-  {
-    testId: 'PaymentsHistory',
-    imageName: {
-      ios: 'iphone67-screen-8',
-      android: '8_en-US',
-      ipad: 'ipadPro129-screen-8',
-    },
-    description: 'Review your payments history',
-    deviceType: ['ios', 'android', 'ipad'],
-    setupFunction: 'paymentsHistory',
-  },
+  // {
+  //   testId: 'PaymentsHistory',
+  //   imageName: {
+  //     ios: 'iphone67-screen-8',
+  //     android: '8_en-US',
+  //     ipad: 'ipadPro129-screen-8',
+  //   },
+  //   description: 'Review your payments history',
+  //   deviceType: ['ios', 'android', 'ipad'],
+  //   setupFunction: 'paymentsHistory',
+  // },
   {
     testId: 'ProfileScreen',
     imageName: {
