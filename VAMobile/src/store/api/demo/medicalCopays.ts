@@ -1,4 +1,4 @@
-import { MedicalCopayPayload, MedicalCopaysPayload } from 'api/types'
+import { MedicalCopaysPayload } from 'api/types'
 import { Params } from 'store/api'
 import { DemoStore } from 'store/api/demo/store'
 
@@ -10,7 +10,7 @@ export type MedicalCopaysDemoStore = {
 }
 
 /** Union of return types for copay demo API calls */
-export type MedicalCopaysDemoReturnTypes = undefined | MedicalCopaysPayload | MedicalCopayPayload
+export type MedicalCopaysDemoReturnTypes = undefined | MedicalCopaysPayload
 
 /** GET /v0/medical_copays */
 export const getMedicalCopays = (store: DemoStore, _params: Params, endpoint: string): MedicalCopaysPayload => {
