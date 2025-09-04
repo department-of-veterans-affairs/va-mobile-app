@@ -64,10 +64,24 @@ describe(':android: Cerner Notice', () => {
   })
 
   it('tap on messages and verify the cerner notification is present and collapsed', async () => {
-    await element(by.id('appointmentsBackTestID')).tap()
     await openMessages()
     await expect(element(by.id(CernerIdConstants.CERNER_NOTE_HEADING_ID))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).not.toExist()
+  })
+
+  it('verify the correct webpage My Health link is opened', async () => {
+    await element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID)).tap()
+    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
+    await setTimeout(5000)
+    await device.takeScreenshot('cernerVAHealthLink')
+    await device.launchApp({ newInstance: false })
+  })
+
+  it('should tap on the cerner notification and verify the alert closes', async () => {
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).swipe('down')
+    await element(by.text(CernerIdConstants.CERNER_NOTE_HEADING_TEXT)).tap()
+    await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).not.toExist()
+    await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).not.toExist()
   })
 
   it('verify the correct information is displayed for multiple facilities', async () => {
