@@ -1,6 +1,6 @@
 # Reusable workflow that sets up environment, installs depdendencies, and
 # runs Android fastlane using provided inputs
-name: '[Build] Reusable Android Workflow'
+name: "[Build] Reusable Android Workflow"
 
 on:
   workflow_call:
@@ -19,22 +19,22 @@ on:
       # Fastlane will default to "New QA version for {{DATE_TIME}}"
       notes:
         type: string
-        default: ''
+        default: ""
       # Google Play Console track to distribute to. Fastlane defaults to
       # "Development Team"
       ps_track:
         type: string
-        default: ''
+        default: ""
       # The branch or tag that we want to build from.  Defaults to the branch/tag that triggered
       # the automation, otherwise uses develop
       ref:
         type: string
-        default: ''
+        default: ""
       # Timestamp of the Slack thread where build related messages should be sent.
       # Gets assigned to the SLACK_THREAD_TS environment variable that Fastlane uses.
       slack_thread_ts:
         type: string
-        default: ''
+        default: ""
       # Version to use for production release. QA/On-demand builds will increment
       # upon the latest version in Google Play Console
       version:
@@ -69,20 +69,6 @@ jobs:
   build_android:
     runs-on: ubuntu-4-cores-latest
     steps:
-      - name: Validate lane/environment combination and set environment variable
-        working-directory: .
-        shell: bash
-        run: |
-          LANE="${{ inputs.lane }}"
-          ENVIRONMENT="${{ inputs.environment }}"
-          if [[ ( "$LANE" == "release" || "$LANE" == "review" ) && "$ENVIRONMENT" != "production" ]]; then
-            echo -e "\033[31mERROR: Lane '$LANE' cannot be used with environment '$ENVIRONMENT'. Only 'production' is allowed for release/review lanes. Failing build and alerting Slack.\033[0m"
-            if [[ -n "${{ secrets.SLACK_API_TOKEN }}" ]]; then
-              WORKFLOW_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-              curl -X POST -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" --data-urlencode "channel=#va-mobile-build-alerts" --data-urlencode "text=❌ *Build Failed*: Invalid lane/environment combination. Lane: $LANE, Environment: $ENVIRONMENT | <$WORKFLOW_URL|View workflow run>" https://slack.com/api/chat.postMessage
-            fi
-            exit 1
-          fi
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -105,19 +91,19 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'microsoft'
+          distribution: "microsoft"
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: "3.1"
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: 'VAMobile/.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: 'VAMobile/yarn.lock'
+          node-version-file: "VAMobile/.nvmrc"
+          cache: "yarn"
+          cache-dependency-path: "VAMobile/yarn.lock"
       - name: Install npm dependencies
         uses: nick-fields/retry@v2
         with:

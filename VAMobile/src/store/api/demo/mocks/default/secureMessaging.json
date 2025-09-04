@@ -2445,7 +2445,17 @@
       "associatedBlockedTriageGroups": 0,
       "sort": {
         "name": "ASC"
-      }
+      },
+      "careSystems": [
+        {
+          "healthCareSystemName": "SM STAGING CARE SYSTEM",
+          "stationNumber": "989"
+        },
+        {
+          "healthCareSystemName": "357",
+          "stationNumber": "357"
+        }
+      ]
     }
   }
 }
