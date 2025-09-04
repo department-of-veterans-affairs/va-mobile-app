@@ -24,6 +24,7 @@ import {
   TextArea,
   TextLine,
   TextView,
+  TextViewProps,
   VABulletList,
   VAScrollView,
 } from 'components'
@@ -251,6 +252,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
+  const titleProps: TextViewProps = {
+    variant: 'TableHeaderBold',
+    mx: gutter,
+    mb: condensedMarginBetween,
+    mt: standardMarginBetween,
+    accessibilityRole: 'header',
+  }
+
   const getNoAuth = () => {
     const alertWrapperProps: BoxProps = {
       mb: standardMarginBetween,
@@ -333,11 +342,12 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
             items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)}
             title={t('contactInformation.phoneNumbers')}
           />
-          <DefaultList
-            items={getEmailAddressData(contactInformation, t, onEmailAddress)}
-            title={t('contactInformation.contactEmailAddress')}
-            alertContent={<EmailConfirmationAlert inContactInfoScreen />}
-          />
+          <TextView {...titleProps} accessible={true} testID={t('contactInformation.contactEmailAddress')}>
+            {t('contactInformation.contactEmailAddress')}
+          </TextView>
+          <EmailConfirmationAlert inContactInfoScreen />
+          <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} />
+
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}
           </TextView>
