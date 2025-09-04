@@ -40,7 +40,12 @@ import {
   SecureMessagingDemoStore,
   getFolderMessages,
 } from 'store/api/demo/secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import {
+  TravelPayDemoReturnTypes,
+  TravelPayDemoStore,
+  getTravelPayClaims,
+  submitAppointmentClaim,
+} from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
 
 /**
@@ -59,7 +64,8 @@ export type DemoStore = AppointmentsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
   AllergyDemoStore &
-  LabsAndTestsDemoStore
+  LabsAndTestsDemoStore &
+  TravelPayDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -241,6 +247,12 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return getTravelPayClaims(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

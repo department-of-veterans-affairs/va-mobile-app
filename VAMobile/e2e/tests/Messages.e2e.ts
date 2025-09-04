@@ -358,7 +358,7 @@ describe('Messages Screen', () => {
 
   it(':ios: should tap the to field and select a name', async () => {
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_CARE_SYSTEM_ID)).tap()
-    await element(by.text('Cary VA Medical Center')).tap()
+    await element(by.text('357')).tap()
     await element(by.text('Done')).tap()
     await element(by.id(MessagesE2eIdConstants.START_NEW_MESSAGE_TO_ID)).tap()
     await element(by.text('VA Flagship mobile applications interface 2_DAYT29')).tap()

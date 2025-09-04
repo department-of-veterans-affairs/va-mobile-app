@@ -14,6 +14,7 @@ const importClaraJeffersonData = () => {
     import('store/api/demo/mocks/default/demographics.json'),
     import('./personalInformation.json'),
     import('store/api/demo/mocks/default/allergies.json'),
+    import('store/api/demo/mocks/default/travelPay.json'),
   ]
 }
 
