@@ -1,4 +1,5 @@
 import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
