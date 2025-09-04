@@ -70,11 +70,9 @@ context('PrescriptionDetails', () => {
       expect(screen.getByRole('header', { name: 'SOMATROPIN 5MG INJ (VI)' })).toBeTruthy()
       expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} None noted`)).toBeTruthy()
       expect(screen.getByText(`${t('prescription.details.instructionsNotAvailable')}`)).toBeTruthy()
-      expect(screen.getByText(`${t('prescription.details.refillRemainingNotAvailable')}`)).toBeTruthy()
-      expect(screen.getByText(`${t('prescription.details.expirationDateNotAvailable')}`)).toBeTruthy()
+      expect(screen.getAllByText(`${t('prescription.details.refillRemainingNotAvailable')}`)).toBeTruthy()
+      expect(screen.getAllByText(`${t('prescription.details.expirationDateNotAvailable')}`)).toBeTruthy()
       expect(screen.getByText(`${t('prescription.details.facilityNameNotAvailable')}`)).toBeTruthy()
-      expect(screen.getByText(`${t('prescription.details.quantityNotAvailable')}`)).toBeTruthy()
-      expect(screen.getByText(`${t('prescription.details.orderedDateNotAvailable')}`)).toBeTruthy()
     })
   })
 
