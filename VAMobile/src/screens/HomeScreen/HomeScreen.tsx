@@ -338,7 +338,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
-        <EmailConfirmationAlert />
+        {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <InView
             triggerOnce={true}

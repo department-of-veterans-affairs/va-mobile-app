@@ -134,7 +134,7 @@ export function HealthScreen({}: HealthScreenProps) {
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
-        <EmailConfirmationAlert />
+        {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}

@@ -41,6 +41,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED = '@intl_number_notification_settings_dismissed'
@@ -345,7 +346,7 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
           <TextView {...titleProps} accessible={true} testID={t('contactInformation.contactEmailAddress')}>
             {t('contactInformation.contactEmailAddress')}
           </TextView>
-          <EmailConfirmationAlert inContactInfoScreen />
+          {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert inContactInfoScreen />}
           <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} />
 
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
