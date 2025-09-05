@@ -4,9 +4,17 @@ title: Push notifications
 
 ## Overview
 
-Deep links in the app are handled by the React Navigation library. The React Navigation linking configuration handles mapping links to the appropriate screens, and updating the navigation state when necessary.
+Push notifications should be used only when they provide timely or important information to Veterans. They are most appropriate for reminders about appointments, prescription refills, or requests for claim evidence. Routine updates that are not urgent should remain in the app.
+
+Notification frequency should be managed carefully. Teams should coordinate to avoid sending multiple messages in a short period, and when there are several updates, they should be combined into a single notification where possible. Both Apple and Android provide standards for grouping notifications, which should be followed.
+
+Content should be clear, concise, and written in plain language. Veterans should be able to dismiss notifications at any time. If a notification is tapped, it should take the user directly to the appropriate location in the app. Notifications should also expire automatically after a set period.
+
+Success should be measured by tracking how many Veterans keep notifications enabled, how often they interact with them, and whether the intended action is completed. These insights can guide improvements to timing, frequency, and message design.
 
 ## Setting up push notifications
+
+Deep links in the app are handled by the React Navigation library. The React Navigation linking configuration handles mapping links to the appropriate screens, and updating the navigation state when necessary.
 
 A prerequisite for adding deep linking support for a feature's push notification is to have push notifications setup for that feature. An architectural overview of how push notifications work in the app and information on how to add them for a feature can be found [in push notification documentation](../BackEnd/Features/PushNotifications.md).
 
