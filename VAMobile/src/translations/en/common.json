@@ -1359,6 +1359,7 @@
   "refillRequest": "Refill request",
   "refresh": "Refresh screen",
   "remoteConfig.title": "Remote Config",
+  "demoModeUsers.title": "Demo Mode Users",
   "remove": "Remove",
   "remove.a11yHint": "Click to remove {{ content }} from added attachments",
   "removePhoto": "Remove photo?",
