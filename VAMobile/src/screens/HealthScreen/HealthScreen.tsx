@@ -38,7 +38,9 @@ import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
@@ -138,6 +140,16 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
+        {featureEnabled('overpayCopay') && (
+          <LargeNavButton
+            title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
+            subText={t('copays.activityButton.subText', {
+              amount: numberToUSDollars(0),
+              count: 0,
+            })}
+          />
+        )}
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
