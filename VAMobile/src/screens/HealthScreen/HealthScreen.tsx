@@ -149,13 +149,13 @@ export function HealthScreen({}: HealthScreenProps) {
           />
         )}
         {featureEnabled('overpayCopay') && (
-          <ActivityButton
+          <LargeNavButton
             title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
             subText={t('copays.activityButton.subText', {
               amount: numberToUSDollars(0),
               count: 0,
             })}
-            deepLink={'copays'}
           />
         )}
         <LargeNavButton
