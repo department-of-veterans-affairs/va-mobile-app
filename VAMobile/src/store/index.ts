@@ -6,8 +6,11 @@ import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
+import getEnv from 'utils/env'
 
 import reactotron from '../../ReactotronConfig'
+
+const { REACTOTRON_ENABLED } = getEnv()
 
 // Creates the store
 const store = configureStore({
@@ -23,7 +26,8 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   enhancers: (getDefaultEnhancers) => {
     // Add enhancer if env is not production
-    const reactotronEnhancer = process.env.NODE_ENV !== 'production' ? [reactotron.createEnhancer()] : []
+    const reactotronEnhancer =
+      process.env.NODE_ENV !== 'production' && REACTOTRON_ENABLED ? [reactotron.createEnhancer()] : []
     return getDefaultEnhancers().concat(reactotronEnhancer)
   },
 })

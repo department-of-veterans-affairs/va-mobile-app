@@ -79,12 +79,12 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-const { ENVIRONMENT, IS_TEST } = getEnv()
+const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 
 enableScreens(true)
 injectStore(store)
 
-if (__DEV__ || ENVIRONMENT === EnvironmentTypesConstants.Staging) {
+if (__DEV__ && REACTOTRON_ENABLED) {
   require('../ReactotronConfig')
 }
 
