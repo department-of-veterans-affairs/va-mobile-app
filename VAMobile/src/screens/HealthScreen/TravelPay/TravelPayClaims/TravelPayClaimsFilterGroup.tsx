@@ -10,6 +10,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 import { Checkbox, Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { FILTER_KEY_ALL } from './TravelPayClaimsFilterModal'
 
 type Option<T> = {
   optionLabelKey: string
@@ -20,23 +21,23 @@ type Option<T> = {
 type CheckboxGroupProps = {
   options: Array<Option<string>>
   onChange: (val: string) => void
-  radioListTitle?: string
+  listTitle?: string
   selectedValues: Set<String>;
 }
 
 const isIntermediate = (value: string, options: Array<Option<string>>, selectedValues: Set<String>) => {
-  const somethingOtherThanAll = selectedValues.has('all')
+  const somethingOtherThanAll = selectedValues.has(FILTER_KEY_ALL)
     ? selectedValues.size > 1 && selectedValues.size < options.length
     : selectedValues.size > 0
 
-  return value === 'all' && somethingOtherThanAll;
+  return value === FILTER_KEY_ALL && somethingOtherThanAll;
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
 const TravelClaimsFilterCheckboxGroup = ({
   options,
   onChange,
-  radioListTitle,
+  listTitle,
   selectedValues,
 }: CheckboxGroupProps): ReactElement => {
   const theme = useTheme()
@@ -71,7 +72,7 @@ const TravelClaimsFilterCheckboxGroup = ({
 
   return (
     <Box>
-      <List items={listItems} title={radioListTitle}  />
+      <List items={listItems} title={listTitle}  />
     </Box>
   )
 }

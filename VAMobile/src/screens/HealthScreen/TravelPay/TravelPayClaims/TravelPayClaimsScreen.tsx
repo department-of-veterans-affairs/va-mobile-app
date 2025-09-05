@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useTheme } from 'utils/hooks'
+import { sortBy as sortByFunc } from 'underscore'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -14,23 +15,35 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
-import TravelPayClaimsFilter, { SortOption } from './TravelClaimsFilter'
+import TravelPayClaimsFilter, { SortOption, SortOptionType } from './TravelPayClaimsFilter'
 import { TravelPayClaimData } from 'api/types'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
-const getFilteredClaims = (
+const filteredAndSortedClaims = (
   claims: Array<TravelPayClaimData>,
-  filter: Set<string>
+  filter: Set<string>,
+  sortBy: SortOptionType,
 ) => {
   if (filter.size === 0) {
     return claims;
   }
 
-  const result = claims.filter(claim => {
+  let result = claims.filter(claim => {
     return filter.has(claim.attributes.claimStatus) 
   });
 
+
+  result = sortByFunc(result, (claim) => {
+    switch (sortBy) {
+      case SortOption.Recent:
+        return -claim.attributes.createdOn;
+      case SortOption.Oldest:
+        return claim.attributes.createdOn;
+      default:
+        return 0;
+    }
+  });
   return result;
 }
 
@@ -56,7 +69,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const claims = claimsPayload?.data ?? []
 
   const filteredClaims = useMemo(() => 
-    getFilteredClaims(claims, filter), [claims, filter]
+    filteredAndSortedClaims(claims, filter, sortBy), [claims, filter, sortBy]
   )
 
   const scrollViewRef = useRef<ScrollView | null>(null)
@@ -64,13 +77,13 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     scrollViewRef: scrollViewRef,
   }
 
-  const listTitle = () => (
-    t('travelPay.statusList.list.title', {
+  const listTitle = () => {
+    return t('travelPay.statusList.list.title', {
       count: filteredClaims.length,
-      filter: filter.size > 0 ? 'Multiple' : 'All',
-      sort: sortBy,
+      filter: filter.size > 0 ? 'Filtered' : 'All',
+      sort: t(`travelPay.statusList.sortOption.${sortBy}`).toLowerCase()
     })
-  )
+  }
 
   return (
     <FeatureLandingTemplate

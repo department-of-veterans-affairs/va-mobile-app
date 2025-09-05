@@ -45,7 +45,7 @@ function TravelPayClaimsList({
 
   const { perPage, totalEntries } = {
     perPage: CLAIMS_PER_PAGE,
-    totalEntries: claimsToShow.length || 0,
+    totalEntries: claims.length || 0,
   }
 
   useEffect(() => {

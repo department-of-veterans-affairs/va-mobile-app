@@ -1699,7 +1699,7 @@
   "travelPay.statusList.claimStatus": "Claim status: {{status}}",
   "travelPay.statusList.loading": "Loading your travel claims...",
   "travelPay.statusList.filterBy": "Filter by",
-  "travelPay.statusList.list.title": "{{filter}} travel claims {{count}}, sorted by {{sort}}",
+  "travelPay.statusList.list.title": "{{filter}} travel claims ({{count}}), sorted by {{sort}}",
   "travelPay.statusList.clearFilters": "Clear filters",
   "travelPay.statusList.filterOption.all": "All",
   "travelPay.statusList.sortBy": "Sort by",

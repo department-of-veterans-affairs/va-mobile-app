@@ -5,7 +5,7 @@ import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-import TravelClaimsFilterModal from './TravelClaimsFilterModal'
+import TravelClaimsFilterModal from './TravelPayClaimsFilterModal'
 
 type TravelPayClaimsFilterProps = {
   claims: Array<TravelPayClaimData>
