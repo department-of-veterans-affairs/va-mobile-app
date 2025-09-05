@@ -3,18 +3,15 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelClaimsFilter'
 import { context, render } from 'testUtils'
 
 context('TravelPayClaimsFilter', () => {
   const initializeTestInstance = () => {
     render(
       <TravelPayClaimsFilter
-        totalClaims={1}
-        selectedFilter=""
-        setSelectedFilter={() => {}}
-        selectedSortBy=""
-        setSelectedSortBy={() => {}}
+        claims={[]}
+        setClaimsFilter={() => {}}
       />,
     )
   }

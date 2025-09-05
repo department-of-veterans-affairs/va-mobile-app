@@ -14,26 +14,21 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
-import TravelPayClaimsFilter from './TravelPayClaimsFilter'
+import TravelPayClaimsFilter, { SortOption } from './TravelClaimsFilter'
 import { TravelPayClaimData } from 'api/types'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
-export type TravelClaimsFilter = {
-  filter: string
-  sortBy: string
-}
-
 const getFilteredClaims = (
   claims: Array<TravelPayClaimData>,
-  filter: TravelClaimsFilter,
+  filter: Set<string>
 ) => {
-  if (!filter.filter || filter.filter === 'All') {
+  if (filter.size === 0) {
     return claims;
   }
 
   const result = claims.filter(claim => {
-    return claim.attributes.claimStatus === filter.filter // TODO: filter.filter might become an array of strings because of checkbox not radio
+    return filter.has(claim.attributes.claimStatus) 
   });
 
   return result;
@@ -43,7 +38,8 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const [claimsFilter, setClaimsFilter] = useState<TravelClaimsFilter>({ filter: '', sortBy: '' })
+  const [filter, setFilter] = useState<Set<string>>(new Set())
+  const [sortBy, setSortBy] = useState(SortOption.Recent);
 
   const startDate = DateTime.now().minus({ months: 3 }).toISO()
   const endDate = DateTime.now().toISO()
@@ -59,9 +55,9 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   
   const claims = claimsPayload?.data ?? []
 
-  const filteredClaims = useMemo(() => {
-    return getFilteredClaims(claims, claimsFilter);
-  }, [claims, claimsFilter])
+  const filteredClaims = useMemo(() => 
+    getFilteredClaims(claims, filter), [claims, filter]
+  )
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -71,8 +67,8 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const listTitle = () => (
     t('travelPay.statusList.list.title', {
       count: filteredClaims.length,
-      filter: claimsFilter.filter || 'All', // TODO: what are good defaults, or hide?
-      sort: claimsFilter.sortBy || '????',  // TODO: what are good defaults, or hide?
+      filter: filter.size > 0 ? 'Multiple' : 'All',
+      sort: sortBy,
     })
   )
 
@@ -104,7 +100,10 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
 
           <TravelPayClaimsFilter 
             claims={claims}
-            setClaimsFilter={setClaimsFilter}
+            filter={filter}
+            setFilter={setFilter}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
           />
           <TravelPayClaimsList
             claims={filteredClaims}
