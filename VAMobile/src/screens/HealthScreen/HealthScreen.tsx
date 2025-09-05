@@ -31,6 +31,7 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
+import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -140,14 +141,21 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('overpayCopay') && (
+        {featureEnabled('travelPayStatusList') && (
           <LargeNavButton
+            title={t('travelPay.title')}
+            onPress={() => navigateTo('TravelPayClaims')}
+            testID="toTravelPayClaimsID"
+          />
+        )}
+        {featureEnabled('overpayCopay') && (
+          <ActivityButton
             title={t('copays.title')}
-            onPress={() => navigateTo('Copays')}
             subText={t('copays.activityButton.subText', {
               amount: numberToUSDollars(0),
               count: 0,
             })}
+            deepLink={'copays'}
           />
         )}
         <LargeNavButton
@@ -245,6 +253,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
         component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaimsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen
