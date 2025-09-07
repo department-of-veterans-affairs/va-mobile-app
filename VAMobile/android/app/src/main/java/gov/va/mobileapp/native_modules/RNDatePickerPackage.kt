@@ -10,7 +10,7 @@ import com.facebook.react.uimanager.ViewManager
  */
 class RNDatePickerPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return emptyList()
+        return emptyList() // no imperative modules for inline picker
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {

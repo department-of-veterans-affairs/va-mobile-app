@@ -1,45 +1,29 @@
 package gov.va.mobileapp.native_modules
 
-import android.widget.DatePicker
+import android.content.Context
+import androidx.compose.ui.platform.ComposeView
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
-import java.text.SimpleDateFormat
-import java.util.*
+import android.view.ViewGroup.LayoutParams
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.*
 
-class DatePickerViewManager : SimpleViewManager<DatePicker>() {
+class DatePickerViewManager : SimpleViewManager<ComposeView>() {
     override fun getName() = "RNDatePicker"
 
-    override fun createViewInstance(reactContext: ThemedReactContext): DatePicker {
-        val datePicker = DatePicker(reactContext)
-        val calendar = Calendar.getInstance()
-        datePicker.init(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH),
-        ) { _, year, month, day ->
-            // You could send events to JS here if needed
-        }
-        return datePicker
-    }
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun createViewInstance(reactContext: ThemedReactContext): ComposeView {
+        return ComposeView(reactContext).apply {
+            // Make sure it respects the parent size
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-    @ReactProp(name = "date")
-    fun setDate(view: DatePicker, dateString: String?) {
-        if (dateString == null) return
-
-        try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-            val date = sdf.parse(dateString)
-            val calendar = Calendar.getInstance()
-            calendar.time = date!!
-
-            view.updateDate(
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
+            setContent {
+                val state = rememberDatePickerState()
+                DatePicker(state = state)
+            }
         }
     }
 }
