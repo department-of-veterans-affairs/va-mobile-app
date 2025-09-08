@@ -83,6 +83,9 @@ const demographicsArray = ['PersonalInformationScreen', 'VeteranStatusCard', 'Ho
 const disabilityVeteranArray = ['DisabilityRatings', 'VeteranStatusCard']
 const appointmentsArray = ['Appointments', 'AppointmentsExpanded', 'AppointmentsTestTime', 'TravelPay']
 const notificationsArray = ['SettingsScreen', 'PushNotifications']
+// TODO: The rest of the Overpay/Copay screens still need to be added to project
+const medicalCopaysArray = ['Payments']
+const debtsArray = ['Payments']
 
 const detoxMapping = {
   directory: {
@@ -173,6 +176,8 @@ const detoxMapping = {
     'common.ts': fullTestRun,
     'contactInformation.json': contactInfoArray,
     'countries.ts': ['ContactInformation'],
+    'debts.ts': debtsArray,
+    'debts.json': debtsArray,
     'decisionLetters.json': ['DecisionLetters'],
     'decisionLetters.ts': ['DecisionLetters'],
     'demographics.ts': demographicsArray,
@@ -189,6 +194,8 @@ const detoxMapping = {
     'letters.json': ['VALetters'],
     'letters.ts': ['VALetters'],
     'linking.tsx': [],
+    'medicalCopays.ts': medicalCopaysArray,
+    'medicalCopays.json': medicalCopaysArray,
     'militaryPostOffices.ts': ['ContactInformation'],
     'militaryStates.ts': ['ContactInformation'],
     'namespaces.ts': [],
