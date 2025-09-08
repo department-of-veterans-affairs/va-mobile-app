@@ -305,7 +305,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text('LAMIVUDINE 10MG TAB'))).toExist()
     await expect(element(by.label('Prescription number 2 3 3 6 8 0 0'))).toExist()
     await expect(element(by.text('ZIDOVUDINE 1MG CAP'))).toExist()
-    await expect(element(by.label('Prescription number None noted'))).toExist()
+    await expect(element(by.label('Prescription number None noted')).atIndex(0)).toExist()
   })
 
   it('verify tracking link for DHL works', async () => {
