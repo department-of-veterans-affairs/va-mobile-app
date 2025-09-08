@@ -572,7 +572,7 @@
         "id": "52142594",
         "type": "Prescription",
         "attributes": {
-          "refillStatus": null,
+          "refillStatus": "unknown",
           "refillSubmitDate": null,
           "refillDate": null,
           "refillRemaining": null,
@@ -581,7 +581,7 @@
           "quantity": null,
           "expirationDate": null,
           "prescriptionNumber": null,
-          "prescriptionName": null,
+          "prescriptionName": "ZIDOVUDINE 10MG CAP",
           "dispensedDate": null,
           "stationNumber": null,
           "isRefillable": false,

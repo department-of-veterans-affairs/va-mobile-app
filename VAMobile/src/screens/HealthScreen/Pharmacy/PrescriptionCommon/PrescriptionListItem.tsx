@@ -33,7 +33,9 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   )
 
   const refillRemainingText =
-    refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
+    refillRemaining >= 0 && refillRemaining !== null
+      ? refillRemaining
+      : t('prescription.details.refillRemainingNotAvailable')
   const refillDateText = `${t('prescription.refillsLeft')} ${refillRemainingText}`
   const facilityNameText = facilityName || t('prescription.details.facilityNameNotAvailable')
 

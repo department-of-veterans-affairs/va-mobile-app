@@ -153,7 +153,9 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     t('prescription.details.orderedDateNotAvailable'),
   )
   const refillRemainingText =
-    refillRemaining >= 0 ? refillRemaining : t('prescription.details.refillRemainingNotAvailable')
+    refillRemaining >= 0 && refillRemaining !== null
+      ? refillRemaining
+      : t('prescription.details.refillRemainingNotAvailable')
   const instructionsText = instructions || t('prescription.details.instructionsNotAvailable')
   const facilityNameText = facilityName || t('prescription.details.facilityNameNotAvailable')
   const quantityText = quantity || t('prescription.details.quantityNotAvailable')
