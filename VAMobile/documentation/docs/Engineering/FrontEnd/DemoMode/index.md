@@ -64,6 +64,7 @@ The following are steps to create a new demo mode user
       * appointmentsTestTime.json
       * claims.json
       * contactInformation.json
+      * debts.json
       * decisionLetters.json
       * demographics.json
       * disabilityRating.json
@@ -72,6 +73,7 @@ The following are steps to create a new demo mode user
       * getFacilitiesInfoCerner.json
       * labsAndTests.json
       * letters.json
+      * medicalCopays.json
       * notifications.json
       * payments.json
       * personalInformation.json
