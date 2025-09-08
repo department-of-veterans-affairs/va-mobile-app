@@ -534,7 +534,7 @@
           "totalPages": 1,
           "totalEntries": 1
         },
-        "activeClaimsCount": 2
+        "activeClaimsCount": 0
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
