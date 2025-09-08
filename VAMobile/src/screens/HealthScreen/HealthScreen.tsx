@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
@@ -20,7 +19,6 @@ import {
   CategoryLandingAlert,
   EmailConfirmationAlert,
   LargeNavButton,
-  TextView,
 } from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -111,14 +109,13 @@ export function HealthScreen({}: HealthScreenProps) {
       const newSession = await AsyncStorage.getItem(NEW_SESSION)
 
       if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
-        navigateTo('HealthHelp')
         await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
         await AsyncStorage.setItem(NEW_SESSION, '')
       }
     }
 
     healthHelpScreenCheck()
-  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner])
 
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
   const activityError = appointmentsError || inboxError || prescriptionsError
@@ -185,23 +182,6 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      {cernerExist && (
-        <Box mx={theme.dimensions.buttonPadding}>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView variant="TableFooterLabel" accessibilityLabel={a11yLabelVA(t('healthHelp.info'))}>
-            {t('healthHelp.info')}
-          </TextView>
-          <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
-            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-            <TextView
-              variant="MobileFooterLink"
-              accessibilityLabel={a11yLabelVA(t('healthHelp.checkFacility'))}
-              paragraphSpacing={true}>
-              {t('healthHelp.checkFacility')}
-            </TextView>
-          </Pressable>
-        </Box>
-      )}
       {!enrolledInVAHealthCare && (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <AnnouncementBanner
