@@ -125,7 +125,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const filteredLetters = featureEnabled('COEAvailable')
     ? letters
     : letters?.filter((letter) => {
-        if (letter.name != 'Certificate of Eligibility for Home Loan Letter') {
+        if (letter.name !== 'Certificate of Eligibility for Home Loan Letter') {
           return letter
         }
       })
