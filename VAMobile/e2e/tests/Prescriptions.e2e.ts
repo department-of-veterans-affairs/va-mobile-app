@@ -83,7 +83,7 @@ export async function validateSort(
     if (firstInstance) {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-      await element(by.text('All (31)')).atIndex(0).tap()
+      await element(by.text('All (32)')).atIndex(0).tap()
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     } else {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
