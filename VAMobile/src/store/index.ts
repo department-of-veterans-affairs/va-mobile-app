@@ -5,6 +5,7 @@ import analyticsReducer from 'store/slices/analyticsSlice'
 import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
+import offlineReducer from 'store/slices/offlineSlice'
 import settingsReducer from 'store/slices/settingsSlice'
 
 // Creates the store
@@ -16,6 +17,7 @@ const store = configureStore({
     errors: errorReducer,
     analytics: analyticsReducer,
     settings: settingsReducer,
+    offline: offlineReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',

@@ -39,6 +39,7 @@ export const lightTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLightest,
     bullet: colors.vadsColorBaseDarker,
     carouselBullet: colors.uswdsSystemColorGray10,
+    offlineBanner: colors.vadsColorBase,
   },
   border: {
     aboutYou: colors.vadsColorGrayWarmLight,
@@ -91,6 +92,7 @@ export const lightTheme = {
     categoryLandingAlert: colors.vadsColorSecondaryDark,
     linkRow: colors.vadsColorPrimary,
     ussf: colors.vadsColorBlack,
+    contrast: colors.vadsColorBaseLightest,
   },
   text: {
     appVersionAndBuild: colors.vadsColorBlack,
@@ -178,6 +180,7 @@ export const darkTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLight,
     bullet: colors.uswdsSystemColorGray10,
     carouselBullet: colors.uswdsSystemColorGray10,
+    offlineBanner: colors.vadsColorBaseLightest,
   },
   border: {
     aboutYou: colors.uswdsSystemColorGray60,
@@ -230,6 +233,7 @@ export const darkTheme = {
     categoryLandingAlert: colors.uswdsSystemColorRedVivid40,
     linkRow: colors.uswdsSystemColorBlueVivid30,
     ussf: colors.vadsColorWhite,
+    contrast: colors.vadsColorBase,
   },
   text: {
     appVersionAndBuild: colors.vadsColorWhite,

@@ -1,9 +1,10 @@
-import NetInfo, { useNetInfo } from '@react-native-community/netinfo'
+import NetInfo from '@react-native-community/netinfo'
 
 import { NetworkMode, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
+import { useOfflineMode } from 'utils/hooks/offline'
 
 type CacheProps = {
   networkMode: NetworkMode
@@ -13,7 +14,7 @@ type CacheProps = {
 }
 
 export const useQueryCacheOptions = (): CacheProps => {
-  const { isConnected } = useNetInfo()
+  const isConnected = useOfflineMode()
 
   return {
     networkMode: isConnected === false ? 'offlineFirst' : 'online',

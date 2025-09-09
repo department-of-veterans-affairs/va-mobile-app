@@ -8,7 +8,6 @@ import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNetInfo } from '@react-native-community/netinfo'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -75,6 +74,7 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
+import { useOfflineMode } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
@@ -216,7 +216,7 @@ export function AuthGuard() {
     requestNotificationsPreferenceScreen,
   } = useSelector<RootState, AuthState>((state) => state.auth)
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
-  const { isConnected } = useNetInfo()
+  const isConnected = useOfflineMode()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
