@@ -33,6 +33,7 @@ import {
   BoxProps,
   CategoryLanding,
   CategoryLandingAlert,
+  EmailConfirmationAlert,
   EncourageUpdateAlert,
   HeaderButton,
   LinkRow,
@@ -338,6 +339,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
+        {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <InView
             triggerOnce={true}
