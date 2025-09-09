@@ -35,12 +35,13 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       })
       setPersister(p)
     }
-    getPersister()
+    if (usesBiometrics) {
+      getPersister()
+    }
   }, [usesBiometrics])
 
-  if (!persister) return null
-
   if (usesBiometrics) {
+    if (!persister) return null
     return (
       <PersistQueryClientProvider persistOptions={{ persister: persister }} client={queryClient}>
         {children}
