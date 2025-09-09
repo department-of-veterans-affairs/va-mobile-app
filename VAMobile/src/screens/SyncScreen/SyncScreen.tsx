@@ -57,7 +57,7 @@ function SyncScreen({}: SyncScreenProps) {
   )
   useClaimsAndAppeals('ACTIVE', { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
   useFolders({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
-  usePrescriptions({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
+  usePrescriptions({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched, useV1: true })
   useFacilitiesInfo({ enabled: !loggingOut && loggedIn })
 
   // Prefetch data for `About you` section

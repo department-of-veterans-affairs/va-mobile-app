@@ -117,7 +117,8 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
   const foldersQuery = useFolders({ enabled: isFocused })
-  const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
+  console.log('home screen')
+  const prescriptionsQuery = usePrescriptions({ enabled: isFocused, useV1: true })
   const facilitiesQuery = useFacilitiesInfo()
   const cernerFacilities = facilitiesQuery.data?.filter((facility) => facility.cerner) || []
 

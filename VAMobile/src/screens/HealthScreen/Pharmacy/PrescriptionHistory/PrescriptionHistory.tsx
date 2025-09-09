@@ -86,6 +86,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
+    useV1: true,
   })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {

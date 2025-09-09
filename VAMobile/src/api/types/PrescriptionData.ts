@@ -1,5 +1,10 @@
 import { AppointmentPhone } from 'api/types'
 
+export const API_VERSIONS = {
+  V0: 'v0',
+  V1: 'v1',
+}
+
 export type PrescriptionSortOptions = 'refillDate' | 'prescriptionName' | 'refillRemaining' | 'refillStatus'
 
 export const PrescriptionSortOptionConstants: {

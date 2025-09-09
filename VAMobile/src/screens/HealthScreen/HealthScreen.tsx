@@ -71,6 +71,7 @@ export function HealthScreen({}: HealthScreenProps) {
     isError: prescriptionsError,
   } = usePrescriptions({
     enabled: isFocused,
+    useV1: true,
   })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
