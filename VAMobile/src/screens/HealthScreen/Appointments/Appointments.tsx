@@ -19,7 +19,6 @@ import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import PastAppointmentsOld from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointmentsOld'
 import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
-import CernerAlert from 'screens/HealthScreen/CernerAlert'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -183,7 +182,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          <CernerAlert />
           <Box mb={theme.dimensions.floatingButtonOffset}>
             {selectedTab === 1 &&
               (featureEnabled('datePickerUpdate') ? (

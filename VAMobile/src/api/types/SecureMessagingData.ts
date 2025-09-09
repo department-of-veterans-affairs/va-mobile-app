@@ -207,7 +207,13 @@ export type SecureMessagingRecipientData = {
   }
 }
 
+export type SecureMessagingCareSystemData = {
+  healthCareSystemName: string
+  stationNumber: string
+}
+
 export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientData>
+export type SecureMessagingCareSystemDataList = Array<SecureMessagingCareSystemData>
 
 export type SecureMessagingRecipients = {
   data: SecureMessagingRecipientDataList
@@ -215,6 +221,7 @@ export type SecureMessagingRecipients = {
     sort: {
       name: 'ASC' | 'DESC'
     }
+    careSystems: SecureMessagingCareSystemDataList
   }
 }
 

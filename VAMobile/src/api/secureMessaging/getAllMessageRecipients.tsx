@@ -1,18 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import { filter } from 'underscore'
 
 import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
-import { SecureMessagingRecipientDataList, SecureMessagingRecipients } from 'api/types'
+import { SecureMessagingRecipients } from 'api/types'
 import { get } from 'store/api'
 
 /**
  * Fetch user message recipients
  */
-const getAllMessageRecipients = async (): Promise<SecureMessagingRecipientDataList | undefined> => {
+const getAllMessageRecipients = async (): Promise<SecureMessagingRecipients | undefined> => {
   const response = await get<SecureMessagingRecipients>('/v0/messaging/health/allrecipients')
-  if (response?.data) {
-    return filter(response?.data, (recipient) => recipient.attributes.preferredTeam)
-  }
+  return response
 }
 
 /**

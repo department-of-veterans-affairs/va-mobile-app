@@ -35,9 +35,11 @@ export type FeatureToggleType =
   | 'testFeature'
   | 'travelPaySMOC'
   | 'travelPayClaimsFullHistory'
+  | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
+  | 'overpayCopay'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -60,9 +62,11 @@ type FeatureToggleValues = {
   testFeature: boolean
   travelPaySMOC: boolean
   travelPayClaimsFullHistory: boolean
+  travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
+  overpayCopay: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -86,9 +90,11 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   travelPaySMOC: true,
   travelPayClaimsFullHistory: false,
+  travelPayStatusList: false,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  overpayCopay: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
