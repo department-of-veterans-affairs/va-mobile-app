@@ -24,6 +24,7 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
@@ -104,19 +105,32 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
         })
+
       case LetterTypeConstants.certificateOfEligibility:
-        return navigateTo('GenericLetter', {
-          header: letterName,
-          description: t('letters.certificateOfEligibility.description'),
-          letterType,
-          screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
-        })
+        if (featureEnabled('COEAvailable')) {
+          return navigateTo('GenericLetter', {
+            header: letterName,
+            description: t('letters.certificateOfEligibility.description'),
+            letterType,
+            screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
+          })
+        } else {
+          return undefined
+        }
       default:
         return undefined
     }
   }
 
-  const letterButtons: Array<SimpleListItemObj> = map(letters || [], (letter: LetterData) => {
+  const filteredLetters = featureEnabled('COEAvailable')
+    ? letters
+    : letters?.filter((letter) => {
+        if (letter.name != 'Certificate of Eligibility for Home Loan Letter') {
+          return letter
+        }
+      })
+
+  const letterButtons: Array<SimpleListItemObj> = map(filteredLetters || [], (letter: LetterData) => {
     let letterName =
       letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()

@@ -14,6 +14,10 @@
             "letterType": "benefit_verification"
           },
           {
+            "name": "Certificate of Eligibility for Home Loan Letter",
+            "letterType": "certificate_of_eligibility_home_loan"
+          },
+          {
             "name": "Civil Service Preference Letter",
             "letterType": "civil_service"
           },
@@ -36,10 +40,6 @@
           {
             "name": "Service Verification Letter",
             "letterType": "service_verification"
-          },
-          {
-            "name": "certificate of eligibility letter",
-            "letterType": "certificate_of_eligibility"
           }
         ]
       }
