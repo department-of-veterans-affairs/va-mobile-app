@@ -11,11 +11,13 @@ import { Params } from 'store/api/api'
 import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from 'store/api/demo/allergies'
 import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from 'store/api/demo/appointments'
 import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from 'store/api/demo/claims'
+import { DebtsDemoReturnTypes, DebtsDemoStore, getDebts } from 'store/api/demo/debts'
 import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from 'store/api/demo/decisionLetters'
 import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from 'store/api/demo/demographics'
 import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
 import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
 import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import { MedicalCopaysDemoReturnTypes, MedicalCopaysDemoStore, getMedicalCopays } from 'store/api/demo/medicalCopays'
 import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
 import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
 import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
@@ -40,7 +42,12 @@ import {
   SecureMessagingDemoStore,
   getFolderMessages,
 } from 'store/api/demo/secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from 'store/api/demo/travelPay'
+import {
+  TravelPayDemoReturnTypes,
+  TravelPayDemoStore,
+  getTravelPayClaims,
+  submitAppointmentClaim,
+} from 'store/api/demo/travelPay'
 import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
 
 /**
@@ -59,7 +66,10 @@ export type DemoStore = AppointmentsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
   AllergyDemoStore &
-  LabsAndTestsDemoStore
+  LabsAndTestsDemoStore &
+  TravelPayDemoStore &
+  MedicalCopaysDemoStore &
+  DebtsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -80,6 +90,8 @@ type DemoApiReturns =
   | AllergyDemoReturnTypes
   | LabsAndTestsDemoReturnTypes
   | TravelPayDemoReturnTypes
+  | MedicalCopaysDemoReturnTypes
+  | DebtsDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -241,6 +253,18 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return getTravelPayClaims(store, params, endpoint)
+    }
+    case '/v0/medical_copays': {
+      return getMedicalCopays(store, params, endpoint)
+    }
+    case '/v0/debts': {
+      return getDebts(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

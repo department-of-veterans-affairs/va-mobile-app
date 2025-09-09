@@ -68,6 +68,7 @@ graph LR
         PreneedsBurials([Preneed Burials])
 
         Debts([Debts])
+        MedicalCopays([Medical Copays])
         FinancialStatusReports([Financial Status Reports])
 
         CommunityCareProviders([Community Care Providers])
@@ -189,6 +190,7 @@ graph LR
     PreneedsBurials --> EOAS
 
     Debts --> DMC
+    MedicalCopays --> DMC
     FinancialStatusReports --> DMC
 
     CommunityCareProviders --> PPMS

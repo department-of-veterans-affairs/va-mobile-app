@@ -163,9 +163,11 @@ PODS:
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
   - op-sqlite (14.1.4):
+    - OpenSSL-Universal
     - React
     - React-callinvoker
     - React-Core
+  - OpenSSL-Universal (3.3.3001)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
@@ -1453,7 +1455,7 @@ PODS:
     - React-Core
   - react-native-document-picker (8.2.2):
     - React-Core
-  - react-native-image-picker (7.1.2):
+  - react-native-image-picker (7.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2050,6 +2052,7 @@ SPEC REPOS:
     - libwebp
     - lottie-ios
     - nanopb
+    - OpenSSL-Universal
     - PromisesObjC
     - PromisesSwift
     - SDWebImage
@@ -2270,7 +2273,8 @@ SPEC CHECKSUMS:
   lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
   lottie-react-native: 8f9d4be452e23f6e5ca0fdc11669dc99ab52be81
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
-  op-sqlite: e6d1c4f6c52581b9ed0e88c127aaaf7431818d70
+  op-sqlite: 7ae1a8af441735a0e3b8601be7fb376be2aad1fe
+  OpenSSL-Universal: 6082b0bf950e5636fe0d78def171184e2b3899c2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: 7b4f73a92ad9571b9dbdb05bb30fad927fa971e1
@@ -2305,7 +2309,7 @@ SPEC CHECKSUMS:
   react-native-blob-util: 64a732c0b8bb7f4928905e16ea8dc5cde6fb4832
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
-  react-native-image-picker: 960f17ebb356854310264b481a76d95afb5b3c70
+  react-native-image-picker: a05e7cf2b13aa348e6a5e2354bcf8b5033a8aed0
   react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-quick-base64: 764b8014da7dc834e5b8ad756c980addf919c177
