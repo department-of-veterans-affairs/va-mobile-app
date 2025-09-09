@@ -105,7 +105,6 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
           screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           descriptionA11yLabel: t('letters.minimumEssentialCoverageA11yLabel.description'),
         })
-
       case LetterTypeConstants.certificateOfEligibility:
         return navigateTo('GenericLetter', {
           header: letterName,
