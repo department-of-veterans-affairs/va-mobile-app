@@ -23,7 +23,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILL_WARNING_ID: 'prescriptionRefillWarningTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
-  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (31), sorted by status (A to Z)',
+  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (32), sorted by status (A to Z)',
   PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8), sorted by status (A to Z)',
   PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
   PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active',
@@ -248,7 +248,7 @@ describe('Prescriptions Screen', () => {
   validateFilter('Tracking', 3, 'Includes refills with current tracking information available')
   validateFilter('Transferred', 1)
   validateFilter('Status Not Available', 2)
-  validateFilter('All', 31)
+  validateFilter('All', 32)
 
   it('verify prescriptions screen after filters cancel', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
@@ -267,14 +267,14 @@ describe('Prescriptions Screen', () => {
 
   it('pending: verify filters', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (31)'))).toExist()
+    await expect(element(by.text('All (32)'))).toExist()
     await expect(element(by.text('Active (24)'))).toExist()
     await expect(element(by.text('Discontinued (1)'))).toExist()
     await expect(element(by.text('Expired (4)'))).toExist()
     await expect(element(by.text('Pending (8)'))).toExist()
     await expect(element(by.text('Tracking (3)'))).toExist()
     await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Status Not Available (1)'))).toExist()
+    await expect(element(by.text('Status Not Available (2)'))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
   })
 
