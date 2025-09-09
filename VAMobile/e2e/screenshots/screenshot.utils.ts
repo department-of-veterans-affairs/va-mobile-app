@@ -45,7 +45,7 @@ const utils = {
     await openSettings()
     await openDeveloperScreen()
     if (device.getPlatform() === 'ios') {
-      await waitFor(element(by.text('Kimberly Washington')))
+      await waitFor(element(by.text('Demo Mode Users')))
         .toBeVisible()
         .whileElement(by.type('UIScrollView'))
         .scroll(200, 'down')
@@ -58,21 +58,19 @@ const utils = {
       let found = false
       for (const type of scrollViewTypes) {
         try {
-          await waitFor(element(by.text('Kimberly Washington')))
+          await waitFor(element(by.text('Demo Mode Users')))
             .toBeVisible()
             .whileElement(by.type(type))
             .scroll(200, 'down')
           found = true
           break
-        } catch (e) {
-          // Try next type
-        }
+        } catch (e) {}
       }
       if (!found) throw new Error('No scrollable view found for scrolling.')
     }
-    await element(by.text('Kimberly Washington')).tap()
+    await element(by.text('Demo Mode Users')).tap()
     await element(by.text('John Monroe')).tap()
-    await element(by.text('Done')).tap()
+    await element(by.text('Save and Logout')).tap()
     await loginToDemoMode()
   },
 
