@@ -107,16 +107,12 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
         })
 
       case LetterTypeConstants.certificateOfEligibility:
-        if (featureEnabled('COEAvailable')) {
-          return navigateTo('GenericLetter', {
-            header: letterName,
-            description: t('letters.certificateOfEligibility.description'),
-            letterType,
-            screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
-          })
-        } else {
-          return undefined
-        }
+        return navigateTo('GenericLetter', {
+          header: letterName,
+          description: t('letters.certificateOfEligibility.description'),
+          letterType,
+          screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
+        })
       default:
         return undefined
     }
