@@ -247,7 +247,7 @@ describe('Prescriptions Screen', () => {
   validateFilter('Pending', 8, 'Includes refill requests you submitted and refills the VA pharmacy is processing')
   validateFilter('Tracking', 3, 'Includes refills with current tracking information available')
   validateFilter('Transferred', 1)
-  validateFilter('Status Not Available', 1)
+  validateFilter('Status Not Available', 2)
   validateFilter('All', 31)
 
   it('verify prescriptions screen after filters cancel', async () => {

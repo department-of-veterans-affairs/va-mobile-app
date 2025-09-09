@@ -590,6 +590,27 @@
         }
       },
       {
+        "id": "52142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "discontinued",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB 1",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 10MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 2 DAYS"
+        }
+      },
+      {
         "id": "71142594",
         "type": "Prescription",
         "attributes": {
@@ -677,7 +698,7 @@
         "transferred": 1,
         "submitted": 0,
         "hold": 1,
-        "unknown": 1,
+        "unknown": 2,
         "total": 31
       },
       "hasNonVaMeds": true
