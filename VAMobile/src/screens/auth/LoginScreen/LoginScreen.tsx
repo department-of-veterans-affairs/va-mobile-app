@@ -4,7 +4,6 @@ import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNetInfo } from '@react-native-community/netinfo'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
@@ -40,6 +39,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
+import { useOfflineMode } from 'utils/hooks/offline'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -51,7 +51,7 @@ function LoginScreen() {
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
   const theme = useTheme()
-  const { isConnected } = useNetInfo()
+  const isConnected = useOfflineMode()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0

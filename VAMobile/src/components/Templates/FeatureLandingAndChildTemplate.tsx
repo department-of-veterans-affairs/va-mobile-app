@@ -5,7 +5,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  OfflineBanner,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
@@ -133,6 +141,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}

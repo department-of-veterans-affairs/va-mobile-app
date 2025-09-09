@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNetInfo } from '@react-native-community/netinfo'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { forEach, has } from 'underscore'
@@ -14,6 +13,7 @@ import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
+import { useOfflineMode } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 /**
@@ -121,7 +121,7 @@ export const useAppointments = (
 ) => {
   const queryClient = useQueryClient()
   const { data: authorizedServices } = useAuthorizedServices()
-  const { isConnected } = useNetInfo()
+  const isConnected = useOfflineMode()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const travelPayEnabled =
     !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
