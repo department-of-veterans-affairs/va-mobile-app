@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useTheme } from 'utils/hooks'
-import { sortBy as sortByFunc } from 'underscore'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -13,46 +11,25 @@ import { Box, ErrorComponent, FeatureLandingTemplate, TextView } from 'component
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import TravelPayClaimsFilter, { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import { FILTER_KEY_ALL } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
-import TravelPayClaimsFilter, { SortOption, SortOptionType } from './TravelPayClaimsFilter'
-import { TravelPayClaimData } from 'api/types'
+import { useTheme } from 'utils/hooks'
+import { filteredClaims, sortedClaims } from 'utils/travelPay'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
-
-const filteredAndSortedClaims = (
-  claims: Array<TravelPayClaimData>,
-  filter: Set<string>,
-  sortBy: SortOptionType,
-) => {
-  if (filter.size === 0) {
-    return claims;
-  }
-
-  let result = claims.filter(claim => {
-    return filter.has(claim.attributes.claimStatus) 
-  });
-
-
-  result = sortByFunc(result, (claim) => {
-    switch (sortBy) {
-      case SortOption.Recent:
-        return -claim.attributes.createdOn;
-      case SortOption.Oldest:
-        return claim.attributes.createdOn;
-      default:
-        return 0;
-    }
-  });
-  return result;
-}
 
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
   const [filter, setFilter] = useState<Set<string>>(new Set())
-  const [sortBy, setSortBy] = useState(SortOption.Recent);
+  const [sortBy, setSortBy] = useState(SortOption.Recent)
 
   const startDate = DateTime.now().minus({ months: 3 }).toISO()
   const endDate = DateTime.now().toISO()
@@ -65,23 +42,19 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     startDate,
     endDate,
   })
-  
-  const claims = claimsPayload?.data ?? []
 
-  const filteredClaims = useMemo(() => 
-    filteredAndSortedClaims(claims, filter, sortBy), [claims, filter, sortBy]
-  )
+  const claims = useMemo(() => claimsPayload?.data ?? [], [claimsPayload])
 
-  const scrollViewRef = useRef<ScrollView | null>(null)
-  const scrollViewProps: VAScrollViewProps = {
-    scrollViewRef: scrollViewRef,
-  }
+  // Filter and sort the claims based on the selections
+  const sortedFilteredClaims = useMemo(() => {
+    return claims.length === 0 ? claims : sortedClaims(filteredClaims(claims, filter), sortBy)
+  }, [claims, filter, sortBy])
 
   const listTitle = () => {
     return t('travelPay.statusList.list.title', {
-      count: filteredClaims.length,
-      filter: filter.size > 0 ? 'Filtered' : 'All',
-      sort: t(`travelPay.statusList.sortOption.${sortBy}`).toLowerCase()
+      count: sortedFilteredClaims.length,
+      filter: filter.has(FILTER_KEY_ALL) || filter.size === 0 ? 'All' : 'Filtered',
+      sort: t(`travelPay.statusList.sortOption.${sortBy}`).toLowerCase(),
     })
   }
 
@@ -100,29 +73,24 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
         />
       ) : (
         <Box>
-
           <Box mx={theme.dimensions.gutter} accessible={true}>
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
               mb={theme.dimensions.condensedMarginBetween}
               accessibilityRole="header"
               variant={'MobileBodyBold'}>
-                {listTitle()}
+              {listTitle()}
             </TextView>
           </Box>
 
-          <TravelPayClaimsFilter 
+          <TravelPayClaimsFilter
             claims={claims}
             filter={filter}
             setFilter={setFilter}
             sortBy={sortBy}
             setSortBy={setSortBy}
           />
-          <TravelPayClaimsList
-            claims={filteredClaims}
-            isLoading={isLoading}
-            scrollViewRef={scrollViewRef}
-          />
+          <TravelPayClaimsList claims={sortedFilteredClaims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
         </Box>
       )}
     </FeatureLandingTemplate>

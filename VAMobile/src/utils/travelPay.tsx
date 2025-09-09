@@ -3,10 +3,12 @@ import { ParamListBase } from '@react-navigation/native'
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
+import { sortBy } from 'underscore'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
+import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
 
@@ -131,3 +133,29 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
   }
 }
+/** Filters the claims based on the provided filter options
+ * @param claims - The list of claims
+ * @param filter - The filter options to apply
+ * @returns The filtered claims
+ */
+export const filteredClaims = (claims: Array<TravelPayClaimData>, filter: Set<string>) =>
+  filter.size === 0 ? claims : claims.filter((claim) => filter.has(claim.attributes.claimStatus))
+
+/**
+ * Sorts the claims based on the provided sort option
+ * @param claims - The list of claims
+ * @param sortBy - The sort option to apply
+ * @returns
+ */
+export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: SortOptionType) =>
+  sortBy(claims, (claim) => {
+    const dateTime = new Date(claim.attributes.appointmentDateTime).getTime()
+    switch (sortOption) {
+      case SortOption.Recent:
+        return -dateTime
+      case SortOption.Oldest:
+        return dateTime
+      default:
+        return 0
+    }
+  })

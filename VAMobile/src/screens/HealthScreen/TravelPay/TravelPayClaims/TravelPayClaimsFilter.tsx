@@ -1,15 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import TravelClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
 import { useTheme } from 'utils/hooks'
-import TravelClaimsFilterModal from './TravelPayClaimsFilterModal'
 
 type TravelPayClaimsFilterProps = {
   claims: Array<TravelPayClaimData>
-  filter: Set<string>,
+  filter: Set<string>
   setFilter: Dispatch<SetStateAction<Set<string>>>
   sortBy: SortOptionType
   setSortBy: Dispatch<SetStateAction<SortOptionType>>
@@ -25,13 +25,7 @@ export const SortOption: {
   Oldest: 'oldest',
 }
 
-function TravelClaimsFilter({
-  claims = [],
-  filter,
-  setFilter,
-  sortBy,
-  setSortBy
-}: TravelPayClaimsFilterProps) {
+function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSortBy }: TravelPayClaimsFilterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -45,7 +39,7 @@ function TravelClaimsFilter({
     mb: theme.dimensions.standardMarginBetween,
   }
 
-  const onClearFiltersPress = () => setFilter(new Set());
+  const onClearFiltersPress = () => setFilter(new Set())
 
   const filterModal = () => {
     return (
@@ -80,4 +74,4 @@ function TravelClaimsFilter({
   )
 }
 
-export default TravelClaimsFilter
+export default TravelPayClaimsFilter

@@ -1,29 +1,29 @@
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Modal, Pressable, PressableProps, View } from 'react-native'
+import { Modal, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, RadioGroup, TextView, TextViewProps, VAScrollView, radioOption } from 'components'
+import { TravelPayClaimData } from 'api/types'
+import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import TravelClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import { TravelPayClaimData } from 'api/types'
-import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import TravelClaimsFilterCheckboxGroup from './TravelClaimsFilterCheckboxGroup'
 
-export const FILTER_KEY_ALL = 'all';
+export const FILTER_KEY_ALL = 'all'
 
-type TravelClaimsFilterModalProps = {
+type TravelPayClaimsFilterModalProps = {
   claims: Array<TravelPayClaimData>
-  currentFilter: Set<string>,
-  setCurrentFilter: Dispatch<SetStateAction<Set<string>>>,
-  currentSortBy: SortOptionType,
-  setCurrentSortBy: Dispatch<SetStateAction<SortOptionType>>,
+  currentFilter: Set<string>
+  setCurrentFilter: Dispatch<SetStateAction<Set<string>>>
+  currentSortBy: SortOptionType
+  setCurrentSortBy: Dispatch<SetStateAction<SortOptionType>>
 }
 
-const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
+const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   claims,
   currentFilter,
   setCurrentFilter,
@@ -32,8 +32,8 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [showScrollView, setShowScrollView] = useState(false)
-  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(currentFilter);
-  const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy);
+  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(currentFilter)
+  const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -45,25 +45,27 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
   const filterOptions = useMemo(() => {
     // Allow filtering by any of the statuses that appear in the list, and 'All'
     const statusToCount: Map<string, number> = new Map()
-      claims.forEach((claim) => {
-        const status = claim.attributes.claimStatus
-        const existingCount = statusToCount.get(status) ?? 0
-        statusToCount.set(status, existingCount + 1)
-      })
+    claims.forEach((claim) => {
+      const status = claim.attributes.claimStatus
+      const existingCount = statusToCount.get(status) ?? 0
+      statusToCount.set(status, existingCount + 1)
+    })
 
-      const options = Array.from(statusToCount.keys()).map((status) => ({
-        optionLabelKey: `${status} (${statusToCount.get(status)!})`,
-        value: status,
-      }))
+    const options = Array.from(statusToCount.keys()).map((status) => ({
+      optionLabelKey: `${status} (${statusToCount.get(status)!})`,
+      value: status,
+    }))
 
-      options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1))
-      options.unshift({
-        optionLabelKey: `${t('travelPay.statusList.filterOption.all')} (${totalClaims})`,
-        value: FILTER_KEY_ALL,
-      })
+    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1))
 
-      return options
-  }, [claims])
+    // Always add in the 'All' option as the first.
+    options.unshift({
+      optionLabelKey: `${t('travelPay.statusList.filterOption.all')} (${totalClaims})`,
+      value: FILTER_KEY_ALL,
+    })
+
+    return options
+  }, [claims, t, totalClaims])
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822
@@ -78,7 +80,7 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
 
   const showModal = () => {
     setModalVisible(true)
-    // onShowAnalyticsFn && onShowAnalyticsFn()
+    // onShowAnalyticsFn && onShowAnalyticsFn() // TODO: SC
   }
 
   const onCancelPressed = () => {
@@ -98,22 +100,32 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
   }
 
   const toggleFilter = (filterKey: string) => {
-    setSelectedFilter(prevFilter => {
+    setSelectedFilter((prevFilter) => {
       // If selecting 'all', then:
-      // 1. if 'all' is already selected, then selecting it again will deselect everything
-      // 2. if 'all' is not already selected, then selecting it will select everything
+      // 1. If 'all' is already selected, then deselect everything
+      // 2. If 'all' is not already selected, then select everything
       if (filterKey === FILTER_KEY_ALL) {
         return prevFilter.has(FILTER_KEY_ALL)
-        ? new Set()
-        : new Set([FILTER_KEY_ALL, ...claims.map(claim => claim.attributes.claimStatus)])
+          ? new Set()
+          : new Set([FILTER_KEY_ALL, ...claims.map((claim) => claim.attributes.claimStatus)])
       }
 
-      // Normal toggle behavior
-      return prevFilter.has(filterKey)
-        ? new Set([...prevFilter].filter(key => key !== filterKey))
-        : new Set([...prevFilter, filterKey]);
+      // If selecting a non-ALL filter, then:
+      // 1. If the filter is already selected, deselect it. And deselect "All" as well.
+      // 2. If the filter is not already selected, select it. And select "All" if everything is now selected.
+      if (prevFilter.has(filterKey)) {
+        return new Set([...prevFilter].filter((key) => key !== filterKey && key !== FILTER_KEY_ALL))
+      } else {
+        const newFilter = new Set([...prevFilter, filterKey])
+        if (newFilter.size === filterOptions.length - 1) {
+          // -1 because we don't count "All" option
+          newFilter.add(FILTER_KEY_ALL)
+        }
+
+        return newFilter
+      }
     })
-  };
+  }
 
   const actionsBarBoxProps: BoxProps = {
     flexDirection: 'row',
@@ -142,17 +154,13 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
           <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancelPressed}
+              <Pressable
+                onPress={onCancelPressed}
                 accessible
                 accessibilityRole="button"
                 accessibilityHint={t('cancel.picker.a11yHint')}
-                testID="filterButtonCancelTestID"
-              >
-                <TextView
-                  variant="MobileBody"
-                  color="showAll"
-                  allowFontScaling={false}
-                >
+                testID="filterButtonCancelTestID">
+                <TextView variant="MobileBody" color="showAll" allowFontScaling={false}>
                   {t('cancel')}
                 </TextView>
               </Pressable>
@@ -161,9 +169,8 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
                   variant="MobileBodyBold"
                   accessibilityRole={'header'}
                   textAlign={'center'}
-                  allowFontScaling={false}
-                >
-                    {t('travelPay.statusList.filterAndSort')}
+                  allowFontScaling={false}>
+                  {t('travelPay.statusList.filterAndSort')}
                 </TextView>
               </Box>
               <Pressable
@@ -171,13 +178,8 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
                 accessible
                 accessibilityRole={'button'}
                 accessibilityHint={t('done.picker.a11yHint')}
-                testID={'filterButtonApplyTestID'}
-              >
-                <TextView
-                  variant="MobileBody"
-                  color="showAll"
-                  allowFontScaling={false}
-                >
+                testID={'filterButtonApplyTestID'}>
+                <TextView variant="MobileBody" color="showAll" allowFontScaling={false}>
                   {t('apply')}
                 </TextView>
               </Pressable>
@@ -216,7 +218,8 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
         accessibilityLabel={t('travelPay.statusList.filterAndSort')}
         accessibilityHint={t('travelPay.statusList.filterAndSort')}>
         <Button
-          onPress={showModal} label={t('travelPay.statusList.filterAndSort')}
+          onPress={showModal}
+          label={t('travelPay.statusList.filterAndSort')}
           buttonType={ButtonVariants.Secondary}
           testID="travelClaimsFilterModalButtonTestId"
         />
@@ -225,4 +228,4 @@ const TravelClaimsFilterModal: FC<TravelClaimsFilterModalProps> = ({
   )
 }
 
-export default TravelClaimsFilterModal
+export default TravelPayClaimsFilterModal

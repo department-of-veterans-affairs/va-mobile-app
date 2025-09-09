@@ -31,11 +31,7 @@ type TravelPayClaimsListProps = {
 
 const CLAIMS_PER_PAGE = 10
 
-function TravelPayClaimsList({
-  claims,
-  isLoading,
-  scrollViewRef,
- }: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
