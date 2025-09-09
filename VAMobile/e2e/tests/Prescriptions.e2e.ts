@@ -129,7 +129,8 @@ export async function validateSort(
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_MODAL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await expect(element(by.text(lastPrescription))).toBeVisible()
   })
 }
