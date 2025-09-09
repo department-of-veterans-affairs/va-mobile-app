@@ -17,6 +17,7 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'COEAvailable'
   | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
@@ -45,6 +46,7 @@ type FeatureToggleValues = {
   appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
+  COEAvailable: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
@@ -73,6 +75,7 @@ export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
+  COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
