@@ -211,12 +211,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       onPress: () => navigateTo('RemoteConfig'),
       testId: 'Remote Config',
     },
-    {
-      text: 'Demo Mode Users',
-      decorator: ButtonDecoratorType.Navigation,
-      onPress: () => navigateTo('DemoModeUsers'),
-      testId: 'DemoModeUsers',
-    },
   ]
 
   const consoleWarningsList: Array<SimpleListItemObj> = [
@@ -230,6 +224,15 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         await toggleHideWarnings()
         setHideWarnings(!hideWarnings)
       },
+    },
+  ]
+
+  const demoModeList: Array<SimpleListItemObj> = [
+    {
+      text: 'Demo Mode Users',
+      decorator: ButtonDecoratorType.Navigation,
+      onPress: () => navigateTo('DemoModeUsers'),
+      testId: 'DemoModeUsers',
     },
   ]
 
@@ -291,6 +294,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Console Warnings
         </TextView>
         {<SimpleList items={consoleWarningsList} />}
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Demo Mode
+        </TextView>
+        <SimpleList items={demoModeList} />
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>

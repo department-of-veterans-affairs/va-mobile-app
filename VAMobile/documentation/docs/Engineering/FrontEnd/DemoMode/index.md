@@ -42,9 +42,17 @@ title: Accessing Demo Mode
 The following are steps to change the demo mode user
 1. Login to the application in Demo Mode
 2. Navigate to the Developer Screen from Settings
-3. Scroll down to the Select Demo User UI
-4. Select the demo user and the app will automatically log out
+3. Scroll down and press 'Demo Mode Users'
+   ![Open Android Studio](/img/demoMode/developer-settings-showing-demo-mode-users.png)
+4. Select the demo user and press 'Save and Logout'
+   ![Open Android Studio](/img/demoMode/demo-mode-users-screen.png)
 5. Login to demo mode again and the selected user's data will be loaded in
+
+### Available Demo Mode users
+- **Kimberly Washington**: US Coast Guard. Default demo user.
+- **Benjamin Adams**: US Army. No appointments, claims, prescriptions or messages.
+- **Clara Jefferson**: US Air Force. All authorized services disabled
+- **Dennis Madison**: United States Marine Corps. Appointments in timezones GMT+10, GMT+8 and GMT-11.
 
 ## Creating a Demo Mode user
 The following are steps to create a new demo mode user
@@ -84,6 +92,7 @@ The following are steps to create a new demo mode user
 5. In `src/store/api/demo/mocks/user.ts` add a user id to `DemoUserIds` and add a new entry to `DemoUsers` with the user's name and a short description of the user's data
     * The user id should be the same as the user directory name
 6. In `src/store/api/demo/store.ts` add a new case to the switch statement to import the new user's data
+7. Update the documentation here with the new user
 
 ## Troubleshooting
 
