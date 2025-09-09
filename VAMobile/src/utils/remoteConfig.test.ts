@@ -41,6 +41,7 @@ const mockOverrides = {
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  showEmailConfirmationAlert: true,
   overpayCopay: false,
 }
 

@@ -38,6 +38,7 @@ export type FeatureToggleType =
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
+  | 'showEmailConfirmationAlert'
   | 'overpayCopay'
 
 type FeatureToggleValues = {
@@ -64,6 +65,7 @@ type FeatureToggleValues = {
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
+  showEmailConfirmationAlert: boolean
   overpayCopay: boolean
 }
 
@@ -91,6 +93,7 @@ export const defaults: FeatureToggleValues = {
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  showEmailConfirmationAlert: true,
   overpayCopay: false,
 }
 
