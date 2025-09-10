@@ -819,7 +819,7 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   await openSettings()
   await openDeveloperScreen()
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID)).tap()
-  await waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
+  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
   await element(by.id(testIdOfDesiredUser)).tap()
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
   await loginToDemoMode()
