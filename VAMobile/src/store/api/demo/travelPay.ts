@@ -1,6 +1,14 @@
 import { DateTime } from 'luxon'
 
-import { SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
+import { GetTravelPayClaimsResponse, SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
+import { Params } from 'store/api'
+import { DemoStore } from 'store/api/demo/store'
+
+type TravelPayClaimsData = {
+  '/v0/travel-pay/claims': GetTravelPayClaimsResponse
+}
+export type TravelPayDemoStore = TravelPayClaimsData
+export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
   data: {
@@ -42,8 +50,10 @@ const createMockClaimResponse = (params: SubmitSMOCTravelPayClaimParameters): Su
   return mockClaimResponse
 }
 
-export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse
-
 export const submitAppointmentClaim = (params: SubmitSMOCTravelPayClaimParameters): SubmitTravelPayClaimResponse => {
   return createMockClaimResponse(params)
+}
+
+export const getTravelPayClaims = (store: DemoStore, _params: Params, endpoint: string): GetTravelPayClaimsResponse => {
+  return store[endpoint as keyof TravelPayDemoStore] as GetTravelPayClaimsResponse
 }

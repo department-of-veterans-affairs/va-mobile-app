@@ -48,6 +48,7 @@ export type HomeStackParamList = WebviewStackParams & {
   FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
+  DemoModeUsers: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
