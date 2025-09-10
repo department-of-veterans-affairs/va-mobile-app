@@ -47,7 +47,7 @@ function CernerAlertSM() {
   }
 
   if (authorizedServices?.secureMessagingOracleHealthEnabled) {
-    logAnalyticsEvent(Events.vama_blue_cerner_alert_sm())
+    logAnalyticsEvent(Events.vama_blue_alert_sm())
     return (
       <AlertWithHaptics
         variant="info"
@@ -61,7 +61,7 @@ function CernerAlertSM() {
         <Box mb={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics
             {...linkProps}
-            analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_cerner_alert_sm_link_confirm())}
+            analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_sm_link_conf())}
           />
         </Box>
       </AlertWithHaptics>

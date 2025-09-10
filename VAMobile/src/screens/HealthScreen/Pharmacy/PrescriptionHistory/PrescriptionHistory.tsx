@@ -466,7 +466,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
 
     if (userAuthorizedServices?.secureMessagingOracleHealthEnabled) {
-      logAnalyticsEvent(Events.vama_blue_cerner_alert_rx())
+      logAnalyticsEvent(Events.vama_blue_alert_rx())
       return (
         <Box mx={theme.dimensions.gutter}>
           <AlertWithHaptics
@@ -480,7 +480,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             <Box mb={theme.dimensions.standardMarginBetween}>
               <LinkWithAnalytics
                 {...linkProps}
-                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_cerner_alert_rx_link_confirm())}
+                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_rx_link_conf())}
               />
             </Box>
           </AlertWithHaptics>
