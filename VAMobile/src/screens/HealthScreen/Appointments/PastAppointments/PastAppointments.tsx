@@ -1,4 +1,4 @@
-import React, { RefObject, useMemo } from 'react'
+import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -8,6 +8,7 @@ import { DateTime } from 'luxon'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
@@ -19,6 +20,7 @@ import {
   getDatePickerRange,
   getGroupedAppointments,
   getPastAppointmentDateRange,
+  getPastTimeFrame,
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -27,9 +29,8 @@ type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
   dateRange: AppointmentsDateRange
   loading: boolean
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
+  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
 }
 
@@ -37,14 +38,14 @@ function PastAppointments({
   appointmentsData,
   dateRange,
   loading,
-  page,
-  setPage,
   setDateRange,
+  setTimeFrame,
   scrollViewRef,
 }: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const [page, setPage] = useState(1)
 
   const datePickerRange = getDatePickerRange(dateRange)
 
@@ -54,20 +55,17 @@ function PastAppointments({
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
+  const filteredAppointments = useMemo(
+    () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
+    [appointmentsData?.data, datePickerRange],
+  )
+
   const pagination = {
     currentPage: page,
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
+    totalEntries: filteredAppointments?.length || 0,
   }
   const { perPage, totalEntries } = pagination
-
-  const filteredAppointments = useMemo(
-    () =>
-      datePickerRange.endDate.valueOf() === DateTime.local().endOf('day').valueOf()
-        ? filterAppointments(appointmentsData?.data || [], true)
-        : appointmentsData?.data,
-    [appointmentsData?.data, datePickerRange],
-  )
 
   const appointmentsToShow = useMemo(
     () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
@@ -82,12 +80,14 @@ function PastAppointments({
     const startDate = selectedDateRange.startDate.toISO()
     const endDate = selectedDateRange.endDate.toISO()
     if (startDate && endDate) {
+      setTimeFrame(getPastTimeFrame(selectedDateRange))
       setDateRange({ startDate, endDate })
       setPage(1)
     }
   }
 
   const handleDatePickerReset = () => {
+    setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
     setDateRange(getPastAppointmentDateRange())
     setPage(1)
   }

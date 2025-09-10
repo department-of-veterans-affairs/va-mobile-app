@@ -6,6 +6,10 @@ export type TimeFrameType =
   | 'pastElevenToNineMonths'
   | 'pastAllCurrentYear'
   | 'pastAllLastYear'
+  | 'pastSixMonths'
+  | 'pastNineMonths'
+  | 'pastOneYear'
+  | 'pastTwoYears'
 
 export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
   UPCOMING: 'upcoming',
@@ -15,6 +19,10 @@ export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
   PAST_ELEVEN_TO_NINE_MONTHS: 'pastElevenToNineMonths',
   PAST_ALL_CURRENT_YEAR: 'pastAllCurrentYear',
   PAST_ALL_LAST_YEAR: 'pastAllLastYear',
+  PAST_SIX_MONTHS: 'pastSixMonths',
+  PAST_NINE_MONTHS: 'pastNineMonths',
+  PAST_ONE_YEAR: 'pastOneYear',
+  PAST_TWO_YEARS: 'pastTwoYears',
 }
 
 export const DEFAULT_UPCOMING_DAYS_LIMIT = 30

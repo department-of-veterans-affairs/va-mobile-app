@@ -188,10 +188,9 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
                 <PastAppointments
                   appointmentsData={apptsData}
                   dateRange={dateRange}
-                  page={page}
-                  setPage={setPage}
                   loading={loadingAppointments || fetchingAuthServices}
                   setDateRange={setDateRange}
+                  setTimeFrame={setTimeFrame}
                   scrollViewRef={scrollViewRef}
                 />
               ) : (
