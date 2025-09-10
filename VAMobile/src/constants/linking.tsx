@@ -5,8 +5,7 @@ import { LinkingOptions, NavigationState } from '@react-navigation/native'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
 import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
-
-import { LoadingComponent } from '../components'
+import { LoadingComponent } from 'components'
 
 const authorizedServices = queryClient.getQueryData(
   authorizedServicesKeys.authorizedServices,
@@ -163,7 +162,11 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'BenefitsTab',
                   state: {
-                    routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                    routes: [
+                      { name: 'Benefits' },
+                      ...(authorizedServices?.decisionLetters ? [{ name: 'Claims' }] : []),
+                      { name: 'ClaimLettersScreen' },
+                    ],
                   },
                 },
               ],
