@@ -75,7 +75,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
         </Box>
       </Pressable>
       {open ? (
-        <Box flex={1}>
+        <Box flex={1} py={theme.dimensions.smallMarginBetween}>
           <RNDatePicker
             style={datePickerStyle}
             date={getNativePickerDate(date)}
