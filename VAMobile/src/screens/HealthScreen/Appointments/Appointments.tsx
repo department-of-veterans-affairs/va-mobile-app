@@ -15,6 +15,10 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
+import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
+import UpcomingAppointments from 'screens/HealthScreen/Appointments/UpcomingAppointments/UpcomingAppointments'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -23,12 +27,6 @@ import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import CernerAlert from '../CernerAlert'
-import { HealthStackParamList } from '../HealthStackScreens'
-import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
-import PastAppointments from './PastAppointments/PastAppointments'
-import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
@@ -183,7 +181,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          <CernerAlert />
           <Box mb={theme.dimensions.floatingButtonOffset}>
             {selectedTab === 1 && (
               <PastAppointments
