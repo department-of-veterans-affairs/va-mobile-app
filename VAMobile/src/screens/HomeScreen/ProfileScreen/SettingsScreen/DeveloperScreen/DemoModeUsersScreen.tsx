@@ -37,6 +37,7 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
     additionalLabelText: [DemoUsers[id as DemoUserIds].notes || ''],
   }))
 
+  console.log(demoUsers)
   return (
     <FeatureLandingTemplate
       backLabel={t('debug.title')}
@@ -52,6 +53,7 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
             dispatch(logout())
           }}
           label={'Save and Logout'}
+          testID={'demoModeUserSave'}
         />
       </TextArea>
     </FeatureLandingTemplate>

@@ -190,6 +190,8 @@ export const CommonE2eIdConstants = {
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
   TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
+  DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
+  DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
 }
 
 /** Logs into demo mode.
@@ -809,4 +811,16 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
   }
 
   await element(by.id('saveErrors')).tap()
+}
+
+export async function changeDemoModeUser(testIdOfDesiredUser: string) {
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID)).tap()
+  await waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
+  await element(by.id(testIdOfDesiredUser)).tap()
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await loginToDemoMode()
 }
