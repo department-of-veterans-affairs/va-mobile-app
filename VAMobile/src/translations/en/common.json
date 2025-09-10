@@ -859,6 +859,8 @@
   "health.details.weBaseThis": "We base this information on your current VA health records. If you have any questions, contact your health care team.",
   "health.title": "Health",
   "help": "Help",
+  "healthHelp.cernerTransitionInfoBanner.content": "No matter what V\ufeffA facility you visit, you can manage your health care right here.\n\nYou no longer need to use the My V\ufeffA Health portal, but you can still access it if needed.",
+  "healthHelp.cernerTransitionInfoBanner.header": "New: Manage all of your health care in the mobile app",
   "healthHelp.checkFacility": "Check if your care team uses My VA Health",
   "healthHelp.info": "Some care teams use My VA Health. Information from that health portal isn't included here.",
   "healthHelp.title": "Health help",
