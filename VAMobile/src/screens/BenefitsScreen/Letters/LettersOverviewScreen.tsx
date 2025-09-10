@@ -10,14 +10,13 @@ import { Box, FeatureLandingTemplate, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import NoLettersScreen from 'screens/BenefitsScreen/Letters/NoLettersScreen'
 import AddressSummary, {
   addressDataField,
   profileAddressOptions,
 } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import NoLettersScreen from './NoLettersScreen'
 
 type LettersOverviewProps = StackScreenProps<BenefitsStackParamList, 'LettersOverview'>
 
