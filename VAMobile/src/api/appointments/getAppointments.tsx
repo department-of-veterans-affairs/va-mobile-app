@@ -25,9 +25,6 @@ const getAppointments = (
     'include[]': 'travel_pay_claims',
   }
 
-  //TODO: REMOVE
-  console.log('api called', timeFrame)
-
   return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,

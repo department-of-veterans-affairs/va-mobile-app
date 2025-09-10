@@ -101,7 +101,6 @@ const DatePicker: FC<DatePickerProps> = ({
   }
 
   const handleApply = () => {
-    // TODO: Error Handling
     if (!fromFieldInvalid && !toFieldInvalid) {
       onApply(selectedDateRange)
       setFromFieldOpen(false)
