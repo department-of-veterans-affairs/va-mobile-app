@@ -15,26 +15,33 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const [usesBiometrics, setUsesBiometrics] = useState(false)
   const [persister, setPersister] = useState<Persister>()
 
+  // Checks async storage for biometrics preference
   useEffect(() => {
     const setBiometricsStatus = async () => {
-      const isit = await isBiometricsPreferred()
-      setUsesBiometrics(isit)
+      const biometricsPreferred = await isBiometricsPreferred()
+      setUsesBiometrics(biometricsPreferred)
     }
     setBiometricsStatus()
   }, [])
 
+  // Creates persister when using persistent query client provider
   useEffect(() => {
     const getPersister = async () => {
       const key = await Keychain.getGenericPassword()
+
+      // Create op-sqlite storage with encryption enabled
       const storage = new Storage({
         location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
         encryptionKey: (key as UserCredentials).password,
       })
-      const p = createAsyncStoragePersister({
+
+      const newPersister = createAsyncStoragePersister({
         storage: storage,
       })
-      setPersister(p)
+
+      setPersister(newPersister)
     }
+
     if (usesBiometrics) {
       getPersister()
     }
@@ -43,7 +50,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   if (usesBiometrics) {
     if (!persister) return null
     return (
-      <PersistQueryClientProvider persistOptions={{ persister: persister }} client={queryClient}>
+      <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}
       </PersistQueryClientProvider>
     )

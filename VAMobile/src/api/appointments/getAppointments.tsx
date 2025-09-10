@@ -1,5 +1,9 @@
+import * as Keychain from 'react-native-keychain'
+import { UserCredentials } from 'react-native-keychain'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { forEach, has } from 'underscore'
 
@@ -14,6 +18,7 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 import { useOfflineMode } from 'utils/hooks/offline'
+import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
 /**
@@ -50,9 +55,14 @@ const appointmentCacheGetter = async (
   startDate: string,
   endDate: string,
 ): Promise<AppointmentsGetData> => {
-  console.log('getting from cache', startDate, 'to', endDate)
+  const key = await Keychain.getGenericPassword()
+  const storage = new Storage({
+    location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
+    encryptionKey: (key as UserCredentials).password,
+  })
+
   // get cached appointments
-  const cachedAppointmentsStr = await AsyncStorage.getItem(queryKey)
+  const cachedAppointmentsStr = await storage.getItem(queryKey)
   const cachedAppointments = JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsMap
 
   // initialize metadata
@@ -135,7 +145,6 @@ export const useAppointments = (
     queryKey: [appointmentsKeys.appointments, timeFrame],
     networkMode: 'always',
     queryFn: () => {
-      console.log('getting appts@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@S', timeFrame)
       if (timeFrame === TimeFrameTypeConstants.UPCOMING && !queryClient.getQueryData(pastAppointmentsQueryKey)) {
         const pastRange = getPastAppointmentDateRange()
 
