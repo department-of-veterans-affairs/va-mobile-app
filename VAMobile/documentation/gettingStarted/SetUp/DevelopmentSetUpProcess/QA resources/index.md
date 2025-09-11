@@ -16,7 +16,7 @@ Within the VA Mobile project, our top-level test case folders to be familiar wit
 ### TestFlight & AppTester
 We distribute testing builds through TestFlight for iOS, and Firebase's AppTester for Android. Key builds for manual testing include: release candidate builds for release testing, builds based on the develop branch that are updated daily (for visual QA or backend testing), and on-demand builds of branches not yet merged to develop for ticket testing.
 
-To get access to either TestFlight or App Tester, follow the platform-specific instructions for your testing device on the [Tool Setup page](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/QA%20resources/tool%20setup/).
+To get access to either TestFlight or App Tester, follow the platform-specific instructions for your testing device on the [Tool Setup page](../QA%20resources/tool%20setup/index.md).
 
 ### Charles Proxy
 We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing.
@@ -37,8 +37,8 @@ Most commonly used: [writing a bug ticket with the new bug report template](http
 
 ## How do I
 ### Log into the mobile app in a staging environment?
-- First, you need to get [TestFlight (iOS) or AppTester (Android)](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Tool%20Setup) set up on the device you'll use, which includes coordination with the mobile Engineering lead to get added to the list of approved testers.
-- If you're testing backend changes, it's best to use a current version of the daily develop builds. If you're testing frontend changes, you'll need to follow the [on-demand build process](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Resources#on-demand-build), above.
+- First, you need to get [TestFlight (iOS) or AppTester (Android)](../QA%20resources/tool%20setup/index.md) set up on the device you'll use, which includes coordination with the mobile Engineering lead to get added to the list of approved testers.
+- If you're testing backend changes, it's best to use a current version of the daily develop builds. If you're testing frontend changes, you'll need to follow the [on-demand build process](./index.md#on-demand-build), above.
 - Any credentials that work to log into staging.va.gov will also work to log into the mobile app in the staging environment. The mobile team, by and large, does not have the ability to create staging users or specific staging data, so you will need to work with other VA teams to do any prep needed for testing.
 
 # Tool Setup
