@@ -3,25 +3,40 @@ import React, { ReactElement } from 'react'
 import { Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, List, ListItemObj, TextView } from 'components'
-import { FILTER_KEY_ALL } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
 import { useTheme } from 'utils/hooks'
 
-type Option<T> = {
+export const FILTER_KEY_ALL = 'all'
+
+export type CheckboxOption = {
   optionLabelKey: string
-  labelArgs?: { [key: string]: string }
-  value: T
+  value: string
+}
+
+export const isChecked = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size === allOptions.size
+  }
+
+  return selectedValues.has(value)
+}
+
+export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    const somethingOtherThanAll = selectedValues.size > 0 && selectedValues.size < allOptions.size
+    return somethingOtherThanAll
+  }
+
+  return false
 }
 
 type TravelPayClaimsFilterCheckboxGroupProps = {
-  options: Array<Option<string>>
+  options: Array<CheckboxOption> // TODO: sc - can we reuse this from elsewhere?
   onChange: (val: string) => void
   listTitle?: string
   selectedValues: Set<string>
-}
-
-const isIntermediate = (value: string, options: Array<Option<string>>, selectedValues: Set<string>) => {
-  const somethingOtherThanAll = !selectedValues.has(FILTER_KEY_ALL) && selectedValues.size > 0
-  return value === FILTER_KEY_ALL && somethingOtherThanAll
+  allLabelText: string
 }
 
 /**A common component to display radio button selectors for a list of selectable items*/
@@ -30,10 +45,20 @@ const TravelPayClaimsFilterCheckboxGroup = ({
   onChange,
   listTitle,
   selectedValues,
+  allLabelText,
 }: TravelPayClaimsFilterCheckboxGroupProps): ReactElement => {
   const theme = useTheme()
 
-  const listItems: Array<ListItemObj> = options.map((option) => {
+  // Always add "All" option
+  const optionsWithAll = [
+    {
+      optionLabelKey: allLabelText,
+      value: FILTER_KEY_ALL,
+    },
+    ...options,
+  ]
+
+  const listItems: Array<ListItemObj> = optionsWithAll.map((option) => {
     return {
       content: (
         <Box flexDirection={'row'} flexGrow={1} alignItems="center">
@@ -41,15 +66,17 @@ const TravelPayClaimsFilterCheckboxGroup = ({
             mr={theme.dimensions.condensedMarginBetween}
             flex={7}
             variant="VASelector"
-            color={theme.colors.text.primary}>
+            color={theme.colors.text.primary}
+            testID={`checkbox_label_${option.value}`}>
             {option.optionLabelKey}
           </TextView>
           <Box>
             <Checkbox
               label=""
-              checked={selectedValues?.has(option.value)}
+              checked={isChecked(option.value, options, selectedValues)}
               onPress={() => onChange(option.value)}
-              indeterminate={isIntermediate(option.value, options, selectedValues)}
+              indeterminate={isIndeterminate(option.value, options, selectedValues)}
+              testID={`checkbox_${option.value}`}
             />
           </Box>
         </Box>

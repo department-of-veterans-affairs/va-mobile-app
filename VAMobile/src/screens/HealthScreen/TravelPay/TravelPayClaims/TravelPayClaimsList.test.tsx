@@ -1,13 +1,14 @@
 import React from 'react'
+import { ScrollView } from 'react-native-gesture-handler'
 
-import { screen, waitFor } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
-import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
-import { get } from 'store/api'
-import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
+import TravelPayClaimsList, {
+  CLAIMS_PER_PAGE,
+} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
+import { context, render } from 'testUtils'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -96,44 +97,50 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
-context('TravelPayClaims', () => {
-  const initializeTestInstance = () => {
-    render(<TravelPayClaims {...mockNavProps()} />)
+context('TravelPayClaimsList', () => {
+  it('renders the list of claims', () => {
+    render(
+      <TravelPayClaimsList
+        claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
+        isLoading={false}
+        scrollViewRef={React.createRef<ScrollView>()}
+      />,
+    )
 
-    mockUseDowntime.mockImplementation(() => false)
-
-    when(featureEnabled as jest.Mock)
-      .calledWith('travelPayStatusList')
-      .mockReturnValue(true)
-  }
-
-  it('should show travel claims header', () => {
-    initializeTestInstance()
-    expect(screen.getByLabelText(t('travelPay.statusList.title'))).toBeTruthy()
-  })
-
-  it('shows the list of claims', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/travel-pay/claims', expect.anything())
-      .mockResolvedValueOnce(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
-
-    initializeTestInstance()
-
-    await waitFor(() => expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy())
-
-    expect(
-      screen.getByText(
-        t('travelPay.statusList.list.title', {
-          count: 3,
-          filter: 'All',
-          sort: t(`travelPay.statusList.sortOption.recent`).toLowerCase(),
-        }),
-      ),
-    ).toBeTruthy()
-
-    // Should contain 3 entries in the list
     expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
+    expect(screen.queryByTestId(t('travelPay.statusList.loading'))).toBeFalsy()
+  })
+
+  it('renders the loading indicator', () => {
+    render(
+      <TravelPayClaimsList
+        claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
+        isLoading={true}
+        scrollViewRef={React.createRef<ScrollView>()}
+      />,
+    )
+
+    expect(screen.getByText(t('travelPay.statusList.loading'))).toBeTruthy()
+    expect(screen.queryByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeFalsy()
+  })
+
+  it('renders the pagination widget if there are enough items', async () => {
+    // Duplicate claims to make the list large enough to show the pagination widgets
+    const claims = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data
+    const duplicateAmount = CLAIMS_PER_PAGE + 1 - claims.length // 1 more than allowed on a page
+    const duplicatedClaims = [
+      ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data,
+      ...Array(duplicateAmount)
+        .fill(null)
+        .map(() => ({ ...claims[0] })),
+    ]
+
+    render(
+      <TravelPayClaimsList claims={duplicatedClaims} isLoading={false} scrollViewRef={React.createRef<ScrollView>()} />,
+    )
+    expect(screen.getByTestId('previous-page')).toBeTruthy()
+    expect(screen.getByTestId('next-page')).toBeTruthy()
   })
 })

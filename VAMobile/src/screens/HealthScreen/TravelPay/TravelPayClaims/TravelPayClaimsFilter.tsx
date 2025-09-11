@@ -41,35 +41,26 @@ function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSort
 
   const onClearFiltersPress = () => setFilter(new Set())
 
-  const filterModal = () => {
-    return (
-      <Box {...filterContainerProps}>
-        <Box mr={8} mb={10}>
-          <TravelClaimsFilterModal
-            claims={claims}
-            currentFilter={filter}
-            setCurrentFilter={setFilter}
-            currentSortBy={sortBy}
-            setCurrentSortBy={setSortBy}
-          />
-        </Box>
-        <TextView
-          onPress={onClearFiltersPress}
-          accessibilityRole="button"
-          accessibilityLabel={t('travelPay.statusList.clearFilters')}
-          accessibilityHint={t('travelPay.statusList.clearFilters.a11yHint')}
-          color="link"
-          testID="clearFiltersButton">
-          {t('travelPay.statusList.clearFilters')}
-        </TextView>
-      </Box>
-    )
-  }
-
   return (
-    <Box>
-      {/* Filter and Sort Section */}
-      {filterModal()}
+    <Box {...filterContainerProps}>
+      <Box mr={8} mb={10}>
+        <TravelClaimsFilterModal
+          claims={claims}
+          currentFilter={filter}
+          setCurrentFilter={setFilter}
+          currentSortBy={sortBy}
+          setCurrentSortBy={setSortBy}
+        />
+      </Box>
+      <TextView
+        onPress={onClearFiltersPress}
+        accessibilityRole="button"
+        accessibilityLabel={t('travelPay.statusList.clearFilters')}
+        accessibilityHint={t('travelPay.statusList.clearFilters.a11yHint')}
+        color="link"
+        testID="clearFiltersButton">
+        {t('travelPay.statusList.clearFilters')}
+      </TextView>
     </Box>
   )
 }

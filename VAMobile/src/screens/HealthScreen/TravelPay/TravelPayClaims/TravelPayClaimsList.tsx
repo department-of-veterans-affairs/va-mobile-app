@@ -29,7 +29,7 @@ type TravelPayClaimsListProps = {
   scrollViewRef: RefObject<ScrollView>
 }
 
-const CLAIMS_PER_PAGE = 10
+export const CLAIMS_PER_PAGE = 10
 
 function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)

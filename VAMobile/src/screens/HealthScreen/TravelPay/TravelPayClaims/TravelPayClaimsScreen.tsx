@@ -12,7 +12,6 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsFilter, { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import { FILTER_KEY_ALL } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
 import { useTheme } from 'utils/hooks'
@@ -50,10 +49,14 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     return claims.length === 0 ? claims : sortedClaims(filteredClaims(claims, filter), sortBy)
   }, [claims, filter, sortBy])
 
+  const uniqueStatuses = useMemo(() => {
+    return new Set(claims.map(({ attributes }) => attributes.claimStatus))
+  }, [claims])
+
   const listTitle = () => {
     return t('travelPay.statusList.list.title', {
       count: sortedFilteredClaims.length,
-      filter: filter.has(FILTER_KEY_ALL) || filter.size === 0 ? 'All' : 'Filtered',
+      filter: filter.size === 0 || filter.size === uniqueStatuses.size ? 'All' : 'Filtered',
       sort: t(`travelPay.statusList.sortOption.${sortBy}`).toLowerCase(),
     })
   }

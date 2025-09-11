@@ -9,11 +9,12 @@ import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import TravelClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterGroup'
+import TravelClaimsFilterCheckboxGroup, {
+  CheckboxOption,
+  FILTER_KEY_ALL,
+} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-
-export const FILTER_KEY_ALL = 'all'
 
 type TravelPayClaimsFilterModalProps = {
   claims: Array<TravelPayClaimData>
@@ -43,7 +44,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   const totalClaims = claims.length
 
   const filterOptions = useMemo(() => {
-    // Allow filtering by any of the statuses that appear in the list, and 'All'
+    // Allow filtering by any of the statuses that appear in the list
     const statusToCount: Map<string, number> = new Map()
     claims.forEach((claim) => {
       const status = claim.attributes.claimStatus
@@ -51,21 +52,29 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
       statusToCount.set(status, existingCount + 1)
     })
 
-    const options = Array.from(statusToCount.keys()).map((status) => ({
-      optionLabelKey: `${status} (${statusToCount.get(status)!})`,
-      value: status,
-    }))
+    const options = Array.from(statusToCount.keys()).map(
+      (status) =>
+        ({
+          optionLabelKey: `${status} (${statusToCount.get(status)!})`,
+          value: status,
+        }) as CheckboxOption,
+    )
 
-    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1))
-
-    // Always add in the 'All' option as the first.
-    options.unshift({
-      optionLabelKey: `${t('travelPay.statusList.filterOption.all')} (${totalClaims})`,
-      value: FILTER_KEY_ALL,
-    })
+    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1)) // TODO: underscore sort?
 
     return options
-  }, [claims, t, totalClaims])
+  }, [claims])
+
+  const sortOptions = [
+    {
+      optionLabelKey: t('travelPay.statusList.sortOption.recent'),
+      value: SortOption.Recent,
+    },
+    {
+      optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
+      value: SortOption.Oldest,
+    },
+  ]
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822
@@ -86,10 +95,6 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   const onCancelPressed = () => {
     setModalVisible(false)
     setAccessibilityFocus(ref)
-
-    // Reset selections to what they were when the modal appeared
-    setSelectedFilter(currentFilter)
-    setSelectedSortBy(currentSortBy)
   }
 
   const onApplyPressed = () => {
@@ -101,29 +106,17 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
 
   const toggleFilter = (filterKey: string) => {
     setSelectedFilter((prevFilter) => {
-      // If selecting 'all', then:
-      // 1. If 'all' is already selected, then deselect everything
-      // 2. If 'all' is not already selected, then select everything
+      const allOptions = new Set(filterOptions.map(({ value }) => value))
+
+      // Select or deselect everything when pressing "All"
       if (filterKey === FILTER_KEY_ALL) {
-        return prevFilter.has(FILTER_KEY_ALL)
-          ? new Set()
-          : new Set([FILTER_KEY_ALL, ...claims.map((claim) => claim.attributes.claimStatus)])
+        return prevFilter.size === allOptions.size ? new Set() : new Set([...allOptions])
       }
 
-      // If selecting a non-ALL filter, then:
-      // 1. If the filter is already selected, deselect it. And deselect "All" as well.
-      // 2. If the filter is not already selected, select it. And select "All" if everything is now selected.
-      if (prevFilter.has(filterKey)) {
-        return new Set([...prevFilter].filter((key) => key !== filterKey && key !== FILTER_KEY_ALL))
-      } else {
-        const newFilter = new Set([...prevFilter, filterKey])
-        if (newFilter.size === filterOptions.length - 1) {
-          // -1 because we don't count "All" option
-          newFilter.add(FILTER_KEY_ALL)
-        }
-
-        return newFilter
-      }
+      // Toggle the filter
+      return prevFilter.has(filterKey)
+        ? new Set([...prevFilter].filter((key) => key !== filterKey))
+        : new Set([...prevFilter, filterKey])
     })
   }
 
@@ -141,7 +134,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   }
 
   return (
-    <View>
+    <View testID="travelPayClaimsFilterModalContainer">
       <Modal
         animationType="slide"
         transparent={true}
@@ -149,7 +142,8 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
-        }}>
+        }}
+        testID="claimsFilterModal">
         <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box backgroundColor="modalOverlay" opacity={0.8} pt={insets.top} />
           <Box backgroundColor="list" pb={insets.bottom} flex={1}>
@@ -169,7 +163,8 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
                   variant="MobileBodyBold"
                   accessibilityRole={'header'}
                   textAlign={'center'}
-                  allowFontScaling={false}>
+                  allowFontScaling={false}
+                  testID="filterAndSortModalTitle">
                   {t('travelPay.statusList.filterAndSort')}
                 </TextView>
               </Box>
@@ -193,14 +188,12 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
                     onChange={toggleFilter}
                     listTitle={t('travelPay.statusList.filterBy')}
                     selectedValues={selectedFilter}
+                    allLabelText={`${t('travelPay.statusList.filterOption.all')} (${totalClaims})`}
                   />
                 </Box>
                 <Box key="sortGroup">
                   <RadioGroup
-                    options={[
-                      { optionLabelKey: t('travelPay.statusList.sortOption.recent'), value: SortOption.Recent },
-                      { optionLabelKey: t('travelPay.statusList.sortOption.oldest'), value: SortOption.Oldest },
-                    ]}
+                    options={sortOptions}
                     onChange={setSelectedSortBy}
                     isRadioList={true}
                     radioListTitle={t('travelPay.statusList.sortBy')}
