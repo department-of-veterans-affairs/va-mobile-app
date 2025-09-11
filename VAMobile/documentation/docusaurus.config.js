@@ -192,7 +192,7 @@ const config = {
           },
           {
             to: '/design/Intro', // ./docs-api/Intro.md
-            label: 'Design System',
+            label: 'Design system',
             position: 'left',
             activeBaseRegex: `/design/`,
           },
