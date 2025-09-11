@@ -20,13 +20,11 @@ import {
   SimpleListItemObj,
   TextArea,
   TextView,
-  VAModalPicker,
   VATextInput,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import DemoUsers, { DemoUserIds } from 'store/api/demo/mocks/users'
 import { AnalyticsState } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
@@ -65,7 +63,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
   const [whatsNewSkippedVersion, setWhatsNewSkippedVersionHomeScreen] = useState<string>()
   const [storeVersion, setStoreVersionScreen] = useState<string>()
-  const [demoUser, setDemoUser] = useState<string>()
   const [reviewCount, setReviewCount] = useState<string>()
   const componentMounted = useRef(true)
 
@@ -118,12 +115,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   useFocusEffect(
     React.useCallback(() => {
       getAsyncStoredData(STORAGE_REVIEW_EVENT_KEY, setReviewCount)
-    }, []),
-  )
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getAsyncStoredData(DEMO_USER, (id) => setDemoUser(id || 'kimberlyWashington'))
     }, []),
   )
 
@@ -195,12 +186,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     })
   }
 
-  const onDemoUserUpdate = async (newDemoUser: string) => {
-    await AsyncStorage.setItem(DEMO_USER, newDemoUser)
-    setDemoUser(newDemoUser)
-    dispatch(logout())
-  }
-
   const resetInAppReview = async () => {
     try {
       await resetReviewActionCount()
@@ -226,6 +211,12 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       onPress: () => navigateTo('RemoteConfig'),
       testId: 'Remote Config',
     },
+    {
+      text: 'Demo Mode Users',
+      decorator: ButtonDecoratorType.Navigation,
+      onPress: () => navigateTo('DemoModeUsers'),
+      testId: 'DemoModeUsers',
+    },
   ]
 
   const consoleWarningsList: Array<SimpleListItemObj> = [
@@ -245,11 +236,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   const onFeedback = () => {
     inAppFeedback('Developer')
   }
-
-  const demoUsers = Object.keys(DemoUsers).map((id) => ({
-    label: DemoUsers[id as DemoUserIds].name,
-    value: id,
-  }))
 
   return (
     <FeatureLandingTemplate
@@ -310,15 +296,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
         <TextArea>
           <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
         </TextArea>
-      </Box>
-      <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.smallMarginBetween}>
-        <VAModalPicker
-          selectedValue={demoUser || ''}
-          onSelectionChange={onDemoUserUpdate}
-          pickerOptions={demoUsers}
-          labelKey="Select Demo User"
-          helperTextKey={demoUser ? DemoUsers[demoUser as DemoUserIds].notes : ''}
-        />
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
         <TextArea>

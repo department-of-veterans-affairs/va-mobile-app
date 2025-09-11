@@ -5,7 +5,7 @@ import { t } from 'i18next'
 
 import {
   CategoryTypeFields,
-  FacilitiesPayload,
+  SecureMessagingCareSystemData,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingRecipients,
   SecureMessagingSignatureData,
@@ -45,46 +45,6 @@ context('StartNewMessage', () => {
         signatureName: 'signatureName',
         includeSignature: false,
         signatureTitle: 'Title',
-      },
-    },
-  }
-  const facilities: FacilitiesPayload = {
-    data: {
-      attributes: {
-        facilities: [
-          {
-            id: '357',
-            name: 'Cary VA Medical Center',
-            city: 'Cary',
-            state: 'WY',
-            cerner: false,
-            miles: '3.63',
-          },
-          {
-            id: '358',
-            name: 'Cheyenne VA Medical Center',
-            city: 'Cheyenne',
-            state: 'WY',
-            cerner: false,
-            miles: '3.17',
-          },
-        ],
-      },
-    },
-  }
-  const singleFacility: FacilitiesPayload = {
-    data: {
-      attributes: {
-        facilities: [
-          {
-            id: '357',
-            name: 'Cary VA Medical Center',
-            city: 'Cary',
-            state: 'WY',
-            cerner: false,
-            miles: '3.63',
-          },
-        ],
       },
     },
   }
@@ -128,6 +88,24 @@ context('StartNewMessage', () => {
       },
     },
   }
+  const careSystemsList: Array<SecureMessagingCareSystemData> = [
+    {
+      healthCareSystemName: 'SM STAGING CARE SYSTEM',
+      stationNumber: '989',
+    },
+    {
+      healthCareSystemName: '357',
+      stationNumber: '357',
+    },
+  ]
+
+  const singleCareSystemList: Array<SecureMessagingCareSystemData> = [
+    {
+      healthCareSystemName: '357',
+      stationNumber: '357',
+    },
+  ]
+
   const recipients: SecureMessagingRecipients = {
     data: [
       {
@@ -163,8 +141,10 @@ context('StartNewMessage', () => {
       sort: {
         name: 'ASC',
       },
+      careSystems: careSystemsList,
     },
   }
+
   const initializeTestInstance = (params: object = { attachmentFileToAdd: {} }) => {
     goBack = jest.fn()
 
@@ -182,14 +162,15 @@ context('StartNewMessage', () => {
     render(<StartNewMessage {...props} />, {})
   }
 
-  const initializeApiCalls = (facilityMock: FacilitiesPayload) => {
+  const initializeApiCalls = (isSingleFaciltyTest: boolean = false) => {
+    if (isSingleFaciltyTest) {
+      recipients.meta.careSystems = singleCareSystemList
+    }
     when(api.get as jest.Mock)
       .calledWith('/v0/messaging/health/allrecipients')
       .mockResolvedValue(recipients)
       .calledWith('/v0/messaging/health/messages/signature')
       .mockResolvedValue(signature)
-      .calledWith('/v0/facilities-info')
-      .mockResolvedValue(facilityMock)
       .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
         page: '1',
         per_page: LARGE_PAGE_SIZE.toString(),
@@ -212,8 +193,6 @@ context('StartNewMessage', () => {
         })
         .calledWith('/v0/messaging/health/messages/signature')
         .mockResolvedValue(signature)
-        .calledWith('/v0/facilities-info')
-        .mockResolvedValue(facilities)
         .calledWith(`/v0/messaging/health/folders/${SecureMessagingSystemFolderIdConstants.SENT}/messages`, {
           page: '1',
           per_page: LARGE_PAGE_SIZE.toString(),
@@ -245,7 +224,7 @@ context('StartNewMessage', () => {
 
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -258,14 +237,14 @@ context('StartNewMessage', () => {
 
   describe('when pressing the back button', () => {
     it('should go to inbox if all fields empty', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByText(t('cancel'))))
       await waitFor(() => expect(goBack).toHaveBeenCalled())
     })
 
     it('should ask for confirmation if any field filled in', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByTestId('picker')))
       fireEvent.press(screen.getByTestId(t('secureMessaging.startNewMessage.general')))
@@ -278,7 +257,7 @@ context('StartNewMessage', () => {
   describe('on click of save (draft)', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        initializeApiCalls(facilities)
+        initializeApiCalls()
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('save'))))
         await waitFor(() =>
@@ -294,7 +273,7 @@ context('StartNewMessage', () => {
 
   describe('when user has multiple facilities on record', () => {
     it('should display select a care system', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(1))
     })
@@ -302,7 +281,7 @@ context('StartNewMessage', () => {
 
   describe('when user has only one facility on record', () => {
     it('should hide select a care system', async () => {
-      initializeApiCalls(singleFacility)
+      initializeApiCalls(true)
       initializeTestInstance()
       await waitFor(() => expect(screen.queryAllByText('Pick a care system (Required)').length).toBe(0))
     })
@@ -311,7 +290,7 @@ context('StartNewMessage', () => {
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       it('should display a field error for that field and an AlertBox', async () => {
-        initializeApiCalls(facilities)
+        initializeApiCalls()
         initializeTestInstance()
         await waitFor(() => fireEvent.press(screen.getByText(t('secureMessaging.formMessage.send'))))
         await waitFor(() =>
@@ -327,7 +306,7 @@ context('StartNewMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() => fireEvent.press(screen.getByLabelText(t('secureMessaging.formMessage.addFiles'))))
       await waitFor(() => expect(mockNavigationSpy).toHaveBeenCalled())
@@ -336,7 +315,7 @@ context('StartNewMessage', () => {
 
   describe('when displaying the form', () => {
     it('should display an alert about urgent messages', async () => {
-      initializeApiCalls(facilities)
+      initializeApiCalls()
       initializeTestInstance()
       await waitFor(() =>
         expect(
