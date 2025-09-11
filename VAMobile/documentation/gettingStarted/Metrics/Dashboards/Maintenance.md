@@ -18,7 +18,7 @@ App store data is very volatile and can take up to 7 days to settle. **We curren
 2. Review the [monthly dashboard](index.md) and confirm the board is operating properly post-data updates. Make adjustments if needed.
 3. Posted in DSVA Slack channel #va-mobile-app-analytics that the updates are complete for the prior month and tag the following stakeholders:
     * Mobile app POs: Rachel Han and Ryan Twell
-    * Mobile app Project Manager: Jennifer Brown
+    * Mobile app Product Manager: Becca Tupaj
     * VA Communication stakeholders: Michelle Correll and Ty Brettnacher
 
 Typically, the Slack update should also include a post that details:
