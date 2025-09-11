@@ -1,1 +1,4 @@
-We added general improvements and fixed a few bugs.
+We updated the app with improvements to appointments and accessibility:
+
+- For Cerner appointments, non-existent clinic and location fields are now hidden.
+- Improved accessibility in secure messaging so screen readers announce the selected recipient and provide a clear way to confirm the choice.
