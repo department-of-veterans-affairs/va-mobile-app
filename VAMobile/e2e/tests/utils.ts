@@ -86,6 +86,8 @@ export const CommonE2eIdConstants = {
   HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID: 'showCompensationTestID',
   HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
   LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
+  CONFIRM_EMAIL_TEXT: 'Confirm',
+  SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
@@ -248,6 +250,18 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   )
   if (turnOnNotificationsBtnExist) {
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+  if (confirmEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+
+  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+  if (skipEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
 }
 

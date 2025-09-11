@@ -16,6 +16,7 @@ import {
   BoxProps,
   DefaultList,
   DefaultListItemObj,
+  EmailConfirmationAlert,
   ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
@@ -23,6 +24,7 @@ import {
   TextArea,
   TextLine,
   TextView,
+  TextViewProps,
   VABulletList,
   VAScrollView,
 } from 'components'
@@ -39,6 +41,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntimeByScreenID, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const INTL_NUMBER_NOTIFICATION_SETTINGS_DISMISSED = '@intl_number_notification_settings_dismissed'
@@ -250,6 +253,14 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
+  const titleProps: TextViewProps = {
+    variant: 'TableHeaderBold',
+    mx: gutter,
+    mb: condensedMarginBetween,
+    mt: standardMarginBetween,
+    accessibilityRole: 'header',
+  }
+
   const getNoAuth = () => {
     const alertWrapperProps: BoxProps = {
       mb: standardMarginBetween,
@@ -332,10 +343,12 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
             items={getPhoneNumberData(contactInformation, t, onHomePhone, onWorkPhone, onCellPhone)}
             title={t('contactInformation.phoneNumbers')}
           />
-          <DefaultList
-            items={getEmailAddressData(contactInformation, t, onEmailAddress)}
-            title={t('contactInformation.contactEmailAddress')}
-          />
+          <TextView {...titleProps} accessible={true} testID={t('contactInformation.contactEmailAddress')}>
+            {t('contactInformation.contactEmailAddress')}
+          </TextView>
+          {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert inContactInfoScreen />}
+          <DefaultList items={getEmailAddressData(contactInformation, t, onEmailAddress)} />
+
           <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
             {t('contactInformation.thisIsEmailWeUseToContactNote')}
           </TextView>
