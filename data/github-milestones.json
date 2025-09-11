@@ -1,5 +1,59 @@
 [
   {
+    "title": "v2.59.0",
+    "due_on": "2025-09-23T07:00:00Z",
+    "issues": [
+      {
+        "title": "Include Certificate of Eligibility for Home Loan letter",
+        "number": 11614,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11614",
+        "isPR": false
+      },
+      {
+        "title": "815 - Added mock data for Overpay/Copay",
+        "number": 11596,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11596",
+        "isPR": true
+      },
+      {
+        "title": "Update AppointmentLocation to hide Clinic and Location fields for Cerner appointments",
+        "number": 11568,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11568",
+        "isPR": true
+      },
+      {
+        "title": "Demo Mode User Selection - Show User Details",
+        "number": 11565,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11565",
+        "isPR": false
+      },
+      {
+        "title": "830 - Adding New Overpayment Debt Endpoints",
+        "number": 11550,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11550",
+        "isPR": true
+      },
+      {
+        "title": "801 - Adding New Copay Endpoints",
+        "number": 11549,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11549",
+        "isPR": true
+      },
+      {
+        "title": "update SM to use api provided care systems list",
+        "number": 11542,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11542",
+        "isPR": true
+      },
+      {
+        "title": "BUG - All - Sev 2 - VoiceOver doesn't announce the selected \"To (Required)\" recipient, no Done button on the selector",
+        "number": 11453,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11453",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.58.0",
     "due_on": "2025-09-09T07:00:00Z",
     "issues": [
