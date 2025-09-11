@@ -102,7 +102,7 @@ We also believe in accessibility beyond compliance. We don’t just meet the bar
 
 ### Based on VA standards
 
-The [VA design system](https://design.va.gov/) does not have comprehensive accessibility guidelines. However, it does [provide accessibility samples and guidelines](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Accessibility#:~:text=provide%20accessibility%20samples%20and%20guidelines) when it comes to design, content, and components. We base our design system on this existing system with modifications for native mobile apps.
+The [VA design system](https://design.va.gov/) does not have comprehensive accessibility guidelines. However, it does [provide accessibility samples and guidelines](https://design.va.gov/content-style-guide/) when it comes to design, content, and components. We base our design system on this existing system with modifications for native mobile apps.
 
 ### Content takes center stage
 
@@ -149,5 +149,5 @@ Section 508 is a federal law that requires all U.S. government agencies to make 
 - [Accessibility checklist for UX designers](../../FrontEnd/Accessibility/Checklists%20for%20designers.md)
 - [Accessibility checklist for content designers](../../FrontEnd/Accessibility/Checklists%20for%20designers.md)
 - [Haptic feedback](/docs/Flagship%20design%20library/Patterns/haptics)
-- [VA.gov mobile accessibility testing plan](../../QA/QA%20Process/Accessibility%20Testing%20Plan.md)
+- [VA.gov mobile accessibility testing plan](../../QA/QA%20process/Accessibility%20Testing%20Plan.md)
 - [Native mobile app accessibility resources & articles](../../FrontEnd/Accessibility/resources)

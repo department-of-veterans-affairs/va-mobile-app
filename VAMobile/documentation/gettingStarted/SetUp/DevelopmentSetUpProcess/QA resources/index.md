@@ -16,7 +16,7 @@ Within the VA Mobile project, our top-level test case folders to be familiar wit
 ### TestFlight & AppTester
 We distribute testing builds through TestFlight for iOS, and Firebase's AppTester for Android. Key builds for manual testing include: release candidate builds for release testing, builds based on the develop branch that are updated daily (for visual QA or backend testing), and on-demand builds of branches not yet merged to develop for ticket testing.
 
-To get access to either TestFlight or App Tester, follow the platform-specific instructions for your testing device on the [Tool Setup page](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/Tool%20Setup).
+To get access to either TestFlight or App Tester, follow the platform-specific instructions for your testing device on the [Tool Setup page](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/QA%20resources/tool%20setup/).
 
 ### Charles Proxy
 We use Charles Proxy as a key tool for things like error state testing, mocking data we don't have access to, and downtime window testing.
@@ -31,9 +31,6 @@ We create [on-demand builds](https://github.com/department-of-veterans-affairs/v
 - Typically it takes ~10-15 minutes for Android to build, and about 5 minutes longer than that for iOS to build.
 - If any build fails, attempt to re-run the failed builds at least once (iOS in particular can be a little flaky).
 
-## Mobile team tools (as they relate to QA)
-### 1Password
-The VAMobile and VA.gov vaults contain usernames and passwords for staging test users.
 
 ### Github
 Most commonly used: [writing a bug ticket with the new bug report template](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?assignees=&labels=bug&template=bug-report.md&title=BUG+-+%5BSEVERITY%5D+-+%5BiOS%2FAndroid%2FAll%5D+-+%5BShort+description%5D).

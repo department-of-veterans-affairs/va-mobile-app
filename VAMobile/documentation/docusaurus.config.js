@@ -190,12 +190,6 @@ const config = {
             position: 'left',
             activeBaseRegex: `/communityAndSupport/`,
           },
-          // {
-          //   to: '/docs/Intro', // ./docs/Intro.md
-          //   label: 'Documentation',
-          //   position: 'left',
-          //   activeBaseRegex: `/docs/`,
-          // },
           {
             to: '/design/Intro', // ./docs-api/Intro.md
             label: 'Design System',
