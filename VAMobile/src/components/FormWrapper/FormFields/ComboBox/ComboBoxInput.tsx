@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Modal, Pressable, View } from 'react-native'
+import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
@@ -91,16 +91,21 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
     removeInputErrorMessage(isFocused, error, setError, focusUpdated, setFocusUpdated)
   }, [isFocused, selectedValue, error, setError, focusUpdated])
 
+  const comboBoxButtonProps: PressableProps = {
+    accessible: true,
+    accessibilityRole: 'button',
+    accessibilityLabel: t('secureMessaging.startNewMessage.combobox.selection'),
+    accessibilityHint: selectedValue
+      ? t('filled', { value: selectedValue.label })
+      : t('secureMessaging.startNewMessage.combobox.selection.a11y'),
+  }
+
   const renderSelectionBox = () => {
     return (
       <Box>
         {labelKey && renderInputLabelSection(error, true, labelKey, t, '')}
         {!!error && renderInputError(error)}
-        <Pressable
-          onPress={showModal}
-          accessible={true}
-          accessibilityLabel={t('secureMessaging.startNewMessage.combobox.selection')}
-          accessibilityHint={t('secureMessaging.startNewMessage.combobox.selection.a11y')}>
+        <Pressable onPress={showModal} {...comboBoxButtonProps}>
           <Box {...wrapperProps}>
             <Box
               width="100%"
@@ -118,7 +123,11 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
               </TextView>
               {selectedValue && !hideRemoveButton && (
                 <Pressable accessibilityRole="button" onPress={() => onSelectionChange(undefined)}>
-                  <Box ml={16} my={12}>
+                  <Box
+                    ml={16}
+                    my={12}
+                    accessibilityLabel={t('secureMessaging.startNewMessage.combobox.clear')}
+                    accessibilityHint={t('secureMessaging.startNewMessage.combobox.clear.a11yHint')}>
                     <Icon name="Close" fill={theme.colors.icon.pickerIcon} width={30} height={30} />
                   </Box>
                 </Pressable>
