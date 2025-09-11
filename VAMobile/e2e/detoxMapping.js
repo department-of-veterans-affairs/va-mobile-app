@@ -144,6 +144,7 @@ const detoxMapping = {
     SettingsScreen: ['SettingsScreen'],
     slices: fullTestRun,
     SplashScreen: ['Onboarding', 'LoginScreen'],
+    store: fullTestRun,
     styles: [],
     SyncScreen: [],
     translations: fullTestRun,
