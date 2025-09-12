@@ -564,7 +564,8 @@ export const getPastTimeFrame = (dateRange: DatePickerRange): TimeFrameType => {
   const todaysDate = DateTime.local().startOf('day')
   const monthsFromToday = todaysDate.diff(dateRange.startDate, 'months').months
 
-  if (monthsFromToday <= 3) return TimeFrameTypeConstants.PAST_THREE_MONTHS
+  if (monthsFromToday <= 1) return TimeFrameTypeConstants.PAST_ONE_MONTH
+  else if (monthsFromToday <= 3) return TimeFrameTypeConstants.PAST_THREE_MONTHS
   else if (monthsFromToday <= 6) return TimeFrameTypeConstants.PAST_SIX_MONTHS
   else if (monthsFromToday <= 9) return TimeFrameTypeConstants.PAST_NINE_MONTHS
   else if (monthsFromToday <= 12) return TimeFrameTypeConstants.PAST_ONE_YEAR

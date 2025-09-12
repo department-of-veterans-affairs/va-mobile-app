@@ -1,5 +1,6 @@
 export type TimeFrameType =
   | 'upcoming'
+  | 'pastOneMonth'
   | 'pastThreeMonths'
   | 'pastFiveToThreeMonths'
   | 'pastEightToSixMonths'
@@ -13,6 +14,7 @@ export type TimeFrameType =
 
 export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
   UPCOMING: 'upcoming',
+  PAST_ONE_MONTH: 'pastOneMonth',
   PAST_THREE_MONTHS: 'pastThreeMonths',
   PAST_FIVE_TO_THREE_MONTHS: 'pastFiveToThreeMonths',
   PAST_EIGHT_TO_SIX_MONTHS: 'pastEightToSixMonths',

@@ -8,6 +8,7 @@ import { DateTime } from 'luxon'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
+import { Events } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,6 +16,7 @@ import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoA
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
+import { logAnalyticsEvent } from 'utils/analytics'
 import {
   filterAppointments,
   getDatePickerRange,
@@ -72,15 +74,19 @@ function PastAppointments({
     [filteredAppointments, page, perPage],
   )
 
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
-
   const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
     const startDate = selectedDateRange.startDate.toISO()
     const endDate = selectedDateRange.endDate.toISO()
     if (startDate && endDate) {
-      setTimeFrame(getPastTimeFrame(selectedDateRange))
+      const calculatedTimeFrame = getPastTimeFrame(selectedDateRange)
+      logAnalyticsEvent(Events.vama_appt_time_frame(calculatedTimeFrame))
+
+      const timeFrameToQuery =
+        calculatedTimeFrame === TimeFrameTypeConstants.PAST_ONE_MONTH
+          ? TimeFrameTypeConstants.PAST_THREE_MONTHS
+          : calculatedTimeFrame
+
+      setTimeFrame(timeFrameToQuery)
       setDateRange({ startDate, endDate })
       setPage(1)
     }
@@ -111,6 +117,19 @@ function PastAppointments({
     tab: 'past appointments',
   }
 
+  const renderNoAppointments = () => {
+    logAnalyticsEvent(Events.vama_appt_empty_range)
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+      </Box>
+    )
+  }
+
+  if (loading) {
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
+  }
+
   return (
     <Box>
       <DatePicker
@@ -131,10 +150,8 @@ function PastAppointments({
           />
         </Box>
       )}
-      {!appointmentsData || appointmentsData.data.length < 1 ? (
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
-        </Box>
+      {!filteredAppointments || filteredAppointments.length < 1 ? (
+        renderNoAppointments()
       ) : (
         <>
           {getGroupedAppointments(

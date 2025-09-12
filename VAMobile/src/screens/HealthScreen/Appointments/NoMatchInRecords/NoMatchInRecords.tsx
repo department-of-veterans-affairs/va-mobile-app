@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AccordionCollapsible, Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 function NoMatchInRecords() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  useEffect(() => {
+    logAnalyticsEvent(Events.vama_appt_noauth())
+  }, [])
 
   function accordionContent(textID: string) {
     return (

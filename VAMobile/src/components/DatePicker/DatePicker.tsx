@@ -9,7 +9,9 @@ import { DateTime } from 'luxon'
 import { BorderColorVariant, Box, TextView, TextViewProps } from 'components'
 import DatePickerField from 'components/DatePicker/DatePickerField'
 import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 
 export type DatePickerRange = {
@@ -87,8 +89,10 @@ const DatePicker: FC<DatePickerProps> = ({
 
     if (fieldName === 'startDate' && startDateInvalid) {
       setFromFieldInvalid(true)
+      logAnalyticsEvent(Events.vama_appt_invalid_range)
     } else if (fieldName === 'endDate' && endDateInvalid) {
       setToFieldInvalid(true)
+      logAnalyticsEvent(Events.vama_appt_invalid_range)
     } else {
       setFromFieldInvalid(false)
       setToFieldInvalid(false)
