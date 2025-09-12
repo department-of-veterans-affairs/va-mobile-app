@@ -56,7 +56,7 @@ env:
 
 jobs:
   build_ios:
-    runs-on: macos-14-large
+    runs-on: macos-15-xlarge
     env:
       # App Store Connect Issuer ID
       APPSTORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_CONNECT_API_KEY_ISSUER_ID }}
@@ -70,7 +70,7 @@ jobs:
       IOS_SCHEME: 'VAMobileRelease'
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-    steps:	
+    steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
@@ -87,6 +87,8 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: 16.2
+      - name: Download ios 18.2
+        run: xcodebuild -downloadPlatform iOS -buildVersion 18.2
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
