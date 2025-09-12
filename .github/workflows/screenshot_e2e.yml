@@ -321,31 +321,30 @@ jobs:
         run: |
           ../.github/scripts/app-store-images/generate_images.sh
 
-      - name: Upload framed artifacts
+      - name: Upload final screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: 'app-store-images-framed'
-          path: .github/scripts/app-store-images/framed_images/*
+          name: final-screenshots
+          path: |
+            VAMobile/ios/fastlane/screenshots/en-US/
+            VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
+            VAMobile/ios/fastlane/screenshots_ipad/en-US/
 
   commit-screenshots:
     name: Commit Screenshots
     runs-on: ubuntu-latest
     needs: [combine-and-frame-images]
     if: github.event_name == 'pull_request'
-    defaults:
-      run:
-        working-directory: VAMobile
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
 
-      - name: Download framed screenshots
+      - name: Download final screenshots
         uses: actions/download-artifact@v4
         with:
-          name: 'app-store-images-framed'
-          path: framed_images
+          name: final-screenshots
 
       - name: Commit and push screenshots
         run: |
