@@ -81,7 +81,7 @@ describe(':android: Cerner Notice', () => {
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).toExist()
-    await expect(element(by.text("You'll need to use our My VA Health portal to send your message"))).toExist()
+    await expect(element(by.text("You'll need to use our My VA Health portal to send your message."))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
