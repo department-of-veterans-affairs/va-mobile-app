@@ -465,7 +465,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
-    if (userAuthorizedServices?.secureMessagingOracleHealthEnabled) {
+    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
       logAnalyticsEvent(Events.vama_blue_alert_rx())
       return (
         <Box mx={theme.dimensions.gutter}>
