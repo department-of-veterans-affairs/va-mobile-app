@@ -818,7 +818,10 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID)).tap()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
+    CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
+  )
   waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
   await element(by.id(testIdOfDesiredUser)).tap()
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
