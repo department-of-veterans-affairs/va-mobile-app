@@ -37,7 +37,6 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
     additionalLabelText: [DemoUsers[id as DemoUserIds].notes || ''],
   }))
 
-  console.log(demoUsers)
   return (
     <FeatureLandingTemplate
       backLabel={t('debug.title')}
