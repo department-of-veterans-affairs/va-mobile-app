@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, FullScreenSubtask, RadioGroup, RadioGroupProps, TextView, VATextInput } from 'components'
+import { Box, FullScreenSubtask, RadioGroup, RadioGroupProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { checkStringForPII } from 'utils/common'
 import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/hooks'
 
 type InAppFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'InAppFeedback'>
@@ -22,7 +20,6 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   const [satisfaction, setSatisfaction] = useState('')
   const [meetMyNeeds, setMeetMyNeeds] = useState('')
   const [easyToUse, setEasyToUse] = useState('')
-  const [task, setTaskOverride] = useState('')
   let submittedCheck = false
   const navigateTo = useRouteNavigation()
 
@@ -34,28 +31,9 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
   })
 
   const onSubmit = (): void => {
-    const { found, newText } = checkStringForPII(task)
-    if (found) {
-      Alert.alert(t('inAppFeedback.personalInfo.title'), t('inAppFeedback.personalInfo.body'), [
-        {
-          text: t('inAppFeedback.personalInfo.edit'),
-          style: 'cancel',
-        },
-        {
-          text: t('inAppFeedback.personalInfo.submit'),
-          onPress: () => {
-            logAnalyticsEvent(Events.vama_feedback(satisfaction, meetMyNeeds, easyToUse, newText))
-            submittedCheck = true
-            navigateTo('FeedbackSent')
-          },
-          style: 'default',
-        },
-      ])
-    } else {
-      logAnalyticsEvent(Events.vama_feedback(satisfaction, meetMyNeeds, easyToUse, task))
-      submittedCheck = true
-      navigateTo('FeedbackSent')
-    }
+    logAnalyticsEvent(Events.vama_feedback(satisfaction, meetMyNeeds, easyToUse, ''))
+    submittedCheck = true
+    navigateTo('FeedbackSent')
   }
 
   const radioGroupProps: RadioGroupProps<string> = {
@@ -166,19 +144,6 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
             {t('inAppFeedback.easyToUse.header')}
           </TextView>
           <RadioGroup {...easyToUseProps} />
-          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {t('inAppFeedback.whatTask.header')}
-          </TextView>
-          <TextView mb={theme.dimensions.standardMarginBetween} variant="HelperText">
-            {t('inAppFeedback.whatTask.body')}
-          </TextView>
-          <VATextInput
-            inputType="none"
-            isTextArea={true}
-            value={task}
-            testID="AppFeedbackTaskID"
-            onChange={setTaskOverride}
-          />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <Button
               label={t('inAppFeedback.submitFeedback')}

@@ -1449,7 +1449,7 @@ PODS:
     - React-Core
   - react-native-document-picker (8.2.2):
     - React-Core
-  - react-native-image-picker (7.1.2):
+  - react-native-image-picker (7.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1495,7 +1495,7 @@ PODS:
     - Yoga
   - react-native-safe-area-context (5.4.0):
     - React-Core
-  - react-native-webview (13.13.5):
+  - react-native-webview (13.15.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2292,11 +2292,11 @@ SPEC CHECKSUMS:
   react-native-blob-util: 64a732c0b8bb7f4928905e16ea8dc5cde6fb4832
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
-  react-native-image-picker: 960f17ebb356854310264b481a76d95afb5b3c70
+  react-native-image-picker: a05e7cf2b13aa348e6a5e2354bcf8b5033a8aed0
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-quick-base64: 764b8014da7dc834e5b8ad756c980addf919c177
   react-native-safe-area-context: 8870dc3e45c8d241336cd8ee3fa3fc76f3a040ac
-  react-native-webview: 3040cd6c3f633f6b17ed339e9d154568d2ea7abe
+  react-native-webview: 3c3786416af1f453ccd6f3a949d72c158d8a7e2e
   React-nativeconfig: 8efdb1ef1e9158c77098a93085438f7e7b463678
   React-NativeModulesApple: 958d4f6c5c2ace4c0f427cf7ef82e28ae6538a22
   React-perflogger: 9b4f13c0afe56bc7b4a0e93ec74b1150421ee22d
