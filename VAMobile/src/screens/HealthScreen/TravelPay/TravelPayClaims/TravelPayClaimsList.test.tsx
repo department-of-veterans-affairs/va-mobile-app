@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 
-import { screen } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
@@ -9,6 +9,8 @@ import TravelPayClaimsList, {
   CLAIMS_PER_PAGE,
 } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { context, render } from 'testUtils'
+
+const mockSetPage = jest.fn()
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -104,6 +106,8 @@ context('TravelPayClaimsList', () => {
         claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
         isLoading={false}
         scrollViewRef={React.createRef<ScrollView>()}
+        currentPage={1}
+        setPage={mockSetPage}
       />,
     )
 
@@ -119,6 +123,8 @@ context('TravelPayClaimsList', () => {
         claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
         isLoading={true}
         scrollViewRef={React.createRef<ScrollView>()}
+        currentPage={1}
+        setPage={mockSetPage}
       />,
     )
 
@@ -138,9 +144,19 @@ context('TravelPayClaimsList', () => {
     ]
 
     render(
-      <TravelPayClaimsList claims={duplicatedClaims} isLoading={false} scrollViewRef={React.createRef<ScrollView>()} />,
+      <TravelPayClaimsList
+        claims={duplicatedClaims}
+        isLoading={false}
+        scrollViewRef={React.createRef<ScrollView>()}
+        setPage={mockSetPage}
+        currentPage={1}
+      />,
     )
     expect(screen.getByTestId('previous-page')).toBeTruthy()
     expect(screen.getByTestId('next-page')).toBeTruthy()
+
+    // TODO SC: fire event to change page and see if mockSetPage is called
+    fireEvent.press(screen.getByTestId('next-page'))
+    expect(mockSetPage).toHaveBeenCalledTimes(1)
   })
 })

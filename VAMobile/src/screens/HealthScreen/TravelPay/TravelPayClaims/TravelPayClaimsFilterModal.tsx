@@ -93,6 +93,10 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   }
 
   const onCancelPressed = () => {
+    // Reset state to original
+    setSelectedFilter(currentFilter)
+    setSelectedSortBy(currentSortBy)
+
     setModalVisible(false)
     setAccessibilityFocus(ref)
   }

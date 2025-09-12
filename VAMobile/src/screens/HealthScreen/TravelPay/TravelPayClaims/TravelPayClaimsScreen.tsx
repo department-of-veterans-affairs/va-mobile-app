@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -29,6 +29,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   }
   const [filter, setFilter] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState(SortOption.Recent)
+  const [page, setPage] = useState(1)
 
   const startDate = DateTime.now().minus({ months: 3 }).toISO()
   const endDate = DateTime.now().toISO()
@@ -60,6 +61,8 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       sort: t(`travelPay.statusList.sortOption.${sortBy}`).toLowerCase(),
     })
   }
+
+  useEffect(() => setPage(1), [filter, sortBy])
 
   return (
     <FeatureLandingTemplate
@@ -93,7 +96,13 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
             sortBy={sortBy}
             setSortBy={setSortBy}
           />
-          <TravelPayClaimsList claims={sortedFilteredClaims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
+          <TravelPayClaimsList
+            claims={sortedFilteredClaims}
+            isLoading={isLoading}
+            scrollViewRef={scrollViewRef}
+            currentPage={page}
+            setPage={setPage}
+          />
         </Box>
       )}
     </FeatureLandingTemplate>

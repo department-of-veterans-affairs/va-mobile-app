@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -27,17 +27,18 @@ type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   isLoading: boolean
   scrollViewRef: RefObject<ScrollView>
+  setPage: Dispatch<SetStateAction<number>>
+  currentPage: number
 }
 
 export const CLAIMS_PER_PAGE = 10
 
-function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, isLoading, scrollViewRef, setPage, currentPage }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
-  const [page, setPage] = useState(1)
 
   const { perPage, totalEntries } = {
     perPage: CLAIMS_PER_PAGE,
@@ -45,9 +46,9 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
   }
 
   useEffect(() => {
-    const summaryList = claims?.slice((page - 1) * perPage, page * perPage)
+    const summaryList = claims?.slice((currentPage - 1) * perPage, currentPage * perPage)
     setClaimsToShow(summaryList || [])
-  }, [claims, page, perPage])
+  }, [claims, currentPage, perPage])
 
   const goToClaimDetails = (claimId: string) => {
     logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
@@ -103,16 +104,16 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(page + 1)
+      setPage(currentPage + 1)
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     onPrev: () => {
-      setPage(page - 1)
+      setPage(currentPage - 1)
       scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
     },
     totalEntries: totalEntries,
     pageSize: perPage,
-    page,
+    page: currentPage,
   }
 
   return (
