@@ -22,6 +22,7 @@ const importBenjaminAdamsData = () => {
     import('store/api/demo/mocks/default/demographics.json'),
     import('./personalInformation.json'),
     import('./allergies.json'),
+    import('store/api/demo/mocks/default/travelPay.json'),
   ]
 }
 
