@@ -346,6 +346,9 @@ jobs:
         with:
           name: final-screenshots
 
+      - name: Extract screenshots
+        run: tar -xzf final-screenshots.tgz
+
       - name: List downloaded files
         run: ls -R
 
@@ -380,3 +383,4 @@ jobs:
     with:
       channel_name: va-mobile-sandbox
       message: 'App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+ run> for results.'
