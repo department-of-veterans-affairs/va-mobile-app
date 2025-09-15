@@ -43,6 +43,10 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     scrollViewRef: scrollViewRef,
   }
 
+  const scrollToTop = () => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -69,11 +73,9 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
             if (nextPageStart >= claims.length && hasNextPage && fetchNextPage) {
               fetchNextPage()
             }
-            scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+            scrollToTop()
           }}
-          onPrev={() => {
-            scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
-          }}
+          onPrev={scrollToTop}
         />
       )}
     </FeatureLandingTemplate>

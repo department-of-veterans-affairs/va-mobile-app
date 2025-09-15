@@ -1,4 +1,5 @@
-import { waitFor } from '@testing-library/react-native'
+import type { UseInfiniteQueryResult } from '@tanstack/react-query'
+import { act, waitFor } from '@testing-library/react-native'
 
 import { useTravelPayClaims } from 'api/travelPay/getClaims'
 import { GetTravelPayClaimsResponse } from 'api/types'
@@ -127,6 +128,107 @@ context('getClaims', () => {
 
       // Should not be called when Travel Pay is in downtime
       expect(get).not.toHaveBeenCalled()
+    })
+
+    it('should fetch next page when additional results exist', async () => {
+      mockUseDowntime.mockImplementation(() => false)
+
+      const dateRange = getDateRangeFromTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+
+      const adjustedParamsPage1 = {
+        start_date: dateRange.startDate,
+        end_date: dateRange.endDate,
+        page_number: 1,
+      }
+
+      const adjustedParamsPage2 = {
+        start_date: dateRange.startDate,
+        end_date: dateRange.endDate,
+        page_number: 2,
+      }
+
+      const PAGE1_RESPONSE: GetTravelPayClaimsResponse = {
+        meta: {
+          totalRecordCount: 2,
+          pageNumber: 1,
+          status: 206,
+        },
+        data: [
+          {
+            id: 'claim-id-1',
+            type: 'travelPayClaimSummary',
+            attributes: {
+              id: 'claim-id-1',
+              claimNumber: '111111',
+              claimStatus: 'In Progress',
+              appointmentDateTime: '2023-02-23T22:22:52.549Z',
+              facilityId: '442',
+              facilityName: 'Tomah VA Medical Center',
+              totalCostRequested: 10.5,
+              reimbursementAmount: 5.25,
+              createdOn: '2023-02-24T22:22:52.549Z',
+              modifiedOn: '2023-02-26T22:22:52.549Z',
+            },
+          },
+        ],
+      }
+
+      const PAGE2_RESPONSE: GetTravelPayClaimsResponse = {
+        meta: {
+          totalRecordCount: 2,
+          pageNumber: 2,
+          status: 200,
+        },
+        data: [
+          {
+            id: 'claim-id-2',
+            type: 'travelPayClaimSummary',
+            attributes: {
+              id: 'claim-id-2',
+              claimNumber: '222222',
+              claimStatus: 'Submitted',
+              appointmentDateTime: '2023-03-01T10:00:00.000Z',
+              facilityId: '442',
+              facilityName: 'Tomah VA Medical Center',
+              totalCostRequested: 20.0,
+              reimbursementAmount: 10.0,
+              createdOn: '2023-03-02T10:00:00.000Z',
+              modifiedOn: '2023-03-03T10:00:00.000Z',
+            },
+          },
+        ],
+      }
+
+      when(get as jest.Mock)
+        .calledWith('/v0/travel-pay/claims', adjustedParamsPage1)
+        .mockResolvedValueOnce(PAGE1_RESPONSE)
+      when(get as jest.Mock)
+        .calledWith('/v0/travel-pay/claims', adjustedParamsPage2)
+        .mockResolvedValueOnce(PAGE2_RESPONSE)
+
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+
+      const { result } = renderQuery(() => useTravelPayClaims(TimeFrameTypeConstants.PAST_THREE_MONTHS))
+
+      await waitFor(() => {
+        expect(result.current.data?.pages?.[0]).toEqual(PAGE1_RESPONSE)
+        expect((result.current as unknown as UseInfiniteQueryResult<unknown, Error>).hasNextPage).toBe(true)
+      })
+
+      await act(async () => {
+        await (result.current as unknown as UseInfiniteQueryResult<unknown, Error>).fetchNextPage()
+      })
+
+      await waitFor(() => {
+        expect(result.current.data?.pages?.length).toBe(2)
+        expect(result.current.data?.pages?.[1]).toEqual(PAGE2_RESPONSE)
+        expect((result.current as unknown as UseInfiniteQueryResult<unknown, Error>).hasNextPage).toBe(false)
+      })
+
+      expect(get).toBeCalledWith('/v0/travel-pay/claims', adjustedParamsPage1)
+      expect(get).toBeCalledWith('/v0/travel-pay/claims', adjustedParamsPage2)
     })
   })
 })

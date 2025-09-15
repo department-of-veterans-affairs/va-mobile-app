@@ -138,7 +138,7 @@ type TravelPayClaimsListProps = {
   setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   onNext?: (page: number) => void
   onPrev?: (page: number) => void
-  totalRecordCount?: number
+  totalRecordCount: number
 }
 
 function TravelPayClaimsList({
@@ -161,7 +161,7 @@ function TravelPayClaimsList({
 
   const { perPage, totalEntries } = {
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: totalRecordCount || claims.length || 0,
+    totalEntries: totalRecordCount,
   }
   const pageStart = (page - 1) * DEFAULT_PAGE_SIZE + 1
   const pageEnd = Math.min(page * DEFAULT_PAGE_SIZE, totalEntries)
