@@ -75,7 +75,7 @@ export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
-  COEAvailable: false,
+  COEAvailable: true,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
