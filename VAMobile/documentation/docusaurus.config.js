@@ -83,6 +83,33 @@ const config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'gettingStarted',
+        path: 'gettingStarted',
+        routeBasePath: 'gettingStarted',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'development',
+        path: 'development',
+        routeBasePath: 'development',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'communityAndSupport',
+        path: 'communityAndSupport',
+        routeBasePath: 'communityAndSupport',
+        sidebarPath: require.resolve('./sidebars.js'),
+      },
+    ],
+    [
       'docusaurus-plugin-react-docgen-typescript',
       {
         // pass in a single string or an array of strings
@@ -146,14 +173,26 @@ const config = {
         },
         items: [
           {
-            to: '/docs/Intro', // ./docs/Intro.md
-            label: 'Documentation',
+            to: '/gettingStarted/Intro', // ./gettingStarted/Intro.md
+            label: 'Getting started',
             position: 'left',
-            activeBaseRegex: `/docs/`,
+            activeBaseRegex: `/gettingStarted/`,
+          },
+          {
+            to: '/development/Intro', // ./development/Intro.md
+            label: 'Development guide',
+            position: 'left',
+            activeBaseRegex: `/development/`,
+          },
+          {
+            to: '/communityAndSupport/Intro', // ./development/Intro.md
+            label: 'Community and support',
+            position: 'left',
+            activeBaseRegex: `/communityAndSupport/`,
           },
           {
             to: '/design/Intro', // ./docs-api/Intro.md
-            label: 'Design System',
+            label: 'Design system',
             position: 'left',
             activeBaseRegex: `/design/`,
           },
@@ -166,47 +205,7 @@ const config = {
       },
       footer: {
         style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Documentation',
-                to: '/docs/Intro',
-              },
-              {
-                label: 'Design System',
-                to: '/design/Intro',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-            ],
-          },
-        ],
+        links: [],
         copyright: `Copyright © ${new Date().getFullYear()} VA Mobile App, Inc. Built with Docusaurus.`,
         logo: {
           src: 'img/va-blue-logo.png',
