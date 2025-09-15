@@ -131,7 +131,7 @@ const DatePicker: FC<DatePickerProps> = ({
         borderColor="primary">
         <DatePickerField
           open={fromFieldOpen}
-          label="From"
+          label={t('datePicker.from')}
           date={selectedDateRange.startDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
@@ -149,7 +149,7 @@ const DatePicker: FC<DatePickerProps> = ({
         />
         <DatePickerField
           open={toFieldOpen}
-          label="To"
+          label={t('datePicker.to')}
           date={selectedDateRange.endDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}

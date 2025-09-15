@@ -597,6 +597,8 @@
   "crisisLineButton.label": "Talk to the Veterans Crisis Line now",
   "currentStep": "Current step",
   "dateTime.at": "at",
+  "datePicker.from": "From",
+  "datePicker.to": "To",
   "debug.title": "Developer Screen",
   "delete": "Delete",
   "deleteChanges": "Delete changes",
