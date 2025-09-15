@@ -155,7 +155,6 @@ context('TravelPayClaimsList', () => {
     expect(screen.getByTestId('previous-page')).toBeTruthy()
     expect(screen.getByTestId('next-page')).toBeTruthy()
 
-    // TODO SC: fire event to change page and see if mockSetPage is called
     fireEvent.press(screen.getByTestId('next-page'))
     expect(mockSetPage).toHaveBeenCalledTimes(1)
   })

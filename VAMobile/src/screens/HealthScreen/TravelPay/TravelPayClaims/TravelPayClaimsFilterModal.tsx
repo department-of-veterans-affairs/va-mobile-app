@@ -60,7 +60,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
         }) as CheckboxOption,
     )
 
-    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1)) // TODO: underscore sort?
+    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1))
 
     return options
   }, [claims])
@@ -89,7 +89,6 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
 
   const showModal = () => {
     setModalVisible(true)
-    // onShowAnalyticsFn && onShowAnalyticsFn() // TODO: SC
   }
 
   const onCancelPressed = () => {

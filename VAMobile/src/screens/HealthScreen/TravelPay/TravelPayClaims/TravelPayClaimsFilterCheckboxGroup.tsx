@@ -66,7 +66,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
             mr={theme.dimensions.condensedMarginBetween}
             flex={7}
             variant="VASelector"
-            color={theme.colors.text.primary}
+            color="primary"
             testID={`checkbox_label_${option.value}`}>
             {option.optionLabelKey}
           </TextView>
@@ -82,7 +82,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
         </Box>
       ),
       minHeight: 64,
-      backgroundColor: selectedValues?.has(option.value) ? 'listActive' : undefined,
+      backgroundColor: isChecked(option.value, options, selectedValues) ? 'listActive' : undefined,
       onPress: () => onChange(option.value),
     }
   })
