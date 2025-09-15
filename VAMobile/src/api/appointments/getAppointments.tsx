@@ -1,16 +1,12 @@
-import * as Keychain from 'react-native-keychain'
-import { UserCredentials } from 'react-native-keychain'
-
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { forEach, has } from 'underscore'
 
 import { appointmentsKeys } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useQuery } from 'api/queryClient'
 import { customQueryCache } from 'api/queryClient'
 import { AppointmentsGetData, AppointmentsGetDataMeta, AppointmentsList, AppointmentsMap } from 'api/types'
+import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
@@ -18,7 +14,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 import { useOfflineMode } from 'utils/hooks/offline'
-import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
 /**
@@ -37,6 +32,7 @@ const getAppointments = (
 
   return appointmentCacheSetter(
     queryKey,
+    'appointments',
     get<AppointmentsGetData>('/v0/appointments', {
       startDate: startDate,
       endDate: endDate,
@@ -55,12 +51,6 @@ const appointmentCacheGetter = async (
   startDate: string,
   endDate: string,
 ): Promise<AppointmentsGetData> => {
-  const key = await Keychain.getGenericPassword()
-  const storage = new Storage({
-    location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
-    encryptionKey: (key as UserCredentials).password,
-  })
-
   // get cached appointments
   const cachedAppointmentsStr = await storage.getItem(queryKey)
   const cachedAppointments = JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsMap
@@ -95,7 +85,11 @@ const appointmentCacheGetter = async (
   }
 }
 
-const appointmentCacheSetter = async (queryKey: string, resPromise: Promise<AppointmentsGetData | undefined>) => {
+const appointmentCacheSetter = async (
+  queryKey: string,
+  key: string,
+  resPromise: Promise<AppointmentsGetData | undefined>,
+) => {
   const response = await resPromise
 
   // map new appointments to object for storage
@@ -105,17 +99,20 @@ const appointmentCacheSetter = async (queryKey: string, resPromise: Promise<Appo
   })
 
   // get cached appointments
-  const cachedAppointmentsStr = await AsyncStorage.getItem(queryKey)
+  const cachedAppointmentsStr = await storage.getItem(key)
   const cachedAppointments = JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsMap
 
   // save new appointments overlapping with cached appointments
-  await AsyncStorage.setItem(
-    queryKey,
+  await storage.setItem(
+    key,
     JSON.stringify({
       ...cachedAppointments,
       ...newAppointmentMap,
     }),
   )
+
+  // save last updated time
+  await storage.setItem(`${queryKey}`, Date.now().toString())
 
   return response
 }
@@ -139,46 +136,56 @@ export const useAppointments = (
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
-  return useQuery({
-    ...options,
-    enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
-    queryKey: [appointmentsKeys.appointments, timeFrame],
-    networkMode: 'always',
-    queryFn: () => {
-      if (timeFrame === TimeFrameTypeConstants.UPCOMING && !queryClient.getQueryData(pastAppointmentsQueryKey)) {
-        const pastRange = getPastAppointmentDateRange()
+  return useQuery(
+    {
+      ...options,
+      enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
+      queryKey: [appointmentsKeys.appointments, timeFrame],
+      networkMode: 'always',
+      queryFn: () => {
+        if (timeFrame === TimeFrameTypeConstants.UPCOMING && !queryClient.getQueryData(pastAppointmentsQueryKey)) {
+          const pastRange = getPastAppointmentDateRange()
 
-        // Prefetch past appointments when upcoming appointments are being fetched so that the default
-        // appointments list in the `Past` tab will already be loaded if a user views past appointments.
-        // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
-        queryClient.prefetchQuery({
-          queryKey: pastAppointmentsQueryKey,
-          queryFn: () =>
-            customQueryCache<AppointmentsGetData | undefined>(
-              () =>
-                getAppointments(
-                  'appointments',
-                  pastRange.startDate,
-                  pastRange.endDate,
-                  TimeFrameTypeConstants.PAST_THREE_MONTHS,
-                  travelPayEnabled,
-                ),
-              'appointments',
-              () => appointmentCacheGetter('appointments', pastRange.startDate, pastRange.endDate),
+          // Prefetch past appointments when upcoming appointments are being fetched so that the default
+          // appointments list in the `Past` tab will already be loaded if a user views past appointments.
+          // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
+          queryClient.prefetchQuery({
+            queryKey: pastAppointmentsQueryKey,
+            queryFn: () =>
+              customQueryCache<AppointmentsGetData | undefined>(
+                () =>
+                  getAppointments(
+                    'appointments',
+                    pastRange.startDate,
+                    pastRange.endDate,
+                    TimeFrameTypeConstants.PAST_THREE_MONTHS,
+                    travelPayEnabled,
+                  ),
+                'appointments',
+                () => appointmentCacheGetter('appointments', pastRange.startDate, pastRange.endDate),
+              ),
+            staleTime: ACTIVITY_STALE_TIME,
+          })
+        }
+
+        return customQueryCache<AppointmentsGetData | undefined>(
+          () =>
+            getAppointments(
+              `${[appointmentsKeys.appointments, timeFrame]}`,
+              startDate,
+              endDate,
+              timeFrame,
+              includeTravelClaims,
             ),
-          staleTime: ACTIVITY_STALE_TIME,
-        })
-      }
-
-      return customQueryCache<AppointmentsGetData | undefined>(
-        () => getAppointments('appointments', startDate, endDate, timeFrame, includeTravelClaims),
-        'appointments',
-        () => appointmentCacheGetter('appointments', startDate, endDate),
-      )
+          'appointments',
+          () => appointmentCacheGetter('appointments', startDate, endDate),
+        )
+      },
+      meta: {
+        errorName: 'getAppointments: Service error',
+      },
+      staleTime: isConnected ? ACTIVITY_STALE_TIME : 0,
     },
-    meta: {
-      errorName: 'getAppointments: Service error',
-    },
-    staleTime: isConnected ? ACTIVITY_STALE_TIME : 0,
-  })
+    false,
+  )
 }

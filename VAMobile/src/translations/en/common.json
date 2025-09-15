@@ -968,6 +968,7 @@
   "labsAndTests.noRecords.alert.text.2.hint": "Information label about records availability",
   "labsAndTests.noRecords.alert.title": "We couldn't find information about your labs and tests",
   "labsAndTests.title": "Labs and tests",
+  "lastUpdatedTimestamp": "Last updated {{timestamp}}",
   "learnAboutPACT": "Learn about PACT Act on VA.gov",
   "leavingApp.body": "You'll go to a website outside of this app.",
   "leavingApp.body.settings": "You'll go to the system settings for this app.",

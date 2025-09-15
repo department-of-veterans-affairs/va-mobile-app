@@ -1,7 +1,13 @@
+import { useEffect, useState } from 'react'
+
 import NetInfo from '@react-native-community/netinfo'
 
-import { NetworkMode, QueryCache, QueryClient } from '@tanstack/react-query'
+import type { DefaultError, QueryKey } from '@tanstack/query-core'
+import { NetworkMode, QueryCache, QueryClient, useQuery as useTanstackQuery } from '@tanstack/react-query'
+import type { UndefinedInitialDataOptions } from '@tanstack/react-query/src/queryOptions'
+import type { UseQueryResult } from '@tanstack/react-query/src/types'
 
+import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useOfflineMode } from 'utils/hooks/offline'
@@ -33,6 +39,7 @@ export const customQueryCache = async <T>(
   const { isConnected } = await NetInfo.fetch()
 
   if (isConnected) {
+    await storage.setItem(`${queryKey}`, Date.now().toString())
     return queryFn(queryKey, ...params)
   }
 
@@ -68,3 +75,46 @@ export default new QueryClient({
     },
   }),
 })
+
+export const useQuery = <
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>(
+  options: UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
+  saveUpdatedTime = true,
+): UseQueryResult<TData, TError> & { lastUpdatedDate: number | undefined } => {
+  const lastUpdatedDate = useGetLastUpdatedTime(options.queryKey)
+  const queryResult = useTanstackQuery({
+    ...options,
+    queryFn: async () => {
+      if (saveUpdatedTime) {
+        await storage.setItem(`${options.queryKey}`, Date.now().toString())
+      }
+      // @ts-ignore
+      return options.queryFn()
+    },
+  })
+
+  return {
+    ...queryResult,
+    lastUpdatedDate,
+  }
+}
+
+const useGetLastUpdatedTime = (key: QueryKey) => {
+  const [time, setTime] = useState<number>()
+
+  useEffect(() => {
+    const getTime = async () => {
+      const storedTime = await storage.getItem(`${key}`)
+      if (storedTime) {
+        setTime(Number(storedTime))
+      }
+    }
+    getTime()
+  }, [key])
+
+  return time
+}

@@ -1,8 +1,7 @@
 import FileViewer from 'react-native-file-viewer'
 
-import { useQuery } from '@tanstack/react-query'
-
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
+import { useQuery } from 'api/queryClient'
 import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'

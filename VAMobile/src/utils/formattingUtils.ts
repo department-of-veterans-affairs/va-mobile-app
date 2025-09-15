@@ -425,3 +425,11 @@ export const formatDateTimeReadable = (dateTime?: DateTime | null): string => {
   }
   return dateTime.toFormat('EEEE, fff')
 }
+
+export const formatEpochReadable = (epoch?: number): string => {
+  if (!epoch) {
+    return ''
+  }
+
+  return DateTime.fromSeconds(epoch).toFormat('LLLL d, y H:mm ZZZZ')
+}

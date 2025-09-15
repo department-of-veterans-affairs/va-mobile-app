@@ -1,9 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { notificationKeys } from 'api/notifications/queryKeys'
+import { useQuery } from 'api/queryClient'
 import { LoadSystemNotificationsData } from 'api/types'
 import { notificationsEnabled } from 'utils/notifications'
-
-import { notificationKeys } from './queryKeys'
 
 /**
  * Fetch user system notification settings

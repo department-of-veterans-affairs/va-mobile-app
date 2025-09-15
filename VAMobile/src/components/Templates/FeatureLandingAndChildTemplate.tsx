@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import {
+  Box,
   HeaderBanner,
   HeaderBannerProps,
   HeaderButton,
@@ -14,6 +15,7 @@ import {
   TextViewProps,
   WaygateWrapper,
 } from 'components'
+import LastUpdatedTimestamp from 'components/LastUpdatedTimestamp/LastUpdatedTimestamp'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
@@ -46,6 +48,8 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional timestamp that the data on this screen last updated */
+  dataUpdatedAt?: number
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -62,6 +66,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -155,7 +160,11 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>{children}</WaygateWrapper>
+        <Box flex={1} display="flex" justifyContent="space-between">
+          {/* TODO double check these changes didnt alter the ui */}
+          <WaygateWrapper>{children}</WaygateWrapper>
+          <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+        </Box>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
