@@ -321,6 +321,9 @@ jobs:
         run: |
           ../.github/scripts/app-store-images/generate_images.sh
 
+      - name: Verify archive
+        run: ls -l final-screenshots.tgz
+
       - name: Upload final screenshots
         uses: actions/upload-artifact@v4
         with:
