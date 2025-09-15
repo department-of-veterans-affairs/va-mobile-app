@@ -350,7 +350,14 @@ jobs:
         run: ls -R
 
       - name: Extract screenshots
-        run: tar -xzf final-screenshots.tgz
+        run: |
+          TGZ_PATH=$(find . -name "final-screenshots.tgz")
+          if [ -z "$TGZ_PATH" ]; then
+            echo "Error: final-screenshots.tgz not found."
+            exit 1
+          fi
+          echo "Found archive at: $TGZ_PATH"
+          tar -xzf "$TGZ_PATH"
 
       - name: Commit and push screenshots
         run: |
