@@ -383,4 +383,3 @@ jobs:
     with:
       channel_name: va-mobile-sandbox
       message: 'App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
- run> for results.'
