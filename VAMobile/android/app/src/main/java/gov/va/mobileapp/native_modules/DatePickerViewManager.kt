@@ -6,9 +6,14 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import android.view.ViewGroup.LayoutParams
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.Typography
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.collectAsState
@@ -69,7 +74,14 @@ class DatePickerViewManager : SimpleViewManager<ComposeView>() {
                         }
                 }
 
-                DatePicker(state = datePickerState)
+                val colorScheme = if (isSystemInDarkTheme()) darkColorScheme() else lightColorScheme()
+
+                MaterialTheme(
+                    colorScheme = colorScheme,
+                    typography = Typography()
+                ) {
+                    DatePicker(state = datePickerState)
+                }
             }
         }
     }
