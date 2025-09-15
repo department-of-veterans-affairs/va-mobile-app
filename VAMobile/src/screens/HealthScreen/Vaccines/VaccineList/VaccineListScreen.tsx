@@ -45,6 +45,7 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
     isFetching: loading,
     error: vaccineError,
     refetch: refetchVaccines,
+    lastUpdatedDate,
   } = useVaccines({ enabled: screenContentAllowed('WG_VaccineList') && !vaccinesInDowntime })
 
   const theme = useTheme()
@@ -123,7 +124,8 @@ function VaccineListScreen({ navigation }: VaccineListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('vaVaccines')}
       titleA11y={a11yLabelVA(t('vaVaccines'))}
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      dataUpdatedAt={lastUpdatedDate}>
       {loading ? (
         <LoadingComponent text={t('vaccines.loading')} />
       ) : vaccineError || vaccinesInDowntime ? (

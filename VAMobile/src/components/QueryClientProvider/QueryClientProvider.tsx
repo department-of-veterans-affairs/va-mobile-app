@@ -11,6 +11,8 @@ import queryClient from 'api/queryClient'
 import { isBiometricsPreferred } from 'store/slices'
 import { isIOS } from 'utils/platform'
 
+export let storage: Storage
+
 const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const [usesBiometrics, setUsesBiometrics] = useState(false)
   const [persister, setPersister] = useState<Persister>()
@@ -30,7 +32,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       const key = await Keychain.getGenericPassword()
 
       // Create op-sqlite storage with encryption enabled
-      const storage = new Storage({
+      storage = new Storage({
         location: isIOS() ? IOS_LIBRARY_PATH : ANDROID_DATABASE_PATH,
         encryptionKey: (key as UserCredentials).password,
       })

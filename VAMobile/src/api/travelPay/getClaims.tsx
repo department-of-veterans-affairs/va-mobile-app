@@ -1,5 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { useQuery } from 'api/queryClient'
 import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameTypeConstants } from 'constants/timeframes'

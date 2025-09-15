@@ -1,9 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { directDepositKeys } from 'api/directDeposit/queryKeys'
+import { useQuery } from 'api/queryClient'
 import { DirectDepositData } from 'api/types'
 import { get } from 'store/api'
-
-import { directDepositKeys } from './queryKeys'
 
 /**
  * Fetch user direct deposit information

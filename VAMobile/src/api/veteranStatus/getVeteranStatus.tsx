@@ -1,5 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { useQuery } from 'api/queryClient'
 import { useQueryCacheOptions } from 'api/queryClient'
 import { VeteranVerificationStatusPayload } from 'api/types'
 import { veteranStatusKeys } from 'api/veteranStatus/queryKeys'

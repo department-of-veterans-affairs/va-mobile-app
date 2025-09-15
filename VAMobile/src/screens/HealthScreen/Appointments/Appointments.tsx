@@ -62,6 +62,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
     error: appointmentsHasError,
     isFetching: loadingAppointments,
     refetch: refetchAppts,
+    lastUpdatedDate,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
@@ -151,7 +152,8 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
       footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
-      backLabelTestID="appointmentsBackTestID">
+      backLabelTestID="appointmentsBackTestID"
+      dataUpdatedAt={lastUpdatedDate}>
       {!apptsNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
       ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
