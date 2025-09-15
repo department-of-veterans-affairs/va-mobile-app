@@ -36,7 +36,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const claims = claimsPayload?.pages?.flatMap((page) => page?.data ?? emptyClaims) ?? emptyClaims
 
   // Get total record count from the first page's metadata
-  const totalRecordCount = claimsPayload?.pages?.[0]?.meta?.totalRecordCount
+  const totalRecordCount = claimsPayload?.pages?.[0]?.meta?.totalRecordCount ?? 0
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
