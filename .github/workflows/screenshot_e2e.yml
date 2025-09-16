@@ -329,14 +329,12 @@ jobs:
         id: run_images
         working-directory: VAMobile
         run: |
-          echo "--- Running generate_images.sh ---"
-          echo "--- Current directory: $(pwd) ---"
-          echo "--- Listing VAMobile directory ---"
-          ls -l
-          echo "--- Listing artifacts directory ---"
-          ls -R artifacts
-          echo "--- Executing script ---"
-          bash -x ../.github/scripts/app-store-images/generate_images.sh
+          ../.github/scripts/app-store-images/generate_images.sh
+
+      - name: Create screenshots archive
+        working-directory: VAMobile
+        run: |
+          tar -czf final-screenshots.tgz ios/fastlane/screenshots/en-US android/fastlane/metadata/android/en-US/images/phoneScreenshots ios/fastlane/screenshots_ipad/en-US
 
       - name: Verify archive
         working-directory: VAMobile
