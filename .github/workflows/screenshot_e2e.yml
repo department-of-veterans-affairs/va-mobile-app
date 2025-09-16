@@ -334,17 +334,16 @@ jobs:
       - name: Create screenshots archive
         working-directory: VAMobile
         run: |
-          tar -czf final-screenshots.tgz ios/fastlane/screenshots/en-US android/fastlane/metadata/android/en-US/images/phoneScreenshots ios/fastlane/screenshots_ipad/en-US
+          tar -czf ../final-screenshots.tgz ios/fastlane/screenshots/en-US android/fastlane/metadata/android/en-US/images/phoneScreenshots ios/fastlane/screenshots_ipad/en-US
 
       - name: Verify archive
-        working-directory: VAMobile
         run: ls -l final-screenshots.tgz
 
       - name: Upload final screenshots
         uses: actions/upload-artifact@v4
         with:
           name: final-screenshots
-          path: VAMobile/final-screenshots.tgz
+          path: final-screenshots.tgz
 
   commit-screenshots:
     name: Commit Screenshots
