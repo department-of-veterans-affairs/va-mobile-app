@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { disabilityRatingKeys } from 'api/disabilityRating/queryKeys'
+import { useQuery } from 'api/queryClient'
 import { useQueryCacheOptions } from 'api/queryClient'
 import { DisabilityRatingData, RatingData } from 'api/types'
 import { get } from 'store/api'

@@ -1,9 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-
+import { useQuery } from 'api/queryClient'
+import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingThreadGetData } from 'api/types'
 import { Params, get } from 'store/api'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Fetch user message thread based on original message ID

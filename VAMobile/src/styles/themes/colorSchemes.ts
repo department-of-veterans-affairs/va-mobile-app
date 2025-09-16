@@ -124,6 +124,7 @@ export const lightTheme = {
     categoryLandingWarning: colors.vadsColorBase,
     cernerPanel: colors.vadsColorBase,
     cernerFooter: colors.vadsColorBaseDark,
+    lastUpdated: colors.vadsColorBorderStrongOnLight,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,
@@ -265,6 +266,7 @@ export const darkTheme = {
     categoryLandingWarning: colors.vadsColorBaseLightest,
     cernerPanel: colors.vadsColorBaseLightest,
     cernerFooter: colors.vadsColorBaseLightest,
+    lastUpdated: colors.vadsColorBorderStrongOnDark,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,

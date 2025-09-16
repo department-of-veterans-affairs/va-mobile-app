@@ -1,15 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { paymentsKeys } from 'api/payments/queryKeys'
+import { useQuery } from 'api/queryClient'
 import { PaymentsGetData } from 'api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 import { getFirstAndLastDayOfYear, groupPaymentsByDate } from 'utils/payments'
-
-import { paymentsKeys } from './queryKeys'
 
 /**
  * Fetch user payments history

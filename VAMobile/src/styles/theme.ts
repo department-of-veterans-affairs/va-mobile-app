@@ -39,6 +39,7 @@ export type VATextColors = {
   activityFooter: string
   categoryLandingError: string
   categoryLandingWarning: string
+  lastUpdated: string
 }
 
 export type VAIconColors = {

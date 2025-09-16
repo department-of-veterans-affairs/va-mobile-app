@@ -1,11 +1,9 @@
 import FileViewer from 'react-native-file-viewer'
 
-import { useQuery } from '@tanstack/react-query'
-
+import { useQuery } from 'api/queryClient'
+import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingAttachment } from 'api/types'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Fetch user attachment

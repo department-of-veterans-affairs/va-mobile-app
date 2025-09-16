@@ -78,10 +78,14 @@ import { useOfflineMode } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-const { ENVIRONMENT, IS_TEST } = getEnv()
+const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 
 enableScreens(true)
 injectStore(store)
+
+if (__DEV__ && REACTOTRON_ENABLED) {
+  require('../ReactotronConfig')
+}
 
 const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()

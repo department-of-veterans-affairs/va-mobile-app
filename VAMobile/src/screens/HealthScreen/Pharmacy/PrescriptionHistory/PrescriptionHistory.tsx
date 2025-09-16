@@ -218,7 +218,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
     },
     {
-      display: 'prescription.history.tag.unknown',
+      display: 'prescription.history.tag.statusNotAvailable',
       value: RefillStatusConstants.UNKNOWN,
       count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
     },
