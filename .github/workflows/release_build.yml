@@ -45,7 +45,7 @@ jobs:
                -H 'Authorization: Bearer '"$SLACK_API_TOKEN" \
                -H 'Content-type: application/json' \
                -d '{"channel": "va-mobile-app", "text": "The release build failed for iOS version ${{ github.ref_name }}. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.", "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}"}' \
-               https://slack.com/api/chat.postMessage  
+               https://slack.com/api/chat.postMessage
   android:
     name: Android Release Build
     needs: start_slack_thread
