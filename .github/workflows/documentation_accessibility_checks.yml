@@ -53,7 +53,7 @@ jobs:
           # Counter for total errors
           total_errors=0
 
-          for url in $(ggrep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
             # save output so that we can send it to std out AND do an operation on it
             output=$(axe "$url" --exclude ".api-content, iframe" --chrome-path="${AXE_CORE_CHROME_PATH}")
@@ -61,7 +61,7 @@ jobs:
             echo "${output}"
 
             # regex number of issues NOTE: grep exits 1 if it finds no match. GH Actions exits the runner if anything exits 1 so we add the || true to overcome that
-            issues=$(echo "${output}" | ggrep -oP '\d+(?= Accessibility issues detected)' || true)
+            issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
 
             # If issues is not an empty string, there were issues
             if [[ ! -z "$issues" ]]
