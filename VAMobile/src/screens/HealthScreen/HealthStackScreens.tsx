@@ -17,7 +17,6 @@ import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/scree
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
-import HealthHelp from 'screens/HealthScreen/HealthHelp/HealthHelp'
 import PrescriptionHelp from 'screens/HealthScreen/Pharmacy/PrescriptionHelp/PrescriptionHelp'
 import RefillRequestSummary from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillRequestSummary'
 import RefillScreenModal from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
@@ -225,6 +224,5 @@ export const getHealthScreens = () => {
       component={SubmitMileageTravelPayScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
-    <HealthStack.Screen key={'HealthHelp'} name="HealthHelp" component={HealthHelp} options={LARGE_PANEL_OPTIONS} />,
   ]
 }
