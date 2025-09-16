@@ -1,6 +1,4 @@
-We updated the app with several improvements to secure messaging, privacy, and usability:
+We updated the app with improvements to appointments and accessibility:
 
-- Improved functionality to clearly direct Oracle Health users to health tools
-- Simplified secure messaging with auto-filled care systems and no duplicate recipients
-- Removed in-app survey comments to better protect Veteran privacy
-- Improved timezone display for Asia and Pacific regions
+- For Cerner appointments, non-existent clinic and location fields are now hidden.
+- Improved accessibility in secure messaging so screen readers announce the selected recipient and provide a clear way to confirm the choice.

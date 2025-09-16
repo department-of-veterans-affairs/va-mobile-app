@@ -33,6 +33,7 @@ import {
   BoxProps,
   CategoryLanding,
   CategoryLandingAlert,
+  EmailConfirmationAlert,
   EncourageUpdateAlert,
   HeaderButton,
   LinkRow,
@@ -55,6 +56,7 @@ import ProfileScreen from 'screens/HomeScreen/ProfileScreen/ProfileScreen'
 import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen'
 import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
+import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
@@ -337,6 +339,7 @@ export function HomeScreen({}: HomeScreenProps) {
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
         <EncourageUpdateAlert />
+        {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <InView
             triggerOnce={true}
@@ -735,6 +738,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HomeScreenStack.Screen name="Developer" component={DeveloperScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <HomeScreenStack.Screen
+        name="DemoModeUsers"
+        component={DemoModeUsersScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <HomeScreenStack.Screen
         name="OverrideAPI"
         component={OverrideAPIScreen}
