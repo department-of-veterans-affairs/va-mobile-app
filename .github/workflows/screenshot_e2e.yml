@@ -329,7 +329,14 @@ jobs:
         id: run_images
         working-directory: VAMobile
         run: |
-          ../.github/scripts/app-store-images/generate_images.sh
+          echo "--- Running generate_images.sh ---"
+          echo "--- Current directory: $(pwd) ---"
+          echo "--- Listing VAMobile directory ---"
+          ls -l
+          echo "--- Listing artifacts directory ---"
+          ls -R artifacts
+          echo "--- Executing script ---"
+          bash -x ../.github/scripts/app-store-images/generate_images.sh
 
       - name: Verify archive
         working-directory: VAMobile
