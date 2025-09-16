@@ -24,7 +24,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_REFILL_WARNING_ID: 'prescriptionRefillWarningTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
-  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (31), sorted by status (A to Z)',
+  PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (32), sorted by status (A to Z)',
   PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT: 'Pending refills (8), sorted by status (A to Z)',
   PRESCRIPTION_TRACKING_NUMBER_OF_PRESCRIPTION_TEXT: 'Refills with tracking information (5)',
   PRESCRIPTION_STATUS_LABEL_HEADER_TEXT: 'Active',
@@ -86,7 +86,7 @@ export async function validateSort(
     if (firstInstance) {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-      await element(by.text('All (31)')).atIndex(0).tap()
+      await element(by.text('All (32)')).atIndex(0).tap()
       await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
     } else {
       await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
@@ -132,6 +132,8 @@ export async function validateSort(
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
+    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).swipe('up', 'fast', 1.0, 0.5, 0.5)
     await expect(element(by.text(lastPrescription))).toBeVisible()
   })
 }
@@ -166,7 +168,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID))).toExist()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
+    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(100, 'down', 0.5, 0.5)
@@ -211,7 +213,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify prescription details information', async () => {
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
+    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(50, 'down', 0.5, 0.5)
@@ -250,8 +252,8 @@ describe('Prescriptions Screen', () => {
   validateFilter('Pending', 8, 'Includes refill requests you submitted and refills the VA pharmacy is processing')
   validateFilter('Tracking', 3, 'Includes refills with current tracking information available')
   validateFilter('Transferred', 1)
-  validateFilter('Unknown', 1)
-  validateFilter('All', 31)
+  validateFilter('Status Not Available', 2)
+  validateFilter('All', 32)
 
   it('verify prescriptions screen after filters cancel', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
@@ -270,24 +272,24 @@ describe('Prescriptions Screen', () => {
 
   it('pending: verify filters', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await expect(element(by.text('All (31)'))).toExist()
+    await expect(element(by.text('All (32)'))).toExist()
     await expect(element(by.text('Active (24)'))).toExist()
     await expect(element(by.text('Discontinued (1)'))).toExist()
     await expect(element(by.text('Expired (4)'))).toExist()
     await expect(element(by.text('Pending (8)'))).toExist()
     await expect(element(by.text('Tracking (3)'))).toExist()
     await expect(element(by.text('Transferred (1)'))).toExist()
-    await expect(element(by.text('Unknown (1)'))).toExist()
+    await expect(element(by.text('Status Not Available (2)'))).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_CANCEL_ID)).tap()
   })
 
   it('verify prescription tracking item specific info', async () => {
-    await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB.')))
+    await waitFor(element(by.label('CITALOPRAM HYDROBROMIDE 20MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_TRACKING_GET_TRACKING_ID)).atIndex(0).tap()
-    await expect(element(by.label('Prescription number 3 6 3 6 8 5 6'))).toExist()
+    await expect(element(by.label('Prescription number 3 6 3 6 7 3 6'))).toExist()
     await expect(
       element(
         by.text("We share tracking information here for up to 15 days, even if you've received your prescription."),
@@ -308,7 +310,7 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text('LAMIVUDINE 10MG TAB'))).toExist()
     await expect(element(by.label('Prescription number 2 3 3 6 8 0 0'))).toExist()
     await expect(element(by.text('ZIDOVUDINE 1MG CAP'))).toExist()
-    await expect(element(by.label('Prescription number None noted'))).toExist()
+    await expect(element(by.label('Prescription number None noted')).atIndex(0)).toExist()
   })
 
   it('verify tracking link for DHL works', async () => {
@@ -321,7 +323,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify tracking link for FEDEX works', async () => {
-    await waitFor(element(by.label('LAMIVUDINE 100MG TAB.')))
+    await waitFor(element(by.label('LAMIVUDINE 100MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
@@ -336,7 +338,7 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify tracking info for multiple packages', async () => {
-    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB.')))
+    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
@@ -356,7 +358,7 @@ describe('Prescriptions Screen', () => {
     await loginToDemoMode()
     await openHealth()
     await openPrescriptions()
-    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB.')))
+    await waitFor(element(by.label('LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
@@ -406,10 +408,10 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.label('0 of 10 selected'))).toExist()
     await expect(element(by.text('Select all'))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A.')).atIndex(0)).toExist()
-    await expect(element(by.label('Refills left: 5.')).atIndex(0)).toExist()
-    await expect(element(by.label('Fill date June 06, 2022.')).atIndex(0)).toExist()
-    await expect(element(by.label(' V-A  facility: SLC10 TEST LAB.')).atIndex(0)).toExist()
+    await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
+    await expect(element(by.label('Refills left: 5')).atIndex(0)).toExist()
+    await expect(element(by.label('Fill date June 06, 2022')).atIndex(0)).toExist()
+    await expect(element(by.label(' V-A  facility: SLC10 TEST LAB')).atIndex(0)).toExist()
   })
 
   it('verify error when nothing is selected for request refills', async () => {
@@ -461,7 +463,7 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await element(by.text('Active (24)')).atIndex(0).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB.')))
+    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
       .scroll(500, 'down', 0.5, 0.5)
@@ -494,5 +496,5 @@ describe('Prescriptions Screen', () => {
   validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)
   validateSort('Medication name (A to Z)', 'ACETAMINOPHEN 325MG TAB', 'ZIPRASIDONE HCL 40MG CAP')
   validateSort('Refills left (least to most)', 'ATORVASTATIN CALCIUM 10MG TAB', 'BERNA VACCINE CAP B/P')
-  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'LAMIVUDINE 10MG TAB')
+  validateSort('Status (A to Z)', 'AMLODIPINE BESYLATE 10MG TAB', 'ZIDOVUDINE 1MG CAP')
 })
