@@ -45,6 +45,7 @@ import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -151,6 +152,16 @@ export function HealthScreen({}: HealthScreenProps) {
             title={t('travelPay.title')}
             onPress={() => navigateTo('TravelPayClaims')}
             testID="toTravelPayClaimsID"
+          />
+        )}
+        {featureEnabled('overpayCopay') && (
+          <LargeNavButton
+            title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
+            subText={t('copays.activityButton.subText', {
+              amount: numberToUSDollars(0),
+              count: 0,
+            })}
           />
         )}
         <LargeNavButton
