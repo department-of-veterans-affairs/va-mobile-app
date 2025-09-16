@@ -1,0 +1,7 @@
+---
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - "shellcheck reported issue"
+      - "action is too old"
+      - "property .+ is not defined"
