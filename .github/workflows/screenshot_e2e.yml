@@ -337,6 +337,7 @@ jobs:
           tar -czf ../final-screenshots.tgz ios/fastlane/screenshots/en-US android/fastlane/metadata/android/en-US/images/phoneScreenshots ios/fastlane/screenshots_ipad/en-US
 
       - name: Verify archive
+        working-directory: .
         run: ls -l final-screenshots.tgz
 
       - name: Upload final screenshots
