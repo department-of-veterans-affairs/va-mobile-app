@@ -22,16 +22,15 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useBeforeNavBackListener, useDowntime, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from '../PrescriptionCommon'
 
 const { CARRIER_TRACKING_URL_USPS, CARRIER_TRACKING_URL_UPS, CARRIER_TRACKING_URL_FEDEX, CARRIER_TRACKING_URL_DHL } =
   getEnv()
