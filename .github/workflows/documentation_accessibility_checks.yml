@@ -1,15 +1,15 @@
-name: "[Documentation] Accessibility Check"
+name: '[Documentation] Accessibility Check'
 
 on:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
-    - cron: "0 9 * * 1,2,3,4,5"
+    - cron: '0 9 * * 1,2,3,4,5'
 
 jobs:
   axe-scan:
     name: Accessibility Check
-    runs-on: macos-14-large
+    runs-on: ubuntu-latest
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
@@ -21,13 +21,13 @@ jobs:
       - name: Setup axe-core CLI tools
         run: |
           npm install @axe-core/cli -g
-      - name: Install GNU Grep #Install GNU Grep as MacOS ships with BSD Grep
-        run: |
-          brew install grep
+      # - name: Install GNU Grep #Install GNU Grep as MacOS ships with BSD Grep
+      #   run: |
+      #     brew install grep
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version-file: "VAMobile/documentation/.nvmrc"
+          node-version-file: 'VAMobile/documentation/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Install mobile app modules
@@ -82,4 +82,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "Accessibility issues detected in the documentation site. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }}. Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}"
+      message: 'Accessibility issues detected in the documentation site. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }}. Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'
