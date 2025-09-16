@@ -125,11 +125,10 @@ const getPickerOptions = (t: TFunction): Array<TravelPayClaimsDatePickerOption> 
 }
 
 const getResultsText = (t: TFunction, numResults: number, pageStart: number, pageEnd: number) => {
-  const sortAndFilterText = t('travelPay.statusList.sortByMode.date')
   if (numResults === 0) {
     return t('travelPay.statusList.emptyResults', { numResults })
   }
-  return t('travelPay.statusList.resultsText', { numResults, pageStart, pageEnd, sortAndFilterText })
+  return t('travelPay.statusList.resultsText', { numResults, pageStart, pageEnd })
 }
 
 type TravelPayClaimsListProps = {
