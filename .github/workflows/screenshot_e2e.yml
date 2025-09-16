@@ -387,6 +387,13 @@ jobs:
             git push
           fi
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: failure()
+        with:
+          limit-access-to-actor: true
+          timeout: 60
+
   success-slack-message:
     name: Success Slack thread
     needs: commit-screenshots
