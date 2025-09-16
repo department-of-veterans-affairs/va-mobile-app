@@ -270,6 +270,17 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Setup node and restore yarn cache
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
+
+      - name: Install npm dependencies
+        working-directory: VAMobile
+        run: yarn install --frozen-lockfile --non-interactive
+
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -308,7 +319,6 @@ jobs:
 
       - name: Combine screenshots
         run: |
-          yarn
           mkdir -p VAMobile/artifacts
           mv VAMobile/artifacts_iphone VAMobile/artifacts/ios
           mv VAMobile/artifacts_ipad VAMobile/artifacts/ipad
@@ -322,16 +332,14 @@ jobs:
           ../.github/scripts/app-store-images/generate_images.sh
 
       - name: Verify archive
+        working-directory: VAMobile
         run: ls -l final-screenshots.tgz
 
       - name: Upload final screenshots
         uses: actions/upload-artifact@v4
         with:
           name: final-screenshots
-          path: |
-            VAMobile/ios/fastlane/screenshots/en-US/
-            VAMobile/android/fastlane/metadata/android/en-US/images/phoneScreenshots/
-            VAMobile/ios/fastlane/screenshots_ipad/en-US/
+          path: VAMobile/final-screenshots.tgz
 
   commit-screenshots:
     name: Commit Screenshots
