@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 
 type GiveFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'GiveFeedback'>
 
@@ -17,11 +19,20 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const openAppStore = useOpenAppStore()
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   const items: Array<SimpleListItemObj> = _.flatten([
     {
       text: t('giveFeedback.send'),
-      onPress: () => navigateTo('SendUsFeedback'),
+      onPress: () => {
+        if (!isConnected) {
+          showOfflineSnackbar(snackbar, t)
+          return
+        }
+
+        navigateTo('SendUsFeedback')
+      },
       detoxTestID: 'inAppRecruitmentID',
       decorator: ButtonDecoratorType.Navigation,
     },

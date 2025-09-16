@@ -20,7 +20,7 @@ import { CommonActions, EventArg, useNavigation } from '@react-navigation/native
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
@@ -42,6 +42,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -188,6 +189,8 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
  */
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   return (url: string, eventParams?: EventParams) => {
     logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
@@ -198,6 +201,11 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     }
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
+      if (!isConnected) {
+        showOfflineSnackbar(snackbar, t)
+        return
+      }
+
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('leavingApp.cancel'),
@@ -494,8 +502,18 @@ export function useOpenAppStore(): () => void {
   const launchExternalLink = useExternalLink()
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
-  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  return () => {
+    if (!isConnected) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
+    launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  }
 }
 
 export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }

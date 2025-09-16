@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Box, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,6 +10,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
@@ -22,6 +25,8 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   return (
     <Box
@@ -47,6 +52,11 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (!isConnected) {
+                showOfflineSnackbar(snackbar, t)
+                return
+              }
+
               logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
               navigateTo('Webview', {
                 url: LINK_URL_SCHEDULE_APPOINTMENTS,

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ParamListBase } from '@react-navigation/native'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 
 import { Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
@@ -16,6 +17,7 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -23,19 +25,27 @@ const {
   WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS,
 } = getEnv()
 
-const webViewLinkHelper = (
+const WebViewLinkHelper = (
   url: string,
   text: string,
   navigateTo: RouteNavigationFunction<ParamListBase>,
   t: TFunction,
   testID?: string,
 ) => {
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
+
   return (
     <LinkWithAnalytics
       type="custom"
       icon={{ name: 'Launch', fill: 'default' }}
       testID={testID}
       onPress={() => {
+        if (!isConnected) {
+          showOfflineSnackbar(snackbar, t)
+          return
+        }
+
         navigateTo('Webview', {
           url,
           displayTitle: t('webview.vagov'),
@@ -62,7 +72,7 @@ const getWebViewLink = (
     testID = 'claimExamLinkTestID'
   }
 
-  return webViewLinkHelper(url, text, navigateTo, t, testID)
+  return WebViewLinkHelper(url, text, navigateTo, t, testID)
 }
 
 // This function generates a webview link specifically for video appointments
@@ -81,7 +91,7 @@ const getVideoWebviewLink = (
     ].includes(type)
   ) {
     const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
-    return webViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
+    return WebViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
   }
 
   return null

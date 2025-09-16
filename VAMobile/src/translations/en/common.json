@@ -1115,6 +1115,7 @@
   "notifications.title": "Notifications",
   "offline.banner.title": "No internet connection",
   "offline.lastConnected": "Last connected",
+  "offline.toast.checkConnection": "Check your connection and try again",
   "onboarding.allInformationYouNeed": "With this app, you can manage your VA health care, benefits, and payments from your phone or tablet.",
   "onboarding.backA11yHint.benefitsOnboarding": "Go back to the benefits onboarding page",
   "onboarding.backA11yHint.healthOnboarding": "Go back to the health care onboarding page",
