@@ -140,31 +140,12 @@
           "quantity": 60,
           "expirationDate": "2023-05-15T04:00:00.000Z",
           "prescriptionNumber": "3636856",
-          "prescriptionName": "This oneCAPECITABINE 500MG TAB",
+          "prescriptionName": "CAPECITABINE 500MG TAB",
           "dispensedDate": "2022-08-02T04:00:00.000Z",
           "stationNumber": "979",
           "isRefillable": true,
           "isTrackable": true,
-          "instructions": "TAKE ONE TABLET TWO (2) TIMES A DAY FOR 30 DAYS",
-          "trackingDetails": {
-            "deliveryService": "DHL",
-            "otherPrescriptions": [
-              {
-                "prescriptionName": "LAMIVUDINE 10MG TAB",
-                "prescriptionNumber": "2336800"
-              },
-              {
-                "prescriptionName": "ZIDOVUDINE 1MG CAP",
-                "prescriptionNumber": ""
-              }
-            ],
-            "prescriptionName": "CAPECITABINE 500MG TAB",
-            "prescriptionNumber": "3636856",
-            "shippedDate": "2022-06-14T00:00:00.000Z",
-            "trackingNumber": "7534533636856",
-            "ndcNumber": "00013264681",
-            "prescriptionId": 21142592
-          }
+          "instructions": "TAKE ONE TABLET TWO (2) TIMES A DAY FOR 30 DAYS"
         }
       },
       {
