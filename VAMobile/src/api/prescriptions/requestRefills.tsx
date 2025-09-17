@@ -1,23 +1,45 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { prescriptionKeys } from 'api/prescriptions/queryKeys'
 import { PrescriptionRefillData, PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
-import { put } from 'store/api'
+import { Params, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
 
-import { prescriptionKeys } from './queryKeys'
-
 /**
  * Requests refills for a users prescriptions
  */
-const requestRefills = async (prescriptions: PrescriptionsList): Promise<RefillRequestSummaryItems> => {
+const requestRefills = async (
+  prescriptions: PrescriptionsList,
+  useV1: boolean = false,
+): Promise<RefillRequestSummaryItems> => {
   let results: RefillRequestSummaryItems = []
-  const prescriptionIds = prescriptions.map((prescription) => prescription.id)
-  const response = await put<PrescriptionRefillData>('/v0/health/rx/prescriptions/refill', {
-    ids: prescriptionIds,
-  })
+
+  const API_VERSION = useV1 ? 'v1' : 'v0'
+  let requestBody: { ids: string[] } | { ids: Array<{ id: string; stationNumber: string }> }
+
+  if (useV1) {
+    // v1 API expects { ids: SingleRefillRequest[] }
+    requestBody = {
+      ids: prescriptions.map((prescription) => ({
+        id: prescription.id,
+        stationNumber: prescription.attributes.stationNumber,
+      })),
+    }
+  } else {
+    // v0 API expects { ids: string[] }
+    requestBody = {
+      ids: prescriptions.map((prescription) => prescription.id),
+    }
+  }
+
+  const response = await put<PrescriptionRefillData>(
+    `/${API_VERSION}/health/rx/prescriptions/refill`,
+    requestBody as unknown as Params,
+  )
   const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []
   results = prescriptions.map((prescription) => ({
     submitted: !failedPrescriptionIds.includes(prescription.id),
@@ -29,11 +51,15 @@ const requestRefills = async (prescriptions: PrescriptionsList): Promise<RefillR
 /**
  * Returns a mutation for requesting refills for a users prescriptions
  */
-export const useRequestRefills = () => {
+export const useRequestRefills = (options?: { isV1Enabled?: boolean }) => {
+  const { data: authorizedServices } = useAuthorizedServices()
+  const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
+  const shouldUseV1 = medicationsOracleHealthEnabled && options?.isV1Enabled
+
   const registerReviewEvent = useReviewEvent(false, 'refillRequest')
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: requestRefills,
+    mutationFn: (prescriptions: PrescriptionsList) => requestRefills(prescriptions, shouldUseV1),
     onMutate: () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     },

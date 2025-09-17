@@ -22,7 +22,7 @@ import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/
 import { HiddenA11yElement } from 'styles/common'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
 
 type RefillScreenProps = StackScreenProps<HealthStackParamList, 'RefillScreenModal'>
 
@@ -42,19 +42,26 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
+  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
+
   const {
     data: prescriptionData,
     isFetching: loadingHistory,
     isFetched: prescriptionsFetched,
     error: prescriptionHasError,
     refetch: refetchPrescriptions,
-  } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') })
+  } = usePrescriptions({
+    enabled: screenContentAllowed('WG_RefillScreenModal'),
+    isV1Enabled: oracleMedsEnabled,
+  })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.isRefillable
   })
 
-  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefills } = useRequestRefills()
+  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefills } = useRequestRefills({
+    isV1Enabled: oracleMedsEnabled,
+  })
 
   const refillable = refillablePrescriptions || []
 
@@ -97,6 +104,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const onSubmitPressed = () => {
     const prescriptionList: PrescriptionsList = []
+    //TODO: change this to have the station number as well
     Object.values(selectedValues).forEach((isSelected, index) => {
       if (isSelected) {
         prescriptionList.push(refillable[index])

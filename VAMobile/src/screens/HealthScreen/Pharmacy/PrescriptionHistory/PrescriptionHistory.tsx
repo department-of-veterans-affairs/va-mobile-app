@@ -53,7 +53,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed } from 'utils/waygateConfig'
+import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
@@ -78,6 +78,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     error: getUserAuthorizedServicesError,
     refetch: refetchAuthServices,
   } = useAuthorizedServices()
+  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
   const {
     data: prescriptionData,
     isFetching: loadingHistory,
@@ -86,6 +87,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
+    isV1Enabled: oracleMedsEnabled,
   })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {

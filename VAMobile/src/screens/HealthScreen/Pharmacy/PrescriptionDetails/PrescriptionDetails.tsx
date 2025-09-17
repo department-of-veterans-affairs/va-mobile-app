@@ -26,6 +26,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { waygateEnabled } from 'utils/waygateConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -59,7 +60,11 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     orderedDate,
   } = prescription?.attributes
 
-  const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
+  const { enabled: waygateOracleHealthMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
+
+  const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills({
+    isV1Enabled: waygateOracleHealthMedsEnabled,
+  })
 
   useFocusEffect(
     React.useCallback(() => {
@@ -112,6 +117,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
                     navigateTo('RefillScreenModal', { refillRequestSummaryItems: data })
                   },
                 }
+                // TODO: update structure here
                 requestRefill([prescription], mutateOptions)
               }
               break
