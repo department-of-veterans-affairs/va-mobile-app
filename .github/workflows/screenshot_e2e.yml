@@ -367,13 +367,8 @@ jobs:
 
       - name: Extract screenshots
         run: |
-          TGZ_PATH=$(find . -name "final-screenshots.tgz")
-          if [ -z "$TGZ_PATH" ]; then
-            echo "Error: final-screenshots.tgz not found."
-            exit 1
-          fi
-          echo "Found archive at: $TGZ_PATH"
-          tar -xzf "$TGZ_PATH"
+          ls -l final-screenshots.tgz
+          tar -xzf final-screenshots.tgz -C VAMobile
 
       - name: Commit and push screenshots
         run: |
