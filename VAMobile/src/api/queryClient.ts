@@ -90,7 +90,7 @@ export const useQuery = <
     ...options,
     queryFn: async () => {
       if (saveUpdatedTime) {
-        await storage.setItem(`${options.queryKey}`, Date.now().toString())
+        await storage.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
       }
       // @ts-ignore
       return options.queryFn()

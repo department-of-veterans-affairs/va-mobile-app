@@ -1,11 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { forEach, has } from 'underscore'
+import { has } from 'underscore'
 
 import { appointmentsKeys } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useQuery } from 'api/queryClient'
 import { customQueryCache } from 'api/queryClient'
-import { AppointmentsGetData, AppointmentsGetDataMeta, AppointmentsList, AppointmentsMap } from 'api/types'
+import { AppointmentsGetData } from 'api/types'
 import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
@@ -32,7 +32,6 @@ const getAppointments = (
 
   return appointmentCacheSetter(
     queryKey,
-    'appointments',
     get<AppointmentsGetData>('/v0/appointments', {
       startDate: startDate,
       endDate: endDate,
@@ -46,73 +45,19 @@ const getAppointments = (
   )
 }
 
-const appointmentCacheGetter = async (
-  queryKey: string,
-  startDate: string,
-  endDate: string,
-): Promise<AppointmentsGetData> => {
+const appointmentCacheGetter = async (queryKey: string): Promise<AppointmentsGetData> => {
   // get cached appointments
   const cachedAppointmentsStr = await storage.getItem(queryKey)
-  const cachedAppointments = JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsMap
 
-  // initialize metadata
-  const meta: AppointmentsGetDataMeta = {
-    travelPayEligibleCount: 0,
-    upcomingAppointmentsCount: 0,
-    upcomingDaysLimit: 0,
-  }
-
-  // find appointments within range and update metadata along the way
-  const data: AppointmentsList = []
-  forEach(cachedAppointments, (appointment) => {
-    if (appointment.attributes.startDateUtc > startDate && appointment.attributes.startDateUtc < endDate) {
-      data.push(appointment)
-      if (appointment.attributes.travelPayEligible) {
-        meta.travelPayEligibleCount = meta.travelPayEligibleCount ? meta.travelPayEligibleCount + 1 : 1
-      }
-    }
-  })
-
-  meta.pagination = {
-    currentPage: 1,
-    perPage: LARGE_PAGE_SIZE,
-    totalEntries: data.length,
-  }
-
-  return {
-    data,
-    meta,
-  }
+  return JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsGetData
 }
 
-const appointmentCacheSetter = async (
-  queryKey: string,
-  key: string,
-  resPromise: Promise<AppointmentsGetData | undefined>,
-) => {
+const appointmentCacheSetter = async (queryKey: string, resPromise: Promise<AppointmentsGetData | undefined>) => {
   const response = await resPromise
-
-  // map new appointments to object for storage
-  const newAppointmentMap: AppointmentsMap = {}
-  response?.data.forEach((appt) => {
-    newAppointmentMap[appt.id] = appt
-  })
-
-  // get cached appointments
-  const cachedAppointmentsStr = await storage.getItem(key)
-  const cachedAppointments = JSON.parse(cachedAppointmentsStr || '{}') as AppointmentsMap
-
-  // save new appointments overlapping with cached appointments
-  await storage.setItem(
-    key,
-    JSON.stringify({
-      ...cachedAppointments,
-      ...newAppointmentMap,
-    }),
-  )
+  await storage.setItem(queryKey, JSON.stringify(response))
 
   // save last updated time
-  await storage.setItem(`${queryKey}`, Date.now().toString())
+  await storage.setItem(`${queryKey}-lastUpdatedTime`, Date.now().toString())
 
   return response
 }
@@ -135,7 +80,6 @@ export const useAppointments = (
   const includeTravelClaims = timeFrame !== TimeFrameTypeConstants.UPCOMING && travelPayEnabled
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
-
   return useQuery(
     {
       ...options,
@@ -155,14 +99,14 @@ export const useAppointments = (
               customQueryCache<AppointmentsGetData | undefined>(
                 () =>
                   getAppointments(
-                    'appointments',
+                    `${[appointmentsKeys.appointments, timeFrame]}`,
                     pastRange.startDate,
                     pastRange.endDate,
                     TimeFrameTypeConstants.PAST_THREE_MONTHS,
                     travelPayEnabled,
                   ),
-                'appointments',
-                () => appointmentCacheGetter('appointments', pastRange.startDate, pastRange.endDate),
+                `${[appointmentsKeys.appointments, timeFrame]}`,
+                () => appointmentCacheGetter(`${[appointmentsKeys.appointments, timeFrame]}`),
               ),
             staleTime: ACTIVITY_STALE_TIME,
           })
@@ -177,8 +121,8 @@ export const useAppointments = (
               timeFrame,
               includeTravelClaims,
             ),
-          'appointments',
-          () => appointmentCacheGetter('appointments', startDate, endDate),
+          `${[appointmentsKeys.appointments, timeFrame]}`,
+          () => appointmentCacheGetter(`${[appointmentsKeys.appointments, timeFrame]}`),
         )
       },
       meta: {
