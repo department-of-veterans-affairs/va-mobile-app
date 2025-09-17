@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import NetInfo from '@react-native-community/netinfo'
-
 import type { DefaultError, QueryKey } from '@tanstack/query-core'
 import { NetworkMode, QueryCache, QueryClient, useQuery as useTanstackQuery } from '@tanstack/react-query'
 import type { UndefinedInitialDataOptions } from '@tanstack/react-query/src/queryOptions'
@@ -28,22 +26,6 @@ export const useQueryCacheOptions = (): CacheProps => {
     refetchOnMount: isConnected === false ? false : 'always',
     gcTime: Infinity,
   }
-}
-
-export const customQueryCache = async <T>(
-  queryFn: (queryKey: string, ...p: never[]) => Promise<T | undefined>,
-  queryKey: string,
-  cacheGetter: () => Promise<T | undefined>,
-  ...params: never[]
-): Promise<T | undefined> => {
-  const { isConnected } = await NetInfo.fetch()
-
-  if (isConnected) {
-    await storage.setItem(`${queryKey}`, Date.now().toString())
-    return queryFn(queryKey, ...params)
-  }
-
-  return cacheGetter()
 }
 
 /**
