@@ -60,7 +60,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
         }) as CheckboxOption,
     )
 
-    options.sort((a, b) => (a.optionLabelKey > b.optionLabelKey ? 1 : -1))
+    options.sort((a, b) => (a.value > b.value ? 1 : -1))
 
     return options
   }, [claims])
