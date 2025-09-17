@@ -22,7 +22,7 @@ function FormFooter({ setActiveForms }: FormFooterProps) {
         label={'Start a statement'}
         onPress={() => {
           navigateTo('Webview', {
-            url: `https://didactic-cod-xx56j6p5vg3v45v-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`,
+            url: `https://bug-free-memory-j4xx55gjx5rhwpq-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`,
             useSSO: true,
             onClose: (url: string) => {
               const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
