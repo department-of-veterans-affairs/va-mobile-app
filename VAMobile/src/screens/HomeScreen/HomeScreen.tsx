@@ -71,7 +71,7 @@ import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
-import { formatDateUtc } from 'utils/formattingUtils'
+import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -424,11 +424,31 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'claims'}
                 />
               )}
+              {featureEnabled('overpayCopay') && (
+                <ActivityButton
+                  title={t('copays.title')}
+                  subText={t('copays.activityButton.subText', {
+                    amount: numberToUSDollars(0),
+                    count: 0,
+                  })}
+                  deepLink={'copays'}
+                />
+              )}
               {!!foldersQuery.data?.inboxUnreadCount && (
                 <ActivityButton
                   title={`${t('messages')}`}
                   subText={t('secureMessaging.activityButton.subText', { count: foldersQuery.data.inboxUnreadCount })}
                   deepLink={'messages'}
+                />
+              )}
+              {featureEnabled('overpayCopay') && (
+                <ActivityButton
+                  title={t('debts.title')}
+                  subText={t('debts.activityButton.subText', {
+                    amount: numberToUSDollars(0),
+                    count: 0,
+                  })}
+                  deepLink={'debts'}
                 />
               )}
               {!!prescriptionsQuery.data?.meta.prescriptionStatusCount.isRefillable && (
