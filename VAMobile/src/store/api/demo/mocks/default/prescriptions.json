@@ -817,12 +817,12 @@
           "isTrackable": false,
           "instructions": "TAKE ONE TABLET BY MOUTH DAILY",
           "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "the best source",
+          "prescriptionSource": "VA",
           "ndcNumber": "12345",
           "prescribedDate": "2022-07-25T04:00:00.000Z",
           "tracking_number": "123455",
           "shipper": "UPS",
-          "trackingInfo": null
+          "trackingInfo": {}
         }
       },
       {
@@ -845,8 +845,8 @@
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS",
           "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "the best source",
-          "trackingInfo": null,
+          "prescriptionSource": "VA",
+          "trackingInfo": {},
           "ndcNumber": "12345",
           "prescribedDate": "2022-07-25T04:00:00.000Z",
           "tracking_number": "123455",
@@ -873,8 +873,8 @@
           "isTrackable": false,
           "instructions": "TAKE 5ML WEEKLY FOR 30 DAYS",
           "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "the best source",
-          "trackingInfo": null,
+          "prescriptionSource": "VA",
+          "trackingInfo": {},
           "ndcNumber": "12345",
           "prescribedDate": "2022-07-25T04:00:00.000Z",
           "tracking_number": "123455",

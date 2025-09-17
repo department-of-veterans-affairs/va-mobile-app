@@ -19,6 +19,7 @@ const getPrescriptions = ({ useV1 }: { useV1: boolean | undefined }): Promise<Pr
     sort: 'refill_status', // Parameters are snake case for the back end
   }
   const API_VERSION = useV1 ? 'v1' : 'v0'
+  console.debug('** Prescriptions', { API_VERSION })
   return get<PrescriptionsGetData>(`/${API_VERSION}/health/rx/prescriptions`, params)
 }
 
