@@ -39,8 +39,6 @@ export const lightTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLightest,
     bullet: colors.vadsColorBaseDarker,
     carouselBullet: colors.uswdsSystemColorGray10,
-    datePicker: colors.vadsColorWhite,
-    datePickerLabel: '#7878801F',
   },
   border: {
     aboutYou: colors.vadsColorGrayWarmLight,
@@ -180,8 +178,6 @@ export const darkTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLight,
     bullet: colors.uswdsSystemColorGray10,
     carouselBullet: colors.uswdsSystemColorGray10,
-    datePicker: '#2c2c2e',
-    datePickerLabel: '#7878801F',
   },
   border: {
     aboutYou: colors.uswdsSystemColorGray60,

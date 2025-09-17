@@ -6,7 +6,7 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { BorderColorVariant, Box, TextView, TextViewProps } from 'components'
+import { BackgroundVariant, BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from 'components'
 import DatePickerField from 'components/DatePicker/DatePickerField'
 import { DateChangeEvent } from 'components/DatePicker/RNDatePicker'
 import { Events } from 'constants/analytics'
@@ -120,15 +120,18 @@ const DatePicker: FC<DatePickerProps> = ({
     setToFieldInvalid(false)
   }
 
+  const datePickerContainerProps: BoxProps = {
+    backgroundColor: theme.mode === 'light' ? 'list' : ('#2c2c2e' as BackgroundVariant),
+    px: theme.dimensions.smallMarginBetween,
+    borderColor: 'primary',
+    borderStyle: 'solid',
+    borderRadius: 6,
+  }
+
   return (
     <Box mx={theme.dimensions.gutter}>
       {labelKey && renderDatePickerLabelSection(labelKey, t, handleReset)}
-      <Box
-        px={theme.dimensions.smallMarginBetween}
-        borderRadius={6}
-        backgroundColor={'datePicker'}
-        borderStyle="solid"
-        borderColor="primary">
+      <Box {...datePickerContainerProps}>
         <DatePickerField
           open={fromFieldOpen}
           label={t('datePicker.from')}

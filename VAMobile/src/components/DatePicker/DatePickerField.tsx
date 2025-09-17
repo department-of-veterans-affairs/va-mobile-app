@@ -49,7 +49,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   }
 
   const dateLabelStyle = {
-    backgroundColor: theme.colors.background.datePickerLabel,
+    backgroundColor: '#7878801F',
     paddingVertical: 6,
     paddingHorizontal: 11,
     borderRadius: 6,
