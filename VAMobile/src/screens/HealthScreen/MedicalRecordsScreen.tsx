@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,6 +13,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -23,6 +26,8 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   return (
     <FeatureLandingTemplate
@@ -58,6 +63,11 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         <LinkWithAnalytics
           type="custom"
           onPress={() => {
+            if (!isConnected) {
+              showOfflineSnackbar(snackbar, t)
+              return
+            }
+
             logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
             navigateTo('Webview', {
               url: LINK_URL_MHV_VA_MEDICAL_RECORDS,

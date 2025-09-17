@@ -7,6 +7,7 @@ export type OfflineState = {
   offlineTimestamp?: DateTime
   bannerExpanded: boolean
   isOffline: boolean
+  forceOffline?: boolean
 }
 
 export const initialOfflineState: OfflineState = {

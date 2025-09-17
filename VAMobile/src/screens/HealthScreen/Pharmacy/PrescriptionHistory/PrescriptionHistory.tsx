@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -51,6 +52,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -107,6 +109,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -416,6 +420,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
       ),
       onPress: (): void => {
+        if (!isConnected) {
+          showOfflineSnackbar(snackbar, t)
+          return
+        }
+
         logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
           url: LINK_URL_MHV_VA_MEDICATIONS,
@@ -507,7 +516,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         isHidden={hideRefillRequestButton}
         testID="refillRequestTestID"
         label={t('prescription.history.startRefillRequest')}
-        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+        onPress={() => {
+          if (!isConnected) {
+            showOfflineSnackbar(snackbar, t)
+            return
+          }
+          navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })
+        }}
       />
     )
   }

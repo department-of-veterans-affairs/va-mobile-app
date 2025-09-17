@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
 import {
@@ -43,6 +44,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -60,6 +62,8 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   const {
     data: systemNotificationData,
@@ -234,6 +238,11 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
             <LinkWithAnalytics
               type="custom"
               onPress={() => {
+                if (!isConnected) {
+                  showOfflineSnackbar(snackbar, t)
+                  return
+                }
+
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
                 navigateTo('Webview', {
                   url: LINK_URL_VA_NOTIFICATIONS,

@@ -2,6 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { AppointmentAttributes } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -21,6 +23,7 @@ import {
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
@@ -36,6 +39,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const isConnected = useOfflineMode()
+  const snackbar = useSnackbar()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -84,6 +89,10 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (!isConnected) {
+                showOfflineSnackbar(snackbar, t)
+                return
+              }
               // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
               // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
               // but the base web URL is actually /claims
@@ -122,6 +131,11 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (!isConnected) {
+                showOfflineSnackbar(snackbar, t)
+                return
+              }
+
               logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
               navigateTo('Webview', {
                 url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
@@ -180,6 +194,11 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (!isConnected) {
+                showOfflineSnackbar(snackbar, t)
+                return
+              }
+
               // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
               // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
               // but the base web URL is actually /claims
