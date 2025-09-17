@@ -34,7 +34,7 @@ export type DatePickerProps = {
   onReset: () => void
 }
 
-export const renderInputLabelSection = (labelKey: string, t: TFunction, onReset: () => void): ReactElement => {
+const renderDatePickerLabelSection = (labelKey: string, t: TFunction, onReset: () => void): ReactElement => {
   const variant = 'MobileBody'
   const resetButtonTextProps: TextViewProps = {
     variant: 'MobileBody',
@@ -84,13 +84,13 @@ const DatePicker: FC<DatePickerProps> = ({
         ? DateTime.fromISO(date).toLocal().startOf('day')
         : DateTime.fromISO(date).toLocal().endOf('day')
 
-    const startDateInvalid = newDate.valueOf() > selectedDateRange.endDate.valueOf()
-    const endDateInvalid = newDate.valueOf() < selectedDateRange.startDate.valueOf()
+    const startDateInvalid = fieldName === 'startDate' && newDate > selectedDateRange.endDate
+    const endDateInvalid = fieldName === 'endDate' && newDate < selectedDateRange.startDate
 
-    if (fieldName === 'startDate' && startDateInvalid) {
+    if (startDateInvalid) {
       setFromFieldInvalid(true)
       logAnalyticsEvent(Events.vama_appt_invalid_range)
-    } else if (fieldName === 'endDate' && endDateInvalid) {
+    } else if (endDateInvalid) {
       setToFieldInvalid(true)
       logAnalyticsEvent(Events.vama_appt_invalid_range)
     } else {
@@ -122,7 +122,7 @@ const DatePicker: FC<DatePickerProps> = ({
 
   return (
     <Box mx={theme.dimensions.gutter}>
-      {labelKey ? renderInputLabelSection(labelKey, t, handleReset) : <></>}
+      {labelKey && renderDatePickerLabelSection(labelKey, t, handleReset)}
       <Box
         px={theme.dimensions.smallMarginBetween}
         borderRadius={6}
@@ -144,7 +144,7 @@ const DatePicker: FC<DatePickerProps> = ({
         />
         <Box
           my={theme.dimensions.smallMarginBetween}
-          borderBottomWidth={1}
+          borderBottomWidth={theme.dimensions.borderWidth}
           borderColor={theme.colors.border.aboutYou as BorderColorVariant}
         />
         <DatePickerField
