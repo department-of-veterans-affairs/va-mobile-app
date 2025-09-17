@@ -14,6 +14,6 @@ class RNDatePickerPackage : ReactPackage {
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return listOf(DatePickerViewManager())
+        return listOf(RNDatePickerViewManager())
     }
 }
