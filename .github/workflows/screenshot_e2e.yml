@@ -367,7 +367,7 @@ jobs:
 
       - name: Extract screenshots
         run: |
-          pwd
+          cd ..
           ls -l final-screenshots.tgz
           tar -xzf final-screenshots.tgz -C VAMobile
 
