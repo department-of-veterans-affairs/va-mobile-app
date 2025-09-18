@@ -52,9 +52,9 @@ export type TimeFrameDropDatePickerValue = {
  * - dates: Start/end bounds for this option.
  */
 export type TimeFrameDropDownItem = {
-  label: string // Human-readable text shown to users.
-  value: TimeFrameType // Machine-friendly time-frame identifier.
-  testID: string // Stable identifier for automated tests.
-  a11yLabel: string // Screen-reader-friendly label.
-  dates: TimeFrameDropDatePickerValue // Start/end bounds for this option.
+  label: string
+  value: TimeFrameType
+  testID: string
+  a11yLabel: string
+  dates: TimeFrameDropDatePickerValue
 }
