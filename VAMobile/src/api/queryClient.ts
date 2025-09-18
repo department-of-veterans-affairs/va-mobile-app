@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import type { DefaultError, QueryKey } from '@tanstack/query-core'
-import { NetworkMode, QueryCache, QueryClient, useQuery as useTanstackQuery } from '@tanstack/react-query'
+import {
+  NetworkMode,
+  QueryCache,
+  QueryClient,
+  QueryFunction,
+  useQuery as useTanstackQuery,
+} from '@tanstack/react-query'
 import type { UndefinedInitialDataOptions } from '@tanstack/react-query/src/queryOptions'
 import type { UseQueryResult } from '@tanstack/react-query/src/types'
 
@@ -65,17 +71,14 @@ export const useQuery = <
   TQueryKey extends QueryKey = QueryKey,
 >(
   options: UndefinedInitialDataOptions<TQueryFnData, TError, TData, TQueryKey>,
-  saveUpdatedTime = true,
 ): UseQueryResult<TData, TError> & { lastUpdatedDate: number | undefined } => {
   const lastUpdatedDate = useGetLastUpdatedTime(options.queryKey)
   const queryResult = useTanstackQuery({
     ...options,
-    queryFn: async () => {
-      if (saveUpdatedTime) {
-        await storage.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
-      }
-      // @ts-ignore
-      return options.queryFn()
+    queryFn: async (context) => {
+      await storage.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
+      const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
+      return queryFn?.(context)
     },
   })
 
@@ -90,7 +93,7 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
 
   useEffect(() => {
     const getTime = async () => {
-      const storedTime = await storage.getItem(`${key}`)
+      const storedTime = await storage.getItem(`${key}-lastUpdatedTime`)
       if (storedTime) {
         setTime(Number(storedTime))
       }

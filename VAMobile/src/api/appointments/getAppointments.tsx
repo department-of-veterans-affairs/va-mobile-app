@@ -5,6 +5,7 @@ import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useQuery } from 'api/queryClient'
 import { AppointmentsGetData } from 'api/types'
+import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
@@ -69,13 +70,17 @@ export const useAppointments = (
         // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
-          queryFn: () =>
-            getAppointments(
+          queryFn: async () => {
+            const pastAppointments = await getAppointments(
               pastRange.startDate,
               pastRange.endDate,
               TimeFrameTypeConstants.PAST_THREE_MONTHS,
               travelPayEnabled,
-            ),
+            )
+            // Save the last updated time here manually as this will not be saved otherwise in the prefetch
+            await storage.setItem(`${pastAppointmentsQueryKey}-lastUpdatedTime`, Date.now().toString())
+            return pastAppointments
+          },
           staleTime: ACTIVITY_STALE_TIME,
         })
       }

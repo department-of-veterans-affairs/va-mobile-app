@@ -162,7 +162,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         ) : null}
         <Box flex={1} display="flex" justifyContent="space-between">
           {/* TODO double check these changes didnt alter the ui */}
-          <WaygateWrapper>{children}</WaygateWrapper>
+          <Box>
+            <WaygateWrapper>{children}</WaygateWrapper>
+          </Box>
           <LastUpdatedTimestamp datetime={dataUpdatedAt} />
         </Box>
       </VAScrollView>
