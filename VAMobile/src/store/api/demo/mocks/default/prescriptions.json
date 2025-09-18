@@ -572,6 +572,27 @@
         "id": "52142594",
         "type": "Prescription",
         "attributes": {
+          "refillStatus": "unknown",
+          "refillSubmitDate": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "facilityName": null,
+          "orderedDate": null,
+          "quantity": null,
+          "expirationDate": null,
+          "prescriptionNumber": null,
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "dispensedDate": null,
+          "stationNumber": null,
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": null
+        }
+      },
+      {
+        "id": "52142594",
+        "type": "Prescription",
+        "attributes": {
           "refillStatus": "discontinued",
           "refillSubmitDate": null,
           "refillDate": "2022-06-26T04:00:00.000Z",
@@ -677,7 +698,7 @@
         "transferred": 1,
         "submitted": 0,
         "hold": 1,
-        "unknown": 1,
+        "unknown": 2,
         "total": 31
       },
       "hasNonVaMeds": true

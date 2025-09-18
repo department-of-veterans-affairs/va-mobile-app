@@ -1,0 +1,14 @@
+name: Get changed files
+description: Get a list of files that have been modified compared to the root branch
+outputs:
+  changed_files:
+    description: 'Space delimited list of paths for changed files that differ from `develop` branch.'
+    value: ${{ steps.get-changed-files.outputs.changed_files }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get paths of changed files
+      id: get-changed-files
+      shell: bash
+      run: cd VAMobile && HEAD=$(git rev-parse HEAD) && echo changed_files=$(git diff --diff-filter=ACM --relative --name-only $(git merge-base $HEAD origin/develop) $HEAD -- "./src/**/*.ts" "./src/**/*.tsx" "./src/**/*.js" "./src/**/*.jsx" ":(exclude)./src/**/index.ts") >> $GITHUB_OUTPUT

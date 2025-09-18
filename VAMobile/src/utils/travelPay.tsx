@@ -2,6 +2,7 @@ import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
@@ -118,4 +119,15 @@ export const useTravelClaimSubmissionMutationState = (appointmentId: string) => 
   })
 
   return mutationState
+}
+
+/**
+ * Logs the time taken for the SMOC flow
+ * @param smocFlowStartDate - The start time when the user presses the continue button
+ */
+export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
+  if (smocFlowStartDate) {
+    const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+    logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
+  }
 }

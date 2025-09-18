@@ -5,12 +5,11 @@ import { t } from 'i18next'
 
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import { RefillScreen } from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
-
-import { RefillScreen } from './RefillScreen'
 
 context('RefillScreen', () => {
   const mock: PrescriptionsGetData = {
@@ -110,14 +109,14 @@ context('RefillScreen', () => {
           screen.getByLabelText(`${t('prescription.history.orderIdentifier', { idx: 1, total: 2 })}.`),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB.' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1.`)).toBeTruthy(),
+        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1`)).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 1.`)).toBeTruthy())
-      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} September 21, 2021.`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 1`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} September 21, 2021`)).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getAllByLabelText(`${a11yLabelVA(t('prescription.vaFacility'))} SLC10 TEST LAB.`)).toBeTruthy(),
+        expect(screen.getAllByLabelText(`${a11yLabelVA(t('prescription.vaFacility'))} SLC10 TEST LAB`)).toBeTruthy(),
       )
 
       await waitFor(() =>
@@ -125,12 +124,12 @@ context('RefillScreen', () => {
           screen.getByLabelText(`${t('prescription.history.orderIdentifier', { idx: 2, total: 2 })}.`),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB.' })).toBeTruthy())
+      await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
       await waitFor(() =>
-        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 7 1 1 A.`)).toBeTruthy(),
+        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 7 1 1 A`)).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 6.`)).toBeTruthy())
-      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} May 15, 2022.`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 6`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} May 15, 2022`)).toBeTruthy())
 
       await waitFor(() =>
         expect(

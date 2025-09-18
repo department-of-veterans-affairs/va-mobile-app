@@ -216,7 +216,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
     },
     {
-      display: 'prescription.history.tag.unknown',
+      display: 'prescription.history.tag.statusNotAvailable',
       value: RefillStatusConstants.UNKNOWN,
       count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
     },
@@ -467,7 +467,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
-    if (userAuthorizedServices?.secureMessagingOracleHealthEnabled) {
+    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
       logAnalyticsEvent(Events.vama_blue_alert_rx())
       return (
         <Box mx={theme.dimensions.gutter}>
@@ -479,6 +479,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
             headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
             description={t('healthHelp.cernerTransitionInfoBanner.content')}
             testID="smCernerInfoAlertTestID">
+            <TextView variant="MobileBody">
+              {t('healthHelp.cernerTransitionInfoBanner.content')}
+              <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
+              {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
+            </TextView>
             <Box mb={theme.dimensions.standardMarginBetween}>
               <LinkWithAnalytics
                 {...linkProps}

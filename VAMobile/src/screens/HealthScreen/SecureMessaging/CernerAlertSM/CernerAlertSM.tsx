@@ -58,6 +58,11 @@ function CernerAlertSM() {
         headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
         description={t('healthHelp.cernerTransitionInfoBanner.content')}
         testID="smCernerInfoAlertTestID">
+        <TextView variant="MobileBody">
+          {t('healthHelp.cernerTransitionInfoBanner.content')}
+          <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
+          {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
+        </TextView>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics
             {...linkProps}

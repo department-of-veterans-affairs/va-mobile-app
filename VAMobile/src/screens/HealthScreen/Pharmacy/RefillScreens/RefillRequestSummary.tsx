@@ -21,11 +21,11 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { getRxNumberTextAndLabel } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
+import { waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useFontScale, useRouteNavigation, useTheme } from 'utils/hooks'
-import { waygateEnabled } from 'utils/waygateConfig'
+import { getRxNumberTextAndLabel } from 'utils/prescriptions'
 
 const enum REQUEST_STATUS {
   FAILED,
