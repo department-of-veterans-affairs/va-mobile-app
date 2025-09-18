@@ -16,6 +16,8 @@ export const linking: LinkingOptions<any> = {
   prefixes: [
     /* your linking prefixes */
     'vamobile://',
+    'https://staging.va.gov',
+    'https://va.gov',
   ],
   config: {
     /* configuration for matching screens with paths */
