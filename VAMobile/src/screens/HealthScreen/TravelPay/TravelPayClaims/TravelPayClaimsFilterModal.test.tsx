@@ -12,30 +12,6 @@ import { FILTER_KEY_ALL } from 'utils/travelPay'
 const mockSetCurrentFilter = jest.fn()
 const mockSetCurrentSortBy = jest.fn()
 
-let mockLogNonFatalErrorToFirebase: jest.Mock
-jest.mock('utils/analytics', () => {
-  mockLogNonFatalErrorToFirebase = jest.fn()
-  const original = jest.requireActual('utils/analytics')
-  return {
-    ...original,
-    logNonFatalErrorToFirebase: mockLogNonFatalErrorToFirebase,
-  }
-})
-
-let mockUseDowntime: jest.Mock
-jest.mock('utils/hooks', () => {
-  mockUseDowntime = jest.fn(() => false)
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useDowntime: mockUseDowntime,
-  }
-})
-
-jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(),
-}))
-
 const FILTER_OPTIONS: Array<CheckboxOption> = [
   { optionLabelKey: 'Option 1', value: 'option_1' },
   { optionLabelKey: 'Option 2', value: 'option_2' },
@@ -47,7 +23,6 @@ context('TravelPayClaimsFilterModal', () => {
   const initialSortBy = SortOption.Recent
 
   beforeEach(() => {
-    // Reset mock call history and implementation
     mockSetCurrentFilter.mockClear()
     mockSetCurrentSortBy.mockClear()
   })

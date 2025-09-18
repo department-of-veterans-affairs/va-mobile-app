@@ -12,38 +12,6 @@ import { context, render } from 'testUtils'
 
 const mockSetPage = jest.fn()
 
-let mockLogNonFatalErrorToFirebase: jest.Mock
-jest.mock('utils/analytics', () => {
-  mockLogNonFatalErrorToFirebase = jest.fn()
-  const original = jest.requireActual('utils/analytics')
-  return {
-    ...original,
-    logNonFatalErrorToFirebase: mockLogNonFatalErrorToFirebase,
-  }
-})
-
-jest.mock('store/api', () => {
-  const original = jest.requireActual('store/api')
-  return {
-    ...original,
-    get: jest.fn(),
-  }
-})
-
-let mockUseDowntime: jest.Mock
-jest.mock('utils/hooks', () => {
-  mockUseDowntime = jest.fn(() => false)
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useDowntime: mockUseDowntime,
-  }
-})
-
-jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(),
-}))
-
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   meta: {
     status: 200,

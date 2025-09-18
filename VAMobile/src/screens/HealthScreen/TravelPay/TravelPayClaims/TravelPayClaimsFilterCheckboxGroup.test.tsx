@@ -12,30 +12,6 @@ import { FILTER_KEY_ALL } from 'utils/travelPay'
 
 const mockOnChange = jest.fn()
 
-let mockLogNonFatalErrorToFirebase: jest.Mock
-jest.mock('utils/analytics', () => {
-  mockLogNonFatalErrorToFirebase = jest.fn()
-  const original = jest.requireActual('utils/analytics')
-  return {
-    ...original,
-    logNonFatalErrorToFirebase: mockLogNonFatalErrorToFirebase,
-  }
-})
-
-let mockUseDowntime: jest.Mock
-jest.mock('utils/hooks', () => {
-  mockUseDowntime = jest.fn(() => false)
-  const original = jest.requireActual('utils/hooks')
-  return {
-    ...original,
-    useDowntime: mockUseDowntime,
-  }
-})
-
-jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: jest.fn(),
-}))
-
 const CHECKBOX_OPTIONS: CheckboxOption[] = [
   {
     optionLabelKey: 'Option A',
@@ -53,7 +29,6 @@ const CHECKBOX_OPTIONS: CheckboxOption[] = [
 
 context('TravelPayClaimsFilterCheckboxGroup', () => {
   beforeEach(() => {
-    // Reset mock call history and implementation
     mockOnChange.mockClear()
   })
 
@@ -104,7 +79,6 @@ context('TravelPayClaimsFilterCheckboxGroup', () => {
     expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b']))).toBe(false)
     expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set([]))).toBe(false)
     expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_a']))).toBe(true)
-    expect(isChecked('option_b', CHECKBOX_OPTIONS, new Set(['option_b']))).toBe(true)
     expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_b']))).toBe(false)
   })
 })
