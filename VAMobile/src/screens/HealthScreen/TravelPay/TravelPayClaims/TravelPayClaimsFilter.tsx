@@ -1,9 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CheckboxOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
 import TravelClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
 import { useTheme } from 'utils/hooks'
 
@@ -41,11 +42,34 @@ function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSort
 
   const onClearFiltersPress = () => setFilter(new Set())
 
+  const filterOptions = useMemo(() => {
+    // Allow filtering by any of the statuses that appear in the list
+    const statusToCount: Map<string, number> = new Map()
+    claims.forEach((claim) => {
+      const status = claim.attributes.claimStatus
+      const existingCount = statusToCount.get(status) ?? 0
+      statusToCount.set(status, existingCount + 1)
+    })
+
+    const options = Array.from(statusToCount.keys()).map(
+      (status) =>
+        ({
+          optionLabelKey: `${status} (${statusToCount.get(status)!})`,
+          value: status,
+        }) as CheckboxOption,
+    )
+
+    options.sort((a, b) => (a.value > b.value ? 1 : -1))
+
+    return options
+  }, [claims])
+
   return (
     <Box {...filterContainerProps}>
       <Box mr={8} mb={10}>
         <TravelClaimsFilterModal
-          claims={claims}
+          totalClaims={claims.length}
+          options={filterOptions}
           currentFilter={filter}
           setCurrentFilter={setFilter}
           currentSortBy={sortBy}

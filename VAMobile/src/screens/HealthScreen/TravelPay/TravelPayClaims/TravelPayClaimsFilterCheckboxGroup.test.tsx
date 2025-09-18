@@ -4,11 +4,11 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import TravelPayClaimsFilterCheckboxGroup, {
   CheckboxOption,
-  FILTER_KEY_ALL,
   isChecked,
   isIndeterminate,
 } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
 import { context, render } from 'testUtils'
+import { FILTER_KEY_ALL } from 'utils/travelPay'
 
 const mockOnChange = jest.fn()
 
@@ -51,7 +51,7 @@ const CHECKBOX_OPTIONS: CheckboxOption[] = [
   },
 ]
 
-context('TravelPayClaimsFilterGroup', () => {
+context('TravelPayClaimsFilterCheckboxGroup', () => {
   beforeEach(() => {
     // Reset mock call history and implementation
     mockOnChange.mockClear()

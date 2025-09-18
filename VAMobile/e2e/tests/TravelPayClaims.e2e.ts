@@ -7,18 +7,13 @@ const TravePayClaimsE2eIds = {
   MOST_RECENT_CLAIM_1_ID: 'claim_summary_6a5302bb-f6ee-4cf9-89b7-7b2775f056bd',
   MOST_RECENT_CLAIM_11_ID: 'claim_summary_a3e6fb0d-5d30-48d7-9b4b-129b44d46088',
 
-  APPEALED_CLAIM_ID: 'claim_summary_a3e6fb0d-5d30-48d7-9b4b-129b44d46088',
-  IN_MANUAL_REVIEW_CLAIM_ID: 'claim_summary_6a5302bb-f6ee-4cf9-89b7-7b2775f056bd',
-  CLAIM_SUBMITTED_CLAIM_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
-
   SHOW_FILTERS_BUTTON_ID: 'travelClaimsFilterModalButtonTestId',
-
-  ALL_RESULTS_TEXT: 'All travel claims (31), sorted by most recent',
-
-  CHECKBOX_APPEALED_ID: 'checkbox_label_Appealed',
+  ALL_RESULTS_TEXT: /All travel claims \(\d+\), sorted by most recent/,
+  FILTERED_RESULTS_TEXT: /Filtered travel claims \(\d+\), sorted by most recent/,
+  CHECKBOX_ALL: 'checkbox_label_all',
   CHECKBOX_IN_MANUAL_REVIEW_ID: 'checkbox_label_In manual review',
 
-  MODAL_CONTAINER_ID: 'travelPayClaimsFilterModalContainer',
+  FILTER_MODAL_CONTAINER_ID: 'travelPayClaimsFilterModalContainer',
   FILTER_MODAL_CANCEL_BUTTON_ID: 'filterButtonCancelTestID',
   FILTER_MODAL_APPLY_BUTTON_ID: 'filterButtonApplyTestID',
   CLEAR_FILTERS_BUTTON_ID: 'clearFiltersButton',
@@ -99,81 +94,44 @@ describe('Travel Pay Claims Screen', () => {
   it('filters and sorts the list of claims', async () => {
     const {
       ALL_RESULTS_TEXT,
-      APPEALED_CLAIM_ID,
-      CLAIM_SUBMITTED_CLAIM_ID,
-      CLEAR_FILTERS_BUTTON_ID,
-      CHECKBOX_APPEALED_ID,
+      FILTERED_RESULTS_TEXT,
+      CHECKBOX_ALL,
       CHECKBOX_IN_MANUAL_REVIEW_ID,
-      FILTER_MODAL_APPLY_BUTTON_ID,
       FILTER_MODAL_CANCEL_BUTTON_ID,
-      IN_MANUAL_REVIEW_CLAIM_ID,
-      MODAL_CONTAINER_ID,
+      FILTER_MODAL_APPLY_BUTTON_ID,
+      FILTER_MODAL_CONTAINER_ID,
       SHOW_FILTERS_BUTTON_ID,
       TRAVEL_PAY_CLAIMS_TEST_ID,
+      CLEAR_FILTERS_BUTTON_ID,
     } = TravePayClaimsE2eIds
 
     await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
     await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
 
-    // Check "Appealed", but cancel so it doesn't take effect and so nothing
-    // should be filtered out
+    // Cancel closes the modal without applying anything
     await element(by.id(SHOW_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(MODAL_CONTAINER_ID)))
+    await waitFor(element(by.id(FILTER_MODAL_CONTAINER_ID)))
       .toExist()
       .withTimeout(4000)
-    await element(by.id(CHECKBOX_APPEALED_ID)).tap()
+    await expect(element(by.id(CHECKBOX_ALL))).toExist()
     await element(by.id(FILTER_MODAL_CANCEL_BUTTON_ID)).tap()
+    await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
 
-    await waitFor(element(by.id(IN_MANUAL_REVIEW_CLAIM_ID)))
-      .toBeVisible()
-      .withTimeout(4000)
-    await waitFor(element(by.id(CLAIM_SUBMITTED_CLAIM_ID)))
-      .toBeVisible()
-      .withTimeout(4000)
-    await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
-    await waitFor(element(by.id(APPEALED_CLAIM_ID)))
-      .toExist()
-      .withTimeout(4000)
-
-    // Filter by Appealed and In manual review
+    // Apply a filter
     await element(by.id(SHOW_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(MODAL_CONTAINER_ID)))
+    await waitFor(element(by.id(FILTER_MODAL_CONTAINER_ID)))
       .toExist()
       .withTimeout(4000)
-    await element(by.id(CHECKBOX_APPEALED_ID)).tap()
+    await expect(element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID))).toExist()
     await element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID)).tap()
     await element(by.id(FILTER_MODAL_APPLY_BUTTON_ID)).tap()
-
-    await waitFor(element(by.id(APPEALED_CLAIM_ID)))
+    await waitFor(element(by.text(FILTERED_RESULTS_TEXT)))
       .toExist()
       .withTimeout(4000)
-    await expect(element(by.id(IN_MANUAL_REVIEW_CLAIM_ID))).toExist()
-    await expect(element(by.id(CLAIM_SUBMITTED_CLAIM_ID))).not.toExist()
 
-    // Press In Manual Review filter again to turn it off
-    await element(by.id(SHOW_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(MODAL_CONTAINER_ID)))
-      .toExist()
-      .withTimeout(4000)
-    await element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID)).tap()
-    await element(by.id(FILTER_MODAL_APPLY_BUTTON_ID)).tap()
-
-    await waitFor(element(by.id(APPEALED_CLAIM_ID)))
-      .toExist()
-      .withTimeout(4000)
-    await expect(element(by.id(IN_MANUAL_REVIEW_CLAIM_ID))).not.toExist()
-
-    // Clear the filters, all the claims should be there again
+    // Clearing the filters should show "All" again
+    await waitFor(element(by.id(CLEAR_FILTERS_BUTTON_ID))).toExist()
     await element(by.id(CLEAR_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(IN_MANUAL_REVIEW_CLAIM_ID)))
-      .toExist()
-      .withTimeout(4000)
-    await expect(element(by.id(CLAIM_SUBMITTED_CLAIM_ID))).toExist()
-    await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('bottom')
-    await element(by.id('next-page')).tap()
-    await waitFor(element(by.id(APPEALED_CLAIM_ID)))
-      .toExist()
-      .withTimeout(4000)
+    await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
   })
 })

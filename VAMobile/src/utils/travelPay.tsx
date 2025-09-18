@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
@@ -11,6 +13,8 @@ import { Events } from 'constants/analytics'
 import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
+
+export const FILTER_KEY_ALL = 'all'
 
 /**
  * Strips the timezone offset from a datetime string
@@ -159,3 +163,33 @@ export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: Sort
         return 0
     }
   })
+
+/**
+ * Hook to manage toggling a set of filters and tracking the state of which ones are active
+ *
+ * @param options - options that are available
+ * @param initialFilter - starting active options
+ * @returns
+ */
+export const useFilterToggle = (
+  options: Set<string>,
+  initialFilter: Set<string>,
+): [Set<string>, Dispatch<SetStateAction<Set<string>>>, (filterKey: string) => void] => {
+  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(initialFilter)
+
+  const toggleFilter = (filterKey: string) => {
+    setSelectedFilter((prevFilter) => {
+      // Select or deselect everything when pressing "All"
+      if (filterKey === FILTER_KEY_ALL) {
+        return prevFilter.size === options.size ? new Set() : new Set([...options])
+      }
+
+      // Toggle the filter
+      return prevFilter.has(filterKey)
+        ? new Set([...prevFilter].filter((key) => key !== filterKey))
+        : new Set([...prevFilter, filterKey])
+    })
+  }
+
+  return [selectedFilter, setSelectedFilter, toggleFilter]
+}

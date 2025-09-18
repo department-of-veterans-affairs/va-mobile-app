@@ -4,8 +4,7 @@ import { Checkbox } from '@department-of-veterans-affairs/mobile-component-libra
 
 import { Box, List, ListItemObj, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-
-export const FILTER_KEY_ALL = 'all'
+import { FILTER_KEY_ALL } from 'utils/travelPay'
 
 export type CheckboxOption = {
   optionLabelKey: string
@@ -32,7 +31,7 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
 }
 
 type TravelPayClaimsFilterCheckboxGroupProps = {
-  options: Array<CheckboxOption> // TODO: sc - can we reuse this from elsewhere?
+  options: Array<CheckboxOption>
   onChange: (val: string) => void
   listTitle?: string
   selectedValues: Set<string>

@@ -5,19 +5,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import TravelClaimsFilterCheckboxGroup, {
   CheckboxOption,
-  FILTER_KEY_ALL,
 } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import { useFilterToggle } from 'utils/travelPay'
 
 type TravelPayClaimsFilterModalProps = {
-  claims: Array<TravelPayClaimData>
+  totalClaims: number
+  options: Array<CheckboxOption>
   currentFilter: Set<string>
   setCurrentFilter: Dispatch<SetStateAction<Set<string>>>
   currentSortBy: SortOptionType
@@ -25,7 +25,8 @@ type TravelPayClaimsFilterModalProps = {
 }
 
 const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
-  claims,
+  totalClaims,
+  options,
   currentFilter,
   setCurrentFilter,
   currentSortBy,
@@ -33,37 +34,16 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [showScrollView, setShowScrollView] = useState(false)
-  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(currentFilter)
+
+  const uniqueOptions = useMemo(() => new Set(options.map((option) => option.value)), [options])
+  const [selectedFilter, setSelectedFilter, toggleFilter] = useFilterToggle(uniqueOptions, currentFilter)
+
   const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const insets = useSafeAreaInsets()
   const ref = useRef(null)
-
-  const totalClaims = claims.length
-
-  const filterOptions = useMemo(() => {
-    // Allow filtering by any of the statuses that appear in the list
-    const statusToCount: Map<string, number> = new Map()
-    claims.forEach((claim) => {
-      const status = claim.attributes.claimStatus
-      const existingCount = statusToCount.get(status) ?? 0
-      statusToCount.set(status, existingCount + 1)
-    })
-
-    const options = Array.from(statusToCount.keys()).map(
-      (status) =>
-        ({
-          optionLabelKey: `${status} (${statusToCount.get(status)!})`,
-          value: status,
-        }) as CheckboxOption,
-    )
-
-    options.sort((a, b) => (a.value > b.value ? 1 : -1))
-
-    return options
-  }, [claims])
 
   const sortOptions = [
     {
@@ -105,22 +85,6 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
     setCurrentFilter(selectedFilter)
     setCurrentSortBy(selectedSortBy)
     setAccessibilityFocus(ref)
-  }
-
-  const toggleFilter = (filterKey: string) => {
-    setSelectedFilter((prevFilter) => {
-      const allOptions = new Set(filterOptions.map(({ value }) => value))
-
-      // Select or deselect everything when pressing "All"
-      if (filterKey === FILTER_KEY_ALL) {
-        return prevFilter.size === allOptions.size ? new Set() : new Set([...allOptions])
-      }
-
-      // Toggle the filter
-      return prevFilter.has(filterKey)
-        ? new Set([...prevFilter].filter((key) => key !== filterKey))
-        : new Set([...prevFilter, filterKey])
-    })
   }
 
   const actionsBarBoxProps: BoxProps = {
@@ -187,7 +151,7 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
                 {/* Less margin on the first group to account for the title margin already there. */}
                 <Box key="filterGroup" mt={-theme.dimensions.condensedMarginBetween}>
                   <TravelClaimsFilterCheckboxGroup
-                    options={filterOptions}
+                    options={options}
                     onChange={toggleFilter}
                     listTitle={t('travelPay.statusList.filterBy')}
                     selectedValues={selectedFilter}
