@@ -5,6 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import {
   DisabilityRatingData,
   FacilitiesPayload,
@@ -13,6 +14,7 @@ import {
   ServiceHistoryAttributes,
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
+import { HomeScreen } from 'screens/HomeScreen/HomeScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
@@ -24,8 +26,6 @@ import {
   getFoldersPayload,
   getPrescriptionsPayload,
 } from 'utils/tests/personalization'
-
-import { HomeScreen } from './HomeScreen'
 
 jest.mock('utils/remoteConfig')
 
@@ -499,12 +499,28 @@ context('HomeScreen', () => {
   })
 
   describe('Prescription module', () => {
-    it('displays refill count when there are refillable prescriptions', async () => {
+    const initializePrescriptionHomeScreen = ({ enabledV1 = false }) => {
+      initializeTestInstance({
+        queriesData: [
+          {
+            queryKey: authorizedServicesKeys.authorizedServices,
+            data: {
+              prescriptions: true,
+              medicationsOracleHealthEnabled: enabledV1,
+            },
+          },
+        ],
+      })
+    }
+
+    it('displays refill count when there are refillable prescriptions using v0 API by default', async () => {
       const refillablePrescriptionsCount = 3
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(refillablePrescriptionsCount))
-      initializeTestInstance()
+      initializePrescriptionHomeScreen({
+        enabledV1: false,
+      })
       await waitFor(() => expect(screen.getByRole('link', { name: t('prescription.title') })).toBeTruthy())
       await waitFor(() =>
         expect(
@@ -517,29 +533,92 @@ context('HomeScreen', () => {
       )
     })
 
-    it('navigates to Prescriptions screen when pressed', async () => {
+    it('displays refill count when there are refillable prescriptions using v1 API when oracle meds and waygate are enabled', async () => {
+      const refillablePrescriptionsCount = 3
+
+      when(get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(refillablePrescriptionsCount))
+      when(get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(9))
+
+      initializePrescriptionHomeScreen({
+        enabledV1: true,
+      })
+      await waitFor(() => expect(screen.getByRole('link', { name: t('prescription.title') })).toBeTruthy())
+      await waitFor(() =>
+        expect(
+          screen.getByRole('link', {
+            name: t('prescriptions.activityButton.subText', {
+              count: refillablePrescriptionsCount,
+            }),
+          }),
+        ).toBeTruthy(),
+      )
+    })
+
+    it('navigates to Prescriptions screen when pressed using v0 API', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
-      initializeTestInstance()
+      initializePrescriptionHomeScreen({
+        enabledV1: false,
+      })
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('prescription.title') })))
       await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions'))
     })
 
-    it('is not displayed when there are no active prescriptions', async () => {
+    it('navigates to Prescriptions screen when pressed using v1 API', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(3))
+      initializePrescriptionHomeScreen({
+        enabledV1: true,
+      })
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('prescription.title') })))
+      await waitFor(() => expect(Linking.openURL).toBeCalledWith('vamobile://prescriptions'))
+    })
+
+    it('uses v0 API when medicationsOracleHealthEnabled is true but waygate is disabled', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v0/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(getPrescriptionsPayload(3))
+      initializePrescriptionHomeScreen({
+        enabledV1: false,
+      })
+      await waitFor(() => expect(screen.getByRole('link', { name: t('prescription.title') })).toBeTruthy())
+    })
+
+    it('is not displayed when there are no active prescriptions in v0 API', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(0))
-      initializeTestInstance()
+      initializePrescriptionHomeScreen({
+        enabledV1: false,
+      })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
 
-    it('is not displayed when the API call throws an error', async () => {
+    it('is not displayed when v0 API call throws an error', async () => {
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockRejectedValue('fail')
-      initializeTestInstance()
+      initializePrescriptionHomeScreen({
+        enabledV1: false,
+      })
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+      await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
+    })
+
+    it('is not displayed when v1 API call throws an error', async () => {
+      when(get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockRejectedValue('fail')
+      initializePrescriptionHomeScreen({
+        enabledV1: true,
+      })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
