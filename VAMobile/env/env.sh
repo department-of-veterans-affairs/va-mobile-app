@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-while getopts e:t:d: option
+while getopts e:t:d:r: option
 do
 case "${option}"
 in
 e) environment=${OPTARG};;
 t) isTest=${OPTARG};;
 d) showDebug=${OPTARG};;
+r) reactotron=${OPTARG};;
 esac
 done
 cd ./env
@@ -47,6 +48,13 @@ then
   echo "IS_TEST=true" >> .env
 else
   echo "IS_TEST=false" >> .env
+fi
+# set reactotron
+if [[ $reactotron == 'true' ]]
+then
+  echo "REACTOTRON_ENABLED=true" >> .env
+else
+  echo "REACTOTRON_ENABLED=false" >> .env
 fi
 # set demo mode password
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env

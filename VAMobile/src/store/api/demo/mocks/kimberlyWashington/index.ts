@@ -25,6 +25,8 @@ const importKimberlyWashingtonData = () => {
     import('store/api/demo/mocks/kimberlyWashington/personalInformation.json'),
     import('store/api/demo/mocks/default/allergies.json'),
     import('store/api/demo/mocks/default/travelPay.json'),
+    import('store/api/demo/mocks/default/medicalCopays.json'),
+    import('store/api/demo/mocks/default/debts.json'),
   ]
 }
 
