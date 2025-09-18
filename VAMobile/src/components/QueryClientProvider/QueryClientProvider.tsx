@@ -29,6 +29,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   // Creates persister when using persistent query client provider
   useEffect(() => {
     const getPersister = async () => {
+      // Get the encryption key from the keychain
       const key = await Keychain.getGenericPassword()
 
       // Create op-sqlite storage with encryption enabled
@@ -49,8 +50,11 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [usesBiometrics])
 
+  // Only use persistent storage if biometrics are enabled
   if (usesBiometrics) {
+    // Do not render the Provider if the persister is not yet available
     if (!persister) return null
+
     return (
       <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}

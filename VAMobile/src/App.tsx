@@ -7,7 +7,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -74,7 +73,6 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
-import { useOfflineMode } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
@@ -206,8 +204,6 @@ function MainApp() {
   )
 }
 
-const OFFLINE_LOGIN_KEY = '@offline_login'
-
 export function AuthGuard() {
   const dispatch = useAppDispatch()
   const {
@@ -220,7 +216,6 @@ export function AuthGuard() {
     requestNotificationsPreferenceScreen,
   } = useSelector<RootState, AuthState>((state) => state.auth)
   const { tappedForegroundNotification, setTappedForegroundNotification } = useNotificationContext()
-  const isConnected = useOfflineMode()
   const { loadingRemoteConfig, remoteConfigActivated } = useSelector<RootState, SettingsState>(
     (state) => state.settings,
   )
@@ -272,20 +267,6 @@ export function AuthGuard() {
     )
     return (): void => sub?.remove()
   }, [dispatch, isVoiceOverTalkBackRunning])
-
-  useEffect(() => {
-    const checkOfflineReauthentication = async () => {
-      const ol = await AsyncStorage.getItem(OFFLINE_LOGIN_KEY)
-      const offlineLogin = JSON.parse(ol || '')
-      if (offlineLogin) {
-        await AsyncStorage.setItem(OFFLINE_LOGIN_KEY, JSON.stringify(false))
-        dispatch(initializeAuth())
-      }
-    }
-    if (isConnected) {
-      checkOfflineReauthentication()
-    }
-  }, [dispatch, isConnected])
 
   useEffect(() => {
     // check if analytics for staging enabled, or check if staging or Google Pre-Launch test,

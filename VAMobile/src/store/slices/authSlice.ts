@@ -2,7 +2,6 @@ import * as Keychain from 'react-native-keychain'
 import { ACCESSIBLE, ACCESS_CONTROL, SECURITY_LEVEL } from 'react-native-keychain'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import NetInfo from '@react-native-community/netinfo'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -56,7 +55,6 @@ const REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY = '@store_refresh_token_encrypted_co
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const ANDROID_FIRST_LOGIN_COMPLETED_KEY = '@store_android_first_login_complete'
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
-const OFFLINE_LOGIN_KEY = '@offline_login'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 const REFRESH_TOKEN_TYPE = 'refreshTokenType'
@@ -294,10 +292,6 @@ const finishInitialize = async (
     await analytics().setAnalyticsCollectionEnabled(false)
     await performance().setPerformanceCollectionEnabled(false)
   }
-
-  // save whether we are finishing authentication offline
-  const { isConnected } = await NetInfo.fetch()
-  await AsyncStorage.setItem(OFFLINE_LOGIN_KEY, JSON.stringify(!isConnected))
 
   dispatch(dispatchInitializeAction(payload))
 }
@@ -568,10 +562,6 @@ export const attemptIntializeAuthWithRefreshToken = async (
 
     if (!refreshTokenMatchesLoginType) {
       throw new Error('Refresh token/login service mismatch.  Aborting refresh.')
-    }
-    const { isConnected } = await NetInfo.fetch()
-    if (!isConnected) {
-      return finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true)
     }
 
     const response = await fetch(AUTH_SIS_TOKEN_REFRESH_URL, {

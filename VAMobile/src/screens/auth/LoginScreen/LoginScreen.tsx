@@ -25,21 +25,13 @@ import { DEMO_USER } from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Devel
 import DemoAlert from 'screens/auth/LoginScreen/DemoAlert'
 import { RootState } from 'store'
 import { AuthParamsLoadingStateTypeConstants } from 'store/api/types/auth'
-import {
-  AuthState,
-  FIRST_TIME_LOGIN,
-  NEW_SESSION,
-  initializeAuth,
-  loginStart,
-  setPKCEParams,
-} from 'store/slices/authSlice'
+import { AuthState, FIRST_TIME_LOGIN, NEW_SESSION, loginStart, setPKCEParams } from 'store/slices/authSlice'
 import { DemoState, updateDemoMode } from 'store/slices/demoSlice'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
-import { useOfflineMode } from 'utils/hooks/offline'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -51,7 +43,6 @@ function LoginScreen() {
   const navigateTo = useRouteNavigation()
   const startAuth = useStartAuth()
   const theme = useTheme()
-  const isConnected = useOfflineMode()
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
@@ -113,12 +104,8 @@ function LoginScreen() {
           navigateTo('LoaGate')
         }
       : () => {
-          if (isConnected) {
-            setNewSession()
-            startAuth()
-          } else {
-            dispatch(initializeAuth())
-          }
+          setNewSession()
+          startAuth()
         }
 
   return (

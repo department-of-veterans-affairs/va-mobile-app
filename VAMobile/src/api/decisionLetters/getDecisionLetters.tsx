@@ -3,7 +3,6 @@ import { has } from 'underscore'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { decisionLettersKeys } from 'api/decisionLetters'
 import { useQuery } from 'api/queryClient'
-import { useQueryCacheOptions } from 'api/queryClient'
 import { DecisionLettersGetData } from 'api/types'
 import { get } from 'store/api'
 
@@ -19,12 +18,10 @@ const getDecisionLetters = (): Promise<DecisionLettersGetData | undefined> => {
  */
 export const useDecisionLetters = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
-  const queryCacheOptions = useQueryCacheOptions()
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
 
   return useQuery({
     ...options,
-    ...queryCacheOptions,
     enabled: !!(authorizedServices?.decisionLetters && queryEnabled),
     queryKey: decisionLettersKeys.decisionLetters,
     queryFn: () => getDecisionLetters(),

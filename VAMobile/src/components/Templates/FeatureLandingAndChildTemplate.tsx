@@ -161,7 +161,6 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           </View>
         ) : null}
         <Box flex={1} display="flex" justifyContent="space-between">
-          {/* TODO double check these changes didnt alter the ui */}
           <Box>
             <WaygateWrapper>{children}</WaygateWrapper>
           </Box>
