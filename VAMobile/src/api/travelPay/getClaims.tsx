@@ -4,9 +4,9 @@ import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameType } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, Params, get } from 'store/api'
+import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
 import { useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getDateRangeFromTimeFrame } from 'utils/travelPay'
 
 /**
  * Fetch paginated travel pay claims

@@ -2,12 +2,10 @@ import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
-import { DateTime } from 'luxon'
 
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
-import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
 
@@ -120,101 +118,4 @@ export const useTravelClaimSubmissionMutationState = (appointmentId: string) => 
   })
 
   return mutationState
-}
-
-/**
- * Creates a complete mapping of all time frame types to their corresponding date ranges.
- * Each date range contains DateTime objects representing the start and end boundaries
- * for filtering travel pay claims by time period.
- *
- * @returns A record mapping each TimeFrameTypeConstant to an object containing:
- *   - startDate: DateTime object marking the beginning of the time period
- *   - endDate: DateTime object marking the end of the time period
- *
- * @example
- * ```typescript
- * const dateRanges = createTimeFrameDateRangeMap();
- * const pastThreeMonthsRange = dateRanges[TimeFrameTypeConstants.PAST_THREE_MONTHS];
- * console.log(pastThreeMonthsRange.startDate.toISO()); // "2024-01-15T00:00:00.000-05:00"
- * ```
- */
-export const createTimeFrameDateRangeMap = () => {
-  const todaysDate = DateTime.local()
-
-  const futureDate = todaysDate.plus({ days: 390 })
-
-  const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-  const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-
-  const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-  const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
-
-  const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-  const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
-
-  const fourteenMonthsEarlier = todaysDate.minus({ months: 14 }).startOf('month').startOf('day')
-  const twelveMonthsEarlier = todaysDate.minus({ months: 12 }).endOf('month').endOf('day')
-
-  const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
-
-  const lastYearDateTime = todaysDate.minus({ years: 1 })
-  const firstDayLastYear = lastYearDateTime.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
-  const lastDayLastYear = lastYearDateTime.set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
-
-  return {
-    [TimeFrameTypeConstants.UPCOMING]: {
-      startDate: todaysDate.startOf('day'),
-      endDate: futureDate.endOf('day'),
-    },
-    [TimeFrameTypeConstants.PAST_THREE_MONTHS]: {
-      startDate: threeMonthsEarlier.startOf('day'),
-      endDate: todaysDate.endOf('day'),
-    },
-    [TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS]: {
-      startDate: fiveMonthsEarlier.startOf('day'),
-      endDate: threeMonthsEarlier,
-    },
-    [TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS]: {
-      startDate: eightMonthsEarlier.startOf('day'),
-      endDate: sixMonthsEarlier,
-    },
-    [TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS]: {
-      startDate: elevenMonthsEarlier.startOf('day'),
-      endDate: nineMonthsEarlier,
-    },
-    [TimeFrameTypeConstants.PAST_FOURTEEN_TO_TWELVE_MONTHS]: {
-      startDate: fourteenMonthsEarlier.startOf('day'),
-      endDate: twelveMonthsEarlier,
-    },
-    [TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR]: {
-      startDate: firstDayCurrentYear,
-      endDate: todaysDate.endOf('day'),
-    },
-    [TimeFrameTypeConstants.PAST_ALL_LAST_YEAR]: {
-      startDate: firstDayLastYear,
-      endDate: lastDayLastYear,
-    },
-  }
-}
-
-/**
- * Retrieves the date range for a specific time frame type and converts it to ISO string format.
- * This function is commonly used for API calls that require date ranges as strings.
- *
- * @param timeFrameType - The time frame type to get the date range for
- * @returns An object containing startDate and endDate as ISO strings
- *
- * @example
- * ```typescript
- * const range = getDateRangeFromTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS);
- * console.log(range); // { startDate: "2024-01-15T00:00:00.000-05:00", endDate: "2024-04-15T23:59:59.999-04:00" }
- * ```
- */
-export const getDateRangeFromTimeFrame = (timeFrameType: TimeFrameType) => {
-  const dateRange = createTimeFrameDateRangeMap()[timeFrameType]
-
-  return {
-    startDate: dateRange.startDate.toISO(),
-    endDate: dateRange.endDate.toISO(),
-  }
 }

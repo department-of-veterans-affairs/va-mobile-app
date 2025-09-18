@@ -23,13 +23,38 @@ export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
 
 export const DEFAULT_UPCOMING_DAYS_LIMIT = 7
 
+/**
+ * Represents an inclusive date range used for time-frame filtering and pickers.
+ *
+ * The bounds are Luxon `DateTime` instances, typically normalized so that
+ * `startDate` is at the start of day and `endDate` is at the end of day.
+ *
+ * Fields:
+ * - startDate: The beginning of the time frame (inclusive).
+ * - endDate: The end of the time frame (inclusive).
+ */
+export type TimeFrameDropDatePickerValue = {
+  startDate: DateTime
+  endDate: DateTime
+}
+
+/**
+ * A selectable option for time-frame dropdowns used in filtering lists.
+ *
+ * Includes localized labels, accessibility text, a stable test identifier,
+ * and the corresponding date range used to perform filtering.
+ *
+ * Fields:
+ * - label: Human-readable text shown to users.
+ * - value: Machine-friendly time-frame identifier.
+ * - testID: Stable identifier for automated tests.
+ * - a11yLabel: Screen-reader-friendly label.
+ * - dates: Start/end bounds for this option.
+ */
 export type TimeFrameDropDownItem = {
-  label: string
-  value: string
-  testID: string
-  dates: {
-    startDate: DateTime
-    endDate: DateTime
-  }
-  timeFrame: TimeFrameType
+  label: string // Human-readable text shown to users.
+  value: TimeFrameType // Machine-friendly time-frame identifier.
+  testID: string // Stable identifier for automated tests.
+  a11yLabel: string // Screen-reader-friendly label.
+  dates: TimeFrameDropDatePickerValue // Start/end bounds for this option.
 }

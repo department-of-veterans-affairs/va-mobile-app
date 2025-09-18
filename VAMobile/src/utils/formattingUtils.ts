@@ -425,3 +425,26 @@ export const formatDateTimeReadable = (dateTime?: DateTime | null): string => {
   }
   return dateTime.toFormat('EEEE, fff')
 }
+
+/**
+ * Returns the date formatted in the format MMM yyyy
+ *
+ * @param date - DateTime object representing the date to format
+ *
+ * @returns date string formatted as MMM yyyy (e.g. "Jan 2025")
+ */
+export const formatDateMMMyyyy = (date: DateTime): string => {
+  return getFormattedDate(date.toISO(), 'MMM yyyy')
+}
+
+/**
+ * Returns the date range formatted in the format MMM yyyy
+ *
+ * @param startDate - DateTime object representing the start of the date range
+ * @param endDate - DateTime object representing the end of the date range
+ *
+ * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
+ */
+export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
+  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
+}

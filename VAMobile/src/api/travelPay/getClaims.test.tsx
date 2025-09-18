@@ -6,8 +6,8 @@ import { GetTravelPayClaimsResponse } from 'api/types'
 import { TimeFrameTypeConstants } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, get } from 'store/api'
 import { context, renderQuery, when } from 'testUtils'
+import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getDateRangeFromTimeFrame } from 'utils/travelPay'
 
 let mockLogNonFatalErrorToFirebase: jest.Mock
 jest.mock('utils/analytics', () => {

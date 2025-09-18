@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { TravelPayClaimData, TravelPayClaimsDateRange } from 'api/types'
+import { TravelPayClaimData } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -19,110 +19,14 @@ import {
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
+import { TimeFrameType } from 'constants/timeframes'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
-import {
-  getFormattedDate,
-  getFormattedDateOrTimeWithFormatOption,
-  getFormattedTimeForTimeZone,
-} from 'utils/formattingUtils'
+import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { createTimeFrameDateRangeMap } from 'utils/travelPay'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
-
-const getMMMyyyy = (date: DateTime): string => {
-  return getFormattedDate(date.toISO(), 'MMM yyyy')
-}
-
-const getDateRange = (startDate: DateTime, endDate: DateTime): string => {
-  return `${getMMMyyyy(startDate)} - ${getMMMyyyy(endDate)}`
-}
-
-type TravelPayClaimsDatePickerOption = {
-  label: string
-  value: TimeFrameType
-  a11yLabel: string
-  dates: TravelPayClaimsDateRange
-}
-
-const getPickerOptions = (t: TFunction): Array<TravelPayClaimsDatePickerOption> => {
-  const map = createTimeFrameDateRangeMap()
-
-  const pastThreeMonths = map[TimeFrameTypeConstants.PAST_THREE_MONTHS]
-  const fiveMonthsToThreeMonths = map[TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS]
-  const eightMonthsToSixMonths = map[TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS]
-  const elevenMonthsToNineMonths = map[TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS]
-  const pastAllCurrentYear = map[TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR]
-  const pastAllLastYear = map[TimeFrameTypeConstants.PAST_ALL_LAST_YEAR]
-
-  return [
-    {
-      label: t('travelPay.statusList.dateRange.pastThreeMonths'),
-      value: TimeFrameTypeConstants.PAST_THREE_MONTHS,
-      a11yLabel: t('travelPay.statusList.dateRange.pastThreeMonths'),
-      dates: {
-        startDate: pastThreeMonths.startDate.toISO(),
-        endDate: pastThreeMonths.endDate.toISO(),
-      },
-    },
-    {
-      label: getDateRange(fiveMonthsToThreeMonths.startDate, fiveMonthsToThreeMonths.endDate),
-      value: TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS,
-      a11yLabel: t('travelPay.statusList.dateRangeA11yLabel', {
-        date1: getMMMyyyy(fiveMonthsToThreeMonths.startDate),
-        date2: getMMMyyyy(fiveMonthsToThreeMonths.endDate),
-      }),
-      dates: {
-        startDate: fiveMonthsToThreeMonths.startDate.toISO(),
-        endDate: fiveMonthsToThreeMonths.endDate.toISO(),
-      },
-    },
-    {
-      label: getDateRange(eightMonthsToSixMonths.startDate, eightMonthsToSixMonths.endDate),
-      value: TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS,
-      a11yLabel: t('travelPay.statusList.dateRangeA11yLabel', {
-        date1: getMMMyyyy(eightMonthsToSixMonths.startDate),
-        date2: getMMMyyyy(eightMonthsToSixMonths.endDate),
-      }),
-      dates: {
-        startDate: eightMonthsToSixMonths.startDate.toISO(),
-        endDate: eightMonthsToSixMonths.endDate.toISO(),
-      },
-    },
-    {
-      label: getDateRange(elevenMonthsToNineMonths.startDate, elevenMonthsToNineMonths.endDate),
-      value: TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
-      a11yLabel: t('travelPay.statusList.dateRangeA11yLabel', {
-        date1: getMMMyyyy(elevenMonthsToNineMonths.startDate),
-        date2: getMMMyyyy(elevenMonthsToNineMonths.endDate),
-      }),
-      dates: {
-        startDate: elevenMonthsToNineMonths.startDate.toISO(),
-        endDate: elevenMonthsToNineMonths.endDate.toISO(),
-      },
-    },
-    {
-      label: t('travelPay.statusList.allOf', { year: pastAllCurrentYear.startDate.year }),
-      value: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
-      a11yLabel: t('travelPay.statusList.allOf', { year: pastAllCurrentYear.startDate.year }),
-      dates: {
-        startDate: pastAllCurrentYear.startDate.toISO(),
-        endDate: pastAllCurrentYear.endDate.toISO(),
-      },
-    },
-    {
-      label: t('travelPay.statusList.allOf', { year: pastAllLastYear.startDate.year }),
-      value: TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
-      a11yLabel: t('travelPay.statusList.allOf', { year: pastAllLastYear.startDate.year }),
-      dates: {
-        startDate: pastAllLastYear.startDate.toISO(),
-        endDate: pastAllLastYear.endDate.toISO(),
-      },
-    },
-  ]
-}
 
 const getResultsText = (t: TFunction, numResults: number, pageStart: number, pageEnd: number) => {
   if (numResults === 0) {
@@ -151,7 +55,11 @@ function TravelPayClaimsList({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const pickerOptions = getPickerOptions(t)
+  const pickerOptions = getPickerOptions(t, {
+    dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
+    allOfTKey: 'travelPay.statusList.allOf',
+    pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
+  })
 
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 
