@@ -5,12 +5,11 @@ import { t } from 'i18next'
 
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistory'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import PrescriptionHistory from './PrescriptionHistory'
 
 const mockNavigationSpy = jest.fn()
 
@@ -91,7 +90,7 @@ const prescriptionData: PrescriptionsGetData = {
         isRefillable: false,
         isTrackable: false,
         instructions:
-          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
+          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS)',
       },
     },
     {
@@ -114,7 +113,7 @@ const prescriptionData: PrescriptionsGetData = {
         isRefillable: false,
         isTrackable: false,
         instructions:
-          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS).',
+          'TAKE ONE TABLET EVERY SIX (6) HOURS, IF NEEDED FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY (8 TABLETS)',
       },
     },
     {
@@ -319,12 +318,12 @@ context('PrescriptionHistory', () => {
       await waitFor(() =>
         expect(
           screen.getByLabelText(
-            'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY.',
+            'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
           ),
         ).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByLabelText('ACETAMINOPHEN 325MG TAB.')).toBeTruthy())
-      await waitFor(() => expect(screen.getByLabelText('TAKE ONE TABLET BY MOUTH DAILY.')).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText('ACETAMINOPHEN 325MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy())
       await waitFor(() =>
         expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
       )

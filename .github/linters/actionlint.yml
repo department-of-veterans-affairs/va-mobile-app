@@ -1,0 +1,12 @@
+---
+# Tricking  actionlint to accept the current git label for ubuntu-16-cores-latest
+self-hosted-runner:
+  labels:
+    - ubuntu-16-cores-latest
+
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - 'shellcheck reported issue'
+      - 'action is too old'
+      - 'property .+ is not defined'
