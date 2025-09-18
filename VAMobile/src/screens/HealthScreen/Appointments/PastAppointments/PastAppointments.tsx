@@ -196,7 +196,7 @@ function PastAppointments({
     }
   }
 
-  if (!appointmentsData || appointmentsData.data.length < 1) {
+  if (!appointmentsData || appointmentsData.data?.length < 1) {
     return (
       <Box>
         <Box mx={theme.dimensions.gutter} accessible={true}>

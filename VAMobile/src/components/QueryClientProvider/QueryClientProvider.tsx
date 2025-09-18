@@ -38,7 +38,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       })
 
       const newPersister = createAsyncStoragePersister({
-        storage: storage,
+        storage,
       })
 
       setPersister(newPersister)
