@@ -134,6 +134,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const scrollViewRef = useRef<ScrollView>(null)
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
+  console.log('COMMIT TO BE DELETED TO RETRIGGER CI')
   const messageData = {
     recipient_id: parseInt(to?.value || '', 10),
     category: category as CategoryTypes,
