@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next'
+import { Alert } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { useNetInfo } from '@react-native-community/netinfo'
 
@@ -6,6 +8,8 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { TFunction } from 'i18next'
 
 import { NAMESPACE } from 'constants/namespaces'
+import { RootState } from 'store'
+import { OfflineState } from 'store/slices'
 
 export function useOfflineMode(): boolean {
   const { isConnected } = useNetInfo()
@@ -14,8 +18,18 @@ export function useOfflineMode(): boolean {
 
 // Enabling any to handle the type of the snackbar which is not exposed in the component library
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function showOfflineSnackbar(snackbar: any, t: TFunction): void {
-  snackbar.show(t('offline.toast.checkConnection'), { isError: true })
+export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false): void {
+  if (inModal) {
+    // TODO: CONFIRM CONTENT
+    Alert.alert('TEMP TITLE', t('offline.toast.checkConnection'), [{ text: t('dismiss'), style: 'default' }])
+  } else {
+    snackbar.show(t('offline.toast.checkConnection'), { isError: true })
+  }
+}
+
+export function useIsWithinModal(): boolean {
+  const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
+  return !!viewingModal
 }
 
 export function useShowOfflineSnackbarIfNeeded(): boolean {

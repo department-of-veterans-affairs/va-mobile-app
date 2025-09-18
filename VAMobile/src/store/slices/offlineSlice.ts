@@ -8,6 +8,11 @@ export type OfflineState = {
   bannerExpanded: boolean
   isOffline: boolean
   forceOffline?: boolean
+  /**
+   * When we are within a modal, toast notifications do not show. This flag
+   * lets us display an alternative alert instead
+   */
+  viewingModal?: boolean
 }
 
 export const initialOfflineState: OfflineState = {
@@ -27,6 +32,12 @@ export const setBannerExpanded =
     dispatch(dispatchUpdateBannerExpanded(value))
   }
 
+export const setViewingModal =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchUpdateViewingModal(value))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -40,8 +51,11 @@ const offlineSlice = createSlice({
     dispatchUpdateBannerExpanded: (state, action: PayloadAction<boolean>) => {
       state.bannerExpanded = action.payload
     },
+    dispatchUpdateViewingModal: (state, action: PayloadAction<boolean>) => {
+      state.viewingModal = action.payload
+    },
   },
 })
 
-const { dispatchUpdateOfflineTime, dispatchUpdateBannerExpanded } = offlineSlice.actions
+const { dispatchUpdateOfflineTime, dispatchUpdateBannerExpanded, dispatchUpdateViewingModal } = offlineSlice.actions
 export default offlineSlice.reducer

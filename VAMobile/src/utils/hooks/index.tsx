@@ -42,7 +42,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
-import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useIsWithinModal, useOfflineMode } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -191,6 +191,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
   const { t } = useTranslation(NAMESPACE.COMMON)
   const isConnected = useOfflineMode()
   const snackbar = useSnackbar()
+  const inModal = useIsWithinModal()
 
   return (url: string, eventParams?: EventParams) => {
     logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
@@ -202,7 +203,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       if (!isConnected) {
-        showOfflineSnackbar(snackbar, t)
+        showOfflineSnackbar(snackbar, t, inModal)
         return
       }
 
