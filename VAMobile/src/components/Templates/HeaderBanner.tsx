@@ -4,12 +4,12 @@ import { Shadow, ShadowProps } from 'react-native-shadow-2'
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
 import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import { useAccessibilityFocus, useTheme } from 'utils/hooks'
+import { useAccessibilityFocus, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -83,6 +83,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
   useFocusEffect(focus === 'Title' ? setFocusTitle : setFocus)
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const navigateTo = useRouteNavigation()
 
   const TEXT_CONSTRAINT_THRESHOLD = 26
 
@@ -304,7 +305,16 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 </View>
               </Box>
             )}
-
+            <Box>
+              <Button
+                a11yLabel={'Test Button'}
+                a11yHint={'Test Button'}
+                label={'Test'}
+                onPress={() => {
+                  navigateTo('FormsTab')
+                }}
+              />
+            </Box>
             <Box
               mr={theme.dimensions.buttonPadding}
               mt={theme.dimensions.buttonPadding}
