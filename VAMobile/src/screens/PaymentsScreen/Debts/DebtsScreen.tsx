@@ -5,8 +5,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useDebts } from 'api/debts'
 import { Box, FeatureLandingTemplate } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import DebtsEmptyState from 'screens/PaymentsScreen/Debts/EmptyState/DebtsEmptyState'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -17,6 +19,10 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  const { summary, isLoading, error } = useDebts()
+
+  const showEmpty = !isLoading && (!!error || (summary?.count ?? 0) === 0)
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
@@ -41,18 +47,24 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
       testID="debtsTestID"
       backLabelTestID="debtsBackTestID">
       {/* TODO: Temporary code to navigate to other screens */}
-      <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
-        <Button
-          label={t('debts.reviewDetails')}
-          onPress={() => {
-            navigation.navigate
-            navigateTo('DebtDetails', {
-              debtRecord: null,
-            })
-          }}
-        />
-      </Box>
-      <ResolveDebtButton />
+      {showEmpty ? (
+        <DebtsEmptyState />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('debts.reviewDetails')}
+              onPress={() => {
+                navigation.navigate
+                navigateTo('DebtDetails', {
+                  debtRecord: null,
+                })
+              }}
+            />
+          </Box>
+          <ResolveDebtButton />
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

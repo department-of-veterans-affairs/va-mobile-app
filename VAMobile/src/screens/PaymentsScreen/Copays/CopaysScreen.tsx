@@ -5,8 +5,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useMedicalCopays } from 'api/medicalCopays'
 import { Box, FeatureLandingTemplate } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import CopaysEmptyState from 'screens/PaymentsScreen/Copays/EmptyState/CopaysEmptyState'
 import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -17,6 +19,10 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  const { summary, isLoading, error } = useMedicalCopays()
+
+  const showEmpty = !isLoading && (!!error || (summary?.count ?? 0) === 0)
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
@@ -41,18 +47,19 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       testID="copaysTestID"
       backLabelTestID="copaysBackTestID">
       {/* TODO: Temporary code to navigate to other screens */}
-      <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
-        <Button
-          label={t('copays.reviewDetails')}
-          onPress={() => {
-            navigation.navigate
-            navigateTo('CopayDetails', {
-              copayRecord: null,
-            })
-          }}
-        />
-      </Box>
-      <ResolveBillButton />
+      {showEmpty ? (
+        <CopaysEmptyState />
+      ) : (
+        <>
+          <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
+            <Button
+              label={t('copays.reviewDetails')}
+              onPress={() => navigateTo('CopayDetails', { copayRecord: null })}
+            />
+          </Box>
+          <ResolveBillButton />
+        </>
+      )}
     </FeatureLandingTemplate>
   )
 }

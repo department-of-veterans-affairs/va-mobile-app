@@ -6,6 +6,8 @@ import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { useDebts } from 'api/debts'
+import { useMedicalCopays } from 'api/medicalCopays'
 import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -26,7 +28,6 @@ import HowToUpdateDirectDepositScreen from 'screens/PaymentsScreen/DirectDeposit
 import PaymentDetailsScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentHistoryScreen'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -39,6 +40,26 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+
+  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays()
+
+  const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
+
+  const copaysSubText =
+    !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+      ? t('copays.activityButton.subText', {
+          amount: copaysSummary.amountDue,
+          count: copaysSummary.count,
+        })
+      : undefined
+
+  const debtsSubText =
+    !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
+      ? t('debts.activityButton.subText', {
+          amount: debtsSummary.amountDue,
+          count: debtsSummary.count,
+        })
+      : undefined
 
   const onPayments = () => {
     navigateTo('PaymentHistory')
@@ -80,18 +101,14 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           <LargeNavButton
             title={t('debts.title')}
             onPress={() => navigateTo('Debts')}
-            subText={t('debts.activityButton.subText', {
-              amount: numberToUSDollars(0),
-              count: 0,
-            })}
+            subText={debtsSubText}
+            showLoading={debtsLoading}
           />
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
-            subText={t('copays.activityButton.subText', {
-              amount: numberToUSDollars(0),
-              count: 0,
-            })}
+            subText={copaysSubText}
+            showLoading={copaysLoading}
           />
         </>
       )}
