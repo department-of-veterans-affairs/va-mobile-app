@@ -78,6 +78,7 @@ import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
+import FormsScreen from "./screens/FormsScreen/FormsScreen";
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 
@@ -132,6 +133,7 @@ type RootTabNavParamList = {
   BenefitsTab: undefined
   PaymentsTab: undefined
   ProfileTab: undefined
+  FormsTab: undefined
 }
 ;`
   background-color: ${theme.colors.icon.active};
@@ -425,6 +427,7 @@ export function AppTabs() {
         <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health.title') }} />
         <TabNav.Screen name="BenefitsTab" component={BenefitsScreen} options={{ title: t('benefits.title') }} />
         <TabNav.Screen name="PaymentsTab" component={PaymentsScreen} options={{ title: t('payments.title') }} />
+        <TabNav.Screen name="FormsTab" component={FormsScreen} options={{ title: 'Forms' }} />
       </TabNav.Navigator>
     </>
   )

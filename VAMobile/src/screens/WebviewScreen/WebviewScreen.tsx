@@ -85,6 +85,8 @@ export type WebviewStackParams = {
     useSSO?: boolean
     /** Test ID for the webview back button */
     backButtonTestID?: string
+    /** onClose function to be called after Done is tapped */
+    onClose?: (url: string) => void
   }
 }
 
@@ -94,7 +96,7 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 function WebviewScreen({ navigation, route }: WebviewScreenProps) {
-  const { url, displayTitle, loadingMessage, useSSO, backButtonTestID } = route.params
+  const { url, displayTitle, loadingMessage, useSSO, backButtonTestID, onClose } = route.params
   const isSSOSession = featureEnabled('sso') && useSSO
 
   const theme = useTheme()
@@ -120,7 +122,10 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       headerLeft: (props): ReactNode => (
         <BackButton
           webview={true}
-          onPress={props.onPress}
+          onPress={() => {
+            if (props.onPress) props.onPress()
+            if (onClose) onClose(currentUrl)
+          }}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.done}
           backButtonTestID={backButtonTestID}

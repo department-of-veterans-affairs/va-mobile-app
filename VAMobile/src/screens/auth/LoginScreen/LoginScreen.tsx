@@ -53,6 +53,10 @@ function LoginScreen() {
     }
   }, [authParamsLoadingState, dispatch])
 
+  useEffect(() => {
+    dispatch(updateDemoMode(true, null))
+  }, [])
+
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
   const mainViewStyle: StyleProp<ViewStyle> = {

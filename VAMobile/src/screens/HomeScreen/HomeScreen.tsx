@@ -46,6 +46,7 @@ import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { GoToFormsButton } from '../FormsScreen/GoToFormsButton'
 import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import PaymentBreakdownModal from 'screens/HomeScreen/PaymentBreakdownModal/PaymentBreakdownModal'
@@ -457,6 +458,9 @@ export function HomeScreen({}: HomeScreenProps) {
               )}
             </Box>
           )}
+          <Box my={theme.dimensions.standardMarginBetween} mx={theme.dimensions.condensedMarginBetween}>
+            <GoToFormsButton />
+          </Box>
           {!!cernerFacilities.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
               {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
