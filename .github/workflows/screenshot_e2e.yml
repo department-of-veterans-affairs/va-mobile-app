@@ -12,6 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
+  push:
   pull_request:
     paths:
       - 'VAMobile/e2e/screenshots/screenshot_data.ts'
