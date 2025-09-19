@@ -109,7 +109,7 @@ These workflows utilize the reusable workflows above with specified parameters. 
 
 #### Description
 
-This workflow runs every night to create and upload the QA version of the app configured for the staging environment for both Android and iOS. It uses the [`build_ios`](#build_ios) and [`build_android`](#build_android) workflows with their default parameters.
+This workflow runs every night to create and upload the QA version of the app configured for the staging environment for both Android and iOS. It uses the [`build_ios`](#reusable-ios-workflow-build_ios) and [`build_android`](#reusable-android-workflow-build_android) workflows with their default parameters.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -161,7 +161,7 @@ on:
 
 #### Description
 
-This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#build_ios) and [`build_android`](#build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case RC-v`int.int.int`.
+This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#reusable-android-workflow-build_ios) and [`build_android`](#reusable-android-workflow-build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case RC-v`int.int.int`.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
@@ -227,7 +227,7 @@ These workflows are related to are release process which occurs every 2 weeks. C
 
 #### Description
 
-Runs our [`release_branch.sh`](../Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#release_branch_issue) and [`release_candidate_build`](#release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
+Runs our [`release_branch.sh`](../Scripts#release_branchsh) script, which checks to see if we are at the beginning of a new sprint, and if so, cuts a new release/v`int.int.int` branch from the `develop` branch and tags it with RC-v`int.int.int`. The command in the script also ends up triggering the [`release_branch_issue`](#new-release-issue-release_branch_issue) and [`release_candidate_build`](#release-candidate-build-release_candidate_build) workflows by tagging the branch with RC-v`int.int.int` and c.
 
 #### Trigger
 
@@ -281,7 +281,7 @@ on:
 
 #### Description
 
-Workflow for the `/approve` command in GitHub Issues. Workflow is made available in Issues by the [`slash_commands`](#slash_commands) workflow.
+Workflow for the `/approve` command in GitHub Issues. Workflow is made available in Issues by the [`slash_commands`](#approve-slash-command-approve_command) workflow.
 
 The current version of the workflow looks for a comment in issues that starts with `/approve`. The command should be immediately followed by a version string that matches the version regex `/^vd+.d+.d+$/`
 
@@ -291,7 +291,7 @@ This command calls the `release_pull_request` workflow during execution.
 
 #### Trigger
 
-Workflow is triggered when a user types `/approve` into a GitHub Issue and clicks the comment button. See [`slash_commands`](#slash_commands) for more info.
+Workflow is triggered when a user types `/approve` into a GitHub Issue and clicks the comment button. See [`slash_commands`](#approve-slash-command-approve_command) for more info.
 
 ```yaml
 on:
