@@ -76,7 +76,7 @@ export const useQuery = <
   const queryResult = useTanstackQuery({
     ...options,
     queryFn: async (context) => {
-      await storage.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
+      await storage?.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
       const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
       return queryFn?.(context)
     },
@@ -93,7 +93,7 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
 
   useEffect(() => {
     const getTime = async () => {
-      const storedTime = await storage.getItem(`${key}-lastUpdatedTime`)
+      const storedTime = await storage?.getItem(`${key}-lastUpdatedTime`)
       if (storedTime) {
         setTime(Number(storedTime))
       }

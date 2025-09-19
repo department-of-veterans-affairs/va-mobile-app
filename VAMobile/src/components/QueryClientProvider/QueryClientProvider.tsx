@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { UserCredentials } from 'react-native-keychain'
 import * as Keychain from 'react-native-keychain'
+import { useSelector } from 'react-redux'
 
 import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
@@ -8,12 +9,14 @@ import { QueryClientProvider as TanstackQueryClientProvider } from '@tanstack/re
 import { PersistQueryClientProvider, Persister } from '@tanstack/react-query-persist-client'
 
 import queryClient from 'api/queryClient'
+import { RootState } from 'store'
 import { isBiometricsPreferred } from 'store/slices'
 import { isIOS } from 'utils/platform'
 
 export let storage: Storage
 
 const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
+  const encryptionKeyGenerated = useSelector<RootState, boolean>((state) => state.auth.encryptionKeyGenerated)
   const [usesBiometrics, setUsesBiometrics] = useState(false)
   const [persister, setPersister] = useState<Persister>()
 
@@ -24,7 +27,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       setUsesBiometrics(biometricsPreferred)
     }
     setBiometricsStatus()
-  }, [])
+  }, [encryptionKeyGenerated])
 
   // Creates persister when using persistent query client provider
   useEffect(() => {
@@ -50,11 +53,8 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [usesBiometrics])
 
-  // Only use persistent storage if biometrics are enabled
-  if (usesBiometrics) {
-    // Do not render the Provider if the persister is not yet available
-    if (!persister) return null
-
+  // Only use persistent storage if biometrics are enabled and if the persister is available
+  if (usesBiometrics && persister) {
     return (
       <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}

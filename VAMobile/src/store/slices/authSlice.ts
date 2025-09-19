@@ -85,6 +85,7 @@ export type AuthState = {
   successfulLogin?: boolean
   requestNotificationsPreferenceScreen?: boolean
   requestNotifications?: boolean
+  encryptionKeyGenerated: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -103,6 +104,7 @@ export const initialAuthState: AuthState = {
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
   requestNotificationsPreferenceScreen: false,
   requestNotifications: false,
+  encryptionKeyGenerated: false,
 }
 
 /*
@@ -296,7 +298,7 @@ const finishInitialize = async (
   dispatch(dispatchInitializeAction(payload))
 }
 
-const saveRefreshToken = async (refreshToken: string): Promise<void> => {
+const saveRefreshToken = async (refreshToken: string, dispatch?: AppDispatch): Promise<void> => {
   inMemoryRefreshToken = refreshToken
   const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
@@ -324,7 +326,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.BIOMETRIC)
+      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.BIOMETRIC, dispatch)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -340,7 +342,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
     console.debug('saveRefreshToken:', options)
     console.debug('saveRefreshToken: saving refresh token to keychain')
     try {
-      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.NONE)
+      await storeRefreshToken(refreshToken, options, AUTH_STORAGE_TYPE.NONE, dispatch)
     } catch (err) {
       logNonFatalErrorToFirebase(err, `saveRefreshTokenWithoutBiometrics: ${authNonFatalErrorString}`)
       console.error(err)
@@ -361,11 +363,12 @@ const storeRefreshToken = async (
   refreshToken: string,
   options: Keychain.SetOptions,
   storageType: AUTH_STORAGE_TYPE,
+  dispatch?: AppDispatch,
 ): Promise<void> => {
   const splitToken = refreshToken.split('.')
   await Promise.all([
     Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', splitToken[1] || '', options),
-    storeEncryptedCacheKey(storageType),
+    storeEncryptedCacheKey(storageType, dispatch),
     AsyncStorage.setItem(REFRESH_TOKEN_ENCRYPTED_COMPONENT_KEY, splitToken[0]),
     AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, storageType),
     AsyncStorage.setItem(REFRESH_TOKEN_TYPE, LoginServiceTypeConstants.SIS),
@@ -414,7 +417,7 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
   }
 }
 
-const storeEncryptedCacheKey = async (storageType: AUTH_STORAGE_TYPE) => {
+const storeEncryptedCacheKey = async (storageType: AUTH_STORAGE_TYPE, dispatch?: AppDispatch) => {
   // Only store the encrypted key if biometrics are enabled
   if (storageType !== AUTH_STORAGE_TYPE.BIOMETRIC) {
     return
@@ -428,6 +431,9 @@ const storeEncryptedCacheKey = async (storageType: AUTH_STORAGE_TYPE) => {
       accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
       securityLevel: SECURITY_LEVEL.SECURE_HARDWARE,
     })
+    if (dispatch) {
+      dispatch(dispatchCreatedEncryptionKey())
+    }
   }
 }
 
@@ -456,7 +462,7 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
   }
 }
 
-const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
+const processAuthResponse = async (response: Response, dispatch?: AppDispatch): Promise<AuthCredentialData> => {
   try {
     if (response.status < 200 || response.status > 399) {
       console.debug('processAuthResponse: non-200 response', response.status)
@@ -468,7 +474,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
     // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
-      await saveRefreshToken(authResponse.refresh_token)
+      await saveRefreshToken(authResponse.refresh_token, dispatch)
       api.setAccessToken(authResponse.access_token)
       api.setRefreshToken(authResponse.refresh_token)
 
@@ -573,7 +579,7 @@ export const attemptIntializeAuthWithRefreshToken = async (
         refresh_token: refreshToken,
       }).toString(),
     })
-    const authCredentials = await processAuthResponse(response)
+    const authCredentials = await processAuthResponse(response, dispatch)
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
     postLoggedIn()
@@ -600,7 +606,7 @@ export const setBiometricsPreference =
     const prefToSet = value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE
     await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, prefToSet)
 
-    await saveRefreshToken(inMemoryRefreshToken || '')
+    await saveRefreshToken(inMemoryRefreshToken || '', dispatch)
     dispatch(dispatchUpdateStoreBiometricsPreference(value))
     dispatch(dispatchFinishSetBiometricPreference())
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_biometric(value))
@@ -755,7 +761,7 @@ export const handleTokenCallbackUrl =
           code,
         }).toString(),
       })
-      const authCredentials = await processAuthResponse(response)
+      const authCredentials = await processAuthResponse(response, dispatch)
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
       postLoggedIn()
@@ -913,6 +919,9 @@ const authSlice = createSlice({
     dispatchFinishLoadingRefreshToken: (state) => {
       state.loadingRefreshToken = false
     },
+    dispatchCreatedEncryptionKey: (state) => {
+      state.encryptionKeyGenerated = true
+    },
   },
 })
 
@@ -936,6 +945,7 @@ export const {
   dispatchFinishSetBiometricPreference,
   dispatchStartLoadingRefreshToken,
   dispatchFinishLoadingRefreshToken,
+  dispatchCreatedEncryptionKey,
 } = authSlice.actions
 
 export default authSlice.reducer

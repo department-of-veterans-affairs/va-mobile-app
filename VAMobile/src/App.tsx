@@ -174,10 +174,10 @@ function MainApp() {
   }
 
   return (
-    <QueryClientProvider>
-      <ActionSheetProvider>
-        <ThemeProvider theme={currentTheme}>
-          <Provider store={store}>
+    <Provider store={store}>
+      <QueryClientProvider>
+        <ActionSheetProvider>
+          <ThemeProvider theme={currentTheme}>
             <I18nextProvider i18n={i18n}>
               <NavigationContainer
                 ref={navigationRef}
@@ -197,10 +197,10 @@ function MainApp() {
                 </NotificationManager>
               </NavigationContainer>
             </I18nextProvider>
-          </Provider>
-        </ThemeProvider>
-      </ActionSheetProvider>
-    </QueryClientProvider>
+          </ThemeProvider>
+        </ActionSheetProvider>
+      </QueryClientProvider>
+    </Provider>
   )
 }
 

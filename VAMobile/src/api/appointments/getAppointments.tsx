@@ -78,7 +78,7 @@ export const useAppointments = (
               travelPayEnabled,
             )
             // Save the last updated time here manually as this will not be saved otherwise in the prefetch
-            await storage.setItem(`${pastAppointmentsQueryKey}-lastUpdatedTime`, Date.now().toString())
+            await storage?.setItem(`${pastAppointmentsQueryKey}-lastUpdatedTime`, Date.now().toString())
             return pastAppointments
           },
           staleTime: ACTIVITY_STALE_TIME,
