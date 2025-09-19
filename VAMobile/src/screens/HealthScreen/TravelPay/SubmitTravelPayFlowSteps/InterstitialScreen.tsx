@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CommonActions } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { DateTime } from 'luxon'
@@ -11,6 +10,7 @@ import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
+import { useTravelPayContext } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
 import { useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
@@ -19,13 +19,19 @@ const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 
 type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'InterstitialScreen'>
 
-function InterstitialScreen({ navigation, route }: InterstitialScreenProps) {
+function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { setSmocFlowStartDate } = useTravelPayContext()
 
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
   const confirmAlert = useShowActionSheet()
+
+  const onPrimaryContentButtonPress = () => {
+    navigateTo('MileageScreen')
+    setSmocFlowStartDate(DateTime.now().toISO())
+  }
 
   const onLeftButtonPress = () => {
     const options = [t('travelPay.cancelClaim.cancel'), t('travelPay.cancelClaim.continue')]
@@ -52,13 +58,7 @@ function InterstitialScreen({ navigation, route }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: () => {
-      navigateTo('MileageScreen')
-      navigation.dispatch({
-        ...CommonActions.setParams({ smocFlowStartDate: DateTime.now().toISO() }),
-        source: route.params.flowStepsRouteKey,
-      })
-    },
+    onPrimaryContentButtonPress,
   })
 
   return (
