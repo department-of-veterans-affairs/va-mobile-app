@@ -161,7 +161,7 @@ on:
 
 #### Description
 
-This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#reusable-android-workflow-build_ios) and [`build_android`](#reusable-android-workflow-build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case RC-v`int.int.int`.
+This workflow runs every time a tag with RC-v`int.int.int` pattern is pushed to the origin. It builds release candidates pointed at staging for our QA team to test using the [`build_ios`](#reusable-ios-workflow-build_ios) and [`build_android`](#reusable-android-workflow-build_android) workflows. Those jobs use the branch/tag that triggered the workflow, in this case RC-v`int.int.int`.
 
 Creates a Slack thread in the channel and updates the thread with the results of each build job.
 
