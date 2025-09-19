@@ -156,6 +156,7 @@ function TravelPayClaimsList({
             if (found) {
               setDatePickerOption(found)
               setTimeFrame(found.value)
+              setPage(1)
             }
           }}
           pickerOptions={pickerOptions}
