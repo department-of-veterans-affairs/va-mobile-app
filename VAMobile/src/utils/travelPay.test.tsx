@@ -27,7 +27,7 @@ const claims: Array<TravelPayClaimData> = [
 ]
 
 describe('filtering travel claims', () => {
-  it('should filter a list of claims', () => {
+  it('should return a filtered list of claims', () => {
     const filtered = filteredClaims(claims, new Set(['Approved', 'Closed']))
     const ids = filtered.map(({ id }) => id)
 
@@ -44,10 +44,9 @@ describe('filtering travel claims', () => {
 
   it('should return all claims when the filter is empty', () => {
     const filtered = filteredClaims(claims, new Set([]))
-    const ids = filtered.map(({ id }) => id)
 
     expect(filtered).toEqual(claims)
-    expect(ids).toHaveLength(claims.length)
+    expect(filtered).toHaveLength(claims.length)
   })
 })
 
