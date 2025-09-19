@@ -71,7 +71,6 @@ context('TravelPayClaimsFilter', () => {
     expect(screen.getByTestId('clearFiltersButton')).toBeTruthy()
   })
 
-  // TODO: test claims renders set of checkbox options maybe
   it('renders the correct checkboxes in the modal from the list of claims', async () => {
     render(
       <TravelPayClaimsFilter

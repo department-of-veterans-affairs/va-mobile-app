@@ -166,6 +166,7 @@ export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: Sort
 
 /**
  * Hook to manage toggling a set of filters and tracking the state of which ones are active
+ * The key FILTER_KEY_ALL will toggle all the filters and off
  *
  * @param options - options that are available
  * @param initialFilter - starting active options
