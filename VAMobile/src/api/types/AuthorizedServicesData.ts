@@ -12,12 +12,14 @@ export type AuthorizedServicesPayload = {
         directDepositBenefitsUpdate: boolean
         disabilityRating: boolean
         lettersAndDocuments: boolean
+        medicationsOracleHealthEnabled: boolean
         militaryServiceHistory: boolean
         paymentHistory: boolean
         preferredName: boolean
         prescriptions: boolean
         scheduleAppointments: boolean
         secureMessaging: boolean
+        secureMessagingOracleHealthEnabled: boolean
         userProfileUpdate: boolean
       }
     }
@@ -33,11 +35,13 @@ export type UserAuthorizedServicesData = {
   directDepositBenefitsUpdate: boolean
   disabilityRating: boolean
   lettersAndDocuments: boolean
+  medicationsOracleHealthEnabled: boolean
   militaryServiceHistory: boolean
   paymentHistory: boolean
   preferredName: boolean
   prescriptions: boolean
   scheduleAppointments: boolean
   secureMessaging: boolean
+  secureMessagingOracleHealthEnabled: boolean
   userProfileUpdate: boolean
 }

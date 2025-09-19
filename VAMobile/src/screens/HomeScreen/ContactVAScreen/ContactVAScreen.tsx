@@ -5,11 +5,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, ClickToCallPhoneNumber, CrisisLineButton, FeatureLandingTemplate, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
+import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { a11yLabelID, a11yLabelMyVA411, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-
-import { HomeStackParamList } from '../HomeStackScreens'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -33,25 +32,37 @@ function ContactVAScreen({ navigation }: ContactVAScreenProps) {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineButton />
         <TextArea>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            variant="MobileBodyBold"
-            accessibilityLabel={a11yLabelVA(t('contactVA.va411.callMy.a11yLabel'))}
-            accessibilityRole="header">
-            {t('contactVA.va411.callMy')}
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('contactVA.va411.callUs')}
+          </TextView>
+          <TextView variant="MobileBody" mt={standardMarginBetween} paragraphSpacing={true}>
+            {t('contactVA.va411.body')}
           </TextView>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
-            variant="MobileBody"
-            mt={standardMarginBetween}
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('contactVA.va411.body.a11yLabel'))}>
-            {t('contactVA.va411.body')}
+            variant="MobileBodyBold"
+            color="primary"
+            accessibilityLabel={a11yLabelMyVA411(t('contactVA.va411.mainInfo'))}
+            accessibilityRole="header">
+            {t('contactVA.va411.mainInfo')}
           </TextView>
           <ClickToCallPhoneNumber
             displayedText={displayedTextPhoneNumber(t('8006982411'))}
             phone={t('8006982411')}
             a11yLabel={a11yLabelID(t('8006982411'))}
+          />
+          <TextView
+            variant="MobileBodyBold"
+            color="primary"
+            accessibilityRole="header"
+            mt={theme.dimensions.contentMarginTop}>
+            {t('contactVA.va411.techSupport')}
+          </TextView>
+          <ClickToCallPhoneNumber
+            displayedText={displayedTextPhoneNumber(t('8662793677'))}
+            phone={t('8662793677')}
+            a11yLabel={a11yLabelID(t('8662793677'))}
+            ttyBypass={true}
           />
         </TextArea>
       </Box>

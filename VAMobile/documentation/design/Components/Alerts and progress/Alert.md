@@ -44,7 +44,7 @@ Alerts are an in-content way to keep users informed of important and sometimes t
 On the mobile app, always consider a native component before using an in-content Alert.
 * **Action Sheet**. When the user takes an action in which the system needs to **clarify their intent**, use an [action sheet](https://developer.apple.com/design/human-interface-guidelines/action-sheets) (for both iOS and Android) to **offer the user a choice in how to proceed**.
 * **Alert/dialogue**. When the user chooses to do something that has **serious consequences**, use a native modal [alert](https://developer.apple.com/design/human-interface-guidelines/alerts) (for iOS) or [dialogue](https://m3.material.io/components/dialogs/overview) (for Android) to present the user with critical information related to that action.
-* **Snackbar**. If a user action **triggers an API call that is successful or results in an error**, consider using a [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Alerts%20and%20Progress/Snackbar/) in addition to or instead of an Alert. The snackbar may allow users to take an action on the feedback such as trying again or undoing the action.
+* **Snackbar**. If a user action **triggers an API call that is successful or results in an error**, consider using a [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/design/Components/Alerts%20and%20progress/Snackbar) in addition to or instead of an Alert. The snackbar may allow users to take an action on the feedback such as trying again or undoing the action.
 
 On the mobile app, do not use the Alert component for:
 * **Sub-alerts on the page**. On the website, when your page has more than 1 alert and you are using the Standard and Slim alerts to create a hierarchy of alerts. It is also appropriate to convey multiple statuses using a combination of headers, text, and the Slim alert variation. An example of a sub-alert is the [Autosave alert](https://design.va.gov/components/form/autosave). On the mobile app, do not use sub-alerts.
@@ -81,5 +81,5 @@ On the website and mobile app, do not use the Alert component for:
 * [accessibilityLabel](https://reactnative.dev/docs/accessibility#accessibilitylabel) and [accessibilityLabelledBy](https://reactnative.dev/docs/accessibility#accessibilitylabelledby-android) should be used where appropriate.
 
 ## Related
-* [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages/)
-* [Snackbar](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Alerts%20and%20Progress/Snackbar)
+* [Native alerts](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Patterns/confirmation-messages)
+* [Snackbar](hhttps://department-of-veterans-affairs.github.io/va-mobile-app/design/Components/Alerts%20and%20progress/Snackbar)
