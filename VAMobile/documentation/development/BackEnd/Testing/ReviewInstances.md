@@ -46,7 +46,7 @@ Loading production environment (Rails 6.1.4.1)
 irb(main):001:0>
 ```
 
-To generate a user session, see section [User Token](StagingInstances.md##User-Token) below then follow [User Sign-in](StagingInstances.md#User-Sign-in) instructions.
+To generate a user session, see section [User Token](StagingInstances.md#user-sign-in) below then follow [User Sign-in](StagingInstances.md#user-sign-in) instructions.
 
 ## User Token
 
