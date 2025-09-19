@@ -20,6 +20,7 @@ import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType } from 'constants/timeframes'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
@@ -119,7 +120,13 @@ function TravelPayClaimsList({
         textLines,
         a11yValue,
         onPress: () => goToClaimDetails(id),
-        testId: `claim_summary_${id}`,
+        a11yHintText: t('travelPay.statusList.viewDetails'),
+        // Due to weird implementation of the List component, we need to set the testID
+        // to the a11y value so that screen readers can read the a11y value correctly
+        testId: getTestIDFromTextLines(textLines),
+        // The actual testID for the item is passed in as detoxTestID even though it is
+        // not specifically for detox tests and can be used for unit tests
+        detoxTestID: `claim_summary_${id}`,
       })
     })
 
