@@ -60,7 +60,10 @@ function TravelPayClaimsList({
     dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
     allOfTKey: 'travelPay.statusList.allOf',
     pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
-  })
+  }).map((option) => ({
+    ...option,
+    testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
+  }))
 
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 

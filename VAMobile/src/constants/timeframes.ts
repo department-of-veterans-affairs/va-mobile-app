@@ -54,7 +54,7 @@ export type TimeFrameDropDatePickerValue = {
 export type TimeFrameDropDownItem = {
   label: string
   value: TimeFrameType
-  testID: string
+  testID?: string
   a11yLabel: string
   dates: TimeFrameDropDatePickerValue
 }
