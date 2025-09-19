@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useContactInformation } from 'api/contactInformation'
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayError } from 'constants/travelPay'
 import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
+import { useTravelPayContext } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -22,8 +22,8 @@ function SMOCErrorScreen({ route }: SMOCErrorScreenProps) {
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
-  const contactInformationQuery = useContactInformation({ enabled: true })
-  const residentialAddress = contactInformationQuery.data?.residentialAddress
+  const { userContactInformation } = useTravelPayContext()
+  const residentialAddress = userContactInformation?.residentialAddress
 
   useSubtaskProps({
     rightButtonText: t('close'),
