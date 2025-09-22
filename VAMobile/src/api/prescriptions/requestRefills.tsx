@@ -19,25 +19,25 @@ const requestRefills = async (
   let results: RefillRequestSummaryItems = []
 
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  let requestBody: { ids: string[] } | { ids: Array<{ id: string; stationNumber: string }> }
+  let requestBody: { ids: string[] } | Array<{ id: string; station: string }>
 
   if (useV1) {
     // v1 API expects { ids: SingleRefillRequest[] }
-    requestBody = {
-      ids: prescriptions.map((prescription) => ({
-        id: prescription.id,
-        stationNumber: prescription.attributes.stationNumber,
-      })),
-    }
+    requestBody = prescriptions.map((prescription) => ({
+      id: prescription.id,
+      station: prescription.attributes.stationNumber,
+    }))
   } else {
     // v0 API expects { ids: string[] }
     requestBody = {
       ids: prescriptions.map((prescription) => prescription.id),
     }
   }
-
+  console.log('refilled', {
+    requestBody: JSON.stringify(requestBody),
+  })
   const response = await put<PrescriptionRefillData>(
-    `/${API_VERSION}/health/rx/prescriptions/refill`,
+    `/ ${API_VERSION} /health/rx / prescriptions / refill`,
     requestBody as unknown as Params,
   )
   const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []

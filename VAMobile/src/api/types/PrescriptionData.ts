@@ -30,6 +30,14 @@ export const RefillStatusConstants: {
   TRACKING: RefillStatus
   TRANSFERRED: RefillStatus
   SUBMITTED: RefillStatus
+  // OH statuses
+  ON_HOLD: RefillStatus
+  ENDED: RefillStatus
+  STOPPED: RefillStatus
+  COMPLETED: RefillStatus
+  CANCELLED: RefillStatus
+  ENTERED_IN_ERROR: RefillStatus
+  DRAFT: RefillStatus
 } = {
   ACTIVE: 'active',
   DELETED: 'deleted',
@@ -46,6 +54,14 @@ export const RefillStatusConstants: {
   TRACKING: 'tracking',
   TRANSFERRED: 'transferred',
   SUBMITTED: 'submitted',
+  // OH Status
+  ON_HOLD: 'on-hold',
+  ENDED: 'ended',
+  STOPPED: 'stopped',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+  ENTERED_IN_ERROR: 'entered-in-error',
+  DRAFT: 'draft',
 }
 
 export type RefillStatus =
@@ -65,6 +81,17 @@ export type RefillStatus =
   | 'transferred'
   | 'submitted'
   | 'dateOfDeathEntered'
+  // OH specfic status
+  | 'on-hold'
+  | 'ended'
+  | 'stopped'
+  | 'completed'
+  | 'cancelled'
+  | 'entered-in-error'
+  | 'draft'
+// added for completeness of documentations, commented out to avoid duplication
+// | 'active'
+// | "unknown"
 
 export type PrescriptionAttributeData = {
   refillStatus: RefillStatus
