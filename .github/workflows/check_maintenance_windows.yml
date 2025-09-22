@@ -1,10 +1,10 @@
-name: "[Utils] Check Maintenance Windows"
+name: '[Utils] Check Maintenance Windows'
 
 on:
   workflow_dispatch:
   schedule:
     # 04:00 UTC, 12:00AM ET, 9:00PM PT every day
-    - cron: "00 4 * * *"
+    - cron: '00 4 * * *'
 
 jobs:
   check_maintenance_windows:
@@ -18,8 +18,8 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@v1
         with:
-          app_id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-          private_key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: '3.13'
       - name: Check Maintenance Windows
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
