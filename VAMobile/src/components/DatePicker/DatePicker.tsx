@@ -144,6 +144,7 @@ const DatePicker: FC<DatePickerProps> = ({
             setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)
             setToFieldOpen(false)
           }}
+          testID="datePickerFromFieldTestId"
         />
         <Box
           my={theme.dimensions.smallMarginBetween}
@@ -162,6 +163,7 @@ const DatePicker: FC<DatePickerProps> = ({
             setToFieldOpen((prevFieldOpen) => !prevFieldOpen)
             setFromFieldOpen(false)
           }}
+          testID="datePickerToFieldTestId"
         />
       </Box>
       <Box pt={theme.dimensions.standardMarginBetween}>

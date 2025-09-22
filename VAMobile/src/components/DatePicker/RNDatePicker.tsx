@@ -8,6 +8,7 @@ interface Props extends ViewProps {
   minimumDate?: string
   maximumDate?: string
   onDateChange?: (event: DateChangeEvent) => void
+  testID?: string
 }
 
 const RNDatePicker = requireNativeComponent<Props>('RNDatePicker')

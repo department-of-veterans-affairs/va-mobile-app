@@ -27,6 +27,8 @@ export type DatePickerFieldProps = {
   maximumDate?: DateTime
   /** Boolean to display selected date as invalid */
   isInvalid?: boolean
+  /** Test ID for the Date Picker Field */
+  testID?: string
   /** Callback called when a new date is selected */
   onDateChange?: (e: DateChangeEvent) => void
   /** Callback called when the field is pressed */
@@ -39,6 +41,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   minimumDate,
   maximumDate,
   isInvalid,
+  testID,
   onDateChange,
   onPress,
 }) => {
@@ -56,7 +59,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   }
 
   return (
-    <Box>
+    <Box testID={testID}>
       <Pressable accessibilityRole="button" onPress={onPress}>
         <Box
           p={theme.dimensions.smallMarginBetween}
@@ -82,6 +85,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
             minimumDate={minimumDate ? getNativePickerDate(minimumDate) : undefined}
             maximumDate={maximumDate ? getNativePickerDate(maximumDate) : undefined}
             onDateChange={onDateChange}
+            testID={`${testID}-nativeCalendar`}
           />
         </Box>
       ) : (
