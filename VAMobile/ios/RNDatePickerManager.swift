@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import React
 
 /// This module allows React Native to manage and render a custom date picker component
 @objc(RNDatePickerManager)
