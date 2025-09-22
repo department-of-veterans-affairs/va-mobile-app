@@ -41,13 +41,5 @@ export const useDebts = (options?: { enabled?: boolean }) => {
     staleTime: ACTIVITY_STALE_TIME,
   })
   const summary = useMemo(() => buildDebtsSummary(query.data), [query.data])
-
-  return {
-    data: query.data,
-    summary,
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    isError: query.isError,
-    error: query.error,
-  }
+  return { ...query, summary }
 }

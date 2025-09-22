@@ -11,7 +11,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
  */
 const DebtsEmptyState = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const phone = '8008270648'
+  const phone = t('8008270648')
 
   return (
     <Box>

@@ -11,7 +11,7 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
  */
 const CopaysEmptyState = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const phone = '8664001238'
+  const phone = t('8664001238')
 
   return (
     <Box>

@@ -37,14 +37,7 @@ export const useMedicalCopays = (options?: { enabled?: boolean }) => {
       errorName: 'getMedicalCopays: Service error',
     },
   })
-  const summary = useMemo(() => summarize(query.data), [query.data])
 
-  return {
-    data: query.data,
-    summary,
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    isError: query.isError,
-    error: query.error,
-  }
+  const summary = useMemo(() => summarize(query.data), [query.data])
+  return { ...query, summary }
 }

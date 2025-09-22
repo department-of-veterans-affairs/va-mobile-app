@@ -22,7 +22,10 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
 
   const { summary, isLoading, error } = useMedicalCopays()
 
-  const showEmpty = !isLoading && (!!error || (summary?.count ?? 0) === 0)
+  const hasError = !!error
+  const isEmpty = (summary?.count ?? 0) === 0
+
+  const showEmpty = !isLoading && !hasError && isEmpty
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
