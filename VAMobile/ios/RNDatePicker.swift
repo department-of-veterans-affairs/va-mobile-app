@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import React
 
 /// A helper function to parse an ISO8601 date string into a `Date` object
 /// - Parameter date: An optional `NSString` representing the date in ISO8601 format
