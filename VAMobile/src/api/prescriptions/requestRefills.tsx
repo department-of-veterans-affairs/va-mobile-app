@@ -37,7 +37,7 @@ const requestRefills = async (
     requestBody: JSON.stringify(requestBody),
   })
   const response = await put<PrescriptionRefillData>(
-    `/ ${API_VERSION} /health/rx / prescriptions / refill`,
+    `/${API_VERSION}/health/rx/prescriptions/refill`,
     requestBody as unknown as Params,
   )
   const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []
