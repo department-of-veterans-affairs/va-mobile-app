@@ -1,11 +1,10 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
-import { setTimeout } from 'timers/promises'
 
 import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 const todaysDate = DateTime.local()
-const dateFieldFormat = 'MM-dd-yyyy'
+const dateFieldFormat = 'MMMM dd, yyyy'
 
 const threeMonthsEarlierFieldText = todaysDate.minus({ months: 3 }).toFormat(dateFieldFormat)
 const todaysDateFieldText = todaysDate.toFormat(dateFieldFormat)
@@ -15,6 +14,7 @@ export const Appointmentse2eConstants = {
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
+  DATE_PICKER_LABEL_TEXT: 'Select a past date range',
   RESET_SELECTED_DATES_BUTTON_TEXT: 'Reset',
 }
 
@@ -85,11 +85,7 @@ describe('Appointments Screen', () => {
   it('should tap on and show past appointments', async () => {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.id('apptsPastID')).tap()
-    if (device.getPlatform() === 'android') {
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
-    } else {
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
-    }
+    await expect(element(by.text(Appointmentse2eConstants.DATE_PICKER_LABEL_TEXT))).toExist()
   })
 
   it('should show the past 3 months date range after resetting', async () => {
