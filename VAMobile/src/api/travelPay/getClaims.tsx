@@ -1,9 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
-import { TimeFrameTypeConstants } from 'constants/timeframes'
+import { TimeFrameType } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, Params, get } from 'store/api'
+import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
 import { useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -30,16 +31,32 @@ const getClaims = async (params: GetTravelPayClaimsParams): Promise<GetTravelPay
 /**
  * Returns a query for paginated travel pay claims
  */
-export const useTravelPayClaims = (params: GetTravelPayClaimsParams) => {
+export const useTravelPayClaims = (timeFrameType: TimeFrameType) => {
   const travelPayEnabled =
     !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPayStatusList')
 
-  return useQuery({
-    queryKey: [travelPayKeys.claims, TimeFrameTypeConstants.PAST_THREE_MONTHS],
-    queryFn: () => getClaims(params),
+  return useInfiniteQuery({
+    queryKey: [travelPayKeys.claims, timeFrameType],
+    queryFn: ({ pageParam }) => getClaims({ ...getDateRangeFromTimeFrame(timeFrameType), pageNumber: pageParam }),
     enabled: travelPayEnabled,
     meta: {
       errorName: 'getTravelPayClaims: Service error',
     },
+    getPreviousPageParam: (firstPage) => {
+      const pageNumber = firstPage?.meta?.pageNumber
+      return pageNumber && pageNumber > 1 ? pageNumber - 1 : undefined
+    },
+    getNextPageParam: (lastPage) => {
+      const pageNumber = lastPage?.meta?.pageNumber
+      const totalRecordCount = lastPage?.meta?.totalRecordCount
+      const currentPageSize = lastPage?.data?.length || 0
+
+      // If we have more records to fetch, return the next page number
+      if (pageNumber && totalRecordCount && pageNumber * currentPageSize < totalRecordCount) {
+        return pageNumber + 1
+      }
+      return undefined
+    },
+    initialPageParam: 1,
   })
 }

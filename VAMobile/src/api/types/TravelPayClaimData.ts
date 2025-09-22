@@ -33,9 +33,12 @@ export type SubmitTravelPayClaimResponse = {
   }
 }
 
-export type GetTravelPayClaimsParams = {
+export type TravelPayClaimsDateRange = {
   startDate: string
   endDate: string
+}
+
+export type GetTravelPayClaimsParams = TravelPayClaimsDateRange & {
   pageNumber?: number
 }
 

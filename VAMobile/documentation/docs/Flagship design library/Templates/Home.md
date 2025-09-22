@@ -33,8 +33,8 @@ The VA Mobile app Home screen zones ensure that the most impactful content items
 * **What it is:** Area for alerts and announcements from the app. It informs users when there’s something they need to do to ensure that the app is functioning and informs users of new features
     * **Module appearance logic:** Variable & optional, can be personalized or universal: Modules appear to all users when in applicable situations. Otherwise, do not show.
 * **What lives in this zone:**
-    * [Encouraged update](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/App%20Features/EncouragedUpdate/) (MVP)
-    * [What’s new](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/App%20Features/WhatsNew/) (MVP)
+    * [Encouraged update](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/AppFeatures/EncouragedUpdate/) (MVP)
+    * [What’s new](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/AppFeatures/WhatsNew/) (MVP)
 * **Guidelines for future module inclusion:**
 Information is appropriate for inclusion on the home screen within the mission-critical app info section when it:
   * Conveys information that’s necessary for the app to function properly

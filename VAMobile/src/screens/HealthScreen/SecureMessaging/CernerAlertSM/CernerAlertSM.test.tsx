@@ -1,9 +1,8 @@
 import React from 'react'
 import { Alert } from 'react-native'
 
+import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/CernerAlertSM'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import CernerAlertSM from './CernerAlertSM'
 
 jest.mock('../../../../api/facilities/getFacilitiesInfo', () => {
   const original = jest.requireActual('../../../../api/facilities/getFacilitiesInfo')
@@ -72,8 +71,8 @@ context('CernerAlertSM', () => {
       expect(screen.getByText('Sending a message to a care team at these facilities:')).toBeTruthy()
       expect(screen.getByText('FacilityOne')).toBeTruthy()
       expect(screen.getByText('FacilityTwo')).toBeTruthy()
-      expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message")).toBeTruthy()
-      expect(screen.getByText("You'll need to use our My VA Health portal to send your message")).toBeTruthy()
+      expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message.")).toBeTruthy()
+      expect(screen.getByText("You'll need to use our My VA Health portal to send your message.")).toBeTruthy()
       fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
       expect(Alert.alert).toBeCalled()
     })
@@ -85,8 +84,8 @@ context('CernerAlertSM', () => {
     expect(screen.getByText('Sending a message to a care team at these facilities:')).toBeTruthy()
     expect(screen.getByText('FacilityOne')).toBeTruthy()
     expect(screen.queryByText('FacilityTwo')).toBeFalsy()
-    expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message")).toBeTruthy()
-    expect(screen.getByText("You'll need to use our My VA Health portal to send your message")).toBeTruthy()
+    expect(screen.getByLabelText("You'll need to use our My  V-A  Health portal to send your message.")).toBeTruthy()
+    expect(screen.getByText("You'll need to use our My VA Health portal to send your message.")).toBeTruthy()
     fireEvent.press(screen.getByRole('link', { name: 'Go to My VA Health' }))
     expect(Alert.alert).toBeCalled()
   })

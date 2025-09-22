@@ -9,6 +9,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
+  changeDemoModeUser,
   checkImages,
   loginToDemoMode,
   openHealth,
@@ -53,6 +54,7 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_CANCEL_ID: 'radioButtonCancelTestID',
   PRESCRIPTION_HELP_BUTTON_ID: 'prescriptionsHelpID',
   PRESCRIPTION_REQUEST_REFILL_ID: 'requestRefillsButtonID',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
 }
 
 let tempPath
@@ -62,6 +64,7 @@ const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await loginToDemoMode()
+  await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
   await openPrescriptions()
 })

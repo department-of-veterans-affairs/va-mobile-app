@@ -1,41 +1,50 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { DateTime } from 'luxon'
-
 import { useTravelPayClaims } from 'api/travelPay'
+import { TravelPayClaimData } from 'api/types'
 import { ErrorComponent, FeatureLandingTemplate } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
+const emptyClaims: Array<TravelPayClaimData> = []
+
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  const startDate = DateTime.now().minus({ months: 3 }).toISO()
-  const endDate = DateTime.now().toISO()
+  const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
   const {
     data: claimsPayload,
     isLoading,
     error,
     refetch,
-  } = useTravelPayClaims({
-    startDate,
-    endDate,
-  })
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useTravelPayClaims(timeFrame)
 
-  const claims = claimsPayload?.data ?? []
+  // Flatten all pages of data into a single array
+  const claims = claimsPayload?.pages?.flatMap((page) => page?.data ?? emptyClaims) ?? emptyClaims
+
+  // Get total record count from the first page's metadata
+  const totalRecordCount = claimsPayload?.pages?.[0]?.meta?.totalRecordCount ?? 0
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
+  }
+
+  const scrollToTop = () => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }
 
   return (
@@ -52,7 +61,22 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
           error={error}
         />
       ) : (
-        <TravelPayClaimsList claims={claims} isLoading={isLoading} scrollViewRef={scrollViewRef} />
+        <TravelPayClaimsList
+          claims={claims}
+          isLoading={isLoading || isFetchingNextPage}
+          setTimeFrame={setTimeFrame}
+          totalRecordCount={totalRecordCount}
+          onNext={(nextPage) => {
+            const nextPageStart = nextPage * DEFAULT_PAGE_SIZE
+
+            // If we need more data and we have more pages available, fetch it
+            if (nextPageStart >= claims.length && hasNextPage && fetchNextPage) {
+              fetchNextPage()
+            }
+            scrollToTop()
+          }}
+          onPrev={scrollToTop}
+        />
       )}
     </FeatureLandingTemplate>
   )
