@@ -4,7 +4,7 @@ The automated release process works well a vast majority of the time but occasio
 
 ## Re-releasing a failed build
 
-Occasionally, a build may fail for one reason or another, or we may determine that we want to resubmit a build. In order to do this, we need to re-trigger the [Release Build](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/DevOps/Automation%20Code%20Docs/GitHub%20Actions/BuildReleaseWorkflows#release-build-release_build) workflow. This workflow is triggered by tagging the release branch with a `vX.X.X` tag. Since this tag exists already, follow the steps below to re-tag a branch and retrigger the build. Keep in mind that the releases for both platforms are tied together in the same workflow, so following these steps will re-run the release for both iOS and Android.
+Occasionally, a build may fail for one reason or another, or we may determine that we want to resubmit a build. In order to do this, we need to re-trigger the [Release Build](https://department-of-veterans-affairs.github.io/va-mobile-app/development/DevOps/AutomationCodeDocs/GitHubActions/BuildReleaseWorkflows) workflow. This workflow is triggered by tagging the release branch with a `vX.X.X` tag. Since this tag exists already, follow the steps below to re-tag a branch and retrigger the build. Keep in mind that the releases for both platforms are tied together in the same workflow, so following these steps will re-run the release for both iOS and Android.
 
 1. Determine the version number of the build you want to rebuild (vX.X.X)
 2. If possible, remove any pending versions for review
