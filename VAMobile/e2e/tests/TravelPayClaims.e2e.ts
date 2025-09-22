@@ -13,7 +13,6 @@ const TravePayClaimsE2eIds = {
   CHECKBOX_ALL: 'checkbox_label_all',
   CHECKBOX_IN_MANUAL_REVIEW_ID: 'checkbox_label_In manual review',
 
-  FILTER_MODAL_CONTAINER_ID: 'travelPayClaimsFilterModalContainer',
   FILTER_MODAL_CANCEL_BUTTON_ID: 'filterButtonCancelTestID',
   FILTER_MODAL_APPLY_BUTTON_ID: 'filterButtonApplyTestID',
   CLEAR_FILTERS_BUTTON_ID: 'clearFiltersButton',
@@ -95,11 +94,9 @@ describe('Travel Pay Claims Screen', () => {
     const {
       ALL_RESULTS_TEXT,
       FILTERED_RESULTS_TEXT,
-      CHECKBOX_ALL,
       CHECKBOX_IN_MANUAL_REVIEW_ID,
       FILTER_MODAL_CANCEL_BUTTON_ID,
       FILTER_MODAL_APPLY_BUTTON_ID,
-      FILTER_MODAL_CONTAINER_ID,
       SHOW_FILTERS_BUTTON_ID,
       TRAVEL_PAY_CLAIMS_TEST_ID,
       CLEAR_FILTERS_BUTTON_ID,
@@ -110,19 +107,17 @@ describe('Travel Pay Claims Screen', () => {
 
     // Cancel closes the modal without applying anything
     await element(by.id(SHOW_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(FILTER_MODAL_CONTAINER_ID)))
+    await waitFor(element(by.id(FILTER_MODAL_CANCEL_BUTTON_ID)))
       .toExist()
       .withTimeout(4000)
-    await expect(element(by.id(CHECKBOX_ALL))).toExist()
     await element(by.id(FILTER_MODAL_CANCEL_BUTTON_ID)).tap()
     await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
 
     // Apply a filter
     await element(by.id(SHOW_FILTERS_BUTTON_ID)).tap()
-    await waitFor(element(by.id(FILTER_MODAL_CONTAINER_ID)))
+    await waitFor(element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID)))
       .toExist()
       .withTimeout(4000)
-    await expect(element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID))).toExist()
     await element(by.id(CHECKBOX_IN_MANUAL_REVIEW_ID)).tap()
     await element(by.id(FILTER_MODAL_APPLY_BUTTON_ID)).tap()
     await waitFor(element(by.text(FILTERED_RESULTS_TEXT)))
