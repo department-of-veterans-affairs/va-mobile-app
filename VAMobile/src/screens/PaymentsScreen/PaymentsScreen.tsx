@@ -28,6 +28,7 @@ import HowToUpdateDirectDepositScreen from 'screens/PaymentsScreen/DirectDeposit
 import PaymentDetailsScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentHistoryScreen'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -48,7 +49,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
       ? t('copays.activityButton.subText', {
-          amount: copaysSummary.amountDue,
+          amount: numberToUSDollars(copaysSummary.amountDue),
           count: copaysSummary.count,
         })
       : undefined
@@ -56,7 +57,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   const debtsSubText =
     !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
       ? t('debts.activityButton.subText', {
-          amount: debtsSummary.amountDue,
+          amount: numberToUSDollars(debtsSummary.amountDue),
           count: debtsSummary.count,
         })
       : undefined
