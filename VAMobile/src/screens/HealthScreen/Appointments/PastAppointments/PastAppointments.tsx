@@ -119,11 +119,7 @@ function PastAppointments({
 
   const renderNoAppointments = () => {
     logAnalyticsEvent(Events.vama_appt_empty_range)
-    return (
-      <Box mt={theme.dimensions.standardMarginBetween}>
-        <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
-      </Box>
-    )
+    return <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
   }
 
   if (loading) {
