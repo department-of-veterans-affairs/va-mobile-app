@@ -23,7 +23,7 @@ Our automated UI testing is done with [Detox](https://wix.github.io/Detox/), whi
 
 ### Prerequisites
 
-Follow instructions for FE [Development Setup Instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevSetupProcess)
+Follow instructions for FE [Development Setup Instructions](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/)
 
 ### Local setup for detox
 
