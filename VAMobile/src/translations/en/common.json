@@ -593,6 +593,7 @@
   "contactVA.va411.callUs": "Call us anytime",
   "contactVA.va411.mainInfo": "Main information (MyVA411)",
   "contactVA.va411.techSupport": "Technical support",
+  "contentUnavailable": "This content isn’t available while offline. Check your connection and try again.",
   "continue": "Continue",
   "continueToSignin": "Continue to sign in",
   "copays.activityButton.subText": "{{amount}} due for {{count}} bill",

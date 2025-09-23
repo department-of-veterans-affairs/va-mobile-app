@@ -11,7 +11,9 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { DEVICE_ENDPOINT_SID, DEVICE_TOKEN_KEY } from 'api/notifications'
+import queryClient from 'api/queryClient'
 import {
   Box,
   ButtonDecoratorType,
@@ -22,6 +24,7 @@ import {
   TextView,
   VATextInput,
 } from 'components'
+import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
@@ -186,6 +189,15 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     })
   }
 
+  const onResetOfflineStorage = async (): Promise<void> => {
+    await storage?.clear()
+    await queryClient.resetQueries({
+      predicate: (query) => {
+        return `${query.queryKey}` !== `${authorizedServicesKeys.authorizedServices}`
+      },
+    })
+  }
+
   const resetInAppReview = async () => {
     try {
       await resetReviewActionCount()
@@ -258,6 +270,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box>
         <TextArea>
           <Button onPress={onResetAsyncStorage} label={'Reset async storage'} />
+        </TextArea>
+      </Box>
+      <Box>
+        <TextArea>
+          <Button onPress={onResetOfflineStorage} label={'Reset offline storage'} />
         </TextArea>
       </Box>
       <Box>

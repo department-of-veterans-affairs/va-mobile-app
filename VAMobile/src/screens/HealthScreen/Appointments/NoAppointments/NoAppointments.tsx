@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
+import ContentUnavailableCard from 'components/ContentUnavailableCard'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -27,6 +28,14 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const navigateTo = useRouteNavigation()
   const isConnected = useOfflineMode()
   const snackbar = useSnackbar()
+
+  if (!isConnected) {
+    return (
+      <Box mx={theme.dimensions.gutter}>
+        <ContentUnavailableCard textId="contentUnavailable" />
+      </Box>
+    )
+  }
 
   return (
     <Box
