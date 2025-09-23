@@ -154,7 +154,7 @@
     "reactotron-react-native": "^5.1.14",
     "reactotron-redux": "^3.2.0",
     "redux-mock-store": "^1.5.5",
-    "ts-jest": "^29.4.1",
+    "ts-jest": "^29.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "watch": "^1.0.2"
