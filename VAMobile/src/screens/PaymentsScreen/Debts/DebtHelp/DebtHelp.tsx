@@ -1,18 +1,38 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { LargePanel } from 'components'
+import { Box, LargePanel, TextView, TranslatablePhoneNumber } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { useTheme } from 'utils/hooks'
 
 type DebtHelpProps = StackScreenProps<PaymentsStackParamList, 'DebtHelp'>
 
 function DebtHelp({}: DebtHelpProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
+  const { gutter, condensedMarginBetween } = theme.dimensions
 
-  return <LargePanel title={t('debts.help.title')} rightButtonText={t('close')} />
+  return (
+    <LargePanel title={t('debts.help.title')} rightButtonText={t('close')}>
+      <Box mx={gutter}>
+        <Trans
+          i18nKey={'debts.help.questions'}
+          components={{
+            // This handles bolding the header text
+            header: <TextView variant="MobileBodyBold" accessibilityRole="header" />,
+            // This handles paragraphs and their spacing
+            p: <TextView my={condensedMarginBetween} variant="MobileBody" />,
+            // This handles phone number links
+            tel: <TranslatablePhoneNumber variant="standalone" />,
+            tty: <TranslatablePhoneNumber variant="tty" />,
+          }}
+        />
+      </Box>
+    </LargePanel>
+  )
 }
 
 export default DebtHelp

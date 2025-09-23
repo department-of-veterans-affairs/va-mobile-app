@@ -47,7 +47,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
           onPress={() => {
             navigation.navigate
             navigateTo('CopayDetails', {
-              copayRecord: null,
+              copay: null,
             })
           }}
         />
