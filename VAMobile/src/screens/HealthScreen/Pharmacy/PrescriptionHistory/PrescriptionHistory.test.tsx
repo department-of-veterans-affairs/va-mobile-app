@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistory'
@@ -23,7 +24,7 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-const prescriptionData: PrescriptionsGetData = {
+const prescriptionDataV0: PrescriptionsGetData = {
   data: [
     {
       id: '20039743',
@@ -258,6 +259,85 @@ const prescriptionData: PrescriptionsGetData = {
   },
 }
 
+const prescriptionDataV1: PrescriptionsGetData = {
+  data: [
+    {
+      id: '20039743',
+      type: 'Prescription',
+      attributes: {
+        refillStatus: 'refillinprocess',
+        refillSubmitDate: '2021-06-28T17:01:12.000Z',
+        refillDate: '2021-07-14T04:00:00.000Z',
+        refillRemaining: 9,
+        facilityName: 'SLC10 TEST LAB',
+        facilityPhoneNumber: '(217) 636-6712',
+        orderedDate: '2021-05-25T04:00:00.000Z',
+        quantity: 4,
+        expirationDate: '2022-05-26T04:00:00.000Z',
+        prescriptionNumber: '3636713',
+        prescriptionName: 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID',
+        dispensedDate: null,
+        stationNumber: '979',
+        isRefillable: false,
+        isTrackable: false,
+        instructions:
+          'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
+      },
+    },
+    {
+      id: '19986250',
+      type: 'Prescription',
+      attributes: {
+        refillStatus: 'discontinued',
+        refillSubmitDate: '2021-05-24T17:42:19.000Z',
+        refillDate: '2021-07-10T04:00:00.000Z',
+        refillRemaining: 2,
+        facilityName: 'DAYT29',
+        facilityPhoneNumber: '(217) 636-6712',
+        orderedDate: '2021-04-21T04:00:00.000Z',
+        quantity: 10,
+        expirationDate: '2022-04-22T04:00:00.000Z',
+        prescriptionNumber: '2720192',
+        prescriptionName: 'ACETAMINOPHEN 325MG TAB',
+        dispensedDate: null,
+        stationNumber: '989',
+        isRefillable: false,
+        isTrackable: false,
+        instructions: 'TAKE ONE TABLET BY MOUTH DAILY',
+      },
+    },
+  ],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalPages: 7,
+      totalEntries: 63,
+    },
+    prescriptionStatusCount: {
+      active: 0,
+      isRefillable: 1,
+      discontinued: 0,
+      expired: 0,
+      historical: 0,
+      pending: 0,
+      transferred: 0,
+      submitted: 0,
+      hold: 0,
+      unknown: 0,
+      total: 1,
+    },
+    hasNonVaMeds: false,
+  },
+  links: {
+    self: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
+    first: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1',
+    prev: null,
+    next: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=2',
+    last: 'https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7',
+  },
+}
+
 const emptyMock: PrescriptionsGetData = {
   data: [],
   meta: {
@@ -293,8 +373,17 @@ const emptyMock: PrescriptionsGetData = {
 
 context('PrescriptionHistory', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
-  const initializeTestInstance = () => {
-    render(<PrescriptionHistory {...mockNavProps()} />)
+  const initializeTestInstance = ({ useV1 = false } = {}) => {
+    const queriesData = [
+      {
+        queryKey: authorizedServicesKeys.authorizedServices,
+        data: {
+          prescriptions: true,
+          medicationsOracleHealthEnabled: useV1,
+        },
+      },
+    ]
+    render(<PrescriptionHistory {...mockNavProps()} />, { queriesData })
   }
 
   beforeEach(() => {
@@ -302,7 +391,7 @@ context('PrescriptionHistory', () => {
   })
 
   describe('Initializes correctly', () => {
-    it('should show the names and instructions of prescriptions and StartRefillRequest button', async () => {
+    it('should show the names and instructions of prescriptions and StartRefillRequest button - v0 API', async () => {
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -310,7 +399,7 @@ context('PrescriptionHistory', () => {
       }
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', params)
-        .mockResolvedValue(prescriptionData)
+        .mockResolvedValue(prescriptionDataV0)
       initializeTestInstance()
       await waitFor(() =>
         expect(screen.getByRole('header', { name: 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID' })).toBeTruthy(),
@@ -328,11 +417,61 @@ context('PrescriptionHistory', () => {
         expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
       )
       await waitFor(() => expect(screen.getByLabelText(t('prescription.history.transferred.title'))).toBeTruthy())
+      // Verify the number of prescriptions displayed
+      const expectedPrescriptionNames = prescriptionDataV0.data.map(
+        (prescription) => prescription.attributes.prescriptionName,
+      )
+      const prescriptionHeaders = screen
+        .getAllByRole('header')
+        .filter(
+          (el) =>
+            el.props.accessibilityRole === 'header' &&
+            el.props.children &&
+            typeof el.props.children === 'string' &&
+            expectedPrescriptionNames.includes(el.props.children),
+        )
+      expect(prescriptionHeaders).toHaveLength(prescriptionDataV0.data.length)
+    })
+    it('should show the names and instructions of prescriptions and StartRefillRequest button - v1 API', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(prescriptionDataV1)
+      initializeTestInstance({ useV1: true })
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'ACETAMINOPHEN 160MG/5ML ALC-F LIQUID' })).toBeTruthy(),
+      )
+      await waitFor(() =>
+        expect(
+          screen.getByLabelText(
+            'TAKE 1/2 TEASPOONFUL (80 MGS/2.5 MLS) EVERY SIX (6) HOURS FOR 30 DAYS NOT MORE THAN FOUR (4) GRAMS OF ACETAMINOPHEN PER DAY',
+          ),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByLabelText('ACETAMINOPHEN 325MG TAB')).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText('TAKE ONE TABLET BY MOUTH DAILY')).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
+      )
+
+      // Verify the number of prescriptions displayed
+      const expectedPrescriptionNames = prescriptionDataV1.data.map(
+        (prescription) => prescription.attributes.prescriptionName,
+      )
+      const prescriptionHeaders = screen
+        .getAllByRole('header')
+        .filter(
+          (el) =>
+            el.props.accessibilityRole === 'header' &&
+            el.props.children &&
+            typeof el.props.children === 'string' &&
+            expectedPrescriptionNames.includes(el.props.children),
+        )
+      expect(prescriptionHeaders).toHaveLength(prescriptionDataV1.data.length)
     })
   })
 
   describe('When there are no prescriptions', () => {
-    it('should not display the refill request button', async () => {
+    it('should not display the refill request button - v0', async () => {
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -342,6 +481,20 @@ context('PrescriptionHistory', () => {
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue(emptyMock)
       initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeFalsy(),
+      )
+    })
+    it('should not display the refill request button - v1', async () => {
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue(emptyMock)
+      initializeTestInstance({ useV1: true })
       await waitFor(() =>
         expect(screen.queryByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeFalsy(),
       )
@@ -359,9 +512,9 @@ context('PrescriptionHistory', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionData,
+          ...prescriptionDataV0,
           meta: {
-            ...prescriptionData.meta,
+            ...prescriptionDataV0.meta,
             hasNonVaMeds: true,
           },
         })
@@ -391,9 +544,9 @@ context('PrescriptionHistory', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionData,
+          ...prescriptionDataV0,
           meta: {
-            ...prescriptionData.meta,
+            ...prescriptionDataV0.meta,
             hasNonVaMeds: true,
           },
         })
@@ -420,9 +573,9 @@ context('PrescriptionHistory', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionData,
+          ...prescriptionDataV0,
           meta: {
-            ...prescriptionData.meta,
+            ...prescriptionDataV0.meta,
             hasNonVaMeds: true,
           },
         })
@@ -448,9 +601,9 @@ context('PrescriptionHistory', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionData,
+          ...prescriptionDataV0,
           meta: {
-            ...prescriptionData.meta,
+            ...prescriptionDataV0.meta,
             hasNonVaMeds: false,
           },
         })
