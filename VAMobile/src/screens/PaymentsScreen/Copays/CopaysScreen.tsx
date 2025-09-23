@@ -7,8 +7,8 @@ import { Button, IconProps } from '@department-of-veterans-affairs/mobile-compon
 
 import { useMedicalCopays } from 'api/medicalCopays'
 import { Box, FeatureLandingTemplate } from 'components'
+import EmptyStateMessage from 'components/EmptyStateMessage'
 import { NAMESPACE } from 'constants/namespaces'
-import CopaysEmptyState from 'screens/PaymentsScreen/Copays/EmptyState/CopaysEmptyState'
 import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -51,7 +51,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       backLabelTestID="copaysBackTestID">
       {/* TODO: Temporary code to navigate to other screens */}
       {showEmpty ? (
-        <CopaysEmptyState />
+        <EmptyStateMessage title={t('copays.empty.title')} body={t('copays.empty.body')} phone={t('8664001238')} />
       ) : (
         <>
           <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>

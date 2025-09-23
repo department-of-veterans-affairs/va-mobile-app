@@ -7,8 +7,8 @@ import { Button, IconProps } from '@department-of-veterans-affairs/mobile-compon
 
 import { useDebts } from 'api/debts'
 import { Box, FeatureLandingTemplate } from 'components'
+import EmptyStateMessage from 'components/EmptyStateMessage'
 import { NAMESPACE } from 'constants/namespaces'
-import DebtsEmptyState from 'screens/PaymentsScreen/Debts/EmptyState/DebtsEmptyState'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -51,7 +51,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
       backLabelTestID="debtsBackTestID">
       {/* TODO: Temporary code to navigate to other screens */}
       {showEmpty ? (
-        <DebtsEmptyState />
+        <EmptyStateMessage title={t('debts.empty.title')} body={t('debts.empty.body')} phone={t('8008270648')} />
       ) : (
         <>
           <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>

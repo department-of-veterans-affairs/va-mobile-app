@@ -1,27 +1,29 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 import { Box, TextArea, TextView } from 'components'
 import ClickToCallPhoneNumber from 'components/ClickToCallPhoneNumber'
-import { NAMESPACE } from 'constants/namespaces'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
-/**
- * Empty state shown when the Veteran has no current VA debts.
- */
-const DebtsEmptyState = () => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  const phone = t('8008270648')
+export type EmptyStateMessageProps = {
+  /** Bold header text */
+  title: string
+  /** Body copy below the header */
+  body: string
+  /** Phone number digits only (e.g., "8664001238") */
+  phone: string
+}
 
+/** Generic empty-state message with header, body, and click-to-call */
+const EmptyStateMessage: FC<EmptyStateMessageProps> = ({ title, body, phone }) => {
   return (
     <Box>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('debts.empty.title')}
+          {title}
         </TextView>
 
         <TextView mt={20} mb={20}>
-          {t('debts.empty.body')}
+          {body}
         </TextView>
 
         <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(phone)} phone={phone} />
@@ -30,4 +32,4 @@ const DebtsEmptyState = () => {
   )
 }
 
-export default DebtsEmptyState
+export default EmptyStateMessage
