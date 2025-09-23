@@ -10,6 +10,7 @@ export type SettingsState = {
   loadingRemoteConfig: boolean
   remoteConfigActivated: boolean
   displayEmailConfirmationAlert: boolean
+  openForm: boolean
 }
 
 export const initialSettingsState: SettingsState = {
@@ -17,6 +18,7 @@ export const initialSettingsState: SettingsState = {
   loadingRemoteConfig: false,
   remoteConfigActivated: false,
   displayEmailConfirmationAlert: false,
+  openForm: false,
 }
 
 const STORAGE_HAPTICS_KEY = '@store_settings_haptics'
@@ -60,6 +62,13 @@ export const updateDisplayEmailConfirmationAlert =
     dispatch(dispatchDisplayEmailConfirmationAlert(value))
   }
 
+// Toggle
+export const setOpenFormImmediately =
+  (value: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchOpenForm(value))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -80,6 +89,9 @@ const settingsSlice = createSlice({
     dispatchDisplayEmailConfirmationAlert: (state, action: PayloadAction<boolean>) => {
       state.displayEmailConfirmationAlert = action.payload
     },
+    dispatchOpenForm: (state, action: PayloadAction<boolean>) => {
+      state.openForm = action.payload
+    }
   },
 })
 
@@ -88,5 +100,6 @@ const {
   dispatchUpdateLoadingRemoteConfig,
   dispatchFinishLoadingRemoteConfig,
   dispatchDisplayEmailConfirmationAlert,
+  dispatchOpenForm,
 } = settingsSlice.actions
 export default settingsSlice.reducer

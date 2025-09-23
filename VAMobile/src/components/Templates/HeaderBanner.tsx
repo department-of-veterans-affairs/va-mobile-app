@@ -9,7 +9,8 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
-import { useAccessibilityFocus, useRouteNavigation, useTheme } from 'utils/hooks'
+import { setOpenFormImmediately } from 'store/slices'
+import { useAccessibilityFocus, useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
   text: string
@@ -78,6 +79,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
   shadow: bannerShadow,
 }) => {
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const [focusRef, setFocus] = useAccessibilityFocus<View>()
   const [focusTitle, setFocusTitle] = useAccessibilityFocus<View>()
   const focus = leftButton ? 'Left' : title ? 'Title' : 'Right'
@@ -305,13 +307,24 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 </View>
               </Box>
             )}
+            <Box mr={8}>
+              <Button
+                a11yLabel={'Apple Button'}
+                a11yHint={'Apple Button'}
+                label={'Apple'}
+                onPress={() => {
+                  navigateTo('FormsTab', { startFormImmediately: false })
+                }}
+              />
+            </Box>
             <Box>
               <Button
-                a11yLabel={'Test Button'}
-                a11yHint={'Test Button'}
-                label={'Test'}
+                a11yLabel={'Pear Button'}
+                a11yHint={'Pear Button'}
+                label={'Pear'}
                 onPress={() => {
-                  navigateTo('FormsTab')
+                  dispatch(setOpenFormImmediately(true))
+                  navigateTo('FormsTab', { startFormImmediately: true })
                 }}
               />
             </Box>
