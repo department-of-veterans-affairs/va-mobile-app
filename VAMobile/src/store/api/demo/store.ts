@@ -258,7 +258,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
      * TRAVEL PAY
      */
     case '/v0/travel-pay/claims': {
-      return getTravelPayClaims(store, params, endpoint)
+      return getTravelPayClaims(store, params)
     }
     case '/v0/medical_copays': {
       return getMedicalCopays(store, params, endpoint)
