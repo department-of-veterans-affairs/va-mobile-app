@@ -97,10 +97,12 @@ describe('Appointments Screen', () => {
   it('should show the native calendar date picker when the From field is tapped', async () => {
     await element(by.id('datePickerFromFieldTestId')).tap()
     await expect(element(by.id('datePickerFromFieldTestId-nativeCalendar'))).toExist()
+    await element(by.id('datePickerFromFieldTestId')).tap()
   })
 
   it('should show the native calendar date picker when the To field is tapped', async () => {
     await element(by.id('datePickerToFieldTestId')).tap()
     await expect(element(by.id('datePickerToFieldTestId-nativeCalendar'))).toExist()
+    await element(by.id('datePickerToFieldTestId')).tap()
   })
 })

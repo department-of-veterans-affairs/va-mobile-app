@@ -59,8 +59,8 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   }
 
   return (
-    <Box testID={testID}>
-      <Pressable accessibilityRole="button" onPress={onPress}>
+    <Box>
+      <Pressable accessibilityRole="button" onPress={onPress} testID={testID}>
         <Box
           p={theme.dimensions.smallMarginBetween}
           flexDirection="row"
