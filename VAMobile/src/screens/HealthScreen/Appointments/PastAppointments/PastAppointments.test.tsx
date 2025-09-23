@@ -97,13 +97,12 @@ context('PastAppointments', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance({ data: appointmentData() })
+
     expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
     expect(screen.getByText(t('reset'))).toBeTruthy()
     expect(screen.getByText(t('datePicker.from'))).toBeTruthy()
     expect(screen.getByText(t('datePicker.to'))).toBeTruthy()
     expect(screen.getByRole('button', { name: t('apply') })).toBeTruthy()
-
-    ///const timeAndDate = getFormattedDateWithWeekdayForTimeZone(mockStartDateUTC, 'America/Los_Angeles') + getFormatedDa
     expect(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`)).toBeTruthy()
   })
 
