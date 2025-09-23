@@ -19,13 +19,13 @@ const requestRefills = async (
   let results: RefillRequestSummaryItems = []
 
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  let requestBody: { ids: string[] } | Array<{ id: string; station: string }>
+  let requestBody: { ids: string[] } | Array<{ id: string; stationNumber: string }>
 
   if (useV1) {
-    // v1 API expects { ids: SingleRefillRequest[] }
+    // v1 API expects SingleRefillRequest[]
     requestBody = prescriptions.map((prescription) => ({
       id: prescription.id,
-      station: prescription.attributes.stationNumber,
+      stationNumber: prescription.attributes.stationNumber,
     }))
   } else {
     // v0 API expects { ids: string[] }
