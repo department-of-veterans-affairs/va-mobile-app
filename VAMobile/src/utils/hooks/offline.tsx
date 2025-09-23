@@ -10,9 +10,19 @@ import { TFunction } from 'i18next'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { OfflineState } from 'store/slices'
+import { featureEnabled } from 'utils/remoteConfig'
 
+/**
+ * Returns a value representing whether the app is able to connect to the internet. If
+ * offline mode is disabled this will always return true
+ */
 export function useOfflineMode(): boolean {
   const { isConnected } = useNetInfo()
+
+  if (!featureEnabled('offlineMode')) {
+    return true
+  }
+
   return !!isConnected
 }
 

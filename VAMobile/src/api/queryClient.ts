@@ -15,6 +15,7 @@ import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useOfflineMode } from 'utils/hooks/offline'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type CacheProps = {
   networkMode: NetworkMode
@@ -76,8 +77,10 @@ export const useQuery = <
   const queryResult = useTanstackQuery({
     ...options,
     queryFn: async (context) => {
-      console.log('settings date!', `${options.queryKey}-lastUpdatedTime`)
-      await storage?.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
+      if (featureEnabled('offlineMode')) {
+        console.log('settings date!', `${options.queryKey}-lastUpdatedTime`)
+        await storage?.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
+      }
       const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
       return queryFn?.(context)
     },
@@ -100,7 +103,10 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
         setTime(Number(storedTime))
       }
     }
-    getTime()
+
+    if (featureEnabled('offlineMode')) {
+      getTime()
+    }
   }, [key])
 
   return time

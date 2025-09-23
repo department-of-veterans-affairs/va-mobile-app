@@ -12,6 +12,7 @@ import queryClient from 'api/queryClient'
 import { RootState } from 'store'
 import { isBiometricsPreferred } from 'store/slices'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export let storage: Storage
 
@@ -19,6 +20,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const encryptionKeyGenerated = useSelector<RootState, boolean>((state) => state.auth.encryptionKeyGenerated)
   const [usesBiometrics, setUsesBiometrics] = useState(false)
   const [persister, setPersister] = useState<Persister>()
+  const offlineModeFeatureEnabled = featureEnabled('offlineMode')
 
   // Checks async storage for biometrics preference
   useEffect(() => {
@@ -48,13 +50,13 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       setPersister(newPersister)
     }
 
-    if (usesBiometrics) {
+    if (offlineModeFeatureEnabled && usesBiometrics) {
       getPersister()
     }
-  }, [usesBiometrics])
+  }, [usesBiometrics, offlineModeFeatureEnabled])
 
   // Only use persistent storage if biometrics are enabled and if the persister is available
-  if (usesBiometrics && persister) {
+  if (offlineModeFeatureEnabled && usesBiometrics && persister) {
     return (
       <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}
