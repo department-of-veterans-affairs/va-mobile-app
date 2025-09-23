@@ -24,9 +24,7 @@ const EmptyStateMessage: FC<EmptyStateMessageProps> = ({ title, body, phone }) =
           {title}
         </TextView>
 
-        <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-          {body}
-        </TextView>
+        <TextView my={theme.dimensions.standardMarginBetween}>{body}</TextView>
 
         <ClickToCallPhoneNumber displayedText={displayedTextPhoneNumber(phone)} phone={phone} />
       </TextArea>
