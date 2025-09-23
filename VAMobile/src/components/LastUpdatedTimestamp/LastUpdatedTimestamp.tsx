@@ -18,7 +18,7 @@ const LastUpdatedTimestamp: FC<LastUpdatedTimestampProps> = ({ datetime }) => {
   if (!datetime) return null
 
   return (
-    <Box alignItems="center" mb={theme.dimensions.gutter}>
+    <Box alignItems="center" mb={theme.dimensions.gutter} testID="last-updated-timestamp">
       <TextView variant="HelperText" color={theme.colors.text.lastUpdated}>
         {t('lastUpdatedTimestamp', { timestamp: `${formatEpochReadable(datetime / 1000)}` })}
       </TextView>
