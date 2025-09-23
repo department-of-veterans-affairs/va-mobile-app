@@ -1,8 +1,8 @@
-import React, { RefObject, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { TravelPayClaimData } from 'api/types'
@@ -14,10 +14,16 @@ import {
   Pagination,
   PaginationProps,
   TextLine,
+  TextView,
+  VAModalPicker,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType } from 'constants/timeframes'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -25,28 +31,55 @@ import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
+const getResultsText = (t: TFunction, numResults: number, pageStart: number, pageEnd: number) => {
+  if (numResults === 0) {
+    return t('travelPay.statusList.emptyResults', { numResults })
+  }
+  return t('travelPay.statusList.resultsText', { numResults, pageStart, pageEnd })
+}
+
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   isLoading: boolean
-  scrollViewRef: RefObject<ScrollView>
+  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
+  onNext?: (page: number) => void
+  onPrev?: (page: number) => void
+  totalRecordCount: number
 }
 
-const CLAIMS_PER_PAGE = 10
-
-function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClaimsListProps) {
+function TravelPayClaimsList({
+  claims,
+  isLoading,
+  setTimeFrame,
+  totalRecordCount,
+  onNext,
+  onPrev,
+}: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isConnected = useOfflineMode()
   const snackbar = useSnackbar()
+  const pickerOptions = getPickerOptions(t, {
+    dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
+    allOfTKey: 'travelPay.statusList.allOf',
+    pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
+  }).map((option) => ({
+    ...option,
+    testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
+  }))
+
+  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
   const [page, setPage] = useState(1)
 
   const { perPage, totalEntries } = {
-    perPage: CLAIMS_PER_PAGE,
-    totalEntries: claims.length || 0,
+    perPage: DEFAULT_PAGE_SIZE,
+    totalEntries: totalRecordCount,
   }
+  const pageStart = (page - 1) * DEFAULT_PAGE_SIZE + 1
+  const pageEnd = Math.min(page * DEFAULT_PAGE_SIZE, totalEntries)
 
   useEffect(() => {
     const summaryList = claims?.slice((page - 1) * perPage, page * perPage)
@@ -99,7 +132,13 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
         textLines,
         a11yValue,
         onPress: () => goToClaimDetails(id),
-        testId: `claim_summary_${id}`,
+        a11yHintText: t('travelPay.statusList.viewDetails'),
+        // Due to weird implementation of the List component, we need to set the testID
+        // to the a11y value so that screen readers can read the a11y value correctly
+        testId: getTestIDFromTextLines(textLines),
+        // The actual testID for the item is passed in as detoxTestID even though it is
+        // not specifically for detox tests and can be used for unit tests
+        detoxTestID: `claim_summary_${id}`,
       })
     })
 
@@ -112,12 +151,14 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(page + 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      const nextPage = page + 1
+      onNext?.(nextPage)
+      setPage(nextPage)
     },
     onPrev: () => {
-      setPage(page - 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      const prevPage = page - 1
+      onPrev?.(prevPage)
+      setPage(prevPage)
     },
     totalEntries: totalEntries,
     pageSize: perPage,
@@ -126,6 +167,25 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef }: TravelPayClai
 
   return (
     <Box testID="travelPayClaimsListTestId">
+      <Box mx={theme.dimensions.gutter} accessible={true}>
+        <VAModalPicker
+          selectedValue={datePickerOption.value}
+          onSelectionChange={(value) => {
+            const found = pickerOptions.find((option) => option.value === value)
+            if (found) {
+              setDatePickerOption(found)
+              setTimeFrame(found.value)
+              setPage(1)
+            }
+          }}
+          pickerOptions={pickerOptions}
+          labelKey={'travelPay.statusList.selectADateRange'}
+          testID="getDateRangeTestID"
+        />
+        <TextView my={theme.dimensions.lineItemSpacing} variant="MobileBodyBold">
+          {getResultsText(t, totalEntries, pageStart, pageEnd)}
+        </TextView>
+      </Box>
       <DefaultList items={getListItemVals()} />
       <Box
         flex={1}

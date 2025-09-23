@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { screen, waitFor } from '@testing-library/react-native'
+import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
-import { get } from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -96,6 +95,25 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
+let mockUseTravelPayClaims: jest.Mock
+jest.mock('api/travelPay', () => {
+  mockUseTravelPayClaims = jest.fn(() => ({
+    data: {
+      pages: [MOCK_TRAVEL_PAY_CLAIM_RESPONSE],
+    },
+    isFetchingNextPage: false,
+    hasNextPage: false,
+    isFetching: false,
+    isLoading: false,
+    error: null,
+    refetch: jest.fn(),
+    fetchNextPage: jest.fn(),
+  }))
+  return {
+    useTravelPayClaims: mockUseTravelPayClaims,
+  }
+})
+
 context('TravelPayClaims', () => {
   const initializeTestInstance = () => {
     render(<TravelPayClaims {...mockNavProps()} />)
@@ -113,17 +131,32 @@ context('TravelPayClaims', () => {
   })
 
   it('shows the list of claims', async () => {
-    when(get as jest.Mock)
-      .calledWith('/v0/travel-pay/claims', expect.anything())
-      .mockResolvedValueOnce(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
-
     initializeTestInstance()
 
-    await waitFor(() => expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy())
+    expect(screen.getByTestId('travelPayClaimsTestID')).toBeTruthy()
+    expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
+  })
 
-    // Should contain 3 entries in the list - identified by claim status
-    expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
-    expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
-    expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
+  describe('when an api error occurs', () => {
+    it('should show the error screen', async () => {
+      mockUseTravelPayClaims.mockImplementation(() => ({
+        data: {
+          pages: [],
+        },
+        isFetchingNextPage: false,
+        hasNextPage: false,
+        isFetching: false,
+        isLoading: false,
+        error: new Error('test error'),
+        refetch: jest.fn(),
+        fetchNextPage: jest.fn(),
+      }))
+      initializeTestInstance()
+
+      expect(screen.getByText(t(`errors.callHelpCenter.vaAppNotWorking`))).toBeTruthy()
+      expect(screen.getByText(t(`errors.callHelpCenter.sorry`))).toBeTruthy()
+      expect(screen.getByText(t(`errors.callHelpCenter.informationLine`))).toBeTruthy()
+      expect(screen.getByTestId('CallVATestID')).toBeTruthy()
+    })
   })
 })

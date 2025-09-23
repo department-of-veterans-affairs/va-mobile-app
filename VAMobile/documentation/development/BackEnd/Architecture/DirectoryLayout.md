@@ -68,7 +68,7 @@ Objects used for communicating with upstream service objects. These can be a mix
 /modules/mobile/app/workers
 ```
 
-[View information about vackground workers](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Architecture/BackgroundWorkersAndCaching)
+[View information about background workers](https://department-of-veterans-affairs.github.io/va-mobile-app/development/BackEnd/Architecture/BackgroundWorkersAndCaching)
 
 ## Helpers
 

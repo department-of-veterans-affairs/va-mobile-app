@@ -23,7 +23,7 @@ If the new component **will** eventually live within the design system, please c
     * How the mobile app uses the component specifically (where, when, etc.).
 
 ## Where does the documentation live?
-We have an area on the documentation site for the [Flagship design library](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Intro#). Within that section, there is another section for [Components](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Flagship%20design%20library/Components/Overview). Currently, most of the documentation is engineering-focused and is not used to document the components (or their usage) themselves. Please use this area of the documentation site to house this documentation moving forward.
+We have an area on the documentation site for the [Flagship design library](https://department-of-veterans-affairs.github.io/va-mobile-app/). Within that section, there is another section for [Components](https://department-of-veterans-affairs.github.io/va-mobile-app/design/About/For%20engineers/components). Currently, most of the documentation is engineering-focused and is not used to document the components (or their usage) themselves. Please use this area of the documentation site to house this documentation moving forward.
 
 Reference the list in the “What should we document?” section below as a guide to what should be updated (including the name of the page itself) vs. what should be added as a new page on the documentation site. 
 

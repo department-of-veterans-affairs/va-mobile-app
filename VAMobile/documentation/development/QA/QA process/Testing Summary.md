@@ -3,11 +3,11 @@ title: Testing summary
 ---
 # Why a testing summary?
 
-QA must [clearly communicate their test plan, results, and quality assessment](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/docs/QA/HowWeWork/index.md#we-stop-testing-when) to fulfill their role of providing stakeholders with enough information to decide whether to release software.
+QA must [clearly communicate their test plan, results, and quality assessment](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/) to fulfill their role of providing stakeholders with enough information to decide whether to release software.
 
 For small, incremental, low-risk, simple changes, the documentation of the test plan itself (running a set of cases, which passed/failed, and any bug reports written) is often sufficient to meet decision-making needs. There's no grand narrative to communicate, for fixing a typo in a button label.
 
-For larger, 'big bang', higher-risk, complex changes, (which should be [avoided whenever possible](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/DevelopmentBestPractices#scoping-tickets)), just a test plan is typically insufficient to communicate your testing work and its results. A testing summary can also be important when working with multiple teams (who likely have differing expectations about what, how, and why QA tests what we test) to support the secondary goal of "avoiding surprising the implementation team about what's being released."
+For larger, 'big bang', higher-risk, complex changes, (which should be [avoided whenever possible](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#scoping-tickets)), just a test plan is typically insufficient to communicate your testing work and its results. A testing summary can also be important when working with multiple teams (who likely have differing expectations about what, how, and why QA tests what we test) to support the secondary goal of "avoiding surprising the implementation team about what's being released."
 
 # What's in a testing summary
 
@@ -29,4 +29,4 @@ Because there is no standard place to publish these summaries, there's also no s
 
 ## When is a testing summary written
 
-A testing summary (implicit in the name) is written [when testing is completed, but before the release of the software under test.](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/working-with-others#testing-qa)
+A testing summary (implicit in the name) is written [when testing is completed, but before the release of the software under test.](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/)
