@@ -14,7 +14,7 @@ type DebtsSummary = { amountDue: number; count: number }
  */
 const buildDebtsSummary = (payload?: DebtsPayload): DebtsSummary => {
   const items = payload?.data ?? []
-  const toNum = (n: unknown) => (typeof n === 'number' ? n : parseFloat(String(n ?? 0)) || 0)
+  const toNum = (n: number | string) => (typeof n === 'number' ? n : parseFloat(String(n ?? 0)) || 0)
 
   const amountDue = items.reduce((sum, d) => sum + toNum(d?.attributes?.currentAr), 0)
   const count = items.filter((d) => toNum(d?.attributes?.currentAr) > 0).length

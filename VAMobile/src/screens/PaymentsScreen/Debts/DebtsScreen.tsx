@@ -22,10 +22,8 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
 
   const { summary, isLoading, error } = useDebts()
 
-  const hasError = !!error
   const isEmpty = (summary?.count ?? 0) === 0
-
-  const showEmpty = !isLoading && !hasError && isEmpty
+  const showEmpty = !isLoading && !error && isEmpty
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',

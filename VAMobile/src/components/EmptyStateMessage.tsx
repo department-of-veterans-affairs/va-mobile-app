@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView } from 'components'
 import ClickToCallPhoneNumber from 'components/ClickToCallPhoneNumber'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 export type EmptyStateMessageProps = {
   /** Bold header text */
@@ -15,6 +16,7 @@ export type EmptyStateMessageProps = {
 
 /** Generic empty-state message with header, body, and click-to-call */
 const EmptyStateMessage: FC<EmptyStateMessageProps> = ({ title, body, phone }) => {
+  const theme = useTheme()
   return (
     <Box>
       <TextArea>
@@ -22,7 +24,7 @@ const EmptyStateMessage: FC<EmptyStateMessageProps> = ({ title, body, phone }) =
           {title}
         </TextView>
 
-        <TextView mt={20} mb={20}>
+        <TextView mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.standardMarginBetween}>
           {body}
         </TextView>
 
