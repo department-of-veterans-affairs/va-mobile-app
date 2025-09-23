@@ -69,9 +69,16 @@ jobs:
   build_android:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private_key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Set git config
         run: |
           git config --global user.name 'VA Mobile Automation Bot'

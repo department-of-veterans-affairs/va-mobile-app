@@ -71,9 +71,16 @@ jobs:
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app_id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private_key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
