@@ -33,10 +33,11 @@ module.exports = {
       },
     ],
   },
-
   moduleNameMapper: {
     '@env': '<rootDir>/env/test.env.ts',
     '\\.svg': '<rootDir>/jest/svgMock.ts',
+    '@react-native-community/netinfo': '<rootDir>/jest/netinfoMock.ts',
+    '@op-engineering/op-sqlite': '<rootDir>/jest/opSQLite.ts',
   },
   testRegex: '.*\\.test\\.tsx?',
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!**/store/api/types/index.*', '!**/store/api/index.*', '!**/*.test.*'],
