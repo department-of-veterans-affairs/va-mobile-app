@@ -148,7 +148,7 @@ jobs:
           - *Release Manager Approval Due:* ${{ needs.release_ticket.outputs.vaDueDate }}\n\
           - *Tickets Tagged Appropriately:* ${{ needs.release_ticket.outputs.qaDueDate }}\n\n\
           *Contacts:*\n\
-            - *VA PO for awareness:* CC: <@${SLACK_rtwell}>
+            - *VA PO for awareness:* CC: <@${SLACK_rtwell}>\n\
             - *Release coordination:* <@${SLACK_becca}>",
             "thread_ts": "${{ needs.start_slack_thread.outputs.thread_ts }}",
             "unfurl_links": false,
