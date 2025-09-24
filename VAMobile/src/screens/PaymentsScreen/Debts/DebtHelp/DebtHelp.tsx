@@ -26,8 +26,8 @@ function DebtHelp({}: DebtHelpProps) {
             // This handles paragraphs and their spacing
             p: <TextView my={condensedMarginBetween} variant="MobileBody" />,
             // This handles phone number links
-            tel: <TranslatablePhoneNumber variant="standalone" />,
-            tty: <TranslatablePhoneNumber variant="tty" />,
+            tel: <TranslatablePhoneNumber variant="standalone" ttyBypass={true} />,
+            tty: <TranslatablePhoneNumber variant="standalone" />,
           }}
         />
       </Box>

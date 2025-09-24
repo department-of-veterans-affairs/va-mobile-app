@@ -3,12 +3,19 @@ import React, { FC } from 'react'
 import { ClickToCallPhoneNumber, TextView } from 'components'
 import { useExternalLink } from 'utils/hooks'
 
-type TranslatablePhoneNumber = {
-  children?: React.ReactNode
-  variant?: 'inline' | 'standalone' | 'tty'
-}
+type TranslatablePhoneNumber =
+  | {
+      children?: React.ReactNode
+      variant: 'inline'
+      ttyBypass?: never
+    }
+  | {
+      children?: React.ReactNode
+      variant: 'standalone'
+      ttyBypass?: boolean
+    }
 
-const TranslatablePhoneNumber: FC<TranslatablePhoneNumber> = ({ children, variant = 'inline' }) => {
+const TranslatablePhoneNumber: FC<TranslatablePhoneNumber> = ({ children, ttyBypass, variant }) => {
   const displayedText = Array.isArray(children) ? children[0] : ''
   const phone = displayedText.replace(/\D/g, '') // Strip out non-numeric characters
   const launchExternalLink = useExternalLink()
@@ -27,10 +34,8 @@ const TranslatablePhoneNumber: FC<TranslatablePhoneNumber> = ({ children, varian
         {displayedText}
       </TextView>
     )
-  } else if (variant === 'standalone') {
-    return <ClickToCallPhoneNumber phone={phone} displayedText={displayedText} ttyBypass={true} />
   } else {
-    return <ClickToCallPhoneNumber phone={phone} displayedText={displayedText} />
+    return <ClickToCallPhoneNumber phone={phone} displayedText={displayedText} ttyBypass={ttyBypass} />
   }
 }
 

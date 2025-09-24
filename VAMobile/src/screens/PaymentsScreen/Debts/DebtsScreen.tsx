@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -15,10 +15,14 @@ import {
   FeatureLandingTemplate,
   LoadingComponent,
   MultiTouchCard,
+  Pagination,
+  PaginationProps,
   TextArea,
   TextView,
   TranslatablePhoneNumber,
 } from 'components'
+import { VAScrollViewProps } from 'components/VAScrollView'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
@@ -36,6 +40,22 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   const { data: debtsData, isFetching: loadingDebts, error: debtsError } = useDebts()
 
   const debts: DebtRecord[] = debtsData?.data || []
+
+  const scrollViewRef = useRef<ScrollView | null>(null)
+  const scrollViewProps: VAScrollViewProps = {
+    scrollViewRef: scrollViewRef,
+  }
+  const [page, setPage] = useState(1)
+  const { perPage, totalEntries } = {
+    perPage: DEFAULT_PAGE_SIZE,
+    totalEntries: debtsData?.data.length || 0,
+  }
+  const [debtsToShow, setDebtsToShow] = useState<DebtRecord[]>([])
+
+  useEffect(() => {
+    const debtsList = debtsData?.data?.slice((page - 1) * perPage, page * perPage)
+    setDebtsToShow(debtsList || [])
+  }, [debtsData, page, perPage])
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
@@ -69,8 +89,34 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     )
   }
 
+  function renderPagination() {
+    const paginationProps: PaginationProps = {
+      onNext: () => {
+        setPage(page + 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      onPrev: () => {
+        setPage(page - 1)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      },
+      totalEntries: totalEntries,
+      pageSize: perPage,
+      page,
+    }
+
+    return (
+      <Box
+        flex={1}
+        mt={theme.dimensions.paginationTopPadding}
+        mb={theme.dimensions.contentMarginBottom}
+        mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
+    )
+  }
+
   function renderContent() {
-    const listItems = debts.map((debt, idx) => {
+    const listItems = debtsToShow.map((debt, idx) => {
       const debtInfo = getDebtInfo(t, debt)
       const iconProps: IconProps = {
         name: debtInfo.variant === 'info' ? 'Info' : 'Warning',
@@ -108,7 +154,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
                     // This handles bolding text
                     bold: <TextView variant="HelperTextBold" />,
                     // This handles phone number links
-                    tel: <TranslatablePhoneNumber />,
+                    tel: <TranslatablePhoneNumber variant="inline" />,
                   }}
                   values={{
                     balance: debtInfo.balance,
@@ -176,6 +222,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
       headerButton={headerButton}
       backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
+      scrollViewProps={scrollViewProps}
       title={t('debts.title')}
       testID="debtsTestID"
       backLabelTestID="debtsBackTestID">
@@ -184,7 +231,10 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
       ) : debtsError ? (
         serviceErrorAlert()
       ) : debts.length > 0 ? (
-        renderContent()
+        <>
+          {renderContent()}
+          {renderPagination()}
+        </>
       ) : (
         noDebtsMessage()
       )}
