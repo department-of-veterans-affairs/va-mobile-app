@@ -1,5 +1,47 @@
 [
   {
+    "title": "v2.60.0",
+    "due_on": "2025-10-07T07:00:00Z",
+    "issues": [
+      {
+        "title": "Reduce duplicative claims calls for BE stability",
+        "number": 11620,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11620",
+        "isPR": false
+      },
+      {
+        "title": "add new banner, integrate with new API flags",
+        "number": 11618,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11618",
+        "isPR": true
+      },
+      {
+        "title": "Turn on Remote Config flag for NonVAMeds Alert and change default in the app",
+        "number": 11600,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11600",
+        "isPR": false
+      },
+      {
+        "title": "Adding reactotron ",
+        "number": 11572,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11572",
+        "isPR": true
+      },
+      {
+        "title": "Update Content on Contact VA Screen",
+        "number": 11508,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11508",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update radio button groups to use RadioButton library component",
+        "number": 11434,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11434",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.59.0",
     "due_on": "2025-09-23T07:00:00Z",
     "issues": [
