@@ -15,8 +15,14 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     env:
-      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
+      DOCS_RELEASE_REPORT_PAT: ${{ steps.generate_token.outputs.token }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
