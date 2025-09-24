@@ -3,7 +3,6 @@ name: '[Documentation] Test Build'
 # Adapted from https://docusaurus.io/docs/deployment
 
 on:
-  push:
   pull_request:
     branches: [develop]
     paths:
