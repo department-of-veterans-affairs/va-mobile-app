@@ -29,7 +29,7 @@ export type DatePickerProps = {
   /** Optional DateTime object that represents the maximum selectable date on each date picker */
   maximumDate?: DateTime
   /** Callback when the apply button is pressed */
-  onApply: (selectedDateRange: DatePickerRange) => void
+  onApply: (selectedDateRange: DatePickerRange, isValid: boolean) => void
   /** Callback when the reset button is pressed */
   onReset: () => void
 }
@@ -105,11 +105,10 @@ const DatePicker: FC<DatePickerProps> = ({
   }
 
   const handleApply = () => {
-    if (!fromFieldInvalid && !toFieldInvalid) {
-      onApply(selectedDateRange)
-      setFromFieldOpen(false)
-      setToFieldOpen(false)
-    }
+    const isValidDateRange = !fromFieldInvalid && !toFieldInvalid
+    onApply(selectedDateRange, isValidDateRange)
+    setFromFieldOpen(false)
+    setToFieldOpen(false)
   }
 
   const handleReset = () => {
@@ -134,11 +133,12 @@ const DatePicker: FC<DatePickerProps> = ({
       <Box {...datePickerContainerProps}>
         <DatePickerField
           open={fromFieldOpen}
+          isInvalid={fromFieldInvalid}
           label={t('datePicker.from')}
+          a11yErrorLabel={t('datePicker.from.invalid')}
           date={selectedDateRange.startDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
-          isInvalid={fromFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'startDate')}
           onPress={() => {
             setFromFieldOpen((prevFieldOpen) => !prevFieldOpen)
@@ -153,11 +153,12 @@ const DatePicker: FC<DatePickerProps> = ({
         />
         <DatePickerField
           open={toFieldOpen}
+          isInvalid={toFieldInvalid}
           label={t('datePicker.to')}
+          a11yErrorLabel={t('datePicker.to.invalid')}
           date={selectedDateRange.endDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
-          isInvalid={toFieldInvalid}
           onDateChange={(e) => handleDateChange(e, 'endDate')}
           onPress={() => {
             setToFieldOpen((prevFieldOpen) => !prevFieldOpen)

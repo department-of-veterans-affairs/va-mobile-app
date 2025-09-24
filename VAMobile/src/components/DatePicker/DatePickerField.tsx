@@ -27,6 +27,8 @@ export type DatePickerFieldProps = {
   maximumDate?: DateTime
   /** Boolean to display selected date as invalid */
   isInvalid?: boolean
+  /** Additional message to be read by screen reader when the date field is invalid */
+  a11yErrorLabel?: string
   /** Test ID for the Date Picker Field */
   testID?: string
   /** Callback called when a new date is selected */
@@ -41,6 +43,7 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
   minimumDate,
   maximumDate,
   isInvalid,
+  a11yErrorLabel,
   testID,
   onDateChange,
   onPress,
@@ -58,9 +61,14 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
     borderRadius: 6,
   }
 
+  const formattedDateText = date.toFormat('MMMM dd, yyyy')
+  const accessibilityLabel =
+    isInvalid && a11yErrorLabel ? `${label} ${formattedDateText} ${a11yErrorLabel}` : `${label} ${formattedDateText}`
+
   return (
     <Box>
-      <Pressable accessibilityRole="button" onPress={onPress} testID={testID}>
+      {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+      <Pressable accessibilityRole="button" accessibilityLabel={accessibilityLabel} onPress={onPress} testID={testID}>
         <Box
           p={theme.dimensions.smallMarginBetween}
           flexDirection="row"
@@ -72,13 +80,13 @@ const DatePickerField: FC<DatePickerFieldProps> = ({
               color={isInvalid ? 'error' : 'link'}
               textDecoration={isInvalid ? 'line-through' : 'none'}
               textDecorationColor={'error'}>
-              {date.toFormat('MMMM dd, yyyy')}
+              {formattedDateText}
             </TextView>
           </Box>
         </Box>
       </Pressable>
       {open ? (
-        <Box flex={1} py={theme.dimensions.smallMarginBetween}>
+        <Box py={theme.dimensions.smallMarginBetween}>
           <RNDatePicker
             style={datePickerStyle}
             date={getNativePickerDate(date)}

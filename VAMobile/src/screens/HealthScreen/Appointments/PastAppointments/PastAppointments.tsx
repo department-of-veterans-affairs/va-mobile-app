@@ -1,4 +1,4 @@
-import React, { RefObject, useMemo, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -48,6 +48,8 @@ function PastAppointments({
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const [page, setPage] = useState(1)
+  const [onApplyClicked, setOnApplyClicked] = useState(false)
+  const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()
 
   const datePickerRange = getDatePickerRange(dateRange)
 
@@ -74,25 +76,37 @@ function PastAppointments({
     [filteredAppointments, page, perPage],
   )
 
-  const handleDatePickerApply = (selectedDateRange: DatePickerRange) => {
-    const startDate = selectedDateRange.startDate.toISO()
-    const endDate = selectedDateRange.endDate.toISO()
-    if (startDate && endDate) {
-      const calculatedTimeFrame = getPastTimeFrame(selectedDateRange)
-      logAnalyticsEvent(Events.vama_appt_time_frame(calculatedTimeFrame))
-
-      const timeFrameToQuery =
-        calculatedTimeFrame === TimeFrameTypeConstants.PAST_ONE_MONTH
-          ? TimeFrameTypeConstants.PAST_THREE_MONTHS
-          : calculatedTimeFrame
-
-      setTimeFrame(timeFrameToQuery)
-      setDateRange({ startDate, endDate })
-      setPage(1)
+  useEffect(() => {
+    if (onApplyClicked) {
+      setOnApplyClicked(false)
     }
+  }, [onApplyClicked])
+
+  const handleDatePickerApply = (selectedDateRange: DatePickerRange, isValid: boolean) => {
+    if (isValid) {
+      const startDate = selectedDateRange.startDate.toISO()
+      const endDate = selectedDateRange.endDate.toISO()
+      if (startDate && endDate) {
+        const calculatedTimeFrame = getPastTimeFrame(selectedDateRange)
+        logAnalyticsEvent(Events.vama_appt_time_frame(calculatedTimeFrame))
+
+        const timeFrameToQuery =
+          calculatedTimeFrame === TimeFrameTypeConstants.PAST_ONE_MONTH
+            ? TimeFrameTypeConstants.PAST_THREE_MONTHS
+            : calculatedTimeFrame
+
+        setTimeFrame(timeFrameToQuery)
+        setDateRange({ startDate, endDate })
+        setPage(1)
+      }
+    } else {
+      setInvalidDateRange(selectedDateRange)
+    }
+    setOnApplyClicked(true)
   }
 
   const handleDatePickerReset = () => {
+    setInvalidDateRange(undefined)
     setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
     setDateRange(getPastAppointmentDateRange())
     setPage(1)
@@ -128,9 +142,20 @@ function PastAppointments({
 
   return (
     <Box>
+      {invalidDateRange && (
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <AlertWithHaptics
+            variant="error"
+            header={t('datePicker.error.header')}
+            description={t('datePicker.error.message')}
+            focusOnError={onApplyClicked}
+            scrollViewRef={scrollViewRef}
+          />
+        </Box>
+      )}
       <DatePicker
         labelKey={'pastAppointments.selectAPastDateRange'}
-        initialDateRange={datePickerRange}
+        initialDateRange={invalidDateRange || datePickerRange}
         minimumDate={DateTime.local().minus({ years: 2 })}
         maximumDate={DateTime.local()}
         onApply={handleDatePickerApply}
