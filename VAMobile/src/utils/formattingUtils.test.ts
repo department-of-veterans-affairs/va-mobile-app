@@ -1,4 +1,6 @@
-import { getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { DateTime } from 'luxon'
+
+import { formatDateMMMyyyy, formatDateRangeMMMyyyy, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 
 describe('formatting utils: getFormattedTimeForTimeZone', () => {
   const originalDate = '2025-05-28T12:00:00.000Z'
@@ -20,4 +22,30 @@ describe('formatting utils: getFormattedTimeForTimeZone', () => {
       expect(result).toBe(expected)
     })
   }
+})
+
+describe('formatting utils: formatDateMMMyyyy', () => {
+  it('formats January 15, 2025 as Jan 2025', () => {
+    const date = DateTime.fromISO('2025-01-15T12:00:00Z')
+    expect(formatDateMMMyyyy(date)).toBe('Jan 2025')
+  })
+
+  it('formats December 31, 2024 as Dec 2024', () => {
+    const date = DateTime.fromISO('2024-12-31T12:00:00Z')
+    expect(formatDateMMMyyyy(date)).toBe('Dec 2024')
+  })
+})
+
+describe('formatting utils: formatDateRangeMMMyyyy', () => {
+  it('formats a Jan 2025 to Feb 2025 range', () => {
+    const start = DateTime.fromISO('2025-01-15T12:00:00Z')
+    const end = DateTime.fromISO('2025-02-20T12:00:00Z')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Feb 2025')
+  })
+
+  it('formats a range within the same month', () => {
+    const start = DateTime.fromISO('2025-01-01T12:00:00Z')
+    const end = DateTime.fromISO('2025-01-31T12:00:00Z')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Jan 2025')
+  })
 })
