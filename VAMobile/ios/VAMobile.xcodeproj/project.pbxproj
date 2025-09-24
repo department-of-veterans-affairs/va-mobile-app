@@ -10,7 +10,6 @@
 		1101F1DD291F0F8D00366337 /* RNInAppUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */; };
 		1101F1DF291F0FB300366337 /* RNInAppUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
@@ -27,7 +26,7 @@
 		4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
 		4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */; };
 		4EF6FBFA2727104E009917AA /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EF6FBF92727104E009917AA /* Colors.xcassets */; };
-		7699B88040F8A987B510C191 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-VAMobile-VAMobileTests.a */; };
+		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
 		B27EF35E2CA1E2B900260C8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B27EF35D2CA1E2B800260C8D /* assets */; };
@@ -40,19 +39,8 @@
 		FE87E8D32BB20660008C3B11 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FE87E8D22BB20660008C3B11 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = VAMobile;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		063E6E51934F27E13811FC7D /* Pods-VAMobile.rc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.rc.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.rc.xcconfig"; sourceTree = "<group>"; };
 		1101F1DC291F0F8D00366337 /* RNInAppUpdate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNInAppUpdate.m; sourceTree = "<group>"; };
 		1101F1DE291F0FB300366337 /* RNInAppUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNInAppUpdate.swift; sourceTree = "<group>"; };
@@ -107,14 +95,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,13 +254,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00E356EC1AD99517003FC87E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,24 +310,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VAMobile/Pods-VAMobile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		1AF0D1EF2AA6E67CCFB050CC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AA351E4A0AC4AFF676B3FDBA /* [CP-User] [RNFB] Crashlytics Configuration */ = {
@@ -499,14 +454,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* VAMobile */;
-			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -805,28 +752,6 @@
 			};
 			name = QA;
 		};
-		4003BC31281784F5009619B9 /* QA */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3553357295992E19D8D2C691 /* Pods-VAMobile-VAMobileTests.qa.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 89M2S6FFNK;
-				INFOPLIST_FILE = VAMobileTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VAMobile.app/VAMobile";
-			};
-			name = QA;
-		};
 		40058F7B281776730070C1CE /* RC */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -970,28 +895,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = RC;
-		};
-		40058F7D281776730070C1CE /* RC */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 777E110798F2E81A4C795C5A /* Pods-VAMobile-VAMobileTests.rc.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 89M2S6FFNK;
-				INFOPLIST_FILE = VAMobileTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VAMobile.app/VAMobile";
 			};
 			name = RC;
 		};
