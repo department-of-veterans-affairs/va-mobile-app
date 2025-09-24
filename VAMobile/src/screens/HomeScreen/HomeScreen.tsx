@@ -17,8 +17,10 @@ import { DateTime } from 'luxon'
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDebts } from 'api/debts'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useMedicalCopays } from 'api/medicalCopays'
 import { useServiceHistory } from 'api/militaryService'
 import { usePayments } from 'api/payments'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
@@ -127,6 +129,14 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
+
+  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+
+  const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
+
+  const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+
+  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -416,16 +426,6 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'claims'}
                 />
               )}
-              {featureEnabled('overpayCopay') && (
-                <ActivityButton
-                  title={t('copays.title')}
-                  subText={t('copays.activityButton.subText', {
-                    amount: numberToUSDollars(0),
-                    count: 0,
-                  })}
-                  deepLink={'copays'}
-                />
-              )}
               {!!foldersQuery.data?.inboxUnreadCount && (
                 <ActivityButton
                   title={`${t('messages')}`}
@@ -433,12 +433,22 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {featureEnabled('overpayCopay') && (
+              {featureEnabled('overpayCopay') && showCopays && (
+                <ActivityButton
+                  title={t('copays.title')}
+                  subText={t('copays.activityButton.subText', {
+                    amount: numberToUSDollars(copaysSummary.amountDue),
+                    count: copaysSummary.count,
+                  })}
+                  deepLink={'copays'}
+                />
+              )}
+              {featureEnabled('overpayCopay') && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    amount: numberToUSDollars(0),
-                    count: 0,
+                    amount: numberToUSDollars(debtsSummary.amountDue),
+                    count: debtsSummary.count,
                   })}
                   deepLink={'debts'}
                 />
