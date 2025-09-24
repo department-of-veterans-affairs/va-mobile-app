@@ -309,8 +309,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
             )}
             <Box mr={8}>
               <Button
-                a11yLabel={'Apple Button'}
-                a11yHint={'Apple Button'}
+                a11yLabel={'Apple'}
+                a11yHint={'Apple'}
                 label={'Apple'}
                 onPress={() => {
                   navigateTo('FormsTab', { startFormImmediately: false })
@@ -319,8 +319,8 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
             </Box>
             <Box>
               <Button
-                a11yLabel={'Pear Button'}
-                a11yHint={'Pear Button'}
+                a11yLabel={'Pear'}
+                a11yHint={'Pear'}
                 label={'Pear'}
                 onPress={() => {
                   dispatch(setOpenFormImmediately(true))

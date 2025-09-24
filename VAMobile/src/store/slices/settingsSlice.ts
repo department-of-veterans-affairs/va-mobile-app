@@ -66,6 +66,7 @@ export const updateDisplayEmailConfirmationAlert =
 export const setOpenFormImmediately =
   (value: boolean): AppThunk =>
   async (dispatch) => {
+  console.log('changing', value)
     dispatch(dispatchOpenForm(value))
   }
 
