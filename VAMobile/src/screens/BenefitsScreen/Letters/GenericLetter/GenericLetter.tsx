@@ -74,7 +74,7 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
         </TextView>
         <Button
           onPress={onViewLetter}
-          label={t('letters.benefitService.viewLetter')}
+          label={t('letters.benefitService.viewLetter', { letterType: letterType })}
           testID="lettersBenefitServiceViewLetterID"
         />
       </TextArea>

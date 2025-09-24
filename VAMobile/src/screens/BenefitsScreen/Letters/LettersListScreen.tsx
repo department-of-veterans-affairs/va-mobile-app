@@ -107,7 +107,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
         })
       case LetterTypeConstants.certificateOfEligibility:
         return navigateTo('GenericLetter', {
-          header: letterName,
+          header: letterName + ' --- ' + letterType,
           description: t('letters.certificateOfEligibility.description'),
           letterType,
           screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
