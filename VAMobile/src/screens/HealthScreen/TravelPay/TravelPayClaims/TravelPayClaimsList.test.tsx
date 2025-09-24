@@ -1,16 +1,34 @@
 import React from 'react'
-import { ScrollView } from 'react-native-gesture-handler'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
-import TravelPayClaimsList, {
-  CLAIMS_PER_PAGE,
-} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
-import { context, render } from 'testUtils'
+import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
+import { render } from 'testUtils'
+import getEnv from 'utils/env'
 
-const mockSetPage = jest.fn()
+const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
+
+let mockLogAnalyticsEvent: jest.Mock
+jest.mock('utils/analytics', () => {
+  mockLogAnalyticsEvent = jest.fn()
+  const original = jest.requireActual('utils/analytics')
+  return {
+    ...original,
+    logAnalyticsEvent: mockLogAnalyticsEvent,
+  }
+})
+
+let mockNavigateTo: jest.Mock
+jest.mock('utils/hooks', () => {
+  mockNavigateTo = jest.fn()
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigateTo,
+  }
+})
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   meta: {
@@ -67,63 +85,113 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   ],
 }
 
-context('TravelPayClaimsList', () => {
-  it('renders the list of claims', () => {
-    render(
-      <TravelPayClaimsList
-        claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
-        isLoading={false}
-        scrollViewRef={React.createRef<ScrollView>()}
-        currentPage={1}
-        setPage={mockSetPage}
-      />,
-    )
+const buildManyClaims = (count: number): GetTravelPayClaimsResponse => {
+  const baseDate = new Date('2025-08-01T12:00:00.000Z').getTime()
+  const data = Array.from({ length: count }).map((_, i) => {
+    const id = `${i + 1}`.padStart(4, '0')
+    return {
+      id: id,
+      type: 'travelPayClaimSummary' as const,
+      attributes: {
+        id: id,
+        claimNumber: `claim-${id}`,
+        claimStatus: 'Saved',
+        appointmentDateTime: new Date(baseDate + i * 86400000).toISOString(),
+        facilityName: 'Facility',
+        createdOn: new Date(baseDate + (i + 1) * 86400000).toISOString(),
+        modifiedOn: new Date(baseDate + (i + 1) * 86400000).toISOString(),
+        totalCostRequested: 10,
+        reimbursementAmount: 5,
+      },
+    }
+  })
+  return {
+    meta: {
+      status: 200,
+      pageNumber: 1,
+      totalRecordCount: count,
+    },
+    data,
+  }
+}
 
+describe('TravelPayClaimsList', () => {
+  const initializeTestInstance = (props?: Partial<React.ComponentProps<typeof TravelPayClaimsList>>) => {
+    const defaultProps: React.ComponentProps<typeof TravelPayClaimsList> = {
+      claims: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data,
+      currentPage: 1,
+      // totalRecordCount: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.meta.totalRecordCount,
+      isLoading: false,
+      // setTimeFrame: jest.fn(),
+      onNext: jest.fn(),
+      onPrev: jest.fn(),
+    }
+    return render(<TravelPayClaimsList {...defaultProps} {...props} />)
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('renders list and items', () => {
+    initializeTestInstance()
+
+    expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
+    // Items are rendered with deterministic testIDs
     expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
+    // Results text shows 1 - 3 of (3)
+    expect(screen.getByText(/Showing 1 - 3 of \(3\) claims/)).toBeTruthy()
+
     expect(screen.queryByTestId(t('travelPay.statusList.loading'))).toBeFalsy()
   })
 
-  it('renders the loading indicator', () => {
-    render(
-      <TravelPayClaimsList
-        claims={MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data}
-        isLoading={true}
-        scrollViewRef={React.createRef<ScrollView>()}
-        currentPage={1}
-        setPage={mockSetPage}
-      />,
-    )
-
+  it('shows loading state', () => {
+    initializeTestInstance({ isLoading: true })
     expect(screen.getByText(t('travelPay.statusList.loading'))).toBeTruthy()
-    expect(screen.queryByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeFalsy()
   })
 
-  it('renders the pagination widget if there are enough items', async () => {
-    // Duplicate claims to make the list large enough to show the pagination widgets
-    const claims = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data
-    const duplicateAmount = CLAIMS_PER_PAGE + 1 - claims.length // 1 more than allowed on a page
-    const duplicatedClaims = [
-      ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data,
-      ...Array(duplicateAmount)
-        .fill(null)
-        .map(() => ({ ...claims[0] })),
-    ]
+  it('does not render pagination when total <= page size', () => {
+    initializeTestInstance()
+    expect(screen.queryByTestId('next-page')).toBeNull()
+    expect(screen.queryByTestId('previous-page')).toBeNull()
+  })
 
-    render(
-      <TravelPayClaimsList
-        claims={duplicatedClaims}
-        isLoading={false}
-        scrollViewRef={React.createRef<ScrollView>()}
-        setPage={mockSetPage}
-        currentPage={1}
-      />,
-    )
-    expect(screen.getByTestId('previous-page')).toBeTruthy()
+  it('renders pagination and navigates pages, calling callbacks', () => {
+    const many = buildManyClaims(12)
+    const onNext = jest.fn()
+    const onPrev = jest.fn()
+    initializeTestInstance({ claims: many.data, onNext, onPrev })
+
+    // Pagination should be visible (12 > 10)
     expect(screen.getByTestId('next-page')).toBeTruthy()
+    expect(screen.getByText(/Showing 1 - 10 of \(12\) claims/)).toBeTruthy()
 
     fireEvent.press(screen.getByTestId('next-page'))
-    expect(mockSetPage).toHaveBeenCalledTimes(1)
+    expect(onNext).toHaveBeenCalledWith(2)
+    expect(screen.getByText(/Showing 11 - 12 of \(12\) claims/)).toBeTruthy()
+
+    fireEvent.press(screen.getByTestId('previous-page'))
+    expect(onPrev).toHaveBeenCalledWith(1)
+    expect(screen.getByText(/Showing 1 - 10 of \(12\) claims/)).toBeTruthy()
+  })
+
+  it('navigates to Webview and logs analytics when an item is pressed', () => {
+    initializeTestInstance()
+    const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
+    fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
+
+    expect(mockLogAnalyticsEvent).toHaveBeenCalled()
+    expect(mockNavigateTo).toHaveBeenCalledWith(
+      'Webview',
+      expect.objectContaining({
+        url: `${LINK_URL_TRAVEL_PAY_WEB_DETAILS}${firstId}`,
+        displayTitle: t('travelPay.webview.claims.displayTitle'),
+        loadingMessage: t('travelPay.webview.claims.loading'),
+        useSSO: true,
+        backButtonTestID: 'webviewBack',
+      }),
+    )
   })
 })

@@ -3,7 +3,7 @@
     "meta": {
       "status": 200,
       "pageNumber": 1,
-      "totalRecordCount": 31
+      "totalRecordCount": 34
     },
     "data": [
       {
@@ -469,6 +469,51 @@
           "modifiedOn": "{{now - 45 minutes}}",
           "totalCostRequested": 50.0,
           "reimbursementAmount": 50.0
+        }
+      },
+      {
+        "id": "33d20686-b65b-40be-a597-e1dfad1e605a",
+        "type": "travelPayClaimSummary",
+        "attributes": {
+          "id": "33d20686-b65b-40be-a597-e1dfad1e605a",
+          "claimNumber": "7a650ebc-83f3-453e-9000-be2ed6c17208",
+          "claimStatus": "Closed",
+          "appointmentDateTime": "{{now - 95 days}}",
+          "facilityName": "Tomah VA Medical Center",
+          "createdOn": "{{now - 94 days}}",
+          "modifiedOn": "{{now - 94 days}}",
+          "totalCostRequested": 41.23,
+          "reimbursementAmount": 41.23
+        }
+      },
+      {
+        "id": "663869dc-baab-42c2-9945-a47a28378a78",
+        "type": "travelPayClaimSummary",
+        "attributes": {
+          "id": "663869dc-baab-42c2-9945-a47a28378a78",
+          "claimNumber": "e7555c45-7c64-4156-8619-2e5d1f34670e",
+          "claimStatus": "Closed",
+          "appointmentDateTime": "{{now - 301 days}}",
+          "facilityName": "Tomah VA Medical Center",
+          "createdOn": "{{now - 300 days}}",
+          "modifiedOn": "{{now - 300 days}}",
+          "totalCostRequested": 51.0,
+          "reimbursementAmount": 51.0
+        }
+      },
+      {
+        "id": "53bd7bc9-5ac4-41af-9f2d-4c1a7ce33b1d",
+        "type": "travelPayClaimSummary",
+        "attributes": {
+          "id": "53bd7bc9-5ac4-41af-9f2d-4c1a7ce33b1d",
+          "claimNumber": "5962acf5-c1df-47be-a2a9-9958b693d9b2",
+          "claimStatus": "Closed",
+          "appointmentDateTime": "{{now - 380 days}}",
+          "facilityName": "Tomah VA Medical Center",
+          "createdOn": "{{now - 370 days}}",
+          "modifiedOn": "{{now - 370 days}}",
+          "totalCostRequested": 42.22,
+          "reimbursementAmount": 42.22
         }
       }
     ]

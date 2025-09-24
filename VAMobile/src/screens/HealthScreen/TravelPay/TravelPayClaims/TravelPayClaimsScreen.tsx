@@ -1,16 +1,18 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { DateTime } from 'luxon'
-
 import { useTravelPayClaims } from 'api/travelPay'
+import { TravelPayClaimData } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, TextView } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsDatePicker'
 import TravelPayClaimsFilter, { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
@@ -18,6 +20,8 @@ import { useTheme } from 'utils/hooks'
 import { filteredClaims, sortedClaims } from 'utils/travelPay'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
+
+const emptyClaims: Array<TravelPayClaimData> = []
 
 function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -29,21 +33,22 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   }
   const [filter, setFilter] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState(SortOption.Recent)
-  const [page, setPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const startDate = DateTime.now().minus({ months: 3 }).toISO()
-  const endDate = DateTime.now().toISO()
+  const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+
   const {
     data: claimsPayload,
     isLoading,
     error,
     refetch,
-  } = useTravelPayClaims({
-    startDate,
-    endDate,
-  })
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useTravelPayClaims(timeFrame)
 
-  const claims = useMemo(() => claimsPayload?.data ?? [], [claimsPayload])
+  // Flatten all pages of data into a single array
+  const claims = claimsPayload?.pages?.flatMap((page) => page?.data ?? emptyClaims) ?? emptyClaims
 
   // Filter and sort the claims based on the selections
   const sortedFilteredClaims = useMemo(() => {
@@ -62,7 +67,9 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     })
   }
 
-  useEffect(() => setPage(1), [filter, sortBy])
+  const scrollToTop = () => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }
 
   return (
     <FeatureLandingTemplate
@@ -79,6 +86,14 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
         />
       ) : (
         <Box>
+          <TravelPayClaimsDatePicker
+            onTimeFrameChanged={(value: TimeFrameType) => {
+              setCurrentPage(1)
+              setTimeFrame(value)
+            }}
+            setTimeFrame={setTimeFrame}
+          />
+
           <Box mx={theme.dimensions.gutter} accessible={true}>
             <TextView
               mt={theme.dimensions.condensedMarginBetween}
@@ -96,12 +111,24 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
             sortBy={sortBy}
             setSortBy={setSortBy}
           />
+
           <TravelPayClaimsList
             claims={sortedFilteredClaims}
-            isLoading={isLoading}
-            scrollViewRef={scrollViewRef}
-            currentPage={page}
-            setPage={setPage}
+            isLoading={isLoading || isFetchingNextPage}
+            currentPage={currentPage}
+            onNext={(nextPage) => {
+              // If we need more data and we have more pages available, fetch it
+              const nextPageStart = nextPage * DEFAULT_PAGE_SIZE
+              if (nextPageStart >= claims.length && hasNextPage && fetchNextPage) {
+                fetchNextPage()
+              }
+              scrollToTop()
+              setCurrentPage(nextPage)
+            }}
+            onPrev={(prevPage) => {
+              scrollToTop()
+              setCurrentPage(prevPage)
+            }}
           />
         </Box>
       )}

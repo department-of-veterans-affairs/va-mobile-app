@@ -1,6 +1,5 @@
-import React, { Dispatch, RefObject, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
 
 import { DateTime } from 'luxon'
 
@@ -15,7 +14,9 @@ import {
   TextLine,
 } from 'components'
 import { Events } from 'constants/analytics'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -25,25 +26,23 @@ const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
-  isLoading: boolean
-  scrollViewRef: RefObject<ScrollView>
-  setPage: Dispatch<SetStateAction<number>>
   currentPage: number
+  isLoading: boolean
+  onNext?: (page: number) => void
+  onPrev?: (page: number) => void
 }
 
 export const CLAIMS_PER_PAGE = 10
 
-function TravelPayClaimsList({ claims, isLoading, scrollViewRef, setPage, currentPage }: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, currentPage, isLoading, onNext, onPrev }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
 
-  const { perPage, totalEntries } = {
-    perPage: CLAIMS_PER_PAGE,
-    totalEntries: claims.length || 0,
-  }
+  const perPage = DEFAULT_PAGE_SIZE
+  const totalEntries = claims.length
 
   useEffect(() => {
     const summaryList = claims?.slice((currentPage - 1) * perPage, currentPage * perPage)
@@ -91,7 +90,13 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef, setPage, curren
         textLines,
         a11yValue,
         onPress: () => goToClaimDetails(id),
-        testId: `claim_summary_${id}`,
+        a11yHintText: t('travelPay.statusList.viewDetails'),
+        // Due to weird implementation of the List component, we need to set the testID
+        // to the a11y value so that screen readers can read the a11y value correctly
+        testId: getTestIDFromTextLines(textLines),
+        // The actual testID for the item is passed in as detoxTestID even though it is
+        // not specifically for detox tests and can be used for unit tests
+        detoxTestID: `claim_summary_${id}`,
       })
     })
 
@@ -104,14 +109,14 @@ function TravelPayClaimsList({ claims, isLoading, scrollViewRef, setPage, curren
 
   const paginationProps: PaginationProps = {
     onNext: () => {
-      setPage(currentPage + 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      const nextPage = currentPage + 1
+      onNext?.(nextPage)
     },
     onPrev: () => {
-      setPage(currentPage - 1)
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+      const prevPage = currentPage - 1
+      onPrev?.(prevPage)
     },
-    totalEntries: totalEntries,
+    totalEntries,
     pageSize: perPage,
     page: currentPage,
   }
