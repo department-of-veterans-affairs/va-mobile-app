@@ -65,7 +65,7 @@ Figma contains a few important features that help teams work together:
 * You receive library updates automatically (a big advantage of using Figma)
 * You can see what everyone else is working on in the VA workspace
 * Developers can inspect any element on a page
-* You can [create a branch](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/figma-branching) of your file at any time
+* You can [create a branch](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Figma/Branching) of your file at any time
 
 ### Designers on Experience Teams
 Currently, designers on Experience Teams can only be added as Viewers in the **VA Mobile App's Figma account**. In order to use the Mobile App libraries in the **VA.gov Platform team's Figma account**, designers should follow the steps below.

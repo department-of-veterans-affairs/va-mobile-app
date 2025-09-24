@@ -61,7 +61,7 @@ The objective of this QA process is to document how we will verify that the soft
 
 ## Test strategy
 
-We are taking an integrated approach to testing - building QA activities into the agile development process so that testing takes place early and often as a key part of sprint operations. Identifying issues during development will minimize technical and functional debt and make for better product quality and more accurate progress reporting and delivery status. In addition, we will leverage automated testing tools in the development delivery chain to provide real time [unit](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/FrontEnd/Testing/UnitTesting), [UI](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/QA/QualityAssuranceProcess/Automation) and service reliability (_no documentation yet_) checks.
+We are taking an integrated approach to testing - building QA activities into the agile development process so that testing takes place early and often as a key part of sprint operations. Identifying issues during development will minimize technical and functional debt and make for better product quality and more accurate progress reporting and delivery status. In addition, we will leverage automated testing tools in the development delivery chain to provide real time [unit](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Testing), [UI](https://department-of-veterans-affairs.github.io/va-mobile-app/development/QA/QA%20process/UI%20automation%20testing/) and service reliability (_no documentation yet_) checks.
 
 ## Features to test
 
@@ -76,7 +76,7 @@ Testing will be performed throughout the development process based on the priori
 
 ## Who is responsible
 
-Software quality is a team effort. Developers will be responsible for [writing unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/Philosphy#all-the-tests). The product team will be responsible for user acceptance testing of the delivered features. Quality Assurance is responsible for writing automated UI tests and manually testing the product functionality and various user flows through the application.
+Software quality is a team effort. Developers will be responsible for [writing unit tests](https://department-of-veterans-affairs.github.io/va-mobile-app/development/FrontEnd/Testing). The product team will be responsible for user acceptance testing of the delivered features. Quality Assurance is responsible for writing automated UI tests and manually testing the product functionality and various user flows through the application.
 
 ## Testing methods
 
