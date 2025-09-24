@@ -80,7 +80,7 @@ describe('DatePicker', () => {
 
     fireEvent.press(screen.getByText('Apply'))
 
-    expect(mockOnApply).toHaveBeenCalledWith(initialDateRange)
+    expect(mockOnApply).toHaveBeenCalledWith(initialDateRange, true)
   })
 
   it('calls the onReset callback and closes the fields the reset button is pressed', () => {
