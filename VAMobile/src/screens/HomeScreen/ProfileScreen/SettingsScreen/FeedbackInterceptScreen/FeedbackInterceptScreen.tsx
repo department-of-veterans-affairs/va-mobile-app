@@ -4,11 +4,11 @@ import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, RadioButton, RadioButtonProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { RootNavStackParamList } from 'App'
 
-import { BorderColorVariant, Box, LargePanel, RadioGroup, RadioGroupProps, TextView } from 'components'
+import { BorderColorVariant, Box, LargePanel, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -42,42 +42,26 @@ function FeedbackInterceptScreen({ navigation, route }: FeedbackInterceptScreenP
     snackbar.show(t('inAppFeedback.snackbar.success'))
   }
 
-  const radioGroupProps: RadioGroupProps<string> = {
-    isRadioList: false,
-    onChange: setSatisfaction,
-    options: [
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.neither'),
-        value: t('inAppFeedback.overallSatisfaction.neither'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
-        value: t('inAppFeedback.overallSatisfaction.satisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
-      },
+  const radioButtonProps: RadioButtonProps = {
+    onSelectionChange: (s) => setSatisfaction(s as string),
+    items: [
+      t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
+      t('inAppFeedback.overallSatisfaction.dissatisfied'),
+      t('inAppFeedback.overallSatisfaction.neither'),
+      t('inAppFeedback.overallSatisfaction.satisfied'),
+      t('inAppFeedback.overallSatisfaction.verySatisfied'),
     ],
-    value: satisfaction,
+    selectedItem: satisfaction,
   }
 
   return (
     <LargePanel title={t('giveFeedback')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <Box>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.overallSatisfaction.header')}
           </TextView>
-          <RadioGroup {...radioGroupProps} />
+          <RadioButton {...radioButtonProps} />
         </Box>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <Button onPress={onSubmit} label={t('inAppFeedback.submitFeedback')} />
