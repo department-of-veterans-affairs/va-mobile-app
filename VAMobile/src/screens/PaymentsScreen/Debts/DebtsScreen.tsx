@@ -17,10 +17,10 @@ import {
   MultiTouchCard,
   Pagination,
   PaginationProps,
-  TextArea,
   TextView,
   TranslatablePhoneNumber,
 } from 'components'
+import EmptyStateMessage from 'components/EmptyStateMessage'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,7 +37,9 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { data: debtsData, isFetching: loadingDebts, error: debtsError } = useDebts()
+  const { data: debtsData, isFetching: loadingDebts, error: debtsError, summary } = useDebts()
+
+  const isEmpty = (summary?.count ?? 0) === 0
 
   const debts: DebtRecord[] = debtsData?.data || []
 
@@ -73,20 +75,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
 
   const debtDetailsClicked = (debt: DebtRecord) => {
     navigateTo('DebtDetails', { debt })
-  }
-
-  function noDebtsMessage() {
-    return (
-      <TextArea>
-        <Box accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold">{t('debts.none.header')}</TextView>
-        </Box>
-        <TextView my={theme.dimensions.standardMarginBetween} variant="MobileBody">
-          {t('debts.none.message')}
-        </TextView>
-        <ClickToCallPhoneNumber phone={t('8008270648')} displayedText={displayedTextPhoneNumber(t('8008270648'))} />
-      </TextArea>
-    )
   }
 
   function renderPagination() {
@@ -230,13 +218,13 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
         <LoadingComponent text={t('debts.loading')} />
       ) : debtsError ? (
         serviceErrorAlert()
-      ) : debts.length > 0 ? (
+      ) : isEmpty ? (
+        <EmptyStateMessage title={t('debts.empty.title')} body={t('debts.empty.body')} phone={t('8008270648')} />
+      ) : (
         <>
           {renderContent()}
           {renderPagination()}
         </>
-      ) : (
-        noDebtsMessage()
       )}
     </FeatureLandingTemplate>
   )
