@@ -5,7 +5,7 @@ name: '[Documentation] Test Build'
 on:
   pull_request:
     branches: [develop]
-    paths: 
+    paths:
       - VAMobile/src/components/**
       - VAMobile/documentation/**
       - VAMobile/src/utils/hooks.tsx
@@ -14,7 +14,6 @@ jobs:
   test-deploy:
     name: Test
     runs-on: ubuntu-latest
-    env:
     steps:
       - name: Generate token
         id: generate_token
