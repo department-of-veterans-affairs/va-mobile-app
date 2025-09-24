@@ -615,7 +615,6 @@
   "datePicker.error.header": "You selected an invalid date range",
   "datePicker.error.message": "The To date cannot be earlier than the From date. Please select a valid date range.",
   "datePicker.from": "From",
-  "datePicker.from.invalid": "Invalid because the from date must be before the to date.",
   "datePicker.to": "To",
   "datePicker.to.invalid": "Invalid because the to date must be after the from date.",
   "debts": "Debts",

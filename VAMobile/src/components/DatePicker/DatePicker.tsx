@@ -70,11 +70,22 @@ const DatePicker: FC<DatePickerProps> = ({
   })
   const [fromFieldOpen, setFromFieldOpen] = useState(false)
   const [toFieldOpen, setToFieldOpen] = useState(false)
-  const [fromFieldInvalid, setFromFieldInvalid] = useState(false)
   const [toFieldInvalid, setToFieldInvalid] = useState(false)
+
+  const validateDateRange = (dateRange: DatePickerRange) => {
+    if (dateRange.startDate > dateRange.endDate) {
+      setToFieldInvalid(true)
+      logAnalyticsEvent(Events.vama_appt_invalid_range)
+    } else {
+      setToFieldInvalid(false)
+    }
+  }
 
   useEffect(() => {
     setSelectedDateRange(initialDateRange)
+    validateDateRange(initialDateRange)
+    setFromFieldOpen(false)
+    setToFieldOpen(false)
   }, [initialDateRange])
 
   const handleDateChange = (e: DateChangeEvent, fieldName: string) => {
@@ -84,29 +95,17 @@ const DatePicker: FC<DatePickerProps> = ({
         ? DateTime.fromISO(date).toLocal().startOf('day')
         : DateTime.fromISO(date).toLocal().endOf('day')
 
-    const startDateInvalid = fieldName === 'startDate' && newDate > selectedDateRange.endDate
-    const endDateInvalid = fieldName === 'endDate' && newDate < selectedDateRange.startDate
-
-    if (startDateInvalid) {
-      setFromFieldInvalid(true)
-      logAnalyticsEvent(Events.vama_appt_invalid_range)
-    } else if (endDateInvalid) {
-      setToFieldInvalid(true)
-      logAnalyticsEvent(Events.vama_appt_invalid_range)
-    } else {
-      setFromFieldInvalid(false)
-      setToFieldInvalid(false)
+    const newDateRange = {
+      ...selectedDateRange,
+      [fieldName]: newDate,
     }
 
-    setSelectedDateRange((prevDatePickerRange) => ({
-      ...prevDatePickerRange,
-      [fieldName]: newDate,
-    }))
+    setSelectedDateRange(newDateRange)
+    validateDateRange(newDateRange)
   }
 
   const handleApply = () => {
-    const isValidDateRange = !fromFieldInvalid && !toFieldInvalid
-    onApply(selectedDateRange, isValidDateRange)
+    onApply(selectedDateRange, !toFieldInvalid)
     setFromFieldOpen(false)
     setToFieldOpen(false)
   }
@@ -115,7 +114,6 @@ const DatePicker: FC<DatePickerProps> = ({
     onReset()
     setFromFieldOpen(false)
     setToFieldOpen(false)
-    setFromFieldInvalid(false)
     setToFieldInvalid(false)
   }
 
@@ -133,9 +131,7 @@ const DatePicker: FC<DatePickerProps> = ({
       <Box {...datePickerContainerProps}>
         <DatePickerField
           open={fromFieldOpen}
-          isInvalid={fromFieldInvalid}
           label={t('datePicker.from')}
-          a11yErrorLabel={t('datePicker.from.invalid')}
           date={selectedDateRange.startDate}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
