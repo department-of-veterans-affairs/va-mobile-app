@@ -33,9 +33,6 @@ const requestRefills = async (
       ids: prescriptions.map((prescription) => prescription.id),
     }
   }
-  console.log('refilled', {
-    requestBody: JSON.stringify(requestBody),
-  })
   const response = await put<PrescriptionRefillData>(
     `/${API_VERSION}/health/rx/prescriptions/refill`,
     requestBody as unknown as Params,

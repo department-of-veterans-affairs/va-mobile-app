@@ -104,7 +104,6 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
 
   const onSubmitPressed = () => {
     const prescriptionList: PrescriptionsList = []
-    //TODO: change this to have the station number as well
     Object.values(selectedValues).forEach((isSelected, index) => {
       if (isSelected) {
         prescriptionList.push(refillable[index])

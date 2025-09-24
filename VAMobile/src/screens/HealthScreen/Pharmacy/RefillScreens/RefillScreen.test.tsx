@@ -3,6 +3,7 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { PrescriptionsGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { RefillScreen } from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillScreen'
@@ -76,7 +77,7 @@ context('RefillScreen', () => {
       last: '',
     },
   }
-  const initializeTestInstance = () => {
+  const initializeTestInstance = ({ useV1 = false } = {}) => {
     const props = mockNavProps(
       {},
       {
@@ -90,11 +91,20 @@ context('RefillScreen', () => {
         },
       },
     )
-    render(<RefillScreen {...props} />)
+    const queriesData = [
+      {
+        queryKey: authorizedServicesKeys.authorizedServices,
+        data: {
+          prescriptions: true,
+          medicationsOracleHealthEnabled: useV1,
+        },
+      },
+    ]
+    render(<RefillScreen {...props} />, { queriesData })
   }
 
   describe('when there are refillable prescriptions', () => {
-    it('should show prescription info and Request Refills button', async () => {
+    it('should show prescription info and Request Refills button - v0 API', async () => {
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -137,10 +147,49 @@ context('RefillScreen', () => {
         ).toBeTruthy(),
       )
     })
+
+    it('should show prescription info and Request Refills button - v1 API', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(mock)
+      initializeTestInstance({ useV1: true })
+      await waitFor(() =>
+        expect(
+          screen.getByLabelText(`${t('prescription.history.orderIdentifier', { idx: 1, total: 2 })}.`),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('header', { name: 'ALLOPURINOL 100MG TAB' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 6 9 1`)).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 1`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} September 21, 2021`)).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getAllByLabelText(`${a11yLabelVA(t('prescription.vaFacility'))} SLC10 TEST LAB`)).toBeTruthy(),
+      )
+
+      await waitFor(() =>
+        expect(
+          screen.getByLabelText(`${t('prescription.history.orderIdentifier', { idx: 2, total: 2 })}.`),
+        ).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByRole('header', { name: 'AMLODIPINE BESYLATE 10MG TAB' })).toBeTruthy())
+      await waitFor(() =>
+        expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} 3 6 3 6 7 1 1 A`)).toBeTruthy(),
+      )
+      await waitFor(() => expect(screen.getByLabelText(`${t('prescription.refillsLeft')} 6`)).toBeTruthy())
+      await waitFor(() => expect(screen.getByLabelText(`${t('fillDate')} May 15, 2022`)).toBeTruthy())
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
+        ).toBeTruthy(),
+      )
+    })
   })
 
   describe('if there are no refillable prescriptions', () => {
-    it('should show NoRefills component', async () => {
+    it('should show NoRefills component - v0 API', async () => {
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -152,10 +201,18 @@ context('RefillScreen', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy())
     })
+
+    it('should show NoRefills component - v1 API', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(emptyMock)
+      initializeTestInstance({ useV1: true })
+      await waitFor(() => expect(screen.getByRole('header', { name: t('prescriptions.noRefill.header') })).toBeTruthy())
+    })
   })
 
   describe('if no prescription is selected', () => {
-    it('should show alert for no prescription selected', async () => {
+    it('should show alert for no prescription selected - v0 API', async () => {
       const params = {
         'page[number]': '1',
         'page[size]': LARGE_PAGE_SIZE.toString(),
@@ -165,6 +222,19 @@ context('RefillScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', params)
         .mockResolvedValue(mock)
       initializeTestInstance()
+      await waitFor(() =>
+        fireEvent.press(
+          screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
+        ),
+      )
+      await waitFor(() => expect(screen.getByText(t('prescriptions.refill.pleaseSelect'))).toBeTruthy())
+    })
+
+    it('should show alert for no prescription selected - v1 API', async () => {
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', expect.anything())
+        .mockResolvedValue(mock)
+      initializeTestInstance({ useV1: true })
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('button', { name: t('prescriptions.refill.RequestRefillButtonTitle_plural') }),
