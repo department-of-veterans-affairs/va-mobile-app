@@ -131,11 +131,9 @@ export function HomeScreen({}: HomeScreenProps) {
   const personalInformationQuery = usePersonalInformation()
 
   const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
-
   const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-
   const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)

@@ -107,7 +107,13 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
 
-  const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+  const copaysSubText =
+    !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+      ? t('copays.activityButton.subText', {
+          amount: numberToUSDollars(copaysSummary.amountDue),
+          count: copaysSummary.count,
+        })
+      : undefined
 
   useEffect(() => {
     async function healthHelpScreenCheck() {
@@ -159,15 +165,8 @@ export function HealthScreen({}: HealthScreenProps) {
             testID="toTravelPayClaimsID"
           />
         )}
-        {featureEnabled('overpayCopay') && showCopays && (
-          <LargeNavButton
-            title={t('copays.title')}
-            onPress={() => navigateTo('Copays')}
-            subText={t('copays.activityButton.subText', {
-              amount: numberToUSDollars(copaysSummary.amountDue),
-              count: copaysSummary.count,
-            })}
-          />
+        {featureEnabled('overpayCopay') && (
+          <LargeNavButton title={t('copays.title')} onPress={() => navigateTo('Copays')} subText={copaysSubText} />
         )}
         <LargeNavButton
           title={t('secureMessaging.title')}
