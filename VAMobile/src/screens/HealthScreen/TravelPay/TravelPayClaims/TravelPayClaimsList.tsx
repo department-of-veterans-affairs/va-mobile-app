@@ -4,15 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 
 import { TravelPayClaimData } from 'api/types'
-import {
-  Box,
-  DefaultList,
-  DefaultListItemObj,
-  LoadingComponent,
-  Pagination,
-  PaginationProps,
-  TextLine,
-} from 'components'
+import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -27,14 +19,13 @@ const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
   currentPage: number
-  isLoading: boolean
   onNext?: (page: number) => void
   onPrev?: (page: number) => void
 }
 
 export const CLAIMS_PER_PAGE = 10
 
-function TravelPayClaimsList({ claims, currentPage, isLoading, onNext, onPrev }: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -103,10 +94,6 @@ function TravelPayClaimsList({ claims, currentPage, isLoading, onNext, onPrev }:
     return listItems
   }
 
-  if (isLoading) {
-    return <LoadingComponent text={t('travelPay.statusList.loading')} />
-  }
-
   const paginationProps: PaginationProps = {
     onNext: () => {
       const nextPage = currentPage + 1
@@ -129,7 +116,7 @@ function TravelPayClaimsList({ claims, currentPage, isLoading, onNext, onPrev }:
         mt={theme.dimensions.paginationTopPadding}
         mb={theme.dimensions.contentMarginBottom}
         mx={theme.dimensions.gutter}>
-        {!isLoading && <Pagination {...paginationProps} />}
+        <Pagination {...paginationProps} />
       </Box>
     </Box>
   )

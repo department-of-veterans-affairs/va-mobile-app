@@ -120,9 +120,6 @@ describe('TravelPayClaimsList', () => {
     const defaultProps: React.ComponentProps<typeof TravelPayClaimsList> = {
       claims: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data,
       currentPage: 1,
-      // totalRecordCount: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.meta.totalRecordCount,
-      isLoading: false,
-      // setTimeFrame: jest.fn(),
       onNext: jest.fn(),
       onPrev: jest.fn(),
     }
@@ -141,15 +138,8 @@ describe('TravelPayClaimsList', () => {
     expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
     expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
-    // Results text shows 1 - 3 of (3)
-    expect(screen.getByText(/Showing 1 - 3 of \(3\) claims/)).toBeTruthy()
 
     expect(screen.queryByTestId(t('travelPay.statusList.loading'))).toBeFalsy()
-  })
-
-  it('shows loading state', () => {
-    initializeTestInstance({ isLoading: true })
-    expect(screen.getByText(t('travelPay.statusList.loading'))).toBeTruthy()
   })
 
   it('does not render pagination when total <= page size', () => {
@@ -158,23 +148,27 @@ describe('TravelPayClaimsList', () => {
     expect(screen.queryByTestId('previous-page')).toBeNull()
   })
 
-  it('renders pagination and navigates pages, calling callbacks', () => {
+  it('renders pagination and goes to the next page', () => {
     const many = buildManyClaims(12)
     const onNext = jest.fn()
     const onPrev = jest.fn()
     initializeTestInstance({ claims: many.data, onNext, onPrev })
 
     // Pagination should be visible (12 > 10)
-    expect(screen.getByTestId('next-page')).toBeTruthy()
-    expect(screen.getByText(/Showing 1 - 10 of \(12\) claims/)).toBeTruthy()
-
+    expect(screen.getByText('1 to 10 of 12')).toBeTruthy()
     fireEvent.press(screen.getByTestId('next-page'))
     expect(onNext).toHaveBeenCalledWith(2)
-    expect(screen.getByText(/Showing 11 - 12 of \(12\) claims/)).toBeTruthy()
+  })
 
+  it('renders pagination and returns to the previous page', () => {
+    const many = buildManyClaims(12)
+    const onNext = jest.fn()
+    const onPrev = jest.fn()
+    initializeTestInstance({ claims: many.data, currentPage: 2, onNext, onPrev })
+
+    expect(screen.getByText('11 to 12 of 12')).toBeTruthy()
     fireEvent.press(screen.getByTestId('previous-page'))
     expect(onPrev).toHaveBeenCalledWith(1)
-    expect(screen.getByText(/Showing 1 - 10 of \(12\) claims/)).toBeTruthy()
   })
 
   it('navigates to Webview and logs analytics when an item is pressed', () => {

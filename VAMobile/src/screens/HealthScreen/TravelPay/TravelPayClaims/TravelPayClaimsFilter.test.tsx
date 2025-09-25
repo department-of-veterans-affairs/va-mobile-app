@@ -60,10 +60,11 @@ context('TravelPayClaimsFilter', () => {
     render(
       <TravelPayClaimsFilter
         claims={[]}
+        totalClaims={0}
         filter={new Set()}
-        setFilter={jest.fn()}
+        onFilterChanged={jest.fn()}
         sortBy={SortOption.Recent}
-        setSortBy={jest.fn()}
+        onSortByChanged={jest.fn()}
       />,
     )
 
@@ -75,10 +76,11 @@ context('TravelPayClaimsFilter', () => {
     render(
       <TravelPayClaimsFilter
         claims={claims}
+        totalClaims={claims.length}
         filter={new Set()}
-        setFilter={jest.fn()}
+        onFilterChanged={jest.fn()}
         sortBy={SortOption.Recent}
-        setSortBy={jest.fn()}
+        onSortByChanged={jest.fn()}
       />,
     )
 

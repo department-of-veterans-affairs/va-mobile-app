@@ -9,8 +9,8 @@ import TravelPayClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPay
 import { context, render } from 'testUtils'
 import { FILTER_KEY_ALL } from 'utils/travelPay'
 
-const mockSetCurrentFilter = jest.fn()
-const mockSetCurrentSortBy = jest.fn()
+const mockOnFilterChanged = jest.fn()
+const mockOnSortByChanged = jest.fn()
 
 const FILTER_OPTIONS: Array<CheckboxOption> = [
   { optionLabelKey: 'Option 1', value: 'option_1' },
@@ -23,8 +23,8 @@ context('TravelPayClaimsFilterModal', () => {
   const initialSortBy = SortOption.Recent
 
   beforeEach(() => {
-    mockSetCurrentFilter.mockClear()
-    mockSetCurrentSortBy.mockClear()
+    mockOnFilterChanged.mockClear()
+    mockOnSortByChanged.mockClear()
   })
 
   const initializeTestInstance = (options = FILTER_OPTIONS) => {
@@ -33,9 +33,9 @@ context('TravelPayClaimsFilterModal', () => {
         totalClaims={4}
         options={options}
         currentFilter={initialFilter}
-        setCurrentFilter={mockSetCurrentFilter}
+        onFilterChanged={mockOnFilterChanged}
         currentSortBy={initialSortBy}
-        setCurrentSortBy={mockSetCurrentSortBy}
+        onSortByChanged={mockOnSortByChanged}
       />,
     )
   }
@@ -73,8 +73,8 @@ context('TravelPayClaimsFilterModal', () => {
     await waitFor(() => expect(screen.getByTestId('filterButtonApplyTestID')).toBeTruthy())
     fireEvent.press(screen.getByTestId('filterButtonApplyTestID'))
 
-    expect(mockSetCurrentFilter).toHaveBeenCalled()
-    expect(mockSetCurrentSortBy).toHaveBeenCalled()
+    expect(mockOnFilterChanged).toHaveBeenCalled()
+    expect(mockOnSortByChanged).toHaveBeenCalled()
   })
 
   it('hides the modal when cancel is pressed', async () => {

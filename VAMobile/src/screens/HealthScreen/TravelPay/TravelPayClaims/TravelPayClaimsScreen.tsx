@@ -6,14 +6,18 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTravelPayClaims } from 'api/travelPay'
 import { TravelPayClaimData } from 'api/types'
-import { Box, ErrorComponent, FeatureLandingTemplate, TextView } from 'components'
+import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import NoTravelClaimsFound from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
 import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsDatePicker'
-import TravelPayClaimsFilter, { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import TravelPayClaimsFilter, {
+  SortOption,
+  SortOptionType,
+} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { ScreenIDTypesConstants } from 'store/api'
 import { useTheme } from 'utils/hooks'
@@ -49,6 +53,8 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
 
   // Flatten all pages of data into a single array
   const claims = claimsPayload?.pages?.flatMap((page) => page?.data ?? emptyClaims) ?? emptyClaims
+  const totalClaims = claimsPayload?.pages?.[0]?.meta?.totalRecordCount ?? 0
+  const loading = isLoading || isFetchingNextPage
 
   // Filter and sort the claims based on the selections
   const sortedFilteredClaims = useMemo(() => {
@@ -71,6 +77,36 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
   }
 
+  const onTimeFrameChanged = (value: TimeFrameType) => {
+    setCurrentPage(1)
+    setTimeFrame(value)
+  }
+
+  const onFilterChanged = (value: Set<string>) => {
+    setFilter(value)
+    setCurrentPage(1)
+  }
+
+  const onSortByChanged = (value: SortOptionType) => {
+    setSortBy(value)
+    setCurrentPage(1)
+  }
+
+  const onNextPage = (nextPage: number) => {
+    // If we need more data and we have more pages available, fetch it
+    const nextPageStart = nextPage * DEFAULT_PAGE_SIZE
+    if (nextPageStart >= claims.length && hasNextPage && fetchNextPage) {
+      fetchNextPage()
+    }
+    scrollToTop()
+    setCurrentPage(nextPage)
+  }
+
+  const onPrevPage = (prevPage: number) => {
+    scrollToTop()
+    setCurrentPage(prevPage)
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -78,58 +114,50 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
+      {/* Error */}
       {error ? (
         <ErrorComponent
           onTryAgain={refetch}
           screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}
           error={error}
         />
+      ) : loading ? (
+        <LoadingComponent text={t('travelPay.statusList.loading')} />
       ) : (
         <Box>
-          <TravelPayClaimsDatePicker
-            onTimeFrameChanged={(value: TimeFrameType) => {
-              setCurrentPage(1)
-              setTimeFrame(value)
-            }}
-            setTimeFrame={setTimeFrame}
-          />
+          <TravelPayClaimsDatePicker timeFrame={timeFrame} onTimeFrameChanged={onTimeFrameChanged} />
 
-          <Box mx={theme.dimensions.gutter} accessible={true}>
-            <TextView
-              mt={theme.dimensions.condensedMarginBetween}
-              mb={theme.dimensions.condensedMarginBetween}
-              accessibilityRole="header"
-              variant={'MobileBodyBold'}>
-              {listTitle()}
-            </TextView>
-          </Box>
+          {totalClaims === 0 ? (
+            <NoTravelClaimsFound />
+          ) : (
+            <>
+              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+                <TextView
+                  mx={2}
+                  mb={theme.dimensions.condensedMarginBetween}
+                  accessibilityRole="header"
+                  variant={'MobileBodyBold'}>
+                  {listTitle()}
+                </TextView>
+              </Box>
 
-          <TravelPayClaimsFilter
-            claims={claims}
-            filter={filter}
-            setFilter={setFilter}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-          />
+              <TravelPayClaimsFilter
+                claims={claims}
+                totalClaims={totalClaims}
+                filter={filter}
+                onFilterChanged={onFilterChanged}
+                sortBy={sortBy}
+                onSortByChanged={onSortByChanged}
+              />
 
-          <TravelPayClaimsList
-            claims={sortedFilteredClaims}
-            isLoading={isLoading || isFetchingNextPage}
-            currentPage={currentPage}
-            onNext={(nextPage) => {
-              // If we need more data and we have more pages available, fetch it
-              const nextPageStart = nextPage * DEFAULT_PAGE_SIZE
-              if (nextPageStart >= claims.length && hasNextPage && fetchNextPage) {
-                fetchNextPage()
-              }
-              scrollToTop()
-              setCurrentPage(nextPage)
-            }}
-            onPrev={(prevPage) => {
-              scrollToTop()
-              setCurrentPage(prevPage)
-            }}
-          />
+              <TravelPayClaimsList
+                claims={sortedFilteredClaims}
+                currentPage={currentPage}
+                onNext={onNextPage}
+                onPrev={onPrevPage}
+              />
+            </>
+          )}
         </Box>
       )}
     </FeatureLandingTemplate>

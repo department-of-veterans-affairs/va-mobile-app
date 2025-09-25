@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -19,31 +19,32 @@ type TravelPayClaimsFilterModalProps = {
   totalClaims: number
   options: Array<CheckboxOption>
   currentFilter: Set<string>
-  setCurrentFilter: Dispatch<SetStateAction<Set<string>>>
+  onFilterChanged: (value: Set<string>) => void
   currentSortBy: SortOptionType
-  setCurrentSortBy: Dispatch<SetStateAction<SortOptionType>>
+  onSortByChanged: (value: SortOptionType) => void
 }
 
 const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   totalClaims,
   options,
   currentFilter,
-  setCurrentFilter,
+  onFilterChanged,
   currentSortBy,
-  setCurrentSortBy,
+  onSortByChanged,
 }) => {
+  const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const insets = useSafeAreaInsets()
+  const ref = useRef(null)
+
   const [modalVisible, setModalVisible] = useState(false)
   const [showScrollView, setShowScrollView] = useState(false)
 
   const uniqueOptions = useMemo(() => new Set(options.map((option) => option.value)), [options])
   const [selectedFilter, setSelectedFilter, toggleFilter] = useFilterToggle(uniqueOptions, currentFilter)
-
   const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy)
 
-  const theme = useTheme()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  const insets = useSafeAreaInsets()
-  const ref = useRef(null)
+  useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
 
   const sortOptions = [
     {
@@ -82,8 +83,8 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
 
   const onApplyPressed = () => {
     setModalVisible(false)
-    setCurrentFilter(selectedFilter)
-    setCurrentSortBy(selectedSortBy)
+    onFilterChanged(selectedFilter)
+    onSortByChanged(selectedSortBy)
     setAccessibilityFocus(ref)
   }
 

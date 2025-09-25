@@ -8,11 +8,11 @@ import { getPickerOptions } from 'utils/dateUtils'
 import { useTheme } from 'utils/hooks'
 
 type TravelPayClaimsDatePickerProps = {
-  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
+  timeFrame: TimeFrameType
   onTimeFrameChanged: (value: TimeFrameType) => void
 }
 
-function TravelPayClaimsDatePicker({ onTimeFrameChanged }: TravelPayClaimsDatePickerProps) {
+function TravelPayClaimsDatePicker({ timeFrame, onTimeFrameChanged }: TravelPayClaimsDatePickerProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -25,7 +25,9 @@ function TravelPayClaimsDatePicker({ onTimeFrameChanged }: TravelPayClaimsDatePi
     testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
   }))
 
-  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+  const [datePickerOption, setDatePickerOption] = useState(
+    pickerOptions.find((option) => option.value === timeFrame) ?? pickerOptions[0],
+  )
 
   return (
     <Box mx={theme.dimensions.gutter} accessible={true}>

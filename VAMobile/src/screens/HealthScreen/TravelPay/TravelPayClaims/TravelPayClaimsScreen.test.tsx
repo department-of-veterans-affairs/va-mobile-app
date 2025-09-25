@@ -130,6 +130,12 @@ context('TravelPayClaims', () => {
     expect(screen.getByLabelText(t('travelPay.statusList.title'))).toBeTruthy()
   })
 
+  it('should show the date range picker and filter', () => {
+    initializeTestInstance()
+    expect(screen.getByText(t('travelPay.statusList.selectADateRange'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.statusList.filterAndSort'))).toBeTruthy()
+  })
+
   it('shows the list of claims', async () => {
     initializeTestInstance()
 
@@ -145,6 +151,27 @@ context('TravelPayClaims', () => {
 
     expect(screen.getByTestId('travelPayClaimsTestID')).toBeTruthy()
     expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
+  })
+
+  it('should show the loading component', async () => {
+    mockUseTravelPayClaims.mockImplementation(() => ({
+      data: {
+        pages: [],
+      },
+      isFetchingNextPage: false,
+      hasNextPage: false,
+      isFetching: false,
+      isLoading: true,
+      error: null,
+      refetch: jest.fn(),
+      fetchNextPage: jest.fn(),
+    }))
+    initializeTestInstance()
+
+    expect(screen.getByText(t('travelPay.statusList.loading'))).toBeTruthy()
+    expect(screen.queryByTestId('travelPayClaimsListTestId')).toBeNull()
+    expect(screen.queryByText(t('travelPay.statusList.selectADateRange'))).toBeNull()
+    expect(screen.queryByText(t('travelPay.statusList.filterAndSort'))).toBeNull()
   })
 
   describe('when an api error occurs', () => {

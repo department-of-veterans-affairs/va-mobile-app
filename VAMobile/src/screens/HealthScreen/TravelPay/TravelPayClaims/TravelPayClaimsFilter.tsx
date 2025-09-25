@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimData } from 'api/types'
@@ -10,10 +10,11 @@ import { useTheme } from 'utils/hooks'
 
 type TravelPayClaimsFilterProps = {
   claims: Array<TravelPayClaimData>
+  totalClaims: number
   filter: Set<string>
-  setFilter: Dispatch<SetStateAction<Set<string>>>
+  onFilterChanged: (value: Set<string>) => void
   sortBy: SortOptionType
-  setSortBy: Dispatch<SetStateAction<SortOptionType>>
+  onSortByChanged: (value: SortOptionType) => void
 }
 
 export type SortOptionType = 'recent' | 'oldest'
@@ -26,7 +27,14 @@ export const SortOption: {
   Oldest: 'oldest',
 }
 
-function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSortBy }: TravelPayClaimsFilterProps) {
+function TravelPayClaimsFilter({
+  claims = [],
+  totalClaims,
+  filter,
+  onFilterChanged,
+  sortBy,
+  onSortByChanged,
+}: TravelPayClaimsFilterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -40,7 +48,7 @@ function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSort
     mb: theme.dimensions.standardMarginBetween,
   }
 
-  const onClearFiltersPress = () => setFilter(new Set())
+  const onClearFiltersPress = () => onFilterChanged(new Set())
 
   const filterOptions = useMemo(() => {
     // Allow filtering by any of the statuses that appear in the list
@@ -68,12 +76,12 @@ function TravelPayClaimsFilter({ claims = [], filter, setFilter, sortBy, setSort
     <Box {...filterContainerProps}>
       <Box mr={8} mb={10}>
         <TravelClaimsFilterModal
-          totalClaims={claims.length}
+          totalClaims={totalClaims}
           options={filterOptions}
           currentFilter={filter}
-          setCurrentFilter={setFilter}
+          onFilterChanged={onFilterChanged}
           currentSortBy={sortBy}
-          setCurrentSortBy={setSortBy}
+          onSortByChanged={onSortByChanged}
         />
       </Box>
       <TextView
