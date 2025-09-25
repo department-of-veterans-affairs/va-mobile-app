@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { act, fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
@@ -185,6 +185,25 @@ context('TravelPayClaims', () => {
     expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
   })
 
+  it('should apply the selected date range to the list of claims', () => {
+    initializeTestInstance()
+
+    // Defaults to past 3 months, so the last one shouldn't be there
+    expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
+    expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
+    expect(screen.queryByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeFalsy()
+
+    // Bring up the date picker and select the last year option
+    fireEvent.press(screen.getByTestId('getDateRangeTestID'))
+    fireEvent.press(screen.getByTestId('pastAllLastYearTestID'))
+    fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
+
+    // Check the claim list is accurate for the date selection
+    expect(screen.queryByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeFalsy()
+    expect(screen.queryByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeFalsy()
+    expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
+  })
+
   it('should show the loading component', async () => {
     mockUseTravelPayClaims.mockImplementation(() => ({
       data: {
@@ -204,34 +223,6 @@ context('TravelPayClaims', () => {
     expect(screen.queryByTestId('travelPayClaimsListTestId')).toBeNull()
     expect(screen.queryByText(t('travelPay.statusList.selectADateRange'))).toBeNull()
     expect(screen.queryByText(t('travelPay.statusList.filterAndSort'))).toBeNull()
-  })
-
-  it('should apply the selected date range to the list of claims', async () => {
-    initializeTestInstance()
-
-    // Defaults to past 3 months, so the last one shouldn't be there
-    expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
-    expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
-    expect(screen.queryByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeFalsy()
-
-    // Bring up the date picker and select the last year option
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('getDateRangeTestID'))
-    })
-    await waitFor(() => {
-      expect(screen.getByTestId('pastAllLastYearTestID')).toBeTruthy()
-    })
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('pastAllLastYearTestID'))
-    })
-    await act(async () => {
-      fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
-    })
-
-    // Check the claim list is accurate for the date selection
-    expect(screen.queryByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeFalsy()
-    expect(screen.queryByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeFalsy()
-    expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
   })
 
   describe('when an api error occurs', () => {

@@ -114,7 +114,6 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
-      {/* Error */}
       {error ? (
         <ErrorComponent
           onTryAgain={refetch}
