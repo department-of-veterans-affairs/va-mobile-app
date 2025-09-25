@@ -818,13 +818,18 @@
           "isRefillable": false,
           "isTrackable": false,
           "instructions": "TAKE ONE TABLET BY MOUTH DAILY",
-          "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "VA",
-          "ndcNumber": "12345",
-          "prescribedDate": "2022-07-25T04:00:00.000Z",
-          "tracking_number": "123455",
-          "shipper": "UPS",
-          "trackingInfo": {}
+          "tracking": [
+            {
+              "prescriptionName": "ACETAMINOPHEN 325MG TAB",
+              "prescriptionNumber": "2720334",
+              "ndcNumber": "00013264681",
+              "prescriptionId": 21142623,
+              "trackingNumber": "77298027203980000000398",
+              "shippedDate": "2022-10-15T00:00:00.000Z",
+              "deliveryService": "UPS",
+              "otherPrescriptions": []
+            }
+          ]
         }
       },
       {
@@ -846,13 +851,7 @@
           "isRefillable": true,
           "isTrackable": false,
           "instructions": "TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS",
-          "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "VA",
-          "trackingInfo": {},
-          "ndcNumber": "12345",
-          "prescribedDate": "2022-07-25T04:00:00.000Z",
-          "tracking_number": "123455",
-          "shipper": "UPS"
+          "trackingInfo": []
         }
       },
       {
@@ -874,13 +873,7 @@
           "isRefillable": true,
           "isTrackable": false,
           "instructions": "TAKE 5ML WEEKLY FOR 30 DAYS",
-          "dataSourceSystem": "oracle_health",
-          "prescriptionSource": "VA",
-          "trackingInfo": {},
-          "ndcNumber": "12345",
-          "prescribedDate": "2022-07-25T04:00:00.000Z",
-          "tracking_number": "123455",
-          "shipper": "UPS"
+          "trackingInfo": []
         }
       }
     ],

@@ -83,14 +83,7 @@ export type PrescriptionAttributeData = {
   instructions: string | null
   dispensedDate: string | null
   stationNumber: string
-  // Additional fields from v1 API
-  dataSourceSystem?: string
-  prescriptionSource?: string
-  ndcNumber?: string
-  prescribedDate?: string
-  tracking_number?: string
-  shipper?: string
-  trackingInfo?: object | null
+  tracking?: Array<object> | null
 }
 
 export type PrescriptionsList = Array<PrescriptionData>
@@ -151,10 +144,6 @@ export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: Prescr
 export type SingleRefillRequest = {
   stationNumber: string
   id: string
-}
-
-export type RefillRequestParameters = {
-  ids: Array<SingleRefillRequest>
 }
 
 export type PrescriptionTrackingInfoOtherItem = {

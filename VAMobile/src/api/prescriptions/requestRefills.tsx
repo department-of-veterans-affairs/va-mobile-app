@@ -2,15 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { prescriptionKeys } from 'api/prescriptions/queryKeys'
-import { PrescriptionRefillData, PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
+import { PrescriptionRefillData, PrescriptionsList, RefillRequestSummaryItems, SingleRefillRequest } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { Params, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { waygateEnabled } from 'utils/waygateConfig'
-
-// Adjust the import path if needed
 
 /**
  * Requests refills for a users prescriptions
@@ -22,7 +20,7 @@ const requestRefills = async (
   let results: RefillRequestSummaryItems = []
 
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  let requestBody: { ids: string[] } | Array<{ id: string; stationNumber: string }>
+  let requestBody: { ids: string[] } | Array<SingleRefillRequest>
 
   if (useV1) {
     // v1 API expects SingleRefillRequest[]
@@ -57,13 +55,8 @@ export const useRequestRefills = () => {
   const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
   const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
 
-  console.log('in prescription hooks', {
-    oracleMedsEnabled,
-    medicationsOracleHealthEnabled,
-    shouldUseV1,
-  })
-
   const registerReviewEvent = useReviewEvent(false, 'refillRequest')
+
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (prescriptions: PrescriptionsList) => requestRefills(prescriptions, shouldUseV1),

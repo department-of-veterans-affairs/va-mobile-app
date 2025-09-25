@@ -10,8 +10,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
 import { waygateEnabled } from 'utils/waygateConfig'
 
-// Adjust the import path if needed
-
 /**
  * Fetch user prescriptions
  */
@@ -22,7 +20,6 @@ const getPrescriptions = ({ useV1 }: { useV1: boolean | undefined }): Promise<Pr
     sort: 'refill_status', // Parameters are snake case for the back end
   }
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  console.debug('** Prescriptions', { API_VERSION })
   return get<PrescriptionsGetData>(`/${API_VERSION}/health/rx/prescriptions`, params)
 }
 
@@ -35,9 +32,6 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
   const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-  console.log('in prescription hooks', {
-    oracleMedsEnabled,
-  })
 
   const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
 
