@@ -20,10 +20,7 @@ function TravelPayClaimsDatePicker({ timeFrame, onTimeFrameChanged }: TravelPayC
     dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
     allOfTKey: 'travelPay.statusList.allOf',
     pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
-  }).map((option) => ({
-    ...option,
-    testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
-  }))
+  })
 
   const [datePickerOption, setDatePickerOption] = useState(
     pickerOptions.find((option) => option.value === timeFrame) ?? pickerOptions[0],
@@ -43,6 +40,7 @@ function TravelPayClaimsDatePicker({ timeFrame, onTimeFrameChanged }: TravelPayC
         pickerOptions={pickerOptions}
         labelKey={'travelPay.statusList.selectADateRange'}
         testID="getDateRangeTestID"
+        confirmTestID="confirmDateRangeTestId"
       />
     </Box>
   )
