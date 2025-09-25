@@ -28,6 +28,10 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const { remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
 
   useEffect(() => {
+    console.log('Setting ready for offline')
+    console.log('remoteConfigActivated ' + remoteConfigActivated)
+    console.log('offlineModeFeatureEnabled ' + offlineModeFeatureEnabled)
+    console.log('usesBiometrics ' + usesBiometrics)
     setReadyForOffline(remoteConfigActivated && offlineModeFeatureEnabled && usesBiometrics)
   }, [remoteConfigActivated, offlineModeFeatureEnabled, usesBiometrics])
 
@@ -65,8 +69,6 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       // Using rnc net info create event listener for network connection status
       onlineManager.setEventListener((setOnline) => {
         return NetInfo.addEventListener((state) => {
-          console.log('---- in NetInfo.addEventListener to set state - feature flag is')
-          console.log(featureEnabled('offlineMode'))
           if (featureEnabled('offlineMode')) {
             setOnline(!!state.isConnected)
           }
