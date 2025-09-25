@@ -3,19 +3,19 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { TranslatablePhoneNumber } from 'components'
+import PhoneNumberComponent from 'components/PhoneNumberComponent'
 import { context, render } from 'testUtils'
 
-context('TranslatablePhoneNumber', () => {
+context('PhoneNumberComponent', () => {
   it('renders phone number and handles click for inline variant', () => {
-    render(<TranslatablePhoneNumber variant="inline">{['123-456-7890']}</TranslatablePhoneNumber>)
+    render(<PhoneNumberComponent variant="inline">{['123-456-7890']}</PhoneNumberComponent>)
     const phoneNumber = screen.getByText('123-456-7890')
     fireEvent.press(phoneNumber)
     expect(Linking.openURL).toBeCalledWith('tel:1234567890')
   })
 
   it('renders phone number and handles clicks for standalone variant with TTY', () => {
-    render(<TranslatablePhoneNumber variant="standalone">{['123-456-7890']}</TranslatablePhoneNumber>)
+    render(<PhoneNumberComponent variant="standalone">{['123-456-7890']}</PhoneNumberComponent>)
     const phoneNumber = screen.getByText('123-456-7890')
     fireEvent.press(phoneNumber)
     expect(Linking.openURL).toBeCalledWith('tel:1234567890')
@@ -26,13 +26,13 @@ context('TranslatablePhoneNumber', () => {
 
   it('renders phone number and handles click for standalone variant without TTY', () => {
     render(
-      <TranslatablePhoneNumber variant="standalone" ttyBypass={true}>
+      <PhoneNumberComponent variant="standalone" ttyBypass={true}>
         {['123-456-7890']}
-      </TranslatablePhoneNumber>,
+      </PhoneNumberComponent>,
     )
     const phoneNumber = screen.getByText('123-456-7890')
     fireEvent.press(phoneNumber)
     expect(Linking.openURL).toBeCalledWith('tel:1234567890')
-    expect(screen.getByText('TTY: 711')).toBeFalsy()
+    expect(screen.queryByText('TTY: 711')).toBeNull()
   })
 })

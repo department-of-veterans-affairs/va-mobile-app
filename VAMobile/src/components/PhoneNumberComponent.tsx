@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { ClickToCallPhoneNumber, TextView } from 'components'
 import { useExternalLink } from 'utils/hooks'
 
-type TranslatablePhoneNumber =
+type PhoneNumberComponentProps =
   | {
       children?: React.ReactNode
       variant: 'inline'
@@ -15,7 +15,7 @@ type TranslatablePhoneNumber =
       ttyBypass?: boolean
     }
 
-const TranslatablePhoneNumber: FC<TranslatablePhoneNumber> = ({ children, ttyBypass, variant }) => {
+const PhoneNumberComponent: FC<PhoneNumberComponentProps> = ({ children, ttyBypass, variant }) => {
   const displayedText = Array.isArray(children) ? children[0] : ''
   const phone = displayedText.replace(/\D/g, '') // Strip out non-numeric characters
   const launchExternalLink = useExternalLink()
@@ -39,4 +39,4 @@ const TranslatablePhoneNumber: FC<TranslatablePhoneNumber> = ({ children, ttyByp
   }
 }
 
-export default TranslatablePhoneNumber
+export default PhoneNumberComponent

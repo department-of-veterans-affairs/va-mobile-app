@@ -3,7 +3,8 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, LargePanel, TextView, TranslatablePhoneNumber } from 'components'
+import { Box, LargePanel, TextView } from 'components'
+import PhoneNumberComponent from 'components/PhoneNumberComponent'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useTheme } from 'utils/hooks'
@@ -26,8 +27,8 @@ function DebtHelp({}: DebtHelpProps) {
             // This handles paragraphs and their spacing
             p: <TextView my={condensedMarginBetween} variant="MobileBody" />,
             // This handles phone number links
-            tel: <TranslatablePhoneNumber variant="standalone" ttyBypass={true} />,
-            tty: <TranslatablePhoneNumber variant="standalone" />,
+            tel: <PhoneNumberComponent variant="standalone" ttyBypass={true} />,
+            tty: <PhoneNumberComponent variant="standalone" />,
           }}
         />
       </Box>

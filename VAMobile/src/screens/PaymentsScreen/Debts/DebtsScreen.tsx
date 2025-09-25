@@ -18,9 +18,9 @@ import {
   Pagination,
   PaginationProps,
   TextView,
-  TranslatablePhoneNumber,
 } from 'components'
 import EmptyStateMessage from 'components/EmptyStateMessage'
+import PhoneNumberComponent from 'components/PhoneNumberComponent'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -142,7 +142,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
                     // This handles bolding text
                     bold: <TextView variant="HelperTextBold" />,
                     // This handles phone number links
-                    tel: <TranslatablePhoneNumber variant="inline" />,
+                    tel: <PhoneNumberComponent variant="inline" />,
                   }}
                   values={{
                     balance: debtInfo.balance,
