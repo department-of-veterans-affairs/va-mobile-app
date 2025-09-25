@@ -13,11 +13,13 @@ import * as api from 'store/api'
 import { TrackedStore } from 'testUtils'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { waygateEnabled } from 'utils/waygateConfig'
 
 jest.mock('store/api')
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('utils/analytics')
 jest.mock('utils/inAppReviews')
+jest.mock('utils/waygateConfig')
 
 describe('requestRefills', () => {
   let store: TrackedStore
@@ -117,6 +119,7 @@ describe('requestRefills', () => {
         medicationsOracleHealthEnabled: false,
       },
     })
+    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
     ;(useReviewEvent as jest.Mock).mockReturnValue(jest.fn())
   })
 
@@ -169,8 +172,9 @@ describe('requestRefills', () => {
           medicationsOracleHealthEnabled: true,
         },
       })
+      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
-      const { result } = renderHook(() => useRequestRefills({ isV1Enabled: true }), { wrapper })
+      const { result } = renderHook(() => useRequestRefills(), { wrapper })
 
       await act(async () => {
         result.current.mutate(mockPrescriptions)
@@ -228,7 +232,7 @@ describe('requestRefills', () => {
       expect(logNonFatalErrorToFirebase).toHaveBeenCalledWith(mockError, 'requestRefills: Service error')
     })
 
-    it('should use v0 API when isV1Enabled is false even if Oracle health is enabled', async () => {
+    it('should use v0 API when waygate is disabled even if Oracle health is enabled', async () => {
       const mockPut = api.put as jest.Mock
       mockPut.mockResolvedValueOnce(mockSuccessfulRefillResponse)
       ;(useAuthorizedServices as jest.Mock).mockReturnValue({
@@ -237,8 +241,9 @@ describe('requestRefills', () => {
           medicationsOracleHealthEnabled: true,
         },
       })
+      ;(waygateEnabled as jest.Mock).mockReturnValue(false)
 
-      const { result } = renderHook(() => useRequestRefills({ isV1Enabled: false }), { wrapper })
+      const { result } = renderHook(() => useRequestRefills(), { wrapper })
 
       await act(async () => {
         result.current.mutate(mockPrescriptions)
@@ -319,7 +324,7 @@ describe('requestRefills', () => {
         data: null,
       })
 
-      const { result } = renderHook(() => useRequestRefills({ isV1Enabled: true }), { wrapper })
+      const { result } = renderHook(() => useRequestRefills(), { wrapper })
 
       await act(async () => {
         result.current.mutate(mockPrescriptions)

@@ -8,6 +8,9 @@ import { Params, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { waygateEnabled } from 'utils/waygateConfig'
+
+// Adjust the import path if needed
 
 /**
  * Requests refills for a users prescriptions
@@ -48,10 +51,17 @@ const requestRefills = async (
 /**
  * Returns a mutation for requesting refills for a users prescriptions
  */
-export const useRequestRefills = (options?: { isV1Enabled?: boolean }) => {
+export const useRequestRefills = () => {
   const { data: authorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
-  const shouldUseV1 = medicationsOracleHealthEnabled && options?.isV1Enabled
+  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
+  const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
+
+  console.log('in prescription hooks', {
+    oracleMedsEnabled,
+    medicationsOracleHealthEnabled,
+    shouldUseV1,
+  })
 
   const registerReviewEvent = useReviewEvent(false, 'refillRequest')
   const queryClient = useQueryClient()
