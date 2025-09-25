@@ -21,7 +21,6 @@ import FullScreenSubtask from 'components/Templates/FullScreenSubtask'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { waygateEnabled } from 'utils/waygateConfig'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useFontScale, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -44,12 +43,7 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
   const [requestFailed, setRequestFailed] = useState<PrescriptionsList>([])
   const fs = useFontScale()
   const indicatorDiameter = fs(30)
-
-  const { enabled: waygateOracleHealthMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-
-  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefillsRetry } = useRequestRefills({
-    isV1Enabled: waygateOracleHealthMedsEnabled,
-  })
+  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefillsRetry } = useRequestRefills()
 
   const onNavToHistory = () => {
     navigateTo('PrescriptionHistory', {})
@@ -59,7 +53,6 @@ function RefillRequestSummary({ navigation, route }: RefillRequestSummaryProps) 
     const requestSubmittedItems = []
     const requestFailedItems: PrescriptionsList = []
     refillRequestSummaryItems.forEach((item) => {
-      //TODO: update the retry logic
       item.submitted ? requestSubmittedItems.push(item.data) : requestFailedItems.push(item.data)
     })
 

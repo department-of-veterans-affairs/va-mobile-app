@@ -23,7 +23,6 @@ import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -56,11 +55,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     orderedDate,
   } = prescription?.attributes
 
-  const { enabled: waygateOracleHealthMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-
-  const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills({
-    isV1Enabled: waygateOracleHealthMedsEnabled,
-  })
+  const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
 
   useFocusEffect(
     React.useCallback(() => {

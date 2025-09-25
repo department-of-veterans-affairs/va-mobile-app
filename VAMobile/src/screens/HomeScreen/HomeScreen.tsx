@@ -74,7 +74,6 @@ import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -120,11 +119,7 @@ export function HomeScreen({}: HomeScreenProps) {
 
   const claimsAndAppealsQuery = useClaimsAndAppeals('ACTIVE', { enabled: isFocused })
   const foldersQuery = useFolders({ enabled: isFocused })
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-  const prescriptionsQuery = usePrescriptions({
-    enabled: isFocused,
-    isV1Enabled: oracleMedsEnabled,
-  })
+  const prescriptionsQuery = usePrescriptions({ enabled: isFocused })
   const facilitiesQuery = useFacilitiesInfo()
   const cernerFacilities = facilitiesQuery.data?.filter((facility) => facility.cerner) || []
 

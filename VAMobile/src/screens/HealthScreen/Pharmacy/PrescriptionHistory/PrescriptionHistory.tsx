@@ -53,7 +53,7 @@ import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
@@ -78,7 +78,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     error: getUserAuthorizedServicesError,
     refetch: refetchAuthServices,
   } = useAuthorizedServices()
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
   const {
     data: prescriptionData,
     isFetching: loadingHistory,
@@ -87,7 +86,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     refetch: refetchPrescriptions,
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
-    isV1Enabled: oracleMedsEnabled,
   })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {
@@ -465,34 +463,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       variant: 'base',
       testID: 'goToMyVAHealthPrescriptionHistoryID',
-    }
-
-    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
-      logAnalyticsEvent(Events.vama_blue_alert_rx())
-      return (
-        <Box mx={theme.dimensions.gutter}>
-          <AlertWithHaptics
-            variant="info"
-            expandable={true}
-            focusOnError={false}
-            header={t('healthHelp.cernerTransitionInfoBanner.header')}
-            headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
-            description={t('healthHelp.cernerTransitionInfoBanner.content')}
-            testID="smCernerInfoAlertTestID">
-            <TextView variant="MobileBody">
-              {t('healthHelp.cernerTransitionInfoBanner.content')}
-              <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
-              {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
-            </TextView>
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <LinkWithAnalytics
-                {...linkProps}
-                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_rx_link_conf())}
-              />
-            </Box>
-          </AlertWithHaptics>
-        </Box>
-      )
     }
 
     return (

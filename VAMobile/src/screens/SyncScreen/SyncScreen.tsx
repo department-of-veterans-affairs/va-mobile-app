@@ -25,7 +25,6 @@ import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useTheme } from 'utils/hooks'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 export type SyncScreenProps = Record<string, unknown>
 function SyncScreen({}: SyncScreenProps) {
@@ -58,11 +57,7 @@ function SyncScreen({}: SyncScreenProps) {
   )
   useClaimsAndAppeals('ACTIVE', { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
   useFolders({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-  usePrescriptions({
-    enabled: !loggingOut && loggedIn && downtimeWindowsFetched,
-    isV1Enabled: oracleMedsEnabled,
-  })
+  usePrescriptions({ enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
   useFacilitiesInfo({ enabled: !loggingOut && loggedIn })
 
   // Prefetch data for `About you` section

@@ -48,7 +48,7 @@ import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { screenContentAllowed, waygateEnabled } from 'utils/waygateConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
 
@@ -73,15 +73,12 @@ export function HealthScreen({}: HealthScreenProps) {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
 
   const { data: userAuthorizedServices } = useAuthorizedServices()
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-
   const {
     data: prescriptionData,
     isFetching: fetchingPrescriptions,
     isError: prescriptionsError,
   } = usePrescriptions({
     enabled: isFocused,
-    isV1Enabled: oracleMedsEnabled,
   })
   const upcomingAppointmentDateRange = getUpcomingAppointmentDateRange()
   const {
