@@ -11,6 +11,7 @@ export type DebtInfo = {
   balance: string
   endDate: string
   header: string
+  resolvable: boolean
   summaryKey: string
   variant: string
 }
@@ -56,19 +57,22 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
   const deductionCode = debt.attributes.deductionCode
   const codeKey = Object.keys(deductionCodeMapping).find((key) => deductionCodeMapping[key].includes(deductionCode))
   const header = codeKey ? t(codeKey) : debt.attributes.benefitType
-  let summaryKey: string, variant: DebtVariantTypes
+  let resolvable: boolean, summaryKey: string, variant: DebtVariantTypes
 
   switch (debt.attributes.diaryCode) {
     case '71':
+      resolvable = false
       summaryKey = 'debts.summary.verifyMilitaryStatus'
       variant = 'info'
       break
     case '655':
     case '817':
+      resolvable = true
       summaryKey = 'debts.summary.submitFinancialStatusReport'
       variant = 'info'
       break
     case '212':
+      resolvable = false
       summaryKey = 'debts.summary.updateAddress'
       variant = 'info'
       break
@@ -79,6 +83,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '442':
     case '448':
     case '453':
+      resolvable = false
       summaryKey = 'debts.summary.pausedCollection'
       variant = 'info'
       break
@@ -89,37 +94,45 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '102':
     case '130':
     case '140':
+      resolvable = true
       summaryKey = 'debts.summary.payOrRequestHelpBy'
       variant = 'warning'
       break
     case '109':
+      resolvable = true
       summaryKey = 'debts.summary.payOrRequestHelpAvoidInterest'
       variant = 'warning'
       break
     case '117':
+      resolvable = true
       summaryKey = 'debts.summary.payPastDueOrRequestHelp'
       variant = 'warning'
       break
     case '123':
+      resolvable = true
       summaryKey = 'debts.summary.payPastDueOrRequestHelpNow'
       variant = 'warning'
       break
     case '680':
+      resolvable = true
       summaryKey = 'debts.summary.payOrRequestHelpSimple'
       variant = 'warning'
       break
     case '681':
     case '682':
+      resolvable = true
       summaryKey = 'debts.summary.treasuryReducingPayments'
       variant = 'info'
       break
     case '600':
     case '601':
+      resolvable = true
       summaryKey = 'debts.summary.continueMonthlyPayments'
       variant = 'info'
       break
     case '430':
     case '431':
+      resolvable = true
       summaryKey = 'debts.summary.reducingEducationBenefits'
       variant = 'info'
       break
@@ -133,11 +146,13 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '614':
     case '615':
     case '617':
+      resolvable = true
       summaryKey = 'debts.summary.reducingBenefitPayments'
       variant = 'info'
       break
     case '603':
     case '613':
+      resolvable = true
       summaryKey = 'debts.summary.makePaymentOrRequestHelp'
       variant = 'warning'
       break
@@ -146,24 +161,29 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '852':
     case '860':
     case '855':
+      resolvable = false
       summaryKey = 'debts.summary.contactTreasuryDMS'
       variant = 'warning'
       break
     case '500':
     case '510':
     case '503':
+      resolvable = true
       summaryKey = 'debts.summary.referringToTreasury'
       variant = 'warning'
       break
     case '811':
+      resolvable = true
       summaryKey = 'debts.summary.reviewCompromiseOffer'
       variant = 'info'
       break
     case '815':
+      resolvable = true
       summaryKey = 'debts.summary.payCompromiseAgreement'
       variant = 'warning'
       break
     case '816':
+      resolvable = false
       summaryKey = 'debts.summary.processingCompromisePayment'
       variant = 'info'
       break
@@ -173,18 +193,22 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '804':
     case '809':
     case '820':
+      resolvable = true
       summaryKey = 'debts.summary.reviewWaiverRequest'
       variant = 'info'
       break
     case '822':
+      resolvable = true
       summaryKey = 'debts.summary.reviewDispute'
       variant = 'info'
       break
     case '825':
+      resolvable = true
       summaryKey = 'debts.summary.reviewHearingRequest'
       variant = 'info'
       break
     case '821':
+      resolvable = true
       summaryKey = 'debts.summary.reviewNoticeOfDisagreement'
       variant = 'info'
       break
@@ -192,6 +216,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '482':
     case '483':
     case '484':
+      resolvable = false
       summaryKey = 'debts.summary.reviewingAccount'
       variant = 'info'
       break
@@ -207,6 +232,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '627':
     case '425':
     default:
+      resolvable = false
       summaryKey = 'debts.summary.updatingAccount'
       variant = 'info'
       break
@@ -216,6 +242,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     balance: numberToUSDollars(debt.attributes.currentAr),
     endDate: getEndDate(t, debt),
     header,
+    resolvable,
     summaryKey,
     variant,
   }

@@ -173,7 +173,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             </Box>
           </Pressable>
           {/* Resolve debt button */}
-          <ResolveDebtButton debt={debt} />
+          {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
         </>
       )
       return (

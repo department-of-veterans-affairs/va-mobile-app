@@ -83,12 +83,13 @@ context('DebtsScreen', () => {
       await waitFor(() => expect(screen.getAllByText(t('debts.reviewDetails'))[0]).toBeTruthy())
     })
 
-    it('should show resolve debt button and action sheet when pressed', async () => {
+    it('should show only one resolve debt button and action sheet when pressed', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/debts')
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
       const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveDebt') })
+      expect(allButtons).toHaveLength(1)
       const resolveDebtButton = allButtons[0]
       expect(resolveDebtButton).toBeTruthy()
       fireEvent.press(resolveDebtButton)
