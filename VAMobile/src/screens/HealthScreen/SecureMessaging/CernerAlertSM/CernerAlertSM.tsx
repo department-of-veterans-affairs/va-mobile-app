@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { Facility } from 'api/types/FacilityData'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
@@ -20,18 +19,8 @@ function CernerAlertSM() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { data: facilitiesInfo } = useFacilitiesInfo()
-  const { data: authorizedServices } = useAuthorizedServices()
 
   const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
-
-  const linkProps: LinkProps = {
-    type: 'url',
-    url: LINK_URL_GO_TO_PATIENT_PORTAL,
-    text: t('goToMyVAHealth'),
-    a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
-    testID: 'goToMyVAHealthTestID',
-    variant: 'base',
-  }
 
   useEffect(() => {
     cernerFacilities.length && logAnalyticsEvent(Events.vama_cerner_alert())
@@ -46,33 +35,6 @@ function CernerAlertSM() {
     return <></>
   }
 
-  if (authorizedServices?.secureMessagingOracleHealthEnabled) {
-    logAnalyticsEvent(Events.vama_blue_alert_sm())
-    return (
-      <AlertWithHaptics
-        variant="info"
-        expandable={true}
-        analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}
-        focusOnError={false}
-        header={t('healthHelp.cernerTransitionInfoBanner.header')}
-        headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
-        description={t('healthHelp.cernerTransitionInfoBanner.content')}
-        testID="smCernerInfoAlertTestID">
-        <TextView variant="MobileBody">
-          {t('healthHelp.cernerTransitionInfoBanner.content')}
-          <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
-          {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
-        </TextView>
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <LinkWithAnalytics
-            {...linkProps}
-            analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_sm_link_conf())}
-          />
-        </Box>
-      </AlertWithHaptics>
-    )
-  }
-
   const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
   const headerText = allCernerFacilities ? t('healthHelp.usesVAHealth') : t('cernerAlert.header.some')
   const headerA11yLabel = allCernerFacilities
@@ -85,6 +47,15 @@ function CernerAlertSM() {
       text: facility.name,
       a11yLabel: a11yLabelVA(facility.name),
     }))
+
+    const linkProps: LinkProps = {
+      type: 'url',
+      url: LINK_URL_GO_TO_PATIENT_PORTAL,
+      text: t('goToMyVAHealth'),
+      a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
+      testID: 'goToMyVAHealthTestID',
+      variant: 'base',
+    }
 
     return (
       <>
