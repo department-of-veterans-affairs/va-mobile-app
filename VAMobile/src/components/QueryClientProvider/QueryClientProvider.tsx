@@ -3,14 +3,17 @@ import { UserCredentials } from 'react-native-keychain'
 import * as Keychain from 'react-native-keychain'
 import { useSelector } from 'react-redux'
 
+import NetInfo from '@react-native-community/netinfo'
+
 import { ANDROID_DATABASE_PATH, IOS_LIBRARY_PATH, Storage } from '@op-engineering/op-sqlite'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { QueryClientProvider as TanstackQueryClientProvider } from '@tanstack/react-query'
+import { onlineManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider, Persister } from '@tanstack/react-query-persist-client'
 
 import queryClient from 'api/queryClient'
 import { RootState } from 'store'
-import { isBiometricsPreferred } from 'store/slices'
+import { SettingsState, isBiometricsPreferred } from 'store/slices'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -20,7 +23,13 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
   const encryptionKeyGenerated = useSelector<RootState, boolean>((state) => state.auth.encryptionKeyGenerated)
   const [usesBiometrics, setUsesBiometrics] = useState(false)
   const [persister, setPersister] = useState<Persister>()
+  const [readyForOffline, setReadyForOffline] = useState<boolean>()
   const offlineModeFeatureEnabled = featureEnabled('offlineMode')
+  const { remoteConfigActivated } = useSelector<RootState, SettingsState>((state) => state.settings)
+
+  useEffect(() => {
+    setReadyForOffline(remoteConfigActivated && offlineModeFeatureEnabled && usesBiometrics)
+  }, [remoteConfigActivated, offlineModeFeatureEnabled, usesBiometrics])
 
   // Checks async storage for biometrics preference
   useEffect(() => {
@@ -50,13 +59,25 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
       setPersister(newPersister)
     }
 
-    if (offlineModeFeatureEnabled && usesBiometrics) {
+    if (readyForOffline && usesBiometrics) {
       getPersister()
+
+      // Using rnc net info create event listener for network connection status
+      onlineManager.setEventListener((setOnline) => {
+        return NetInfo.addEventListener((state) => {
+          console.log('---- in NetInfo.addEventListener to set state - feature flag is')
+          console.log(featureEnabled('offlineMode'))
+          if (featureEnabled('offlineMode')) {
+            setOnline(!!state.isConnected)
+          }
+        })
+      })
     }
-  }, [usesBiometrics, offlineModeFeatureEnabled])
+  }, [usesBiometrics, readyForOffline])
 
   // Only use persistent storage if biometrics are enabled and if the persister is available
-  if (offlineModeFeatureEnabled && usesBiometrics && persister) {
+  if (readyForOffline && persister) {
+    console.log('Initializing persistent query')
     return (
       <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}

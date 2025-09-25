@@ -1,8 +1,5 @@
 import { Platform } from 'react-native'
 
-import NetInfo from '@react-native-community/netinfo'
-
-import { onlineManager } from '@tanstack/react-query'
 import _ from 'underscore'
 
 import { deviceKeys } from 'api/device/queryKeys'
@@ -14,13 +11,6 @@ import { APIError } from 'store/api/types'
 import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-
-// Using rnc net info create event listener for network connection status
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
-    setOnline(!!state.isConnected)
-  })
-})
 
 const { API_ROOT } = getEnv()
 
