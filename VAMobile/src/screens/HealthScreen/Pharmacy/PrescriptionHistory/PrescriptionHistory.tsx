@@ -464,6 +464,28 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       variant: 'base',
       testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
+    if (userAuthorizedServices?.secureMessagingOracleHealthEnabled) {
+      logAnalyticsEvent(Events.vama_blue_alert_rx())
+      return (
+        <Box mx={theme.dimensions.gutter}>
+          <AlertWithHaptics
+            variant="info"
+            expandable={true}
+            focusOnError={false}
+            header={t('healthHelp.cernerTransitionInfoBanner.header')}
+            headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
+            description={t('healthHelp.cernerTransitionInfoBanner.content')}
+            testID="smCernerInfoAlertTestID">
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <LinkWithAnalytics
+                {...linkProps}
+                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_rx_link_conf())}
+              />
+            </Box>
+          </AlertWithHaptics>
+        </Box>
+      )
+    }
 
     return (
       <Box mx={theme.dimensions.gutter}>
