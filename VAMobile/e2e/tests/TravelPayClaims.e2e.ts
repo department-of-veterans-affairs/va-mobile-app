@@ -1,6 +1,15 @@
 import { by, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openTravelPayClaims, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openHealth,
+  openPayments,
+  openTravelPayClaims,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
@@ -11,11 +20,24 @@ const TravePayClaimsE2eIds = {
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
-  await openHealth()
-  await openTravelPayClaims()
 })
 
 describe('Travel Pay Claims Screen', () => {
+  it('navigates from the different entry points', async () => {
+    // Visit through Benefits tab
+    await openBenefits()
+    await openClaims()
+    await openTravelPayClaims()
+
+    // Visit through Payments tab
+    await openPayments()
+    await openTravelPayClaims()
+
+    // Visit through Health tab
+    await openHealth()
+    await openTravelPayClaims()
+  })
+
   it('navigates to the Travel Pay Claims screen and display title', async () => {
     await expect(element(by.id(TravePayClaimsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
   })
