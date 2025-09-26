@@ -19,9 +19,9 @@ import { featureEnabled } from 'utils/remoteConfig'
 export function useOfflineMode(): boolean {
   const { isConnected } = useNetInfo()
 
-  if (!featureEnabled('offlineMode')) {
-    return true
-  }
+  // if (!featureEnabled('offlineMode')) {
+  //   return true
+  // }
 
   return !!isConnected
 }
@@ -31,7 +31,7 @@ export function useOfflineMode(): boolean {
 export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false): void {
   if (inModal) {
     // TODO: CONFIRM CONTENT
-    Alert.alert('TEMP TITLE', t('offline.toast.checkConnection'), [{ text: t('dismiss'), style: 'default' }])
+    Alert.alert('Content unavailable', t('offline.toast.checkConnection'), [{ text: t('dismiss'), style: 'default' }])
   } else {
     snackbar.show(t('offline.toast.checkConnection'), { isError: true })
   }

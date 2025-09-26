@@ -47,16 +47,18 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
         storage,
       })
 
+      console.debug('CREATED PERSISTENT STORAGE')
       setPersister(newPersister)
     }
 
-    if (offlineModeFeatureEnabled && usesBiometrics) {
+    if (usesBiometrics) {
       getPersister()
     }
-  }, [usesBiometrics, offlineModeFeatureEnabled])
+  }, [usesBiometrics])
 
   // Only use persistent storage if biometrics are enabled and if the persister is available
-  if (offlineModeFeatureEnabled && usesBiometrics && persister) {
+  if (usesBiometrics && persister) {
+    console.debug('USING PERSISTENT STORAGE')
     return (
       <PersistQueryClientProvider persistOptions={{ persister }} client={queryClient}>
         {children}
@@ -64,6 +66,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
+  console.debug('NOT USING STORAGE')
   return <TanstackQueryClientProvider client={queryClient}>{children}</TanstackQueryClientProvider>
 }
 
