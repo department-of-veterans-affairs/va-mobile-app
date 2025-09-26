@@ -32,6 +32,7 @@ import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScre
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
@@ -90,7 +91,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
         {featureEnabled('travelPayStatusList') && (
           <LargeNavButton
             title={t('travelPay.title')}
-            onPress={() => navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Payments })}
+            onPress={() => navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.Payments)}
             testID="toTravelPayClaimsID"
           />
         )}
