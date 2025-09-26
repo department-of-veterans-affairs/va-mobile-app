@@ -11,20 +11,32 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/DatePicker/TravelPayClaimsDatePicker'
 import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import NoTravelClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
+import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api'
 import { useTheme } from 'utils/hooks'
 import { SortOption, SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
 
-type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
+type TravelPayClaimsProps = StackScreenProps<
+  HealthStackParamList | BenefitsStackParamList | PaymentsStackParamList,
+  'TravelPayClaims'
+>
+
+const backLabelForNavigation = {
+  [TravelClaimsScreenEntry.Health]: 'health.title',
+  [TravelClaimsScreenEntry.Claims]: 'claims.title',
+  [TravelClaimsScreenEntry.Payments]: 'payments.title',
+}
 
 const emptyClaims: Array<TravelPayClaimData> = []
 
-function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
+function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -35,6 +47,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const [filter, setFilter] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState(SortOption.Recent)
   const [currentPage, setCurrentPage] = useState(1)
+  const backLabelKey = backLabelForNavigation[route.params.from]
 
   const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
 
@@ -106,7 +119,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t(backLabelKey)}
       backLabelOnPress={navigation.goBack}
       title={t('travelPay.title')}
       testID="travelPayClaimsTestID"
