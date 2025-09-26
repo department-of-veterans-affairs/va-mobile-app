@@ -2,6 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { travelPayKeys } from 'api/travelPay'
 import { GetTravelPayClaimsParams, GetTravelPayClaimsResponse } from 'api/types'
+import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { TimeFrameType } from 'constants/timeframes'
 import { DowntimeFeatureTypeConstants, Params, get } from 'store/api'
 import { getDateRangeFromTimeFrame } from 'utils/dateUtils'
@@ -58,5 +59,6 @@ export const useTravelPayClaims = (timeFrameType: TimeFrameType) => {
       return undefined
     },
     initialPageParam: 1,
+    staleTime: ACTIVITY_STALE_TIME,
   })
 }
