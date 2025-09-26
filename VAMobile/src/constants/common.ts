@@ -66,4 +66,4 @@ export const URL2_REGEX_EXP = new RegExp(/^(www\.\S*)|^([a-zA-Z]*\.([a-z]){2,3})
 export const ASCENDING = 'ascending'
 export const DESCENDING = 'descending'
 
-export const ACTIVITY_STALE_TIME = 30000 // 5 minutes
+export const ACTIVITY_STALE_TIME = 300000 // 5 minutes
