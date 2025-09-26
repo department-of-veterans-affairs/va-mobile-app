@@ -49,6 +49,7 @@ import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
@@ -188,7 +189,7 @@ export function HealthScreen({}: HealthScreenProps) {
         {featureEnabled('travelPayStatusList') && (
           <LargeNavButton
             title={t('travelPay.title')}
-            onPress={() => navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Health })}
+            onPress={() => navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.Health)}
             testID="toTravelPayClaimsID"
           />
         )}

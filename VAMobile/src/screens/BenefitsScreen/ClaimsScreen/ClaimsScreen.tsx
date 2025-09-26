@@ -11,6 +11,7 @@ import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScre
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -29,7 +30,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   }
 
   const onTravelClaimsPress = () => {
-    navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Claims }) // TODO: SC - can I type the navigation props for the screen?
+    navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.Claims)
   }
 
   return (
