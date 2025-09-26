@@ -317,17 +317,17 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 }}
               />
             </Box>
-            <Box>
-              <Button
-                a11yLabel={'Pear'}
-                a11yHint={'Pear'}
-                label={'Pear'}
-                onPress={() => {
-                  dispatch(setOpenFormImmediately(true))
-                  navigateTo('FormsTab', { startFormImmediately: true })
-                }}
-              />
-            </Box>
+            {/*<Box>*/}
+            {/*  <Button*/}
+            {/*    a11yLabel={'Pear'}*/}
+            {/*    a11yHint={'Pear'}*/}
+            {/*    label={'Pear'}*/}
+            {/*    onPress={() => {*/}
+            {/*      dispatch(setOpenFormImmediately(true))*/}
+            {/*      navigateTo('FormsTab', { startFormImmediately: true })*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</Box>*/}
             <Box
               mr={theme.dimensions.buttonPadding}
               mt={theme.dimensions.buttonPadding}
