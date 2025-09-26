@@ -80,12 +80,9 @@ export const useQuery = <
       const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
       const response = await queryFn?.(context)
 
-      // if (featureEnabled('offlineMode')) {
-        if (`${options.queryKey}-lastUpdatedTime`.includes('appointments')) {
-          console.log('setting date:', `${options.queryKey}-lastUpdatedTime`, !!storage)
-        }
+      if (featureEnabled('offlineMode')) {
         await storage?.setItem(`${options.queryKey}-lastUpdatedTime`, Date.now().toString())
-      // }
+      }
 
       return response
     },
@@ -102,17 +99,13 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
 
   useEffect(() => {
     const getTime = async () => {
-
       const storedTime = await storage?.getItem(`${key}-lastUpdatedTime`)
-      if (`${key}-lastUpdatedTime`.includes('appointments') && storedTime) {
-        console.log('getting date:', `${key}-lastUpdatedTime`, storedTime)
-      }
       setTime(storedTime ? Number(storedTime) : undefined)
     }
 
-    // if (featureEnabled('offlineMode')) {
+    if (featureEnabled('offlineMode')) {
       getTime()
-    // }
+    }
   }, [key])
 
   return time

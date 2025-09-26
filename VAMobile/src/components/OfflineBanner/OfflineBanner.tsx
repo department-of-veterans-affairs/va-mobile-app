@@ -22,7 +22,7 @@ export const OfflineBanner: FC = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { offlineTimestamp, bannerExpanded } = useSelector<RootState, OfflineState>((state) => state.offline)
-  console.log(`OOOOOOOOO ${isConnected} OOOOOOOO`)
+
   useEffect(() => {
     if (!isConnected && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))

@@ -100,7 +100,7 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
-  offlineMode: true,
+  offlineMode: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
