@@ -32,6 +32,7 @@ const backLabelForNavigation = {
   [TravelClaimsScreenEntry.Health]: 'health.title',
   [TravelClaimsScreenEntry.Claims]: 'claims.title',
   [TravelClaimsScreenEntry.Payments]: 'payments.title',
+  [TravelClaimsScreenEntry.AppointmentDetail]: 'appointments.appointment',
 }
 
 const emptyClaims: Array<TravelPayClaimData> = []
