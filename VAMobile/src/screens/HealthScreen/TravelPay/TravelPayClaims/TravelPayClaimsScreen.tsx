@@ -11,17 +11,32 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
+import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { ScreenIDTypesConstants } from 'store/api'
 
-type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
+type TravelPayClaimsProps = StackScreenProps<
+  HealthStackParamList | BenefitsStackParamList | PaymentsStackParamList,
+  'TravelPayClaims'
+>
+
+const backLabelForNavigation = {
+  [TravelClaimsScreenEntry.Health]: 'health.title',
+  [TravelClaimsScreenEntry.Claims]: 'claims.title',
+  [TravelClaimsScreenEntry.Payments]: 'payments.title',
+}
 
 const emptyClaims: Array<TravelPayClaimData> = []
 
-function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
+function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const backLabelKey = backLabelForNavigation[route.params.from]
+
   const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+
   const {
     data: claimsPayload,
     isLoading,
@@ -49,7 +64,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t(backLabelKey)}
       backLabelOnPress={navigation.goBack}
       title={t('travelPay.statusList.title')}
       testID="travelPayClaimsTestID"
