@@ -6,9 +6,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -26,6 +28,10 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
     navigateTo('ClaimLettersScreen')
   }
 
+  const onTravelClaimsPress = () => {
+    navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Claims }) // TODO: SC - can I type the navigation props for the screen?
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('benefits.title')}
@@ -34,6 +40,9 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} testID="toClaimsHistoryID" />
         <LargeNavButton title={t('claimLetters.title')} onPress={onClaimLettersPress} testID="toClaimLettersID" />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton title={t('travelPay.title')} onPress={onTravelClaimsPress} testID="toTravelPayClaimsID" />
+        )}
       </Box>
     </FeatureLandingTemplate>
   )

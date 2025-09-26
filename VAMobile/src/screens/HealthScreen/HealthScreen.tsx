@@ -24,6 +24,7 @@ import {
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import AllergyDetailsScreen from 'screens/HealthScreen/Allergies/AllergyDetails/AllergyDetailsScreen'
 import AllergyListScreen from 'screens/HealthScreen/Allergies/AllergyList/AllergyListScreen'
 import Appointments from 'screens/HealthScreen/Appointments'
@@ -158,13 +159,6 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('travelPayStatusList') && (
-          <LargeNavButton
-            title={t('travelPay.title')}
-            onPress={() => navigateTo('TravelPayClaims')}
-            testID="toTravelPayClaimsID"
-          />
-        )}
         {featureEnabled('overpayCopay') && (
           <LargeNavButton title={t('copays.title')} onPress={() => navigateTo('Copays')} subText={copaysSubText} />
         )}
@@ -195,6 +189,13 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('MedicalRecordsList')}
           testID="toMedicalRecordsListID"
         />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton
+            title={t('travelPay.title')}
+            onPress={() => navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Health })}
+            testID="toTravelPayClaimsID"
+          />
+        )}
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {!enrolledInVAHealthCare && (

@@ -11,6 +11,8 @@ import { useMedicalCopays } from 'api/medicalCopays'
 import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
+import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import CopaysScreen from 'screens/PaymentsScreen/Copays'
 import ChargeDetails from 'screens/PaymentsScreen/Copays/ChargeDetails/ChargeDetailsScreen'
 import CopayDetails from 'screens/PaymentsScreen/Copays/CopayDetails/CopayDetailsScreen'
@@ -85,6 +87,13 @@ function PaymentsScreen({}: PaymentsScreenProps) {
       )}
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton
+            title={t('travelPay.title')}
+            onPress={() => navigateTo('TravelPayClaims', { from: TravelClaimsScreenEntry.Payments })}
+            testID="toTravelPayClaimsID"
+          />
+        )}
         {userAuthorizedServices?.directDepositBenefits && (
           <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
         )}
@@ -146,6 +155,11 @@ function PaymentsStackScreen({}: PaymentsStackScreenProps) {
       <PaymentsScreenStack.Screen
         name="PaymentDetails"
         component={PaymentDetailsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <PaymentsScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaimsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <PaymentsScreenStack.Screen
