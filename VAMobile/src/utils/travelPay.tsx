@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
+import { TravelClaimsScreenEntryType } from 'constants/travelPay'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
 
@@ -130,4 +131,16 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
     const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
   }
+}
+
+/**
+ * Navigates to the travel claims list screen from various entry points
+ * @param navigateTo - The navigation function to navigate between screens
+ * @param from - The entry point from which the user is navigating from
+ */
+export const navigateToTravelClaims = (
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  from: TravelClaimsScreenEntryType,
+) => {
+  navigateTo('TravelPayClaims', { from })
 }
