@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { DebtRecord, MedicalCopayDetail, MedicalCopayRecord, PaymentsData } from 'api/types'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { TravelClaimsScreenEntryType } from 'constants/travelPay'
 import CopaysHelp from 'screens/PaymentsScreen/Copays/CopayHelp/CopayHelp'
 import DebtHelp from 'screens/PaymentsScreen/Debts/DebtHelp/DebtHelp'
 import PaymentIssue from 'screens/PaymentsScreen/PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
@@ -46,6 +47,9 @@ export type PaymentsStackParamList = {
     debtRecord: DebtRecord
   }
   TransactionDetails: undefined // TODO: add param when available
+  TravelPayClaims: {
+    from: TravelClaimsScreenEntryType
+  }
 }
 
 const PaymentsStack = createStackNavigator<PaymentsStackParamList>()

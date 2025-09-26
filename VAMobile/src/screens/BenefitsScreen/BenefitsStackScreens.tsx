@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { LetterTypes } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { TravelClaimsScreenEntryType } from 'constants/travelPay'
 import ConsolidatedClaimsNote from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 import { ScreenIDTypes } from 'store/api/types'
@@ -38,6 +39,9 @@ export type BenefitsStackParamList = {
     claimType: ClaimType
   }
   ClaimsHistoryScreen: undefined
+  TravelPayClaims: {
+    from: TravelClaimsScreenEntryType
+  }
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {
