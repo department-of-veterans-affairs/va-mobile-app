@@ -53,7 +53,7 @@ export const requestRefill = (store: DemoStore, params: RefillRequestParams): Pr
   let stationNumbers: string[] = []
 
   // Handle both v0 format { ids: string[] } and v1 format { ids: SingleRefillRequest[] }
-  if (params.ids && Array.isArray(params.ids)) {
+  if (params.ids && Array.isArray(params.ids) && params.ids.length > 0) {
     if (typeof params.ids[0] === 'string') {
       // v0 format: { ids: string[] }
       prescriptionIds = params.ids as string[]
