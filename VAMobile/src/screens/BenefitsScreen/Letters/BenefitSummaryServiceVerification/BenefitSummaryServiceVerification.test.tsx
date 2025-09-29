@@ -9,11 +9,11 @@ import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { roundToHundredthsPlace } from 'utils/formattingUtils'
 
-const mockExternalLinkSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
   return {
     ...jest.requireActual<typeof import('utils/hooks')>('utils/hooks'),
-    useExternalLink: () => mockExternalLinkSpy,
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -227,5 +227,17 @@ context('BenefitSummaryServiceVerification', () => {
         expect(screen.queryByTestId('letterBeneficiaryError')).toBeNull()
       })
     })
+  })
+
+  it('launches a webview that navigates to the Ask VA page when the "Go to Ask VA" link is pressed', async () => {
+    initializeTestInstance(123, date, 88)
+    await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('letters.benefitService.sendMessage') })))
+    const expectNavArgs = {
+      url: 'https://ask.va.gov/',
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('loading.vaWebsite'),
+      useSSO: true,
+    }
+    expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
   })
 })
