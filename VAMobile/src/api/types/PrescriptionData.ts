@@ -83,7 +83,7 @@ export type PrescriptionAttributeData = {
   instructions: string | null
   dispensedDate: string | null
   stationNumber: string
-  tracking?: Array<object> | null
+  tracking?: Array<PrescriptionTrackingItem> | null
 }
 
 export type PrescriptionsList = Array<PrescriptionData>
@@ -149,6 +149,17 @@ export type SingleRefillRequest = {
 export type PrescriptionTrackingInfoOtherItem = {
   prescriptionName: string
   prescriptionNumber: string
+}
+
+export type PrescriptionTrackingItem = {
+  prescriptionName: string
+  prescriptionNumber: string
+  ndcNumber: string
+  prescriptionId: number
+  trackingNumber: string
+  shippedDate: string
+  deliveryService: string
+  otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
 }
 
 export const DELIVERY_SERVICE_TYPES: {
