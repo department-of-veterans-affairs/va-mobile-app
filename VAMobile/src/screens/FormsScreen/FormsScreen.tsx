@@ -73,10 +73,12 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
             status = FORM_STATUS.draft
             break
           case 'confirmation':
-          default:
             // Assumed they finish at this point if they got to confirmation or are on a different page now
             status = FORM_STATUS.inProgress
             break
+          default:
+            // Any other endUrl is not a part of the process
+            return
         }
 
         snackbar.show('Form updated successfully', {
