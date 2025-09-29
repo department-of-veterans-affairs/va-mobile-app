@@ -52,6 +52,8 @@ const getEndDate = (t: TFunction, debt: DebtRecord): string => {
   return newDate.toFormat('MMMM d, yyyy')
 }
 
+// Leverated from web implementation:
+// vets-website/src/applications/combined-debt-portal/debt-letters/const/diary-codes/debtSummaryCardContent.js
 export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
   // Determine header based on deduction code mapping
   const deductionCode = debt.attributes.deductionCode
