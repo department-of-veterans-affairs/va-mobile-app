@@ -1,30 +1,23 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-
-
-
-import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack';
-
-
-
-import { SegmentedControl, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library';
-import { DateTime } from 'luxon';
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+
+import { CardStyleInterpolators, StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+
+import { SegmentedControl, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { DateTime } from 'luxon'
+
 import { RootState } from 'store'
+import { SettingsState, setOpenFormImmediately } from 'store/slices'
 
-
-
-import { setOpenFormImmediately, SettingsState } from 'store/slices';
-
-
-
-import { Box, FeatureLandingTemplate, TextView } from '../../components';
+import { Box, FeatureLandingTemplate, TextView } from '../../components'
 import { useAppDispatch, useRouteNavigation, useTheme } from '../../utils/hooks'
-import FormEmptyPlaceHolder from './FormEmptyPlaceHolder';
-import FormFooter from './FormFooter';
-import FormsCardItem, { FormMetaData } from './FormsCardItem';
-import { FORM_STATUS, FormStatus } from './FormsCardItemTag';
-import { FormsStackParamList } from './FormsStackScreens';
+import FormEmptyPlaceHolder from './FormEmptyPlaceHolder'
+import FormFooter from './FormFooter'
+import FormsCardItem, { FormMetaData } from './FormsCardItem'
+import { FORM_STATUS, FormStatus } from './FormsCardItemTag'
+import { FormsStackParamList } from './FormsStackScreens'
 
+const DOMAIN = 'https://refactored-space-disco-w9ww774vvjjhg4pp-3001.app.github.dev'
 
 type PaymentsScreenProps = StackScreenProps<FormsStackParamList, 'Forms'>
 function FormsScreen({ navigation }: PaymentsScreenProps) {
@@ -46,39 +39,47 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
     // },
   ])
 
-
-  const startStatement = useCallback((page = 'introduction') => {
-    console.log('opening', page)
+  const startStatement = useCallback(() => {
     navigateTo('Webview', {
-      url: `https://refactored-space-disco-w9ww774vvjjhg4pp-3001.app.github.dev/supporting-forms-for-claims/submit-statement-form-21-4138/${page}`,
+      url: `${DOMAIN}/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`,
       useSSO: true,
       onClose: (url: string) => {
         dispatch(setOpenFormImmediately(false))
-        const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
+        const domainIndex = url.indexOf(DOMAIN)
+        const endUrl = url.slice(domainIndex + DOMAIN.length)
+
         let status = ''
         switch (endUrl) {
-          case 'introduction':
-          case 'statement-type':
-            // The flow does not officially start until they get to personal information
-            // ignore the first two screens for now
+          // Do not save the statement until the user reaches the personal info screen.
+          // These are all the screens before then
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/introduction':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement-type':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/claim-status-tool':
+          case '/track-claims/your-claims':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/decision-review':
+          case '/resources/choosing-a-decision-review-option/':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/lay-witness-statement':
+          case '/supporting-forms-for-claims/lay-witness-statement-form-21-10210/introduction':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/priority-processing':
+          case '/supporting-forms-for-claims/request-priority-processing-form-20-10207/introduction':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-records-request':
+          case '/records/request-personal-records-form-20-10206/introduction':
             return
-          // cover the case if they click on form-saved
-          case 'form-saved':
-          case 'personal-information':
-          case 'identification-information':
-          case 'mailing-address':
-          case 'contact-information':
-          case 'statement':
-          case 'review-and-submit':
+          // Save the statement as a draft while in the middle of the form or once the form has been saved
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-information':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/identification-information':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/mailing-address':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/contact-information':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/review-and-submit':
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/form-saved':
             status = FORM_STATUS.draft
             break
-          case 'confirmation':
-            // Assumed they finish at this point if they got to confirmation or are on a different page now
-            status = FORM_STATUS.inProgress
-            break
+          // Assumed they finish at this point if they got to confirmation or are on a different page now
+          // or any other endpoint that could be reached after form submission
+          case '/supporting-forms-for-claims/submit-statement-form-21-4138/confirmation':
           default:
-            // Any other endUrl is not a part of the process
-            return
+            status = FORM_STATUS.inProgress
         }
 
         snackbar.show('Form updated successfully', {
@@ -104,7 +105,7 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
   useEffect(() => {
     if (openForm) {
       dispatch(setOpenFormImmediately(false)).then(() => {
-        startStatement('personal-information')
+        startStatement()
       })
     }
   }, [dispatch, openForm, startStatement])
