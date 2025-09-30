@@ -237,6 +237,7 @@ context('BenefitSummaryServiceVerification', () => {
       displayTitle: t('webview.vagov'),
       loadingMessage: t('loading.vaWebsite'),
       useSSO: true,
+      backButtonTestID: 'webviewBack',
     }
     expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', expectNavArgs)
   })
