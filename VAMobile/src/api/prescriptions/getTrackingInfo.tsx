@@ -48,7 +48,7 @@ const getTrackingDataForPrescription = async ({
           ndcNumber: t.ndcNumber,
           trackingNumber: t.trackingNumber,
           shippedDate: t.shippedDate,
-          deliveryService: t.deliveryService,
+          carrier: t.carrier,
           otherPrescriptions: t.otherPrescriptions,
         },
       }))

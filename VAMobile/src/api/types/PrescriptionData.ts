@@ -149,6 +149,8 @@ export type SingleRefillRequest = {
 export type PrescriptionTrackingInfoOtherItem = {
   prescriptionName: string
   prescriptionNumber: string
+  ndcNumber?: string
+  stationNumber?: string
 }
 
 export type PrescriptionTrackingItem = {
@@ -158,7 +160,8 @@ export type PrescriptionTrackingItem = {
   prescriptionId: number
   trackingNumber: string
   shippedDate: string
-  deliveryService: string
+  deliveryService?: string
+  carrier?: string
   otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
 }
 
@@ -181,7 +184,8 @@ export type PrescriptionTrackingInfoAttributeData = {
   trackingNumber: string
   ndcNumber: string
   shippedDate: string
-  deliveryService: string
+  deliveryService?: string
+  carrier?: string
   otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
 }
 
