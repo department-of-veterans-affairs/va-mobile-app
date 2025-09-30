@@ -88,7 +88,9 @@ body:
     description: Before system access can be granted, the user _must_ be onboarded into VA Github Organization
     options:
     - label: App store connect (VA Mobile will provide)
+    - label: TestFlight (VA Mobile will provide)
     - label: Firebase (VA Mobile will provide)
+    - label: App Tester (VA Mobile will provide through Firebase)
     - label: Write access to applicable repositories (VA Mobile will provide)
     - label: Join [#va-mobile-app slack channel](https://dsva.slack.com/archives/C018V2JCWRJ)
 
