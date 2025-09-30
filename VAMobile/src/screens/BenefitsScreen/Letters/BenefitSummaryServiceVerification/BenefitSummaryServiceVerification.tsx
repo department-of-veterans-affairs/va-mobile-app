@@ -327,6 +327,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
                   displayTitle: t('webview.vagov'),
                   loadingMessage: t('loading.vaWebsite'),
                   useSSO: true,
+                  backButtonTestID: 'webviewBack',
                 })
               }}
               testID="lettersBenefitServiceGoToAskVAID"
