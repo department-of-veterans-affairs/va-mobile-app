@@ -4,6 +4,7 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -115,8 +116,21 @@ jest.mock('api/travelPay', () => {
 })
 
 context('TravelPayClaims', () => {
-  const initializeTestInstance = () => {
-    render(<TravelPayClaims {...mockNavProps()} />)
+  const initializeTestInstance = (routeMock?: { from: string }) => {
+    render(
+      <TravelPayClaims
+        {...mockNavProps(
+          {},
+          {
+            setOptions: jest.fn(),
+            navigate: jest.fn(),
+            addListener: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: routeMock },
+        )}
+      />,
+    )
 
     mockUseDowntime.mockImplementation(() => false)
 
@@ -135,6 +149,28 @@ context('TravelPayClaims', () => {
 
     expect(screen.getByTestId('travelPayClaimsTestID')).toBeTruthy()
     expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
+  })
+
+  describe('different entry points', () => {
+    it('shows the correct go back title when coming from claims', () => {
+      initializeTestInstance({ from: TravelClaimsScreenEntry.Claims })
+      expect(screen.getByText(t('claims.title'))).toBeTruthy()
+    })
+
+    it('shows the correct go back title when coming from health', () => {
+      initializeTestInstance({ from: TravelClaimsScreenEntry.Health })
+      expect(screen.getByText(t('health.title'))).toBeTruthy()
+    })
+
+    it('shows the correct go back title when coming from payments', () => {
+      initializeTestInstance({ from: TravelClaimsScreenEntry.Payments })
+      expect(screen.getByText(t('payments.title'))).toBeTruthy()
+    })
+
+    it('shows the correct go back title when coming from appointment detail', () => {
+      initializeTestInstance({ from: TravelClaimsScreenEntry.AppointmentDetail })
+      expect(screen.getByText(t('appointments.appointment'))).toBeTruthy()
+    })
   })
 
   describe('when an api error occurs', () => {

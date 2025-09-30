@@ -34,7 +34,7 @@ const emptyClaims: Array<TravelPayClaimData> = []
 
 function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const backLabelKey = backLabelForNavigation[route.params.from]
+  const backLabelKey = backLabelForNavigation[route.params?.from ?? TravelClaimsScreenEntry.Health]
 
   const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
 
