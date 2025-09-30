@@ -1,4 +1,4 @@
-We updated the app with improvements to appointments and accessibility:
+We updated the app with improvements to performance, guidance, and support:
 
-- For Cerner appointments, non-existent clinic and location fields are now hidden.
-- Improved accessibility in secure messaging so screen readers announce the selected recipient and provide a clear way to confirm the choice.
+Claims History now loads closed claims separately, improving performance and ensuring data displays as expected.
+Added technical support content to the Contact VA page to make it easier to get help when needed.

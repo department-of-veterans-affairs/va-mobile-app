@@ -52,6 +52,7 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
             dispatch(logout())
           }}
           label={'Save and Logout'}
+          testID={'demoModeUserSave'}
         />
       </TextArea>
     </FeatureLandingTemplate>

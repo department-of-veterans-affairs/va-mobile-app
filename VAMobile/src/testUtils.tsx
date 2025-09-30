@@ -8,7 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
 import { AnyAction, Store, configureStore } from '@reduxjs/toolkit'
-import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult, UseQueryResult } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult } from '@tanstack/react-query'
 import { render as rtlRender } from '@testing-library/react-native'
 import { renderHook as rtlRenderHook } from '@testing-library/react-native/build/render-hook'
 import path from 'path'
@@ -253,7 +253,7 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
  * - `queryClient`: QueryClient instance to test the state
  * - `result`: The result of the hook
  */
-const renderQuery = (useHook: () => UseQueryResult<any, Error>) => {
+const renderQuery = <T,>(useHook: () => T) => {
   const queryClient = new QueryClient()
   const wrapper = ({ children }: { children: React.ReactNode }) => {
     return (

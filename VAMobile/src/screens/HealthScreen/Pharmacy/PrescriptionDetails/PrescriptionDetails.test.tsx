@@ -4,9 +4,8 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { PrescriptionAttributeData, RefillStatusConstants } from 'api/types'
+import PrescriptionDetails from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionDetails'
 import { context, mockNavProps, render } from 'testUtils'
-
-import PrescriptionDetails from './PrescriptionDetails'
 
 context('PrescriptionDetails', () => {
   const initializeTestInstance = (mockAttributeData: Partial<PrescriptionAttributeData> = {}) => {
@@ -69,15 +68,11 @@ context('PrescriptionDetails', () => {
         prescriptionNumber: '',
       })
       expect(screen.getByRole('header', { name: 'SOMATROPIN 5MG INJ (VI)' })).toBeTruthy()
-      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} ${t('noneNoted')}`)).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.instructionsHeader') })).toBeTruthy()
-      expect(screen.getAllByText(t('noneNoted'))).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.refillLeftHeader') })).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('fillDate') })).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.quantityHeader') })).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.expiresOnHeader') })).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.orderedOnHeader') })).toBeTruthy()
-      expect(screen.getByRole('header', { name: t('prescription.details.vaFacilityHeader') })).toBeTruthy()
+      expect(screen.getByLabelText(`${t('prescription.rxNumber.a11yLabel')} None noted`)).toBeTruthy()
+      expect(screen.getByText(`${t('prescription.details.instructionsNotAvailable')}`)).toBeTruthy()
+      expect(screen.getAllByText(`${t('prescription.details.refillRemainingNotAvailable')}`)).toBeTruthy()
+      expect(screen.getAllByText(`${t('prescription.details.expirationDateNotAvailable')}`)).toBeTruthy()
+      expect(screen.getByText(`${t('prescription.details.facilityNameNotAvailable')}`)).toBeTruthy()
     })
   })
 

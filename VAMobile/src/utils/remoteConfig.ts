@@ -83,7 +83,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: true,
   inAppReview: true,
   labsAndTests: false,
-  nonVAMedsLink: false,
+  nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: true,

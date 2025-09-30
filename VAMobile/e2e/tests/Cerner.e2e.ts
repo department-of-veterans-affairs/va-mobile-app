@@ -3,6 +3,7 @@ import { setTimeout } from 'timers/promises'
 
 import {
   CommonE2eIdConstants,
+  changeDemoModeUser,
   loginToDemoMode,
   openDeveloperScreen,
   openHealth,
@@ -27,6 +28,7 @@ export const CernerIdConstants = {
     "Some care teams use My VA Health. Information from that health portal isn't included here.",
   CERNER_HEALTH_HELP_LINK_TEXT: 'Check if your care team uses My VA Health',
   MESSAGES_ID: 'messagesTestID',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
 }
 
 beforeAll(async () => {
@@ -54,6 +56,7 @@ beforeAll(async () => {
 
     //navigates to correct screen with cerner on
     await loginToDemoMode()
+    await changeDemoModeUser(CernerIdConstants.DESIRED_DEMO_MODE_USER_ID)
   }
 })
 
@@ -78,7 +81,7 @@ describe(':android: Cerner Notice', () => {
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_MESSAGES_TEXT))).toExist()
     await expect(element(by.text(CommonE2eIdConstants.CHEYENNE_FACILITY_TEXT))).toExist()
     await expect(element(by.text(CernerIdConstants.CERNER_NOTE_FACILITY_TEXT))).toExist()
-    await expect(element(by.text("You'll need to use our My VA Health portal to send your message"))).toExist()
+    await expect(element(by.text("You'll need to use our My VA Health portal to send your message."))).toExist()
     await expect(element(by.id(CernerIdConstants.GO_TO_VA_HEALTH_LINK_ID))).toExist()
   })
 
