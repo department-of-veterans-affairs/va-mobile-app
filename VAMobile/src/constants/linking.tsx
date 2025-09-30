@@ -208,6 +208,25 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'my-health') {
+      // TODO: Alter for specific url, just used for testing atm
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'Appointments' }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     }
   },
 }
