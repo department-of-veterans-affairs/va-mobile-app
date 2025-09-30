@@ -28,6 +28,7 @@ import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/Repl
 import Attachments from 'screens/HealthScreen/SecureMessaging/StartNewMessage/Attachments/Attachments'
 import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 import SubmitMileageTravelPayScreen from 'screens/HealthScreen/TravelPay'
+import TravelPayClaimDetailsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimDetailsScreen'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
@@ -55,6 +56,9 @@ export type HealthStackParamList = WebviewStackParams & {
   BeneficiaryTravelAgreementScreen: undefined
   TravelClaimHelpScreen: undefined
   TravelPayClaims: undefined
+  TravelPayClaimDetailsScreen: {
+    claimId: string
+  }
   Messages: undefined
   SecureMessaging: {
     activeTab: number
@@ -222,6 +226,12 @@ export const getHealthScreens = () => {
       key={'SubmitTravelPayClaimScreen'}
       name="SubmitTravelPayClaimScreen"
       component={SubmitMileageTravelPayScreen}
+      options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'TravelPayClaimDetailsScreen'}
+      name="TravelPayClaimDetailsScreen"
+      component={TravelPayClaimDetailsScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
     />,
   ]

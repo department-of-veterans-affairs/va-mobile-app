@@ -16,18 +16,16 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
-import { Events } from 'constants/analytics'
+// import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType } from 'constants/timeframes'
 import { getTestIDFromTextLines } from 'utils/accessibility'
-import { logAnalyticsEvent } from 'utils/analytics'
+// import { logAnalyticsEvent } from 'utils/analytics'
 import { getPickerOptions } from 'utils/dateUtils'
-import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
+import { featureEnabled } from 'utils/remoteConfig'
 
 const getResultsText = (t: TFunction, numResults: number, pageStart: number, pageEnd: number) => {
   if (numResults === 0) {
@@ -83,13 +81,11 @@ function TravelPayClaimsList({
   }, [claims, page, perPage])
 
   const goToClaimDetails = (claimId: string) => {
-    logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-    navigateTo('Webview', {
-      url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-      displayTitle: t('travelPay.webview.claims.displayTitle'),
-      loadingMessage: t('travelPay.webview.claims.loading'),
-      useSSO: true,
-      backButtonTestID: `webviewBack`,
+    if (!featureEnabled('travelPayClaimDetails')) {
+      return
+    }
+    navigateTo('TravelPayClaimDetailsScreen', {
+      claimId: claimId,
     })
   }
 

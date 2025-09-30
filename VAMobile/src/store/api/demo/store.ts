@@ -45,6 +45,7 @@ import {
 import {
   TravelPayDemoReturnTypes,
   TravelPayDemoStore,
+  getTravelPayClaimDetails,
   getTravelPayClaims,
   submitAppointmentClaim,
 } from 'store/api/demo/travelPay'
@@ -267,6 +268,11 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getDebts(store, params, endpoint)
     }
     default: {
+      // Handle dynamic travel pay claims details endpoint
+      if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+        return getTravelPayClaimDetails(store)
+      }
+
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns
     }
   }

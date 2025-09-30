@@ -517,5 +517,77 @@
         }
       }
     ]
+  },
+  "/v0/travel-pay/claims/:id": {
+    "data": {
+      "id": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
+        "claimNumber": "TC202500001",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "In manual review",
+        "appointmentDate": "{{now - 2 days}}",
+        "facilityName": "Cheyenne VA Medical Center",
+        "totalCostRequested": 47.5,
+        "reimbursementAmount": 47.5,
+        "rejectionReason": null,
+        "appointment": {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 2 days}}",
+          "appointmentName": "Primary Care Appointment",
+          "appointmentType": "Primary Care",
+          "facilityId": "442",
+          "facilityName": "Cheyenne VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-12345",
+          "associatedClaimId": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
+          "associatedClaimNumber": "TC202500001",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 2 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 42.5,
+            "costSubmitted": 42.5
+          },
+          {
+            "id": "exp2-3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 2 days}}",
+            "description": "Medical center parking",
+            "costRequested": 5.0,
+            "costSubmitted": 5.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 1 day}}"
+          },
+          {
+            "documentId": "doc2-3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 1 day}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
   }
 }
