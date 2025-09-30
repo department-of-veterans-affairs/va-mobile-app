@@ -48,7 +48,8 @@ function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   const [filter, setFilter] = useState<Set<string>>(new Set())
   const [sortBy, setSortBy] = useState(SortOption.Recent)
   const [currentPage, setCurrentPage] = useState(1)
-  const backLabelKey = backLabelForNavigation[route.params.from]
+
+  const backLabelKey = backLabelForNavigation[route.params?.from ?? 'Back']
 
   const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
 

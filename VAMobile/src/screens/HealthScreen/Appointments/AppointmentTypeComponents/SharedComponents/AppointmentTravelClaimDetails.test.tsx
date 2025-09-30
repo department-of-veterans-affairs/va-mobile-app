@@ -10,14 +10,24 @@ import {
   AppointmentType,
   AppointmentTypeConstants,
 } from 'api/types'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { AppointmentTravelClaimDetails } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { ErrorsState } from 'store/slices'
-import { RenderParams, render, screen, when } from 'testUtils'
+import { RenderParams, fireEvent, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
+
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 const mockMutationState = { status: 'success' }
 let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
@@ -343,6 +353,11 @@ describe('AppointmentTravelClaimDetails', () => {
               expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
               expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
               expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+
+              fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+              expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
+                from: TravelClaimsScreenEntry.AppointmentDetail,
+              })
             })
           })
         })
@@ -431,6 +446,11 @@ describe('AppointmentTravelClaimDetails', () => {
           ).toBeTruthy()
           expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
           expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+
+          fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
+            from: TravelClaimsScreenEntry.AppointmentDetail,
+          })
         })
       })
     })
