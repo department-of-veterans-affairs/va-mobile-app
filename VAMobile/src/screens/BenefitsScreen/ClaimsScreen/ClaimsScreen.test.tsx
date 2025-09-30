@@ -63,7 +63,7 @@ context('ClaimsScreen', () => {
       expect(screen.getByTestId('toTravelPayClaimsID')).toBeTruthy()
     })
 
-    it('navigates to Travel Claims screen when pressed', () => {
+    it('should navigate to the Travel Claims screen', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
@@ -71,9 +71,7 @@ context('ClaimsScreen', () => {
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
-        from: TravelClaimsScreenEntry.Claims,
-      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', { from: TravelClaimsScreenEntry.Claims })
     })
   })
 })
