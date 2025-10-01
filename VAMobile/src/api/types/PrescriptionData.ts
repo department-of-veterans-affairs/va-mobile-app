@@ -146,6 +146,24 @@ export type SingleRefillRequest = {
   id: string
 }
 
+export type RefillResponsePrescriptionListItem = {
+  id: string
+  stationNumber: string
+  status: string
+}
+
+export type PrescriptionRefillError = {
+  developerMessage: string
+  prescriptionId: string
+  stationNumber: string
+}
+
+export type PrescriptionRefillInfoMessage = {
+  prescriptionId: string
+  message: string
+  stationNumber: string
+}
+
 export type PrescriptionTrackingInfoOtherItem = {
   prescriptionName: string
   prescriptionNumber: string
@@ -200,11 +218,13 @@ export type PrescriptionTrackingInfoGetData = {
 }
 
 export type PrescriptionRefillAttributeData = {
-  failedStationList: string | null
-  successfulStationList: string | null
+  failedStationList: string | string[] | null
+  successfulStationList: string | string[] | null
   lastUpdatedTime: string | null
-  prescriptionList: string | null
-  failedPrescriptionIds: Array<string>
+  prescriptionList: string | RefillResponsePrescriptionListItem[] | null
+  failedPrescriptionIds: Array<string> | Array<{ id: string; stationNumber: string }>
+  errors: PrescriptionRefillError[]
+  infoMessages: PrescriptionRefillInfoMessage[]
 }
 
 export type PrescriptionRefillData = {

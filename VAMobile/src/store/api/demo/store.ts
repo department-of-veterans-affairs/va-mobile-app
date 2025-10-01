@@ -309,16 +309,6 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     case '/v0/travel-pay/claims': {
       return submitAppointmentClaim(params as unknown as SubmitSMOCTravelPayClaimParameters)
     }
-    /**
-     * PRESCRIPTIONS REFILL
-     */
-    case `/v0/health/rx/prescriptions/refill`:
-    case `/v1/health/rx/prescriptions/refill`: {
-      return requestRefill(store, params as { ids: string[] | Array<{ id: string; stationNumber: string }> })
-    }
-    default: {
-      return undefined
-    }
   }
 }
 
@@ -352,6 +342,12 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
      */
     case '/v0/user/preferred_name': {
       return updatePreferredName(store, params as PreferredNameUpdatePayload)
+    } /**
+     * PRESCRIPTIONS REFILL
+     */
+    case `/v0/health/rx/prescriptions/refill`:
+    case `/v1/health/rx/prescriptions/refill`: {
+      return requestRefill(store, params as { ids: string[] | Array<{ id: string; stationNumber: string }> })
     }
     default: {
       return undefined

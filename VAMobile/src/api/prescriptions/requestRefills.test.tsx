@@ -83,6 +83,8 @@ describe('requestRefills', () => {
         successfulStationList: '123,456',
         lastUpdatedTime: '2023-01-01T12:00:00Z',
         prescriptionList: 'prescription-list-id',
+        errors: [],
+        infoMessages: [],
       },
     },
   }
@@ -97,6 +99,14 @@ describe('requestRefills', () => {
         successfulStationList: '123',
         lastUpdatedTime: '2023-01-01T12:00:00Z',
         prescriptionList: 'prescription-list-id',
+        errors: [
+          {
+            developerMessage: 'Prescription not eligible for refill',
+            prescriptionId: '456',
+            stationNumber: '456',
+          },
+        ],
+        infoMessages: [],
       },
     },
   }
@@ -351,6 +361,8 @@ describe('requestRefills', () => {
             successfulStationList: '123,456',
             lastUpdatedTime: '2023-01-01T12:00:00Z',
             prescriptionList: 'prescription-list-id',
+            errors: [],
+            infoMessages: [],
           },
         },
       }
@@ -375,6 +387,61 @@ describe('requestRefills', () => {
       ]
 
       expect(result.current.data).toEqual(expectedResult)
+    })
+
+    it('should handle response with errors and info messages', async () => {
+      const responseWithErrorsAndInfo: PrescriptionRefillData = {
+        data: {
+          id: 'refill-response',
+          type: 'PrescriptionRefillResponse',
+          attributes: {
+            failedPrescriptionIds: ['456'],
+            failedStationList: '456',
+            successfulStationList: '123',
+            lastUpdatedTime: '2023-01-01T12:00:00Z',
+            prescriptionList: 'prescription-list-id',
+            errors: [
+              {
+                developerMessage: 'Prescription cannot be refilled at this time',
+                prescriptionId: '456',
+                stationNumber: '456',
+              },
+            ],
+            infoMessages: [
+              {
+                prescriptionId: '123',
+                message: 'Refill request processed successfully',
+                stationNumber: '123',
+              },
+            ],
+          },
+        },
+      }
+
+      const mockPut = api.put as jest.Mock
+      mockPut.mockResolvedValueOnce(responseWithErrorsAndInfo)
+
+      const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+      await act(async () => {
+        result.current.mutate(mockPrescriptions)
+      })
+
+      await waitFor(() => {
+        expect(result.current.isSuccess).toBeTruthy()
+      })
+
+      const expectedResult: RefillRequestSummaryItems = [
+        { submitted: true, data: mockPrescription1 },
+        { submitted: false, data: mockPrescription2 },
+      ]
+
+      expect(result.current.data).toEqual(expectedResult)
+
+      // Verify that the response includes the new error and info message fields
+      expect(result.current.data).toBeDefined()
+      expect(responseWithErrorsAndInfo.data.attributes.errors).toHaveLength(1)
+      expect(responseWithErrorsAndInfo.data.attributes.infoMessages).toHaveLength(1)
     })
   })
 })

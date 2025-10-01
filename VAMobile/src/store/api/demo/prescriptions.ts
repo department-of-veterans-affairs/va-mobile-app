@@ -51,7 +51,7 @@ export const getPrescriptions = (store: DemoStore, params: Params, endpoint: str
 export const requestRefill = (store: DemoStore, params: RefillRequestParams): PrescriptionRefillData => {
   let prescriptionIds: string[]
   let stationNumbers: string[] = []
-
+  const failedPrescriptionIds: Array<string> | Array<{ id: string; stationNumber: string }> = []
   // Handle both v0 format { ids: string[] } and v1 format { ids: SingleRefillRequest[] }
   if (params.ids && Array.isArray(params.ids) && params.ids.length > 0) {
     if (typeof params.ids[0] === 'string') {
@@ -59,10 +59,48 @@ export const requestRefill = (store: DemoStore, params: RefillRequestParams): Pr
       prescriptionIds = params.ids as string[]
       stationNumbers = ['SLC10', 'DAYT29'] // Default station numbers for v0
     } else {
-      // v1 format: { ids: SingleRefillRequest[] }
-      const v1Requests = params.ids as SingleRefillRequest[]
-      prescriptionIds = v1Requests.map((request) => request.id)
-      stationNumbers = [...new Set(v1Requests.map((request) => request.stationNumber))]
+      // [
+      // success: {"id": "21142579", "stationNumber": "979"},
+      // fail: {"id": "21142625", "stationNumber": "989"}
+      // ]
+      return {
+        data: {
+          id: '775f2f68-132c-4548-ae7c-ad8e1f5d9fff',
+          type: 'PrescriptionRefills',
+          attributes: {
+            failedStationList: ['556'],
+            successfulStationList: ['556'],
+            lastUpdatedTime: '2025-09-30T22:04:58Z',
+            prescriptionList: [
+              {
+                id: '21142579',
+                status: 'Already in Queue',
+                stationNumber: '979',
+              },
+            ],
+            failedPrescriptionIds: [
+              {
+                id: '21142625',
+                stationNumber: '989',
+              },
+            ],
+            errors: [
+              {
+                developerMessage: '^ER:Error:',
+                prescriptionId: '21142625',
+                stationNumber: '989',
+              },
+            ],
+            infoMessages: [
+              {
+                prescriptionId: '21142579',
+                message: 'Already in Queue',
+                stationNumber: '979',
+              },
+            ],
+          },
+        },
+      }
     }
   } else {
     prescriptionIds = []
@@ -78,7 +116,9 @@ export const requestRefill = (store: DemoStore, params: RefillRequestParams): Pr
         successfulStationList: stationNumbers.join(','),
         lastUpdatedTime: new Date().toISOString(),
         prescriptionList: prescriptionIds.join(','),
-        failedPrescriptionIds: [],
+        failedPrescriptionIds,
+        errors: [],
+        infoMessages: [],
       },
     },
   }

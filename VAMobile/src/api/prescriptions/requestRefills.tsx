@@ -38,7 +38,14 @@ const requestRefills = async (
     `/${API_VERSION}/health/rx/prescriptions/refill`,
     requestBody as Params,
   )
-  const failedPrescriptionIds = response?.data.attributes.failedPrescriptionIds || []
+  const failedPrescriptionIds =
+    response?.data.attributes.failedPrescriptionIds.map((failed) => {
+      if (useV1 && typeof failed === 'object' && failed !== null && 'id' in failed) {
+        return (failed as { id: string }).id
+      } else {
+        return failed as string
+      }
+    }) || []
   results = prescriptions.map((prescription) => ({
     submitted: !failedPrescriptionIds.includes(prescription.id),
     data: prescription,
