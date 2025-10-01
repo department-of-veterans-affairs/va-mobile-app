@@ -364,7 +364,7 @@ export const AppealIssueLastAction: {
 
 export type AppealIssue = {
   active: boolean
-  description: string
+  description: string | null
   diagnosticCode: string | null
   lastAction: AppealIssueLastActionTypes
   date: string | null
@@ -404,6 +404,18 @@ export const AppealTypesConstants: {
   higherLevelReview: 'higherLevelReview',
   supplementalClaim: 'supplementalClaim',
   legacyAppeal: 'legacyAppeal',
+  appeal: 'appeal',
+}
+
+export const AppealTypesDisplayNames: {
+  higherLevelReview: 'Higher-Level Review'
+  supplementalClaim: 'Supplemental Claim'
+  legacyAppeal: 'appeal'
+  appeal: 'appeal'
+} = {
+  higherLevelReview: 'Higher-Level Review',
+  supplementalClaim: 'Supplemental Claim',
+  legacyAppeal: 'appeal',
   appeal: 'appeal',
 }
 

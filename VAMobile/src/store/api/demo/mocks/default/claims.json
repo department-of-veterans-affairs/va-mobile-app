@@ -3955,6 +3955,62 @@
             "active": false,
             "lastAction": null,
             "date": "02-04-11"
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": "Service connection, neck strain",
+            "diagnosticCode": "8518",
+            "active": true,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": null,
+            "date": "02-04-11"
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "denied",
+            "date": "03-04-11"
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "field_grant",
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "field_grant",
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "withdrawn",
+            "date": null
           }
         ],
         "location": "bva",
@@ -5150,6 +5206,20 @@
             "active": true,
             "lastAction": null,
             "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": "02-04-11"
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": "2008-04-10"
           }
         ],
         "location": "bva",
@@ -5193,6 +5263,20 @@
             "diagnosticCode": "7518",
             "active": true,
             "lastAction": null,
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": null,
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": "denied",
             "date": null
           }
         ],

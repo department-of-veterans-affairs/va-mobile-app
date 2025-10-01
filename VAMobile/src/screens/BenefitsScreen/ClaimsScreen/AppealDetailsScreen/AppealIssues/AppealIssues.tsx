@@ -1,19 +1,27 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealIssue, AppealIssueLastAction } from 'api/types'
+import { AppealIssue, AppealIssueLastAction, AppealTypes } from 'api/types'
+import { AppealTypesDisplayNames } from 'api/types/ClaimsAndAppealsData'
 import { AccordionCollapsible, Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type AppealIssuesProps = {
+  appealType: AppealTypes
   issues: Array<AppealIssue>
 }
 
-function AppealIssues({ issues }: AppealIssuesProps) {
+function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  console.log('appealType', AppealTypesDisplayNames[appealType])
+
+  const appealTypeName = appealType.includes('appeal')
+    ? AppealTypesDisplayNames[appealType]
+    : `your ${AppealTypesDisplayNames[appealType]}`
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
@@ -71,7 +79,16 @@ function AppealIssues({ issues }: AppealIssuesProps) {
     if (!items.length) {
       return null
     }
-    const listOfIssues = items.map((item) => item.description)
+    const itemsWithNullDescription = items.filter((item) => item.description === null)
+    const itemsWithDescriptions = items.filter((item) => item.description !== null)
+    const listOfIssues = itemsWithDescriptions.map((item) => item.description as string)
+
+    // Add one item that informs the user of how many issues have null descriptions
+    // This will display one list item per status (remand, granted, etc.)
+    if (itemsWithNullDescription.length > 0) {
+      const issueText = itemsWithNullDescription.length > 1 ? 'issues' : 'issue'
+      listOfIssues.push(t(`We're unable to show ${itemsWithNullDescription.length} ${issueText} on ${appealTypeName}`))
+    }
     return (
       <>
         <TextView
