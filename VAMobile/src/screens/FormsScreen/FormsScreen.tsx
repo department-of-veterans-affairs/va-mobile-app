@@ -47,7 +47,6 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
         dispatch(setOpenFormImmediately(false))
         const domainIndex = url.indexOf(DOMAIN)
         const endUrl = url.slice(domainIndex + DOMAIN.length)
-
         let status = ''
         switch (endUrl) {
           // Do not save the statement until the user reaches the personal info screen.
@@ -64,7 +63,9 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
           case '/supporting-forms-for-claims/request-priority-processing-form-20-10207/introduction':
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-records-request':
           case '/records/request-personal-records-form-20-10206/introduction':
-            return
+            url = `${DOMAIN}/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`
+            status = FORM_STATUS.draft
+            break
           // Save the statement as a draft while in the middle of the form or once the form has been saved
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-information':
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/identification-information':
@@ -117,25 +118,42 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
   }, [activeForms])
 
   const updateForm = (formId: number, url: string) => {
-    const endUrl = url.slice(url.lastIndexOf('/') + 1, url.length)
     let status: FormStatus = FORM_STATUS.draft
-
+    const domainIndex = url.indexOf(DOMAIN)
+    const endUrl = url.slice(domainIndex + DOMAIN.length)
     switch (endUrl) {
-      // cover the case if they click on form-saved
-      case 'form-saved':
-      case 'personal-information':
-      case 'identification-information':
-      case 'mailing-address':
-      case 'contact-information':
-      case 'statement':
-      case 'review-and-submit':
+      // Do not save the statement until the user reaches the personal info screen.
+      // These are all the screens before then
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/introduction':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement-type':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/claim-status-tool':
+      case '/track-claims/your-claims':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/decision-review':
+      case '/resources/choosing-a-decision-review-option/':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/lay-witness-statement':
+      case '/supporting-forms-for-claims/lay-witness-statement-form-21-10210/introduction':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/priority-processing':
+      case '/supporting-forms-for-claims/request-priority-processing-form-20-10207/introduction':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-records-request':
+      case '/records/request-personal-records-form-20-10206/introduction':
+        url = `${DOMAIN}/supporting-forms-for-claims/submit-statement-form-21-4138/introduction`
         status = FORM_STATUS.draft
         break
-      case 'confirmation':
-      default:
-        // Assumed they finish at this point if they got to confirmation or are on a different page now
-        status = FORM_STATUS.inProgress
+      // Save the statement as a draft while in the middle of the form or once the form has been saved
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/personal-information':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/identification-information':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/mailing-address':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/contact-information':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/review-and-submit':
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/form-saved':
+        status = FORM_STATUS.draft
         break
+      // Assumed they finish at this point if they got to confirmation or are on a different page now
+      // or any other endpoint that could be reached after form submission
+      case '/supporting-forms-for-claims/submit-statement-form-21-4138/confirmation':
+      default:
+        status = FORM_STATUS.inProgress
     }
 
     snackbar.show('Form updated successfully', {
