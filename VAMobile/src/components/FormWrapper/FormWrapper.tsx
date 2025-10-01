@@ -1,5 +1,6 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
+import { RadioButton, RadioButtonProps } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import {
@@ -8,7 +9,6 @@ import {
   ComboBoxInputProps,
   FormAttachments,
   FormAttachmentsProps,
-  RadioGroup,
   RadioGroupProps,
   VAModalPicker,
   VAModalPickerProps,
@@ -269,13 +269,7 @@ const FormWrapper = <T,>({
           />
         )
       case FieldType.Radios:
-        return (
-          <RadioGroup
-            {...(fieldProps as RadioGroupProps<T>)}
-            setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
-            error={errors[index]}
-          />
-        )
+        return <RadioButton {...(fieldProps as RadioButtonProps)} error={errors[index]} />
       case FieldType.FormAttachmentsList:
         return <FormAttachments {...(fieldProps as FormAttachmentsProps)} />
       case FieldType.ComboBox:

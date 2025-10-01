@@ -49,7 +49,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "<https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows> update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "<https://ecc.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=P92C7UP|Mobile Maintenance Windows> update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   start_slack_thread_failure:
     name: Start Slack thread for failure
@@ -59,4 +59,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "<https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows> update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "<https://ecc.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=P92C7UP|Mobile Maintenance Windows> update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
