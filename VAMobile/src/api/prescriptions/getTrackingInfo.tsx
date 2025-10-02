@@ -53,7 +53,6 @@ const getTrackingDataForPrescription = async ({
         },
       }))
     : []
-  console.log('getTrackingDataForPrescription returning', rv)
   return rv
 }
 /**
