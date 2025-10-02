@@ -14,20 +14,26 @@ jobs:
       run:
         working-directory: VAMobile
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
             VAMobile/maintenance_windows.py
             VAMobile/requirements.txt
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Check Maintenance Windows
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
         run: |
           echo "Installing dependencies..."
