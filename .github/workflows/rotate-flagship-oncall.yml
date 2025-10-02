@@ -70,30 +70,36 @@ jobs:
         id: get-channel
         run: |
           CHANNEL_NAME="va-mobile-app-alerts"
-          fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '$SLACK_API_TOKEN' ' \
-            -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list
-            cursor=$cursor | jq .)
-          }
-          get_id() {
-            id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
-          }
-          get_cursor() {
-            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
-          }
-          id=""
-          cursor=""
-          last_response=""
-          fetch_page
-          get_id
-          while [[ -z "$id" ]]
-          do
-            get_cursor
-            fetch_page
-            get_id
+          cursor="" 
+
+          while true; do
+            echo "Fetching conversations list with cursor: '$cursor'"
+            response=$(curl -s -X GET "https://slack.com/api/conversations.list?limit=1000&cursor=$cursor" \
+              -H "Authorization: Bearer $SLACK_API_TOKEN" \
+              -H "Content-type: application/x-www-form-urlencoded")
+            
+            ok=$(echo "$response" | jq -r .ok)
+            if [ "$ok" != "true" ]; then
+              echo "Error fetching conversations from Slack:"
+              echo "$response"
+              exit 1
+            fi
+            
+            channel_id=$(echo "$response" | jq -r --arg CHAN "$CHANNEL_NAME" '.channels[] | select(.name == $CHAN) | .id')
+            
+            if [ -n "$channel_id" ]; then
+              echo "Found channel ID: $channel_id"
+              echo "channel_id=$channel_id" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            
+            cursor=$(echo "$response" | jq -r .response_metadata.next_cursor)
+            
+            if [ -z "$cursor" ] || [ "$cursor" == "null" ]; then
+              echo "Channel '$CHANNEL_NAME' not found after checking all conversations."
+              exit 1
+            fi
           done
-          echo "channel_id=${id}" >> $GITHUB_OUTPUT
       - name: Send Slack notification
         run: |
           SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
