@@ -1,62 +1,67 @@
 name: '[Admin] Flagship Mobile Alerts Weekly On-Call Assignment'
-
 on:
+  push:
   workflow_dispatch:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
     - cron: '30 13 * * 1'
-
 env:
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-
+  # IMPORTANT: You must create a PAGERDUTY_API_TOKEN secret in your repository settings.
+  # This token needs read-only access to your PagerDuty schedules and users.
+  PAGERDUTY_API_TOKEN: ${{ secrets.PD_KEY }}
+  # IMPORTANT: Replace 'YOUR_SCHEDULE_ID' with your actual PagerDuty schedule ID.
+  PAGERDUTY_SCHEDULE_ID: 'PH01C1M'
 jobs:
   assign-oncall:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - name: Set static on-call rotation through 2025
+      - name: Get on-call person from PagerDuty
         id: select-oncall
         run: |
-          # Static rotation order and Slack mapping
-          declare -A GITHUB_TO_SLACK=(
-            ["timwright12"]="U08H8A5Q00J"
-            ["ryan-mcneil"]="U051N9T603X"
-            ["SMLuthi"]="U9YP3N7C7"
-            ["jbergman-oddball"]="U08FHQEA8P7"
+          # This map is used to correlate the PagerDuty user email with their Slack user ID.
+          # Please update this with the email addresses of your on-call users from PagerDuty and their corresponding Slack Member IDs.
+          # Example: ["user.name@company.com"]="U0123456789"
+          declare -A EMAIL_TO_SLACK_ID=(
+            ["ryan.mcneil@example.com"]="U051N9T603X"
+            ["silvio.luthi@example.com"]="U9YP3N7C7"
+            ["josh.bergman@example.com"]="U08FHQEA8P7"
           )
-          # Get current week number (ISO week, Monday-based)
+
+          # Fetch the current on-call user from PagerDuty for the specified schedule
+          echo "Fetching on-call user from PagerDuty for schedule: $PAGERDUTY_SCHEDULE_ID"
+          ONCALL_RESPONSE=$(curl -s -X GET \
+            -H "Authorization: Token token=$PAGERDUTY_API_TOKEN" \
+            -H "Accept: application/vnd.pagerduty+json;version=2" \
+            "https://api.pagerduty.com/oncalls?schedule_ids[]=$PAGERDUTY_SCHEDULE_ID&include[]=users")
+
+          # Extract the email and name of the primary on-call user (escalation level 1)
+          ONCALL_EMAIL=$(echo "$ONCALL_RESPONSE" | jq -r '.oncalls | map(select(.escalation_level == 1)) | .[0].user.email')
+          ONCALL_PERSON_NAME=$(echo "$ONCALL_RESPONSE" | jq -r '.oncalls | map(select(.escalation_level == 1)) | .[0].user.summary')
+
+          if [ -z "$ONCALL_EMAIL" ] || [ "$ONCALL_EMAIL" == "null" ]; then
+            echo "Could not determine on-call person from PagerDuty. Check your PAGERDUTY_API_TOKEN and PAGERDUTY_SCHEDULE_ID."
+            # Fallback to a default person if PagerDuty fails
+            ONCALL_PERSON="Tim Wright" # Fallback to a default name
+            SLACK_MENTION="<@U08H8A5Q00J>" # Fallback to a default Slack user ID
+            echo "Falling back to default on-call: $ONCALL_PERSON"
+          else
+            SLACK_USER_ID="${EMAIL_TO_SLACK_ID[$ONCALL_EMAIL]}"
+            if [ -z "$SLACK_USER_ID" ]; then
+              # If no Slack ID is found, mention the person by name as a fallback.
+              echo "Warning: Could not find Slack user ID for email: $ONCALL_EMAIL. Mentioning by name."
+              SLACK_MENTION="$ONCALL_PERSON_NAME"
+            else
+              SLACK_MENTION="<@$SLACK_USER_ID>"
+            fi
+            ONCALL_PERSON="$ONCALL_PERSON_NAME"
+          fi
+
           WEEK_NUM=$(date -u +%V)
           YEAR=$(date -u +%G)
-          # Set the rotation start week and order
-          # This week (Aug 25, 2025) is Tim Wright, then Ryan, Silvio, Josh, repeat
-          # Find the week number for this week as the anchor
-          ANCHOR_YEAR=2025
-          ANCHOR_WEEK=35
-          # Calculate offset from anchor
-          if [ "$YEAR" -lt "$ANCHOR_YEAR" ]; then
-            OFFSET=0
-          else
-            OFFSET=$(( ( (YEAR-ANCHOR_YEAR)*52 + WEEK_NUM - ANCHOR_WEEK ) ))
-            if [ $OFFSET -lt 0 ]; then OFFSET=0; fi
-          fi
-          case $((OFFSET % 4)) in
-            0) ONCALL_PERSON="timwright12";;
-            1) ONCALL_PERSON="ryan-mcneil";;
-            2) ONCALL_PERSON="SMLuthi";;
-            3) ONCALL_PERSON="jbergman-oddball";;
-            *) ONCALL_PERSON="timwright12";;
-          esac
-          # Fallback if for some reason not set
-          if [ -z "$ONCALL_PERSON" ]; then
-            ONCALL_PERSON="timwright12"
-          fi
-          SLACK_USER_ID="${GITHUB_TO_SLACK[$ONCALL_PERSON]}"
-          if [ -z "$SLACK_USER_ID" ]; then
-            SLACK_MENTION="@$ONCALL_PERSON"
-          else
-            SLACK_MENTION="<@$SLACK_USER_ID>"
-          fi
+
           echo "oncall_person=$ONCALL_PERSON" >> $GITHUB_OUTPUT
           echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
           echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
@@ -66,47 +71,5 @@ jobs:
         run: |
           CHANNEL_NAME="va-mobile-app-alerts"
           fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/x-www-form-urlencoded' \
-            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
-          }
-          get_id() {
-            id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
-          }
-          get_cursor() {
-            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
-          }
-          id=""
-          cursor=""
-          last_response=""
-          fetch_page
-          get_id
-          while [[ -z "$id" ]]
-          do
-            get_cursor
-            fetch_page
-            get_id
-          done
-          echo "channel_id=${id}" >> $GITHUB_OUTPUT
-      - name: Send Slack notification
-        run: |
-          SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
-          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
-          URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
-          echo "Sending Slack notification..."
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json; charset=utf-8" \
-            -d "{\"channel\":\"$CHANNEL_ID\",\"text\":\"🚨 *On-Call Alert rotation this week: $SLACK_MENTION*\\n\\nOn call procedure: <$URL>\"}" \
-            https://slack.com/api/chat.postMessage
-      - name: Update channel topic
-        run: |
-          SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
-          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
-          TOPIC_TEXT="Alert rotation this week: $SLACK_MENTION\nOn call procedure: https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
-          echo "Updating channel topic..."
-          curl -X POST \
-            -H "Authorization: Bearer $SLACK_API_TOKEN" \
-            -H "Content-type: application/json; charset=utf-8" \
-            -d "{\"channel\":\"$CHANNEL_ID\",\"topic\":\"$TOPIC_TEXT\"}" \
-            https://slack.com/api/conversations.setTopic
+            last_response=$(curl -X GET -H 'Authorization: Bearer '
+
