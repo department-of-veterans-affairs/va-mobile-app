@@ -39,7 +39,7 @@ const requestRefills = async (
     requestBody as Params,
   )
   const failedPrescriptionIds =
-    response?.data.attributes.failedPrescriptionIds.map((failed) => {
+    response?.data.attributes.failedPrescriptionIds?.map((failed) => {
       if (useV1 && typeof failed === 'object' && failed !== null && 'id' in failed) {
         return (failed as { id: string }).id
       } else {
@@ -47,7 +47,7 @@ const requestRefills = async (
       }
     }) || []
   results = prescriptions.map((prescription) => ({
-    submitted: !failedPrescriptionIds.includes(prescription.id),
+    submitted: !failedPrescriptionIds?.includes(prescription.id),
     data: prescription,
   }))
   return results

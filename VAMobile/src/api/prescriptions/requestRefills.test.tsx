@@ -89,7 +89,7 @@ describe('requestRefills', () => {
     },
   }
 
-  const mockPartialFailureRefillResponse: PrescriptionRefillData = {
+  const mockPartialFailureRefillResponseV0: PrescriptionRefillData = {
     data: {
       id: 'refill-response',
       type: 'PrescriptionRefillResponse',
@@ -202,7 +202,7 @@ describe('requestRefills', () => {
 
     it('should handle partial failures correctly', async () => {
       const mockPut = api.put as jest.Mock
-      mockPut.mockResolvedValueOnce(mockPartialFailureRefillResponse)
+      mockPut.mockResolvedValueOnce(mockPartialFailureRefillResponseV0)
 
       const { result } = renderHook(() => useRequestRefills(), { wrapper })
 
@@ -442,6 +442,231 @@ describe('requestRefills', () => {
       expect(result.current.data).toBeDefined()
       expect(responseWithErrorsAndInfo.data.attributes.errors).toHaveLength(1)
       expect(responseWithErrorsAndInfo.data.attributes.infoMessages).toHaveLength(1)
+    })
+
+    describe('failedPrescriptionIds handling', () => {
+      it('should handle v0 API failedPrescriptionIds as strings', async () => {
+        const responseWithStringIds: PrescriptionRefillData = {
+          data: {
+            id: 'refill-response',
+            type: 'PrescriptionRefillResponse',
+            attributes: {
+              failedPrescriptionIds: ['456'], // V0 API returns strings
+              failedStationList: '456',
+              successfulStationList: '123',
+              lastUpdatedTime: '2023-01-01T12:00:00Z',
+              prescriptionList: 'prescription-list-id',
+              errors: [],
+              infoMessages: [],
+            },
+          },
+        }
+
+        // Mock V0 API usage (default behavior)
+        ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+          data: {
+            prescriptions: true,
+            medicationsOracleHealthEnabled: false,
+          },
+        })
+        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockResolvedValueOnce(responseWithStringIds)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy()
+        })
+
+        const expectedResult: RefillRequestSummaryItems = [
+          { submitted: true, data: mockPrescription1 },
+          { submitted: false, data: mockPrescription2 }, // This one failed
+        ]
+
+        expect(result.current.data).toEqual(expectedResult)
+      })
+
+      it('should handle v1 API failedPrescriptionIds as objects', async () => {
+        const responseWithObjectIds: PrescriptionRefillData = {
+          data: {
+            id: 'refill-response',
+            type: 'PrescriptionRefillResponse',
+            attributes: {
+              failedPrescriptionIds: [
+                { id: '456', stationNumber: '456' }, // V1 API returns objects
+              ],
+              failedStationList: '456',
+              successfulStationList: '123',
+              lastUpdatedTime: '2023-01-01T12:00:00Z',
+              prescriptionList: 'prescription-list-id',
+              errors: [],
+              infoMessages: [],
+            },
+          },
+        }
+
+        // Mock V1 API usage
+        ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+          data: {
+            prescriptions: true,
+            medicationsOracleHealthEnabled: true,
+          },
+        })
+        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockResolvedValueOnce(responseWithObjectIds)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy()
+        })
+
+        const expectedResult: RefillRequestSummaryItems = [
+          { submitted: true, data: mockPrescription1 },
+          { submitted: false, data: mockPrescription2 }, // This one failed
+        ]
+
+        expect(result.current.data).toEqual(expectedResult)
+      })
+
+      it('should handle mixed failedPrescriptionIds types in v1 API', async () => {
+        const responseWithMixedIds = {
+          data: {
+            id: 'refill-response',
+            type: 'PrescriptionRefillResponse',
+            attributes: {
+              failedPrescriptionIds: [
+                '123', // String format
+                { id: '456', stationNumber: '456' }, // Object format
+              ],
+              failedStationList: '123,456',
+              successfulStationList: '',
+              lastUpdatedTime: '2023-01-01T12:00:00Z',
+              prescriptionList: 'prescription-list-id',
+              errors: [],
+              infoMessages: [],
+            },
+          },
+        } as PrescriptionRefillData
+
+        // Mock V1 API usage
+        ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+          data: {
+            prescriptions: true,
+            medicationsOracleHealthEnabled: true,
+          },
+        })
+        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockResolvedValueOnce(responseWithMixedIds)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy()
+        })
+
+        const expectedResult: RefillRequestSummaryItems = [
+          { submitted: false, data: mockPrescription1 }, // This one failed
+          { submitted: false, data: mockPrescription2 }, // This one failed too
+        ]
+
+        expect(result.current.data).toEqual(expectedResult)
+      })
+
+      it('should handle empty failedPrescriptionIds array', async () => {
+        const responseWithEmptyIds: PrescriptionRefillData = {
+          data: {
+            id: 'refill-response',
+            type: 'PrescriptionRefillResponse',
+            attributes: {
+              failedPrescriptionIds: [],
+              failedStationList: null,
+              successfulStationList: '123,456',
+              lastUpdatedTime: '2023-01-01T12:00:00Z',
+              prescriptionList: 'prescription-list-id',
+              errors: [],
+              infoMessages: [],
+            },
+          },
+        }
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockResolvedValueOnce(responseWithEmptyIds)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy()
+        })
+
+        const expectedResult: RefillRequestSummaryItems = [
+          { submitted: true, data: mockPrescription1 },
+          { submitted: true, data: mockPrescription2 },
+        ]
+
+        expect(result.current.data).toEqual(expectedResult)
+      })
+
+      it('should handle null or undefined failedPrescriptionIds', async () => {
+        const responseWithNullIds: PrescriptionRefillData = {
+          data: {
+            id: 'refill-response',
+            type: 'PrescriptionRefillResponse',
+            attributes: {
+              failedPrescriptionIds: null as unknown as string[], // Simulating unexpected null
+              failedStationList: null,
+              successfulStationList: '123,456',
+              lastUpdatedTime: '2023-01-01T12:00:00Z',
+              prescriptionList: 'prescription-list-id',
+              errors: [],
+              infoMessages: [],
+            },
+          },
+        }
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockResolvedValueOnce(responseWithNullIds)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isSuccess).toBeTruthy()
+        })
+
+        // When failedPrescriptionIds is null/undefined, all should be treated as successful
+        const expectedResult: RefillRequestSummaryItems = [
+          { submitted: true, data: mockPrescription1 },
+          { submitted: true, data: mockPrescription2 },
+        ]
+
+        expect(result.current.data).toEqual(expectedResult)
+      })
     })
   })
 })
