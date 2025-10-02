@@ -48,11 +48,15 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
         const domainIndex = url.indexOf(DOMAIN)
         const endUrl = url.slice(domainIndex + DOMAIN.length)
         let status = ''
+        console.log(endUrl)
         switch (endUrl) {
           // Do not save the statement until the user reaches the personal info screen.
           // These are all the screens before then
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/introduction':
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement-type':
+            status = FORM_STATUS.inProgress
+            break
+          // If the user chooses a path that leads nowhere then they are in a draft and returned to the intro page
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/claim-status-tool':
           case '/track-claims/your-claims':
           case '/supporting-forms-for-claims/submit-statement-form-21-4138/decision-review':
@@ -121,11 +125,15 @@ function FormsScreen({ navigation }: PaymentsScreenProps) {
     let status: FormStatus = FORM_STATUS.draft
     const domainIndex = url.indexOf(DOMAIN)
     const endUrl = url.slice(domainIndex + DOMAIN.length)
+    console.log(endUrl)
     switch (endUrl) {
       // Do not save the statement until the user reaches the personal info screen.
       // These are all the screens before then
       case '/supporting-forms-for-claims/submit-statement-form-21-4138/introduction':
       case '/supporting-forms-for-claims/submit-statement-form-21-4138/statement-type':
+        status = FORM_STATUS.inProgress
+        break
+      // If the user chooses a path that leads nowhere then they are in a draft and returned to the intro page
       case '/supporting-forms-for-claims/submit-statement-form-21-4138/claim-status-tool':
       case '/track-claims/your-claims':
       case '/supporting-forms-for-claims/submit-statement-form-21-4138/decision-review':
