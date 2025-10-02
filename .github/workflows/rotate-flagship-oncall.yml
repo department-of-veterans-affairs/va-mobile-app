@@ -24,11 +24,7 @@ jobs:
           # This map is used to correlate the PagerDuty user email with their Slack user ID.
           # Please update this with the email addresses of your on-call users from PagerDuty and their corresponding Slack Member IDs.
           # Example: ["user.name@company.com"]="U0123456789"
-          declare -A EMAIL_TO_SLACK_ID=(
-            ["ryan.mcneil@oddball.io"]="U051N9T603X"
-            ["silvio.luthi@va.gov"]="U9YP3N7C7"
-            ["josh.bergman@oddball.io"]="U08FHQEA8P7"
-          )
+          declare -A EMAIL_TO_SLACK_ID=(["ryan.mcneil@oddball.io"]="U051N9T603X" ["silvio.luthi@va.gov"]="U9YP3N7C7" ["josh.bergman@oddball.io"]="U08FHQEA8P7")
 
           # Fetch the current on-call user from PagerDuty for the specified schedule
           echo "Fetching on-call user from PagerDuty for schedule: $PAGERDUTY_SCHEDULE_ID"
