@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { TravelPayClaimData } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { CheckboxOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
-import TravelClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
+import TravelClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterModal'
 import { useTheme } from 'utils/hooks'
+import { CheckboxOption, SortOptionType } from 'utils/travelPay'
 
 type TravelPayClaimsFilterProps = {
   claims: Array<TravelPayClaimData>
@@ -15,16 +15,6 @@ type TravelPayClaimsFilterProps = {
   onFilterChanged: (value: Set<string>) => void
   sortBy: SortOptionType
   onSortByChanged: (value: SortOptionType) => void
-}
-
-export type SortOptionType = 'recent' | 'oldest'
-
-export const SortOption: {
-  Recent: SortOptionType
-  Oldest: SortOptionType
-} = {
-  Recent: 'recent',
-  Oldest: 'oldest',
 }
 
 function TravelPayClaimsFilter({

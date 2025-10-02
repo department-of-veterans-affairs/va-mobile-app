@@ -7,13 +7,10 @@ import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-c
 
 import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import TravelClaimsFilterCheckboxGroup, {
-  CheckboxOption,
-} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
+import TravelClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterCheckboxGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import { useFilterToggle } from 'utils/travelPay'
+import { CheckboxOption, SortOption, SortOptionType, useFilterToggle } from 'utils/travelPay'
 
 type TravelPayClaimsFilterModalProps = {
   totalClaims: number

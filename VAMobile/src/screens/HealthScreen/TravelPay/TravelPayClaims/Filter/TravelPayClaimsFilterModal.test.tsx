@@ -3,11 +3,9 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import { CheckboxOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
-import TravelPayClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterModal'
+import TravelPayClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterModal'
 import { context, render } from 'testUtils'
-import { FILTER_KEY_ALL } from 'utils/travelPay'
+import { CheckboxOption, FILTER_KEY_ALL, SortOption } from 'utils/travelPay'
 
 const mockOnFilterChanged = jest.fn()
 const mockOnSortByChanged = jest.fn()

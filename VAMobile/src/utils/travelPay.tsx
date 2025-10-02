@@ -10,11 +10,25 @@ import { sortBy } from 'underscore'
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
-import { SortOption, SortOptionType } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
 
 export const FILTER_KEY_ALL = 'all'
+
+export type SortOptionType = 'recent' | 'oldest'
+
+export const SortOption: {
+  Recent: SortOptionType
+  Oldest: SortOptionType
+} = {
+  Recent: 'recent',
+  Oldest: 'oldest',
+}
+
+export type CheckboxOption = {
+  optionLabelKey: string
+  value: string
+}
 
 /**
  * Strips the timezone offset from a datetime string
@@ -196,4 +210,36 @@ export const useFilterToggle = (
   }
 
   return [selectedFilter, setSelectedFilter, toggleFilter]
+}
+
+/**
+ * Determine if a checkbox is checked based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the value is selected, false otherwise
+ */
+export const isChecked = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size === allOptions.size
+  }
+
+  return selectedValues.has(value)
+}
+
+/**
+ * Determine if a checkbox is in an indeterminate state based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the checkbox is indeterminate, false otherwise
+ */
+export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size > 0 && selectedValues.size < allOptions.size
+  }
+
+  return false
 }

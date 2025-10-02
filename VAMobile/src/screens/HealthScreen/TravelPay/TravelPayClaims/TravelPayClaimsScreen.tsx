@@ -12,16 +12,13 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import NoTravelClaimsFound from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
-import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsDatePicker'
-import TravelPayClaimsFilter, {
-  SortOption,
-  SortOptionType,
-} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
-import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
+import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/DatePicker/TravelPayClaimsDatePicker'
+import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
+import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
+import NoTravelClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
 import { ScreenIDTypesConstants } from 'store/api'
 import { useTheme } from 'utils/hooks'
-import { filteredClaims, sortedClaims } from 'utils/travelPay'
+import { SortOption, SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
 
 type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
 
@@ -127,7 +124,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
           <TravelPayClaimsDatePicker timeFrame={timeFrame} onTimeFrameChanged={onTimeFrameChanged} />
 
           {totalClaims === 0 ? (
-            <NoTravelClaimsFound />
+            <NoTravelClaims />
           ) : (
             <>
               <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} accessible={true}>

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TimeFrameTypeConstants } from 'constants/timeframes'
-import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsDatePicker'
+import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/DatePicker/TravelPayClaimsDatePicker'
 import { context, fireEvent, render, screen } from 'testUtils'
 
 const mockOnTimeFrameChanged = jest.fn()

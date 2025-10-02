@@ -3,9 +3,9 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 
 import { TravelPayClaimData } from 'api/types'
-import TravelPayClaimsFilter, { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
+import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import { context, render } from 'testUtils'
-import { FILTER_KEY_ALL } from 'utils/travelPay'
+import { FILTER_KEY_ALL, SortOption } from 'utils/travelPay'
 
 const claims: Array<TravelPayClaimData> = [
   {

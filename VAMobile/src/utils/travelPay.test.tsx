@@ -1,9 +1,8 @@
 import { waitFor } from '@testing-library/react-native'
 
 import { TravelPayClaimData } from 'api/types'
-import { SortOption } from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilter'
 import { renderHook } from 'testUtils'
-import { FILTER_KEY_ALL, filteredClaims, sortedClaims, useFilterToggle } from 'utils/travelPay'
+import { FILTER_KEY_ALL, SortOption, filteredClaims, sortedClaims, useFilterToggle } from 'utils/travelPay'
 
 const createTestClaim = (id: string, claimStatus: string, appointmentDateTime: string) => ({
   id,

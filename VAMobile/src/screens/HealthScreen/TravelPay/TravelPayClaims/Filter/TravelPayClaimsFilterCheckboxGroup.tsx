@@ -4,30 +4,7 @@ import { Checkbox } from '@department-of-veterans-affairs/mobile-component-libra
 
 import { Box, ButtonDecoratorType, List, ListItemObj, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-import { FILTER_KEY_ALL } from 'utils/travelPay'
-
-export type CheckboxOption = {
-  optionLabelKey: string
-  value: string
-}
-
-export const isChecked = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
-  if (value === FILTER_KEY_ALL) {
-    const allOptions = new Set(options.map((option) => option.value))
-    return selectedValues.size === allOptions.size
-  }
-
-  return selectedValues.has(value)
-}
-
-export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
-  if (value === FILTER_KEY_ALL) {
-    const allOptions = new Set(options.map((option) => option.value))
-    return selectedValues.size > 0 && selectedValues.size < allOptions.size
-  }
-
-  return false
-}
+import { CheckboxOption, FILTER_KEY_ALL, isChecked, isIndeterminate } from 'utils/travelPay'
 
 type TravelPayClaimsFilterCheckboxGroupProps = {
   options: Array<CheckboxOption>

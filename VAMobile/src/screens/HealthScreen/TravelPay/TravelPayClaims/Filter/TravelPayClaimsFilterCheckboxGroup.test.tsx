@@ -2,13 +2,9 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import TravelPayClaimsFilterCheckboxGroup, {
-  CheckboxOption,
-  isChecked,
-  isIndeterminate,
-} from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsFilterCheckboxGroup'
+import TravelPayClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import { context, render } from 'testUtils'
-import { FILTER_KEY_ALL } from 'utils/travelPay'
+import { CheckboxOption, FILTER_KEY_ALL, isChecked, isIndeterminate } from 'utils/travelPay'
 
 const mockOnChange = jest.fn()
 
