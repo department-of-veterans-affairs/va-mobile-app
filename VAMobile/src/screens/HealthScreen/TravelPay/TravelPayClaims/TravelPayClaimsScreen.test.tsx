@@ -159,7 +159,7 @@ context('TravelPayClaims', () => {
 
   it('should show travel claims header', () => {
     initializeTestInstance()
-    expect(screen.getByLabelText(t('travelPay.statusList.title'))).toBeTruthy()
+    expect(screen.getByLabelText(t('travelPay.title'))).toBeTruthy()
   })
 
   it('should show the date range picker and filter', () => {

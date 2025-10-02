@@ -149,7 +149,7 @@ export const filteredClaims = (claims: Array<TravelPayClaimData>, filter: Set<st
  * Sorts the claims based on the provided sort option
  * @param claims - The list of claims
  * @param sortBy - The sort option to apply
- * @returns
+ * @returns The list of claims sorted according to the sort
  */
 export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: SortOptionType) =>
   sortBy(claims, (claim) => {
@@ -166,11 +166,14 @@ export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: Sort
 
 /**
  * Hook to manage toggling a set of filters and tracking the state of which ones are active
- * The key FILTER_KEY_ALL will toggle all the filters and off
  *
- * @param options - options that are available
- * @param initialFilter - starting active options
- * @returns
+ * @param options - Set of all available filter options
+ * @param initialFilter - Set of initially selected filter options
+ * @returns A tuple containing:
+ *   - `selectedFilter` - Set of currently selected filter keys
+ *   - `setSelectedFilter` - Setter to update the selected filters
+ *   - `toggleFilter` - Function to toggle a specific filter on/off. When toggling FILTER_KEY_ALL,
+ *     it will select all options if none/some are selected, or deselect all if all are selected
  */
 export const useFilterToggle = (
   options: Set<string>,

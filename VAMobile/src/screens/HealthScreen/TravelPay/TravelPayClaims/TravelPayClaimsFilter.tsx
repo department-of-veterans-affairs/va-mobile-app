@@ -74,7 +74,7 @@ function TravelPayClaimsFilter({
 
   return (
     <Box {...filterContainerProps}>
-      <Box mr={8} mb={10}>
+      <Box mr={theme.dimensions.smallMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
         <TravelClaimsFilterModal
           totalClaims={totalClaims}
           options={filterOptions}

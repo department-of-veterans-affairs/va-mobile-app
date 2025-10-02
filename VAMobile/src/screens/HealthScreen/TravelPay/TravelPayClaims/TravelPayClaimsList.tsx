@@ -23,8 +23,6 @@ type TravelPayClaimsListProps = {
   onPrev?: (page: number) => void
 }
 
-export const CLAIMS_PER_PAGE = 10
-
 function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()

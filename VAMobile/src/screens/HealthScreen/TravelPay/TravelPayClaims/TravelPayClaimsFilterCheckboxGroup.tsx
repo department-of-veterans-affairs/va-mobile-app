@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, List, ListItemObj, TextView } from 'components'
+import { Box, ButtonDecoratorType, List, ListItemObj, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
 import { FILTER_KEY_ALL } from 'utils/travelPay'
 
@@ -23,8 +23,7 @@ export const isChecked = (value: string, options: Array<CheckboxOption>, selecte
 export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
   if (value === FILTER_KEY_ALL) {
     const allOptions = new Set(options.map((option) => option.value))
-    const somethingOtherThanAll = selectedValues.size > 0 && selectedValues.size < allOptions.size
-    return somethingOtherThanAll
+    return selectedValues.size > 0 && selectedValues.size < allOptions.size
   }
 
   return false
@@ -60,10 +59,9 @@ const TravelPayClaimsFilterCheckboxGroup = ({
   const listItems: Array<ListItemObj> = optionsWithAll.map((option) => {
     return {
       content: (
-        <Box flexDirection={'row'} flexGrow={1} alignItems="center">
+        <Box flexDirection={'row'} justifyContent={'space-between'} width={'100%'} alignItems="center">
           <TextView
             mr={theme.dimensions.condensedMarginBetween}
-            flex={7}
             variant="VASelector"
             color="primary"
             testID={`checkbox_label_${option.value}`}>
@@ -83,6 +81,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
       minHeight: 64,
       backgroundColor: isChecked(option.value, options, selectedValues) ? 'listActive' : undefined,
       onPress: () => onChange(option.value),
+      decorator: ButtonDecoratorType.None,
     }
   })
 

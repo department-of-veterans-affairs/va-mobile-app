@@ -1694,7 +1694,6 @@
   "travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading": "Loading the travel claims status page...",
   "travelPay.webview.fileForTravelPay.title": "Travel Pay Reimbursement",
   "travelPay.title": "Travel claims",
-  "travelPay.statusList.title": "Travel claims",
   "travelPay.statusList.allOf": "All of {{year}}",
   "travelPay.statusList.appointmentDateLine1": "{{date}} at",
   "travelPay.statusList.appointmentDateLine2": "{{time}} appointment",

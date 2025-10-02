@@ -5,7 +5,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
-function NoTravelClaimsFound() {
+function NoTravelClaims() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -26,4 +26,4 @@ function NoTravelClaimsFound() {
   )
 }
 
-export default NoTravelClaimsFound
+export default NoTravelClaims
