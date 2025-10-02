@@ -1,6 +1,5 @@
 name: '[Admin] Flagship Mobile Alerts Weekly On-Call Assignment'
 on:
-  push:
   workflow_dispatch:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
@@ -25,9 +24,9 @@ jobs:
           # Please update this with the email addresses of your on-call users from PagerDuty and their corresponding Slack Member IDs.
           # Example: ["user.name@company.com"]="U0123456789"
           declare -A EMAIL_TO_SLACK_ID=(
-            ["ryan.mcneil@example.com"]="U051N9T603X"
-            ["silvio.luthi@example.com"]="U9YP3N7C7"
-            ["josh.bergman@example.com"]="U08FHQEA8P7"
+            ["ryan.mcneil@oddball.io"]="U051N9T603X"
+            ["silvio.luthi@va.gov"]="U9YP3N7C7"
+            ["josh.bergman@oddball.io"]="U08FHQEA8P7"
           )
 
           # Fetch the current on-call user from PagerDuty for the specified schedule
@@ -44,8 +43,8 @@ jobs:
           if [ -z "$ONCALL_EMAIL" ] || [ "$ONCALL_EMAIL" == "null" ]; then
             echo "Could not determine on-call person from PagerDuty. Check your PAGERDUTY_API_TOKEN and PAGERDUTY_SCHEDULE_ID."
             # Fallback to a default person if PagerDuty fails
-            ONCALL_PERSON="Tim Wright" # Fallback to a default name
-            SLACK_MENTION="<@U08H8A5Q00J>" # Fallback to a default Slack user ID
+            ONCALL_PERSON="Josh Bergman" # Fallback to a default name
+            SLACK_MENTION="<@U08FHQEA8P7>" # Fallback to a default Slack user ID
             echo "Falling back to default on-call: $ONCALL_PERSON"
           else
             SLACK_USER_ID="${EMAIL_TO_SLACK_ID[$ONCALL_EMAIL]}"
@@ -72,4 +71,3 @@ jobs:
           CHANNEL_NAME="va-mobile-app-alerts"
           fetch_page() {
             last_response=$(curl -X GET -H 'Authorization: Bearer '
-
