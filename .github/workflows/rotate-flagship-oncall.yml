@@ -28,9 +28,8 @@ jobs:
 
           # Fetch the current on-call user from PagerDuty for the specified schedule
           echo "Fetching on-call user from PagerDuty for schedule: $PAGERDUTY_SCHEDULE_ID"
-          echo "API Token Length: ${#PAGERDUTY_API_TOKEN}"
           ONCALL_RESPONSE=$(curl -X GET \
-            -H "Authorization: Token token=$PAGERDUTY_API_TOKEN" \
+            -H "Authorization: $PAGERDUTY_API_TOKEN" \
             -H "Accept: application/vnd.pagerduty+json;version=2" \
             "https://api.pagerduty.com/oncalls?schedule_ids[]=$PAGERDUTY_SCHEDULE_ID&include[]=users")
 
