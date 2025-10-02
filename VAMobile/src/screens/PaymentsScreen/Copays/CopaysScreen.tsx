@@ -29,6 +29,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const { data: copaysData, isFetching: loadingCopays, error: copaysError } = useMedicalCopays()
 
   const copays = copaysData?.data ?? []
+  const isEmpty = copays.length === 0
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -115,13 +116,13 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
         <LoadingComponent text={t('copays.loading')} />
       ) : copaysError ? (
         <CopayErrorStates copaysError={copaysError} />
-      ) : copays.length > 0 ? (
+      ) : isEmpty ? (
+        <EmptyStateMessage title={t('copays.none.header')} body={t('copays.none.message')} phone={t('8664001238')} />
+      ) : (
         <>
           {renderContent()}
           {renderPagination()}
         </>
-      ) : (
-        <EmptyStateMessage title={t('copays.none.header')} body={t('copays.none.message')} phone={t('8664001238')} />
       )}
     </FeatureLandingTemplate>
   )
