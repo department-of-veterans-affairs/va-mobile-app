@@ -28,7 +28,7 @@ jobs:
 
           # Fetch the current on-call user from PagerDuty for the specified schedule
           echo "Fetching on-call user from PagerDuty for schedule: $PAGERDUTY_SCHEDULE_ID"
-          ONCALL_RESPONSE=$(curl -X GET \
+          ONCALL_RESPONSE=$(curl -v -X GET \
             -H "Authorization: Token token=$PAGERDUTY_API_TOKEN" \
             -H "Accept: application/vnd.pagerduty+json;version=2" \
             "https://api.pagerduty.com/oncalls?schedule_ids[]=$PAGERDUTY_SCHEDULE_ID&include[]=users")
@@ -69,7 +69,8 @@ jobs:
       - name: Get Slack channel ID
         id: get-channel
         run: |
-          CHANNEL_NAME="va-mobile-app-alerts"
+          CHANNEL_NAME="va-mobile-sandbox"
+          # CHANNEL_NAME="va-mobile-app-alerts"
           cursor="" 
 
           while true; do
@@ -122,4 +123,3 @@ jobs:
             -H "Content-type: application/json; charset=utf-8" \
             -d "{\"channel\":\"$CHANNEL_ID\",\"topic\":\"$TOPIC_TEXT\"}" \
             https://slack.com/api/conversations.setTopic
-
