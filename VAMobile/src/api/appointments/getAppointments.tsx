@@ -5,13 +5,13 @@ import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useQuery } from 'api/queryClient'
 import { AppointmentsGetData } from 'api/types'
-import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { setLastUpdatedTimestamp } from 'store/slices'
 import { getPastAppointmentDateRange } from 'utils/appointments'
-import { useDowntime } from 'utils/hooks'
+import { useAppDispatch, useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 /**
@@ -49,6 +49,7 @@ export const useAppointments = (
   options?: { enabled?: boolean },
 ) => {
   const queryClient = useQueryClient()
+  const dispatch = useAppDispatch()
   const { data: authorizedServices } = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
   const travelPayEnabled =
@@ -78,7 +79,7 @@ export const useAppointments = (
               travelPayEnabled,
             )
             // Save the last updated time here manually as this will not be saved otherwise in the prefetch
-            await storage?.setItem(`${pastAppointmentsQueryKey}-lastUpdatedTime`, Date.now().toString())
+            dispatch(setLastUpdatedTimestamp(`${pastAppointmentsQueryKey}`, Date.now().toString()))
             return pastAppointments
           },
           staleTime: ACTIVITY_STALE_TIME,

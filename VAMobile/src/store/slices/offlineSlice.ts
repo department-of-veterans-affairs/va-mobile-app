@@ -1,7 +1,17 @@
+import NetInfo from '@react-native-community/netinfo'
+
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { onlineManager } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
 import { AppThunk } from 'store'
+
+// Using rnc net info create event listener for network connection status
+onlineManager.setEventListener((setOnline) => {
+  return NetInfo.addEventListener((state) => {
+    setOnline(!!state.isConnected)
+  })
+})
 
 export type OfflineState = {
   offlineTimestamp?: DateTime
@@ -13,11 +23,13 @@ export type OfflineState = {
    * lets us display an alternative alert instead
    */
   viewingModal?: boolean
+  lastUpdatedTimestamps: Record<string, string | undefined>
 }
 
 export const initialOfflineState: OfflineState = {
   bannerExpanded: false,
   isOffline: false,
+  lastUpdatedTimestamps: {},
 }
 
 export const setOfflineTimestamp =
@@ -38,6 +50,12 @@ export const setViewingModal =
     dispatch(dispatchUpdateViewingModal(value))
   }
 
+export const setLastUpdatedTimestamp =
+  (queryKey: string, timestamp: string | undefined): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetLastUpdatedTime({ queryKey, timestamp }))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -54,8 +72,17 @@ const offlineSlice = createSlice({
     dispatchUpdateViewingModal: (state, action: PayloadAction<boolean>) => {
       state.viewingModal = action.payload
     },
+    dispatchSetLastUpdatedTime: (state, action: PayloadAction<{ queryKey: string; timestamp: string | undefined }>) => {
+      const { queryKey, timestamp } = action.payload
+      state.lastUpdatedTimestamps[queryKey] = timestamp
+    },
   },
 })
 
-const { dispatchUpdateOfflineTime, dispatchUpdateBannerExpanded, dispatchUpdateViewingModal } = offlineSlice.actions
+const {
+  dispatchUpdateOfflineTime,
+  dispatchUpdateBannerExpanded,
+  dispatchUpdateViewingModal,
+  dispatchSetLastUpdatedTime,
+} = offlineSlice.actions
 export default offlineSlice.reducer

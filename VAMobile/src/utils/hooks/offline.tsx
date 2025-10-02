@@ -24,6 +24,7 @@ export function useOfflineMode(): boolean {
   }
 
   return !!isConnected
+  // return false
 }
 
 // Enabling any to handle the type of the snackbar which is not exposed in the component library

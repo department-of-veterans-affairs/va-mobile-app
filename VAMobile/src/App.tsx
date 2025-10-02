@@ -21,12 +21,13 @@ import {
   useSnackbar,
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
+import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import NotificationManager, { useNotificationContext } from 'components/NotificationManager'
-import QueryClientProvider from 'components/QueryClientProvider/QueryClientProvider'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
@@ -175,7 +176,7 @@ function MainApp() {
 
   return (
     <Provider store={store}>
-      <QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
         <ActionSheetProvider>
           <ThemeProvider theme={currentTheme}>
             <I18nextProvider i18n={i18n}>

@@ -24,7 +24,6 @@ import {
   TextView,
   VATextInput,
 } from 'components'
-import { storage } from 'components/QueryClientProvider/QueryClientProvider'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
@@ -190,7 +189,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
   }
 
   const onResetOfflineStorage = async (): Promise<void> => {
-    await storage?.clear()
     await queryClient.resetQueries({
       predicate: (query) => {
         return `${query.queryKey}` !== `${authorizedServicesKeys.authorizedServices}`
