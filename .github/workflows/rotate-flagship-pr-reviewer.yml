@@ -1,6 +1,7 @@
 name: "[Admin] Weekly Flagship Mobile PR Reviewer Assignment"
 
 on:
+  push:
   schedule:
     # Run every Monday at 8:33 AM EST (1:33 PM UTC)
     - cron: '33 13 * * 1'
