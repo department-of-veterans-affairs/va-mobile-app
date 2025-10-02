@@ -671,6 +671,7 @@
   "debts.summary.reviewingAccount": "We’re reviewing your account.",
   "debts.summary.submitFinancialStatusReport": "Submit a Financial Status Report so that we can make a decision on your request.",
   "debts.summary.treasuryReducingPayments": "The U.S. Department of the Treasury is reducing your federal payments until your debt is paid.",
+  "debts.summary.updateAddress": "Contact us to update your address.",
   "debts.summary.updatingAccount": "We’re updating your account.",
   "debts.summary.verifyMilitaryStatus": "Contact us to verify your military status.",
   "debts.title": "Overpayment debts",
