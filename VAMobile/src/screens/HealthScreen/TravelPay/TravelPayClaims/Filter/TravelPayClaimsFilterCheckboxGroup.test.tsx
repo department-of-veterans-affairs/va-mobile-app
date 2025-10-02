@@ -2,7 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import TravelPayClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
+import TravelPayClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterCheckboxGroup'
 import { context, render } from 'testUtils'
 import { CheckboxOption, FILTER_KEY_ALL } from 'utils/travelPay'
 
