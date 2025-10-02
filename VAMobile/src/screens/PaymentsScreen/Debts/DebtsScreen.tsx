@@ -137,7 +137,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             <Box ml={theme.dimensions.condensedMarginBetween} flexShrink={1}>
               <TextView variant="HelperText">
                 <Trans
-                  i18nKey={debtInfo.summaryKey}
+                  i18nKey={`debts.summary.${debtInfo.i18nKey}`}
                   components={{
                     // This handles bolding text
                     bold: <TextView variant="HelperTextBold" />,
