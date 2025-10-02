@@ -28,10 +28,14 @@ jobs:
 
           # Fetch the current on-call user from PagerDuty for the specified schedule
           echo "Fetching on-call user from PagerDuty for schedule: $PAGERDUTY_SCHEDULE_ID"
-          ONCALL_RESPONSE=$(curl -s -X GET \
+          ONCALL_RESPONSE=$(curl -X GET \
             -H "Authorization: Token token=$PAGERDUTY_API_TOKEN" \
             -H "Accept: application/vnd.pagerduty+json;version=2" \
             "https://api.pagerduty.com/oncalls?schedule_ids[]=$PAGERDUTY_SCHEDULE_ID&include[]=users")
+
+          echo "--- PagerDuty API Response ---"
+          echo "$ONCALL_RESPONSE"
+          echo "----------------------------"
 
           # Extract the email and name of the primary on-call user (escalation level 1)
           ONCALL_EMAIL=$(echo "$ONCALL_RESPONSE" | jq -r '.oncalls | map(select(.escalation_level == 1)) | .[0].user.email')
@@ -67,5 +71,49 @@ jobs:
         run: |
           CHANNEL_NAME="va-mobile-app-alerts"
           fetch_page() {
-            last_response=$(curl -X GET -H 'Authorization: Bearer '
+            last_response=$(curl -X GET -H 'Authorization: Bearer '$SLACK_API_TOKEN' ' \
+            -H 'Content-type: application/x-www-form-urlencoded' \
+            https://slack.com/api/conversations.list
+            cursor=$cursor | jq .)
+          }
+          get_id() {
+            id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
+          }
+          get_cursor() {
+            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
+          }
+          id=""
+          cursor=""
+          last_response=""
+          fetch_page
+          get_id
+          while [[ -z "$id" ]]
+          do
+            get_cursor
+            fetch_page
+            get_id
+          done
+          echo "channel_id=${id}" >> $GITHUB_OUTPUT
+      - name: Send Slack notification
+        run: |
+          SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+          URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
+          echo "Sending Slack notification..."
+          curl -X POST \
+            -H "Authorization: Bearer $SLACK_API_TOKEN" \
+            -H "Content-type: application/json; charset=utf-8" \
+            -d "{\"channel\":\"$CHANNEL_ID\",\"text\":\"🚨 *On-Call Alert rotation this week: $SLACK_MENTION*\\n\\nOn call procedure: <$URL>\"}" \
+            https://slack.com/api/chat.postMessage
+      - name: Update channel topic
+        run: |
+          SLACK_MENTION="${{ steps.select-oncall.outputs.slack_mention }}"
+          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+          TOPIC_TEXT="Alert rotation this week: $SLACK_MENTION\nOn call procedure: https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/OnCallProcedure/"
+          echo "Updating channel topic..."
+          curl -X POST \
+            -H "Authorization: Bearer $SLACK_API_TOKEN" \
+            -H "Content-type: application/json; charset=utf-8" \
+            -d "{\"channel\":\"$CHANNEL_ID\",\"topic\":\"$TOPIC_TEXT\"}" \
+            https://slack.com/api/conversations.setTopic
 
