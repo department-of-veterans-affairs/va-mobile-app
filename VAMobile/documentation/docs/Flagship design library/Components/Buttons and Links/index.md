@@ -2,7 +2,7 @@
 title: Buttons and links
 ---
 
-*The following information comes from the [Accessibility Cookbook](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/teams/CAIA/accessibility/accessibility-cookbook.md) and has been modified for native mobile apps.*
+*The following information comes from the [Accessibility Cookbook](https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/teams/digital-experience/ADE/accessibility-cookbook.md) and has been modified for native mobile apps.*
 
 ## Choose the right component: buttons vs. links
 Many people struggle to select the right element when choosing between a button or link. Making the right choice can help make an interface easier to use, especially for people who use assistive technology. Buttons and links are the primary ways users interact with information in a native mobile app.

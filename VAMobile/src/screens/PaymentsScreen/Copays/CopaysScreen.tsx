@@ -9,11 +9,11 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 import { useMedicalCopays } from 'api/medicalCopays'
 import { MedicalCopayRecord } from 'api/types'
 import { Box, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
+import EmptyStateMessage from 'components/EmptyStateMessage'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import CopayCard from 'screens/PaymentsScreen/Copays/CopayCard/CopayCard'
-import CopayEmptyState from 'screens/PaymentsScreen/Copays/CopayEmptyState/CopayEmptyState'
 import CopayErrorStates from 'screens/PaymentsScreen/Copays/CopayErrorStates/CopayErrorStates'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { sortStatementsByDate, uniqBy } from 'utils/copays'
@@ -46,7 +46,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   useEffect(() => {
     const copaysList = copaysByUniqueFacility?.slice((page - 1) * perPage, page * perPage)
     setCopaysToShow(copaysList || [])
-  }, [copaysData, page, perPage, copaysByUniqueFacility])
+  }, [copaysData, page, perPage])
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
@@ -121,7 +121,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
           {renderPagination()}
         </>
       ) : (
-        <CopayEmptyState testID="copayEmptyStateTestID" />
+        <EmptyStateMessage title={t('copays.none.header')} body={t('copays.none.message')} phone={t('8664001238')} />
       )}
     </FeatureLandingTemplate>
   )

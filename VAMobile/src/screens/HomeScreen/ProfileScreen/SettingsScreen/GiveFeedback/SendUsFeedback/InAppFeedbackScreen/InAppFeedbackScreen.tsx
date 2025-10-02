@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, RadioButton, RadioButtonProps } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, FullScreenSubtask, RadioGroup, RadioGroupProps, TextView } from 'components'
+import { Box, FullScreenSubtask, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -36,88 +36,40 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
     navigateTo('FeedbackSent')
   }
 
-  const radioGroupProps: RadioGroupProps<string> = {
-    isRadioList: false,
-    onChange: setSatisfaction,
-    options: [
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.verySatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.verySatisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.satisfied'),
-        value: t('inAppFeedback.overallSatisfaction.satisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.neither'),
-        value: t('inAppFeedback.overallSatisfaction.neither'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.dissatisfied'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-        value: t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
-      },
+  const satisfactionProps: RadioButtonProps = {
+    onSelectionChange: (s) => setSatisfaction(s as string),
+    items: [
+      t('inAppFeedback.overallSatisfaction.verySatisfied'),
+      t('inAppFeedback.overallSatisfaction.satisfied'),
+      t('inAppFeedback.overallSatisfaction.neither'),
+      t('inAppFeedback.overallSatisfaction.dissatisfied'),
+      t('inAppFeedback.overallSatisfaction.notAtAllSatisfied'),
     ],
-    value: satisfaction,
+    selectedItem: satisfaction,
   }
 
-  const meetMyNeedsProps: RadioGroupProps<string> = {
-    isRadioList: false,
-    onChange: setMeetMyNeeds,
-    options: [
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
-        value: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.agree'),
-        value: t('inAppFeedback.agreeOrDisagree.agree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.neither'),
-        value: t('inAppFeedback.agreeOrDisagree.neither'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
-        value: t('inAppFeedback.agreeOrDisagree.disagree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
-        value: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
-      },
+  const meetMyNeedsProps: RadioButtonProps = {
+    onSelectionChange: (s) => setMeetMyNeeds(s as string),
+    items: [
+      t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
+      t('inAppFeedback.agreeOrDisagree.agree'),
+      t('inAppFeedback.agreeOrDisagree.neither'),
+      t('inAppFeedback.agreeOrDisagree.disagree'),
+      t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
     ],
-    value: meetMyNeeds,
+    selectedItem: meetMyNeeds,
   }
 
-  const easyToUseProps: RadioGroupProps<string> = {
-    isRadioList: false,
-    onChange: setEasyToUse,
-    options: [
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
-        value: t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.agree'),
-        value: t('inAppFeedback.agreeOrDisagree.agree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.neither'),
-        value: t('inAppFeedback.agreeOrDisagree.neither'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.disagree'),
-        value: t('inAppFeedback.agreeOrDisagree.disagree'),
-      },
-      {
-        optionLabelKey: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
-        value: t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
-      },
+  const easyToUseProps: RadioButtonProps = {
+    onSelectionChange: (s) => setEasyToUse(s as string),
+    items: [
+      t('inAppFeedback.agreeOrDisagree.stronglyAgree'),
+      t('inAppFeedback.agreeOrDisagree.agree'),
+      t('inAppFeedback.agreeOrDisagree.neither'),
+      t('inAppFeedback.agreeOrDisagree.disagree'),
+      t('inAppFeedback.agreeOrDisagree.stronglyDisagree'),
     ],
-    value: easyToUse,
+    selectedItem: easyToUse,
   }
 
   return (
@@ -126,32 +78,34 @@ function InAppFeedbackScreen({ navigation }: InAppFeedbackScreenProps) {
       leftButtonText={t('cancel')}
       onLeftButtonPress={navigation.goBack}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <Box>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
             {t('inAppFeedback.overallSatisfaction.header')}
           </TextView>
-          <RadioGroup {...radioGroupProps} />
+          <RadioButton {...satisfactionProps} />
         </Box>
-        <Box>
-          <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {t('inAppFeedback.agreeOrDisagree.header')}
-          </TextView>
+        <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+          {t('inAppFeedback.agreeOrDisagree.header')}
+        </TextView>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBody" accessibilityRole="header">
             {t('inAppFeedback.functions.header')}
           </TextView>
-          <RadioGroup {...meetMyNeedsProps} />
+          <RadioButton {...meetMyNeedsProps} />
+        </Box>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBody" accessibilityRole="header">
             {t('inAppFeedback.easyToUse.header')}
           </TextView>
-          <RadioGroup {...easyToUseProps} />
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <Button
-              label={t('inAppFeedback.submitFeedback')}
-              onPress={() => {
-                onSubmit()
-              }}
-            />
-          </Box>
+          <RadioButton {...easyToUseProps} />
+        </Box>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <Button
+            label={t('inAppFeedback.submitFeedback')}
+            onPress={() => {
+              onSubmit()
+            }}
+          />
         </Box>
       </Box>
     </FullScreenSubtask>
