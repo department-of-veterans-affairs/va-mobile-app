@@ -81,7 +81,8 @@ function TravelPayClaimsList({
   }, [claims, page, perPage])
 
   const goToClaimDetails = (claimId: string) => {
-    if (!featureEnabled('travelPayClaimDetails')) {
+    const isEnabled = featureEnabled('travelPayClaimDetails')
+    if (!isEnabled) {
       return
     }
     navigateTo('TravelPayClaimDetailsScreen', {
