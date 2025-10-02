@@ -6,10 +6,12 @@ const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
   TRAVEL_PAY_CLAIM_1_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
   TRAVEL_PAY_CLAIM_11_ID: 'claim_summary_4b99039f-208f-4c07-90b8-498f8466233e',
+  TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID: 'TravelPayClaimDetailsScreen',
 }
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openTravelPayClaims()
@@ -64,8 +66,9 @@ describe('Travel Pay Claims Screen', () => {
     await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).not.toExist()
   })
 
-  it('opens a webview to view claim details on web', async () => {
-    const { TRAVEL_PAY_CLAIMS_TEST_ID, TRAVEL_PAY_CLAIM_1_ID } = TravePayClaimsE2eIds
+  it('opens claim details screen', async () => {
+    const { TRAVEL_PAY_CLAIMS_TEST_ID, TRAVEL_PAY_CLAIM_1_ID, TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID } =
+      TravePayClaimsE2eIds
 
     await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
     await waitFor(element(by.id(TRAVEL_PAY_CLAIM_1_ID)))
@@ -73,9 +76,23 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(4000)
 
     await element(by.id(TRAVEL_PAY_CLAIM_1_ID)).tap()
-    await waitFor(element(by.text('Travel Claim Details')))
+
+    // Wait for the native claim details screen to appear
+    await waitFor(element(by.id(TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
       .toExist()
       .withTimeout(4000)
-    await element(by.id('webviewBack')).tap()
+
+    // Verify the screen title
+    await waitFor(element(by.text('Travel Pay Claim Details')))
+      .toExist()
+      .withTimeout(4000)
+
+    // Navigate back using the back button
+    await element(by.text('Travel')).tap()
+
+    // Verify we're back on the claims list screen
+    await waitFor(element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)))
+      .toExist()
+      .withTimeout(4000)
   })
 })
