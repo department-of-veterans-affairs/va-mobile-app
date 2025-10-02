@@ -31,7 +31,7 @@ const getTrackingDataForPrescription = async ({
   id: string
   prescriptionData: PrescriptionsList | undefined
 }): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
-  // find the perscription with the id in the prescriptionData
+  // find the prescription with the id in the prescriptionData
   const prescription = prescriptionData?.find((p: PrescriptionData) => p.id === id)
   if (!prescription || !prescription.attributes.tracking) {
     return undefined
