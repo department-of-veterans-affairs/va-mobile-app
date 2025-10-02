@@ -51,6 +51,25 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     return null
   }
 
+  const goToTravelClaims = () => {
+    // Go to the native screen if the FF is on, otherwise
+    // continue to go to the web view
+    if (featureEnabled('travelPayStatusList')) {
+      navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.AppointmentDetail)
+    } else {
+      // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+      // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
+      // but the base web URL is actually /claims
+      logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+      navigateTo('Webview', {
+        url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+        displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+        loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+        useSSO: true,
+      })
+    }
+  }
+
   const getContent = () => {
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {
@@ -84,9 +103,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           </TextView>
           <LinkWithAnalytics
             type="custom"
-            onPress={() => {
-              navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.AppointmentDetail)
-            }}
+            onPress={goToTravelClaims}
             text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
             testID={`goToVAGovTravelClaimStatus`}
@@ -171,9 +188,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           </TextView>
           <LinkWithAnalytics
             type="custom"
-            onPress={() => {
-              navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.AppointmentDetail)
-            }}
+            onPress={goToTravelClaims}
             text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
             testID={`goToVAGovTravelClaimStatus`}
