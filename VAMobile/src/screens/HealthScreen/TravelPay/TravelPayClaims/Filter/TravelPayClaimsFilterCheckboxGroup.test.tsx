@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import TravelPayClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import { context, render } from 'testUtils'
-import { CheckboxOption, FILTER_KEY_ALL, isChecked, isIndeterminate } from 'utils/travelPay'
+import { CheckboxOption, FILTER_KEY_ALL } from 'utils/travelPay'
 
 const mockOnChange = jest.fn()
 
@@ -61,20 +61,5 @@ context('TravelPayClaimsFilterCheckboxGroup', () => {
 
     fireEvent.press(screen.getByTestId(`checkbox_option_a`))
     expect(mockOnChange).toHaveBeenCalledWith('option_a')
-  })
-
-  it('correctly marks the check boxes as indeterminate', () => {
-    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b']))).toBe(true)
-    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(false)
-    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set([]))).toBe(false)
-    expect(isIndeterminate('option_a', CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(false)
-  })
-
-  it('correctly marks the check boxes as checked', () => {
-    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(true)
-    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b']))).toBe(false)
-    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set([]))).toBe(false)
-    expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_a']))).toBe(true)
-    expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_b']))).toBe(false)
   })
 })

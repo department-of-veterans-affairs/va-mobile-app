@@ -2,7 +2,31 @@ import { waitFor } from '@testing-library/react-native'
 
 import { TravelPayClaimData } from 'api/types'
 import { renderHook } from 'testUtils'
-import { FILTER_KEY_ALL, SortOption, filteredClaims, sortedClaims, useFilterToggle } from 'utils/travelPay'
+import {
+  CheckboxOption,
+  FILTER_KEY_ALL,
+  SortOption,
+  filteredClaims,
+  isChecked,
+  isIndeterminate,
+  sortedClaims,
+  useFilterToggle,
+} from 'utils/travelPay'
+
+const CHECKBOX_OPTIONS: CheckboxOption[] = [
+  {
+    optionLabelKey: 'Option A',
+    value: 'option_a',
+  },
+  {
+    optionLabelKey: 'Option B',
+    value: 'option_b',
+  },
+  {
+    optionLabelKey: 'Option C',
+    value: 'option_c',
+  },
+]
 
 const createTestClaim = (id: string, claimStatus: string, appointmentDateTime: string) => ({
   id,
@@ -58,6 +82,23 @@ describe('sorting travel claims', () => {
     sorted = sortedClaims(claims, SortOption.Oldest)
     ids = sorted.map(({ id }) => id)
     expect(ids).toEqual(['103', '104', '101', '102', '100'])
+  })
+})
+
+describe('filter checkbox state logic', () => {
+  it('correctly marks the check boxes as indeterminate', () => {
+    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b']))).toBe(true)
+    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(false)
+    expect(isIndeterminate(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set([]))).toBe(false)
+    expect(isIndeterminate('option_a', CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(false)
+  })
+
+  it('correctly marks the check boxes as checked', () => {
+    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b', 'option_c']))).toBe(true)
+    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set(['option_a', 'option_b']))).toBe(false)
+    expect(isChecked(FILTER_KEY_ALL, CHECKBOX_OPTIONS, new Set([]))).toBe(false)
+    expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_a']))).toBe(true)
+    expect(isChecked('option_a', CHECKBOX_OPTIONS, new Set(['option_b']))).toBe(false)
   })
 })
 
