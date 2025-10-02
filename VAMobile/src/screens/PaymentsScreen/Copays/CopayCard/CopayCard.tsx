@@ -25,7 +25,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
 
   const getCopayInfo = (
     copayRecord: MedicalCopayRecord,
-  ): { facilityName: string; balance: number | undefined; summaryKey: string; date: string | Date } => {
+  ): { facilityName: string; balance: number | undefined; summaryKey: string; date: string } => {
     return {
       facilityName: getMedicalCenterNameByID(copay.station.facilitYNum),
       balance: copayRecord.pHAmtDue,
@@ -34,8 +34,8 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
     }
   }
 
-  const copayDetailsClicked = (copay: MedicalCopayRecord) => {
-    navigateTo('CopayDetails', { copay })
+  const copayDetailsClicked = (copayRecord: MedicalCopayRecord) => {
+    navigateTo('CopayDetails', { copay: copayRecord })
   }
 
   const copayInfo = getCopayInfo(copay)

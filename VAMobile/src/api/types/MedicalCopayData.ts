@@ -52,7 +52,7 @@ export type MedicalCopayRecord = {
   pSStatementVal?: string
   pSStatementDate?: string
   accountNumber?: string
-  pSStatementDateOutput?: string | Date
+  pSStatementDateOutput?: string
   pSProcessDate?: string
   pSProcessDateOutput?: string
 

@@ -97,7 +97,8 @@ context('CopaysScreen', () => {
     it('should display empty state', async () => {
       initializeTestInstance(emptyCopaysData)
       await waitFor(() => {
-        expect(screen.getByTestId('copayEmptyStateTestID')).toBeTruthy()
+        expect(screen.getByText(t('copays.none.header'))).toBeTruthy()
+        expect(screen.getByText(t('copays.none.message'))).toBeTruthy()
       })
     })
   })

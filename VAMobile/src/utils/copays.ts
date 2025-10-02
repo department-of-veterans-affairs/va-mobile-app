@@ -71,14 +71,10 @@ const parseDateString = (dateStr: string): Date | null => {
 }
 
 /**
- * Parses various date value types into a Date object
+w * Parses a date string into a Date object
  */
-const parseDateValue = (val?: string | Date | null): Date | null => {
+const parseDateValue = (val?: string | null): Date | null => {
   if (val == null) return null
-
-  if (val instanceof Date) {
-    return Number.isFinite(val.getTime()) ? val : null
-  }
 
   // Try explicit MM/DD/YYYY parsing first
   const parsed = parseDateString(String(val))
@@ -90,42 +86,44 @@ const parseDateValue = (val?: string | Date | null): Date | null => {
 }
 
 /**
- * Converts various date value types to timestamp
+ * Converts a date string to timestamp
  */
-const toTime = (val?: string | Date | null): number => {
+const toTime = (val?: string | null): number => {
   const date = parseDateValue(val)
   return date ? date.getTime() : Number.NEGATIVE_INFINITY
 }
 
 /**
- * Formats a date for display
+ * Formats a date string for display
  */
-export const formatDate = (date: string | Date | null | undefined): string => {
+export const formatDate = (date: string | null | undefined): string => {
   if (!date) return ''
 
-  const d =
-    typeof date === 'string'
-      ? // Trim and remove NBSP to avoid hidden-char parse failures
-        parse(date.replace(/\u00A0/g, ' ').trim(), 'MM/dd/yyyy', new Date())
-      : date
+  // Trim and remove NBSP to avoid hidden-char parse failures
+  const d = parse(date.replace(/\u00A0/g, ' ').trim(), 'MM/dd/yyyy', new Date())
 
   return isValid(d) ? format(d, 'MMMM d, yyyy') : ''
 }
 
 /**
- * Calculates a due date by adding days to a given date
+ * Calculates a due date by adding days to a given date string
  */
-export const calcDueDate = (date: string | Date, days: number): string => {
-  return formatDate(addDays(new Date(date), days))
+export const calcDueDate = (date: string, days: number): string => {
+  const parsedDate = parseDateValue(date)
+  if (!parsedDate) return ''
+  return formatDate(format(addDays(parsedDate, days), 'MM/dd/yyyy'))
 }
 
 /**
  * Verifies if a balance is current (not past due)
  */
-export const verifyCurrentBalance = (date: string | Date): boolean => {
+export const verifyCurrentBalance = (date: string): boolean => {
   const currentDate = new Date()
-  const dueDate = calcDueDate(date, DUE_DATE_DAYS)
-  return isBefore(currentDate, new Date(dueDate)) || isEqual(currentDate, new Date(dueDate))
+  const parsedDate = parseDateValue(date)
+  if (!parsedDate) return false
+
+  const dueDate = addDays(parsedDate, DUE_DATE_DAYS)
+  return isBefore(currentDate, dueDate) || isEqual(currentDate, dueDate)
 }
 
 // ARRAY UTILITIES

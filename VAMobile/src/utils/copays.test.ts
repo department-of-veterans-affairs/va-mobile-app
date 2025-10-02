@@ -77,7 +77,7 @@ describe('copays utils', () => {
     })
 
     it('should format Date object', () => {
-      const date = new Date('2024-01-15T12:00:00Z') // Use UTC to avoid timezone issues
+      const date = '01/15/2024' // Use string format instead
       const result = formatDate(date)
       expect(result).toBe('January 15, 2024')
     })
@@ -105,7 +105,7 @@ describe('copays utils', () => {
     })
 
     it('should calculate due date from Date object', () => {
-      const date = new Date('2024-01-15T12:00:00Z') // Use UTC to avoid timezone issues
+      const date = '01/15/2024' // Use string format instead
       const result = calcDueDate(date, 30)
       expect(result).toBe('February 14, 2024')
     })
@@ -148,7 +148,7 @@ describe('copays utils', () => {
     })
 
     it('should work with Date objects', () => {
-      const date = new Date('2024-01-01')
+      const date = '01/01/2024' // Use string format instead
       const result = verifyCurrentBalance(date)
       expect(result).toBe(true)
     })

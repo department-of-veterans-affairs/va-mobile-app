@@ -30,6 +30,8 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
 
   const copays = copaysData?.data ?? []
   const isEmpty = copays.length === 0
+  const sortedCopays = sortStatementsByDate(copays ?? [])
+  const copaysByUniqueFacility = uniqBy(sortedCopays, (c) => c.pSFacilityNum)
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -38,16 +40,18 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const [page, setPage] = useState(1)
   const { perPage, totalEntries } = {
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: copaysData?.data.length || 0,
+    totalEntries: copaysByUniqueFacility.length || 0,
   }
   const [copaysToShow, setCopaysToShow] = useState<MedicalCopayRecord[]>([])
-  const sortedCopays = sortStatementsByDate(copays ?? [])
-  const copaysByUniqueFacility = uniqBy(sortedCopays, (c) => c.pSFacilityNum)
 
   useEffect(() => {
     const copaysList = copaysByUniqueFacility?.slice((page - 1) * perPage, page * perPage)
-    setCopaysToShow(copaysList || [])
-  }, [copaysData, page, perPage])
+
+    // Only update if the list has actually changed
+    if (JSON.stringify(copaysList) !== JSON.stringify(copaysToShow)) {
+      setCopaysToShow(copaysList || [])
+    }
+  }, [page, perPage, copaysByUniqueFacility, copaysToShow])
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
