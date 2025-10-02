@@ -52,7 +52,7 @@ export type MedicalCopayRecord = {
   pSStatementVal?: string
   pSStatementDate?: string
   accountNumber?: string
-  pSStatementDateOutput?: string
+  pSStatementDateOutput?: string | Date
   pSProcessDate?: string
   pSProcessDateOutput?: string
 
@@ -96,6 +96,11 @@ export type MedicalCopayRecord = {
 
   station: MedicalCopayStation
   details: MedicalCopayDetail[]
+}
+
+export type MedicalCenter = {
+  value: string // facility id, e.g. "123" or "123F"
+  label: string // facility name
 }
 
 export type MedicalCopayPayload = {

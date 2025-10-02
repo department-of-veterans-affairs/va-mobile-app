@@ -3,16 +3,48 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { LargePanel } from 'components'
+import { Box, ClickToCallPhoneNumber, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useTheme } from 'utils/hooks'
 
 type CopayHelpProps = StackScreenProps<PaymentsStackParamList, 'CopayHelp'>
 
 function CopayHelp({}: CopayHelpProps) {
+  const { LINK_URL_ASK_VA_GOV } = getEnv()
   const { t } = useTranslation(NAMESPACE.COMMON)
-
-  return <LargePanel title={t('copays.help.title')} rightButtonText={t('close')} />
+  const theme = useTheme()
+  return (
+    <LargePanel title={t('copays.help.title')} rightButtonText={t('close')}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          accessibilityLabel={t('copays.help.header.a11yLabel')}
+          accessibilityHint={t('copays.help.header.a11yHint')}>
+          {t('copays.help.header')}
+        </TextView>
+        <TextView variant="MobileBody" paragraphSpacing={false}>
+          {t('copays.help.content')}
+        </TextView>
+        <ClickToCallPhoneNumber phone={t('8664001238')} displayedText={displayedTextPhoneNumber(t('8664001238'))} />
+        <TextView variant="MobileBody" paragraphSpacing={false}>
+          {t('copays.help.orContactAskVA')}
+        </TextView>
+        <LinkWithAnalytics
+          type="url"
+          url={LINK_URL_ASK_VA_GOV}
+          text={t('copays.help.askVA')}
+          a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
+          a11yHint={t('copays.help.askVAA11yHint')}
+          testID="lettersBenefitServiceGoToAskVAID"
+        />
+      </Box>
+    </LargePanel>
+  )
 }
 
 export default CopayHelp
