@@ -19,7 +19,7 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
 
   console.log('appealType', AppealTypesDisplayNames[appealType])
 
-  const appealTypeName = appealType.includes('appeal')
+  const appealTypeName = appealType.toLowerCase().includes('appeal')
     ? AppealTypesDisplayNames[appealType]
     : `your ${AppealTypesDisplayNames[appealType]}`
 

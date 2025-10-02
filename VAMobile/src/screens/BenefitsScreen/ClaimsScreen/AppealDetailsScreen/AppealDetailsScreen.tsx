@@ -6,7 +6,13 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppeal } from 'api/claimsAndAppeals'
-import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
+import {
+  AppealAttributesData,
+  AppealData,
+  AppealEventTypesConstants,
+  AppealTypes,
+  AppealTypesConstants,
+} from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -135,7 +141,9 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 programArea={programArea}
               />
             )}
-            {appeal && selectedTab === 1 && <AppealIssues appealType={type} issues={issues} />}
+            {appeal && selectedTab === 1 && (
+              <AppealIssues appealType={appeal.attributes.type as AppealTypes} issues={issues} />
+            )}
           </Box>
           <NeedHelpData appealId={appealID} />
         </Box>
