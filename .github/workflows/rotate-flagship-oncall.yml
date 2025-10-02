@@ -1,5 +1,6 @@
 name: '[Admin] Flagship Mobile Alerts Weekly On-Call Assignment'
 on:
+  push:
   workflow_dispatch:
   schedule:
     # Run every Monday at 8:30 AM EST (1:30 PM UTC)
@@ -71,3 +72,4 @@ jobs:
           CHANNEL_NAME="va-mobile-app-alerts"
           fetch_page() {
             last_response=$(curl -X GET -H 'Authorization: Bearer '
+
