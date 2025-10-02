@@ -309,6 +309,9 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     case '/v0/travel-pay/claims': {
       return submitAppointmentClaim(params as unknown as SubmitSMOCTravelPayClaimParameters)
     }
+    default: {
+      return undefined
+    }
   }
 }
 
