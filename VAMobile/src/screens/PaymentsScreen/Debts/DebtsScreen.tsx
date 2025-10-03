@@ -5,7 +5,6 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
-import { TFunction } from 'i18next'
 
 import { useDebts } from 'api/debts'
 import { DebtRecord } from 'api/types/DebtData'
@@ -27,7 +26,6 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { VATheme } from 'styles/theme'
 import { getDebtInfo } from 'utils/debts'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -101,7 +99,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     )
   }
 
-  function renderReviewDetailsLink(t: TFunction, theme: VATheme, debt: DebtRecord) {
+  function renderReviewDetailsLink(debt: DebtRecord) {
     const detailsPressableProps: PressableProps = {
       onPress: () => {
         navigateTo('DebtDetails', { debt })
@@ -178,7 +176,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             </Box>
           </Box>
           {/* Review details link */}
-          {renderReviewDetailsLink(t, theme, debt)}
+          {renderReviewDetailsLink(debt)}
           {/* Resolve debt button */}
           {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
         </>
