@@ -5,6 +5,7 @@ import { Pressable, PressableProps, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
+import { TFunction } from 'i18next'
 
 import { useDebts } from 'api/debts'
 import { DebtRecord } from 'api/types/DebtData'
@@ -26,6 +27,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { VATheme } from 'styles/theme'
 import { getDebtInfo } from 'utils/debts'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -73,10 +75,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     testID: 'debtHelpID',
   }
 
-  const debtDetailsClicked = (debt: DebtRecord) => {
-    navigateTo('DebtDetails', { debt })
-  }
-
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -103,18 +101,45 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     )
   }
 
+  function renderReviewDetailsLink(t: TFunction, theme: VATheme, debt: DebtRecord) {
+    const detailsPressableProps: PressableProps = {
+      onPress: () => {
+        navigateTo('DebtDetails', { debt })
+      },
+      accessible: true,
+      accessibilityRole: 'link',
+      accessibilityLabel: t('debts.reviewDetails'),
+    }
+
+    return (
+      <Pressable {...detailsPressableProps}>
+        <Box
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          minHeight={theme.dimensions.touchableMinHeight}
+          pt={5}>
+          <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+            {t('debts.reviewDetails')}
+          </TextView>
+          <Icon
+            name={'ChevronRight'}
+            fill={theme.colors.icon.chevronListItem}
+            width={theme.dimensions.chevronListItemWidth}
+            height={theme.dimensions.chevronListItemHeight}
+          />
+        </Box>
+      </Pressable>
+    )
+  }
+
   function renderContent() {
     const listItems = debtsToShow.map((debt, idx) => {
       const debtInfo = getDebtInfo(t, debt)
       const iconProps: IconProps = {
         name: debtInfo.variant === 'info' ? 'Info' : 'Warning',
         fill: debtInfo.variant === 'info' ? theme.colors.icon.info : theme.colors.icon.warning,
-      }
-      const detailsPressableProps: PressableProps = {
-        onPress: () => debtDetailsClicked(debt),
-        accessible: true,
-        accessibilityRole: 'link',
-        accessibilityLabel: t('debts.reviewDetails'),
       }
 
       const mainContent = (
@@ -153,25 +178,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             </Box>
           </Box>
           {/* Review details link */}
-          <Pressable {...detailsPressableProps}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              minHeight={theme.dimensions.touchableMinHeight}
-              pt={5}>
-              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
-                {t('debts.reviewDetails')}
-              </TextView>
-              <Icon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.chevronListItem}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-              />
-            </Box>
-          </Pressable>
+          {renderReviewDetailsLink(t, theme, debt)}
           {/* Resolve debt button */}
           {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
         </>
