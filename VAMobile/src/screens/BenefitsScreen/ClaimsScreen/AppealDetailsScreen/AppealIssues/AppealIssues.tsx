@@ -78,14 +78,20 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
       return null
     }
     const itemsWithNullDescription = items.filter((item) => item.description === null)
-    const itemsWithDescriptions = items.filter((item) => item.description !== null)
-    const listOfIssues = itemsWithDescriptions.map((item) => item.description as string)
+    const itemsWithDescriptions = items.filter(
+      (item): item is AppealIssue & { description: string } => item.description !== null,
+    )
+    const listOfIssues = itemsWithDescriptions.map((item) => item.description)
 
     // Add one item that informs the user of how many issues have null descriptions
     // This will display one list item per status (remand, granted, etc.)
     if (itemsWithNullDescription.length > 0) {
-      const issueText = itemsWithNullDescription.length > 1 ? 'issues' : 'issue'
-      listOfIssues.push(t(`We're unable to show ${itemsWithNullDescription.length} ${issueText} on ${appealTypeName}`))
+      listOfIssues.push(
+        t('appealDetails.unableToShowIssues', {
+          count: itemsWithNullDescription.length,
+          appealType: appealTypeName,
+        }),
+      )
     }
     return (
       <>
