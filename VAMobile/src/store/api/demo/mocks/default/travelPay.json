@@ -520,11 +520,11 @@
   },
   "/v0/travel-pay/claims/:id": {
     "data": {
-      "id": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
+      "id": "f33ef640-000f-4ecf-82b8-1c50df13d178",
       "type": "travelPayClaimDetails",
       "attributes": {
-        "id": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
-        "claimNumber": "TC202500001",
+        "id": "f33ef640-000f-4ecf-82b8-1c50df13d178",
+        "claimNumber": "c68baadf-3d95-45d5-857b-eca5bef6d4a5",
         "claimName": "Travel reimbursement",
         "claimantFirstName": "Samantha",
         "claimantMiddleName": "Michelle",
@@ -547,8 +547,8 @@
           "currentStatus": "BOOKED",
           "appointmentStatus": "CONFIRMED",
           "externalAppointmentId": "EXT-12345",
-          "associatedClaimId": "6ea23179-e87c-44ae-a20a-f31fb2c782fb",
-          "associatedClaimNumber": "TC202500001",
+          "associatedClaimId": "f33ef640-000f-4ecf-82b8-1c50df13d178",
+          "associatedClaimNumber": "c68baadf-3d95-45d5-857b-eca5bef6d4a5",
           "isCompleted": true
         },
         "expenses": [

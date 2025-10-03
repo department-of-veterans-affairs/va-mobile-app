@@ -96,7 +96,7 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(6000) // Increased timeout for CI/CD
 
-    // Verify we can see claim data (now that we're using the right demo user)
+    // Verify we can see claim data
     await waitFor(element(by.text('Claimant')))
       .toExist()
       .withTimeout(6000) // Increased timeout for CI/CD
