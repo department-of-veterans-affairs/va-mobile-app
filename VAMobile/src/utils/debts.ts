@@ -185,6 +185,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
       resolvable = false
       variant = 'warning'
       break
+    case '081':
     case '500':
     case '510':
     case '503':
@@ -243,14 +244,14 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     case '002':
     case '005':
     case '032':
-    case '609':
     case '321':
     case '400':
     case '420':
     case '421':
     case '422':
-    case '627':
     case '425':
+    case '609':
+    case '627':
     default:
       i18nKey = 'updatingAccount'
       resolvable = false
