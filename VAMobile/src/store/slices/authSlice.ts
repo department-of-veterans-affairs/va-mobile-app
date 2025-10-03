@@ -771,14 +771,25 @@ export const startWebLogin = (): AppThunk => async (dispatch) => {
   // TODO: modify code challenge and state based on
   // what will be used in LoginSuccess.js for the token exchange.
   // The code challenge is a SHA256 hash of the code verifier string.
-  const params = new URLSearchParams({
+  
+  // For local development with Mocked Authentication, we need client_id=vamock-mobile
+  const paramData: { [key: string]: string } = {
     code_challenge_method: 'S256',
     code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
     application: 'vamobile',
     oauth: 'true',
-  }).toString()
+  }
+  
+  // Add client_id for local environment to enable Mocked Authentication
+  if (ENVIRONMENT === 'local') {
+    paramData.client_id = 'vamock-mobile'
+  }
+  
+  const params = new URLSearchParams(paramData).toString()
+  console.log(params)
 
   const url = `${AUTH_SIS_ENDPOINT}?${params}`
+  console.log(url)
   dispatch(dispatchShowWebLogin(url))
 }
 
