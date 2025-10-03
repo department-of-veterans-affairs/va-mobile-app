@@ -31,13 +31,27 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   }
   
   func generateUrl(authUrl: String, codeChallenge: String)-> URL? {
+    // Check if this is a local URL (for Mocked Authentication)
+    let isLocalUrl = authUrl.contains("localhost") || authUrl.contains("127.0.0.1") || authUrl.range(of: #"192\.168\.\d+\.\d+"#, options: .regularExpression) != nil
+    
     var items = [
       URLQueryItem(name: "code_challenge_method", value: "S256"),
       URLQueryItem(name: "code_challenge", value: codeChallenge),
       URLQueryItem(name: "application", value: "vamobile"),
       URLQueryItem(name: "oauth", value: "true"),
-      URLQueryItem(name: "scope", value: "device_sso"),
     ]
+    
+    // Add scope only for non-local URLs (staging/production)
+    if !isLocalUrl {
+      items.append(URLQueryItem(name: "scope", value: "device_sso"))
+    }
+    
+    // Add client_id, type, and acr for local development with Mocked Authentication
+    if isLocalUrl {
+      items.append(URLQueryItem(name: "client_id", value: "vamock-mobile"))
+      items.append(URLQueryItem(name: "type", value: "idme"))
+      items.append(URLQueryItem(name: "acr", value: "min"))
+    }
 
     guard var comps = URLComponents(string: authUrl) else {
       return nil

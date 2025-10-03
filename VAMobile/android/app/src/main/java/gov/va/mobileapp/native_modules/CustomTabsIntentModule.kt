@@ -38,6 +38,12 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             promise: Promise
     ) {
         try {
+            // Check if this is a local URL (for Mocked Authentication)
+            val isLocalUrl = authEndPoint.contains("localhost") || 
+                authEndPoint.contains("127.0.0.1") ||
+                Regex("""192\.168\.\d+\.\d+""").containsMatchIn(authEndPoint) ||
+                Regex("""10\.\d+\.\d+\.\d+""").containsMatchIn(authEndPoint)
+            
             val authURI =
                     Uri.parse(authEndPoint)
                             .buildUpon()
@@ -47,7 +53,18 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                     appendQueryParameter("code_challenge", codeChallenge)
                                     appendQueryParameter("application", "vamobile")
                                     appendQueryParameter("oauth", "true")
-                                    appendQueryParameter("scope", "device_sso")
+                                    
+                                    // Add scope only for non-local URLs (staging/production)
+                                    if (!isLocalUrl) {
+                                        appendQueryParameter("scope", "device_sso")
+                                    }
+                                    
+                                    // Add client_id, type, and acr for local development with Mocked Authentication
+                                    if (isLocalUrl) {
+                                        appendQueryParameter("client_id", "vamock-mobile")
+                                        appendQueryParameter("type", "idme")
+                                        appendQueryParameter("acr", "min")
+                                    }
                                 }
                             }
                             .build()
