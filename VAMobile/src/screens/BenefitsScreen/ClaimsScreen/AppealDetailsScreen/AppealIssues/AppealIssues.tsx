@@ -86,8 +86,11 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
     // Add one item that informs the user of how many issues have null descriptions
     // This will display one list item per status (remand, granted, etc.)
     if (itemsWithNullDescription.length > 0) {
+      const translationKey =
+        itemsWithNullDescription.length === 1 ? 'appealDetails.unableToShowIssue' : 'appealDetails.unableToShowIssues'
+
       listOfIssues.push(
-        t('appealDetails.unableToShowIssues', {
+        t(translationKey, {
           count: itemsWithNullDescription.length,
           appealType: appealTypeName,
         }),

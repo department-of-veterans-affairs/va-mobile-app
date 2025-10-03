@@ -143,9 +143,23 @@ context('AppealIssues', () => {
 
     // Test that the correct number of null description messages are rendered
     // Under consideration: 2 null issues, Granted: 2 null issues = 2 total "2 issues" messages
-    // Remand: 2 null issues, Denied: 1 null issue, Withdrawn: 1 null issue = 3 total "1 issue" messages
-    expect(screen.getAllByText(t("We're unable to show 2 issues on appeal"))).toHaveLength(2)
-    expect(screen.getAllByText(t("We're unable to show 1 issue on appeal"))).toHaveLength(3)
+    // Remand: 1 null issue, Denied: 1 null issue, Withdrawn: 1 null issue = 3 total "1 issue" messages
+    expect(
+      screen.getAllByText(
+        t('appealDetails.unableToShowIssues', {
+          count: 2,
+          appealType: 'appeal',
+        }),
+      ),
+    ).toHaveLength(2)
+    expect(
+      screen.getAllByText(
+        t('appealDetails.unableToShowIssue', {
+          count: 1,
+          appealType: 'appeal',
+        }),
+      ),
+    ).toHaveLength(3)
   })
 
   it('should handle supplemental claim appeal type', () => {
@@ -161,7 +175,14 @@ context('AppealIssues', () => {
 
     render(<AppealIssues appealType="supplementalClaim" issues={issues} {...mockNavProps()} />)
 
-    expect(screen.getByText(t("We're unable to show 1 issue on your Supplemental Claim"))).toBeTruthy()
+    expect(
+      screen.getByText(
+        t('appealDetails.unableToShowIssue', {
+          count: 1,
+          appealType: 'your Supplemental Claim',
+        }),
+      ),
+    ).toBeTruthy()
   })
 
   it('should handle higher level review appeal type', () => {
@@ -177,6 +198,13 @@ context('AppealIssues', () => {
 
     render(<AppealIssues appealType="higherLevelReview" issues={issues} {...mockNavProps()} />)
 
-    expect(screen.getByText(t("We're unable to show 1 issue on your Higher-Level Review"))).toBeTruthy()
+    expect(
+      screen.getByText(
+        t('appealDetails.unableToShowIssue', {
+          count: 1,
+          appealType: 'your Higher-Level Review',
+        }),
+      ),
+    ).toBeTruthy()
   })
 })
