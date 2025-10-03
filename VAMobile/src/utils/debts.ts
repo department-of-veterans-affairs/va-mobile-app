@@ -1,9 +1,11 @@
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
-import { head } from 'underscore'
+import { head, last } from 'underscore'
 
 import { DebtRecord } from 'api/types/DebtData'
 import { numberToUSDollars } from 'utils/formattingUtils'
+
+const DATE_FORMAT = 'MM/dd/yyyy'
 
 export type DebtVariantTypes = 'info' | 'warning'
 
@@ -13,6 +15,7 @@ export type DebtInfo = {
   header: string
   i18nKey: string
   resolvable: boolean
+  updatedDate?: string
   variant: string
 }
 
@@ -43,13 +46,28 @@ const getEndDate = (t: TFunction, debt: DebtRecord): string => {
     return fallbackMessage
   }
 
-  const parsedDate = DateTime.fromFormat(date, 'MM/dd/yyyy')
+  const parsedDate = DateTime.fromFormat(date, DATE_FORMAT)
   if (!parsedDate.isValid) {
     return fallbackMessage
   }
 
   const newDate = parsedDate.plus({ days: daysToAdd })
   return newDate.toFormat('MMMM d, yyyy')
+}
+
+// Leveraged from web implementation:
+// vets-website/src/applications/combined-debt-portal/debt-letters/containers/DebtDetails.jsx
+const getUpdatedDate = (debt: DebtRecord): string | undefined => {
+  const lastHistory = last(debt.attributes.debtHistory ?? [])
+  const lastUpdatedDate = lastHistory?.date
+  if (lastUpdatedDate) {
+    const parsedDate = DateTime.fromFormat(lastUpdatedDate, DATE_FORMAT)
+    if (parsedDate.isValid) {
+      const formattedDate = parsedDate.toFormat('MMMM d, yyyy')
+      return formattedDate
+    }
+  }
+  return undefined
 }
 
 // Leverated from web implementation:
@@ -246,6 +264,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     header,
     i18nKey,
     resolvable,
+    updatedDate: getUpdatedDate(debt),
     variant,
   }
 }

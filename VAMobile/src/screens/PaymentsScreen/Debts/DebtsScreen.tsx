@@ -68,7 +68,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     label: t('help'),
     icon: helpIconProps,
     onPress: () => {
-      navigateTo('DebtHelp')
+      navigateTo('DebtHelp', { helpType: 'questionsAboutDebt' })
     },
     testID: 'debtHelpID',
   }

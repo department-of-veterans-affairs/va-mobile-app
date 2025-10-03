@@ -315,11 +315,25 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
 }
 
 /**
- * Converts 1234567890 to 123-456-7890
+ * Converts 1234567890 to 123-456-7890 and 12345678901 to +1-234-567-8901
  * @param phoneNumber - string that has the phone number
  */
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
-  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  if (phoneNumber.length === 10) {
+    return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  } else if (phoneNumber.length === 11) {
+    return (
+      '+' +
+      phoneNumber.substring(0, 1) +
+      '-' +
+      phoneNumber.substring(1, 4) +
+      '-' +
+      phoneNumber.substring(4, 7) +
+      '-' +
+      phoneNumber.substring(7, 11)
+    )
+  }
+  return phoneNumber
 }
 
 /**
