@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, LinkWithAnalytics, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type CopayHelpProps = StackScreenProps<PaymentsStackParamList, 'CopayHelp'>
 
@@ -17,6 +19,8 @@ function CopayHelp({}: CopayHelpProps) {
   const { LINK_URL_ASK_VA_GOV } = getEnv()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
+
   return (
     <LargePanel title={t('copays.help.title')} rightButtonText={t('close')}>
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
@@ -35,12 +39,20 @@ function CopayHelp({}: CopayHelpProps) {
           {t('copays.help.orContactAskVA')}
         </TextView>
         <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_ASK_VA_GOV}
+          type="custom"
+          onPress={() => {
+            navigateTo('Copays')
+            logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
+            navigateTo('Webview', {
+              url: LINK_URL_ASK_VA_GOV,
+              displayTitle: t('copays.help.askVA'),
+              loadingMessage: t('loading.vaWebsite'),
+              useSSO: true,
+            })
+          }}
           text={t('copays.help.askVA')}
           a11yLabel={a11yLabelVA(t('copays.help.askVA'))}
           a11yHint={t('copays.help.askVAA11yHint')}
-          testID="lettersBenefitServiceGoToAskVAID"
         />
       </Box>
     </LargePanel>
