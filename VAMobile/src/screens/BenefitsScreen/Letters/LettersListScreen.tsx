@@ -58,8 +58,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const [COEViewed, setCOEViewed] = useState('')
 
   const getCOEViewed = async (): Promise<void> => {
-    const COEViewed = await AsyncStorage.getItem(CONFIRM_COE_VIEWED)
-    if (COEViewed) {
+    const COEViewedCheck = await AsyncStorage.getItem(CONFIRM_COE_VIEWED)
+    if (COEViewedCheck) {
       setCOEViewed(COEViewed)
     }
   }
