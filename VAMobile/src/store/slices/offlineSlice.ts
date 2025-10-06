@@ -4,7 +4,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { onlineManager } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
-import { AppThunk } from 'store'
+import store, { AppThunk } from 'store'
+import { Event, logAnalyticsEvent } from 'utils/analytics'
 
 // Using rnc net info create event listener for network connection status
 onlineManager.setEventListener((setOnline) => {
@@ -24,12 +25,14 @@ export type OfflineState = {
    */
   viewingModal?: boolean
   lastUpdatedTimestamps: Record<string, string | undefined>
+  offlineEventsMap: Record<string, Event>
 }
 
 export const initialOfflineState: OfflineState = {
   bannerExpanded: false,
   isOffline: false,
   lastUpdatedTimestamps: {},
+  offlineEventsMap: {},
 }
 
 export const setOfflineTimestamp =
@@ -56,6 +59,25 @@ export const setLastUpdatedTimestamp =
     dispatch(dispatchSetLastUpdatedTime({ queryKey, timestamp }))
   }
 
+export const queueOfflineEvent =
+  (event: Event): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchQueueOfflineEvent(event))
+  }
+
+export const logOfflineEventQueue = (): AppThunk => async (dispatch) => {
+  const offlineEventQueue: Array<Event> = Object.values(store.getState().offline.offlineEventsMap)
+
+  // Go through each queued event, log it and remove it from the queue
+  while (offlineEventQueue.length) {
+    await logAnalyticsEvent(offlineEventQueue[0])
+    offlineEventQueue.shift()
+  }
+
+  // Clear the stored offline event queue
+  dispatch(dispatchClearOfflineEventQueue())
+}
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -76,6 +98,18 @@ const offlineSlice = createSlice({
       const { queryKey, timestamp } = action.payload
       state.lastUpdatedTimestamps[queryKey] = timestamp
     },
+    dispatchQueueOfflineEvent: (state, action: PayloadAction<Event>) => {
+      const screen = action.payload.params?.screen_name as string
+      state.offlineEventsMap = {
+        ...state.offlineEventsMap,
+        [screen]: action.payload,
+      }
+
+      console.debug('NEW QUEUE LENGTH', Object.keys(state.offlineEventsMap).length, action.payload.params?.screen_name)
+    },
+    dispatchClearOfflineEventQueue: (state) => {
+      state.offlineEventsMap = {}
+    },
   },
 })
 
@@ -84,5 +118,7 @@ const {
   dispatchUpdateBannerExpanded,
   dispatchUpdateViewingModal,
   dispatchSetLastUpdatedTime,
+  dispatchQueueOfflineEvent,
+  dispatchClearOfflineEventQueue,
 } = offlineSlice.actions
 export default offlineSlice.reducer

@@ -11,11 +11,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameDropDatePickerValue } from 'constants/timeframes'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
 import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getPickerOptions } from 'utils/dateUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
@@ -40,6 +41,7 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)

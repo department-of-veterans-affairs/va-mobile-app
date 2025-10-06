@@ -21,7 +21,7 @@ import {
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import {
   AppointmentDetailsSubTypeConstants,
@@ -31,6 +31,7 @@ import {
   isAPendingAppointment,
 } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -40,6 +41,7 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const { appointment } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const registerReviewEvent = useReviewEvent(true)
+  useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENT_DETAILS_SCREEN_ID)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)

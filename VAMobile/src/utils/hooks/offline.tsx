@@ -1,16 +1,49 @@
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { useNetInfo } from '@react-native-community/netinfo'
+import { addEventListener, useNetInfo } from '@react-native-community/netinfo'
+import { useFocusEffect } from '@react-navigation/native'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { OfflineState } from 'store/slices'
+import { OfflineState, logOfflineEventQueue, queueOfflineEvent } from 'store/slices'
+import { useAppDispatch } from 'utils/hooks/index'
 import { featureEnabled } from 'utils/remoteConfig'
+
+export const useOfflineEventQueue = (screen: string) => {
+  const dispatch = useAppDispatch()
+
+  useFocusEffect(
+    useCallback(() => {
+      let isOnline: boolean | null = null
+      const unsubscribe = addEventListener(({ isConnected }) => {
+        // Upon navigating to a screen while offline queue an event
+        if (isConnected === false) {
+          dispatch(queueOfflineEvent(Events.vama_offline_access(screen)))
+        }
+
+        // When the connection status changes update for later
+        if (isConnected !== isOnline) {
+          // Once connection has been reestablished log the offline events in the queue
+          if (isConnected) {
+            dispatch(logOfflineEventQueue())
+          }
+          isOnline = isConnected
+        }
+      })
+
+      return () => {
+        unsubscribe()
+      }
+    }, [dispatch, screen]),
+  )
+}
 
 /**
  * Returns a value representing whether the app is able to connect to the internet. If
@@ -24,7 +57,6 @@ export function useOfflineMode(): boolean {
   }
 
   return !!isConnected
-  // return false
 }
 
 // Enabling any to handle the type of the snackbar which is not exposed in the component library
