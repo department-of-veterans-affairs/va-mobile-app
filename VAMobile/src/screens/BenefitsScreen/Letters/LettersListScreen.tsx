@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { map } from 'underscore'
@@ -12,10 +13,13 @@ import {
   Box,
   ErrorComponent,
   FeatureLandingTemplate,
+  List,
+  ListItemObj,
   LoadingComponent,
-  SimpleList,
-  SimpleListItemObj,
+  TextLine,
+  TextView,
 } from 'components'
+import { TextLines } from 'components/TextLines'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -26,6 +30,8 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+export const CONFIRM_COE_VIEWED = '@confirm_coe_viewed'
 
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
@@ -49,8 +55,27 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const [COEViewed, setCOEViewed] = useState('')
 
-  const letterPressFn = (letterType: LetterTypes, letterName: string): void | undefined => {
+  const getCOEViewed = async (): Promise<void> => {
+    const COEViewed = await AsyncStorage.getItem(CONFIRM_COE_VIEWED)
+    if (COEViewed) {
+      setCOEViewed(COEViewed)
+    }
+  }
+
+  useEffect(() => {
+    if (COEViewed === '') {
+      getCOEViewed()
+    }
+  }, [COEViewed])
+
+  const letterPressFn = (
+    letterType: LetterTypes,
+    letterName: string,
+    letterResponse?: string,
+    letterReferenceNum?: string,
+  ): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
         return navigateTo('BenefitSummaryServiceVerificationLetter')
@@ -111,32 +136,58 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
           description: t('letters.certificateOfEligibility.description'),
           letterType,
           screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
+          displayAlert: !COEViewed,
+          letterResponse: letterResponse,
+          letterReferenceNum: letterReferenceNum,
         })
       default:
         return undefined
     }
   }
 
+  const nowAvailable = (text: Array<TextLine>): React.ReactNode => {
+    return (
+      <Box flexDirection="column">
+        <TextLines listOfText={text} />
+        {!COEViewed ? <TextView variant="HelperTextBold">{t('nowAvailable')}</TextView> : <></>}
+      </Box>
+    )
+  }
+
   const filteredLetters = featureEnabled('COEAvailable')
     ? letters
     : letters?.filter((letter) => {
-        if (letter.name !== 'Certificate of Eligibility for Home Loan Letter') {
+        if (letter.letterType !== LetterTypeConstants.certificateOfEligibility) {
           return letter
         }
       })
 
-  const letterButtons: Array<SimpleListItemObj> = map(filteredLetters || [], (letter: LetterData) => {
+  const setCOE = (): void => {
+    setCOEViewed('true')
+    AsyncStorage.setItem(CONFIRM_COE_VIEWED, 'true')
+  }
+
+  const letterButtons: Array<ListItemObj> = map(filteredLetters || [], (letter: LetterData) => {
     let letterName =
       letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
-    const letterButton: SimpleListItemObj = {
-      text: t('text.raw', { text: letterName }),
+    const text = t('text.raw', { text: letterName })
+    const textLine: Array<TextLine> = [{ text } as TextLine]
+
+    const letterButton: ListItemObj = {
       a11yHintText: t('letters.list.a11y', { letter: letterName }),
       onPress: () => {
         logAnalyticsEvent(Events.vama_click(letterName, t('letters.overview.viewLetters')))
-        letterPressFn(letter.letterType, letterName)
+        letter.letterType === LetterTypeConstants.certificateOfEligibility ? setCOE() : undefined
+        letterPressFn(letter.letterType, letterName, letter.letterResponse, letter.letterReferenceNum)
       },
+      content:
+        letter.letterType === LetterTypeConstants.certificateOfEligibility ? (
+          nowAvailable(textLine)
+        ) : (
+          <TextLines listOfText={textLine} />
+        ),
     }
 
     return letterButton
@@ -169,7 +220,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
         <NoLettersScreen />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
-          <SimpleList items={letterButtons} />
+          <List items={letterButtons} />
         </Box>
       )}
     </FeatureLandingTemplate>
