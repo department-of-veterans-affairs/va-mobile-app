@@ -68,7 +68,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     if (COEViewed === '') {
       getCOEViewed()
     }
-  }, [COEViewed])
+  }, [COEViewed, getCOEViewed])
 
   const letterPressFn = (
     letterType: LetterTypes,
