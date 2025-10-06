@@ -31,8 +31,6 @@ import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-export const CONFIRM_COE_VIEWED = '@confirm_coe_viewed'
-
 type LettersListScreenProps = StackScreenProps<BenefitsStackParamList, 'LettersList'>
 
 function LettersListScreen({ navigation }: LettersListScreenProps) {
@@ -55,12 +53,13 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const CONFIRM_COE_VIEWED = '@confirm_coe_viewed'
   const [COEViewed, setCOEViewed] = useState('')
 
   const getCOEViewed = async (): Promise<void> => {
     const COEViewedCheck = await AsyncStorage.getItem(CONFIRM_COE_VIEWED)
     if (COEViewedCheck) {
-      setCOEViewed(COEViewed)
+      setCOEViewed(COEViewedCheck)
     }
   }
 
@@ -68,7 +67,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     if (COEViewed === '') {
       getCOEViewed()
     }
-  }, [COEViewed, getCOEViewed])
+  }, [COEViewed])
 
   const letterPressFn = (
     letterType: LetterTypes,
