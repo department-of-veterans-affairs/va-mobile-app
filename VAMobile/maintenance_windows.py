@@ -59,7 +59,7 @@ def service_to_add():
 def list_maint_windows():
     retries = 3
     delay = 1
-    search_word = 'EVSS'
+    search_words = ['EVSS', 'Lighthouse', 'VAOS', 'Travel Pay']
     for attempt in range(retries):
         try:
             conn = http.client.HTTPSConnection("api.pagerduty.com")
@@ -77,7 +77,7 @@ def list_maint_windows():
                         if 'services' in item:
                             found_service = False
                             for service in item['services']:
-                                if 'summary' in service and search_word in service['summary']:
+                                if 'summary' in service and any(word in service['summary'] for word in search_words):
                                     found_service = True
                                     count += 1
                                     break
@@ -111,7 +111,7 @@ def update_maint_window():
     future_windows, count = list_maint_windows()
     if future_windows:
         print(f"Checking and updating {count} maintenance window(s)")
-        query1 = "EVSS"
+        query1_words = ["EVSS", "Lighthouse", "VAOS", "Travel Pay"]
         query2 = "Mobile"
         services_to_add = service_to_add()
 
@@ -130,7 +130,7 @@ def update_maint_window():
 
             print(f"\nProcessing window {i+1} with ID: {window_id}, Description: {desc}")
 
-            has_query1 = any(query1 in name for name in existing_service_names)
+            has_query1 = any(word in name for name in existing_service_names for word in query1_words)
             has_query2 = any(query2 in name for name in existing_service_names)
 
             if has_query2:
@@ -138,7 +138,7 @@ def update_maint_window():
                 continue
 
             elif has_query1 and not has_query2:
-                print(f"  {query1} is applied, and {query2} is not. Adding {query2} services.")
+                print(f"  A service matching {query1_words} is applied, and {query2} is not. Adding {query2} services.")
                 updated_services = list(existing_services)
                 for service_to_add_item in services_to_add:
                     if query2 in service_to_add_item.get('name', '') and service_to_add_item.get('id') not in existing_service_ids:

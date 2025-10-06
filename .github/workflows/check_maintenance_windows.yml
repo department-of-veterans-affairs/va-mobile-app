@@ -1,10 +1,10 @@
-name: "[Utils] Check Maintenance Windows"
+name: '[Utils] Check Maintenance Windows'
 
 on:
   workflow_dispatch:
   schedule:
     # 04:00 UTC, 12:00AM ET, 9:00PM PT every day
-    - cron: "00 4 * * *"
+    - cron: '00 4 * * *'
 
 jobs:
   check_maintenance_windows:
@@ -14,20 +14,26 @@ jobs:
       run:
         working-directory: VAMobile
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           sparse-checkout: |
             VAMobile/maintenance_windows.py
             VAMobile/requirements.txt
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: '3.13'
       - name: Check Maintenance Windows
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           PAGERDUTY_API_KEY: ${{ secrets.PD_KEY }}
         run: |
           echo "Installing dependencies..."
@@ -43,7 +49,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "<https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows> update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "<https://ecc.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=P92C7UP|Mobile Maintenance Windows> update success! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
 
   start_slack_thread_failure:
     name: Start Slack thread for failure
@@ -53,4 +59,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "<https://dsva.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=PSACBVG|Mobile Maintenance Windows> update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: "<https://ecc.pagerduty.com/service-directory/maintenance-windows?Teams-search=mob&team_ids=P92C7UP|Mobile Maintenance Windows> update failed! \n  See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
