@@ -38,15 +38,19 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             promise: Promise
     ) {
         try {
+            val uri = Uri.parse(authEndPoint)
+            val host = uri.host ?: ""
+            
             // Check if this is a local URL (for Mocked Authentication)
-            val isLocalUrl = authEndPoint.contains("localhost") || 
-                authEndPoint.contains("127.0.0.1") ||
-                Regex("""192\.168\.\d+\.\d+""").containsMatchIn(authEndPoint) ||
-                Regex("""10\.\d+\.\d+\.\d+""").containsMatchIn(authEndPoint)
+            // Use Uri.host which provides the hostname from the URL
+            val isLocalUrl = host == "localhost" ||
+                host == "127.0.0.1" ||
+                host.startsWith("192.168.") ||
+                host.startsWith("10.") ||
+                host.startsWith("172.")
             
             val authURI =
-                    Uri.parse(authEndPoint)
-                            .buildUpon()
+                    uri.buildUpon()
                             .also {
                                 with(it) {
                                     appendQueryParameter("code_challenge_method", "S256")

@@ -31,8 +31,18 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   }
   
   func generateUrl(authUrl: String, codeChallenge: String)-> URL? {
+    guard let url = URL(string: authUrl), 
+          let host = url.host else {
+      return nil
+    }
+    
     // Check if this is a local URL (for Mocked Authentication)
-    let isLocalUrl = authUrl.contains("localhost") || authUrl.contains("127.0.0.1") || authUrl.range(of: #"192\.168\.\d+\.\d+"#, options: .regularExpression) != nil
+    // Use URLComponents.host which provides the hostname from the URL
+    let isLocalUrl = host == "localhost" || 
+                     host == "127.0.0.1" || 
+                     host.hasPrefix("192.168.") ||
+                     host.hasPrefix("10.") ||
+                     host.hasPrefix("172.")
     
     var items = [
       URLQueryItem(name: "code_challenge_method", value: "S256"),
