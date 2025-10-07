@@ -14,6 +14,11 @@ type TravelPayClaimsFilterCheckboxGroupProps = {
   allLabelText: string
 }
 
+const getA11yLabel = (option: CheckboxOption): string => {
+  const label = option.value === FILTER_KEY_ALL ? 'Select all' : `${option.optionLabelKey}`
+  return `${label}, checkbox`
+}
+
 /**A common component to display radio button selectors for a list of selectable items*/
 const TravelPayClaimsFilterCheckboxGroup = ({
   options,
@@ -34,6 +39,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
   ]
 
   const listItems: Array<ListItemObj> = optionsWithAll.map((option) => {
+    const checked = isChecked(option.value, options, selectedValues)
     return {
       content: (
         <Box flexDirection={'row'} justifyContent={'space-between'} width={'100%'} alignItems="center">
@@ -47,7 +53,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
           <Box>
             <Checkbox
               label=""
-              checked={isChecked(option.value, options, selectedValues)}
+              checked={checked}
               onPress={() => onChange(option.value)}
               indeterminate={isIndeterminate(option.value, options, selectedValues)}
               testID={`checkbox_${option.value}`}
@@ -59,6 +65,9 @@ const TravelPayClaimsFilterCheckboxGroup = ({
       backgroundColor: isChecked(option.value, options, selectedValues) ? 'listActive' : undefined,
       onPress: () => onChange(option.value),
       decorator: ButtonDecoratorType.None,
+      testId: getA11yLabel(option),
+      a11yState: { checked: checked },
+      a11yRole: 'checkbox',
     }
   })
 

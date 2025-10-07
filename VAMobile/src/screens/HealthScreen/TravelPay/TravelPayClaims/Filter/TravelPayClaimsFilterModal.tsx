@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
+import { Box, BoxProps, RadioGroup, TextView, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import TravelClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterCheckboxGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
@@ -41,18 +41,23 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   const [selectedFilter, setSelectedFilter, toggleFilter] = useFilterToggle(uniqueOptions, currentFilter)
   const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy)
 
-  useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
+  const sortOptions = useMemo(
+    (): Array<radioOption<SortOptionType>> => [
+      {
+        optionLabelKey: t('travelPay.statusList.sortOption.recent'),
+        value: SortOption.Recent,
+        a11yLabel: `${t('travelPay.statusList.sortOption.recent')}, radio button, ${selectedSortBy === SortOption.Recent ? 'selected' : 'not selected'},`,
+      },
+      {
+        optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
+        value: SortOption.Oldest,
+        a11yLabel: `${t('travelPay.statusList.sortOption.oldest')}, radio button, ${selectedSortBy === SortOption.Oldest ? 'selected' : 'not selected'},`,
+      },
+    ],
+    [t, selectedSortBy],
+  )
 
-  const sortOptions = [
-    {
-      optionLabelKey: t('travelPay.statusList.sortOption.recent'),
-      value: SortOption.Recent,
-    },
-    {
-      optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
-      value: SortOption.Oldest,
-    },
-  ]
+  useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822
