@@ -209,8 +209,9 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
-    } else if (pathParts[0] === 'my-health') {
-      // TODO: Alter for specific url, just used for testing atm
+    } else if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
+      // Handles https://staging.va.gov/my-health/appointments & https://staging.va.gov/my-health/appointments/past
+      const isPastAppointment = pathParts[2] === 'past'
       return {
         routes: [
           {
@@ -220,7 +221,10 @@ export const linking: LinkingOptions<any> = {
                 {
                   name: 'HealthTab',
                   state: {
-                    routes: [{ name: 'Health' }, { name: 'Appointments' }],
+                    routes: [
+                      { name: 'Health' },
+                      { name: 'Appointments', params: isPastAppointment ? { tab: 1 } : { tab: 0 } },
+                    ],
                   },
                 },
               ],
