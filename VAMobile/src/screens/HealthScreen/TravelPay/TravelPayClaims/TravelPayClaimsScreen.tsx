@@ -141,7 +141,7 @@ function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
             <NoTravelClaims />
           ) : (
             <>
-              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
                 <TextView
                   mx={2}
                   mb={theme.dimensions.condensedMarginBetween}
