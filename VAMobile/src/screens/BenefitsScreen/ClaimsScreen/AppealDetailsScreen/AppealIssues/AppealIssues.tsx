@@ -17,9 +17,7 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const appealTypeName = appealType.toLowerCase().includes('appeal')
-    ? t(AppealTypesDisplayNames[appealType])
-    : `your ${t(AppealTypesDisplayNames[appealType])}`
+  const appealTypeName = t(AppealTypesDisplayNames[appealType])
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
