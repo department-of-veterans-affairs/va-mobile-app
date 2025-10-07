@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useMedicalCopays } from 'api/medicalCopays'
-import { MedicalCopayRecord } from 'api/types'
 import { Box, FeatureLandingTemplate, LoadingComponent, Pagination, PaginationProps, TextView } from 'components'
 import EmptyStateMessage from 'components/EmptyStateMessage'
 import { VAScrollViewProps } from 'components/VAScrollView'
@@ -30,8 +29,8 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
 
   const copays = copaysData?.data ?? []
   const isEmpty = copays.length === 0
-  const sortedCopays = sortStatementsByDate(copays ?? [])
-  const copaysByUniqueFacility = uniqBy(sortedCopays, (c) => c.pSFacilityNum)
+  const sorted = useMemo(() => sortStatementsByDate(copays), [copays])
+  const copaysByUniqueFacility = useMemo(() => uniqBy(sorted, (c) => c.pSFacilityNum), [sorted])
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -42,16 +41,11 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
     perPage: DEFAULT_PAGE_SIZE,
     totalEntries: copaysByUniqueFacility.length || 0,
   }
-  const [copaysToShow, setCopaysToShow] = useState<MedicalCopayRecord[]>([])
 
-  useEffect(() => {
-    const copaysList = copaysByUniqueFacility?.slice((page - 1) * perPage, page * perPage)
-
-    // Only update if the list has actually changed
-    if (JSON.stringify(copaysList) !== JSON.stringify(copaysToShow)) {
-      setCopaysToShow(copaysList || [])
-    }
-  }, [page, perPage, copaysByUniqueFacility, copaysToShow])
+  const copaysToShow = useMemo(
+    () => copaysByUniqueFacility.slice((page - 1) * perPage, page * perPage),
+    [copaysByUniqueFacility, page, perPage],
+  )
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',

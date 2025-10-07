@@ -25,11 +25,10 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
 
   const getCopayInfo = (
     copayRecord: MedicalCopayRecord,
-  ): { facilityName: string; balance: number | undefined; summaryKey: string; date: string } => {
+  ): { facilityName: string; balance: number | undefined; date: string } => {
     return {
       facilityName: getMedicalCenterNameByID(copay.station.facilitYNum),
       balance: copayRecord.pHAmtDue,
-      summaryKey: '',
       date: copayRecord.pSStatementDateOutput || '',
     }
   }
