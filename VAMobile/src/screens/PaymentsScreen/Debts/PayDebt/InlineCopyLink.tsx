@@ -1,4 +1,5 @@
-import { Pressable } from 'react-native'
+import React from 'react'
+import { Pressable, StyleSheet } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -22,11 +23,7 @@ export function InlineCopyLink({ label = 'Copy', onPress, testID }: InlineCopyLi
       accessibilityLabel={label}
       accessibilityHint={label}
       testID={testID}
-      style={{
-        minHeight: theme.dimensions.touchableMinHeight,
-        justifyContent: 'center',
-        paddingHorizontal: 4,
-      }}>
+      style={[styles.pressable, { minHeight: theme.dimensions.touchableMinHeight }]}>
       <Box flexDirection="row" alignItems="center">
         <Icon name="ContentCopy" fill={color} width={24} height={24} />
         <TextView ml={6} variant="HelperTextBold" color="link">
@@ -36,3 +33,10 @@ export function InlineCopyLink({ label = 'Copy', onPress, testID }: InlineCopyLi
     </Pressable>
   )
 }
+
+const styles = StyleSheet.create({
+  pressable: {
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+  },
+})

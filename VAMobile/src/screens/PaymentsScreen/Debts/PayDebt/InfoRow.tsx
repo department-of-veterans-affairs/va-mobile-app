@@ -1,3 +1,4 @@
+import React from 'react'
 import { Clipboard } from 'react-native'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'

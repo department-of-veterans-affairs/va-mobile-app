@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { __mockSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { __mockSnackbar as __mockSnackbarMock } from '@department-of-veterans-affairs/mobile-component-library'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
@@ -45,12 +45,12 @@ context('PayDebtScreen (data render + copy snackbars)', () => {
   }
 
   const expectSnack = (msg: string) => {
-    const last = __mockSnackbar.show.mock.calls.at(-1)
+    const last = __mockSnackbarMock.show.mock.calls.at(-1)
     expect(last?.[0]).toBe(msg)
   }
 
   beforeEach(() => {
-    __mockSnackbar.show.mockClear()
+    __mockSnackbarMock.show.mockClear()
   })
 
   it('renders labels and formatted values from debt', async () => {
