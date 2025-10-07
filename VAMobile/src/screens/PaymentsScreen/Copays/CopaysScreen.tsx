@@ -5,9 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { useMedicalCopays } from 'api/medicalCopays'
 import { Box, FeatureLandingTemplate } from 'components'
-import EmptyStateMessage from 'components/EmptyStateMessage'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
@@ -19,11 +17,6 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
-  const { summary, isLoading, error } = useMedicalCopays()
-
-  const isEmpty = (summary?.count ?? 0) === 0
-  const showEmpty = !isLoading && !error && isEmpty
 
   const helpIconProps: IconProps = {
     name: 'HelpOutline',
@@ -48,19 +41,18 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       testID="copaysTestID"
       backLabelTestID="copaysBackTestID">
       {/* TODO: Temporary code to navigate to other screens */}
-      {showEmpty ? (
-        <EmptyStateMessage title={t('copays.empty.title')} body={t('copays.empty.body')} phone={t('8664001238')} />
-      ) : (
-        <>
-          <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('copays.reviewDetails')}
-              onPress={() => navigateTo('CopayDetails', { copayRecord: null })}
-            />
-          </Box>
-          <ResolveBillButton />
-        </>
-      )}
+      <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
+        <Button
+          label={t('copays.reviewDetails')}
+          onPress={() => {
+            navigation.navigate
+            navigateTo('CopayDetails', {
+              copayRecord: null,
+            })
+          }}
+        />
+      </Box>
+      <ResolveBillButton />
     </FeatureLandingTemplate>
   )
 }

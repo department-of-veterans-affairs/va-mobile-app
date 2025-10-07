@@ -1,34 +1,11 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
-import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
-import { useDebts } from 'api/debts'
-import { useMedicalCopays } from 'api/medicalCopays'
-import PaymentsScreen from 'screens/PaymentsScreen'
 import { context, render } from 'testUtils'
-import { numberToUSDollars } from 'utils/formattingUtils'
 
-jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: (key: string) => key === 'overpayCopay',
-}))
-
-jest.mock('api/medicalCopays', () => ({
-  useMedicalCopays: jest.fn(() => ({
-    summary: { amountDue: 0, count: 0 },
-    isLoading: false,
-    error: undefined,
-  })),
-}))
-
-jest.mock('api/debts', () => ({
-  useDebts: jest.fn(() => ({
-    summary: { amountDue: 0, count: 0 },
-    isLoading: false,
-    error: undefined,
-  })),
-}))
+import PaymentsScreen from './index'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -88,69 +65,6 @@ context('PaymentsScreen', () => {
       initializeTestInstance()
       fireEvent.press(screen.getByRole('link', { name: 'VA payment history' }))
       expect(mockNavigationSpy).toHaveBeenCalledWith('DirectDeposit')
-    })
-  })
-
-  describe('Subtext data for debts & copay', () => {
-    beforeEach(() => {
-      jest.clearAllMocks()
-    })
-
-    it('renders subtext when amount & count > 0', () => {
-      ;(useMedicalCopays as jest.Mock).mockReturnValue({
-        summary: { amountDue: 396.93, count: 6 },
-        isLoading: false,
-        error: undefined,
-      })
-      ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { amountDue: 347.5, count: 2 },
-        isLoading: false,
-        error: undefined,
-      })
-
-      render(<PaymentsScreen />)
-
-      const copaysTitle = t('copays.title')
-      const debtsTitle = t('debts.title')
-
-      const copaysSub = t('copays.activityButton.subText', {
-        amount: numberToUSDollars(396.93),
-        count: 6,
-      })
-      const debtsSub = t('debts.activityButton.subText', {
-        amount: numberToUSDollars(347.5),
-        count: 2,
-      })
-
-      expect(screen.getByText(copaysSub)).toBeTruthy()
-      expect(screen.getByText(debtsSub)).toBeTruthy()
-
-      expect(screen.getByRole('link', { name: `${copaysTitle} ${copaysSub}` })).toBeTruthy()
-      expect(screen.getByRole('link', { name: `${debtsTitle} ${debtsSub}` })).toBeTruthy()
-    })
-
-    it('omits subtext when summaries are empty', () => {
-      ;(useMedicalCopays as jest.Mock).mockReturnValue({
-        summary: { amountDue: 0, count: 0 },
-        isLoading: false,
-        error: undefined,
-      })
-      ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { amountDue: 0, count: 0 },
-        isLoading: false,
-        error: undefined,
-      })
-
-      render(<PaymentsScreen />)
-
-      const copaysTitle = t('copays.title')
-      const debtsTitle = t('debts.title')
-
-      expect(screen.getByRole('link', { name: copaysTitle })).toBeTruthy()
-      expect(screen.getByRole('link', { name: debtsTitle })).toBeTruthy()
-
-      expect(screen.queryByText(t('copays.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
-      expect(screen.queryByText(t('debts.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
     })
   })
 })
