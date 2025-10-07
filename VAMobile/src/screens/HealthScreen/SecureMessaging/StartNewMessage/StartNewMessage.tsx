@@ -394,6 +394,9 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
         saveDraft(params, mutateOptions)
       })
     } else {
+      const isRecipientOh =
+        recipients?.find((recipient) => recipient.attributes.triageTeamId === messageDataRef.current.recipient_id)
+          ?.attributes.ohTriageGroup || false
       const mutateOptions = {
         onSuccess: () => {
           snackbar.show(t('secureMessaging.startNewMessage.sent'))
@@ -413,13 +416,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
               offset: theme.dimensions.snackBarBottomOffset,
               onActionPressed: () => {
                 // passing messageDataRef to ensure we have the latest messageData
-                sendMessage({ messageData: messageDataRef.current, uploads: attachmentsList }, mutateOptions)
+                sendMessage(
+                  { messageData: messageDataRef.current, uploads: attachmentsList, isRecipientOh: isRecipientOh },
+                  mutateOptions,
+                )
               },
             })
           }
         },
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+      const params: SendMessageParameters = {
+        messageData: messageData,
+        uploads: attachmentsList,
+        isRecipientOh: isRecipientOh,
+      }
       sendMessage(params, mutateOptions)
     }
   }

@@ -23,6 +23,7 @@ export type SecureMessagingMessageAttributes = {
   recipientId?: number
   recipientName: string
   readReceipt?: string
+  isOhMessage: boolean
 }
 
 export type CategoryTypes =
@@ -93,6 +94,7 @@ export type SecureMessagingFormData = {
   body: string
   subject?: string
   draft_id?: number
+  is_oh_triage_group?: boolean
 }
 
 /**
@@ -112,6 +114,7 @@ export type SecureMessagingRecipient = {
   preferredTeam: boolean
   relationType: string
   triageTeamId: number
+  ohTriageGroup: boolean
 }
 
 export type SecureMessagingFolderData = {
@@ -204,6 +207,7 @@ export type SecureMessagingRecipientData = {
     locationName: string
     suggestedNameDisplay: string
     healthCareSystemName: string
+    ohTriageGroup: boolean
   }
 }
 
@@ -261,6 +265,7 @@ export type SendMessageParameters = {
   messageData: SecureMessagingFormData
   uploads?: Array<ImagePickerResponse | DocumentPickerResponse>
   replyToID?: number
+  isRecipientOh: boolean
 }
 
 export type DeleteMessageParameters = {

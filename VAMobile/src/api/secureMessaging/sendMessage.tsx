@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingFormData, SecureMessagingMessageData, SendMessageParameters } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { Params, contentTypes, post } from 'store/api'
@@ -7,17 +8,15 @@ import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/anal
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
 
-import { secureMessagingKeys } from './queryKeys'
-
 /**
  * Sends a message
  */
-const sendMessage = ({ messageData, replyToID, uploads }: SendMessageParameters) => {
+const sendMessage = ({ messageData, replyToID, uploads, isRecipientOh }: SendMessageParameters) => {
   let postData: FormData | SecureMessagingFormData = messageData
+  postData.is_oh_triage_group = isRecipientOh ? isRecipientOh : false
   if (uploads && uploads.length !== 0) {
     const formData = new FormData()
     formData.append('message', JSON.stringify(messageData))
-
     uploads.forEach((attachment) => {
       let nameOfFile: string | undefined
       let typeOfFile: string | undefined
@@ -47,6 +46,7 @@ const sendMessage = ({ messageData, replyToID, uploads }: SendMessageParameters)
     })
     postData = formData
   }
+
   return post<SecureMessagingMessageData>(
     replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
     postData as unknown as Params,
