@@ -10,7 +10,7 @@ import { Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleLis
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 type GiveFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'GiveFeedback'>
 
@@ -19,7 +19,7 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const openAppStore = useOpenAppStore()
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const items: Array<SimpleListItemObj> = _.flatten([

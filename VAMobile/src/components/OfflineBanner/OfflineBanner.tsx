@@ -12,10 +12,10 @@ import { RootState } from 'store'
 import { OfflineState, setBannerExpanded, setOfflineTimestamp } from 'store/slices'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useOfflineMode } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 export const OfflineBanner: FC = () => {
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   // const [expanded, setExpanded] = useState<boolean>(false)
   // const [offlineTimestamp, setOfflineTimestamp] = useState<DateTime>()
   const { t } = useTranslation(NAMESPACE.COMMON)

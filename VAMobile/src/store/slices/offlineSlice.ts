@@ -1,18 +1,8 @@
-import NetInfo from '@react-native-community/netinfo'
-
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { onlineManager } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
 import store, { AppThunk } from 'store'
 import { Event, logAnalyticsEvent } from 'utils/analytics'
-
-// Using rnc net info create event listener for network connection status
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
-    setOnline(!!state.isConnected)
-  })
-})
 
 export type OfflineState = {
   offlineTimestamp?: DateTime

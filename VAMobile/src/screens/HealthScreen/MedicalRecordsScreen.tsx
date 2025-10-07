@@ -13,7 +13,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -26,7 +26,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
 
   return (

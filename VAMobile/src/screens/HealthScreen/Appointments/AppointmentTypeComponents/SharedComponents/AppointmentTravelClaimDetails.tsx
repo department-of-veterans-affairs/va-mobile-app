@@ -23,7 +23,7 @@ import {
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
@@ -39,7 +39,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
