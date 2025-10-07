@@ -93,6 +93,10 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     const claimError = attributes.travelPayClaim?.metadata.success === false
 
     if (isSubmitting) {
+      const linkTextKey = featureEnabled('travelPayStatusList')
+        ? 'travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link'
+        : 'travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'
+
       // We are in the process of submitting a travel pay claim and don't yet have the claim details from the API
       // so we're displaying a placeholder status
       const status = t('travelPay.travelClaimFiledDetails.status.submitting')
@@ -104,8 +108,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={goToTravelClaims}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            text={t(linkTextKey)}
+            a11yLabel={a11yLabelVA(t(linkTextKey))}
             testID={`goToVAGovTravelClaimStatus`}
           />
           <TravelPayHelp />
@@ -177,20 +181,30 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     }
 
     if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
+      const { messageTextKey, linkTextKey } = featureEnabled('travelPayStatusList')
+        ? {
+            messageTextKey: 'travelPay.travelClaimFiledDetails.yourAppointmentIsPast30Days',
+            linkTextKey: 'travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link',
+          }
+        : {
+            messageTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage',
+            linkTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage.link',
+          }
+
       return (
         <>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
-            accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
+            accessibilityLabel={a11yLabelVA(t(messageTextKey))}
             mb={theme.dimensions.condensedMarginBetween}
             variant="MobileBody">
-            {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
+            {t(messageTextKey)}
           </TextView>
           <LinkWithAnalytics
             type="custom"
             onPress={goToTravelClaims}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            text={t(linkTextKey)}
+            a11yLabel={a11yLabelVA(t(linkTextKey))}
             testID={`goToVAGovTravelClaimStatus`}
           />
           <TravelPayHelp />
