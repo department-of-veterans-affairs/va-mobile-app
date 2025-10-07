@@ -31,7 +31,7 @@ function CopayHelp({}: CopayHelpProps) {
           accessibilityHint={t('copays.help.header.a11yHint')}>
           {t('copays.help.header')}
         </TextView>
-        <TextView variant="MobileBody" paragraphSpacing={false}>
+        <TextView my={theme.dimensions.condensedMarginBetween} variant="MobileBody" paragraphSpacing={false}>
           {t('copays.help.content')}
         </TextView>
         <ClickToCallPhoneNumber phone={t('8664001238')} displayedText={displayedTextPhoneNumber(t('8664001238'))} />
