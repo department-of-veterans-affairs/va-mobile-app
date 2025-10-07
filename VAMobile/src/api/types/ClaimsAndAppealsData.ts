@@ -408,15 +408,15 @@ export const AppealTypesConstants: {
 }
 
 export const AppealTypesDisplayNames: {
-  higherLevelReview: 'Higher-Level Review'
-  supplementalClaim: 'Supplemental Claim'
-  legacyAppeal: 'appeal'
-  appeal: 'appeal'
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview'
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim'
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal'
+  appeal: 'appealDetails.appealTypesDisplayName.appeal'
 } = {
-  higherLevelReview: 'Higher-Level Review',
-  supplementalClaim: 'Supplemental Claim',
-  legacyAppeal: 'appeal',
-  appeal: 'appeal',
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview',
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim',
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal',
+  appeal: 'appealDetails.appealTypesDisplayName.appeal',
 }
 
 export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'

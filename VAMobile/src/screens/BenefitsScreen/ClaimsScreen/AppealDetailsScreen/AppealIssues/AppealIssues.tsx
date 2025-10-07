@@ -18,8 +18,8 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const theme = useTheme()
 
   const appealTypeName = appealType.toLowerCase().includes('appeal')
-    ? AppealTypesDisplayNames[appealType]
-    : `your ${AppealTypesDisplayNames[appealType]}`
+    ? t(AppealTypesDisplayNames[appealType])
+    : `your ${t(AppealTypesDisplayNames[appealType])}`
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
