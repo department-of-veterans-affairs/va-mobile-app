@@ -3,65 +3,65 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { AppealIssue } from 'api/types'
+import { AppealIssue, AppealTypesConstants } from 'api/types'
+import AppealIssues from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealIssues/AppealIssues'
 import { context, mockNavProps, render } from 'testUtils'
 
-import AppealIssues from './AppealIssues'
-
 context('AppealIssues', () => {
+  const issues: AppealIssue[] = [
+    {
+      active: true,
+      description: 'Appeal is still under review',
+      diagnosticCode: null,
+      lastAction: null,
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Service connection, Post-traumatic stress disorder remand',
+      diagnosticCode: null,
+      lastAction: 'remand',
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Service connection for neck strain cavc_remand',
+      diagnosticCode: null,
+      lastAction: 'cavc_remand',
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Eligibility for loan guaranty benefits has filed grant',
+      diagnosticCode: null,
+      lastAction: 'field_grant',
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Eligibility for hearing lost allowed',
+      diagnosticCode: null,
+      lastAction: 'allowed',
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Service connection for tinnitus is denied',
+      diagnosticCode: null,
+      lastAction: 'denied',
+      date: null,
+    },
+    {
+      active: true,
+      description: 'Eligibility for loan guaranty benefits withdrawn',
+      diagnosticCode: null,
+      lastAction: 'withdrawn',
+      date: null,
+    },
+  ]
+
   beforeEach(() => {
-    const issues: AppealIssue[] = [
-      {
-        active: true,
-        description: 'Appeal is still under review',
-        diagnosticCode: null,
-        lastAction: null,
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Service connection, Post-traumatic stress disorder remand',
-        diagnosticCode: null,
-        lastAction: 'remand',
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Service connection for neck strain cavc_remand',
-        diagnosticCode: null,
-        lastAction: 'cavc_remand',
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Eligibility for loan guaranty benefits has filed grant',
-        diagnosticCode: null,
-        lastAction: 'field_grant',
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Eligibility for hearing lost allowed',
-        diagnosticCode: null,
-        lastAction: 'allowed',
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Service connection for tinnitus is denied',
-        diagnosticCode: null,
-        lastAction: 'denied',
-        date: null,
-      },
-      {
-        active: true,
-        description: 'Eligibility for loan guaranty benefits withdrawn',
-        diagnosticCode: null,
-        lastAction: 'withdrawn',
-        date: null,
-      },
-    ]
-    render(<AppealIssues issues={issues} {...mockNavProps()} />)
+    render(<AppealIssues issues={issues} appealType={AppealTypesConstants.appeal} {...mockNavProps()} />)
   })
 
   it('should initialize', () => {
@@ -87,5 +87,19 @@ context('AppealIssues', () => {
     // withdrawn
     expect(screen.getByRole('header', { name: t('appealDetails.withdrawnText') })).toBeTruthy()
     expect(screen.getByText('Eligibility for loan guaranty benefits withdrawn')).toBeTruthy()
+  })
+
+  describe('Appeal explanation accordion', () => {
+    it('should display the accordion when appealType is appeal or legacyAppeal', () => {
+      render(<AppealIssues issues={issues} appealType={AppealTypesConstants.appeal} {...mockNavProps()} />)
+
+      expect(screen.getByRole('header', { name: t('appealDetails.issuesDifferentHeader') })).toBeTruthy()
+    })
+
+    it('should NOT display the accordion when appealType is anything other than appeal or legacyAppeal', () => {
+      render(<AppealIssues issues={issues} appealType={AppealTypesConstants.higherLevelReview} {...mockNavProps()} />)
+
+      expect(screen.queryByRole('header', { name: t('appealDetails.issuesDifferentHeader') })).toBeFalsy()
+    })
   })
 })
