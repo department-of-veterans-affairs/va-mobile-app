@@ -52,7 +52,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -109,7 +109,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const [page, setPage] = useState(1)

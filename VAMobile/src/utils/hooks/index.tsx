@@ -42,7 +42,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
-import { showOfflineSnackbar, useIsWithinModal, useOfflineMode } from 'utils/hooks/offline'
+import { showOfflineSnackbar, useAppIsOnline, useIsWithinModal } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -189,7 +189,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
  */
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
   const inModal = useIsWithinModal()
 
@@ -504,7 +504,7 @@ export function useOpenAppStore(): () => void {
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const snackbar = useSnackbar()
 
   return () => {

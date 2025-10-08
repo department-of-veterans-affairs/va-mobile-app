@@ -49,7 +49,7 @@ export const useOfflineEventQueue = (screen: string) => {
  * Returns a value representing whether the app is able to connect to the internet. If
  * offline mode is disabled this will always return true
  */
-export function useOfflineMode(): boolean {
+export function useAppIsOnline(): boolean {
   const { isConnected } = useNetInfo()
 
   if (!featureEnabled('offlineMode')) {
@@ -76,7 +76,7 @@ export function useIsWithinModal(): boolean {
 }
 
 export function useShowOfflineSnackbarIfNeeded(): boolean {
-  const isConnected = useOfflineMode()
+  const isConnected = useAppIsOnline()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const snackbar = useSnackbar()
 
