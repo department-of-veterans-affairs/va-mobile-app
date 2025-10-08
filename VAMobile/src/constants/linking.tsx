@@ -26,7 +26,6 @@ export const linking: LinkingOptions<any> = {
         screens: {
           HealthTab: {
             screens: {
-              Appointments: 'my-health/appointments',
               UpcomingAppointmentDetails: 'appointments/:vetextID',
               ViewMessage: 'messages/:messageID',
             },
