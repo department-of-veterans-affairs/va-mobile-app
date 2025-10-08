@@ -48,7 +48,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
       testID="payDebtTestID"
       backLabelTestID="payDebtBackTestID">
       <>
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextArea>
             <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
               {t('debts.payDebt.intro')}
