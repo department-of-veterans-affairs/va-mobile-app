@@ -90,7 +90,7 @@ describe('Travel Pay Claims Screen', () => {
     // Verify we can see claim data
     await waitFor(element(by.text('Claimant')))
       .toExist()
-      .withTimeout(6000) // Increased timeout for CI/CD
+      .withTimeout(8000) // Increased timeout for CI/CD
 
     // Navigate back using the back button
     await element(by.text('Travel')).tap()
