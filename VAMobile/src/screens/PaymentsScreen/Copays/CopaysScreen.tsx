@@ -27,7 +27,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
 
   const { data: copaysData, isFetching: loadingCopays, error: copaysError } = useMedicalCopays()
 
-  const copays = copaysData?.data ?? []
+  const copays = useMemo(() => copaysData?.data ?? [], [copaysData?.data])
   const isEmpty = copays.length === 0
   const sorted = useMemo(() => sortStatementsByDate(copays), [copays])
   const copaysByUniqueFacility = useMemo(() => uniqBy(sorted, (c) => c.pSFacilityNum), [sorted])
