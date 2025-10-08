@@ -14,6 +14,7 @@ export type DebtInfo = {
   endDate: string
   header: string
   i18nKey: string
+  original: string
   resolvable: boolean
   updatedDate?: string
   variant: string
@@ -264,6 +265,7 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     endDate: getEndDate(t, debt),
     header,
     i18nKey,
+    original: numberToUSDollars(debt.attributes.originalAr),
     resolvable,
     updatedDate: getUpdatedDate(debt),
     variant,

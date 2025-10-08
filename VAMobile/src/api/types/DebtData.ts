@@ -18,7 +18,7 @@ export type DebtRecord = {
 
     amountOverpaid?: number
     amountWithheld?: number
-    originalAr?: number
+    originalAr: number
     currentAr: number
 
     debtHistory?: DebtHistory[]

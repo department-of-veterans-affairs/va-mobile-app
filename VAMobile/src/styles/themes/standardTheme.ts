@@ -82,6 +82,18 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
+  DebtLabel: {
+    fontSize: 18,
+    lineHeight: 30,
+  },
+  DebtValue: {
+    fontSize: 22,
+    lineHeight: 28,
+  },
+  DebtValueLarge: {
+    fontSize: 26,
+    lineHeight: 28,
+  },
   DescriptiveBackButton: {
     fontSize: 16,
     lineHeight: 22,
@@ -247,6 +259,9 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.vadsColorWhite),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
+    DebtLabel: buildFont('SourceSansPro-Regular', fontSizes.DebtLabel, scheme.text.bodyText),
+    DebtValue: buildFont('SourceSansPro-Regular', fontSizes.DebtValue, scheme.text.bodyText),
+    DebtValueLarge: buildFont('Bitter-Regular', fontSizes.DebtValueLarge, scheme.text.bodyText),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.link),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
