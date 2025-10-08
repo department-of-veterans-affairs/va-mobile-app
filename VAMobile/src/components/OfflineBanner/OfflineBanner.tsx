@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
@@ -22,12 +22,15 @@ export const OfflineBanner: FC = () => {
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { offlineTimestamp, bannerExpanded } = useSelector<RootState, OfflineState>((state) => state.offline)
+  const [shouldAnnounceOffline, setShouldAnnounceOffline] = useState(false)
 
   useEffect(() => {
     if (!isConnected && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))
+      setShouldAnnounceOffline(true)
     } else if (isConnected) {
       dispatch(setOfflineTimestamp(undefined))
+      setShouldAnnounceOffline(false)
     }
   }, [isConnected, offlineTimestamp, dispatch])
 
@@ -47,7 +50,10 @@ export const OfflineBanner: FC = () => {
       pt={5}
       mb={theme.dimensions.condensedMarginBetween}>
       <Box height={40} display="flex" flexDirection="row" justifyContent="space-between">
-        <TextView accessibilityLiveRegion="polite" color="offlineText" variant="MobileBodyBold">
+        <TextView
+          accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
+          color="offlineText"
+          variant="MobileBodyBold">
           {t('offline.banner.title')}
         </TextView>
         <Pressable
@@ -64,7 +70,10 @@ export const OfflineBanner: FC = () => {
       </Box>
       {bannerExpanded && (
         <Box pb={theme.dimensions.condensedMarginBetween}>
-          <TextView accessibilityLiveRegion="polite" color="offlineText" variant="HelperText">
+          <TextView
+            accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
+            color="offlineText"
+            variant="HelperText">
             {t('offline.lastConnected')} {getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}
           </TextView>
         </Box>
