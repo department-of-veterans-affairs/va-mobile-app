@@ -90,13 +90,13 @@ context('AppealIssues', () => {
   })
 
   describe('Appeal explanation accordion', () => {
-    it('should display the accordion when appealType is appeal or legacyAppeal', () => {
+    it("should display the accordion when appealType is 'appeal' or 'legacyAppeal'", () => {
       render(<AppealIssues issues={issues} appealType={AppealTypesConstants.appeal} {...mockNavProps()} />)
 
       expect(screen.getByRole('header', { name: t('appealDetails.issuesDifferentHeader') })).toBeTruthy()
     })
 
-    it('should NOT display the accordion when appealType is anything other than appeal or legacyAppeal', () => {
+    it("should NOT display the accordion when appealType is anything other than 'appeal' or 'legacyAppeal'", () => {
       render(<AppealIssues issues={issues} appealType={AppealTypesConstants.higherLevelReview} {...mockNavProps()} />)
 
       expect(screen.queryByRole('header', { name: t('appealDetails.issuesDifferentHeader') })).toBeFalsy()
