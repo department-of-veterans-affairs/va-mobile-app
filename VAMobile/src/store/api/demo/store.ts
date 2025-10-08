@@ -270,6 +270,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     default: {
       // Handle dynamic travel pay claims details endpoint
       if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+        console.log('SC: calling getTravelPayClaimDetails with params: ', JSON.stringify(params))
         return getTravelPayClaimDetails(store)
       }
 

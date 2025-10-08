@@ -27,6 +27,8 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
   const claimDetails = claimDetailsData?.data?.attributes
 
+  console.log('SC: claimDetails: ', !!claimDetails ? 'NONE' : JSON.stringify(claimDetails))
+
   if (loadingClaimDetails) {
     return (
       <FeatureLandingTemplate

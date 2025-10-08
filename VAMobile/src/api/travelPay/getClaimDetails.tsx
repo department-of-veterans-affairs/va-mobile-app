@@ -23,6 +23,11 @@ export const useTravelPayClaimDetails = (id: string, options?: { enabled?: boole
 
   const queryEnabled = options && typeof options.enabled !== 'undefined' ? options.enabled : true
 
+  console.log('SC: travelPayEnabled: ', travelPayEnabled)
+  console.log('SC: travelPaySMOC enabled: ', featureEnabled('travelPaySMOC'))
+  console.log('SC: travelPayClaimDetailsEnabled: ', travelPayClaimDetailsEnabled)
+  console.log('SC: queryEnabled: ', queryEnabled)
+
   return useQuery({
     ...options,
     enabled: travelPayEnabled && travelPayClaimDetailsEnabled && queryEnabled && !!id,
