@@ -125,6 +125,7 @@ export const lightTheme = {
     cernerPanel: colors.vadsColorBase,
     cernerFooter: colors.vadsColorBaseDark,
     lastUpdated: colors.vadsColorBorderStrongOnLight,
+    offlineText: colors.vadsColorBaseLighter,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,
@@ -267,6 +268,7 @@ export const darkTheme = {
     cernerPanel: colors.vadsColorBaseLightest,
     cernerFooter: colors.vadsColorBaseLightest,
     lastUpdated: colors.vadsColorBorderStrongOnDark,
+    offlineText: colors.vadsColorInk,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,

@@ -42,26 +42,29 @@ export const OfflineBanner: FC = () => {
 
   return (
     <Box
-      backgroundColor={'offlineBanner'}
+      backgroundColor="offlineBanner"
       px={theme.dimensions.gutter}
       pt={5}
       mb={theme.dimensions.condensedMarginBetween}>
-      <Pressable onPress={onBannerInteract} accessibilityRole={'button'}>
-        <Box height={40} display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-          <TextView color={'primaryContrast'} variant={'MobileBodyBold'}>
-            {t('offline.banner.title')}
-          </TextView>
+      <Box height={40} display="flex" flexDirection="row" justifyContent="space-between">
+        <TextView accessibilityLiveRegion="polite" color="offlineText" variant="MobileBodyBold">
+          {t('offline.banner.title')}
+        </TextView>
+        <Pressable
+          accessibilityState={{ expanded: bannerExpanded }}
+          onPress={onBannerInteract}
+          accessibilityRole="button">
           <Icon
             name={bannerExpanded ? 'ExpandLess' : 'ExpandMore'}
             fill={theme.colors.icon.contrast}
             width={theme.dimensions.chevronListItemWidth}
             height={theme.dimensions.chevronListItemHeight}
           />
-        </Box>
-      </Pressable>
+        </Pressable>
+      </Box>
       {bannerExpanded && (
         <Box pb={theme.dimensions.condensedMarginBetween}>
-          <TextView color={'primaryContrast'} variant={'HelperText'}>
+          <TextView accessibilityLiveRegion="polite" color="offlineText" variant="HelperText">
             {t('offline.lastConnected')} {getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}
           </TextView>
         </Box>

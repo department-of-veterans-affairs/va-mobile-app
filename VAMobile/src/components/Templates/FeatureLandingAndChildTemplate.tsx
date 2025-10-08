@@ -160,10 +160,8 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <Box flex={1} display="flex" justifyContent="space-between">
-          <Box>
-            <WaygateWrapper>{children}</WaygateWrapper>
-          </Box>
+        <Box flexShrink={1} display="flex" justifyContent="space-between">
+          <WaygateWrapper>{children}</WaygateWrapper>
           <LastUpdatedTimestamp datetime={dataUpdatedAt} />
         </Box>
       </VAScrollView>
