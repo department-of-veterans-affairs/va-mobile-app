@@ -1,8 +1,10 @@
-import { useQuery } from 'api/queryClient'
-import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
+import { useQuery } from '@tanstack/react-query'
+
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { Params, get } from 'store/api'
+
+import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Fetch user folder messages

@@ -1,11 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
-import { demographicsKeys } from 'api/demographics/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { DemographicsPayload, UserDemographics } from 'api/types/DemographicsData'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
+
+import { demographicsKeys } from './queryKeys'
 
 /**
  * Fetch user demographics

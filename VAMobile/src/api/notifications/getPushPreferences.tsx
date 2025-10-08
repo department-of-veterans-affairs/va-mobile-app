@@ -1,11 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { notificationKeys } from 'api/notifications/queryKeys'
-import { DEVICE_ENDPOINT_SID } from 'api/notifications/registerDevice'
-import { useQuery } from 'api/queryClient'
+import { useQuery } from '@tanstack/react-query'
+
 import { GetPushPrefsResponse, LoadPushPreferencesData } from 'api/types'
 import store from 'store'
 import { get } from 'store/api'
+
+import { notificationKeys } from './queryKeys'
+import { DEVICE_ENDPOINT_SID } from './registerDevice'
 
 /**
  * Fetch user push preferences

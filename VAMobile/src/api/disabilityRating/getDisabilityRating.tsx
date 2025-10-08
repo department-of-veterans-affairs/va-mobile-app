@@ -1,12 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { disabilityRatingKeys } from 'api/disabilityRating/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { DisabilityRatingData, RatingData } from 'api/types'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
+
+import { disabilityRatingKeys } from './queryKeys'
 
 /**
  * Fetch user disability rating

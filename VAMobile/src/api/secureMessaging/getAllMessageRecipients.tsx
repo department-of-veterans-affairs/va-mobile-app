@@ -1,4 +1,5 @@
-import { useQuery } from 'api/queryClient'
+import { useQuery } from '@tanstack/react-query'
+
 import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingRecipients } from 'api/types'
 import { get } from 'store/api'

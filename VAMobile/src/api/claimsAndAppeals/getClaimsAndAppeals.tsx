@@ -1,8 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { chain, has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { ClaimsAndAppealsList, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
@@ -28,6 +28,7 @@ const getClaimsAndAppeals = async (claimType: ClaimType): Promise<ClaimsAndAppea
     showCompleted: claimType === ClaimTypeConstants.ACTIVE ? 'false' : 'true',
     useCache: 'false',
   })
+
   if (response) {
     return {
       ...response,

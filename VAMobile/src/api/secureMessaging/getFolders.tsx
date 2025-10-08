@@ -1,14 +1,15 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useQuery } from 'api/queryClient'
-import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
 import { SecureMessagingFoldersGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
+
+import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Fetch user folders
