@@ -1,12 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
-import { contactInformationKeys } from 'api/contactInformation/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { ContactInformationPayload, UserContactInformation } from 'api/types/ContactInformation'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { useDowntime } from 'utils/hooks'
+
+import { contactInformationKeys } from './queryKeys'
 
 /**
  * Fetch user contact information

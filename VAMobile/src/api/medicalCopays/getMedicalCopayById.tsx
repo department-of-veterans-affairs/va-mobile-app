@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { MedicalCopayPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'

@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
+import { useQuery } from '@tanstack/react-query'
+
 import { debtKeys } from 'api/debts/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { DebtsPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'

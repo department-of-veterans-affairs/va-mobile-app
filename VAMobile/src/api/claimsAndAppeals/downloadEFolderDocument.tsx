@@ -1,12 +1,14 @@
 import FileViewer from 'react-native-file-viewer'
 
-import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
-import { useQuery } from 'api/queryClient'
+import { useQuery } from '@tanstack/react-query'
+
 import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
 import { useReviewEvent } from 'utils/inAppReviews'
+
+import { claimsAndAppealsKeys } from './queryKeys'
 
 const { API_ROOT } = getEnv()
 

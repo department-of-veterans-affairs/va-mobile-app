@@ -1,10 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { decisionLettersKeys } from 'api/decisionLetters'
-import { useQuery } from 'api/queryClient'
 import { DecisionLettersGetData } from 'api/types'
 import { get } from 'store/api'
+
+import { decisionLettersKeys } from './queryKeys'
 
 /**
  * Fetch user decision letters

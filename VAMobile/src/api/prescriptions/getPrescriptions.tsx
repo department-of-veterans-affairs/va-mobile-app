@@ -1,13 +1,14 @@
+import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { prescriptionKeys } from 'api/prescriptions/queryKeys'
-import { useQuery } from 'api/queryClient'
 import { PrescriptionsGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
+
+import { prescriptionKeys } from './queryKeys'
 
 /**
  * Fetch user prescriptions

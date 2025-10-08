@@ -1,7 +1,9 @@
-import { useQuery } from 'api/queryClient'
+import { useQuery } from '@tanstack/react-query'
+
 import { VaccineLocationPayload } from 'api/types'
-import { vaccineKeys } from 'api/vaccines/queryKeys'
 import { get } from 'store/api'
+
+import { vaccineKeys } from './queryKeys'
 
 /**
  * Fetch user Vaccine Location

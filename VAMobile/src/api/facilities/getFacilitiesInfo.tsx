@@ -1,7 +1,9 @@
-import { facilitiesKeys } from 'api/facilities/queryKeys'
-import { useQuery } from 'api/queryClient'
+import { useQuery } from '@tanstack/react-query'
+
 import { FacilitiesPayload, Facility } from 'api/types/FacilityData'
 import { get } from 'store/api'
+
+import { facilitiesKeys } from './queryKeys'
 
 /**
  * Fetch user facilities info
