@@ -7,7 +7,6 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { Box, FeatureLandingTemplate } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
@@ -36,7 +35,6 @@ function CopayDetailsScreen({ navigation }: CopayDetailsScreenProps) {
           }}
         />
       </Box>
-      <ResolveBillButton />
     </FeatureLandingTemplate>
   )
 }

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
 import { MedicalCopaysPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
-import { get } from 'store/api'
+import { APIError, get } from 'store/api'
 
 type CopaySummary = { amountDue: number; count: number }
 
@@ -28,7 +28,7 @@ export const getMedicalCopays = async (): Promise<MedicalCopaysPayload | undefin
 }
 
 export const useMedicalCopays = (options?: { enabled?: boolean }) => {
-  const query = useQuery({
+  const query = useQuery<MedicalCopaysPayload | undefined, APIError>({
     ...options,
     queryKey: medicalCopayKeys.medicalCopays,
     queryFn: getMedicalCopays,
