@@ -1,27 +1,18 @@
 import { by, element, expect, waitFor } from 'detox'
 
-import {
-  CommonE2eIdConstants,
-  changeDemoModeUser,
-  loginToDemoMode,
-  openHealth,
-  openTravelPayClaims,
-  toggleRemoteConfigFlag,
-} from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openHealth, openTravelPayClaims, toggleRemoteConfigFlag } from './utils'
 
 const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
   TRAVEL_PAY_CLAIM_1_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
   TRAVEL_PAY_CLAIM_11_ID: 'claim_summary_4b99039f-208f-4c07-90b8-498f8466233e',
   TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID: 'TravelPayClaimDetailsScreen',
-  DESIRED_DEMO_MODE_USER_ID: 'Kimberly Washington option 1 of 4', // Ensure we use a user with travel pay data
 }
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
-  await changeDemoModeUser(TravePayClaimsE2eIds.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
   await openTravelPayClaims()
 })
@@ -89,7 +80,7 @@ describe('Travel Pay Claims Screen', () => {
     // Wait for the native claim details screen to appear
     await waitFor(element(by.id(TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
       .toExist()
-      .withTimeout(8000) // Increased timeout for CI/CD
+      .withTimeout(4000) // Increased timeout for CI/CD
 
     // Verify the screen title (confirms we're on the right screen)
     await waitFor(element(by.text('Travel Pay Claim Details')))

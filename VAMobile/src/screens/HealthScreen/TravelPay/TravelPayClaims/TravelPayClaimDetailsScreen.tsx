@@ -43,7 +43,8 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
       <FeatureLandingTemplate
         backLabel={t('travelPay.title')}
         backLabelOnPress={navigation.goBack}
-        title={t('travelPay.claimDetails.title')}>
+        title={t('travelPay.claimDetails.title')}
+        testID="TravelPayClaimDetailsScreen">
         <ErrorComponent
           screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID}
           error={claimDetailsError}
@@ -58,7 +59,8 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
       <FeatureLandingTemplate
         backLabel={t('travelPay.title')}
         backLabelOnPress={navigation.goBack}
-        title={t('travelPay.claimDetails.title')}>
+        title={t('travelPay.claimDetails.title')}
+        testID="TravelPayClaimDetailsScreen">
         <Box m={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('travelPay.claimDetails.noData')}
