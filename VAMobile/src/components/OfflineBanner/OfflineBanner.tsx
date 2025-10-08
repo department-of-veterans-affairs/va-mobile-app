@@ -16,14 +16,14 @@ import { useAppIsOnline } from 'utils/hooks/offline'
 
 export const OfflineBanner: FC = () => {
   const isConnected = useAppIsOnline()
-  // const [expanded, setExpanded] = useState<boolean>(false)
-  // const [offlineTimestamp, setOfflineTimestamp] = useState<DateTime>()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
   const { offlineTimestamp, bannerExpanded } = useSelector<RootState, OfflineState>((state) => state.offline)
+  // This is used to trigger the screen reader announcement for the screen disconnection occurs
   const [shouldAnnounceOffline, setShouldAnnounceOffline] = useState(false)
 
+  // Update timestamp when connection status changes
   useEffect(() => {
     if (!isConnected && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))

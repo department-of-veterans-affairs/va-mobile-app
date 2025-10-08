@@ -90,12 +90,13 @@ const offlineSlice = createSlice({
     },
     dispatchQueueOfflineEvent: (state, action: PayloadAction<Event>) => {
       const screen = action.payload.params?.screen_name as string
-      state.offlineEventsMap = {
-        ...state.offlineEventsMap,
-        [screen]: action.payload,
+      if (!state.offlineEventsMap[screen]) {
+        state.offlineEventsMap = {
+          ...state.offlineEventsMap,
+          [screen]: action.payload,
+        }
+        console.debug('NEW QUEUE LENGTH', Object.keys(state.offlineEventsMap).length, action.payload.params?.screen_name)
       }
-
-      console.debug('NEW QUEUE LENGTH', Object.keys(state.offlineEventsMap).length, action.payload.params?.screen_name)
     },
     dispatchClearOfflineEventQueue: (state) => {
       state.offlineEventsMap = {}

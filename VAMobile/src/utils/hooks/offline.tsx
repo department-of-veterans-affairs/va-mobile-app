@@ -1,16 +1,13 @@
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { addEventListener, useNetInfo } from '@react-native-community/netinfo'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { OfflineState, logOfflineEventQueue, queueOfflineEvent } from 'store/slices'
 import { useAppDispatch } from 'utils/hooks/index'
@@ -73,17 +70,4 @@ export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false
 export function useIsWithinModal(): boolean {
   const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
   return !!viewingModal
-}
-
-export function useShowOfflineSnackbarIfNeeded(): boolean {
-  const isConnected = useAppIsOnline()
-  const { t } = useTranslation(NAMESPACE.COMMON)
-  const snackbar = useSnackbar()
-
-  if (isConnected) {
-    return false
-  } else {
-    showOfflineSnackbar(snackbar, t)
-    return true
-  }
 }
