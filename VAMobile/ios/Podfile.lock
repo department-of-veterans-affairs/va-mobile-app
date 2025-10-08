@@ -1396,27 +1396,6 @@ PODS:
     - Yoga
   - react-native-notifications (5.1.0):
     - React-Core
-  - react-native-quick-base64 (2.1.2):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.11.18.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - react-native-safe-area-context (5.4.0):
     - React-Core
   - react-native-webview (13.15.0):
@@ -1913,7 +1892,6 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-notifications (from `../node_modules/react-native-notifications`)
-  - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -2077,8 +2055,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-notifications:
     :path: "../node_modules/react-native-notifications"
-  react-native-quick-base64:
-    :path: "../node_modules/react-native-quick-base64"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -2241,7 +2217,6 @@ SPEC CHECKSUMS:
   react-native-document-picker: a338165804b1a14c8e408448115dc0edfd7b73ca
   react-native-image-picker: 8c8f120521f283d7a069c51d519fbd654e8de8e3
   react-native-notifications: 3bafa1237ae8a47569a84801f17d80242fe9f6a5
-  react-native-quick-base64: 99ddcde16a1bdab6aed68f375ab1ed5431946f13
   react-native-safe-area-context: 9d72abf6d8473da73033b597090a80b709c0b2f1
   react-native-webview: 3772c8537fd6d7869791820a7b154fb546bcef7b
   React-nativeconfig: f77b4627803bf7886a1f2e96b33b8af34e583cc4

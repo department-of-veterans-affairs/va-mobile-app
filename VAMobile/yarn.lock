@@ -10552,11 +10552,6 @@ react-native-notifications@^5.1.0:
   resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-5.1.0.tgz#8cba105fd57ab9d5df9d27284acf1e2b4f3d7ea3"
   integrity sha512-laqDSDlCvEASmJR6cXpqaryK855ejQd07vrfYERzhv68YDOoSkKy/URExRP4vAfAOVqHhix80tLbNUcfvZk2VQ==
 
-react-native-quick-base64@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-quick-base64/-/react-native-quick-base64-2.2.2.tgz#52005a0b455b04acc1c6ff3eb8fa220401656aae"
-  integrity sha512-WLHSifHLoamr2kF00Gov0W9ud6CfPshe1rmqWTquVIi9c62qxOaJCFVDrXFZhEBU8B8PvGLVuOlVKH78yhY0Fg==
-
 react-native-safe-area-context@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-5.4.0.tgz#04b51940408c114f75628a12a93569d30c525454"

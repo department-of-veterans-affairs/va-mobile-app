@@ -84,7 +84,6 @@
     "react-native-keychain": "^9.2.3",
     "react-native-localize": "^3.3.0",
     "react-native-notifications": "^5.1.0",
-    "react-native-quick-base64": "^2.2.2",
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "^4.8.0",
     "react-native-shadow-2": "^7.1.1",
