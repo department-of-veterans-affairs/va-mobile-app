@@ -38,6 +38,9 @@ export const LINK_URL_ABOUT_PACT_ACT = 'https://www.va.gov/resources/the-pact-ac
 export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/apply/application/introduction'
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_REQUEST_HELP_FORM_5655 =
+  'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction/'
+export const LINK_URL_REQUEST_HELP_VA_DEBT = 'https://www.va.gov/resources/options-to-request-help-with-va-debt/'
 export const LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS =
   'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt'
 export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
