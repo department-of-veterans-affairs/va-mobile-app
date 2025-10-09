@@ -1,5 +1,17 @@
 [
   {
+    "title": "v2.61.0",
+    "due_on": "2025-10-21T07:00:00Z",
+    "issues": [
+      {
+        "title": "875 - Payment Screen: Update Overpayment and Copayment components",
+        "number": 11655,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11655",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.60.0",
     "due_on": "2025-10-07T07:00:00Z",
     "issues": [
