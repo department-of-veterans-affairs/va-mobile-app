@@ -7,7 +7,8 @@ import {
   PrescriptionData,
   PrescriptionTrackingInfo,
   PrescriptionTrackingInfoGetData,
-  PrescriptionTrackingItem,
+  PrescriptionTrackingItemV1,
+  PrescriptionsAttributeDataV1,
   PrescriptionsList,
 } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
@@ -33,12 +34,13 @@ const getTrackingDataForPrescription = async ({
 }): Promise<Array<PrescriptionTrackingInfo> | undefined> => {
   // find the prescription with the id in the prescriptionData
   const prescription = prescriptionData?.find((p: PrescriptionData) => p.id === id)
-  if (!prescription || !prescription.attributes.tracking) {
+  const { tracking } = (prescription?.attributes as PrescriptionsAttributeDataV1) || {}
+  if (!prescription || !tracking) {
     return undefined
   }
   // convert PrescriptionData to an Array<PrescriptionTrackingInfo>
-  const rv = prescription.attributes.tracking
-    ? prescription.attributes.tracking.map<PrescriptionTrackingInfo>((t: PrescriptionTrackingItem) => ({
+  const rv = tracking
+    ? tracking.map<PrescriptionTrackingInfo>((t: PrescriptionTrackingItemV1) => ({
         id: String(t.prescriptionId),
         type: 'prescriptionTrackingInfo',
         attributes: {

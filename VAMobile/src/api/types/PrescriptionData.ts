@@ -232,7 +232,7 @@ export type PrescriptionRefillData = {
   data: {
     id: string
     type: string
-    attributes: PrescriptionRefillAttributeData
+    attributes: PrescriptionRefillAttributeDataV0 | PrescriptionRefillAttributeDataV1
   }
 }
 

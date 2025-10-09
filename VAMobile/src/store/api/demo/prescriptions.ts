@@ -1,4 +1,5 @@
 import {
+  PrescriptionRefillAttributeData,
   PrescriptionRefillData,
   PrescriptionTrackingInfoGetData,
   PrescriptionsGetData,
@@ -119,7 +120,7 @@ export const requestRefill = (store: DemoStore, params: RefillRequestParams): Pr
         failedPrescriptionIds,
         errors: [],
         infoMessages: [],
-      },
+      } as PrescriptionRefillAttributeData,
     },
   }
 }
