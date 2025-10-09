@@ -426,7 +426,6 @@ describe('useTrackingInfo', () => {
 
       // Access the query client to check the query key
       const queries = queryClient.getQueryCache().getAll()
-      console.log({ key: queries[0].queryKey })
       const trackingQuery = queries[0].queryKey
 
       expect(trackingQuery).toBeDefined()

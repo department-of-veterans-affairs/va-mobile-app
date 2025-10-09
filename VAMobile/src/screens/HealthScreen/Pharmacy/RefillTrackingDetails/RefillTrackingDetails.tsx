@@ -118,8 +118,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     return trackingInfo?.map((prescriptionTrackingInfo, index) => {
       const { trackingNumber, deliveryService, shippedDate, otherPrescriptions, carrier } =
         prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingItem)
-      const deliveryServiceFinal = deliveryService || carrier || ''
-      const trackingLink = getTrackingLink(deliveryServiceFinal)
+      const carrierName = deliveryService || carrier || ''
+      const trackingLink = getTrackingLink(carrierName)
 
       const [shippedDateMMddyyyy, shippedDateA11yLabel] = getDateTextAndLabel(t, shippedDate)
       const trackingNumberA11yLabel = a11yLabelID(trackingNumber)
@@ -143,7 +143,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
             </TextView>
           )}
           <Box mt={standardMarginBetween} mb={condensedMarginBetween}>
-            <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${deliveryServiceFinal || noneNoted}`}</TextView>
+            <TextView variant="HelperText">{`${t('prescriptions.refillTracking.deliveryService')}: ${carrierName || noneNoted}`}</TextView>
           </Box>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
