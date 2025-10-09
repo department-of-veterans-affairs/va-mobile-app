@@ -6,12 +6,14 @@ import { t } from 'i18next'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
+import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import PaymentsScreen from 'screens/PaymentsScreen'
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
 import { numberToUSDollars } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: (key: string) => key === 'overpayCopay',
+  featureEnabled: jest.fn(),
 }))
 
 jest.mock('api/medicalCopays', () => ({
@@ -41,6 +43,10 @@ jest.mock('utils/hooks', () => {
 
 context('PaymentsScreen', () => {
   const initializeTestInstance = (authorized = true): void => {
+    when(featureEnabled as jest.Mock)
+      .calledWith('overpayCopay')
+      .mockReturnValue(true)
+
     render(<PaymentsScreen />, {
       queriesData: [
         {
@@ -151,6 +157,38 @@ context('PaymentsScreen', () => {
 
       expect(screen.queryByText(t('copays.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
       expect(screen.queryByText(t('debts.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
+    })
+  })
+
+  describe('Travel Claims button', () => {
+    it('is not displayed if feature toggle is disabled', () => {
+      initializeTestInstance()
+
+      expect(screen.queryByTestId('toTravelPayClaimsID')).toBeFalsy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+
+      initializeTestInstance()
+
+      expect(screen.getByTestId('toTravelPayClaimsID')).toBeTruthy()
+    })
+
+    it('navigates to Travel Claims screen when pressed', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+
+      initializeTestInstance()
+
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsID'))
+
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
+        from: TravelClaimsScreenEntry.Payments,
+      })
     })
   })
 })

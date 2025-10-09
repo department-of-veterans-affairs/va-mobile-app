@@ -265,7 +265,6 @@ export const getPickerOptions = (
       label: t(pastThreeMonthsTKey),
       value: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       a11yLabel: t(pastThreeMonthsTKey),
-      testID: 'pastThreeMonthsTestID',
       dates: {
         startDate: fiveMonthsToThreeMonths.startDate,
         endDate: fiveMonthsToThreeMonths.endDate,
@@ -278,7 +277,6 @@ export const getPickerOptions = (
         date1: formatDateMMMyyyy(fiveMonthsToThreeMonths.startDate),
         date2: formatDateMMMyyyy(fiveMonthsToThreeMonths.endDate),
       }),
-      testID: 'pastFiveToThreeMonthsTestID',
       dates: {
         startDate: fiveMonthsToThreeMonths.startDate,
         endDate: fiveMonthsToThreeMonths.endDate,
@@ -291,7 +289,6 @@ export const getPickerOptions = (
         date1: formatDateMMMyyyy(eightMonthsToSixMonths.startDate),
         date2: formatDateMMMyyyy(eightMonthsToSixMonths.endDate),
       }),
-      testID: 'pastEightToSixMonthsTestID',
       dates: {
         startDate: eightMonthsToSixMonths.startDate,
         endDate: eightMonthsToSixMonths.endDate,
@@ -304,7 +301,6 @@ export const getPickerOptions = (
         date1: formatDateMMMyyyy(elevenMonthsToNineMonths.startDate),
         date2: formatDateMMMyyyy(elevenMonthsToNineMonths.endDate),
       }),
-      testID: 'pastElevenToNineMonthsTestID',
       dates: {
         startDate: elevenMonthsToNineMonths.startDate,
         endDate: elevenMonthsToNineMonths.endDate,
@@ -314,7 +310,6 @@ export const getPickerOptions = (
       label: t(allOfTKey, { year: pastAllCurrentYear.startDate.year }),
       value: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       a11yLabel: t(allOfTKey, { year: pastAllCurrentYear.startDate.year }),
-      testID: 'pastAllCurrentYearTestID',
       dates: {
         startDate: pastAllCurrentYear.startDate,
         endDate: pastAllCurrentYear.endDate,
@@ -324,7 +319,6 @@ export const getPickerOptions = (
       label: t(allOfTKey, { year: pastAllLastYear.startDate.year }),
       value: TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
       a11yLabel: t(allOfTKey, { year: pastAllLastYear.startDate.year }),
-      testID: 'pastAllLastYearTestID',
       dates: {
         startDate: pastAllLastYear.startDate,
         endDate: pastAllLastYear.endDate,
