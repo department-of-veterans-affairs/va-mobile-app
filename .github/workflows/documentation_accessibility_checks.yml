@@ -30,6 +30,10 @@ jobs:
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
+          google-chrome --version
+          chromedriver --version
+          which chromedriver
+          which google-chrome
           echo "ChromeDriver Version..."
           chromedriver --version
           echo " Chrome Version..."
