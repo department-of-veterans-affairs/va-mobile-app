@@ -220,6 +220,12 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     return store['/v0/push/prefs'] as DemoApiReturns
   }
 
+  // Handle dynamic travel pay claims details endpoint
+  if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+    console.log('DEBUG: Matched dynamic travel pay endpoint:', endpoint)
+    return getTravelPayClaimDetails(store)
+  }
+
   switch (endpoint) {
     /**
      * APPOINTMENTS
@@ -268,13 +274,6 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       return getDebts(store, params, endpoint)
     }
     default: {
-      // Handle dynamic travel pay claims details endpoint
-      if (endpoint.startsWith('/v0/travel-pay/claims/')) {
-        console.log('DEBUG: Matched dynamic travel pay endpoint:', endpoint)
-        return getTravelPayClaimDetails(store)
-      }
-
-      console.log('DEBUG: Unmatched endpoint in default case:', endpoint)
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns
     }
   }
