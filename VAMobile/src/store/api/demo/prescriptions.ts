@@ -53,10 +53,10 @@ export const requestRefill = (store: DemoStore, params: RefillRequestParams): Pr
   let stationNumbers: string[] = []
   const failedPrescriptionIds: Array<string> | Array<{ id: string; stationNumber: string }> = []
   // Handle both v0 format { ids: string[] } and v1 format { ids: SingleRefillRequest[] }
-  if (params.ids && Array.isArray(params.ids) && params.ids.length > 0) {
-    if (typeof params.ids[0] === 'string') {
+  if (params && Array.isArray(params) && params.length > 0) {
+    if (typeof params[0] === 'string') {
       // v0 format: { ids: string[] }
-      prescriptionIds = params.ids as string[]
+      prescriptionIds = params as string[]
       stationNumbers = ['SLC10', 'DAYT29'] // Default station numbers for v0
     } else {
       // [

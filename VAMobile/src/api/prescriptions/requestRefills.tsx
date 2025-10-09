@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { prescriptionKeys } from 'api/prescriptions/queryKeys'
-import { PrescriptionRefillData, PrescriptionsList, RefillRequestSummaryItems, SingleRefillRequest } from 'api/types'
+import { PrescriptionRefillData, PrescriptionsList, RefillRequestData, RefillRequestSummaryItems } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { Params, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
@@ -20,7 +20,7 @@ const requestRefills = async (
   let results: RefillRequestSummaryItems = []
 
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  let requestBody: { ids: string[] } | Array<SingleRefillRequest>
+  let requestBody: RefillRequestData
 
   if (useV1) {
     // v1 API expects SingleRefillRequest[]
