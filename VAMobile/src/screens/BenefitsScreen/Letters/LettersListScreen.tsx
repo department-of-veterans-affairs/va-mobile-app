@@ -168,7 +168,11 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
 
   const letterButtons: Array<ListItemObj> = map(filteredLetters || [], (letter: LetterData) => {
     let letterName =
-      letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+      letter.letterType === LetterTypeConstants.proofOfService
+        ? t('letters.proofOfServiceCard')
+        : letter.letterType === LetterTypeConstants.certificateOfEligibility
+          ? t('letters.coeHomeLoan')
+          : letter.name
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
     const text = t('text.raw', { text: letterName })

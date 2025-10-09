@@ -60,11 +60,12 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
           <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
         </Box>
       )}
-      {letterType === LetterTypeConstants.certificateOfEligibility && displayAlert && coeStatus === 'AVAILABLE' && (
+      {letterType === LetterTypeConstants.certificateOfEligibility && displayAlert && coeStatus === 'ELIGIBLE' && (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertWithHaptics
             variant="success"
             expandable={true}
+            initializeExpanded={true}
             header={t('letters.serviceVerificationLetter.informationalHeader')}
             description={t('letters.certificateOfEligibility.success')}>
             {referenceNum ? (
