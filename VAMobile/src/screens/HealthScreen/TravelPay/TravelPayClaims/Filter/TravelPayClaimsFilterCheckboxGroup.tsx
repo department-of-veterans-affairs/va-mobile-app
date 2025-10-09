@@ -14,10 +14,8 @@ type TravelPayClaimsFilterCheckboxGroupProps = {
   allLabelText: string
 }
 
-const getA11yLabel = (option: CheckboxOption): string => {
-  const label = option.value === FILTER_KEY_ALL ? 'Select all' : `${option.optionLabelKey}`
-  return `${label}, checkbox`
-}
+const getA11yLabel = (option: CheckboxOption): string =>
+  option.value === FILTER_KEY_ALL ? 'Select all' : `${option.optionLabelKey}`
 
 /**A common component to display radio button selectors for a list of selectable items*/
 const TravelPayClaimsFilterCheckboxGroup = ({
@@ -51,13 +49,15 @@ const TravelPayClaimsFilterCheckboxGroup = ({
             {option.optionLabelKey}
           </TextView>
           <Box>
-            <Checkbox
-              label=""
-              checked={checked}
-              onPress={() => onChange(option.value)}
-              indeterminate={isIndeterminate(option.value, options, selectedValues)}
-              testID={`checkbox_${option.value}`}
-            />
+            <Box pointerEvents="none">
+              <Checkbox
+                label=""
+                checked={checked}
+                onPress={() => {}} // Outer list item will handle the press
+                indeterminate={isIndeterminate(option.value, options, selectedValues)}
+                testID={`checkbox_${option.value}`}
+              />
+            </Box>
           </Box>
         </Box>
       ),

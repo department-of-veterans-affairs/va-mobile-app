@@ -46,12 +46,12 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
       {
         optionLabelKey: t('travelPay.statusList.sortOption.recent'),
         value: SortOption.Recent,
-        a11yLabel: `${t('travelPay.statusList.sortOption.recent')}, radio button, ${selectedSortBy === SortOption.Recent ? 'selected' : 'not selected'},`,
+        a11yLabel: `${t('travelPay.statusList.sortOption.recent')}, ${selectedSortBy === SortOption.Recent ? 'selected' : 'not selected'},`,
       },
       {
         optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
         value: SortOption.Oldest,
-        a11yLabel: `${t('travelPay.statusList.sortOption.oldest')}, radio button, ${selectedSortBy === SortOption.Oldest ? 'selected' : 'not selected'},`,
+        a11yLabel: `${t('travelPay.statusList.sortOption.oldest')}, ${selectedSortBy === SortOption.Oldest ? 'selected' : 'not selected'},`,
       },
     ],
     [t, selectedSortBy],
