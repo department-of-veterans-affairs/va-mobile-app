@@ -28,9 +28,15 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
 
-      - name: Install ChromeDriver v140
+      - name: Install Google Chrome v141
         run: |
-          CHROME_DRIVER_VERSION=140.0.7339.207
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+          google-chrome --version
+
+      - name: Install ChromeDriver v141
+        run: |
+          CHROME_DRIVER_VERSION=141.0.8645.71
           wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
