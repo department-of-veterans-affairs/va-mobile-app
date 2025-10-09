@@ -11,6 +11,23 @@ import { useReviewEvent } from 'utils/inAppReviews'
 import { waygateEnabled } from 'utils/waygateConfig'
 
 /**
+ * Type guard to check if a failed prescription ID is a V1 object format
+ */
+const isV1FailedPrescriptionId = (failed: unknown): failed is { id: string; stationNumber: string } => {
+  return typeof failed === 'object' && failed !== null && 'id' in failed && 'stationNumber' in failed
+}
+
+/**
+ * Extracts the prescription ID from either V0 (string) or V1 (object) format
+ */
+const extractPrescriptionId = (failed: unknown, useV1: boolean): string => {
+  if (useV1 && isV1FailedPrescriptionId(failed)) {
+    return failed.id
+  }
+  return failed as string
+}
+
+/**
  * Requests refills for a users prescriptions
  */
 const requestRefills = async (
@@ -39,13 +56,7 @@ const requestRefills = async (
     requestBody as Params,
   )
   const failedPrescriptionIds =
-    response?.data.attributes.failedPrescriptionIds?.map((failed) => {
-      if (useV1 && typeof failed === 'object' && failed !== null && 'id' in failed) {
-        return (failed as { id: string }).id
-      } else {
-        return failed as string
-      }
-    }) || []
+    response?.data.attributes.failedPrescriptionIds?.map((failed) => extractPrescriptionId(failed, useV1)) || []
   results = prescriptions.map((prescription) => ({
     submitted: !failedPrescriptionIds?.includes(prescription.id),
     data: prescription,
