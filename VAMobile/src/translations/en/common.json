@@ -1048,7 +1048,7 @@
   "letters.benefitVerification.description": "This letter shows the benefits you’re receiving from VA. The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.",
   "letters.certificateOfEligibility.description": "This letter shows that you're eligible for a VA home loan.",
   "letters.certificateOfEligibility.success": "We have all the information we need, so you don't need to fill out a request for COE. You can download your COE now.",
-  "letters.certificateOfEligibility.referenceNum": "Reference number: {{letterReferenceNum}}",
+  "letters.certificateOfEligibility.referenceNum": "Reference number: {{referenceNum}}",
   "letters.civilService.description": "This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.",
   "letters.commissary.description": "If you’re a Veteran with a 100% service-connected disability rating take this letter, a copy of your DD214 or other discharge papers, and your DD2765 to a local military ID and pass office. You can schedule an appointment to get a Retiree Military ID card at the office or use the Rapid Appointments Scheduler. The Retiree Military ID card gives you access to your local base facilities, including the commissary and post exchange.",
   "letters.details.title": "Letter details",
