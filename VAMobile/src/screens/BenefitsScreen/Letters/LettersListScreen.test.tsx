@@ -6,11 +6,11 @@ import { when } from 'jest-when'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { LettersList } from 'api/types'
+import { LettersListScreen } from 'screens/BenefitsScreen/Letters/index'
 import * as api from 'store/api'
 import { APIError } from 'store/api/types'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
-
-import { LettersListScreen } from './index'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -19,6 +19,8 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('utils/remoteConfig')
 
 const lettersData: LettersList = [
   {
@@ -32,6 +34,12 @@ const lettersData: LettersList = [
   {
     name: 'Proof of Creditable Prescription Drug Coverage Letter',
     letterType: 'medicare_partd',
+  },
+  {
+    name: 'Certificate of Eligibility for Home Loan Letter',
+    letterType: 'certificate_of_eligibility_home_loan',
+    coeStatus: 'ELIGIBLE',
+    referenceNum: '22788256',
   },
   {
     name: 'Proof of Minimum Essential Coverage Letter',
@@ -56,6 +64,7 @@ const lettersData: LettersList = [
 ]
 
 context('LettersListScreen', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (lettersList: LettersList | null, throwError: boolean = false, authorized = true) => {
     if (throwError) {
       when(api.get as jest.Mock)
@@ -66,7 +75,6 @@ context('LettersListScreen', () => {
         .calledWith('/v0/letters')
         .mockResolvedValue({ data: { attributes: { letters: lettersList } } })
     }
-
     render(<LettersListScreen {...mockNavProps()} />, {
       queriesData: [
         {
@@ -105,11 +113,13 @@ context('LettersListScreen', () => {
   })
 
   it('should render correctly', async () => {
+    when(mockFeatureEnabled).calledWith('COEAvailable').mockReturnValue(true)
     initializeTestInstance(lettersData)
     expect(screen.getByText(t('letters.list.loading'))).toBeTruthy()
     await waitFor(() => expect(screen.getByRole('link', { name: t('letters.benefitService.title') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Benefit verification letter' })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Civil service preference letter' })).toBeTruthy())
+    await waitFor(() => expect(screen.getByRole('link', { name: t('letters.coeHomeLoan') })).toBeTruthy())
     await waitFor(() => expect(screen.getByRole('link', { name: 'Commissary letter' })).toBeTruthy())
     await waitFor(() =>
       expect(screen.getByRole('link', { name: 'Proof of creditable prescription drug coverage letter' })).toBeTruthy(),
@@ -209,6 +219,23 @@ context('LettersListScreen', () => {
           header: t('letters.proofOfServiceCard'),
           letterType: 'proof_of_service',
           screenID: 'PROOF_OF_SERVICE_LETTER_SCREEN',
+        }),
+      )
+    })
+
+    it('should call navigations navigate for Certificate of Eligibility Home Loan Letter', async () => {
+      when(mockFeatureEnabled).calledWith('COEAvailable').mockReturnValue(true)
+      initializeTestInstance(lettersData)
+      await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('letters.coeHomeLoan') })))
+      await waitFor(() =>
+        expect(mockNavigationSpy).toHaveBeenCalledWith('GenericLetter', {
+          description: t('letters.certificateOfEligibility.description'),
+          header: t('letters.coeHomeLoan'),
+          letterType: 'certificate_of_eligibility_home_loan',
+          screenID: 'CERTIFICATE_OF_ELIGIBILITY_SCREEN',
+          coeStatus: 'ELIGIBLE',
+          referenceNum: '22788256',
+          displayAlert: true,
         }),
       )
     })
