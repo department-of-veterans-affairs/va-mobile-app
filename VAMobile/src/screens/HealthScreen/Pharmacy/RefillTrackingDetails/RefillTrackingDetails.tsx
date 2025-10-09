@@ -5,11 +5,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useTrackingInfo } from 'api/prescriptions'
-import {
-  DELIVERY_SERVICE_TYPES,
-  PrescriptionTrackingInfoAttributeData,
-  PrescriptionTrackingInfoOtherItem,
-} from 'api/types'
+import { DELIVERY_SERVICE_TYPES, PrescriptionTrackingInfoOtherItem, PrescriptionTrackingItem } from 'api/types'
 import {
   Box,
   ErrorComponent,
@@ -121,7 +117,7 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
     const totalTracking = trackingInfo?.length
     return trackingInfo?.map((prescriptionTrackingInfo, index) => {
       const { trackingNumber, deliveryService, shippedDate, otherPrescriptions, carrier } =
-        prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingInfoAttributeData)
+        prescriptionTrackingInfo?.attributes || ({} as PrescriptionTrackingItem)
       const deliveryServiceFinal = deliveryService || carrier || ''
       const trackingLink = getTrackingLink(deliveryServiceFinal)
 

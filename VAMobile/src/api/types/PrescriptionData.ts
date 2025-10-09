@@ -180,7 +180,7 @@ export type PrescriptionTrackingInfoOtherItem = {
   stationNumber?: string
 }
 
-export type PrescriptionTrackingItem = PrescriptionTrackingItemV0 | PrescriptionTrackingItemV1
+export type PrescriptionTrackingItem = PrescriptionTrackingItemV0 & PrescriptionTrackingItemV1
 
 // GET all Rx
 
