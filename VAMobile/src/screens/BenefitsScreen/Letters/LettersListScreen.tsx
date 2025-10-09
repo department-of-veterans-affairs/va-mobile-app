@@ -72,8 +72,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
   const letterPressFn = (
     letterType: LetterTypes,
     letterName: string,
-    letterResponse?: string,
-    letterReferenceNum?: string,
+    coeStatus?: string,
+    referenceNum?: string,
   ): void | undefined => {
     switch (letterType) {
       case LetterTypeConstants.benefitSummary:
@@ -136,8 +136,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
           letterType,
           screenID: ScreenIDTypesConstants.CERTIFICATE_OF_ELIGIBILITY_SCREEN_ID,
           displayAlert: !COEViewed,
-          letterResponse: letterResponse,
-          letterReferenceNum: letterReferenceNum,
+          coeStatus: coeStatus,
+          referenceNum: referenceNum,
         })
       default:
         return undefined
@@ -179,7 +179,7 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
       onPress: () => {
         logAnalyticsEvent(Events.vama_click(letterName, t('letters.overview.viewLetters')))
         letter.letterType === LetterTypeConstants.certificateOfEligibility ? setCOE() : undefined
-        letterPressFn(letter.letterType, letterName, letter.letterResponse, letter.letterReferenceNum)
+        letterPressFn(letter.letterType, letterName, letter.coeStatus, letter.referenceNum)
       },
       content:
         letter.letterType === LetterTypeConstants.certificateOfEligibility ? (

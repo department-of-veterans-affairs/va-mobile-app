@@ -14,10 +14,10 @@
             "letterType": "benefit_verification"
           },
           {
-            "name": "Certificate of Eligibility - Home Loan Letter",
+            "name": "Certificate of Eligibility for Home Loan Letter",
             "letterType": "certificate_of_eligibility_home_loan",
-            "letterResponse": "Automatic",
-            "letterReferenceNum": "22788256"
+            "coeStatus": "ELIGIBLE",
+            "referenceNum": "22788256"
           },
           {
             "name": "Civil Service Preference Letter",
