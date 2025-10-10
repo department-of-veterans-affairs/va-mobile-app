@@ -30,19 +30,20 @@ jobs:
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
 
-      # - name: Install Google Chrome v141
-      #   run: |
-      #     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      #     sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
-      #     google-chrome --version
-      #
-      # - name: Install ChromeDriver v141
-      #   run: |
-      #     CHROME_DRIVER_VERSION=141.0.8645.71
-      #     wget https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip
-      #     unzip chromedriver_linux64.zip
-      #     sudo mv chromedriver /usr/local/bin/
-      #     chromedriver --version
+      - name: Update Chrome and Chromedriver
+        run: |
+          # Add Google's signing key
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          # Add the Chrome repository
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          # Update the package list and install Chrome
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # Download and install chromedriver
+          wget https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.76/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Install mobile app modules
         working-directory: VAMobile
