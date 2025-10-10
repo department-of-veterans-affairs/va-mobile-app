@@ -35,12 +35,16 @@ jobs:
           echo "Debugging team members..."
           echo "$APP_TOKEN" | gh auth login --with-token
 
+          echo "Listing teams in organization to verify names and permissions..."
+          gh api orgs/department-of-veterans-affairs/teams
+          
+          echo "Attempting to fetch team members..."
           engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-pr-reviewers/members | jq -c '[.[] .login]')
           qa_members=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members | jq -c '[.[] .login]')
 
           echo "Engineer team members: $engineers"
           echo "QA team members: $qa_members"
-
+          
           # The rest of the script is commented out for debugging purposes.
           #
           # if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
@@ -57,10 +61,10 @@ jobs:
           # required_approval_count=$(gh api \
           # -H "Accept: application/vnd.github+json" \
           # -H "X-GitHub-Api-Version: 2022-11-28" \
-          # /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection |
+          # /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | \
           # jq -c '.required_pull_request_reviews.required_approving_review_count')
           #
-          # echo "Approvers: $approvals"  
+          # echo "Approvers: $approvals"
           # echo "required approval count: $required_approval_count"
           #
           # if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
@@ -72,14 +76,14 @@ jobs:
           #         then
           #         echo 'This PR has QA and engineer approval to merge'
           #         exit 0
-          #       else 
+          #       else
           #         echo 'This PR requires QA approval to merge'
           #         exit 1
           #       fi
           #     else
           #       echo 'This PR requires Engineer approval before QA review'
           #       exit 1
-          #     fi 
+          #     fi
           # else
           #   echo 'This PR requires two approvals, including one QA approval, before merging.'
           #   exit 1
