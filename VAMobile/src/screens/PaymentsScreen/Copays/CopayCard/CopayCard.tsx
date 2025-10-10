@@ -121,7 +121,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
         </Box>
       </Pressable>
       {/* Resolve bill button */}
-      <ResolveBillButton />
+      <ResolveBillButton copay={copay} />
     </>
   )
 
