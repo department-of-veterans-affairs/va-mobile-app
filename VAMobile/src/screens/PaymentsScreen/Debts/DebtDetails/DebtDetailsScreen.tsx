@@ -3,11 +3,21 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { AlertWithHaptics, Box, FeatureLandingTemplate, LinkWithAnalytics, MultiTouchCard, TextView } from 'components'
+import { DebtHistory } from 'api/types/DebtData'
+import {
+  AccordionCollapsible,
+  AlertWithHaptics,
+  BorderColorVariant,
+  Box,
+  FeatureLandingTemplate,
+  LinkWithAnalytics,
+  MultiTouchCard,
+  TextView,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { getDebtInfo } from 'utils/debts'
+import { getDebtInfo, getDebtLetterInfo, getFilteredDebtHistory } from 'utils/debts'
 import { useTheme } from 'utils/hooks'
 
 type DebtDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtDetails'>
@@ -40,18 +50,18 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {debtInfo.header}
         </TextView>
         {/* Current balance */}
-        <TextView variant="DebtLabel">{t('debts.details.currentBalance')}</TextView>
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="DebtValueLarge">
+        <TextView variant="HelperText">{t('debts.details.currentBalance')}</TextView>
+        <TextView mb={theme.dimensions.condensedMarginBetween} variant="vadsFontHeadingMedium">
           {debtInfo.balance}
         </TextView>
         {/* Original amount */}
-        <TextView variant="DebtLabel">{t('debts.details.originalAmount')}</TextView>
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="DebtValue">
+        <TextView variant="HelperText">{t('debts.details.originalAmount')}</TextView>
+        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {debtInfo.original}
         </TextView>
         {/* Payment due date */}
-        <TextView variant="DebtLabel">{t('debts.details.paymentDueDate')}</TextView>
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="DebtValue">
+        <TextView variant="HelperText">{t('debts.details.paymentDueDate')}</TextView>
+        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
           {debtInfo.endDate}
         </TextView>
         {/* Resolve debt button */}
@@ -68,6 +78,49 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {t('debts.details.updated', { date: debtInfo.updatedDate })}
         </TextView>
       )
+    )
+  }
+
+  // Leveraged from web implementation:
+  // vets-website/src/applications/combined-debt-portal/debt-letters/components/HistoryTable.jsx
+  function renderDebtHistory(debtHistory: DebtHistory[]) {
+    const letters = debtHistory.map((letter) => {
+      const debtLetterInfo = getDebtLetterInfo(t, debt, letter)
+      return (
+        <Box
+          borderTopWidth={theme.dimensions.borderWidth}
+          borderColor={theme.colors.border.divider as BorderColorVariant}
+          mt={theme.dimensions.standardMarginBetween}>
+          <TextView mt={theme.dimensions.standardMarginBetween} variant="HelperText">
+            {debtLetterInfo.date}
+          </TextView>
+          <TextView my={theme.dimensions.tinyMarginBetween} variant="vadsFontHeadingXsmall">
+            {debtLetterInfo.title}
+          </TextView>
+          <TextView variant="HelperText">{debtLetterInfo.description}</TextView>
+        </Box>
+      )
+    })
+    const expandedContent = (
+      <>
+        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+          {t('debts.letter.history.description')}
+        </TextView>
+        {letters}
+      </>
+    )
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <AccordionCollapsible
+          header={
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('debts.letter.history.header')}
+            </TextView>
+          }
+          expandedContent={expandedContent}
+          testID="debtLetterHistoryAccordionID"
+        />
+      </Box>
     )
   }
 
@@ -91,13 +144,19 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   }
 
   function renderContent() {
+    const debtHistory = getFilteredDebtHistory(debt)
+    console.log('debt.attributes.debtHistory', debt.attributes.debtHistory)
+    console.log('debtHistory', debtHistory)
     return (
-      <Box mx={theme.dimensions.gutter}>
-        {renderUpdatedDate()}
-        {renderAlert()}
-        {renderWhyDebtLink()}
-        {renderCard()}
-      </Box>
+      <>
+        <Box mx={theme.dimensions.gutter}>
+          {renderUpdatedDate()}
+          {renderAlert()}
+          {renderWhyDebtLink()}
+          {renderCard()}
+        </Box>
+        {debtHistory.length > 0 && renderDebtHistory(debtHistory)}
+      </>
     )
   }
 

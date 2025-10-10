@@ -87,9 +87,6 @@ export type VATypographyThemeVariants = {
   CategoryLandingWarning: string
   ClaimPhase: string
   CrisisLineButton: string
-  DebtLabel: string
-  DebtValue: string
-  DebtValueLarge: string
   DescriptiveBackButton: string
   HomeScreen: string
   HomeScreenHeader: string
@@ -119,6 +116,7 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
+  vadsFontHeadingMedium: string
   vadsFontHeadingXsmall: string
 }
 

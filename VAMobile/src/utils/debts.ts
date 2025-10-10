@@ -2,10 +2,11 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 import { head, last } from 'underscore'
 
-import { DebtRecord } from 'api/types/DebtData'
+import { DebtHistory, DebtRecord } from 'api/types/DebtData'
 import { numberToUSDollars } from 'utils/formattingUtils'
 
-const DATE_FORMAT = 'MM/dd/yyyy'
+const FROM_DATE_FORMAT = 'MM/dd/yyyy'
+const TO_DATE_FORMAT = 'MMMM d, yyyy'
 
 export type DebtVariantTypes = 'info' | 'warning'
 
@@ -20,6 +21,16 @@ export type DebtInfo = {
   variant: string
 }
 
+export type DebtLetterInfo = {
+  date: string
+  title: string
+  description: string
+}
+
+// Leveraged from web implementation:
+// vets-website/src/applications/combined-debt-portal/debt-letters/containers/DebtDetails.jsx
+const approvedLetterCodes = ['100', '101', '102', '109', '117', '123', '130']
+
 // Leveraged from web implementation:
 // vets-website/src/applications/combined-debt-portal/debt-letters/const/deduction-codes/index.js
 const deductionCodeMapping: Record<string, string[]> = {
@@ -31,6 +42,14 @@ const deductionCodeMapping: Record<string, string[]> = {
   'debts.deductionCode.post911Housing': ['16', '17', '18', '19', '20', '48', '49', '50', '51', '72'],
   'debts.deductionCode.post911School': ['75'],
   'debts.deductionCode.post911Tuition': ['74'],
+}
+
+// Leveraged from web implementation:
+// vets-website/src/applications/combined-debt-portal/debt-letters/containers/DebtDetails.jsx
+export const getFilteredDebtHistory = (debt: DebtRecord): DebtHistory[] => {
+  return (debt.attributes.debtHistory ?? [])
+    .filter((history) => approvedLetterCodes.includes(history.letterCode))
+    .reverse()
 }
 
 // Leveraged from web implementation:
@@ -47,13 +66,13 @@ const getEndDate = (t: TFunction, debt: DebtRecord): string => {
     return fallbackMessage
   }
 
-  const parsedDate = DateTime.fromFormat(date, DATE_FORMAT)
+  const parsedDate = DateTime.fromFormat(date, FROM_DATE_FORMAT)
   if (!parsedDate.isValid) {
     return fallbackMessage
   }
 
   const newDate = parsedDate.plus({ days: daysToAdd })
-  return newDate.toFormat('MMMM d, yyyy')
+  return newDate.toFormat(TO_DATE_FORMAT)
 }
 
 // Leveraged from web implementation:
@@ -62,9 +81,9 @@ const getUpdatedDate = (debt: DebtRecord): string | undefined => {
   const lastHistory = last(debt.attributes.debtHistory ?? [])
   const lastUpdatedDate = lastHistory?.date
   if (lastUpdatedDate) {
-    const parsedDate = DateTime.fromFormat(lastUpdatedDate, DATE_FORMAT)
+    const parsedDate = DateTime.fromFormat(lastUpdatedDate, FROM_DATE_FORMAT)
     if (parsedDate.isValid) {
-      const formattedDate = parsedDate.toFormat('MMMM d, yyyy')
+      const formattedDate = parsedDate.toFormat(TO_DATE_FORMAT)
       return formattedDate
     }
   }
@@ -269,5 +288,43 @@ export const getDebtInfo = (t: TFunction, debt: DebtRecord): DebtInfo => {
     resolvable,
     updatedDate: getUpdatedDate(debt),
     variant,
+  }
+}
+
+export const getDebtLetterInfo = (t: TFunction, debt: DebtRecord, debtHistory: DebtHistory): DebtLetterInfo => {
+  const parsedDate = DateTime.fromFormat(debtHistory.date, FROM_DATE_FORMAT)
+  const date = parsedDate.isValid ? parsedDate.toFormat(TO_DATE_FORMAT) : ''
+
+  // Leveraged from web implementation:
+  // vets-website/src/applications/combined-debt-portal/debt-letters/const/diary-codes/index.js
+  let title: string, description: string
+  switch (debtHistory.letterCode) {
+    case '100':
+    case '101':
+    case '102':
+    case '109':
+      title = t('debts.letter.firstDemand.title')
+      description = t('debts.letter.firstDemand.description')
+      break
+    case '117':
+      title = t('debts.letter.secondDemand.title')
+      description = t('debts.letter.secondDemand.description')
+      break
+    case '123':
+      title = t('debts.letter.secondDemand.title')
+      description = t('debts.letter.secondDemand.description')
+      break
+    case '130':
+      title = t('debts.letter.increase.title')
+      description = t('debts.letter.increase.description')
+      break
+    default:
+      title = description = ''
+      break
+  }
+  return {
+    date,
+    title,
+    description,
   }
 }

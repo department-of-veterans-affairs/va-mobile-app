@@ -259,9 +259,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.vadsColorWhite),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
-    DebtLabel: buildFont('SourceSansPro-Regular', fontSizes.DebtLabel, scheme.text.bodyText),
-    DebtValue: buildFont('SourceSansPro-Regular', fontSizes.DebtValue, scheme.text.bodyText),
-    DebtValueLarge: buildFont('Bitter-Regular', fontSizes.DebtValueLarge, scheme.text.bodyText),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.link),
     HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText, scheme.text.bodyText),
     HelperTextBold: buildFont('SourceSansPro-Bold', fontSizes.HelperText, scheme.text.primary),
@@ -304,6 +301,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       scheme.text.primary,
     ),
     // TODO: update to pull in the full mobile design token typography
+    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
     vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
   }
 }
