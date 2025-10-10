@@ -13,6 +13,8 @@ type AppealIssuesProps = {
   issues: Array<AppealIssue>
 }
 
+const UNABLE_TO_SHOW = "We're unable to show"
+
 function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -75,25 +77,27 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
     if (!items.length) {
       return null
     }
-    const itemsWithNullDescription = items.filter((item) => item.description === null)
-    const itemsWithDescriptions = items.filter(
-      (item): item is AppealIssue & { description: string } => item.description !== null,
-    )
-    const listOfIssues = itemsWithDescriptions.map((item) => item.description)
 
-    // Add one item that informs the user of how many issues have null descriptions
-    // This will display one list item per status (remand, granted, etc.)
-    if (itemsWithNullDescription.length > 0) {
-      const translationKey =
-        itemsWithNullDescription.length === 1 ? 'appealDetails.unableToShowIssue' : 'appealDetails.unableToShowIssues'
+    // Separate issues with "We're unable..." descriptions from regular issue descriptions
+    const unableToShowIssues = items.filter((item) => item.description.includes(UNABLE_TO_SHOW))
+    const issuesWithRegularDescriptions = items.filter((item) => !item.description.includes(UNABLE_TO_SHOW))
+
+    // Start with regular descriptions
+    const listOfIssues = issuesWithRegularDescriptions.map((item) => item.description)
+
+    // Add one aggregated message for all "We're unable..." issues at the end
+    if (unableToShowIssues.length > 0) {
+      const count = unableToShowIssues.length
+      const translationKey = count === 1 ? 'appealDetails.unableToShowIssue' : 'appealDetails.unableToShowIssues'
 
       listOfIssues.push(
         t(translationKey, {
-          count: itemsWithNullDescription.length,
+          count,
           appealType: appealTypeName,
         }),
       )
     }
+
     return (
       <>
         <TextView

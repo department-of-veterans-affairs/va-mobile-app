@@ -364,7 +364,7 @@ export const AppealIssueLastAction: {
 
 export type AppealIssue = {
   active: boolean
-  description: string | null
+  description: string
   diagnosticCode: string | null
   lastAction: AppealIssueLastActionTypes
   date: string | null

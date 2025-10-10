@@ -59,17 +59,17 @@ context('AppealIssues', () => {
         lastAction: 'withdrawn',
         date: null,
       },
-      // Issues with null descriptions
+      // Issues with "We're unable..." descriptions from backend
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on appeal",
         diagnosticCode: null,
         lastAction: null,
         date: null,
       },
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on appeal",
         diagnosticCode: null,
         lastAction: null,
         date: null,
@@ -77,14 +77,14 @@ context('AppealIssues', () => {
       // Granted (lastAction: field_grant, allowed)
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Higher-Level Review",
         diagnosticCode: null,
         lastAction: 'field_grant',
         date: null,
       },
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Higher-Level Review",
         diagnosticCode: null,
         lastAction: 'allowed',
         date: null,
@@ -92,7 +92,7 @@ context('AppealIssues', () => {
       // Remand (lastAction: remand, cavc_remand)
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on appeal",
         diagnosticCode: null,
         lastAction: 'remand',
         date: null,
@@ -100,7 +100,7 @@ context('AppealIssues', () => {
       // Denied (lastAction: denied)
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Supplemental Claim",
         diagnosticCode: null,
         lastAction: 'denied',
         date: null,
@@ -108,7 +108,7 @@ context('AppealIssues', () => {
       // Withdrawn (lastAction: withdrawn)
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Supplemental Claim",
         diagnosticCode: null,
         lastAction: 'withdrawn',
         date: null,
@@ -141,9 +141,12 @@ context('AppealIssues', () => {
     expect(screen.getByRole('header', { name: t('appealDetails.withdrawnText') })).toBeTruthy()
     expect(screen.getByText('Eligibility for loan guaranty benefits withdrawn')).toBeTruthy()
 
-    // Test that the correct number of null description messages are rendered
-    // Under consideration: 2 null issues, Granted: 2 null issues = 2 total "2 issues" messages
-    // Remand: 1 null issue, Denied: 1 null issue, Withdrawn: 1 null issue = 3 total "1 issue" messages
+    // Test that the frontend aggregates "We're unable..." issues correctly
+    // Under consideration: 2 "unable" issues -> "2 issues" message
+    // Granted: 2 "unable" issues (field_grant + allowed) -> "2 issues" message
+    // Remand: 1 "unable" issue -> "1 issue" message
+    // Denied: 1 "unable" issue -> "1 issue" message
+    // Withdrawn: 1 "unable" issue -> "1 issue" message
     expect(
       screen.getAllByText(
         t('appealDetails.unableToShowIssues', {
@@ -166,7 +169,7 @@ context('AppealIssues', () => {
     const issues: AppealIssue[] = [
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Supplemental Claim",
         diagnosticCode: null,
         lastAction: null,
         date: null,
@@ -189,7 +192,7 @@ context('AppealIssues', () => {
     const issues: AppealIssue[] = [
       {
         active: true,
-        description: null,
+        description: "We're unable to show this issue on your Higher-Level Review",
         diagnosticCode: null,
         lastAction: null,
         date: null,
