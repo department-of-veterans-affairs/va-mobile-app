@@ -44,6 +44,7 @@
     "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.11",
     "@department-of-veterans-affairs/mobile-assets": "0.15.1",
     "@department-of-veterans-affairs/mobile-component-library": "0.30.3",
     "@department-of-veterans-affairs/mobile-tokens": "0.23.0",

@@ -1,7 +1,9 @@
 import React, { ReactElement } from 'react'
+import { Image } from 'react-native'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import ImageResizer from '@bam.tech/react-native-image-resizer'
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 
@@ -9,6 +11,7 @@ import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_
 import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { ActionSheetProps } from 'utils/hooks'
 
@@ -91,7 +94,7 @@ export const getUserPhase = (phase: number): number => {
  * @param fileType - given file type to check if valid
  */
 export const isValidFileType = (fileType: string): boolean => {
-  const imageValidTypes = ['jpeg', 'jpg', 'public.image', 'gif', 'bmp']
+  const imageValidTypes = ['jpeg', 'jpg', 'public.image', 'gif', 'bmp', 'heic']
   const textValidTypes = ['txt', 'pdf', 'text/plain', 'application/pdf', 'public.plain-text', 'com.adobe.pdf']
   const validFileTypes = [...imageValidTypes, ...textValidTypes]
 
@@ -220,6 +223,36 @@ export const onAddPhotos = (
       }
     },
   )
+}
+
+export const convertHeicToPng = async (heicDocument: DocumentPickerResponse): Promise<DocumentPickerResponse> => {
+  try {
+    // Get original image dimensions to keep same size
+    const { width, height } = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+      Image.getSize(
+        heicDocument.uri,
+        (imageWidth, imageHeight) => resolve({ width: imageWidth, height: imageHeight }),
+        reject,
+      )
+    })
+
+    // Convert to PNG with same dimensions
+    const convertedPngFile = await ImageResizer.createResizedImage(heicDocument.uri, width, height, 'PNG', 100, 0)
+
+    const pngDocument: DocumentPickerResponse = {
+      ...heicDocument,
+      uri: convertedPngFile.uri,
+      fileCopyUri: convertedPngFile.uri,
+      name: heicDocument.name.replace(/\.heic$/i, '.png'),
+      type: 'image/png',
+      size: convertedPngFile.size ?? heicDocument.size,
+    }
+
+    return pngDocument
+  } catch (error) {
+    console.log('HEIC → PNG conversion failed:', error)
+    throw new Error('Failed to convert HEIC image to PNG')
+  }
 }
 
 /**

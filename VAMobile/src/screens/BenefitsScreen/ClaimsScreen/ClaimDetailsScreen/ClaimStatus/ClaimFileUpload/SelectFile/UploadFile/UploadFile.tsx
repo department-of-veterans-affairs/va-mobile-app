@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pressable } from 'react-native'
+import { Image } from 'react-native'
 import DocumentPicker from 'react-native-document-picker'
 import { ScrollView } from 'react-native/types'
 
@@ -35,7 +36,7 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
-import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
+import { MAX_TOTAL_FILE_SIZE_IN_BYTES, convertHeicToPng, isValidFileType } from 'utils/claims'
 import { isPdfEncrypted } from 'utils/filesystem'
 import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
@@ -244,6 +245,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     )
 
     try {
+      console.log('about to select')
       const document = (await pickSingle({
         type: [images, plainText, pdf],
       })) as DocumentPickerResponse
@@ -265,10 +267,16 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         return
       }
 
+      if (document.type.includes('heic')) {
+        const pngDocument = await convertHeicToPng(document)
+        setFilesList([pngDocument])
+      } else {
+        setFilesList([document])
+      }
       setFilesEmptyError(false)
       setError('')
       setErrorA11y('')
-      setFilesList([document])
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (docError: any) {
       if (DocumentPicker.isCancel(docError as Error)) {
@@ -346,6 +354,7 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   }
 
   const a11yErrorLabel = t('error', { error: t('fileUpload.requiredFile') })
+  console.log('welcome II')
 
   return (
     <VAScrollView scrollViewRef={scrollViewRef}>
@@ -412,6 +421,11 @@ function UploadFile({ navigation, route }: UploadFileProps) {
               />
             </Box>
           </Box>
+          {filesList?.length > 0 && (
+            <Box flexDirection="row" justifyContent="center">
+              <Image source={{ uri: filesList[0].uri }} width={150} height={150} />
+            </Box>
+          )}
           <Box
             mt={theme.dimensions.standardMarginBetween}
             mx={theme.dimensions.gutter}
