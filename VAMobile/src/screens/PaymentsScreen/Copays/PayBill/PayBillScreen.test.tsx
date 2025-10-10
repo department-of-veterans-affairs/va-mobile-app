@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { __mockSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { __mockSnackbar as __mockSnackbarMock } from '@department-of-veterans-affairs/mobile-component-library'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
@@ -65,12 +65,12 @@ context('PayBillScreen (copays) – render, copy snackbars, directions link', ()
   }
 
   const expectSnack = (msg: string) => {
-    const last = __mockSnackbar.show.mock.calls.at(-1)
+    const last = __mockSnackbarMock.show.mock.calls.at(-1)
     expect(last?.[0]).toBe(msg)
   }
 
   beforeEach(() => {
-    __mockSnackbar.show.mockClear()
+    __mockSnackbarMock.show.mockClear()
   })
 
   it('renders labels and formatted values; splits account parts 1–5', async () => {
@@ -116,7 +116,7 @@ context('PayBillScreen (copays) – render, copy snackbars, directions link', ()
 
     expect(await screen.findByTestId('copay-in-person-directions')).toBeTruthy()
 
-    __mockSnackbar.show.mockClear()
+    __mockSnackbarMock.show.mockClear()
     const noAddr = {
       ...baseCopay,
       station: {
