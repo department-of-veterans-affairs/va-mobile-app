@@ -3957,7 +3957,7 @@
             "date": "02-04-11"
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": true,
             "lastAction": "remand",
@@ -3971,42 +3971,42 @@
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": false,
             "lastAction": null,
             "date": "02-04-11"
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": true,
             "lastAction": "denied",
             "date": "03-04-11"
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": true,
             "lastAction": "field_grant",
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": false,
             "lastAction": "remand",
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": true,
             "lastAction": "field_grant",
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on appeal",
             "diagnosticCode": null,
             "active": true,
             "lastAction": "withdrawn",
@@ -5208,14 +5208,14 @@
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on your Supplemental Claim",
             "diagnosticCode": null,
             "active": true,
             "lastAction": null,
             "date": "02-04-11"
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on your Supplemental Claim",
             "diagnosticCode": null,
             "active": true,
             "lastAction": null,
@@ -5266,14 +5266,14 @@
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on your Higher-Level Review",
             "diagnosticCode": null,
             "active": true,
             "lastAction": null,
             "date": null
           },
           {
-            "description": null,
+            "description": "We're unable to show this issue on your Higher-Level Review",
             "diagnosticCode": null,
             "active": false,
             "lastAction": "denied",
