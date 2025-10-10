@@ -9,15 +9,18 @@ import {
   AlertWithHaptics,
   BorderColorVariant,
   Box,
+  ClickToCallPhoneNumber,
   FeatureLandingTemplate,
   LinkWithAnalytics,
   MultiTouchCard,
+  TextArea,
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { getDebtInfo, getDebtLetterInfo, getFilteredDebtHistory } from 'utils/debts'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type DebtDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtDetails'>
@@ -71,16 +74,6 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
     return <MultiTouchCard mainContent={mainContent} />
   }
 
-  function renderUpdatedDate() {
-    return (
-      debtInfo.updatedDate && (
-        <TextView mb={theme.dimensions.standardMarginBetween}>
-          {t('debts.details.updated', { date: debtInfo.updatedDate })}
-        </TextView>
-      )
-    )
-  }
-
   // Leveraged from web implementation:
   // vets-website/src/applications/combined-debt-portal/debt-letters/components/HistoryTable.jsx
   function renderDebtHistory(debtHistory: DebtHistory[]) {
@@ -124,6 +117,40 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
     )
   }
 
+  function renderHelp() {
+    return (
+      <Box my={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('debts.help.questions.header')}
+          </TextView>
+          <TextView my={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('debts.help.questions.body.1')}
+          </TextView>
+          <ClickToCallPhoneNumber phone={t('8008270648')} displayedText={displayedTextPhoneNumber(t('8008270648'))} />
+          <TextView my={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('debts.help.questions.body.2')}
+          </TextView>
+          <ClickToCallPhoneNumber
+            phone={t('16127136415')}
+            displayedText={displayedTextPhoneNumber(t('16127136415'))}
+            ttyBypass={true}
+          />
+        </TextArea>
+      </Box>
+    )
+  }
+
+  function renderUpdatedDate() {
+    return (
+      debtInfo.updatedDate && (
+        <TextView mb={theme.dimensions.standardMarginBetween}>
+          {t('debts.details.updated', { date: debtInfo.updatedDate })}
+        </TextView>
+      )
+    )
+  }
+
   function renderWhyDebtLink() {
     return (
       <Box my={theme.dimensions.condensedMarginBetween}>
@@ -156,6 +183,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {renderCard()}
         </Box>
         {debtHistory.length > 0 && renderDebtHistory(debtHistory)}
+        {renderHelp()}
       </>
     )
   }
