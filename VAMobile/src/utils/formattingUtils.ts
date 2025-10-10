@@ -140,6 +140,93 @@ export const getEpochSecondsOfDate = (date: string): number => {
 }
 
 /**
+ * Format time in VA.gov standard (h:mm a.m./p.m.)
+ * Matches web implementation using Luxon instead of date-fns
+ *
+ * @param date - JavaScript Date object
+ * @param timeZone - Optional IANA timezone identifier
+ * @returns Time formatted as "8:00 a.m." or "5:00 p.m."
+ */
+const formatTimeVaStyle = (date: Date, timeZone?: string): string => {
+  let dt = DateTime.fromJSDate(date)
+  if (timeZone) {
+    dt = dt.setZone(timeZone)
+  }
+  const time = dt.toFormat('h:mm a').toLowerCase()
+  // Use case-insensitive replacement to handle any case variations
+  return time.replace(/am/i, 'a.m.').replace(/pm/i, 'p.m.')
+}
+
+/**
+ * Get timezone abbreviation from a date using native Intl API
+ * Uses native Date.toLocaleString() like web implementation, with GMT fallback workaround
+ *
+ * @param date - JavaScript Date object
+ * @param timeZone - Optional IANA timezone identifier
+ * @returns Timezone abbreviation (e.g., 'EDT', 'JST', 'PDT')
+ */
+const getTimezoneAbbr = (date: Date, timeZone?: string): string => {
+  const options: Intl.DateTimeFormatOptions = { timeZoneName: 'short' }
+  if (timeZone) {
+    options.timeZone = timeZone
+  }
+  let tzAbbr = date.toLocaleString('en-US', options).split(' ').pop() || ''
+
+  // Workaround: Native Intl API falls back to GMT format for some timezones
+  // Replace with more user-friendly abbreviations
+  if (tzAbbr.includes(GMTPrefix)) {
+    for (const { pattern, value } of GMTTimezones) {
+      if (tzAbbr === pattern) {
+        tzAbbr = value
+        break
+      }
+    }
+  }
+
+  return tzAbbr
+}
+
+/**
+ * Returns timezone-aware warning message about file upload date display discrepancies.
+ *
+ * Due to API returning date-only strings, files display with UTC date instead of local date.
+ *
+ * @returns Message string: "Files uploaded [before/after] [time] will show as received on the [previous/next] day..."
+ *
+ * @example
+ * // PDT: "Files uploaded after 5:00 p.m. PDT will show as received on the next day..."
+ * // JST: "Files uploaded before 9:00 a.m. GMT+9 will show as received on the previous day..."
+ */
+export const getFileUploadTimezoneMessage = (): string => {
+  // Create a DateTime for midnight UTC (today)
+  const midnightUTC = DateTime.utc().startOf('day')
+
+  // Convert to local timezone
+  const localTime = midnightUTC.toLocal()
+
+  // Get timezone offset in minutes (positive = east of UTC, negative = west)
+  const offsetMinutes = localTime.offset
+
+  // Determine if we're east of UTC
+  const isEastOfUTC = offsetMinutes > 0
+
+  // Format the time with timezone abbreviation using VA.gov style helpers
+  const localDate = localTime.toJSDate()
+  const timeZone = localTime.zoneName
+  const timeStr = formatTimeVaStyle(localDate, timeZone)
+  const tzAbbr = getTimezoneAbbr(localDate, timeZone)
+  const time = `${timeStr} ${tzAbbr}`.trim()
+
+  // The display bug: API returns date-only strings without timezone info
+  // - West of UTC: Upload after cutoff → UTC date is NEXT day → shows as next day
+  // - East of UTC: Upload before cutoff → UTC date is PREVIOUS day → shows as previous day
+  const beforeAfter = isEastOfUTC ? 'before' : 'after'
+  const nextPrevious = isEastOfUTC ? 'previous' : 'next'
+
+  return `Files uploaded ${beforeAfter} ${time} will show as received on the ${nextPrevious} day, but we record your submissions when you upload them.`
+}
+
+/**
  * Returns the date formatted utilizing the formatBy parameter
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00

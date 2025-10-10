@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIsFocused } from '@react-navigation/native'
@@ -8,7 +8,7 @@ import _ from 'underscore'
 import { ClaimData, ClaimEFolderDocuments } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFileUploadTimezoneMessage } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
 type ClaimFilesProps = {
@@ -27,6 +27,7 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   const events = attributes.eventsTimeline.filter(
     (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
   )
+  const timezoneMessage = useMemo(() => getFileUploadTimezoneMessage(), [])
   const files = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = []
 
@@ -93,6 +94,9 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   if (isFocused && filesList.length > 0) {
     return (
       <Box>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBody">{timezoneMessage}</TextView>
+        </Box>
         <DefaultList items={files()} />
       </Box>
     )
