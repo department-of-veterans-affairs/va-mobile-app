@@ -354,7 +354,6 @@ function UploadFile({ navigation, route }: UploadFileProps) {
   }
 
   const a11yErrorLabel = t('error', { error: t('fileUpload.requiredFile') })
-  console.log('welcome II')
 
   return (
     <VAScrollView scrollViewRef={scrollViewRef}>
