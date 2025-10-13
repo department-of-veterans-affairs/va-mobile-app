@@ -29,7 +29,7 @@ jobs:
     needs: generate_token_job
     uses: ./.github/workflows/start_slack_thread.yml
     with:
-      channel_name: va-mobile-build-alerts
+      channel_name: va-mobile-app
       message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User  @${{ github.event.member.login }} has been added to the ${{ github.event.team.name }}. Please update the slack mapping data and open an on boarding ticket.'
     secrets: inherit
 
