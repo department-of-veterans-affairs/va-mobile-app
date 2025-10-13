@@ -102,6 +102,9 @@ export const defaults: FeatureToggleValues = {
   overpayCopay: false,
   offlineMode: false,
 }
+export const FeatureToggleDescriptions: Record<string, string> = {
+  offlineMode: '(Restart required)',
+}
 
 export let devConfig: FeatureToggleValues = defaults
 
