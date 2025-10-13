@@ -1,4 +1,6 @@
-import { contentTypes, get, post } from 'store/api'
+// import { contentTypes, get, post } from './api'
+// import * as Types from './types'
+import { contentTypes, get, post } from 'store/api/api'
 import * as Types from 'store/api/types'
 import { context, fetch } from 'testUtils'
 
