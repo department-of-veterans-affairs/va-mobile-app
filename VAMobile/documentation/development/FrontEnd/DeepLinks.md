@@ -1,14 +1,14 @@
 ---
-title: Universal Links
+title: Universal and app links
 ---
 
 ## Overview
 
-In React Native, universal links (also referred to as deep links or deep linking) enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
+In React Native, Universal links(IOS) and App links(Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
 
-Universal links function across both web and mobile platforms. For example, when a user taps a universal link, it can open the related screen directly within the React Native app instead of loading a webpage. This creates a more seamless and integrated user experience between mobile and web content.
+These type of deep linking function across both web and mobile platforms. For example, when a user taps a link, it can open the related screen directly within the React Native app instead of loading a webpage. This creates a more seamless and integrated user experience between mobile and web content.
 
-## Universal Link Configurations
+## Configurations
 :::note
 Deep linking support for both iOS and Android should already be configured. However, here's a brief overview of the setup process for those who want to review or customize the implementation.
 :::
@@ -97,11 +97,11 @@ With this in place, the json file should be accessible on the browser. Content s
 - https://va.gov/.well-known/assetlinks.json
 
 
-## Adding a new Universal Link
+## Adding a new linking path in the app
 
 ### Basic steps
 
-1. Obtain the universal link that will be used to redirect to the app `ex: https://staging.va.gov/my-health/appointments`
+1. Obtain the https link that will be used to redirect to the app `ex: https://staging.va.gov/my-health/appointments`
 2. Update the `getStateFromPath` function within the `linking.tsx` file. An example is provided below. 
 - Note that within the `prefixes` array, `https://staging.va.gov` and `https://va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the configurations.
 ```tsx
@@ -163,7 +163,7 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 
 ```
 
-## Testing universal links
+## Testing
 
 Before testing deep links, make sure that you rebuild and install the app in your emulator/simulator/device.
 
