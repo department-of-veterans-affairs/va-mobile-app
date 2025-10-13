@@ -18,6 +18,10 @@ export const useOfflineEventQueue = (screen: string) => {
 
   useFocusEffect(
     useCallback(() => {
+      if (!featureEnabled('offlineMode')) {
+        return
+      }
+
       let isOnline: boolean | null = null
       const unsubscribe = addEventListener(({ isConnected }) => {
         // Upon navigating to a screen while offline queue an event
