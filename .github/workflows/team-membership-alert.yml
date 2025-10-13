@@ -1,0 +1,33 @@
+name: Team Membership Alert
+
+on:
+  membership:
+    types:
+      - added
+  push:
+    # branches:
+    #   - test-workflow # Push to this branch to test
+
+jobs:
+  generate_token_job:
+    runs-on: ubuntu-latest
+    # The 'if' condition is commented out for testing purposes.
+    # if: github.event.team.slug == 'flagship-mobile-team'
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+  notify_slack:
+    needs: generate_token_job
+    uses: ./.github/workflows/start_slack_thread.yml
+    with:
+      # Using a static message for testing.
+      channel_name: va-mobile-sandbox
+      # channel_name: va-mobile-build-alerts
+      message: 'This is a test message from the Team Membership Alert workflow.'
+    secrets: inherit
+
