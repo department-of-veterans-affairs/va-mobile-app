@@ -4,7 +4,7 @@ title: Universal and app links
 
 ## Overview
 
-In React Native, Universal links(IOS) and App links(Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
+In React Native, Universal links (iOS) and App links (Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
 
 These type of deep linking function across both web and mobile platforms. For example, when a user taps a link, it can open the related screen directly within the React Native app instead of loading a webpage. This creates a more seamless and integrated user experience between mobile and web content.
 
@@ -15,7 +15,31 @@ Deep linking support for both iOS and Android should already be configured. Howe
 
 ### iOS
 
-**An apple-app-site-association(AASA) file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
+**An apple-app-site-association (AASA) file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
+An AASA format will follow a format like this. BundleId and TeamID can be found from the apple developer account.
+
+```json
+{
+   "applinks": {
+      "details": [
+         {
+            "appIDs": ["<TeamID>.<BundleID>"],
+            "components": [
+               {
+                  "/": "/<path>/*",
+                  "comment": "Handles all URLs under /<path>/"
+               }
+            ]
+         }
+      ]
+   },
+   "webcredentials": {
+      "apps": ["<TeamID>.<BundleID>"]
+   }
+}
+```
+
+As a more specific example: 
 
 ```json
 {
@@ -91,6 +115,10 @@ An assetlinks.json file has been uploaded to our [website server](https://github
   }
 ]
 ```
+The JSON file uses the following fields to identify associated apps: 
+- `package_name`: The application ID declared in the app's build.gradle file.
+- `sha256_cert_fingerprints`: The SHA256 fingerprints of your app's signing certificate
+  - This field supports multiple fingerprints, which can be used to support different versions of your app, such as debug and production builds
 
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
 - https://staging.va.gov/.well-known/assetlinks.json
@@ -148,7 +176,9 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 #### iOS
 
 7. Updates will need to be made to the [apple-app-site-association file](https://github.com/department-of-veterans-affairs/content-build/blob/main/src/site/assets/.well-known/apple-app-site-association) by adding a new object representing the new universal link within the `components` array. This requires a PR to be made to the `content-build` repository. More information about [preparing a PR](https://depo-platform-documentation.scrollhelp.site/developer-docs/submitting-pull-requests-for-approval#PreparingyourPullRequestforPlatformReview-HowtogetyourPRreviewedbyPlatform)
-
+:::important
+Make sure to validate that the result is valid json after the update
+:::
 ```json
 "components": [
    {
@@ -160,8 +190,9 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
       "comment": "Matches any URL with a path that starts with /my-health/appointments/ and send to the mobile app."
    }
 ]
-
 ```
+
+
 
 ## Testing
 
@@ -180,3 +211,18 @@ As an example:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d "https://staging.va.gov/my-health/appointments" 
 ```
+
+## Useful Links
+https://medium.com/@fashad.ahmed20/how-to-implement-universal-links-in-react-native-19a424db4dcf
+
+https://reactnavigation.org/docs/deep-linking/
+
+https://developer.android.com/training/app-links/about
+
+https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known
+
+https://www.ebay.com/.well-known/apple-app-site-association
+
+https://www.ebay.com/.well-known/assetlinks.json
+
+
