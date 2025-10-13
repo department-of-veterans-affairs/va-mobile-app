@@ -193,7 +193,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          <Box mb={theme.dimensions.floatingButtonOffset}>
+          <Box>
             {selectedTab === 1 && (
               <PastAppointments
                 appointmentsData={apptsData}
