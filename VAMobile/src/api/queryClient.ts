@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import NetInfo from '@react-native-community/netinfo'
-
 import type { DefaultError, QueryKey } from '@tanstack/query-core'
 import {
   QueryCache,
@@ -20,13 +18,6 @@ import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } fr
 import { isErrorObject } from 'utils/common'
 import { useAppDispatch } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-// Using rnc net info create event listener for network connection status
-onlineManager.setEventListener((setOnline) => {
-  return NetInfo.addEventListener((state) => {
-    setOnline(!!state.isConnected)
-  })
-})
 
 /**
   By default, the query client caches for 5 minutes with a max expiration of 24 days.

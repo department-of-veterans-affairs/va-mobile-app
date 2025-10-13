@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
+import NetInfo from '@react-native-community/netinfo'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
@@ -21,7 +22,7 @@ import {
   useSnackbar,
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider, onlineManager } from '@tanstack/react-query'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
@@ -77,6 +78,7 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import { useAppIsOnline } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 
@@ -247,6 +249,17 @@ export function AuthGuard() {
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
+
+  useEffect(() => {
+    if (remoteConfigActivated && featureEnabled('offlineMode')) {
+      // Using rnc net info create event listener for network connection status
+      onlineManager.setEventListener((setOnline) => {
+        return NetInfo.addEventListener((state) => {
+          setOnline(!!state.isConnected)
+        })
+      })
+    }
+  }, [remoteConfigActivated])
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
