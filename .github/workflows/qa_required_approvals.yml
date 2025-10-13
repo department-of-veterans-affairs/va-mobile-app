@@ -15,7 +15,6 @@ on:
   #     - '!.github/**'
   # pull_request_review:
   #   types: [submitted, dismissed]
-  # adding comment   
 
 jobs:
   check_for_qa_approval:
@@ -36,16 +35,13 @@ jobs:
           echo "Debugging team members..."
           echo "$APP_TOKEN" | gh auth login --with-token
 
-          echo "Listing teams in organization to verify names and permissions..."
-          gh api orgs/department-of-veterans-affairs/teams
-          
           echo "Attempting to fetch team members..."
           engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-pr-reviewers/members | jq -c '[.[] .login]')
           qa_members=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members | jq -c '[.[] .login]')
 
           echo "Engineer team members: $engineers"
           echo "QA team members: $qa_members"
-          
+
           # The rest of the script is commented out for debugging purposes.
           #
           # if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
@@ -89,3 +85,4 @@ jobs:
           #   echo 'This PR requires two approvals, including one QA approval, before merging.'
           #   exit 1
           # fi
+
