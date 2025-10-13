@@ -9,7 +9,7 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
-import { ScreenIDTypesConstants } from 'store/api'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
