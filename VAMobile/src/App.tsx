@@ -74,6 +74,7 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
@@ -143,11 +144,24 @@ type AuthedAppProps = {
 function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
+  const isOnline = useAppIsOnline()
 
   const scheme = useColorScheme()
   setColorScheme(scheme)
 
   const currentTheme = getTheme()
+
+  // When the device disconnects from the network refetch ongoing queries to clear the network error and fetch data
+  // from the cache.
+  useEffect(() => {
+    const refetchQueriesOffline = async () => {
+      await queryClient.cancelQueries({}, { silent: true })
+      await queryClient.refetchQueries()
+    }
+    if (!isOnline) {
+      refetchQueriesOffline()
+    }
+  }, [isOnline])
 
   /**
    * Used by the navigation container to initialize the first route.
