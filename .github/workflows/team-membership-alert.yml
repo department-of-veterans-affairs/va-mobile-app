@@ -20,6 +20,15 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
+          GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
 
   notify_slack:
     needs: generate_token_job
@@ -28,6 +37,6 @@ jobs:
       # Using a static message for testing.
       channel_name: va-mobile-sandbox
       # channel_name: va-mobile-build-alerts
-      message: 'This is a test message from the Team Membership Alert workflow.'
+      message: '<@U01AWJEH5UJ> <@U08AWC7DQA2> This is a test message from the Team Membership Alert workflow.'
     secrets: inherit
 
