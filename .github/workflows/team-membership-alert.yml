@@ -1,9 +1,9 @@
 name: Team Membership Alert
 
 on:
-  membership:
-    types:
-      - added
+  # membership:
+  #   types:
+  #     - added
   push:
     # branches:
     #   - test-workflow # Push to this branch to test
