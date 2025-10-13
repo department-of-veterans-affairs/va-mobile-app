@@ -22,7 +22,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { logout } from 'store/slices/authSlice'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
-import { FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
+import { FeatureToggleDescriptions, FeatureToggleType, getFeatureToggles, setDebugConfig } from 'utils/remoteConfig'
 import { getWaygateToggles, setWaygateDebugConfig } from 'utils/waygateConfig'
 
 type RemoteConfigScreenSettingsScreenProps = StackScreenProps<HomeStackParamList, 'RemoteConfig'>
@@ -47,7 +47,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
   function toggleList() {
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
       return {
-        text: `${key}`,
+        text: `${key} ${FeatureToggleDescriptions[key] || ''}`,
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
           on: toggles[key as FeatureToggleType],
