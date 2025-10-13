@@ -37,6 +37,6 @@ jobs:
       # Using a static message for testing.
       channel_name: va-mobile-sandbox
       # channel_name: va-mobile-build-alerts
-      message: '<@U01AWJEH5UJ> <@U08AWC7DQA2> This is a test message from the Team Membership Alert workflow.'
+      message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User ALL YOUR BASE ARE BELONG TO US has been added to the AWESOME MOBILE TEAM.:rotating_light:'
     secrets: inherit
 
