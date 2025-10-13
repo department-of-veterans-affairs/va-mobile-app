@@ -1,18 +1,13 @@
-name: Team Membership Alert
+name: '[Admin] Team Membership Alert'
 
 on:
-  # membership:
-  #   types:
-  #     - added
-  push:
-    # branches:
-    #   - test-workflow # Push to this branch to test
-
+  membership:
+    types:
+      - added
 jobs:
   generate_token_job:
     runs-on: ubuntu-latest
-    # The 'if' condition is commented out for testing purposes.
-    # if: github.event.team.slug == 'flagship-mobile-team'
+    if: github.event.team.slug == 'flagship-mobile-team'
     steps:
       - name: Generate token
         id: generate_token
@@ -34,9 +29,7 @@ jobs:
     needs: generate_token_job
     uses: ./.github/workflows/start_slack_thread.yml
     with:
-      # Using a static message for testing.
-      channel_name: va-mobile-sandbox
-      # channel_name: va-mobile-build-alerts
-      message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User ALL YOUR BASE ARE BELONG TO US has been added to the AWESOME MOBILE TEAM.:rotating_light:'
+      channel_name: va-mobile-build-alerts
+      message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User  @${{ github.event.member.login }} has been added to the ${{ github.event.team.name }}. Please update the slack mapping data and open an on boarding ticket.'
     secrets: inherit
 
