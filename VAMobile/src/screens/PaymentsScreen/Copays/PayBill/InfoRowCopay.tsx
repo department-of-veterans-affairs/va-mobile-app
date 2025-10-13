@@ -1,5 +1,6 @@
 import React from 'react'
-import { Clipboard } from 'react-native'
+
+import Clipboard from '@react-native-clipboard/clipboard'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 

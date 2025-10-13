@@ -98,7 +98,6 @@ function PayBillScreen({ route, navigation }: PayBillScreenProps) {
             <TextView mb={condensedMarginBetween} variant="MobileBodyBold">
               {t('copays.payBill.intro')}
             </TextView>
-            {/* TODO(merge-900): replace with shared InfoRow/InlineCopyLink + @react-native-clipboard/clipboard */}
             <InfoRowCopay
               label={t('copays.payBill.currentBalance')}
               value={numberToUSDollars(currentBalance)}

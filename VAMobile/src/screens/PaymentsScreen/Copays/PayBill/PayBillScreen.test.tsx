@@ -7,11 +7,6 @@ import { t } from 'i18next'
 import PayBillScreen from 'screens/PaymentsScreen/Copays/PayBill/PayBillScreen'
 import { context, mockNavProps, render, waitFor, within } from 'testUtils'
 
-// TODO: Add mock for @react-native-clipboard/clipboard after merge
-// jest.mock('@react-native-clipboard/clipboard', () => ({
-//   setString: jest.fn(),
-// }))
-
 jest.mock('utils/env', () => () => ({
   LINK_URL_ASK_VA_GOV: 'https://pay.gov',
 }))
