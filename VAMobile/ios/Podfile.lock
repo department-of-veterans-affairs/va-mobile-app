@@ -1797,6 +1797,8 @@ PODS:
     - SDWebImageWebPCoder
   - RNCAsyncStorage (2.1.2):
     - React-Core
+  - RNCClipboard (1.16.3):
+    - React-Core
   - RNFBAnalytics (18.9.0):
     - Firebase/AnalyticsWithoutAdIdSupport (= 10.20.0)
     - React-Core
@@ -2005,6 +2007,7 @@ DEPENDENCIES:
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
   - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
@@ -2200,6 +2203,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-webp-format"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNFBAnalytics:
     :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
@@ -2327,6 +2332,7 @@ SPEC CHECKSUMS:
   ReactNativeKeyboardManager: 60292dbac467c49841a7d69588208ec4a4f7b2a2
   ReactNativeWebPFormat: a40e251d8727e946461055997e539c4e985481f1
   RNCAsyncStorage: addfc2cb6511dbe199c56c6b26ede383b6c38919
+  RNCClipboard: dfeb43751adff21e588657b5b6c888c72f3aa68e
   RNFBAnalytics: 60ffe0c9c80f404246e384d0d2076e35dd129b16
   RNFBApp: a3e139715386fe79a09c387f2dbeb6890eb05b39
   RNFBCrashlytics: e6d595ed2619e5e8ee3cdfd12c6a62e470280a03

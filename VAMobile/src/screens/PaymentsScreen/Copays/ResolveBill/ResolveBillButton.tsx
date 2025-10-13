@@ -3,11 +3,16 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { MedicalCopayRecord } from 'api/types'
 import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
-function ResolveBillButton() {
+type ResolveBillButtonProps = {
+  copay?: MedicalCopayRecord
+}
+
+function ResolveBillButton({ copay }: ResolveBillButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -31,7 +36,12 @@ function ResolveBillButton() {
       },
       (buttonIndex) => {
         if (buttonIndex !== undefined && buttonIndex < 3) {
-          navigateTo(routeNames[buttonIndex])
+          const routeName = routeNames[buttonIndex]
+          if (routeName === 'PayBill') {
+            navigateTo(routeName, { copay })
+          } else {
+            navigateTo(routeName)
+          }
         }
       },
     )
