@@ -1,12 +1,21 @@
+// import { contentTypes, get, post } from './api'
+// import * as Types from './types'
+import { contentTypes, get, post } from 'store/api/api'
+import * as Types from 'store/api/types'
 import { context, fetch } from 'testUtils'
-
-import { contentTypes, get, post } from './api'
-import * as Types from './types'
 
 jest.mock('store/slices', () => {
   return {
     refreshAccessToken: (): Promise<boolean> => {
       return Promise.resolve(true)
+    },
+  }
+})
+
+jest.mock('@expo/react-native-action-sheet', () => {
+  return {
+    useActionSheet: () => {
+      return { showActionSheetWithOptions: jest.fn() }
     },
   }
 })
@@ -17,6 +26,7 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
     Model: 'Google Pixel 8 Pro',
     Release: '15',
   },
+  select: jest.fn(),
 }))
 
 context('api', () => {
