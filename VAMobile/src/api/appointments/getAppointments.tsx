@@ -3,7 +3,7 @@ import { has } from 'underscore'
 
 import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useQuery } from 'api/queryClient'
+import { offlineRetry, useQuery } from 'api/queryClient'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
@@ -17,7 +17,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 /**
  * Fetch user appointments
  */
-const getAppointments = (
+const getAppointments = async (
   startDate: string,
   endDate: string,
   timeFrame: TimeFrameType,
@@ -27,7 +27,7 @@ const getAppointments = (
     'include[]': 'travel_pay_claims',
   }
 
-  return get<AppointmentsGetData>('/v0/appointments', {
+  const res = await get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
     'page[number]': '1',
@@ -37,6 +37,8 @@ const getAppointments = (
     useCache: 'false',
     ...pastParams,
   } as Params)
+  console.log('completed appointments get!')
+  return res
 }
 
 /**
@@ -71,6 +73,7 @@ export const useAppointments = (
         // For past appointments we'll need to prefetch travel claims, unless travel pay is in downtime
         queryClient.prefetchQuery({
           queryKey: pastAppointmentsQueryKey,
+          retry: offlineRetry,
           queryFn: async () => {
             const pastAppointments = await getAppointments(
               pastRange.startDate,
@@ -79,7 +82,9 @@ export const useAppointments = (
               travelPayEnabled,
             )
             // Save the last updated time here manually as this will not be saved otherwise in the prefetch
-            dispatch(setLastUpdatedTimestamp(`${pastAppointmentsQueryKey}`, Date.now().toString()))
+            if (featureEnabled('offlineMode')) {
+              dispatch(setLastUpdatedTimestamp(`${pastAppointmentsQueryKey}`, Date.now().toString()))
+            }
             return pastAppointments
           },
           staleTime: ACTIVITY_STALE_TIME,

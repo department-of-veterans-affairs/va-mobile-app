@@ -48,6 +48,11 @@ export default new QueryClient({
     },
   }),
 })
+// Retry on network error. If the connection is lost this will trigger pulling the latest data from the cache
+export const offlineRetry = <TError = DefaultError>(_: number, error: TError) => {
+  // @ts-ignore networkError comes from a locally thrown error and is not expected on type Error
+  return featureEnabled('offlineMode') && !!error.networkError
+}
 
 export const useQuery = <
   TQueryFnData = unknown,
@@ -60,6 +65,7 @@ export const useQuery = <
   const lastUpdatedDate = useGetLastUpdatedTime(options.queryKey)
   const dispatch = useAppDispatch()
   const queryResult = useTanstackQuery({
+    retry: offlineRetry,
     ...options,
     queryFn: async (context) => {
       const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
