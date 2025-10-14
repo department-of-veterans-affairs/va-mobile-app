@@ -1,1 +1,4 @@
-We added general improvements and fixed a few bugs.
+We updated the app with improvements to performance, guidance, and support:
+
+Claims History now loads closed claims separately, improving performance and ensuring data displays as expected.
+Added technical support content to the Contact VA page to make it easier to get help when needed.
