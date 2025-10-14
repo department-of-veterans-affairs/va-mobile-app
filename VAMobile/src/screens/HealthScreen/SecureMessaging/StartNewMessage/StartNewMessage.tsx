@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
@@ -10,7 +10,8 @@ import _ from 'underscore'
 
 import {
   secureMessagingKeys,
-  useMessageRecipients,
+  useAllMessageRecipients,
+  useFolderMessages,
   useMessageSignature,
   useSaveDraft,
   useSendMessage,
@@ -26,6 +27,8 @@ import {
 import {
   AlertWithHaptics,
   Box,
+  ComboBoxItem,
+  ComboBoxOptions,
   ErrorComponent,
   FieldType,
   FormFieldType,
@@ -34,7 +37,6 @@ import {
   LinkWithAnalytics,
   LoadingComponent,
   MessageAlert,
-  PickerItem,
   TextArea,
   TextView,
 } from 'components'
@@ -43,6 +45,7 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants, FormHeaderTypeConstants, PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { useComposeCancelConfirmation } from 'screens/HealthScreen/SecureMessaging/CancelConfirmations'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -51,20 +54,21 @@ import { hasErrorCode } from 'utils/errors'
 import {
   useAttachments,
   useBeforeNavBackListener,
-  useDestructiveActionSheet,
   useMessageWithSignature,
   useRouteNavigation,
+  useShowActionSheet,
   useTheme,
   useValidateMessageWithSignature,
 } from 'utils/hooks'
 import {
+  RecentRecipient,
   SubjectLengthValidationFn,
+  getCareSystemPickerOptions,
+  getRecentRecipients,
   getStartNewMessageCategoryPickerOptions,
   saveDraftWithAttachmentAlert,
 } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { useComposeCancelConfirmation } from '../CancelConfirmations/ComposeCancelConfirmation'
 
 type StartNewMessageProps = StackScreenProps<HealthStackParamList, 'StartNewMessage'>
 
@@ -72,9 +76,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const draftAttachmentAlert = useDestructiveActionSheet()
+  const draftAttachmentAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
   const queryClient = useQueryClient()
+
   const { mutate: saveDraft, isPending: savingDraft } = useSaveDraft()
   const {
     mutate: sendMessage,
@@ -84,12 +89,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useSendMessage()
   const { attachmentFileToAdd, saveDraftConfirmFailed } = route.params
   const {
-    data: recipients,
+    data: recipientsResponse,
     isFetched: hasLoadedRecipients,
     error: recipientsError,
     refetch: refetchRecipients,
     isFetching: refetchingRecipients,
-  } = useMessageRecipients({
+  } = useAllMessageRecipients({
     enabled: screenContentAllowed('WG_StartNewMessage'),
   })
   const {
@@ -101,7 +106,20 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   } = useMessageSignature({
     enabled: PREPOPULATE_SIGNATURE && screenContentAllowed('WG_StartNewMessage'),
   })
-  const [to, setTo] = useState('')
+  const {
+    data: folderMessagesData,
+    isFetched: hasLoadedFolderMessages,
+    error: folderMessagesError,
+    refetch: refetchFolderMessages,
+    isFetching: refetchingFolderMessages,
+  } = useFolderMessages(SecureMessagingSystemFolderIdConstants.SENT, {
+    enabled: screenContentAllowed('WG_FolderMessages'),
+  })
+  const careSystems = getCareSystemPickerOptions(recipientsResponse?.meta.careSystems || [])
+  const recipients = recipientsResponse?.data
+
+  const [careSystem, setCareSystem] = useState('')
+  const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState('')
   const [subject, setSubject] = useState('')
   const [replyTriageError, setReplyTriageError] = useState(false)
@@ -117,7 +135,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
   const [isDiscarded, composeCancelConfirmation] = useComposeCancelConfirmation()
 
   const messageData = {
-    recipient_id: parseInt(to, 10),
+    recipient_id: parseInt(to?.value || '', 10),
     category: category as CategoryTypes,
     body: message,
     subject,
@@ -192,13 +210,54 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     }
   }
 
-  const getToPickerOptions = (): Array<PickerItem> => {
-    return (recipients || []).map((recipient) => {
+  const handleSetCareSystem = (cs: string) => {
+    setCareSystem(cs)
+    // Clear to recipient
+    setTo(undefined)
+  }
+
+  useEffect(() => {
+    if (careSystems.length === 1) {
+      setCareSystem(careSystems[0].value)
+    }
+  }, [hasLoadedRecipients, careSystems])
+
+  const recentRecipients: Array<RecentRecipient> = useMemo(() => {
+    return getRecentRecipients(folderMessagesData?.data || [])
+  }, [folderMessagesData?.data])
+
+  const getToComboBoxOptions = (): ComboBoxOptions => {
+    // filter recipients by selected care system station number
+    const careSystemRecipients = _.filter(
+      recipients || [],
+      (recipient) => recipient.attributes.stationNumber === careSystem,
+    )
+    const allRecipients = careSystemRecipients.map((recipient) => {
       return {
         label: recipient.attributes.name,
         value: recipient.id,
       }
     })
+
+    // Recent recipients must match
+    // 1. Selected care system
+    // 2. Included within allRecipients
+    const allRecipientsIds = new Set(allRecipients.map((r) => r.value))
+    const filteredRecentRecipients = recentRecipients.filter((r) => {
+      if (!r.value) return false
+      return allRecipientsIds.has(r.value)
+    })
+
+    //Filtering out the all recipients list of any recent recipients so as to not have duplicate entries.
+    const filteredRecentRecipientsIds = new Set(filteredRecentRecipients.map((r) => r.value))
+    const filteredAllRecipients = allRecipients.filter((r) => {
+      return !filteredRecentRecipientsIds.has(r.value)
+    })
+
+    return {
+      [t('secureMessaging.formMessage.recentCareTeams')]: filteredRecentRecipients,
+      [t('secureMessaging.formMessage.allCareTeams')]: filteredAllRecipients,
+    }
   }
 
   const onAddFiles = () => {
@@ -209,15 +268,32 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     {
       fieldType: FieldType.Picker,
       fieldProps: {
+        labelKey: 'secureMessaging.formMessage.careSystem',
+        selectedValue: careSystem,
+        onSelectionChange: handleSetCareSystem,
+        pickerOptions: careSystems,
+        includeBlankPlaceholder: true,
+        isRequiredField: true,
+        testID: 'care system field',
+        confirmTestID: 'careSystemPickerConfirmID',
+      },
+      hideField: careSystems.length === 1,
+      fieldErrorMessage: t('secureMessaging.startNewMessage.careSystem.fieldError'),
+    },
+    {
+      fieldType: FieldType.ComboBox,
+      fieldProps: {
+        titleKey: 'secureMessaging.formMessage.careTeam',
         labelKey: 'secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
-        pickerOptions: getToPickerOptions(),
+        comboBoxOptions: getToComboBoxOptions(),
         includeBlankPlaceholder: true,
         isRequiredField: true,
         testID: 'to field',
-        confirmTestID: 'messagePickerConfirmID',
+        confirmTestID: 'toComboBoxConfirmID',
       },
+      hideField: !careSystem,
       fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
     },
     {
@@ -367,6 +443,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           <AlertWithHaptics
             variant="info"
             header={t('secureMessaging.startNewMessage.nonurgent.title')}
+            testID={'startNewMessageNonUrgentWarning'}
             scrollViewRef={scrollViewRef}>
             <TextView variant="MobileBody">
               {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
@@ -408,7 +485,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     )
   }
 
-  const hasError = recipientsError || signatureError
+  const hasError = recipientsError || signatureError || folderMessagesError
+
   const isLoading =
     !hasLoadedRecipients ||
     savingDraft ||
@@ -416,7 +494,10 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     isDiscarded ||
     sendingMessage ||
     refetchingRecipients ||
-    refetchingSignature
+    refetchingSignature ||
+    !hasLoadedFolderMessages ||
+    refetchingFolderMessages
+
   const loadingText = savingDraft
     ? t('secureMessaging.formMessage.saveDraft.loading')
     : isDiscarded
@@ -437,6 +518,12 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
           rightButtonTestID: 'startNewMessageSaveTestID',
         }
 
+  const refetchData = () => {
+    if (recipientsError) return refetchRecipients
+    if (signatureError) return refetchSignature
+    if (folderMessagesError) return refetchFolderMessages
+  }
+
   return (
     <FullScreenSubtask
       scrollViewRef={scrollViewRef}
@@ -452,8 +539,8 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
       ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}
-          error={recipientsError || signatureError}
-          onTryAgain={recipientsError ? refetchRecipients : signatureError ? refetchSignature : undefined}
+          error={recipientsError || signatureError || folderMessagesError}
+          onTryAgain={refetchData}
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>

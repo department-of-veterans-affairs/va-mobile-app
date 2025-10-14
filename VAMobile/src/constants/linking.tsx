@@ -5,8 +5,7 @@ import { LinkingOptions, NavigationState } from '@react-navigation/native'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import queryClient from 'api/queryClient'
 import { UserAuthorizedServicesData } from 'api/types/AuthorizedServicesData'
-
-import { LoadingComponent } from '../components'
+import { LoadingComponent } from 'components'
 
 const authorizedServices = queryClient.getQueryData(
   authorizedServicesKeys.authorizedServices,
@@ -95,6 +94,24 @@ export const linking: LinkingOptions<any> = {
           },
         ],
       }
+    } else if (pathParts[0] === 'pastAppointments') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HealthTab',
+                  state: {
+                    routes: [{ name: 'Health' }, { name: 'Appointments', params: { tab: 1 } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
     } else if (pathParts[0] === 'prescriptions') {
       return {
         routes: [
@@ -146,6 +163,42 @@ export const linking: LinkingOptions<any> = {
                   name: 'BenefitsTab',
                   state: {
                     routes: [{ name: 'Benefits' }, { name: 'ClaimLettersScreen' }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'copays') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'PaymentsTab',
+                  state: {
+                    routes: [{ name: 'Payments' }, { name: 'Copays' }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'debts') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'PaymentsTab',
+                  state: {
+                    routes: [{ name: 'Payments' }, { name: 'Debts' }],
                   },
                 },
               ],

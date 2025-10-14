@@ -1,13 +1,10 @@
-
 # Image optimization before release build. This workflow commit only images that have been optimized
-
-
-name: '[Build] Optimize Image'
+name: "[Build] Optimize Image"
 
 on:
   push:
     branches:
-      - 'release/v[0-9]+.[0-9]+.[0-9]+'
+      - "release/v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   optimize_images:
@@ -19,21 +16,21 @@ jobs:
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
       - name: Optimize iOS images
-        run:  imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
+        run: imagemin VAMobile/ios/fastlane/screenshots/* --out-dir=VAMobile/ios/fastlane/screenshots/en-US
       - name: Optimize Android images
         run: |
           cd VAMobile/android/fastlane/metadata/android/en-US/images/
           imagemin * --out-dir=.
-          
+
           cd phoneScreenshots/
           imagemin * --out-dir=.
-          
+
           cd ../sevenInchScreenshots/
           imagemin * --out-dir=.
       - name: Commit optimized images
         run: |
-          git config --global user.name 'VA Automation Bot'
-          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git config --global user.name 'VA Mobile Automation Bot'
+          git config --global user.email 'VAFlagshipMobile@va.gov'
           git add VAMobile/ios/fastlane/screenshots/en-US
           git add VAMobile/android/fastlane/metadata/android/en-US/images
           if git diff --cached --quiet; then

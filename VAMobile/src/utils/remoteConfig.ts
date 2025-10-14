@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { loadWaygateOverrides } from 'utils/waygateConfig'
-
-import { logNonFatalErrorToFirebase } from './analytics'
 
 const { IS_TEST } = getEnv()
 
@@ -16,83 +15,89 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
-  | 'allergies'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'COEAvailable'
+  | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
-  | 'homeScreenPrefetch'
+  | 'hsScrollAnalytics'
   | 'inAppRecruitment'
   | 'inAppFeedback'
   | 'inAppReview'
-  | 'inAppUpdates'
+  | 'labsAndTests'
   | 'nonVAMedsLink'
-  | 'patientCheckIn'
-  | 'patientCheckInWaygate'
-  | 'preferredNameGenderWaygate'
-  | 'prescriptions'
+  | 'rescheduleLink'
   | 'shareMyHealthDataLink'
   | 'submitEvidenceExpansion'
   | 'sso'
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
+  | 'travelPayClaimsFullHistory'
+  | 'travelPayStatusList'
   | 'useOldLinkComponent'
-  | 'whatsNewUI'
-  | 'veteranStatusCardRedesign'
+  | 'internationalPhoneNumber'
+  | 'showCernerAlertSM'
+  | 'showEmailConfirmationAlert'
+  | 'overpayCopay'
 
 type FeatureToggleValues = {
-  allergies: boolean
   appointmentRequests: boolean
+  appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
+  COEAvailable: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
-  homeScreenPrefetch: boolean
+  hsScrollAnalytics: boolean
   inAppRecruitment: boolean
   inAppFeedback: boolean
   inAppReview: boolean
-  inAppUpdates: boolean
+  labsAndTests: boolean
   nonVAMedsLink: boolean
-  patientCheckIn: boolean
-  patientCheckInWaygate: boolean
-  preferredNameGenderWaygate: boolean
-  prescriptions: boolean
+  rescheduleLink: boolean
   shareMyHealthDataLink: boolean
   submitEvidenceExpansion: boolean
   sso: boolean
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
+  travelPayClaimsFullHistory: boolean
+  travelPayStatusList: boolean
   useOldLinkComponent: boolean
-  whatsNewUI: boolean
-  veteranStatusCardRedesign: boolean
+  internationalPhoneNumber: boolean
+  showCernerAlertSM: boolean
+  showEmailConfirmationAlert: boolean
+  overpayCopay: boolean
 }
 
 export const defaults: FeatureToggleValues = {
-  allergies: true,
   appointmentRequests: false,
+  appointmentsTestTime: false,
   cernerTrueForDemo: false,
+  COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,
-  homeScreenPrefetch: true,
+  hsScrollAnalytics: false,
   inAppRecruitment: false,
-  inAppFeedback: false,
+  inAppFeedback: true,
   inAppReview: true,
-  inAppUpdates: true,
-  nonVAMedsLink: false,
-  patientCheckIn: false,
-  patientCheckInWaygate: true,
-  preferredNameGenderWaygate: true,
-  prescriptions: true,
+  labsAndTests: false,
+  nonVAMedsLink: true,
+  rescheduleLink: true,
   submitEvidenceExpansion: true,
-  shareMyHealthDataLink: false,
+  shareMyHealthDataLink: true,
   sso: true,
   startScheduling: false,
   testFeature: false,
-  travelPaySMOC: false,
+  travelPaySMOC: true,
+  travelPayClaimsFullHistory: false,
+  travelPayStatusList: false,
   useOldLinkComponent: true,
-  whatsNewUI: true,
-  veteranStatusCardRedesign: true,
+  internationalPhoneNumber: false,
+  showCernerAlertSM: true,
+  showEmailConfirmationAlert: true,
+  overpayCopay: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
@@ -182,7 +187,7 @@ export const getFeatureToggles = (): FeatureToggleValues => {
   }
   const toggles = {} as FeatureToggleValues
   Object.keys(remoteConfig().getAll()).forEach((key) => {
-    if (!key.startsWith('WG')) {
+    if (!key.startsWith('WG') && key in defaults) {
       toggles[key as FeatureToggleType] = remoteConfig().getValue(key).asBoolean()
     }
   })

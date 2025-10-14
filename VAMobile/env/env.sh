@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-while getopts e:t:d: option
+while getopts e:t:d:r: option
 do
 case "${option}"
 in
 e) environment=${OPTARG};;
 t) isTest=${OPTARG};;
 d) showDebug=${OPTARG};;
+r) reactotron=${OPTARG};;
 esac
 done
 cd ./env
@@ -48,6 +49,13 @@ then
 else
   echo "IS_TEST=false" >> .env
 fi
+# set reactotron
+if [[ $reactotron == 'true' ]]
+then
+  echo "REACTOTRON_ENABLED=true" >> .env
+else
+  echo "REACTOTRON_ENABLED=false" >> .env
+fi
 # set demo mode password
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
@@ -59,6 +67,7 @@ echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://${WEBSITE_PREFIX}va.gov/my-health/a
 echo "LINK_URL_TRAVEL_PAY_WEB_DETAILS=https://${WEBSITE_PREFIX}va.gov/my-health/travel-pay/claims/" >> .env
 echo "LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS=https://${WEBSITE_PREFIX}va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt" >> .env
 echo "LINK_URL_MHV_VA_MEDICATIONS=https://${WEBSITE_PREFIX}va.gov/my-health/medications" >> .env
+echo "LINK_URL_MHV_VA_MEDICAL_RECORDS=https://${WEBSITE_PREFIX}va.gov/my-health/medical-records/" >> .env
 
 # Get all vars that are the same across environments
 while read p; do

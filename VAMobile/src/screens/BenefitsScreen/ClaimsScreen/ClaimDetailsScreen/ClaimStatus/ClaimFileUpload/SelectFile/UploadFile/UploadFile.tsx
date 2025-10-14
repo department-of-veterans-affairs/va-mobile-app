@@ -24,6 +24,7 @@ import {
   VAScrollView,
 } from 'components'
 import FileList from 'components/FileList'
+import FormValidationAlert from 'components/FormValidationAlert'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -31,20 +32,13 @@ import { ClaimTypeConstants } from 'constants/claims'
 import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { isPdfEncrypted } from 'utils/filesystem'
-import {
-  useBeforeNavBackListener,
-  useDestructiveActionSheet,
-  useRouteNavigation,
-  useShowActionSheet,
-  useTheme,
-} from 'utils/hooks'
+import { useBeforeNavBackListener, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { getWaygateToggles } from 'utils/waygateConfig'
-
-import { FileRequestStackParams } from '../../FileRequestSubtask'
 
 type UploadFileProps = StackScreenProps<FileRequestStackParams, 'UploadFile'>
 
@@ -61,14 +55,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
     originalRequest,
     filesList,
   )
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
+  const showActionSheet = useShowActionSheet()
   const [request, setRequest] = useState<ClaimEventData | undefined>(originalRequest)
   const [error, setError] = useState('')
   const [errorA11y, setErrorA11y] = useState('')
   const [isActionSheetVisible, setIsActionSheetVisible] = useState(false)
   const [filesEmptyError, setFilesEmptyError] = useState(false)
-  const showActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
+  const [formContainsError, setFormContainsError] = useState(false)
+  const [formErrorList, setFormErrorList] = useState<{ [key: number]: string }>({})
+  const [validationErrors, setValidationErrors] = useState<Array<string>>([])
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -84,23 +81,25 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('fileUpload.discard.confirm.title'),
-      message: request
-        ? t('fileUpload.discard.confirm.message.requestFile')
-        : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('fileUpload.continueUpload'),
-        },
-        {
-          text: t('fileUpload.cancelUpload'),
-          onPress: () => navigation.dispatch(e.data.action),
-        },
-      ],
-    })
+    const options = [t('fileUpload.cancelUpload'), t('fileUpload.continueUpload')]
+    confirmAlert(
+      {
+        options,
+        title: t('fileUpload.discard.confirm.title'),
+        message: request
+          ? t('fileUpload.discard.confirm.message.requestFile')
+          : t('fileUpload.discard.confirm.message.submitEvidenceFile'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.dispatch(e.data.action)
+            break
+        }
+      },
+    )
   })
 
   useEffect(() => {
@@ -121,6 +120,17 @@ function UploadFile({ navigation, route }: UploadFileProps) {
       })
     }
   }, [documentType, originalRequest])
+
+  useEffect(() => {
+    const validationErrorsList = []
+    if (filesEmptyError) validationErrorsList.push(t('fileUpload.requiredFile'))
+    for (const key in formErrorList) {
+      if (formErrorList[key] !== '') {
+        validationErrorsList.push(`${formErrorList[key]}`)
+      }
+    }
+    setValidationErrors(validationErrorsList)
+  }, [formErrorList, filesEmptyError, t])
 
   const onUploadConfirmed = () => {
     logAnalyticsEvent(
@@ -177,20 +187,23 @@ function UploadFile({ navigation, route }: UploadFileProps) {
         filesList.length,
       ),
     )
-    confirmAlert({
-      title: t('fileUpload.submit.confirm.title'),
-      message: t('fileUpload.submit.confirm.message'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('fileUpload.submit'),
-          onPress: onUploadConfirmed,
-        },
-      ],
-    })
+
+    const options = [t('fileUpload.submit'), t('cancel')]
+    confirmAlert(
+      {
+        options,
+        title: t('fileUpload.submit.confirm.title'),
+        message: t('fileUpload.submit.confirm.message'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onUploadConfirmed()
+            break
+        }
+      },
+    )
   }
 
   const onDocumentTypeChange = (selectedType: string) => {
@@ -353,6 +366,13 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                 />
               </Box>
             )}
+            <FormValidationAlert
+              description={t('fileUpload.submit.error.message')}
+              hasValidationError={formContainsError || filesEmptyError}
+              scrollViewRef={scrollViewRef}
+              focusOnError={onSaveClicked}
+              errorList={validationErrors}
+            />
             {request && (
               <TextView
                 variant="MobileBodyBold"
@@ -387,6 +407,8 @@ function UploadFile({ navigation, route }: UploadFileProps) {
                 onSave={onUpload}
                 onSaveClicked={onSaveClicked}
                 setOnSaveClicked={setOnSaveClicked}
+                setErrorList={setFormErrorList}
+                setFormContainsError={setFormContainsError}
               />
             </Box>
           </Box>

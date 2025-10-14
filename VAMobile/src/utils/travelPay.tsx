@@ -1,10 +1,14 @@
 import { ParamListBase } from '@react-navigation/native'
 
+import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 
+import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimSummary } from 'api/types'
-
-import { RouteNavigationFunction } from './hooks'
+import { Events } from 'constants/analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { RouteNavigationFunction } from 'utils/hooks'
 
 /**
  * Strips the timezone offset from a datetime string
@@ -89,7 +93,10 @@ export const getCommonSubtaskProps = (
     ...(hasErrorScreen
       ? {
           secondaryContentButtonText: t('no'),
-          onSecondaryContentButtonPress: () => navigateTo('ErrorScreen', { error: 'unsupportedType' }),
+          onSecondaryContentButtonPress: () => {
+            logAnalyticsEvent(Events.vama_smoc_error('unsupportedType'))
+            navigateTo('SMOCErrorScreen', { error: 'unsupportedType' })
+          },
         }
       : {}),
   }
@@ -104,4 +111,23 @@ export const getCommonSubtaskProps = (
   }
 
   return props
+}
+
+export const useTravelClaimSubmissionMutationState = (appointmentId: string) => {
+  const [mutationState] = useMutationState({
+    filters: { mutationKey: [travelPayMutationKeys.submitClaim, appointmentId] },
+  })
+
+  return mutationState
+}
+
+/**
+ * Logs the time taken for the SMOC flow
+ * @param smocFlowStartDate - The start time when the user presses the continue button
+ */
+export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
+  if (smocFlowStartDate) {
+    const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
+    logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
+  }
 }

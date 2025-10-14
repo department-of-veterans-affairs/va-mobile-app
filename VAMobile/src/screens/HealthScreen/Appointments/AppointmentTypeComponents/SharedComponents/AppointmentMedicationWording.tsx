@@ -17,25 +17,24 @@ import {
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
 
-const { WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS, WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE } = getEnv()
+const {
+  WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
+  WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE,
+  WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS,
+} = getEnv()
 
-const getWebViewLink = (
-  type: AppointmentDetailsScreenType,
+const webViewLinkHelper = (
+  url: string,
+  text: string,
   navigateTo: RouteNavigationFunction<ParamListBase>,
   t: TFunction,
+  testID?: string,
 ) => {
-  let text = t('appointmentsTab.medicationWording.whatToBringLink')
-  let url = WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS
-
-  if (type === AppointmentDetailsTypeConstants.ClaimExam) {
-    text = t('appointmentsTab.medicationWording.claimExam.webLink')
-    url = WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE
-  }
-
   return (
     <LinkWithAnalytics
       type="custom"
       icon={{ name: 'Launch', fill: 'default' }}
+      testID={testID}
       onPress={() => {
         navigateTo('Webview', {
           url,
@@ -46,6 +45,46 @@ const getWebViewLink = (
       text={text}
     />
   )
+}
+
+const getWebViewLink = (
+  type: AppointmentDetailsScreenType,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  t: TFunction,
+) => {
+  let text = t('appointmentsTab.medicationWording.whatToBringLink')
+  let url = WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS
+  let testID = 'whatToBringLinkTestID'
+
+  if (type === AppointmentDetailsTypeConstants.ClaimExam) {
+    text = t('appointmentsTab.medicationWording.claimExam.webLink')
+    url = WEBVIEW_URL_APPOINTMENTS_CLAIM_EXAM_LEARN_MORE
+    testID = 'claimExamLinkTestID'
+  }
+
+  return webViewLinkHelper(url, text, navigateTo, t, testID)
+}
+
+// This function generates a webview link specifically for video appointments
+// Where device preparation is necessary. It is shown in addition to the other
+// webview link for general information.
+const getVideoWebviewLink = (
+  type: AppointmentDetailsScreenType,
+  navigateTo: RouteNavigationFunction<ParamListBase>,
+  t: TFunction,
+) => {
+  if (
+    [
+      AppointmentDetailsTypeConstants.VideoAtlas,
+      AppointmentDetailsTypeConstants.VideoGFE,
+      AppointmentDetailsTypeConstants.VideoHome,
+    ].includes(type)
+  ) {
+    const text = t('appointmentsTab.medicationWording.howToSetUpDeviceLink')
+    return webViewLinkHelper(WEBVIEW_URL_VIDEO_HEALTH_APPOINTMENTS, text, navigateTo, t, 'prepareForVideoVisitTestID')
+  }
+
+  return null
 }
 
 type AppointmentMedicationWordingProps = {
@@ -60,6 +99,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
   const theme = useTheme()
 
   const webViewLink = getWebViewLink(type, navigateTo, t)
+  const videoWebViewLink = getVideoWebviewLink(type, navigateTo, t)
 
   const getContent = () => {
     switch (type) {
@@ -69,7 +109,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
       case AppointmentDetailsTypeConstants.VideoVA:
         return (
           <>
-            <TextView variant="MobileBody">{body}</TextView>
+            <TextView variant="MobileBody">{body}.</TextView>
             {webViewLink}
           </>
         )
@@ -81,14 +121,7 @@ function AppointmentMedicationWording({ subType, type }: AppointmentMedicationWo
             <VABulletList listOfText={[body]} />
             {webViewLink}
             <VABulletList listOfText={[t('appointmentsTab.medicationWording.bullet2')]} />
-            <LinkWithAnalytics
-              type="custom"
-              testID="prepareForVideoVisitTestID"
-              text={t('appointmentsTab.medicationWording.howToSetUpDevice')}
-              onPress={() => {
-                navigateTo('PrepareForVideoVisit')
-              }}
-            />
+            {videoWebViewLink}
           </>
         )
       case AppointmentDetailsTypeConstants.ClaimExam:

@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AppointmentData } from 'api/types'
-import { Box } from 'components'
+import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 type AppointmentFileTravelPayAlertProps = {
   appointment: AppointmentData
@@ -19,11 +20,13 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const mutationState = useTravelClaimSubmissionMutationState(appointment.id)
+  const mutationStatus = mutationState?.status
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-  if (!eligibleForTravelPay || daysLeftToFile < 0) {
+  if (!eligibleForTravelPay || daysLeftToFile < 0 || mutationStatus === 'pending') {
     return null
   }
 
@@ -31,16 +34,25 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
     <Box mb={theme.dimensions.standardMarginBetween}>
       <Alert
         variant="info"
-        description={t('travelPay.fileClaimAlert.description', { count: daysLeftToFile, days: daysLeftToFile })}
         header={t('travelPay.fileClaimAlert.header')}
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            navigateTo('SubmitTravelPayClaimScreen', { appointment, appointmentRouteKey })
+            navigateTo('SubmitTravelPayClaimScreen', {
+              appointment,
+              appointmentRouteKey,
+            })
           },
+          testID: 'appointmentFileTravelPayAlertPrimaryButtonTestID',
         }}
-        testID="appointmentFileTravelPayAlert"
-      />
+        testID="appointmentFileTravelPayAlert">
+        {mutationStatus === 'error' && (
+          <TextView mb={theme.dimensions.condensedMarginBetween}>{t('travelPay.fileClaimAlert.error')}</TextView>
+        )}
+        <TextView>
+          {t('travelPay.fileClaimAlert.description', { count: daysLeftToFile, days: daysLeftToFile })}
+        </TextView>
+      </Alert>
     </Box>
   )
 }

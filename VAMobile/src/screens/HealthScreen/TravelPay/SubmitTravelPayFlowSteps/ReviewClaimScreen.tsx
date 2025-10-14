@@ -1,14 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { CommonActions } from '@react-navigation/native'
-import { StackScreenProps } from '@react-navigation/stack'
 
 import { Button, Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 
-import { useContactInformation } from 'api/contactInformation'
-import { useSubmitTravelClaim } from 'api/travelPay'
 import {
   Box,
   LinkWithAnalytics,
@@ -21,26 +16,27 @@ import {
 } from 'components'
 import { SubtaskContext, useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
+import { useTravelPayContext } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { getTextForAddressData } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
-import { appendClaimDataToAppointment, getCommonSubtaskProps } from 'utils/travelPay'
+import { getCommonSubtaskProps } from 'utils/travelPay'
 
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-
-type ReviewClaimScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'ReviewClaimScreen'>
-
-function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
-  const { appointment, appointmentRouteKey } = route.params
+function ReviewClaimScreen() {
+  const {
+    appointment,
+    submitTravelClaim,
+    submittingTravelClaim,
+    userContactInformation,
+    penaltyStatementAccepted,
+    setPenaltyStatementAccepted,
+    penaltyStatementError,
+  } = useTravelPayContext()
   const { attributes } = appointment
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { setSubtaskProps } = useContext(SubtaskContext)
-  const { mutate: submitClaim, isPending: submittingTravelClaim } = useSubmitTravelClaim(appointment.id)
 
   useSubtaskProps(getCommonSubtaskProps(t, navigateTo, 'AddressScreen', undefined, false))
-
-  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
-  const [checkBoxError, setCheckBoxError] = useState<string>('')
 
   useEffect(() => {
     if (!submittingTravelClaim) {
@@ -54,47 +50,7 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
 
   const theme = useTheme()
   const isPortrait = useOrientation()
-
-  const contactInformationQuery = useContactInformation({ enabled: true })
-  const address = getTextForAddressData(contactInformationQuery.data, 'residentialAddress', t)
-
-  const submitTravelClaim = async () => {
-    if (!isCheckboxChecked) {
-      setCheckBoxError(t('required'))
-      return
-    }
-
-    if (!attributes.location.id) {
-      navigateTo('ErrorScreen', { error: 'error' })
-      return
-    }
-
-    submitClaim(
-      {
-        appointmentDateTime: attributes.startDateLocal,
-        facilityStationNumber: attributes.location.id,
-        appointmentType: 'Other',
-        isComplete: false,
-      },
-      {
-        onSuccess: (data) => {
-          navigation.dispatch({
-            ...CommonActions.setParams({
-              appointment: appendClaimDataToAppointment(appointment, data?.data.attributes),
-            }),
-            source: appointmentRouteKey,
-          })
-          navigateTo('SubmitSuccessScreen', {
-            appointmentDateTime: attributes.startDateLocal,
-            facilityName: attributes.location.name,
-          })
-        },
-        onError: () => {
-          navigateTo('ErrorScreen', { error: 'error' })
-        },
-      },
-    )
-  }
+  const address = getTextForAddressData(userContactInformation, 'residentialAddress', t)
 
   if (submittingTravelClaim) {
     return <LoadingComponent text={t('travelPay.submitLoading')} />
@@ -116,8 +72,8 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.what')}
             </TextView>
 
-            <TextView testID="milageOnlyID" variant="MobileBody">
-              {t('travelPay.reviewDetails.milageOnly')}
+            <TextView testID="mileageOnlyID" variant="MobileBody">
+              {t('travelPay.reviewDetails.mileageOnly')}
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VABulletList
@@ -142,11 +98,9 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
               {t('travelPay.reviewDetails.where')}
             </TextView>
             {address.map((line: TextLine) => (
-              <>
-                <TextView key={line.text} variant="MobileBody">
-                  {line.text}
-                </TextView>
-              </>
+              <TextView key={line.text} variant="MobileBody">
+                {line.text}
+              </TextView>
             ))}
           </Box>
         </TextArea>
@@ -178,10 +132,10 @@ function ReviewClaimScreen({ route, navigation }: ReviewClaimScreenProps) {
           <Checkbox
             label={t('travelPay.penaltyStatement.checkbox')}
             onPress={() => {
-              setIsCheckboxChecked(!isCheckboxChecked)
+              setPenaltyStatementAccepted(!penaltyStatementAccepted)
             }}
-            checked={isCheckboxChecked}
-            error={checkBoxError}
+            checked={penaltyStatementAccepted}
+            error={penaltyStatementError ? t('required') : undefined}
             testID="checkboxTestID"
           />
         </Box>

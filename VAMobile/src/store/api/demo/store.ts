@@ -7,19 +7,24 @@ import {
   SecureMessagingSystemFolderIdConstants,
   SubmitSMOCTravelPayClaimParameters,
 } from 'api/types'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import { Params } from '../api'
-import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from './allergies'
-import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from './appointments'
-import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from './claims'
-import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from './decisionLetters'
-import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from './demographics'
-import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from './disabilityRating'
-import { LettersDemoApiReturnTypes, LettersDemoStore } from './letters'
-import { NotificationDemoApiReturnTypes, NotificationDemoStore } from './notifications'
-import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from './payments'
-import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from './prescriptions'
+import { Params } from 'store/api/api'
+import { AllergyDemoReturnTypes, AllergyDemoStore, getAllergyList } from 'store/api/demo/allergies'
+import { AppointmentDemoReturnTypes, AppointmentsDemoStore, getAppointments } from 'store/api/demo/appointments'
+import { ClaimsDemoApiReturnTypes, ClaimsDemoStore, getClaimsAndAppealsOverview } from 'store/api/demo/claims'
+import { DebtsDemoReturnTypes, DebtsDemoStore, getDebts } from 'store/api/demo/debts'
+import { DecisionLettersDemoApiReturnTypes, DecisionLettersDemoStore } from 'store/api/demo/decisionLetters'
+import { DemographicsDemoApiReturnTypes, DemographicsDemoStore, updatePreferredName } from 'store/api/demo/demographics'
+import { DisabilityRatingDemoApiReturnTypes, DisabilityRatingDemoStore } from 'store/api/demo/disabilityRating'
+import { LabsAndTestsDemoReturnTypes, LabsAndTestsDemoStore, getLabsAndTestsList } from 'store/api/demo/labsAndTests'
+import { LettersDemoApiReturnTypes, LettersDemoStore } from 'store/api/demo/letters'
+import { MedicalCopaysDemoReturnTypes, MedicalCopaysDemoStore, getMedicalCopays } from 'store/api/demo/medicalCopays'
+import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
+import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
+import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
+import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
+import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
+import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
+import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
 import {
   ProfileDemoReturnTypes,
   ProfileDemoStore,
@@ -31,10 +36,19 @@ import {
   updateEmail,
   updateUserPhone,
   validateAddress,
-} from './profile'
-import { SecureMessagingDemoApiReturnTypes, SecureMessagingDemoStore, getFolderMessages } from './secureMessaging'
-import { TravelPayDemoReturnTypes, submitAppointmentClaim } from './travelPay'
-import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from './vaccine'
+} from 'store/api/demo/profile'
+import {
+  SecureMessagingDemoApiReturnTypes,
+  SecureMessagingDemoStore,
+  getFolderMessages,
+} from 'store/api/demo/secureMessaging'
+import {
+  TravelPayDemoReturnTypes,
+  TravelPayDemoStore,
+  getTravelPayClaims,
+  submitAppointmentClaim,
+} from 'store/api/demo/travelPay'
+import { VaccineDemoReturnTypes, VaccineDemoStore, getVaccineList } from 'store/api/demo/vaccine'
 
 /**
  * Intersection type denoting the demo data store
@@ -51,7 +65,11 @@ export type DemoStore = AppointmentsDemoStore &
   PrescriptionsDemoStore &
   NotificationDemoStore &
   DemographicsDemoStore &
-  AllergyDemoStore
+  AllergyDemoStore &
+  LabsAndTestsDemoStore &
+  TravelPayDemoStore &
+  MedicalCopaysDemoStore &
+  DebtsDemoStore
 
 /**
  * Union type to define the mock returns to keep type safety
@@ -70,7 +88,10 @@ type DemoApiReturns =
   | NotificationDemoApiReturnTypes
   | DemographicsDemoApiReturnTypes
   | AllergyDemoReturnTypes
+  | LabsAndTestsDemoReturnTypes
   | TravelPayDemoReturnTypes
+  | MedicalCopaysDemoReturnTypes
+  | DebtsDemoReturnTypes
 
 let store: DemoStore | undefined
 
@@ -130,28 +151,24 @@ const transformDates = (fileObject: Record<string, unknown>) => {
 /**
  * function to import the demo data store from the JSON file and initialize the demo store.
  */
-export const initDemoStore = async (): Promise<void> => {
-  const data = await Promise.all([
-    import('./mocks/appointments.json'),
-    import('./mocks/claims.json'),
-    import('./mocks/profile.json'),
-    import('./mocks/secureMessaging.json'),
-    import('./mocks/vaccine.json'),
-    import('./mocks/disablityRating.json'),
-    import('./mocks/decisionLetters.json'),
-    import('./mocks/letters.json'),
-    import('./mocks/payments.json'),
-    import('./mocks/prescriptions.json'),
-    import('./mocks/notifications.json'),
-    import('./mocks/contactInformation.json'),
-    import('./mocks/getAuthorizedServices.json'),
-    featureEnabled('cernerTrueForDemo')
-      ? import('./mocks/getFacilitiesInfoCerner.json')
-      : import('./mocks/getFacilitiesInfo.json'),
-    import('./mocks/demographics.json'),
-    import('./mocks/personalInformation.json'),
-    import('./mocks/allergies.json'),
-  ])
+export const initDemoStore = async (demoUser: string | null = 'kimberlyWashington'): Promise<void> => {
+  let userData
+  switch (demoUser) {
+    case 'benjaminAdams':
+      userData = importBenjaminAdamsData()
+      break
+    case 'claraJefferson':
+      userData = importClaraJeffersonData()
+      break
+    case 'dennisMadison':
+      userData = importDennisMadisonData()
+      break
+    case 'kimberlyWashington':
+    default:
+      userData = importKimberlyWashingtonData()
+  }
+
+  const data = await Promise.all(userData)
   const transformedData = data.map((file) => transformDates(file))
   setDemoStore(transformedData.reduce((merged, current) => ({ ...merged, ...current }), {}) as unknown as DemoStore)
 }
@@ -225,7 +242,10 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     case '/v1/health/immunizations': {
       return getVaccineList(store, params, endpoint)
     }
-    case '/v1/health/allergy-intolerances': {
+    case '/v1/health/labs-and-tests': {
+      return getLabsAndTestsList(store, params)
+    }
+    case '/v0/health/allergy-intolerances': {
       return getAllergyList(store, params, endpoint)
     }
     case '/v0/payment-history': {
@@ -233,6 +253,18 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/health/rx/prescriptions': {
       return getPrescriptions(store, params, endpoint)
+    }
+    /**
+     * TRAVEL PAY
+     */
+    case '/v0/travel-pay/claims': {
+      return getTravelPayClaims(store, params)
+    }
+    case '/v0/medical_copays': {
+      return getMedicalCopays(store, params, endpoint)
+    }
+    case '/v0/debts': {
+      return getDebts(store, params, endpoint)
     }
     default: {
       return store?.[endpoint as keyof DemoStore] as DemoApiReturns

@@ -1,0 +1,800 @@
+{
+  "/v0/health/rx/prescriptions": {
+    "data": [
+      {
+        "id": "21142610",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2022-01-15T05:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-10-27T04:00:00.000Z",
+          "quantity": 10,
+          "expirationDate": "2022-10-28T04:00:00.000Z",
+          "prescriptionNumber": "2720192A",
+          "prescriptionName": "ACETAMINOPHEN 325MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH DAILY"
+        }
+      },
+      {
+        "id": "21142577",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2022-05-16T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2021-09-21T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2022-09-22T04:00:00.000Z",
+          "prescriptionNumber": "3636747",
+          "prescriptionName": "ADEFOVIR DIPIVOXIL 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET EVERY DAY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142578",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2021-10-22T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2021-09-21T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2022-09-22T04:00:00.000Z",
+          "prescriptionNumber": "3636748",
+          "prescriptionName": "ALENDRONATE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET EVERY MORNING, 30 MINUTES BEFORE MEAL FOR 30 DAYS WITH FULL GLASS OF WATER, ONLY. DON'T LIE DOWN, EAT, DRINK, OR TAKE MEDS FOR ONE-HALF (1/2) HOUR."
+        }
+      },
+      {
+        "id": "21142579",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-06T04:00:00.000Z",
+          "refillRemaining": 5,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2021-10-27T04:00:00.000Z",
+          "quantity": 15,
+          "expirationDate": "2022-10-28T04:00:00.000Z",
+          "prescriptionNumber": "3636711A",
+          "prescriptionName": "AMLODIPINE BESYLATE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142604",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "expired",
+          "refillSubmitDate": null,
+          "refillDate": "2021-09-21T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-08-02T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2022-08-03T04:00:00.000Z",
+          "prescriptionNumber": "2720291",
+          "prescriptionName": "ATORVASTATIN CALCIUM 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH DAILY FOR 30 DAYS --AVOID GRAPEFRUIT JUICE/AVOID ANTACIDS--"
+        }
+      },
+      {
+        "id": "21142612",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2021-12-07T05:00:00.000Z",
+          "refillRemaining": 10,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-10-27T04:00:00.000Z",
+          "quantity": 10,
+          "expirationDate": "2022-10-28T04:00:00.000Z",
+          "prescriptionNumber": "2720108A",
+          "prescriptionName": "BERNA VACCINE CAP B/P",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE 0.5ML BY MOUTH AFTER DINNER FOR 5 DAYS"
+        }
+      },
+      {
+        "id": "21142592",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+          "refillDate": "2022-07-05T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 60,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636856",
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "dispensedDate": "2022-08-02T04:00:00.000Z",
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": true,
+          "instructions": "TAKE ONE TABLET TWO (2) TIMES A DAY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142607",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2021-10-21T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-09-01T04:00:00.000Z",
+          "quantity": 4,
+          "expirationDate": "2022-09-02T04:00:00.000Z",
+          "prescriptionNumber": "2720292",
+          "prescriptionName": "CIPROFLOXACIN 400MG PREMIXED 200ML",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "INJECT 2MG WEEKLY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142574",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-04-16T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2021-09-01T04:00:00.000Z",
+          "quantity": 15,
+          "expirationDate": "2022-09-02T04:00:00.000Z",
+          "prescriptionNumber": "3636736",
+          "prescriptionName": "CITALOPRAM HYDROBROMIDE 20MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF TABLET EVERY DAY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142616",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "hold",
+          "refillSubmitDate": null,
+          "refillDate": "2021-12-16T05:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-09-27T04:00:00.000Z",
+          "quantity": 4,
+          "expirationDate": "2022-09-28T04:00:00.000Z",
+          "prescriptionNumber": "2720295",
+          "prescriptionName": "DEXTROSE 10% IN WATER 1000ML",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "INJECT 1ML IV WEEKLY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142625",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-03T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 3,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "2720338",
+          "prescriptionName": "IODOQUINOL 650MG TAB",
+          "dispensedDate": "2022-07-25T04:00:00.000Z",
+          "stationNumber": "989",
+          "isRefillable": true,
+          "isTrackable": true,
+          "instructions": "TAKE 5ML WEEKLY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142621",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2022-07-05T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2022-04-26T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2023-04-27T04:00:00.000Z",
+          "prescriptionNumber": "2720333",
+          "prescriptionName": "LABETALOL HCL 100MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET DAILY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142623",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+          "refillDate": "2022-07-16T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "DAYT29",
+          "orderedDate": "2022-04-26T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2023-04-27T04:00:00.000Z",
+          "prescriptionNumber": "2720334",
+          "prescriptionName": "LAMIVUDINE 100MG TAB",
+          "dispensedDate": "2022-08-02T04:00:00.000Z",
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": true,
+          "instructions": "TAKE ONE TABLET BY MOUTH DAILY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142586",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-07T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2023-05-08T04:00:00.000Z",
+          "prescriptionNumber": "3636846",
+          "prescriptionName": "LAMIVUDINE 150MG/ZIDOVUDINE 300MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE 1 TABLET BY MOUTH EVERY DAY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142628",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-22T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 2,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "2720340",
+          "prescriptionName": "LATANOPROST 0.005% OPH SOLN",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "INSTILL 1 DROP WEEKLY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142614",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": null,
+          "refillDate": "2021-12-15T05:00:00.000Z",
+          "refillRemaining": 6,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-10-27T04:00:00.000Z",
+          "quantity": 10,
+          "expirationDate": "2022-10-28T04:00:00.000Z",
+          "prescriptionNumber": "2720068A",
+          "prescriptionName": "NIVEA SKIN OIL (8 OZ) ",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "APPLY LIBERAL AMOUNT TO AFFECTED AREA MONDAY,TUESDAY,FRIDAY,SATURDAY AT 5 PM TESTING"
+        }
+      },
+      {
+        "id": "21142619",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2021-10-17T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-09-27T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2022-09-28T04:00:00.000Z",
+          "prescriptionNumber": "2720296",
+          "prescriptionName": "NORFLOXACIN 400MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET DAILY FOR 30 DAYS --AVOID ANTACIDS--"
+        }
+      },
+      {
+        "id": "21142588",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "facilityName": "",
+          "orderedDate": "2022-05-08T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2023-05-09T04:00:00.000Z",
+          "prescriptionNumber": "",
+          "prescriptionName": "OLANZAPINE 10MG RAPID DISINTEGRATING TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": ""
+        }
+      },
+      {
+        "id": "21142590",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "activeParked",
+          "refillSubmitDate": null,
+          "refillDate": null,
+          "refillRemaining": 2,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-09T04:00:00.000Z",
+          "quantity": 60,
+          "expirationDate": "2023-05-10T04:00:00.000Z",
+          "prescriptionNumber": "3636853",
+          "prescriptionName": "OLSALAZINE NA 250MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE CAPSULE TWO (2) TIMES PER DAY, WITH FOOD FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142589",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-07T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-08T04:00:00.000Z",
+          "quantity": 1,
+          "expirationDate": "2023-05-09T04:00:00.000Z",
+          "prescriptionNumber": "3636848",
+          "prescriptionName": "PAMIDRONATE DISODIUM 3MG/ML INJ 10ML",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "INJECT 1ML INTRAVENOUS ONCE FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142602",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "expired",
+          "refillSubmitDate": null,
+          "refillDate": "2021-08-25T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2021-07-26T04:00:00.000Z",
+          "quantity": 4,
+          "expirationDate": "2022-07-27T04:00:00.000Z",
+          "prescriptionNumber": "2720287",
+          "prescriptionName": "PEGFILGRASTIM 6MG/0.6ML",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "INJECT 1MG DAILY FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142591",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-05-14T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 1,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636855",
+          "prescriptionName": "YANKAUER SUCTION TIP (EA)",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "DEVICE(S) MISC YEARLY FOR 365 DAYS"
+        }
+      },
+      {
+        "id": "21142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636857",
+          "prescriptionName": "ZIDOVUDINE 100MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "21142627",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2022-05-14T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "DAYT29",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 5,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "2720339",
+          "prescriptionName": "ZIPRASIDONE HCL 40MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "989",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE CAPSULE WEEKLY FOR 30 DAYS"
+        }
+      },
+      {
+        "attributes": {
+          "dispensedDate": "2022-08-02T04:00:00.000Z",
+          "expirationDate": null,
+          "facilityName": "",
+          "instructions": "",
+          "isRefillable": false,
+          "isTrackable": false,
+          "orderedDate": null,
+          "prescriptionName": "LAMIVUDINE 100MG TAB",
+          "prescriptionNumber": "",
+          "quantity": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "refillStatus": "active",
+          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+          "stationNumber": "989"
+        },
+        "id": "21142623",
+        "type": "Prescription"
+      },
+      {
+        "attributes": {
+          "dispensedDate": "2022-08-02T04:00:00.000Z",
+          "expirationDate": null,
+          "facilityName": "",
+          "instructions": "",
+          "isRefillable": false,
+          "isTrackable": false,
+          "orderedDate": null,
+          "prescriptionName": "LAMIVUDINE 1MG TAB",
+          "prescriptionNumber": "",
+          "quantity": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "refillStatus": "active",
+          "refillSubmitDate": "2022-08-04T13:59:40.000Z",
+          "stationNumber": "999"
+        },
+        "id": "21142627",
+        "type": "Prescription"
+      },
+      {
+        "id": "41142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "transferred",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 1MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
+        }
+      },
+      {
+        "id": "52142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "unknown",
+          "refillSubmitDate": null,
+          "refillDate": null,
+          "refillRemaining": null,
+          "facilityName": null,
+          "orderedDate": null,
+          "quantity": null,
+          "expirationDate": null,
+          "prescriptionNumber": null,
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "dispensedDate": null,
+          "stationNumber": null,
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": null
+        }
+      },
+      {
+        "id": "52142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "discontinued",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 TEST LAB 1",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 10MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 2 DAYS"
+        }
+      },
+      {
+        "id": "71142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "expired",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 Prime",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "ZIDOVUDINE 11MG CAP",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 30 DAYS"
+        }
+      },
+      {
+        "id": "94142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "unknown",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "LAMIVUDINE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 3 DAYS"
+        }
+      },
+      {
+        "id": "40142594",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "expired",
+          "refillSubmitDate": null,
+          "refillDate": "2022-06-26T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "SLC10 Lab",
+          "orderedDate": "2022-05-14T04:00:00.000Z",
+          "quantity": 45,
+          "expirationDate": "2023-05-15T04:00:00.000Z",
+          "prescriptionNumber": "3636850",
+          "prescriptionName": "LAMIVUDINE 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "979",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE-HALF CAPSULE EVERY EIGHT (8) HOURS FOR 15 DAYS"
+        }
+      }
+    ],
+    "meta": {
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 10000,
+        "totalPages": 1,
+        "totalEntries": 31
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=3",
+        "first": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "prev": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=1",
+        "next": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=4",
+        "last": "https://staging-api.va.gov/mobile/v0/health/rx/prescriptions?page[size]=10&page[number]=7"
+      },
+      "prescriptionStatusCount": {
+        "active": 24,
+        "isRefillable": 10,
+        "discontinued": 1,
+        "expired": 4,
+        "historical": 3,
+        "pending": 8,
+        "transferred": 1,
+        "submitted": 0,
+        "hold": 1,
+        "unknown": 2,
+        "total": 31
+      },
+      "hasNonVaMeds": true
+    }
+  },
+  "/v0/health/rx/prescriptions/21142592/tracking": {
+    "data": [
+      {
+        "attributes": {
+          "deliveryService": "DHL",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "LAMIVUDINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            },
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": ""
+            }
+          ],
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "prescriptionNumber": "3636856",
+          "shippedDate": "2022-06-14T00:00:00.000Z",
+          "trackingNumber": "7534533636856",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142592
+        },
+        "id": "21142592",
+        "type": "PrescriptionTracking"
+      }
+    ]
+  },
+  "/v0/health/rx/prescriptions/21142625/tracking": {
+    "data": [
+      {
+        "attributes": {
+          "deliveryService": "FEDEX",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": "3636850"
+            },
+            {
+              "prescriptionName": "LAMIVUDINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            }
+          ],
+          "prescriptionName": "CAPECITABINE 500MG TAB",
+          "prescriptionNumber": "3636856",
+          "shippedDate": "2022-06-14T00:00:00.000Z",
+          "trackingNumber": "7534533636856",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142625
+        },
+        "id": "21142625",
+        "type": "PrescriptionTracking"
+      }
+    ]
+  },
+  "/v0/health/rx/prescriptions/21142623/tracking": {
+    "data": [
+      {
+        "attributes": {
+          "prescriptionName": "HALCINONIDE 0.1% OINT",
+          "prescriptionNumber": "2720334",
+          "ndcNumber": "00013264681",
+          "prescriptionId": 21142623,
+          "trackingNumber": "77298027203980000000398",
+          "shippedDate": "2022-10-15T00:00:00.000Z",
+          "deliveryService": "UPS",
+          "otherPrescriptions": []
+        }
+      },
+      {
+        "attributes": {
+          "deliveryService": "USPS",
+          "otherPrescriptions": [
+            {
+              "prescriptionName": "CAPECITABINE 10MG TAB",
+              "prescriptionNumber": "2336800"
+            },
+            {
+              "prescriptionName": "ZIDOVUDINE 1MG CAP",
+              "prescriptionNumber": "6236811"
+            }
+          ],
+          "prescriptionName": "LAMIVUDINE 100MG TAB",
+          "shippedDate": "2022-10-22T00:00:00.000Z",
+          "trackingNumber": "9205 5000 0000 0000 0000 00",
+          "ndcNumber": "",
+          "prescriptionId": null,
+          "prescriptionNumber": ""
+        },
+        "id": "21142623",
+        "type": "PrescriptionTracking"
+      }
+    ]
+  }
+}

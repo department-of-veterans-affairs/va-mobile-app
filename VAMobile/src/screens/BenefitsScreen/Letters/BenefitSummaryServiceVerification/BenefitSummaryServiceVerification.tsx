@@ -9,6 +9,7 @@ import { map } from 'underscore'
 import { useDownloadLetter, useLetterBeneficiaryData } from 'api/letters'
 import { LetterBenefitInformation, LetterTypeConstants, LettersDownloadParams } from 'api/types'
 import {
+  AlertWithHaptics,
   BasicError,
   Box,
   ButtonDecoratorType,
@@ -22,9 +23,11 @@ import {
   TextArea,
   TextView,
 } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -40,7 +43,12 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<
 function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: letterBeneficiaryData, isLoading: loadingLetterBeneficiaryData } = useLetterBeneficiaryData({
+  const {
+    data: letterBeneficiaryData,
+    error: letterBeneficiaryError,
+    isLoading: loadingLetterBeneficiaryData,
+    refetch: refetchLetterBeneficiaryData,
+  } = useLetterBeneficiaryData({
     enabled: screenContentAllowed('WG_BenefitSummaryServiceVerificationLetter'),
   })
   const lettersOptions: LettersDownloadParams = {
@@ -139,6 +147,11 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     },
   ]
 
+  const tryAgain = () => {
+    logAnalyticsEvent(Events.vama_fail_refresh())
+    refetchLetterBeneficiaryData()
+  }
+
   const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
     const toggleListItems: Array<SimpleListItemObj> = []
     const {
@@ -149,24 +162,28 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
       hasServiceConnectedDisabilities,
     } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
-    const text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-      monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount || 0),
-      date: awardEffectiveDate
-        ? formatDateMMMMDDYYYY(awardEffectiveDate)
-        : t('letters.benefitService.effectiveDateInvalid'),
-    })
-
-    toggleListItems.push({
-      text: text,
-      testId: text.replace(',', ''),
-      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: monthlyAwardToggle,
-        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-        testID: 'monthly-award',
-      },
-    })
+    if (monthlyAwardAmount || monthlyAwardAmount === 0) {
+      const effectiveDateText = awardEffectiveDate
+        ? t('letters.benefitService.effectiveDate', {
+            date: formatDateMMMMDDYYYY(awardEffectiveDate),
+          })
+        : ''
+      const monthlyAwardAndEffectiveDateText =
+        t('letters.benefitService.monthlyAward', {
+          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
+        }) + effectiveDateText
+      toggleListItems.push({
+        text: monthlyAwardAndEffectiveDateText,
+        testId: monthlyAwardAndEffectiveDateText.replace(',', ''),
+        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: monthlyAwardToggle,
+          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+          testID: 'monthly-award',
+        },
+      })
+    }
 
     if (serviceConnectedPercentage) {
       const percentText = t('letters.benefitService.combinedServiceConnectingRating', {
@@ -224,7 +241,7 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
     refetchLetter()
   }
 
-  const loadingCheck = loadingLetterBeneficiaryData || downloading || !letterBeneficiaryData
+  const loadingCheck = loadingLetterBeneficiaryData || downloading
 
   return (
     <FeatureLandingTemplate
@@ -243,6 +260,20 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
         />
       ) : (
         <Box mb={theme.dimensions.contentMarginBottom}>
+          {letterBeneficiaryError && (
+            <AlertWithHaptics
+              variant="error"
+              testID="letterBeneficiaryError"
+              header={t('letters.benefitService.letterDetailsError.title')}
+              headerA11yLabel={t('letters.benefitService.letterDetailsError.title')}
+              description={t('letters.benefitService.letterDetailsError.content')}
+              primaryButton={{
+                label: t('letters.benefitService.letterDetailsError.reloadLetter'),
+                onPress: tryAgain,
+                testID: 'reloadLetter',
+              }}
+            />
+          )}
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
               {t('letters.benefitService.title')}

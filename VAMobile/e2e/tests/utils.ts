@@ -86,7 +86,10 @@ export const CommonE2eIdConstants = {
   HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID: 'showCompensationTestID',
   HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
   LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
+  CONFIRM_EMAIL_TEXT: 'Confirm',
+  SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
+  APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
   APPOINTMENTS_BUTTON_ID: 'toAppointmentsID',
@@ -100,9 +103,11 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_BUTTON_ID: 'refillRequestTestID',
   PRESCRIPTION_HISTORY_SCROLL_ID: 'PrescriptionHistory',
   PRESCRIPTIONS_BUTTON_ID: 'toPrescriptionsID',
-  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request Refill ',
+  PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
+  LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
+  LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
@@ -183,6 +188,10 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
+  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
+  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
+  DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
+  DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
 }
 
 /** Logs into demo mode.
@@ -243,6 +252,18 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   )
   if (turnOnNotificationsBtnExist) {
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+  if (confirmEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+
+  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+  if (skipEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
 }
 
@@ -310,6 +331,31 @@ export async function scrollToIDThenTap(scrollToID: string, containerID: string)
   await element(by.id(scrollToID)).tap()
 }
 
+/** Scroll down inside container until specified text is found
+ *
+ * @param text - string of the text to match
+ * @param containerID - testID of the container
+ */
+export async function scrollToElement(text: string, containerID: string) {
+  await waitFor(element(by.text(text)))
+    .toBeVisible()
+    .whileElement(by.id(containerID))
+    .scroll(200, 'down')
+}
+
+/** Test for the presence of text 1 or more times
+ *
+ * @param text - string of the text to match
+ */
+export const testForOneOrManyOccurancesOf = async (text: string) => {
+  const multipleMatchedElements = await element(by.text(text)).getAttributes()
+  if (!('elements' in multipleMatchedElements)) {
+    await expect(element(by.text(text))).toExist()
+  } else {
+    await expect(element(by.text(text)).atIndex(0)).toExist()
+  }
+}
+
 /** This function will open, check for, and dismiss the leaving app popup from a specified launching point
  *
  * @param matchString - string of the text or id to match
@@ -325,64 +371,12 @@ export async function openDismissLeavingAppPopup(matchString: string, findbyText
 
   await expect(element(by.text(CommonE2eIdConstants.LEAVING_APP_POPUP_TEXT))).toExist()
   await element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)).tap()
-}
 
-/** This function will change the mock data for demo mode
- *
- * @param matchString - string: name of the json file ie appointments.json
- * @param jsonProperty - array of strings and dictionaries: should match the path to get to the
- * json obj you want changed that matches the path to get to the object you want changed
- * @param newJsonValue - string or boolean: new value for the json object
- */
-
-export async function changeMockData(mockFileName: string, jsonProperty, newJsonValue) {
-  const mockDirectory = './src/store/api/demo/mocks/'
-
-  fs.readFile(mockDirectory + mockFileName, 'utf8', (error, data) => {
-    if (error) {
-      console.log(error)
-      return
-    }
-
-    const jsonParsed = JSON.parse(data)
-    let mockDataVariable
-    let mockDataKeyValue
-    for (let x = 0; x < jsonProperty.length; x++) {
-      if (x === 0) {
-        mockDataVariable = jsonParsed[jsonProperty[x]]
-      } else if (x === jsonProperty.length - 1) {
-        mockDataVariable[jsonProperty[x]] = newJsonValue
-      } else {
-        if (jsonProperty[x].constructor === Object) {
-          const key = String(Object.keys(jsonProperty[x]))
-          const value = jsonProperty[x][key]
-          mockDataKeyValue = mockDataVariable[key]
-          mockDataVariable = mockDataKeyValue[value]
-        } else {
-          mockDataVariable = mockDataVariable[jsonProperty[x]]
-        }
-      }
-    }
-
-    fs.writeFile(mockDirectory + mockFileName, JSON.stringify(jsonParsed, null, 2), function writeJSON(err) {
-      if (err) {
-        return console.log(err)
-      }
-    })
-  })
-
-  await device.uninstallApp()
-  await setTimeout(1000)
-  if (device.getPlatform() === 'ios') {
-    await spawnSync('yarn', ['bundle:ios'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c ios'], { maxBuffer: Infinity, timeout: 200000 })
-  } else {
-    await spawnSync('yarn', ['bundle:android'], { maxBuffer: Infinity, timeout: 200000 })
-    await spawnSync('detox', ['build', '-c android'], { maxBuffer: Infinity, timeout: 200000 })
-  }
-  await device.installApp()
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await loginToDemoMode()
+  // 115452: Added to fix race conditions with the popup not being fully gone
+  // and interfering with view visibility in subsequent steps.
+  await waitFor(element(by.text(CommonE2eIdConstants.LEAVING_APP_CANCEL_TEXT)))
+    .not.toExist()
+    .withTimeout(6000)
 }
 
 /** This function will check and verify if the image provided matches the image in the _imagesnapshot_ folder
@@ -435,6 +429,10 @@ export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
+export async function openTravelPayClaims() {
+  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
+}
+
 export async function openPayments() {
   await element(by.id(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_ID)).tap()
 }
@@ -472,6 +470,10 @@ export async function openVaccineRecords() {
 }
 export async function openAllergyRecords() {
   await element(by.id(CommonE2eIdConstants.ALLERGIES_BUTTON_ID)).tap()
+}
+
+export async function openLabsAndTestRecords() {
+  await element(by.id(CommonE2eIdConstants.LABS_AND_TEST_BUTTON_ID)).tap()
 }
 
 export async function openMedicalRecords() {
@@ -808,5 +810,20 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
   }
 
-  await element(by.label('Set API Errors')).tap()
+  await element(by.id('saveErrors')).tap()
+}
+
+export async function changeDemoModeUser(testIdOfDesiredUser: string) {
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
+    CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
+  )
+  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
+  await element(by.id(testIdOfDesiredUser)).tap()
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await loginToDemoMode()
 }

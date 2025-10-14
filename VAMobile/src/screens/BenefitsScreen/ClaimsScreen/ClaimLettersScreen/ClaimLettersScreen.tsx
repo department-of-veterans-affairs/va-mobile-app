@@ -27,6 +27,7 @@ import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import NoClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/NoClaimLettersScreen/NoClaimLettersScreen'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -34,8 +35,6 @@ import { getA11yLabelText, isErrorObject } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useDowntime, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import NoClaimLettersScreen from './NoClaimLettersScreen/NoClaimLettersScreen'
 
 type ClaimLettersScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimLettersScreen'>
 
@@ -48,6 +47,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
   const [letterID, setLetterID] = useState<string>('')
+  const [letterReceivedAt, setLetterReceivedAt] = useState<string>('')
   const {
     data: decisionLettersData,
     isFetching: loading,
@@ -60,8 +60,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
     isFetching: downloading,
     error: downloadLetterErrorDetails,
     refetch: refetchLetter,
-  } = useDownloadDecisionLetter(letterID, {
-    enabled: letterID.length > 0,
+  } = useDownloadDecisionLetter(letterID, letterReceivedAt, {
+    enabled: letterID.length > 0 && letterReceivedAt.length > 0,
   })
   // This screen is reachable from two different screens, so adjust back button label
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
@@ -97,11 +97,12 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
       const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
       const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
       const onPress = () => {
-        logAnalyticsEvent(Events.vama_ddl_letter_view())
+        logAnalyticsEvent(Events.vama_ddl_letter_view(typeDescription))
         if (letterID === letter.id) {
           refetchLetter()
         } else {
           setLetterID(letter.id)
+          setLetterReceivedAt(receivedAt.toString())
         }
       }
 

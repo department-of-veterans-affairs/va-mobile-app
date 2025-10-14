@@ -3,44 +3,53 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { DateTime } from 'luxon'
+
 import { Box, LinkWithAnalytics, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitTravelPayFlowModalStackParamList } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
+import { SetUpDirectDepositWebLink } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
+import { useTravelPayContext } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOrientation, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
-import { SubmitTravelPayFlowModalStackParamList } from '../SubmitMileageTravelPayScreen'
-
-const { LINK_URL_TRAVEL_PAY_ELIGIBILITY, LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
+const { LINK_URL_TRAVEL_PAY_ELIGIBILITY } = getEnv()
 
 type InterstitialScreenProps = StackScreenProps<SubmitTravelPayFlowModalStackParamList, 'InterstitialScreen'>
 
 function InterstitialScreen({ navigation }: InterstitialScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { setSmocFlowStartDate } = useTravelPayContext()
 
   const theme = useTheme()
   const isPortrait = useOrientation()
   const navigateTo = useRouteNavigation()
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
+
+  const onPrimaryContentButtonPress = () => {
+    navigateTo('MileageScreen')
+    setSmocFlowStartDate(DateTime.now().toISO())
+  }
 
   const onLeftButtonPress = () => {
-    confirmAlert({
-      title: t('travelPay.cancelClaim.title'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('travelPay.cancelClaim.continue'),
-        },
-        {
-          text: t('travelPay.cancelClaim.cancel'),
-          onPress: () => {
+    const options = [t('travelPay.cancelClaim.cancel'), t('travelPay.cancelClaim.continue')]
+    confirmAlert(
+      {
+        options,
+        title: t('travelPay.cancelClaim.title'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.goBack()
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   }
 
   useSubtaskProps({
@@ -49,7 +58,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
     onLeftButtonPress,
     primaryContentButtonText: t('continue'),
     primaryButtonTestID: 'continueTestID',
-    onPrimaryContentButtonPress: () => navigateTo('MileageScreen'),
+    onPrimaryContentButtonPress,
   })
 
   return (
@@ -57,7 +66,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
       <Box
         mb={theme.dimensions.contentMarginBottom}
         mx={isPortrait ? theme.dimensions.gutter : theme.dimensions.headerHeight}>
-        <TextView testID="milageQuestionID" variant="BitterHeading" accessibilityRole="header">
+        <TextView testID="mileageQuestionID" variant="BitterHeading" accessibilityRole="header">
           {t('travelPay.beforeYouFileQuestion')}
         </TextView>
         <TextView testID="eligibilityTitleID" variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
@@ -79,13 +88,7 @@ function InterstitialScreen({ navigation }: InterstitialScreenProps) {
         <TextView testID="directDepositDescriptionID" variant="MobileBody">
           {t('travelPay.setUpDirectDeposit.description')}
         </TextView>
-        <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
-          text={t('travelPay.setUpDirectDeposit.link')}
-          a11yLabel={a11yLabelVA(t('travelPay.setUpDirectDeposit.link'))}
-          testID="setUpDirectDepositLinkID"
-        />
+        <SetUpDirectDepositWebLink />
         <TextView mt={theme.dimensions.condensedMarginBetween} testID="burdenTimeID" variant="MobileBody">
           {t('travelPay.burdenTime')}
         </TextView>

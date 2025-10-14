@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { when } from 'jest-when'
 import { DateTime } from 'luxon'
 
@@ -8,17 +9,14 @@ import { appointmentsKeys } from 'api/appointments'
 import { prescriptionKeys } from 'api/prescriptions'
 import { secureMessagingKeys } from 'api/secureMessaging'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
+import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
-import { HealthScreen } from './HealthScreen'
-
 const mockNavigationSpy = jest.fn()
-
-jest.mock('utils/remoteConfig')
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -29,9 +27,11 @@ jest.mock('utils/hooks', () => {
   }
 })
 
-context('HealthScreen', () => {
-  const mockFeatureEnabled = featureEnabled as jest.Mock
+jest.mock('utils/remoteConfig', () => ({
+  featureEnabled: jest.fn(),
+}))
 
+context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -55,7 +55,7 @@ context('HealthScreen', () => {
         queriesData: [
           {
             queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
-            data: getAppointmentsPayload(upcomingAppointmentsCount),
+            data: getAppointmentsPayload(upcomingAppointmentsCount, 5),
           },
         ],
       })
@@ -73,7 +73,7 @@ context('HealthScreen', () => {
         queriesData: [
           {
             queryKey: [appointmentsKeys.appointments, TimeFrameTypeConstants.UPCOMING],
-            data: getAppointmentsPayload(upcomingAppointmentsCount),
+            data: getAppointmentsPayload(upcomingAppointmentsCount, 5),
           },
         ],
       })
@@ -93,6 +93,33 @@ context('HealthScreen', () => {
       await waitFor(() =>
         expect(screen.queryByText(`in the next ${DEFAULT_UPCOMING_DAYS_LIMIT} days`, { exact: false })).toBeFalsy(),
       )
+    })
+  })
+
+  describe('Travel button', () => {
+    it('is not displayed if feature toggle is disabled', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(false)
+      initializeTestInstance()
+      expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+      initializeTestInstance()
+      expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
+    })
+
+    it('navigates to Travel Reimbursement screen when pressed', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+      initializeTestInstance()
+      fireEvent.press(screen.getByText(t('travelPay.title')))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
     })
   })
 
@@ -140,23 +167,12 @@ context('HealthScreen', () => {
 
   describe('Prescriptions button', () => {
     it('navigates to Prescription history screen when pressed', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
       initializeTestInstance()
       fireEvent.press(screen.getByText('Prescriptions'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PrescriptionHistory')
     })
 
-    it('is not displayed if feature toggle is disabled', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(false)
-      initializeTestInstance()
-      expect(screen.getByText('Appointments')).toBeTruthy()
-      expect(screen.getByText('Messages')).toBeTruthy()
-      expect(screen.queryByText('Prescriptions')).toBeFalsy()
-      expect(screen.getByText('Medical records')).toBeTruthy()
-    })
-
-    it('is displayed if feature toggle is enabled', () => {
-      when(mockFeatureEnabled).calledWith('prescriptions').mockReturnValue(true)
+    it('is displayed correctly', () => {
       initializeTestInstance()
       expect(screen.getByText('Prescriptions')).toBeTruthy()
     })
@@ -199,7 +215,7 @@ context('HealthScreen', () => {
   it('displays error message when one of the API calls fail', async () => {
     when(get as jest.Mock)
       .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
+      .mockResolvedValue(getAppointmentsPayload(3, 5))
       .calledWith('/v0/messaging/health/folders')
       .mockResolvedValue(getFoldersPayload(3))
       .calledWith('/v0/health/rx/prescriptions', expect.anything())
@@ -218,7 +234,7 @@ context('HealthScreen', () => {
   it('displays error message when one of the health features are in downtime', async () => {
     when(get as jest.Mock)
       .calledWith('/v0/appointments', expect.anything())
-      .mockResolvedValue(getAppointmentsPayload(3))
+      .mockResolvedValue(getAppointmentsPayload(3, 5))
       .calledWith('/v0/messaging/health/folders')
       .mockResolvedValue(getFoldersPayload(3))
       .calledWith('/v0/health/rx/prescriptions', expect.anything())

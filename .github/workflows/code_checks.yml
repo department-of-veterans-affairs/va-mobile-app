@@ -31,8 +31,86 @@ jobs:
           max_attempts: 3
           command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
       - run: yarn lint:ci
+  super-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run Super-Linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          LINTER_RULES_PATH: '.github/linters/'
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_CHECKOV: false
+          VALIDATE_CLANG_FORMAT: false
+          VALIDATE_CPP: false
+          VALIDATE_CSS: false
+          VALIDATE_CSS_PRETTIER: false
+          VALIDATE_ENV: false
+          VALIDATE_GITLEAKS: false
+          VALIDATE_GOOGLE_JAVA_FORMAT: false
+          VALIDATE_GROOVY: false
+          VALIDATE_JAVASCRIPT_ES: false
+          VALIDATE_JAVASCRIPT_PRETTIER: false
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_JAVA: false
+          VALIDATE_BASH: false
+          VALIDATE_JSCPD: false
+          VALIDATE_JSON: false
+          VALIDATE_JSON_PRETTIER: false
+          VALIDATE_KOTLIN: false
+          VALIDATE_MARKDOWN: false
+          VALIDATE_MARKDOWN_PRETTIER: false
+          VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_PYTHON_BLACK: false
+          VALIDATE_PYTHON_PYLINT: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_ISORT: false
+          VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_RUFF: false
+          VALIDATE_PYTHON_PYINK: false
+          VALIDATE_RUBY: false
+          VALIDATE_SHELL_SHFMT: false
+          VALIDATE_TSX: false
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_TYPESCRIPT_PRETTIER: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_DOCKER_HADOLINT: false
+          VALIDATE_XML: false
+          VALIDATE_YAML_PRETTIER: false
+        uses: super-linter/super-linter@v7.4.0
+  lint-changed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'VAMobile/.nvmrc'
+      - name: Install dependencies
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+      - name: Get changed files
+        id: get-changed-apps
+        uses: ./.github/actions/get-changed-files
+      - name: lint-changed-files
+        env:
+          CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
+        run: |
+          if [ "$CHANGED_FILES" ]; then
+            yarn run lint:changed:ci; 
+          fi
   test:
-    runs-on: ubuntu-4-cores-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
@@ -54,7 +132,7 @@ jobs:
         # This should match the numbers of items in the matrix chunk array above
         run: bash ${GITHUB_WORKSPACE}/.github/scripts/setupTestMatrix.sh ${{ matrix.chunk }} 5
   bundle_android:
-    runs-on: ubuntu-4-cores-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

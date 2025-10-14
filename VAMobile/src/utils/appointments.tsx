@@ -20,15 +20,14 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { LabelTagTypeConstants } from 'components/LabelTag'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
-
-import { LabelTagTypeConstants } from '../components/LabelTag'
-import { getTestIDFromTextLines } from './accessibility'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
   getFormattedDate,
   getFormattedDateWithWeekdayForTimeZone,
   getFormattedTimeForTimeZone,
-} from './formattingUtils'
+} from 'utils/formattingUtils'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -303,74 +302,15 @@ const getListItemsForAppointments = (
   return listItems
 }
 
-const isClinicVideoAppointment = (attributes: AppointmentAttributes) => {
-  const { appointmentType } = attributes
-  return (
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
-  )
-}
-
-/**
- * Determines if an appointment is community care.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is community care appointment.
- */
-const getIsCommunityCare = (attributes: AppointmentAttributes) => {
-  return attributes.appointmentType === AppointmentTypeConstants.COMMUNITY_CARE
-}
-
-/**
- * Determines if an appointment is phone only.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is phone only.
- */
-const getIsPhoneOnly = (attributes: AppointmentAttributes) => {
-  return attributes.phoneOnly
-}
-
-/**
- * Determines if an appointment is a video appointment.
- *
- * @param attributes - type AppointmentAttributes, data attrubutes of an appointment.
- * @returns boolean - true if the appointment is a video appointment.
- */
-const getIsVideo = (attributes: AppointmentAttributes) => {
-  const { appointmentType } = attributes
-  return (
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
-    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
-  )
-}
-
-/**
- * Returns true or false if the appointment meets the travel pay criteria
- * @param attributes - type AppointmentAttributes, data attributes of an appointment
- * @returns boolean, true if the appointment meets the travel pay criteria
- */
-export const appointmentMeetsTravelPayCriteria = (attributes: AppointmentAttributes) => {
-  const { status } = attributes
-  const isPast = !isAPendingAppointment(attributes)
-  const isInPerson = !getIsVideo(attributes) && !getIsCommunityCare(attributes) && !getIsPhoneOnly(attributes)
-  const isClinicVideo = isClinicVideoAppointment(attributes)
-  const isBooked = status === AppointmentStatusConstants.BOOKED
-  return isPast && isBooked && (isInPerson || isClinicVideo)
-}
-
 /**
  * Returns true or false if the appointment is eligible for travel pay
  * @param attributes - type AppointmentAttributes, data attributes of an appointment
  * @returns boolean, true if the appointment is eligible for travel pay
  */
 export const isEligibleForTravelPay = (attributes: AppointmentAttributes) => {
-  const { travelPayClaim } = attributes
-  // if the claim data is not successful or the claim has already been filed, then the appointment is not eligible for travel pay
-  const hasNoClaim = !!travelPayClaim?.metadata.success && !travelPayClaim?.claim
-  return appointmentMeetsTravelPayCriteria(attributes) && hasNoClaim
+  const { travelPayClaim, travelPayEligible } = attributes
+  // if the claim has already been filed, then the appointment is not eligible for travel pay
+  return travelPayEligible && !travelPayClaim?.claim
 }
 
 /**
@@ -502,11 +442,12 @@ export const getTextLinesForAppointmentListItem = (
       getTextLine(t('appointmentList.requestType', { type }), tinyMarginBetween),
     ]
   } else {
+    const travelPayTag = includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween)
     result = [
       getDate(startDateUtc, timeZone),
       getTime(startDateUtc, timeZone, tinyMarginBetween),
-      includeTravelClaims && getTravelPay(attributes, t, condensedMarginBetween),
-      getStatus(isPending, attributes.status, t, condensedMarginBetween),
+      travelPayTag,
+      !travelPayTag && getStatus(isPending, attributes.status, t, condensedMarginBetween),
       getTextLine(careText, tinyMarginBetween),
       getTextLine(healthcareProvider, tinyMarginBetween),
       getModality(appointmentType, phoneOnly, location, theme, t),
@@ -592,7 +533,7 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
 
   return {
     startDate: threeMonthsEarlier.startOf('day').toISO(),
-    endDate: todaysDate.minus({ days: 1 }).endOf('day').toISO(),
+    endDate: todaysDate.endOf('day').toISO(),
   }
 }
 
@@ -651,4 +592,34 @@ export const AppointmentDetailsSubTypeConstants: {
   Canceled: 'Canceled',
   CanceledAndPending: 'CanceledAndPending',
   PastPending: 'PastPending',
+}
+
+/**
+ * Filters appointments based on logic from web for upcoming and past appointments.
+ * - Upcoming:
+ *   - If it is a video appointment, show it in upcoming up to 4 hours in the past
+ *   - If it is not a video appointment, show it in upcoming up to 1 hour in the past
+ * - Past:
+ *   - If it is a video appointment, show it in past if it started more than 4 hours ago
+ *   - If it is not a video appointment, show it in past
+ */
+export const filterAppointments = (
+  appointments?: AppointmentsList,
+  isPast: boolean = false,
+): AppointmentsList | undefined => {
+  if (!appointments) {
+    return undefined
+  }
+  const todaysDate = DateTime.local()
+  const fourHoursAgo = todaysDate.minus({ hours: 4 }).valueOf()
+  const oneHourAgo = todaysDate.minus({ hours: 1 }).valueOf()
+  // If, by chance appointments is not undefined but is not an array, return undefined
+  return appointments.filter?.((appointment) => {
+    const startDate = DateTime.fromISO(appointment.attributes.startDateLocal).valueOf()
+
+    // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
+    const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
+    const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
+    return isPast ? startDate <= filterDateTime : startDate > filterDateTime
+  })
 }

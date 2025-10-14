@@ -10,7 +10,6 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
-import { featureEnabled } from 'utils/remoteConfig'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -28,7 +27,7 @@ export const WhatsNew = () => {
   //@ts-ignore
   const body = t(BODY_PREFIX)
 
-  const displayWN = featureEnabled('whatsNewUI') && localVersion !== skippedVersion && body !== BODY_PREFIX
+  const displayWN = localVersion !== skippedVersion && body !== BODY_PREFIX
 
   useEffect(() => {
     async function checkLocalVersion() {

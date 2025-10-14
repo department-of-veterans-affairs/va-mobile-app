@@ -4,6 +4,8 @@ import { TFunction } from 'i18next'
 import { $Dictionary } from 'i18next/typescript/helpers'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 
+import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
+
 /**
  * Returns the formatted phone number
  *
@@ -86,7 +88,20 @@ export const getFormattedMessageTime = (dateTime: string): string => {
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
 export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string): string => {
-  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
+  let formattedTime = getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, {
+    timeZoneName: 'short',
+  })
+
+  // Specific non-location timezones are currently unavailable in DateTime
+  // and formatting will fall back to GMT timezones (e.g. GMT+8).
+  // This is a workaround to replace them with more user friendly timezone abbreviations.
+  if (formattedTime.includes(GMTPrefix)) {
+    for (const { pattern, value } of GMTTimezones.values()) {
+      formattedTime = formattedTime.replace(pattern, value)
+    }
+  }
+
+  return formattedTime
 }
 
 /**
@@ -257,6 +272,17 @@ export const camelToIndividualWords = (originalStr: string): string => {
   return originalStr.replace(/([A-Z])/g, ' $1')
 }
 
+/**
+ * Returns original string formatted in camel case from snake case input
+ *
+ * @param originalStr - snake case string split by underscores
+ *
+ * @returns original string in camel case
+ */
+export const snakeToCamelCase = (originalStr: string): string => {
+  return originalStr.toLowerCase().replace(/_([a-z])/g, (_, char) => char.toUpperCase())
+}
+
 /**s
  * Returns a luxon DateTime object from an ISO 8601 string
  *
@@ -292,7 +318,6 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
  * Converts 1234567890 to 123-456-7890
  * @param phoneNumber - string that has the phone number
  */
-
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
   return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
 }
@@ -399,4 +424,27 @@ export const formatDateTimeReadable = (dateTime?: DateTime | null): string => {
     return ''
   }
   return dateTime.toFormat('EEEE, fff')
+}
+
+/**
+ * Returns the date formatted in the format MMM yyyy
+ *
+ * @param date - DateTime object representing the date to format
+ *
+ * @returns date string formatted as MMM yyyy (e.g. "Jan 2025")
+ */
+export const formatDateMMMyyyy = (date: DateTime): string => {
+  return getFormattedDate(date.toISO(), 'MMM yyyy')
+}
+
+/**
+ * Returns the date range formatted in the format MMM yyyy
+ *
+ * @param startDate - DateTime object representing the start of the date range
+ * @param endDate - DateTime object representing the end of the date range
+ *
+ * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
+ */
+export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
+  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
 }

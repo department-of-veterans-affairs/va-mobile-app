@@ -3,15 +3,14 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { Asset, ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 
 import { ClaimAttributesData, ClaimEventData, FILE_REQUEST_STATUS, FILE_REQUEST_TYPE } from 'api/types'
 import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { DISABILITY_COMPENSATION_CLAIM_TYPE_CODES, MAX_NUM_PHOTOS } from 'constants/claims'
-
-import { logAnalyticsEvent } from './analytics'
+import { logAnalyticsEvent } from 'utils/analytics'
+import { ActionSheetProps } from 'utils/hooks'
 
 /** function that determines if a request file has been uploaded or received for a claim's event*/
 export const hasUploadedOrReceived = (event: ClaimEventData): boolean => {
@@ -167,7 +166,7 @@ export const postCameraLaunchCallback = (
  **/
 export const onAddPhotos = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+  showActionSheetWithOptions: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
@@ -284,4 +283,12 @@ export const getIndicatorValue = (number: number, useCheckMark: boolean): ReactE
  */
 export function isDisabilityCompensationClaim(claimTypeCode: string) {
   return DISABILITY_COMPENSATION_CLAIM_TYPE_CODES.includes(claimTypeCode)
+}
+
+/**
+ * Evaluates the disability rating response for existence including the 0 value
+ * @param rating - disability rating value
+ */
+export function isValidDisabilityRating(rating: number | undefined) {
+  return rating === 0 || !!rating
 }

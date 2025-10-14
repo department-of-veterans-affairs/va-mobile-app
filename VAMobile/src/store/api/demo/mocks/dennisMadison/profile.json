@@ -1,0 +1,90 @@
+{
+  "/v0/military-service-history": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "militaryInformation",
+      "attributes": {
+        "serviceHistory": [
+          {
+            "branchOfService": "United States Marine Corps",
+            "beginDate": "1998-09-01",
+            "endDate": "2000-01-01",
+            "formattedBeginDate": "September 01, 1998",
+            "formattedEndDate": "January 01, 2000",
+            "characterOfDischarge": "Honorable",
+            "honorableServiceIndicator": "Y"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/letters": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "letters",
+      "attributes": {
+        "letters": [
+          {
+            "name": "Commissary Letter",
+            "letterType": "commissary"
+          },
+          {
+            "name": "Proof of Service Letter",
+            "letterType": "proof_of_service"
+          },
+          {
+            "name": "Service Verification Letter",
+            "letterType": "service_verification"
+          },
+          {
+            "name": "Civil Service Preference Letter",
+            "letterType": "civil_service"
+          },
+          {
+            "name": "Benefit Summary and Service Verification Letter",
+            "letterType": "benefit_summary"
+          },
+          {
+            "name": "Benefit Verification Letter",
+            "letterType": "benefit_verification"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/payment-information/benefits": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "paymentInformation",
+      "attributes": {
+        "accountControl": {
+          "canUpdateAddress": false,
+          "corpAvailIndicator": true,
+          "corpRecFoundIndicator": false,
+          "hasNoBdnPaymentsIndicator": true,
+          "identityIndicator": true,
+          "isCompetentIndicator": true,
+          "indexIndicator": true,
+          "noFiduciaryAssignedIndicator": true,
+          "notDeceasedIndicator": true,
+          "canUpdatePayment": true
+        },
+        "paymentAccount": {
+          "accountType": null,
+          "financialInstitutionName": null,
+          "accountNumber": null,
+          "financialInstitutionRoutingNumber": null
+        }
+      }
+    }
+  },
+  "/v0/vet_verification_status": {
+    "data": {
+      "id": "",
+      "type": "veteran_status_confirmations",
+      "attributes": {
+        "veteranStatus": "confirmed"
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal, View, ViewStyle } from 'react-native'
 
@@ -7,10 +7,9 @@ import { useNavigation } from '@react-navigation/native'
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { VAScrollView, WaygateWrapper } from 'components'
+import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import { NAMESPACE } from 'constants/namespaces'
-import { useDestructiveActionSheet, useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
+import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -65,31 +64,42 @@ export const LargePanel: FC<LargePanelProps> = ({
   removeInsets,
   hideModal,
 }) => {
+  const [showScrollView, setShowScrollView] = useState(false)
   const navigation = useNavigation()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
 
+  // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
+  // https://github.com/facebook/react-native/issues/48822
+  useEffect(() => {
+    if (!hideModal) {
+      const timeout = setTimeout(() => setShowScrollView(true), 50)
+      return () => clearTimeout(timeout)
+    } else {
+      setShowScrollView(false)
+    }
+  }, [hideModal])
+
   const leftTitleButtonPress = () => {
-    confirmAlert({
-      title: '',
-      message,
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('cancel'),
-          onPress: () => {},
-        },
-        {
-          text: t('close'),
-          onPress: () => {
+    const options = [t('close'), t('cancel')]
+    confirmAlert(
+      {
+        options,
+        title: '',
+        message,
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.goBack()
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
     return
   }
 
@@ -133,20 +143,22 @@ export const LargePanel: FC<LargePanelProps> = ({
 
   return (
     // Modal to ensure keyboard navigation is confined to focusable elements within panel
-    <Modal visible={!hideModal} transparent={true}>
+    <Modal visible={!hideModal} animationType="slide" transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
-        <VAScrollView
-          testID={testID}
-          removeInsets={removeInsets}
-          contentContainerStyle={removeInsets ? containerStyle : undefined}>
-          <WaygateWrapper>
-            {children}
-            {footerButtonText && onFooterButtonPress && (
-              <Button label={footerButtonText} onPress={onFooterButtonPress} />
-            )}
-          </WaygateWrapper>
-        </VAScrollView>
+        {showScrollView && (
+          <VAScrollView
+            testID={testID}
+            removeInsets={removeInsets}
+            contentContainerStyle={removeInsets ? containerStyle : undefined}>
+            <WaygateWrapper>
+              {children}
+              {footerButtonText && onFooterButtonPress && (
+                <Button label={footerButtonText} onPress={onFooterButtonPress} />
+              )}
+            </WaygateWrapper>
+          </VAScrollView>
+        )}
       </View>
     </Modal>
   )

@@ -1,0 +1,27 @@
+import HooksInfo from '../../../src/components/HooksInfo'
+
+export const exampleString = `useBeforeNavBackListener(navigation, (e) => {
+  if (imagesList?.length === 0 || filesUploadedSuccess) {
+    return
+  }
+  e.preventDefault()
+  confirmAlert({
+    title: t('fileUpload.discard.confirm.title.photos'),
+    message: t('fileUpload.discard.confirm.message.photos'),
+    cancelButtonIndex: 0,
+    destructiveButtonIndex: 1,
+    buttons: [
+      {
+        text: t('fileUpload.continueUpload'),
+      },
+      {
+        text: t('fileUpload.cancelUpload'),
+        onPress: () => {
+          navigation.dispatch(e.data.action)
+        },
+      },
+    ],
+  })
+})`
+
+<HooksInfo componentName="useBeforeNavBackListener" example={exampleString}/>

@@ -6,12 +6,18 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { colors } from '@department-of-veterans-affairs/mobile-tokens'
-import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
 
-import { CategoryTypeFields, CategoryTypes, SecureMessagingFolderList, SecureMessagingMessageList } from 'api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  SecureMessagingCareSystemDataList,
+  SecureMessagingFolderList,
+  SecureMessagingMessageList,
+} from 'api/types'
 import { Box, InlineTextWithIconsProps, LinkWithAnalytics, MessageListItemObj, PickerItem, TextView } from 'components'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { Events } from 'constants/analytics'
 import { EMAIL_REGEX_EXP, MAIL_TO_REGEX_EXP, PHONE_REGEX_EXP, URL2_REGEX_EXP, URL_REGEX_EXP } from 'constants/common'
 import {
@@ -24,19 +30,53 @@ import {
 } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import theme from 'styles/themes/standardTheme'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
+import { generateTestIDForInlineTextIconList, isErrorObject } from 'utils/common'
 import {
   getFormattedMessageTime,
   getNumberAccessibilityLabelFromString,
   getNumbersFromString,
   stringToTitleCase,
 } from 'utils/formattingUtils'
-
-import Unread from '../components/VAIcon/svgs/Unread.svg'
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
-import { generateTestIDForInlineTextIconList, isErrorObject } from './common'
-import { imageDocumentResponseType, useDestructiveActionSheetProps } from './hooks'
+import { ActionSheetProps, imageDocumentResponseType } from 'utils/hooks'
 
 const MAX_SUBJECT_LENGTH = 50
+
+export type RecentRecipient = {
+  label: string
+  value?: string
+  date: string
+}
+
+/**
+ * Returns recent recipients based on the SecureMessagingMessageList data
+ * Modeled after this branch from sm team: https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10896/files
+ * might want to move this to the backend
+ *
+ * @param data - SecureMessagingMessageList data
+ */
+export const getRecentRecipients = (data: SecureMessagingMessageList) => {
+  const recentList: Record<string, RecentRecipient> = {}
+  _.each(data, (sentMessage) => {
+    const currentRecipientId = sentMessage?.attributes?.recipientId
+    const recentRecipient: RecentRecipient = {
+      label: sentMessage?.attributes?.recipientName,
+      value: String(sentMessage?.attributes?.recipientId),
+      date: sentMessage?.attributes?.sentDate,
+    }
+    if (currentRecipientId) {
+      if (!recentList[currentRecipientId]) {
+        recentList[currentRecipientId] = recentRecipient
+      } else {
+        if (new Date(recentRecipient.date) > new Date(recentList[currentRecipientId].date)) {
+          recentList[currentRecipientId] = recentRecipient
+        }
+      }
+    }
+  })
+
+  return _.values(recentList)
+}
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -363,7 +403,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  */
 export const onAddFileAttachments = (
   t: TFunction,
-  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i?: number) => void | Promise<void>) => void,
+  showActionSheetWithOptions: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   setError: (error: string) => void,
   setErrorA11y: (errorA11y: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
@@ -447,31 +487,33 @@ export const getfolderName = (id: string, folders: SecureMessagingFolderList): s
 /**
  * Checks if the message has attachments before saving a draft and displays a message to the
  * user letting them know that the attachments wouldn't be saved with the draft
- * @param alert - Alert from useDestructiveActionSheet() hook
+ * @param alert - Alert from useShowActionSheet() hook
  * @param attachmentsList - List of attachments
- * @param t - Traslation function
+ * @param t - Translation function
  * @param dispatchSaveDraft - Dispatch save draft callback
  */
 export const saveDraftWithAttachmentAlert = (
-  alert: (props: useDestructiveActionSheetProps) => void,
+  alert: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   attachmentsList: Array<imageDocumentResponseType>,
   t: TFunction,
   dispatchSaveDraft: () => void,
 ) => {
   if (attachmentsList.length) {
-    alert({
-      title: t('secureMessaging.draft.cantSaveAttachments'),
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('secureMessaging.saveDraft'),
-          onPress: dispatchSaveDraft,
-        },
-      ],
-    })
+    const options = [t('secureMessaging.saveDraft'), t('keepEditing')]
+    alert(
+      {
+        options,
+        title: t('secureMessaging.draft.cantSaveAttachments'),
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            dispatchSaveDraft()
+            break
+        }
+      },
+    )
   } else {
     dispatchSaveDraft()
   }
@@ -656,4 +698,13 @@ export const getLinkifiedText = (body: string, t: TFunction, isPortrait: boolean
       {textReconstructedBody}
     </Box>
   )
+}
+
+export const getCareSystemPickerOptions = (careSystems: SecureMessagingCareSystemDataList): Array<PickerItem> => {
+  return careSystems.map((careSystem) => {
+    return {
+      label: careSystem.healthCareSystemName,
+      value: careSystem.stationNumber,
+    }
+  })
 }

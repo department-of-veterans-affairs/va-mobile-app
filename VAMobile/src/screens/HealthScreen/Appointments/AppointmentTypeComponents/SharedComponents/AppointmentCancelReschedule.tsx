@@ -22,7 +22,8 @@ import {
   getAppointmentAnalyticsStatus,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useDestructiveActionSheet, useDestructiveActionSheetProps, useTheme } from 'utils/hooks'
+import { ActionSheetProps, useShowActionSheet, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_VA_SCHEDULING, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -43,7 +44,7 @@ const cancelButton = (
   t: TFunction,
   theme: VATheme,
   snackbar: ReturnType<typeof useSnackbar>,
-  confirmAlert: (props: useDestructiveActionSheetProps) => void,
+  confirmAlert: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   cancelId?: string,
   cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>,
 ) => {
@@ -93,20 +94,25 @@ const cancelButton = (
         'start',
       ),
     )
-    confirmAlert({
-      title: pendingAppointment ? t('appointments.cancelRequest') : t('appointments.cancelThisAppointment'),
-      cancelButtonIndex: 1,
-      destructiveButtonIndex: 0,
-      buttons: [
-        {
-          text: pendingAppointment ? t('cancelRequest') : t('appointments.cancelAppointment'),
-          onPress: onPress,
-        },
-        {
-          text: pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment'),
-        },
-      ],
-    })
+
+    const keepText = pendingAppointment ? t('keepRequest') : t('appointments.keepAppointment')
+    const cancelText = pendingAppointment ? t('cancelRequest') : t('appointments.cancelAppointment')
+    const options = [cancelText, keepText]
+    confirmAlert(
+      {
+        options,
+        title: pendingAppointment ? t('appointments.cancelRequest') : t('appointments.cancelThisAppointment'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            onPress()
+            break
+        }
+      },
+    )
   }
 
   return (
@@ -130,6 +136,7 @@ const phoneFacilitySchedulingLink = (
   useFacilityLocatorFallback: boolean,
   isGFEAtlasHomeVideo: boolean,
   location: AppointmentLocation | undefined,
+  showScheduleLink: boolean,
   t: TFunction,
   theme: VATheme,
 ) => {
@@ -151,7 +158,7 @@ const phoneFacilitySchedulingLink = (
           a11yHint={t('upcomingAppointmentDetails.findYourVALocation.a11yHint')}
         />
       ) : undefined}
-      {!useFacilityLocatorFallback && (
+      {featureEnabled('rescheduleLink') && showScheduleLink && !useFacilityLocatorFallback && (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}
@@ -271,8 +278,8 @@ function AppointmentCancelReschedule({
   const snackbar = useSnackbar()
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const confirmAlert = useDestructiveActionSheet()
-  const { location, cancelId } = attributes || ({} as AppointmentAttributes)
+  const confirmAlert = useShowActionSheet()
+  const { location, cancelId, showScheduleLink } = attributes || ({} as AppointmentAttributes)
 
   const header = getHeader(subType, t)
   const body = getBody(cancelId, location, subType, type, t)
@@ -320,8 +327,17 @@ function AppointmentCancelReschedule({
         {body}
       </TextView>
       {!isClaimExam ? (
-        phoneFacilitySchedulingLink(useFacilityFallback, isAtlastGFEHomeVideoAppt, location, t, theme)
-      ) : subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
+        phoneFacilitySchedulingLink(
+          useFacilityFallback,
+          isAtlastGFEHomeVideoAppt,
+          location,
+          !!showScheduleLink,
+          t,
+          theme,
+        )
+      ) : featureEnabled('rescheduleLink') &&
+        showScheduleLink &&
+        subType === AppointmentDetailsSubTypeConstants.CanceledAndPending ? (
         <LinkWithAnalytics
           type="url"
           url={LINK_URL_VA_SCHEDULING}

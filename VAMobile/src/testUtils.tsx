@@ -8,8 +8,9 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
 import { AnyAction, Store, configureStore } from '@reduxjs/toolkit'
-import { QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult } from '@tanstack/react-query'
 import { render as rtlRender } from '@testing-library/react-native'
+import { renderHook as rtlRenderHook } from '@testing-library/react-native/build/render-hook'
 import path from 'path'
 import { ThemeProvider } from 'styled-components'
 
@@ -175,16 +176,18 @@ export type RenderParams = {
 
 //@ts-ignore
 function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  })
+
   //@ts-ignore
   function Wrapper({ children }) {
     const store = mockStore(preloadedState)
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
-      },
-    })
+
     queryClient.setQueryData(authorizedServicesKeys.authorizedServices, {
       appeals: true,
       appointments: true,
@@ -238,11 +241,62 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       </QueryClientProvider>
     )
   }
-  return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
+
+  // Return queryClient to validate client state changes not present in the ui
+  return { queryClient, screen: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
+}
+
+/**
+ * Used to unit test query hooks.
+ * @param useHook - The query hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `result`: The result of the hook
+ */
+const renderQuery = <T,>(useHook: () => T) => {
+  const queryClient = new QueryClient()
+  const wrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
+      </QueryClientProvider>
+    )
+  }
+
+  const { result } = rtlRenderHook(useHook, { wrapper })
+
+  return { queryClient, result }
+}
+
+/**
+ * Used to unit test mutation hooks
+ * @param useHook - The mutation hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `mutate`: Function to trigger the mutation
+ * - `result`: The result of the hook
+ */
+const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) => {
+  const queryClient = new QueryClient()
+  const wrapper = ({ children }: { children: Element }) => (
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
+    </QueryClientProvider>
+  )
+  const { result } = rtlRenderHook(useHook, { wrapper })
+
+  const mutate = async (props: any) => {
+    // Need to wrap in a try/catch as this will throw an error when testing error state
+    try {
+      await result.current.mutateAsync(props)
+    } catch {}
+  }
+
+  return { queryClient, mutate, result }
 }
 
 // re-export everything
 export * from '@testing-library/react-native'
 // override render method
-export { render }
+export { render, renderQuery, renderMutation }
 export * from 'jest-when'

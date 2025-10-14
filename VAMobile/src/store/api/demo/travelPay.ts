@@ -1,6 +1,19 @@
-import { DateTime } from 'luxon'
+import { DateTime, Interval } from 'luxon'
 
-import { SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
+import {
+  GetTravelPayClaimsResponse,
+  SubmitSMOCTravelPayClaimParameters,
+  SubmitTravelPayClaimResponse,
+  TravelPayClaimData,
+} from 'api/types'
+import { Params } from 'store/api'
+import { DemoStore } from 'store/api/demo/store'
+
+type TravelPayClaimsData = {
+  '/v0/travel-pay/claims': GetTravelPayClaimsResponse
+}
+export type TravelPayDemoStore = TravelPayClaimsData
+export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
   data: {
@@ -22,7 +35,16 @@ const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
 
 const createMockClaimResponse = (params: SubmitSMOCTravelPayClaimParameters): SubmitTravelPayClaimResponse => {
   const { appointmentDateTime, facilityStationNumber } = params
+
   const mockClaimResponse = { ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE }
+  if (facilityStationNumber === '983GC') {
+    mockClaimResponse.data.id = 'mock_id_partial_success'
+    mockClaimResponse.data.attributes.id = 'mock_id_partial_success'
+    mockClaimResponse.data.attributes.claimStatus = 'Saved'
+    mockClaimResponse.data.attributes.facilityId = facilityStationNumber
+    mockClaimResponse.data.attributes.facilityName = 'Fort Collins VA Clinic'
+    mockClaimResponse.data.attributes.totalCostRequested = undefined
+  }
   mockClaimResponse.data.attributes.appointmentDateTime = appointmentDateTime
   mockClaimResponse.data.attributes.facilityId = facilityStationNumber
   const mockDate = DateTime.fromISO(appointmentDateTime).toISO({ includeOffset: false })
@@ -33,8 +55,29 @@ const createMockClaimResponse = (params: SubmitSMOCTravelPayClaimParameters): Su
   return mockClaimResponse
 }
 
-export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse
-
 export const submitAppointmentClaim = (params: SubmitSMOCTravelPayClaimParameters): SubmitTravelPayClaimResponse => {
   return createMockClaimResponse(params)
+}
+
+export const getTravelPayClaims = (store: DemoStore, params: Params): GetTravelPayClaimsResponse | undefined => {
+  const endDate = params.end_date
+  const startDate = params.start_date as string
+  const pageNumber = (params.page_number as unknown as number) || 1
+  const pageSize = 25 // mock a page size to test pagination
+
+  if (endDate && typeof endDate === 'string' && startDate && typeof startDate === 'string') {
+    const travelPayClaims = JSON.parse(JSON.stringify(store['/v0/travel-pay/claims']))
+    const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
+    const filteredClaimsData = travelPayClaims.data.filter((claim: TravelPayClaimData) => {
+      const claimDate = DateTime.fromISO(claim.attributes.appointmentDateTime)
+      return interval.contains(claimDate)
+    })
+
+    travelPayClaims.meta.pageNumber = pageNumber
+    travelPayClaims.data = [...filteredClaimsData.slice(pageSize * (pageNumber - 1), pageSize * pageNumber)]
+    travelPayClaims.meta.totalRecordCount = filteredClaimsData.length
+    return travelPayClaims
+  } else {
+    return undefined
+  }
 }

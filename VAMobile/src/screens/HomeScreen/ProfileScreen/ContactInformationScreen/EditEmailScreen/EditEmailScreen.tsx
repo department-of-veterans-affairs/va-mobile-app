@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
@@ -17,11 +18,13 @@ import {
   FullScreenSubtask,
   LoadingComponent,
 } from 'components'
+import { CONFIRM_EMAIL_ALERT_DISMISSED } from 'components/EmailConfirmationAlert'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import { updateDisplayEmailConfirmationAlert } from 'store/slices'
 import { isErrorObject } from 'utils/common'
-import { useAlert, useBeforeNavBackListener, useDestructiveActionSheet, useTheme } from 'utils/hooks'
+import { useAlert, useAppDispatch, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -31,13 +34,14 @@ type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const snackbar = useSnackbar()
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { data: contactInformation } = useContactInformation()
   const { mutate: saveEmail, isPending: savingEmail, isSuccess: emailSaved } = useSaveEmail()
   const { mutate: deleteEmail, isPending: deletingEmail, isSuccess: emailDeleted } = useDeleteEmail()
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
-  const confirmAlert = useDestructiveActionSheet()
+  const confirmAlert = useShowActionSheet()
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -60,22 +64,22 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
       return
     }
     e.preventDefault()
-    confirmAlert({
-      title: t('contactInformation.emailAddress.deleteChanges'),
-      cancelButtonIndex: 0,
-      destructiveButtonIndex: 1,
-      buttons: [
-        {
-          text: t('keepEditing'),
-        },
-        {
-          text: t('deleteChanges'),
-          onPress: () => {
+    const options = [t('deleteChanges'), t('keepEditing')]
+    confirmAlert(
+      {
+        options,
+        title: t('contactInformation.emailAddress.deleteChanges'),
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
             navigation.dispatch(e.data.action)
-          },
-        },
-      ],
-    })
+            break
+        }
+      },
+    )
   })
 
   const noPageChanges = (): boolean => {
@@ -94,6 +98,8 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
 
     const mutateOptions = {
       onSuccess: () => {
+        AsyncStorage.setItem(CONFIRM_EMAIL_ALERT_DISMISSED, 'true')
+        dispatch(updateDisplayEmailConfirmationAlert(false))
         snackbar.show(t('contactInformation.emailAddress.saved'))
       },
       onError: (error: unknown) => {

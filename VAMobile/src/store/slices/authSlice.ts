@@ -24,6 +24,8 @@ import {
   LOGIN_PROMPT_TYPE,
   LoginServiceTypeConstants,
 } from 'store/api/types'
+import { dispatchSetAnalyticsLogin } from 'store/slices'
+import { updateDemoMode } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { KEYCHAIN_DEVICE_SECRET_KEY, storeDeviceSecret } from 'utils/auth'
 import { isErrorObject } from 'utils/common'
@@ -31,9 +33,6 @@ import getEnv from 'utils/env'
 import { pkceAuthorizeParams } from 'utils/oauth'
 import { isAndroid } from 'utils/platform'
 import { clearCookies } from 'utils/rnAuthSesson'
-
-import { dispatchSetAnalyticsLogin } from './analyticsSlice'
-import { updateDemoMode } from './demoSlice'
 
 const {
   AUTH_SIS_ENDPOINT,
@@ -594,7 +593,7 @@ export const logout = (): AppThunk => async (dispatch, getState) => {
   const { demoMode } = getState().demo
 
   if (demoMode) {
-    dispatch(updateDemoMode(false, true))
+    await dispatch(updateDemoMode(false, null, true))
   }
 
   try {
@@ -719,7 +718,6 @@ export const handleTokenCallbackUrl =
   (url: string): AppThunk =>
   async (dispatch, getState) => {
     try {
-      await logAnalyticsEvent(Events.vama_auth_completed())
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)

@@ -2,50 +2,44 @@ import React from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { AppointmentData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { TravelPayError } from 'constants/travelPay'
-import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
-
-import { HealthStackParamList } from '../HealthStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import {
   AddressScreen,
   BeneficiaryTravelAgreement,
   BurdenStatement,
-  ErrorScreen,
   InterstitialScreen,
   MileageScreen,
   ReviewClaimScreen,
+  SMOCErrorScreen,
   SubmitSuccessScreen,
   TravelClaimHelpScreen,
   VehicleScreen,
-} from './SubmitTravelPayFlowSteps'
+} from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps'
+import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   InterstitialScreen: undefined
   MileageScreen: undefined
   VehicleScreen: undefined
   AddressScreen: undefined
-  ReviewClaimScreen: {
-    appointment: AppointmentData
-    appointmentRouteKey: string
-  }
+  ReviewClaimScreen: undefined
   SubmitSuccessScreen: {
     appointmentDateTime: string
     facilityName: string
+    status: string
   }
-  ErrorScreen: {
+  SMOCErrorScreen: {
     error: TravelPayError
   }
   TravelClaimHelpScreen: undefined
 }
 
 export type TravelPayStack = WebviewStackParams & {
-  FlowSteps: {
-    appointment: AppointmentData
-    appointmentRouteKey: string
-  }
+  FlowSteps: undefined
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
   TravelClaimHelpScreen: undefined
@@ -56,10 +50,7 @@ type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 
 const TravelPayStack = createStackNavigator<TravelPayStack>()
 const TravelPayMultiStepStack = createStackNavigator<SubmitTravelPayFlowModalStackParamList>()
 
-const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => {
-  const { appointment, appointmentRouteKey } = route.params
-  const { attributes } = appointment
-
+const FlowSteps = () => {
   return (
     <MultiStepSubtask<SubmitTravelPayFlowModalStackParamList>
       stackNavigator={TravelPayMultiStepStack}
@@ -72,19 +63,17 @@ const FlowSteps = ({ route }: StackScreenProps<TravelPayStack, 'FlowSteps'>) => 
       <TravelPayMultiStepStack.Screen key="MileageScreen" name="MileageScreen" component={MileageScreen} />
       <TravelPayMultiStepStack.Screen key="VehicleScreen" name="VehicleScreen" component={VehicleScreen} />
       <TravelPayMultiStepStack.Screen key="AddressScreen" name="AddressScreen" component={AddressScreen} />
-      <TravelPayMultiStepStack.Screen
-        key="ReviewClaimScreen"
-        name="ReviewClaimScreen"
-        component={ReviewClaimScreen}
-        initialParams={{ appointment, appointmentRouteKey }}
-      />
+      <TravelPayMultiStepStack.Screen key="ReviewClaimScreen" name="ReviewClaimScreen" component={ReviewClaimScreen} />
       <TravelPayMultiStepStack.Screen
         key="SubmitSuccessScreen"
         name="SubmitSuccessScreen"
         component={SubmitSuccessScreen}
-        initialParams={{ appointmentDateTime: attributes.startDateUtc, facilityName: attributes.location.name }}
+        options={{
+          // Disable gesture navigation to prevent the user from going back to the previous screen
+          gestureEnabled: false,
+        }}
       />
-      <TravelPayMultiStepStack.Screen key="ErrorScreen" name="ErrorScreen" component={ErrorScreen} />
+      <TravelPayMultiStepStack.Screen key="SMOCErrorScreen" name="SMOCErrorScreen" component={SMOCErrorScreen} />
     </MultiStepSubtask>
   )
 }
@@ -93,31 +82,29 @@ function SubmitMileageTravelPayScreen({ route }: SubmitMileageTravelPayScreenPro
   const { appointment, appointmentRouteKey } = route.params
 
   return (
-    <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
-      <TravelPayStack.Screen
-        name="FlowSteps"
-        component={FlowSteps}
-        initialParams={{ appointment, appointmentRouteKey }}
-      />
-      <TravelPayStack.Screen
-        key={'TravelClaimHelpScreen'}
-        name="TravelClaimHelpScreen"
-        component={TravelClaimHelpScreen}
-        options={LARGE_PANEL_OPTIONS}
-      />
-      <TravelPayStack.Screen
-        key={'BurdenStatementScreen'}
-        name="BurdenStatementScreen"
-        component={BurdenStatement}
-        options={LARGE_PANEL_OPTIONS}
-      />
-      <TravelPayStack.Screen
-        key={'BeneficiaryTravelAgreementScreen'}
-        name="BeneficiaryTravelAgreementScreen"
-        component={BeneficiaryTravelAgreement}
-        options={LARGE_PANEL_OPTIONS}
-      />
-    </TravelPayStack.Navigator>
+    <TravelPayContextProvider appointment={appointment} appointmentRouteKey={appointmentRouteKey}>
+      <TravelPayStack.Navigator screenOptions={{ headerShown: false }} initialRouteName="FlowSteps">
+        <TravelPayStack.Screen name="FlowSteps" component={FlowSteps} />
+        <TravelPayStack.Screen
+          key={'TravelClaimHelpScreen'}
+          name="TravelClaimHelpScreen"
+          component={TravelClaimHelpScreen}
+          options={LARGE_PANEL_OPTIONS}
+        />
+        <TravelPayStack.Screen
+          key={'BurdenStatementScreen'}
+          name="BurdenStatementScreen"
+          component={BurdenStatement}
+          options={LARGE_PANEL_OPTIONS}
+        />
+        <TravelPayStack.Screen
+          key={'BeneficiaryTravelAgreementScreen'}
+          name="BeneficiaryTravelAgreementScreen"
+          component={BeneficiaryTravelAgreement}
+          options={LARGE_PANEL_OPTIONS}
+        />
+      </TravelPayStack.Navigator>
+    </TravelPayContextProvider>
   )
 }
 

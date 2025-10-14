@@ -1,7 +1,4 @@
-
-#
 # Checks if QA approvals are necessary, and if so runs the associated action when a new review is added
-#
 
 name: '[Utils] QA required approval'
 
@@ -47,13 +44,13 @@ jobs:
 
           echo "Approvers: $approvals"  
           echo "required approval count: $required_approval_count"
- 
+
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
             then
-              if [[ $(jq '[.[] | select(. | IN("timwright12", "dumathane", "jmarchi", "keli13", "dftony", "AdryienH", "matthew-df"))] | length' <<< "$approvals") -gt 0 ]]
+              if [[ $(jq '[.[] | select(. | IN("dumathane", "jmarchi", "keli13", "dftony", "AdryienH", "matthew-df"))] | length' <<< "$approvals") -gt 0 ]]
                 then
                 echo 'This PR has at least one engineer approval. Now checking for QA approval...'
-                if [[ $(jq '[.[] | select(. | IN("timwright12", "digitalken", "SKMOstudio"))] | length' <<< "$approvals") -gt 0 ]]
+                if [[ $(jq '[.[] | select(. | IN("digitalken", "SKMOstudio"))] | length' <<< "$approvals") -gt 0 ]]
                   then
                   echo 'This PR has QA and engineer approval to merge'
                   exit 0
@@ -68,4 +65,4 @@ jobs:
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
-          fi 
+          fi

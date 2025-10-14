@@ -26,7 +26,7 @@ import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { useAppDispatch, useDestructiveActionSheet, useExternalLink, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
@@ -42,27 +42,29 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const dispatchLogout = useAppDispatch()
-  const signOutAlert = useDestructiveActionSheet()
+  const signOutAlert = useShowActionSheet()
   const _logout = () => {
     dispatchLogout(logout())
   }
 
   const onShowConfirm = (): void => {
     logAnalyticsEvent(Events.vama_click(t('logout.title'), t('settings.title')))
-    signOutAlert({
-      title: t('logout.confirm.text'),
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 0,
-      buttons: [
-        {
-          text: t('cancel'),
-        },
-        {
-          text: t('logout.title'),
-          onPress: _logout,
-        },
-      ],
-    })
+    const options = [t('logout.title'), t('cancel')]
+    signOutAlert(
+      {
+        options,
+        title: t('logout.confirm.text'),
+        destructiveButtonIndex: 0,
+        cancelButtonIndex: 1,
+      },
+      (buttonIndex) => {
+        switch (buttonIndex) {
+          case 0:
+            _logout()
+            break
+        }
+      },
+    )
   }
 
   const onToggleTouchId = (): void => {
@@ -115,7 +117,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
     {
       text: t('giveFeedback'),
       a11yHintText: t('giveFeedback.a11yHint'),
-      onPress: () => navigateTo('InAppRecruitment'),
+      onPress: () => navigateTo('GiveFeedback'),
       detoxTestID: 'inAppRecruitmentID',
     },
     {
@@ -154,7 +156,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
       ) : (
         <>
           <Box mb={theme.dimensions.contentMarginBottom} flex={1}>
-            <Box mb={theme.dimensions.standardMarginBetween}>
+            <Box mb={50}>
               <SimpleList items={items} />
               {(SHOW_DEBUG_MENU || demoMode) && debugMenu()}
             </Box>

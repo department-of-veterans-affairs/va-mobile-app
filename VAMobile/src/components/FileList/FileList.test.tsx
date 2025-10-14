@@ -1,10 +1,9 @@
 import React from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
+import FileList from 'components/FileList'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import FileList from './FileList'
 
 import Mock = jest.Mock
 
@@ -15,7 +14,7 @@ jest.mock('utils/hooks', () => {
 
   return {
     ...original,
-    useDestructiveActionSheet: () => mockAlertSpy,
+    useShowActionSheet: () => mockAlertSpy,
   }
 })
 

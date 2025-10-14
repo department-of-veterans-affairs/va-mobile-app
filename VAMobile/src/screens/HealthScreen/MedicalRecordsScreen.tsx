@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { HealthStackParamList } from './HealthStackScreens'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
@@ -29,18 +30,23 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
+        {featureEnabled('labsAndTests') && (
+          <LargeNavButton
+            title={t('labsAndTests.buttonTitle')}
+            onPress={() => navigateTo('LabsAndTestsList')}
+            testID="toLabsAndTestListID"
+          />
+        )}
         <LargeNavButton
           title={t('vaVaccines.buttonTitle')}
           onPress={() => navigateTo('VaccineList')}
           testID="toVaccineListID"
         />
-        {featureEnabled('allergies') && (
-          <LargeNavButton
-            title={t('vaAllergies.buttonTitle')}
-            onPress={() => navigateTo('AllergyList')}
-            testID="toAllergyListID"
-          />
-        )}
+        <LargeNavButton
+          title={t('vaAllergies.buttonTitle')}
+          onPress={() => navigateTo('AllergyList')}
+          testID="toAllergyListID"
+        />
       </Box>
       <Box mx={gutter}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
@@ -50,8 +56,16 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
       </Box>
       <Box mx={gutter} mb={theme.dimensions.standardMarginBetween}>
         <LinkWithAnalytics
-          type="url"
-          url={LINK_URL_MHV_VA_MEDICAL_RECORDS}
+          type="custom"
+          onPress={() => {
+            logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
+            navigateTo('Webview', {
+              url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: t('webview.medicalRecords.loading'),
+              useSSO: true,
+            })
+          }}
           text={t('vaMedicalRecords.viewCompleteRecord.link')}
           a11yLabel={a11yLabelVA(t('vaMedicalRecords.viewCompleteRecord.link'))}
           testID="viewMedicalRecordsLinkID"

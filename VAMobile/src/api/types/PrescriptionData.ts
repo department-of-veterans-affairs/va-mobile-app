@@ -102,6 +102,7 @@ export type PrescriptionsGetData = {
 export type PrescriptionsGetMeta = {
   pagination: PrescriptionsPaginationData
   prescriptionStatusCount: PrescriptionStatusCountData
+  hasNonVaMeds: boolean
 }
 
 export type PrescriptionsPaginationData = {
