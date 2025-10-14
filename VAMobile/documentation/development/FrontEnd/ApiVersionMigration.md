@@ -237,15 +237,24 @@ const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEna
 - Set flipper toggle at 100%
 - Monitor for issues
 
+### Phase 4: Clean up
+
+- Remove feature toggles
+- Also enabled new API calls
+- Clean up old types
+- Remove Legacy code as needed
+- Document when the clean up was completed
+
 ## Cleanup Process
 
 ### Phase 1: Remove Feature Flags
 
 ```typescript
-// Remove conditional logic
+// The preference should be to remove the logic entirely and always call V1
+
+// Only for good reasons, Remove conditional logic
 const shouldUseV1 = true // Always use V1
 
-// Or remove the logic entirely and always call V1
 ```
 
 ### Phase 2: Type Cleanup
@@ -294,40 +303,36 @@ export type PrescriptionTrackingItem = PrescriptionTrackingItemV1
 
 ### Type Design
 
-- ✅ Use descriptive version suffixes (V0, V1)
-- ✅ Create union types for gradual migration
-- ✅ Provide backward compatibility aliases
-- ✅ Document differences between versions
+- Use descriptive version suffixes (V0, V1)
+- Create union types for gradual migration
+- Provide backward compatibility aliases
+- Document differences between versions
 
 ### Code Organization
 
-- ✅ Keep version-specific logic centralized
-- ✅ Use feature flags for runtime switching
-- ✅ Maintain clear separation between API versions
-- ✅ Document migration decisions
+- Keep version-specific logic centralized
+- Use feature flags for runtime switching
+- Maintain clear separation between API versions
+- Document migration decisions
 
 ### Testing Strategy
 
-- ✅ Test all version combinations
-- ✅ Include edge cases and error scenarios
-- ✅ Test feature flag behavior
-- ✅ Verify backward compatibility
+- Test all version combinations
+- Include edge cases and error scenarios
+- Test feature flag behavior
+- Verify backward compatibility
 
 ### Rollout Planning
 
-- ✅ Plan gradual rollout with monitoring
-- ✅ Have rollback procedures ready
-- ✅ Monitor key metrics during migration
-- ✅ Communicate changes to team
+- Plan gradual rollout with monitoring
+- Have rollback procedures ready
+- Monitor key metrics during migration
+- Communicate changes to team
 
-## References
+## Example
 
 - **Type Definitions**: `src/api/types/PrescriptionData.ts`
 - **API Implementation**: `src/api/prescriptions/requestRefills.tsx`
 - **Test Examples**: `src/api/prescriptions/requestRefills.test.tsx`
 - **Demo Logic**: `src/store/api/demo/store.ts`
 - **Component Usage**: `src/screens/HealthScreen/Pharmacy/RefillTrackingDetails/RefillTrackingDetails.tsx`
-
----
-
-*For questions or suggestions, please reach out to the API migration team or create an issue in the repository.*
