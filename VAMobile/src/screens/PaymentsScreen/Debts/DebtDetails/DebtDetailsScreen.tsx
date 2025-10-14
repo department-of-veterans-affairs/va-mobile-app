@@ -18,6 +18,7 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import ResolveDebtButton from 'screens/PaymentsScreen/Debts/ResolveDebt/ResolveDebtButton'
+import NoticeOfRightsButton from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { getDebtInfo, getDebtLetterInfo, getFilteredDebtHistory } from 'utils/debts'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
@@ -35,7 +36,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
     return (
       <AlertWithHaptics
         variant={debtInfo.variant === 'info' ? 'info' : 'warning'}
-        expandable={true}
+        expandable={false} // TODO: change to true when alert content is added
         header={t(`debts.details.alert.header.${debtInfo.i18nKey}`, {
           balance: debtInfo.balance,
           endDate: debtInfo.endDate,
@@ -183,6 +184,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
           {renderCard()}
         </Box>
         {debtHistory.length > 0 && renderDebtHistory(debtHistory)}
+        <NoticeOfRightsButton />
         {renderHelp()}
       </>
     )
