@@ -39,7 +39,7 @@ function DisputeCopayScreen({ navigation }: DisputeCopayScreenProps) {
             }}
           />
 
-          <Box mt={condensedMarginBetween}>
+          <Box>
             <LinkWithAnalytics
               type="url"
               url={LINK_URL_DISPUTE_COPAY}
