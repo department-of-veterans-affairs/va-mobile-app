@@ -106,7 +106,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
               </Box>
             }
             expandedContent={
-              <Box pb={theme.dimensions.cardPadding}>
+              <Box>
                 <Trans
                   i18nKey={'debts.payDebt.howToPay.payByPhone'}
                   components={{
@@ -146,9 +146,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
                     }
                   />
                 </Box>
-                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBodyBold">
-                  {t('debts.payDebt.mail.addressHeader')}
-                </TextView>
+                <TextView variant="MobileBodyBold">{t('debts.payDebt.mail.addressHeader')}</TextView>
                 <Box>
                   <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                     {t('debts.payDebt.mail.line1')}
