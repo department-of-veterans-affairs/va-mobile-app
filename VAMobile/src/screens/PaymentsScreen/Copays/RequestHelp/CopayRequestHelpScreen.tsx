@@ -94,9 +94,8 @@ function CopayRequestHelpScreen({ navigation }: CopayRequestHelpScreenProps) {
                 {t('copays.requestHelp.current.intro')}
               </TextView>
 
-              <Box>
+              <Box mx={condensedMarginBetween}>
                 <VABulletList
-                  paragraphSpacing
                   listOfText={
                     [
                       {
