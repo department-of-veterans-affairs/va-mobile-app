@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "lib": ["es6", "ES2019", "ESNext"],
+    "lib": ["es6", "ES2019", "ESNext", "dom"],
     "allowJs": true,
     "jsx": "react-native",
     "noEmit": true,

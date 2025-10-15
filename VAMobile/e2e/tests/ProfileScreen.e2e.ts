@@ -10,7 +10,7 @@ import { CommonE2eIdConstants, loginToDemoMode, openProfile } from './utils'
 
 export const ProfileE2eIdConstants = {
   PROFILE_TEXT: 'Profile',
-  BANNER_NAME_ID: 'Kimberly Washington',
+  BANNER_NAME_ID: 'KIMBERLY WASHINGTON',
 }
 
 beforeAll(async () => {

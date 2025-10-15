@@ -7,13 +7,12 @@ import { t } from 'i18next'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import { claim as claimData } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { claim as claimData } from '../claimData'
-import ClaimDetailsScreen from './ClaimDetailsScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -117,6 +116,7 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
+      fireEvent.press(screen.getByText(t('files')))
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
