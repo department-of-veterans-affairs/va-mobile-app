@@ -17,13 +17,13 @@ jest.mock('utils/remoteConfig', () => ({
 // Currently there is an issue with useAppDispatch being declared as undefined in useQuery.
 // Further investigation may be needed to improve unit test. For now, it is mocked and the
 // lastUpdatedTimestamp is checked for a call.
-// jest.mock('utils/hooks', () => {
-//   const original = jest.requireActual('utils/hooks')
-//   return {
-//     ...original,
-//     useAppDispatch: jest.fn().mockReturnValue(jest.fn()),
-//   }
-// })
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useAppDispatch: jest.fn().mockReturnValue(jest.fn()),
+  }
+})
 
 // Mock setLastUpdatedTimestamp to ensure it is called after a successful fetch
 jest.mock('store/slices', () => {
@@ -32,20 +32,6 @@ jest.mock('store/slices', () => {
     setLastUpdatedTimestamp: jest.fn(),
   }
 })
-
-// Mock onlineManager to ensure online functionality is maintained
-// let mockIsOnline: jest.Mock
-// jest.mock('@tanstack/react-query', () => {
-//   mockIsOnline = jest.fn().mockReturnValue(true)
-//   const original = jest.requireActual('@tanstack/react-query')
-//   return {
-//     ...original,
-//     onlineManager: {
-//       ...original.onlineManager,
-//       isOnline: mockIsOnline,
-//     },
-//   }
-// })
 
 const appointmentData = {
   data: [
@@ -61,7 +47,10 @@ context('Appointments Offline Mode', () => {
   describe('Online', () => {
     const lastUpdatedTimestamp = Date.now()
     beforeEach(() => {
-      // mockIsOnline.mockImplementation(jest.fn().mockReturnValue(true))
+      // This is here twice because getAppointments has a prefetch to get past appointments
+      when(api.get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockResolvedValueOnce(appointmentData)
       when(api.get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValueOnce(appointmentData)
@@ -88,11 +77,17 @@ context('Appointments Offline Mode', () => {
   })
 
   describe('Offline', () => {
-    beforeEach(() => {})
+    beforeEach(() => {
+      when(api.get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockRejectedValueOnce({ networkError: true })
+      when(api.get as jest.Mock)
+        .calledWith('/v0/appointments', expect.anything())
+        .mockRejectedValueOnce({ networkError: true })
+      render(<Appointments {...mockNavProps()} />, { isOnline: false })
+    })
     it('should render an empty state if there are no cached appointments', async () => {
-      render(<Appointments {...mockNavProps()} />)
       await waitFor(() => expect(screen.getByTestId('content-unavailable')).toBeTruthy())
     })
-    it('should render appointments when device goes offline if they are cached', () => {})
   })
 })

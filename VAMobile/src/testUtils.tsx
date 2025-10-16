@@ -4,11 +4,12 @@ import { I18nextProvider } from 'react-i18next'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Provider } from 'react-redux'
 
+import { useNetInfo } from '@react-native-community/netinfo'
 import { NavigationContainer } from '@react-navigation/native'
 
 import { SnackbarProvider } from '@department-of-veterans-affairs/mobile-component-library'
 import { AnyAction, Store, configureStore } from '@reduxjs/toolkit'
-import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryKey, UseMutationResult, onlineManager } from '@tanstack/react-query'
 import { render as rtlRender } from '@testing-library/react-native'
 import { renderHook as rtlRenderHook } from '@testing-library/react-native/build/render-hook'
 import path from 'path'
@@ -174,10 +175,14 @@ export type RenderParams = {
   preloadedState?: any // TODO: Update this type to Partial<RootState> and fix broken tests
   navigationProvided?: boolean
   queriesData?: QueriesData
+  isOnline?: boolean
 }
 
-//@ts-ignore
-function render(ui, { preloadedState, navigationProvided = false, queriesData, ...renderOptions }: RenderParams = {}) {
+function render(
+  //@ts-ignore
+  ui,
+  { preloadedState, navigationProvided = false, queriesData, isOnline = true, ...renderOptions }: RenderParams = {},
+) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -185,6 +190,8 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
       },
     },
   })
+  onlineManager.setOnline(isOnline)
+  ;(useNetInfo as jest.Mock).mockImplementation(jest.fn().mockReturnValue({ isConnected: isOnline }))
 
   //@ts-ignore
   function Wrapper({ children }) {
@@ -214,8 +221,8 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
     }
     if (navigationProvided) {
       return (
-        <QueryClientProvider client={queryClient}>
-          <Provider store={store}>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
             <I18nextProvider i18n={i18nReal}>
               <ThemeProvider theme={theme}>
                 <SafeAreaProvider>
@@ -223,13 +230,13 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
                 </SafeAreaProvider>
               </ThemeProvider>
             </I18nextProvider>
-          </Provider>
-        </QueryClientProvider>
+          </QueryClientProvider>
+        </Provider>
       )
     }
     return (
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
           <I18nextProvider i18n={i18nReal}>
             <NavigationContainer initialState={{ routes: [] }}>
               <ThemeProvider theme={theme}>
@@ -239,8 +246,8 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
               </ThemeProvider>
             </NavigationContainer>
           </I18nextProvider>
-        </Provider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </Provider>
     )
   }
 
