@@ -16,7 +16,7 @@ Deep linking support for both iOS and Android should already be configured. Howe
 ### iOS
 
 **An apple-app-site-association (AASA) file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
-An AASA format will follow a format like this. BundleId and TeamID can be found from the apple developer account.
+An AASA format will follow a format like this. `BundleId` and `TeamID` can be found from the apple developer account.
 
 ```json
 {
@@ -46,7 +46,7 @@ As a more specific example:
   "applinks": {
     "details": [
       {
-        "appIDs": ["123.gov.va.vamobileapp"],
+        "appIDs": ["W2VK9K4NG2.gov.va.vamobileapp"],
         "components": [
           {
             "/": "/my-health/appointments/past",
@@ -57,7 +57,7 @@ As a more specific example:
     ]
   },
   "webcredentials": {
-    "apps": [ "123.gov.va.vamobileapp" ]
+    "apps": [ "W2VK9K4NG2.gov.va.vamobileapp" ]
   }
 }
 ```
@@ -78,7 +78,7 @@ In XCode, within the “Signing & Capabilities” tab, there should be a section
 
 Code snippet added in project’s “AppDelegate.mm”
 
-```objective-c
+```objectivec
 #import <React/RCTLinkingManager.h>
 
 - (BOOL)application:(UIApplication *)application
@@ -131,7 +131,7 @@ With this in place, the json file should be accessible on the browser. Content s
 
 1. Obtain the https link that will be used to redirect to the app `ex: https://staging.va.gov/my-health/appointments`
 2. Update the `getStateFromPath` function within the `linking.tsx` file. An example is provided below. 
-- Note that within the `prefixes` array, `https://staging.va.gov` and `https://va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the configurations.
+- Note that within the `prefixes` array, `https://staging.va.gov` and `https://va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the [configurations](#configurations).
 ```tsx
 // Handles https://staging.va.gov/my-health/appointments & https://staging.va.gov/my-health/appointments/past
 if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
@@ -161,7 +161,7 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 
 3. Updates will now need to be made for both iOS and Android 
 
-#### Android
+### Android
 
 4. Update the Android manifest file. On Android studio navigate to `Tools` -> `App Links Assistant`
 
@@ -173,11 +173,11 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 
    ![URL Mapping Filled](/img/deepLinks/urlMappingFilled.png)
 
-#### iOS
+### iOS
 
 7. Updates will need to be made to the [apple-app-site-association file](https://github.com/department-of-veterans-affairs/content-build/blob/main/src/site/assets/.well-known/apple-app-site-association) by adding a new object representing the new universal link within the `components` array. This requires a PR to be made to the `content-build` repository. More information about [preparing a PR](https://depo-platform-documentation.scrollhelp.site/developer-docs/submitting-pull-requests-for-approval#PreparingyourPullRequestforPlatformReview-HowtogetyourPRreviewedbyPlatform)
 :::important
-Make sure to validate that the result is valid json after the update
+Make sure to validate that the result is valid `json` after the update
 :::
 ```json
 "components": [
