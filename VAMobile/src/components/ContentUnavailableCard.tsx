@@ -23,7 +23,7 @@ const ContentUnavailableCard: FC<ContentUnavailableCardProps> = ({ textId }) => 
   }
 
   return (
-    <Box {...boxProps}>
+    <Box testID="content-unavailable" {...boxProps}>
       <TextView color="placeholder" textAlign="center">
         {t(textId)}
       </TextView>
