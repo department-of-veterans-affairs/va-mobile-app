@@ -173,9 +173,28 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 
    ![URL Mapping Filled](/img/deepLinks/urlMappingFilled.png)
 
+7. The android manifest file should add a snippet similar to the following
+
+```xml
+<intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW" />
+
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+
+    <data android:scheme="https" />
+    <data android:host="staging.va.gov" />
+    <data android:path="/my-health/appointments" />
+</intent-filter>
+```
+:::note
+Ensure that `android:autoVerify="true"` is present 
+:::
+
+
 ### iOS
 
-7. Updates will need to be made to the [apple-app-site-association file](https://github.com/department-of-veterans-affairs/content-build/blob/main/src/site/assets/.well-known/apple-app-site-association) by adding a new object representing the new universal link within the `components` array. This requires a PR to be made to the `content-build` repository. More information about [preparing a PR](https://depo-platform-documentation.scrollhelp.site/developer-docs/submitting-pull-requests-for-approval#PreparingyourPullRequestforPlatformReview-HowtogetyourPRreviewedbyPlatform)
+8. Updates will need to be made to the [apple-app-site-association file](https://github.com/department-of-veterans-affairs/content-build/blob/main/src/site/assets/.well-known/apple-app-site-association) by adding a new object representing the new universal link within the `components` array. This requires a PR to be made to the `content-build` repository. More information about [preparing a PR](https://depo-platform-documentation.scrollhelp.site/developer-docs/submitting-pull-requests-for-approval#PreparingyourPullRequestforPlatformReview-HowtogetyourPRreviewedbyPlatform)
 :::important
 Make sure to validate that the result is valid `json` after the update
 :::
