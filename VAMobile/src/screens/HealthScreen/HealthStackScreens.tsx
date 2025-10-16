@@ -28,6 +28,7 @@ import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/Repl
 import Attachments from 'screens/HealthScreen/SecureMessaging/StartNewMessage/Attachments/Attachments'
 import StartNewMessage from 'screens/HealthScreen/SecureMessaging/StartNewMessage/StartNewMessage'
 import SubmitMileageTravelPayScreen from 'screens/HealthScreen/TravelPay'
+import TravelClaimHelpScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/TravelClaimHelpScreen'
 import TravelPayClaimDetailsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimDetailsScreen'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
@@ -54,7 +55,9 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
-  TravelClaimHelpScreen: undefined
+  TravelClaimHelpScreen: {
+    fromClaimDetails?: boolean
+  }
   TravelPayClaims: undefined
   TravelPayClaimDetailsScreen: {
     claimId: string
@@ -233,6 +236,12 @@ export const getHealthScreens = () => {
       name="TravelPayClaimDetailsScreen"
       component={TravelPayClaimDetailsScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HealthStack.Screen
+      key={'TravelClaimHelpScreen'}
+      name="TravelClaimHelpScreen"
+      component={TravelClaimHelpScreen}
+      options={LARGE_PANEL_OPTIONS}
     />,
   ]
 }

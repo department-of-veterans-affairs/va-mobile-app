@@ -1,14 +1,22 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { StackScreenProps } from '@react-navigation/stack'
+
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { useTheme } from 'utils/hooks'
 
-function TravelClaimHelpScreen() {
+type TravelClaimHelpScreenProps = StackScreenProps<HealthStackParamList, 'TravelClaimHelpScreen'>
+
+function TravelClaimHelpScreen({ route }: TravelClaimHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  // Check if navigated from claim details screen
+  const fromClaimDetails = route.params?.fromClaimDetails || false
 
   return (
     <LargePanel
@@ -18,22 +26,26 @@ function TravelClaimHelpScreen() {
       rightButtonTestID="rightCloseTestID"
       children={
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          <TextView testID="travelClaimHelpTitleID" variant="MobileBodyBold">
-            {t('travelPay.help.useThisApp')}
-          </TextView>
-          <TextView testID="travelClaimHelpTextID" variant="MobileBody">
-            {t('travelPay.help.youCanStillFile')}
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList
-              listOfText={[
-                t('travelPay.help.youCanStillFile.bulletOne'),
-                t('travelPay.help.youCanStillFile.bulletTwo'),
-                t('travelPay.help.youCanStillFile.bulletThree'),
-              ]}
-            />
-          </Box>
-          <FileOnlineComponent />
+          {!fromClaimDetails && (
+            <>
+              <TextView testID="travelClaimHelpTitleID" variant="MobileBodyBold">
+                {t('travelPay.help.useThisApp')}
+              </TextView>
+              <TextView testID="travelClaimHelpTextID" variant="MobileBody">
+                {t('travelPay.help.youCanStillFile')}
+              </TextView>
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <VABulletList
+                  listOfText={[
+                    t('travelPay.help.youCanStillFile.bulletOne'),
+                    t('travelPay.help.youCanStillFile.bulletTwo'),
+                    t('travelPay.help.youCanStillFile.bulletThree'),
+                  ]}
+                />
+              </Box>
+              <FileOnlineComponent />
+            </>
+          )}
           <TravelPayHelp />
         </Box>
       }
