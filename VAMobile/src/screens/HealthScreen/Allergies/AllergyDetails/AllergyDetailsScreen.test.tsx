@@ -250,7 +250,7 @@ describe('AllergyDetailsScreen', () => {
       render(<AllergyDetailsScreen {...props} />)
     }
 
-    it('initializes correctly for default allergy', async () => {
+    it('initializes correctly for v1 allergy', async () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText('January 01, 2002')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Types')).toBeTruthy())
@@ -273,7 +273,7 @@ describe('AllergyDetailsScreen', () => {
       )
     })
 
-    it('initializes correctly for allergy with no reactions', async () => {
+    it('initializes correctly for v1 allergy with no reactions', async () => {
       const allergyWithNoReactions: AllergyData = {
         ...defaultAllergy,
         attributes: {
@@ -302,7 +302,7 @@ describe('AllergyDetailsScreen', () => {
       })
     })
 
-    it('initializes correctly for allergy with multiple categories', async () => {
+    it('initializes correctly for v1 allergy with multiple categories', async () => {
       const allergyWithCategories = {
         ...defaultAllergy,
         attributes: {
@@ -333,7 +333,7 @@ describe('AllergyDetailsScreen', () => {
       })
     })
 
-    it('initializes correctly for allergy with multiple notes', async () => {
+    it('initializes correctly for v1 allergy with multiple notes', async () => {
       const allergyWithNotes = {
         ...defaultAllergy,
         attributes: {

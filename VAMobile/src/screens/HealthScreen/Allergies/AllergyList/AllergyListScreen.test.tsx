@@ -220,7 +220,7 @@ context('AllergyListScreen', () => {
       })
     }
 
-    it('initializes correctly', async () => {
+    it('initializes correctly with v1 endpoint', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v1/health/allergy-intolerances', expect.anything())
         .mockResolvedValue({ data: allergyDataV1 })
@@ -230,7 +230,7 @@ context('AllergyListScreen', () => {
       await waitFor(() => expect(screen.getByText('Penicillin allergy')).toBeTruthy())
     })
 
-    describe('when loading is set to true', () => {
+    describe('when loading is set to true with v1 endpoint', () => {
       it('should show loading screen', () => {
         when(api.get as jest.Mock)
           .calledWith('/v1/health/allergy-intolerances', expect.anything())
@@ -240,7 +240,7 @@ context('AllergyListScreen', () => {
       })
     })
 
-    describe('when there are no allergies', () => {
+    describe('when there are no allergies with v1 endpoint', () => {
       it('should show no Allergy Records', async () => {
         when(api.get as jest.Mock)
           .calledWith('/v1/health/allergy-intolerances', expect.anything())
@@ -271,7 +271,7 @@ context('AllergyListScreen', () => {
       })
     })
 
-    describe('when there is an error fetching allergies', () => {
+    describe('when there is an error fetching allergies from v1 endpoint', () => {
       it('should show the error state', async () => {
         when(api.get as jest.Mock)
           .calledWith('/v1/health/allergy-intolerances', expect.anything())
