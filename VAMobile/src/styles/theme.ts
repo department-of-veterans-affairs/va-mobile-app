@@ -108,6 +108,8 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   textWithIconButton: string
   UnreadMessagesTag: string
+  vadsFontBodySmall: string
+  vadsFontBodyXsmall: string
   VAHeader: string
   VASelector: string
   VeteranStatusBranch: string
