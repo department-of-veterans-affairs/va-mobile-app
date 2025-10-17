@@ -64,15 +64,13 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const {
     data: apptsData,
     error: appointmentsHasError,
-    status,
-    fetchStatus,
     isFetching: loadingAppointments,
     refetch: refetchAppts,
     lastUpdatedDate,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
-  console.log(status, fetchStatus, loadingAppointments)
+
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,

@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { onlineManager, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { appointmentsKeys } from 'api/appointments/queryKeys'
@@ -82,7 +82,7 @@ export const useAppointments = (
               travelPayEnabled,
             )
             // Save the last updated time here manually as this will not be saved otherwise in the prefetch
-            if (featureEnabled('offlineMode')) {
+            if (featureEnabled('offlineMode') && onlineManager.isOnline()) {
               dispatch(setLastUpdatedTimestamp(`${pastAppointmentsQueryKey}`, Date.now().toString()))
             }
             return pastAppointments

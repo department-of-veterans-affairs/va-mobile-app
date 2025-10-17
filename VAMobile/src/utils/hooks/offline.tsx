@@ -10,7 +10,7 @@ import { TFunction } from 'i18next'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
 import { OfflineState, logOfflineEventQueue, queueOfflineEvent } from 'store/slices'
-import { useAppDispatch } from 'utils/hooks/index'
+import { useAppDispatch } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
 export const useOfflineEventQueue = (screen: string) => {

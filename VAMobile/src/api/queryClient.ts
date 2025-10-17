@@ -92,7 +92,6 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
   useEffect(() => {
     const getTime = async () => {
       const storedTime = lastUpdatedTimestamps[`${key}`]
-      //const storedTime = await storage?.getItem(`${key}-lastUpdatedTime`)
       setTime(storedTime ? Number(storedTime) : undefined)
     }
 
