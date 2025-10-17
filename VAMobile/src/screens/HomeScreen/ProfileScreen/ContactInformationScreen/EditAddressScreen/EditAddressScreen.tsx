@@ -31,6 +31,7 @@ import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactI
 import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { GenerateAddressMessage } from 'translations/en/functions'
 import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
+import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
 const MAX_ADDRESS_LENGTH = 35
@@ -88,6 +89,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const deleteAddressAlert = useAlert()
   const destructiveActionSheet = useShowActionSheet()
   const scrollViewRef = useRef<ScrollView>(null)
+  const isConnected = useAppIsOnline()
 
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
@@ -258,6 +260,12 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   }
 
   const onSave = (): void => {
+    console.log('---- in editaddress save')
+    if (!isConnected) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     const addressValues = getAddressValues()
     const addressData = getAddressDataPayload(addressValues, contactInformation)
 
@@ -533,6 +541,11 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   const lowerCaseTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
+    if (!isConnected) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     deleteAddressAlert({
       title: t('contactInformation.removeInformation.title', { info: lowerCaseTitle }),
       message: t('contactInformation.removeInformation.body', { info: lowerCaseTitle }),
