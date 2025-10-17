@@ -27,7 +27,7 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   const events = attributes.eventsTimeline.filter(
     (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
   )
-  const timezoneMessage = useMemo(() => getFileUploadTimezoneMessage(), [])
+  const timezoneMessage = useMemo(() => getFileUploadTimezoneMessage(t), [t])
   const files = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = []
 

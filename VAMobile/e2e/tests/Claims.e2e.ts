@@ -54,6 +54,8 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_LEARN_WHAT_TO_DO: 'claimDetailsLearnWhatToDoIFDisagreeLinkID',
   CLAIMS_DECISION_REVIEW_OPTIONS: 'ClaimsDecisionReviewOptionsTestID',
   CLAIMS_LEARN_WHAT_TO_DO_BACK: 'claimsWhatToDoDisagreementCloseID',
+  TIMEZONE_MESSAGE_PATTERN:
+    /Files uploaded (before|after) .+ will show as received on the (previous|next) day, but we record your submissions when you upload them/,
 }
 
 beforeAll(async () => {
@@ -418,9 +420,33 @@ describe('Claims Screen', () => {
     }
   })
 
-  it('verify files tab infomation', async () => {
+  it('verify files tab shows no files message when claim has no files', async () => {
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
     await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
+
+    // Verify timezone message is NOT shown when no files exist
+    await expect(element(by.text(ClaimsE2eIdConstants.TIMEZONE_MESSAGE_PATTERN))).not.toExist()
+  })
+
+  it('verify files tab shows timezone message when files exist', async () => {
+    // Navigate back to claims list
+    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
+
+    // Open CLAIM_5 which has files
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
+      .scroll(100, 'down')
+    await element(by.id(ClaimsE2eIdConstants.CLAIM_5_ID)).tap()
+
+    // Click on Files tab
+    await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
+
+    // Verify timezone message is displayed using regex pattern
+    await expect(element(by.text(ClaimsE2eIdConstants.TIMEZONE_MESSAGE_PATTERN))).toExist()
+
+    // Verify files are also displayed
+    await expect(element(by.text('filter-sketch.pdf'))).toExist()
   })
 })

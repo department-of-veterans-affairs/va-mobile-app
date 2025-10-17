@@ -140,21 +140,19 @@ export const getEpochSecondsOfDate = (date: string): number => {
 }
 
 /**
- * Format time in VA.gov standard (h:mm a.m./p.m.)
- * Matches web implementation using Luxon instead of date-fns
+ * Format time in VA.gov style
  *
  * @param date - JavaScript Date object
  * @param timeZone - Optional IANA timezone identifier
- * @returns Time formatted as "8:00 a.m." or "5:00 p.m."
+ * @returns Time formatted as "8 AM" or "5 PM"
  */
 const formatTimeVaStyle = (date: Date, timeZone?: string): string => {
   let dt = DateTime.fromJSDate(date)
   if (timeZone) {
     dt = dt.setZone(timeZone)
   }
-  const time = dt.toFormat('h:mm a').toLowerCase()
-  // Use case-insensitive replacement to handle any case variations
-  return time.replace(/am/i, 'a.m.').replace(/pm/i, 'p.m.')
+  // Format as hour followed by uppercase AM/PM (no minutes)
+  return dt.toFormat('h a')
 }
 
 /**
@@ -197,7 +195,7 @@ const getTimezoneAbbr = (date: Date, timeZone?: string): string => {
  * // PDT: "Files uploaded after 5:00 p.m. PDT will show as received on the next day..."
  * // JST: "Files uploaded before 9:00 a.m. GMT+9 will show as received on the previous day..."
  */
-export const getFileUploadTimezoneMessage = (): string => {
+export const getFileUploadTimezoneMessage = (t: TFunction): string => {
   // Create a DateTime for midnight UTC (today)
   const midnightUTC = DateTime.utc().startOf('day')
 
@@ -223,7 +221,11 @@ export const getFileUploadTimezoneMessage = (): string => {
   const beforeAfter = isEastOfUTC ? 'before' : 'after'
   const nextPrevious = isEastOfUTC ? 'previous' : 'next'
 
-  return `Files uploaded ${beforeAfter} ${time} will show as received on the ${nextPrevious} day, but we record your submissions when you upload them.`
+  return t('fileUpload.timezoneMessage', {
+    beforeAfter,
+    time,
+    nextPrevious,
+  })
 }
 
 /**

@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next'
 import { DateTime, Settings } from 'luxon'
 
 import {
@@ -32,44 +33,73 @@ describe('formatting utils: getFormattedTimeForTimeZone', () => {
 describe('formatting utils: getFileUploadTimezoneMessage', () => {
   const originalDefaultZone = Settings.defaultZone
 
+  // Mock translation function
+  const mockT = jest.fn((key: string, values?: Record<string, string>) => {
+    if (key === 'fileUpload.timezoneMessage' && values) {
+      return `Files uploaded ${values.beforeAfter} ${values.time} will show as received on the ${values.nextPrevious} day, but we record your submissions when you upload them`
+    }
+    return key
+  }) as unknown as TFunction
+
   afterEach(() => {
     Settings.defaultZone = originalDefaultZone
+    jest.clearAllMocks()
   })
 
   it('should return complete message for EDT (west of UTC)', () => {
     Settings.defaultZone = 'America/New_York'
-    const message = getFileUploadTimezoneMessage()
+    const message = getFileUploadTimezoneMessage(mockT)
 
     expect(message).toBe(
-      'Files uploaded after 8:00 p.m. EDT will show as received on the next day, but we record your submissions when you upload them.',
+      'Files uploaded after 8 PM EDT will show as received on the next day, but we record your submissions when you upload them',
     )
+    expect(mockT).toHaveBeenCalledWith('fileUpload.timezoneMessage', {
+      beforeAfter: 'after',
+      time: '8 PM EDT',
+      nextPrevious: 'next',
+    })
   })
 
   it('should return complete message for PDT (west of UTC)', () => {
     Settings.defaultZone = 'America/Los_Angeles'
-    const message = getFileUploadTimezoneMessage()
+    const message = getFileUploadTimezoneMessage(mockT)
 
     expect(message).toBe(
-      'Files uploaded after 5:00 p.m. PDT will show as received on the next day, but we record your submissions when you upload them.',
+      'Files uploaded after 5 PM PDT will show as received on the next day, but we record your submissions when you upload them',
     )
+    expect(mockT).toHaveBeenCalledWith('fileUpload.timezoneMessage', {
+      beforeAfter: 'after',
+      time: '5 PM PDT',
+      nextPrevious: 'next',
+    })
   })
 
   it('should return complete message for JST (east of UTC)', () => {
     Settings.defaultZone = 'Asia/Tokyo'
-    const message = getFileUploadTimezoneMessage()
+    const message = getFileUploadTimezoneMessage(mockT)
 
     expect(message).toBe(
-      'Files uploaded before 9:00 a.m. GMT+9 will show as received on the previous day, but we record your submissions when you upload them.',
+      'Files uploaded before 9 AM GMT+9 will show as received on the previous day, but we record your submissions when you upload them',
     )
+    expect(mockT).toHaveBeenCalledWith('fileUpload.timezoneMessage', {
+      beforeAfter: 'before',
+      time: '9 AM GMT+9',
+      nextPrevious: 'previous',
+    })
   })
 
   it('should return complete message for PHT (east of UTC)', () => {
     Settings.defaultZone = 'Asia/Manila'
-    const message = getFileUploadTimezoneMessage()
+    const message = getFileUploadTimezoneMessage(mockT)
 
     expect(message).toBe(
-      'Files uploaded before 8:00 a.m. PHT will show as received on the previous day, but we record your submissions when you upload them.',
+      'Files uploaded before 8 AM PHT will show as received on the previous day, but we record your submissions when you upload them',
     )
+    expect(mockT).toHaveBeenCalledWith('fileUpload.timezoneMessage', {
+      beforeAfter: 'before',
+      time: '8 AM PHT',
+      nextPrevious: 'previous',
+    })
   })
 })
 
