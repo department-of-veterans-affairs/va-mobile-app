@@ -433,11 +433,17 @@ describe('Claims Screen', () => {
     // Navigate back to claims list
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
 
+    // Switch back to Active tab (we're on Closed tab from previous tests)
+    await element(by.text('Active')).tap()
+
+    // Reset scroll position to top
+    await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
+
     // Navigate to CLAIM_4 which we know works in other tests and has request files
     await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
-      .scroll(100, 'up')
+      .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
 
     // Click on Files tab
