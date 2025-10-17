@@ -146,7 +146,7 @@ android {
             versionNameSuffix = ".QA"
         }
         qaStore{
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             manifestPlaceholders = [
                     appIcon:"ic_launcher_qa",
                     appIconRound:"ic_launcher_qa_round"
