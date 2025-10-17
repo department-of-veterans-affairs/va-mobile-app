@@ -6,24 +6,19 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { SegmentedControl } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppeal } from 'api/claimsAndAppeals'
-import {
-  AppealAttributesData,
-  AppealData,
-  AppealEventTypesConstants,
-  AppealTypes,
-  AppealTypesConstants,
-} from 'api/types'
+import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'api/types'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
-import AppealIssues from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealIssues/AppealIssues'
-import AppealStatus from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealStatus'
-import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone, getTranslation } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+import NeedHelpData from '../NeedHelpData/NeedHelpData'
+import AppealIssues from './AppealIssues/AppealIssues'
+import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'AppealDetailsScreen'>
 
@@ -141,9 +136,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
                 programArea={programArea}
               />
             )}
-            {appeal && selectedTab === 1 && (
-              <AppealIssues appealType={appeal.attributes.type as AppealTypes} issues={issues} />
-            )}
+            {appeal && selectedTab === 1 && <AppealIssues issues={issues} />}
           </Box>
           <NeedHelpData appealId={appealID} />
         </Box>
