@@ -133,7 +133,7 @@ context('CopayDetailsScreen', () => {
     it('should display copay details', () => {
       initializeTestInstance(mockCopay)
       expect(screen.getByTestId('copayDetailsTestID')).toBeTruthy()
-      expect(screen.getByText(/Current balance:/)).toBeTruthy()
+      expect(screen.getByText(/Current balance/)).toBeTruthy()
     })
 
     it('should display facility name', () => {

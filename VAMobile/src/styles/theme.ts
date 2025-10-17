@@ -119,6 +119,7 @@ export type VATypographyThemeVariants = {
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
   vadsFontHeadingXsmall: string
+  vadsFontHeadingMedium: string
 }
 
 export type VABackgroundColors = {

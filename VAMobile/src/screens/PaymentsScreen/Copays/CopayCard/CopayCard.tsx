@@ -88,7 +88,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
       {/* Balance */}
       <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
         <Trans
-          i18nKey="copays.currentBalance.amount"
+          i18nKey="copays.currentBalance"
           components={{ bold: <TextView variant="MobileBodyBold" /> }}
           values={{ amount: numberToUSDollars(copayInfo.balance ?? 0) }}
         />

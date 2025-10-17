@@ -146,15 +146,15 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
   const mainContent = (
     <>
       <TextView variant="MobileBodyBold">{copayInfo.facilityName}</TextView>
-      <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-        <Trans
-          i18nKey="copays.currentBalance.amount"
-          components={{ bold: <TextView variant="MobileBodyBold" /> }}
-          values={{ amount: numberToUSDollars(copayInfo.balance ?? 0) }}
-        />
+      <TextView mt={theme.dimensions.condensedMarginBetween} variant="HelperText">
+        {t('copays.currentBalance')}
       </TextView>
+      <TextView mb={theme.dimensions.condensedMarginBetween} variant="vadsFontHeadingMedium">
+        {numberToUSDollars(copayInfo.balance ?? 0)}
+      </TextView>
+      <TextView variant="HelperText">{t('copays.paymentDueDate')}</TextView>
       <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-        Payment due date {formattedDate}
+        {formattedDate}
       </TextView>
       <ResolveBillButton />
       <Pressable onPress={() => downloadStatement(copay.id)} accessibilityRole="link" accessible={true}>

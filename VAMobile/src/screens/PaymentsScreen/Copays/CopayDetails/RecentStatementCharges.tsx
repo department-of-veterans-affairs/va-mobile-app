@@ -75,7 +75,10 @@ function RecentStatementCharges({ copay }: { copay: MedicalCopayRecord }) {
         <TextView>{formatCurrency(copay.pHPrevBal)}</TextView>
       </Box>
       {charges.map((detail, index) => renderCharge(detail, index))}
-      <Box {...chargeBoxProps}>
+      <Box
+        borderTopWidth={theme.dimensions.borderWidth}
+        borderColor={theme.colors.border.divider as BorderColorVariant}
+        pt={theme.dimensions.standardMarginBetween}>
         <TextView variant="vadsFontHeadingXsmall">{t('copays.currentBalance')}</TextView>
         <TextView>{formatCurrency(copay.pHNewBalance)}</TextView>
       </Box>
