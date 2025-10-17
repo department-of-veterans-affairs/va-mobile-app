@@ -31,33 +31,47 @@ function PreviousPDFStatements({
       <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween}>
         {t('copays.previousStatements.description')}
       </TextView>
-      {statements.map((statement, index) => (
-        <Pressable
-          key={`${statement.id}-${index}`}
-          onPress={() => downloadStatement(statement.id)}
-          accessible={true}
-          accessibilityRole="link"
-          accessibilityLabel={t('copays.goToStatement')}
-          accessibilityHint="Opens PDF in viewer">
-          <Box
-            {...statementBoxProps}
-            display={'flex'}
-            flexDirection={'row'}
-            justifyContent={'space-between'}
-            alignItems={'center'}
-            minHeight={theme.dimensions.touchableMinHeight}>
-            <TextView flex={1} variant={'MobileBody'}>
-              {t('copays.previousStatements.statementDate', { date: formatDate(statement.pSStatementDateOutput) })}
-            </TextView>
-            <Icon
-              name={'ChevronRight'}
-              fill={theme.colors.icon.chevronListItem}
-              width={theme.dimensions.chevronListItemWidth}
-              height={theme.dimensions.chevronListItemHeight}
-            />
-          </Box>
-        </Pressable>
-      ))}
+      {statements.length > 0 ? (
+        statements.map((statement, index) => (
+          <Pressable
+            key={`${statement.id}-${index}`}
+            onPress={() => downloadStatement(statement.id)}
+            accessible={true}
+            accessibilityRole="link"
+            accessibilityLabel={t('copays.goToStatement')}
+            accessibilityHint="Opens PDF in viewer">
+            <Box
+              {...statementBoxProps}
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'space-between'}
+              alignItems={'center'}
+              minHeight={theme.dimensions.touchableMinHeight}>
+              <TextView flex={1} variant={'MobileBody'}>
+                {t('copays.previousStatements.statementDate', { date: formatDate(statement.pSStatementDateOutput) })}
+              </TextView>
+              <Icon
+                name={'ChevronRight'}
+                fill={theme.colors.icon.chevronListItem}
+                width={theme.dimensions.chevronListItemWidth}
+                height={theme.dimensions.chevronListItemHeight}
+              />
+            </Box>
+          </Pressable>
+        ))
+      ) : (
+        <Box
+          {...statementBoxProps}
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          minHeight={theme.dimensions.touchableMinHeight}>
+          <TextView flex={1} variant={'MobileBody'}>
+            {t('copays.previousStatements.noStatements')}
+          </TextView>
+        </Box>
+      )}
     </Box>
   )
 

@@ -632,6 +632,7 @@
   "copays.paymentDueDate": "Payment due date",
   "copays.previousStatements": "Previous PDF statements",
   "copays.previousStatements.description": "Review your charges and download your mailed statements from the past 6 months for this facility.",
+  "copays.previousStatements.noStatements": "No previous statements",
   "copays.previousStatements.statementDate": "{{date}} statement (PDF)",
   "copays.recentCharges": "Recent statement charges",
   "copays.recentCharges.billingReference": "Billing reference:",

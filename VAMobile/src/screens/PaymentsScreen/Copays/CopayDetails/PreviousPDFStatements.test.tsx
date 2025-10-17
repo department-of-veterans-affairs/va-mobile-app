@@ -154,5 +154,14 @@ context('PreviousPDFStatements', () => {
         expect(screen.queryByText(/statement \(PDF\)/)).toBeFalsy()
       })
     })
+
+    it('should display "No previous statements" message when empty', async () => {
+      initializeTestInstance(emptyStatements)
+      const accordion = screen.getByText(t('copays.previousStatements'))
+      fireEvent.press(accordion)
+      await waitFor(() => {
+        expect(screen.getByText(t('copays.previousStatements.noStatements'))).toBeTruthy()
+      })
+    })
   })
 })
