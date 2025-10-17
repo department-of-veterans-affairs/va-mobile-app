@@ -1,25 +1,19 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealIssue, AppealIssueLastAction, AppealTypes } from 'api/types'
-import { AppealTypesDisplayNames } from 'api/types/ClaimsAndAppealsData'
+import { AppealIssue, AppealIssueLastAction } from 'api/types'
 import { AccordionCollapsible, Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type AppealIssuesProps = {
-  appealType: AppealTypes
   issues: Array<AppealIssue>
 }
 
-const UNABLE_TO_SHOW = "We're unable to show"
-
-function AppealIssues({ appealType, issues }: AppealIssuesProps) {
+function AppealIssues({ issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-
-  const appealTypeName = t(AppealTypesDisplayNames[appealType])
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
@@ -77,27 +71,7 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
     if (!items.length) {
       return null
     }
-
-    // Separate issues with "We're unable..." descriptions from regular issue descriptions
-    const unableToShowIssues = items.filter((item) => item.description.includes(UNABLE_TO_SHOW))
-    const issuesWithRegularDescriptions = items.filter((item) => !item.description.includes(UNABLE_TO_SHOW))
-
-    // Start with regular descriptions
-    const listOfIssues = issuesWithRegularDescriptions.map((item) => item.description)
-
-    // Add one aggregated message for all "We're unable..." issues at the end
-    if (unableToShowIssues.length > 0) {
-      const count = unableToShowIssues.length
-      const translationKey = count === 1 ? 'appealDetails.unableToShowIssue' : 'appealDetails.unableToShowIssues'
-
-      listOfIssues.push(
-        t(translationKey, {
-          count,
-          appealType: appealTypeName,
-        }),
-      )
-    }
-
+    const listOfIssues = items.map((item) => item.description)
     return (
       <>
         <TextView

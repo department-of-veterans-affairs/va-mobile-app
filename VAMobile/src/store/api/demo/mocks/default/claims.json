@@ -3955,62 +3955,6 @@
             "active": false,
             "lastAction": null,
             "date": "02-04-11"
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": "remand",
-            "date": null
-          },
-          {
-            "description": "Service connection, neck strain",
-            "diagnosticCode": "8518",
-            "active": true,
-            "lastAction": "remand",
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": false,
-            "lastAction": null,
-            "date": "02-04-11"
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": "denied",
-            "date": "03-04-11"
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": "field_grant",
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": false,
-            "lastAction": "remand",
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": "field_grant",
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on appeal",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": "withdrawn",
-            "date": null
           }
         ],
         "location": "bva",
@@ -5206,20 +5150,6 @@
             "active": true,
             "lastAction": null,
             "date": null
-          },
-          {
-            "description": "We're unable to show this issue on your Supplemental Claim",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": null,
-            "date": "02-04-11"
-          },
-          {
-            "description": "We're unable to show this issue on your Supplemental Claim",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": null,
-            "date": "2008-04-10"
           }
         ],
         "location": "bva",
@@ -5263,20 +5193,6 @@
             "diagnosticCode": "7518",
             "active": true,
             "lastAction": null,
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on your Higher-Level Review",
-            "diagnosticCode": null,
-            "active": true,
-            "lastAction": null,
-            "date": null
-          },
-          {
-            "description": "We're unable to show this issue on your Higher-Level Review",
-            "diagnosticCode": null,
-            "active": false,
-            "lastAction": "denied",
             "date": null
           }
         ],
