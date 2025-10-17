@@ -687,5 +687,83 @@
         "modifiedOn": "{{now - 1 day}}"
       }
     }
+  },
+  "/v0/travel-pay/claims/7519378a-e9ef-4a84-8673-591776c8f06b": {
+    "data": {
+      "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+        "claimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "PartialPayment",
+        "appointmentDate": "{{now - 4 days}}",
+        "facilityName": "Tomah VA Medical Center",
+        "totalCostRequested": 250.0,
+        "reimbursementAmount": 180.0,
+        "rejectionReason": null,
+        "appointment": {
+          "id": "7519378a-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 4 days}}",
+          "appointmentName": "Mental Health Appointment",
+          "appointmentType": "Mental Health",
+          "facilityId": "618",
+          "facilityName": "Tomah VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-67890",
+          "associatedClaimId": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "associatedClaimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-partial-claim-mileage",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 225.0,
+            "costSubmitted": 180.0
+          },
+          {
+            "id": "exp2-partial-claim-parking",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Medical center parking",
+            "costRequested": 25.0,
+            "costSubmitted": 0.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-partial-mileage-receipt",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc2-partial-parking-receipt",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc3-partial-payment-letter",
+            "filename": "Decision Letter.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 2 days}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
   }
 }
