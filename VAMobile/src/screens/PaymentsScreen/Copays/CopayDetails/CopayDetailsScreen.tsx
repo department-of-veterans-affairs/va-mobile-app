@@ -53,11 +53,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   const previousSortedFacilityCopays = sortedFacilityCopays.filter((statement) => statement.id !== copay.id)
 
-  const {
-    isFetching: downloading,
-    error: downloadStatementError,
-    refetch: refetchStatement,
-  } = useDownloadCopayStatement(statementID, {
+  const { error: downloadStatementError, refetch: refetchStatement } = useDownloadCopayStatement(statementID, {
     enabled: statementID.length > 0,
   })
 
@@ -186,8 +182,8 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
       title={t('copays.details.title')}
       testID="copayDetailsTestID"
       backLabelTestID="copayDetailsBackTestID">
-      {loadingCopays || downloading ? (
-        <LoadingComponent text={t(loadingCopays ? 'copays.loading' : 'copays.downloading')} />
+      {loadingCopays ? (
+        <LoadingComponent text={t('copays.loading')} />
       ) : (
         <>
           {!isCurrentBalance && (

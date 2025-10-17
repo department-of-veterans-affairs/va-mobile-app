@@ -607,7 +607,6 @@
   "copays.details.title": "Details",
   "copays.disputeCopay.title": "Dispute copay",
   "copays.download.error": "We couldn't download your statement. Please try again.",
-  "copays.downloading": "Downloading statement...",
   "copays.empty.body": "If you think this is incorrect, contact our Health Resource Center. We're here Monday through Friday, 8:00 a.m. to 8:00 p.m. ET.",
   "copays.empty.title": "You haven't received a copay bill in the past 6 months",
   "copays.error.description": "We're sorry. Information about copays you might have is unavailable because something went wrong on our end. Check back soon. \n\nIf you continue having trouble viewing information about your copays, contact the VA Health Resource Center. We're here Monday through Friday, 8:00 a.m. to 8:00 p.m. ET.",

@@ -266,8 +266,8 @@ context('CopayDetailsScreen', () => {
       await waitFor(() => {
         const downloadLink = screen.getByText(t('copays.goToStatement'))
         fireEvent.press(downloadLink)
-        // Should show downloading state
-        expect(screen.getByText(t('copays.downloading'))).toBeTruthy()
+        // Download happens in background, screen content remains visible
+        expect(screen.getByTestId('copayDetailsTestID')).toBeTruthy()
       })
     })
   })
