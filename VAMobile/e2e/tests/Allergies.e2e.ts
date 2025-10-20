@@ -7,12 +7,13 @@ This script should be updated whenever new things are added/changed in allergies
 import { by, element, expect } from 'detox'
 
 import {
-  changeDemoModeUser,
+  CommonE2eIdConstants,
   checkImages,
   loginToDemoMode,
   openAllergyRecords,
   openHealth,
   openMedicalRecords,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const AllergiesE2eIdConstants = {
@@ -24,12 +25,11 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_6_ID: 'Latex allergy August 20, 2020',
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
-  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.ALLERGIES_TOGGLE_TEXT)
   await loginToDemoMode()
-  await changeDemoModeUser(AllergiesE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
   await openMedicalRecords()
   await openAllergyRecords()
