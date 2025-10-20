@@ -8,6 +8,7 @@ import { useServiceHistory } from 'api/militaryService'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
 import { BranchOfService, ServiceHistoryData } from 'api/types'
 import { useVeteranStatus } from 'api/veteranStatus'
+import { VeteranPassPayload } from 'api/wallet'
 import {
   AlertWithHaptics,
   Box,
@@ -20,6 +21,7 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import AppleWalletButton from 'screens/HomeScreen/VeteranStatusScreen/AddToWalletButton/AppleWalletButton'
 import VeteranStatusCard from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusCard/VeteranStatusCard'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -202,6 +204,15 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
     )
   }
 
+  const passPayload: VeteranPassPayload | undefined = personalInfo?.fullName
+    ? {
+        name: personalInfo.fullName,
+        id: personalInfo?.edipi ?? 'V00000000',
+        disability_percent: ratingIsDefined ? Number(ratingPercent) : undefined,
+        as_of_date: new Date().toISOString().slice(0, 10),
+      }
+    : undefined
+
   return (
     <LargePanel
       title={t('veteranStatus.title')}
@@ -225,6 +236,11 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
             />
           </WaygateWrapper>
         </>
+      )}
+      {passPayload && (
+        <Box mt={16} px={horizontalPadding} style={containerStyle} width="100%">
+          <AppleWalletButton payload={passPayload} />
+        </Box>
       )}
       {getHelperText()}
     </LargePanel>

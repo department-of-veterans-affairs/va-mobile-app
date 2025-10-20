@@ -1,9 +1,13 @@
 /**
  * @format
  */
+import { AppRegistry } from 'react-native'
 
-import {AppRegistry} from 'react-native';
-import App from './src/App';
-import {name as appName} from './app.json';
+import { Buffer } from 'buffer'
 
-AppRegistry.registerComponent(appName, () => App);
+import { name as appName } from './app.json'
+import App from './src/App'
+
+global.Buffer = global.Buffer || Buffer
+
+AppRegistry.registerComponent(appName, () => App)
