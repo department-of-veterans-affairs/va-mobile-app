@@ -11,10 +11,11 @@ type Props = {
 }
 
 export default function AppleWalletButton({ payload }: Props) {
-  const [canAdd, setCanAdd] = useState<boolean>(true) // Leverage PassKit.canAddPasses()
+  const [canAdd, setCanAdd] = useState<boolean>(true)
   const createPass = useCreateApplePass()
 
   useEffect(() => {
+    // NOTE: Are we able to detect if pass is already in wallet? Might need native bridge.
     PassKit.canAddPasses()
       .then(setCanAdd)
       .catch(() => setCanAdd(false))
@@ -38,6 +39,7 @@ export default function AppleWalletButton({ payload }: Props) {
 
   return (
     <View style={{ marginTop: 16 }}>
+      {/* Need to handle UX for this button after we add the pass to the wallet. */}
       <AddPassButton onPress={onPress} style={{ height: 44 }} addPassButtonStyle={PassKit.AddPassButtonStyle.black} />
       <TextView variant="MobileBody" color="bodyText" mt={12}>
         Get quick access to your Veteran Status Card by adding it to your digital wallet app.
