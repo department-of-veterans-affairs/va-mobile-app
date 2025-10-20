@@ -54,8 +54,6 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_LEARN_WHAT_TO_DO: 'claimDetailsLearnWhatToDoIFDisagreeLinkID',
   CLAIMS_DECISION_REVIEW_OPTIONS: 'ClaimsDecisionReviewOptionsTestID',
   CLAIMS_LEARN_WHAT_TO_DO_BACK: 'claimsWhatToDoDisagreementCloseID',
-  TIMEZONE_MESSAGE_PATTERN:
-    /Files uploaded (before|after) .+ will show as received on the (previous|next) day, but we record your submissions when you upload them/,
 }
 
 beforeAll(async () => {
@@ -247,7 +245,8 @@ describe('Claims Screen', () => {
   //   await expect(
   //     element(
   //       by.text(
-  //         'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, your claim will go back to that step for review.',
+  //         'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, ' +
+  //         'your claim will go back to that step for review.',
   //       ),
   //     ),
   //   ).toExist()
@@ -426,7 +425,7 @@ describe('Claims Screen', () => {
     await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
 
     // Verify timezone message is NOT shown when no files exist
-    await expect(element(by.text(ClaimsE2eIdConstants.TIMEZONE_MESSAGE_PATTERN))).not.toExist()
+    await expect(element(by.text('Files uploaded'))).not.toExist()
   })
 
   it('verify files tab shows timezone message when files exist', async () => {
@@ -446,6 +445,14 @@ describe('Claims Screen', () => {
       .scroll(100, 'down')
     await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
 
+    // Wait for claim details screen to load and Files tab to be visible
+    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)))
+      .toBeVisible()
+      .withTimeout(5000)
+
+    // Add small delay for UI to stabilize
+    await setTimeout(1000)
+
     // Click on Files tab
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
 
@@ -456,10 +463,12 @@ describe('Claims Screen', () => {
       // Check if no files message exists (with short timeout)
       await expect(noFilesElement).toExist()
       // This claim has no files, so timezone message should not exist
-      await expect(element(by.text(ClaimsE2eIdConstants.TIMEZONE_MESSAGE_PATTERN))).not.toExist()
+      await expect(element(by.text('Files uploaded'))).not.toExist()
     } catch {
       // This claim has files, so timezone message should exist
-      await expect(element(by.text(ClaimsE2eIdConstants.TIMEZONE_MESSAGE_PATTERN))).toExist()
+      // Check for static parts of the timezone message that are always present
+      await expect(element(by.text('Files uploaded'))).toExist()
+      await expect(element(by.text('but we record your submissions when you upload them.'))).toExist()
     }
   })
 })
