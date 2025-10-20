@@ -1,6 +1,7 @@
 name: '[Admin] Weekly Flagship Mobile PR Reviewer Assignment'
 
 on:
+  push:
   schedule:
     # Run every Monday at 8:33 AM EST (1:33 PM UTC)
     - cron: '33 13 * * 1'
@@ -39,7 +40,7 @@ jobs:
           declare -A GITHUB_TO_SLACK=(
             ["AdryienH"]="U08N85KC05Q"
             ["jmarchi"]="U01APSBG86A"
-            ["jonbindbeutel"]="UXXXXXXXJON"
+            ["jonbindbeutel"]="U08HW514Y8Y"
             ["keli13"]="U01ATFT0XBP"
             ["dftony"]="U08HW41SBUG"
             ["matthew-df"]="U08UWE4S3GW"
