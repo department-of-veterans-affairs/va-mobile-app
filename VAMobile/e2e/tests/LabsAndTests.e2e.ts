@@ -1,8 +1,6 @@
 import { by, element, expect } from 'detox'
 
-import { fireEvent } from 'testUtils'
-
-import { MONTHS, getFormattedDate } from '../../src/utils/dateUtils'
+import { getFormattedDate } from '../../src/utils/dateUtils'
 import {
   CommonE2eIdConstants,
   loginToDemoMode,
@@ -15,21 +13,14 @@ import {
 } from './utils'
 
 export const LabsAndTestsE2eIDConstants = {
-  YEAR_PICKER_ID: 'labsAndTestDataRangeYearTestID',
-  YEAR_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeYearConfirmID',
-  MONTH_PICKER_ID: 'labsAndTestDataRangeMonthTestID',
-  MONTH_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeMonthConfirmID',
-  APPLY_DATE_BUTTON_ID: 'updateLabsAndTestsButtonTestID',
+  DATE_RANGE_PICKER_ID: 'labsAndTestDateRangePickerTestID',
+  DATE_RANGE_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeConfirmID',
 }
 
 const resetDateRangeToDefault = async () => {
-  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
-  await element(by.text(MONTHS[0])).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
-  await element(by.text('2024')).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
-  await element(by.id(LabsAndTestsE2eIDConstants.APPLY_DATE_BUTTON_ID)).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
+  await element(by.text('Last 90 days')).tap()
+  await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
 }
 // These dates must match the dates in the demo data
 // Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
@@ -53,13 +44,13 @@ beforeAll(async () => {
 })
 
 describe('Labs And Test Screen - Date Picker', () => {
-  it('month and year selection verification', async () => {
-    await element(by.id(LabsAndTestsE2eIDConstants.MONTH_PICKER_ID)).tap()
-    await element(by.text(MONTHS[3])).tap()
-    await element(by.id(LabsAndTestsE2eIDConstants.MONTH_CONFIRM_PICKER_ID)).tap()
-    await element(by.id(LabsAndTestsE2eIDConstants.YEAR_PICKER_ID)).tap()
-    await element(by.text('2020')).tap()
-    await element(by.id(LabsAndTestsE2eIDConstants.YEAR_CONFIRM_PICKER_ID)).tap()
+  it('90-day period selection verification', async () => {
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
+    // Verify "Last 90 days" option exists (index 0)
+    await expect(element(by.text('Last 90 days'))).toExist()
+    // Select "Last 90 days" to confirm it works
+    await element(by.text('Last 90 days')).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
   })
 })
 

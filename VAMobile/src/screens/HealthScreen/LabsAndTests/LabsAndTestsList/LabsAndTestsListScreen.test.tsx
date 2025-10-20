@@ -6,7 +6,6 @@ import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { MONTHS } from 'utils/dateUtils'
 
 context('LabsAndTestsListScreen', () => {
   afterEach(() => {
@@ -52,15 +51,11 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to current month and year in pickers', async () => {
+  it('defaults to "Last 90 days" in date range picker', async () => {
     initializeTestInstance()
-    const currentTime = new Date()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID').children[0]).toEqual(
-      currentTime.getFullYear().toString(),
-    )
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID').children[0]).toEqual(MONTHS[currentTime.getMonth()])
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
+    // The first option (index 0) should be "Last 90 days"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Last 90 days')
   })
 
   it('renders the correct availability timing', async () => {

@@ -1,13 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import {
-  Button,
-  ButtonVariants,
-} from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
@@ -37,7 +33,6 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
-import { MONTHS, getCurrentMonth, getFormattedDate, getListOfYearsSinceYear } from 'utils/dateUtils'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -54,60 +49,72 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const [LabsAndTestsToShow, setLabsAndTestsToShow] = useState<Array<LabsAndTests>>([])
 
   const [page, setPage] = useState(1)
-  const [selectedMonth, setSelectedMonth] = useState<string>(getCurrentMonth())
-  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString())
 
-  const createApiParamObject = (month: string, year: string) => {
-    const startDate = DateTime.fromFormat(`${month} 01 ${year}`, 'LLLL dd yyyy').toJSDate()
-    const endDate = new Date(startDate)
-    endDate.setMonth(endDate.getMonth() + 1)
-    endDate.setDate(0)
+  // Generate 90-day period options going back approximately 10 years
+  // This provides reasonable coverage while maintaining good UX
+  // 10 years * 365.25 days / 90 days ≈ 40 ranges
+  const dateRangeOptions: Array<PickerItem> = useMemo(() => {
+    const now = DateTime.now()
+    const options: Array<PickerItem> = []
+    const totalRanges = 40
+
+    for (let i = 0; i < totalRanges; i += 1) {
+      const rangeEndDaysAgo = i * 90
+      const rangeStartDaysAgo = (i + 1) * 90
+
+      const endDate = now.minus({ days: rangeEndDaysAgo })
+      const startDate = now.minus({ days: rangeStartDaysAgo })
+
+      let label
+      if (i === 0) {
+        label = 'Last 90 days'
+      } else {
+        const startFormatted = startDate.toFormat('MMM d, yyyy')
+        const endFormatted = endDate.toFormat('MMM d, yyyy')
+        label = `${startFormatted} to ${endFormatted}`
+      }
+
+      options.push({
+        label,
+        value: String(i),
+        testID: `range-${i}`,
+      })
+    }
+
+    return options
+  }, [])
+
+  // Get initial date range (last 90 days)
+  const getDateRangeByIndex = (index: number) => {
+    const now = DateTime.now()
+    const today = now.toFormat('yyyy-MM-dd')
+    const rangeEndDaysAgo = index * 90
+    const rangeStartDaysAgo = (index + 1) * 90
+
+    const endDate = now.minus({ days: rangeEndDaysAgo })
+    const startDate = now.minus({ days: rangeStartDaysAgo })
+
     return {
-      startDate: getFormattedDate(startDate.toISOString(), 'yyyy-MM-dd'),
-      endDate: getFormattedDate(endDate.toISOString(), 'yyyy-MM-dd'),
-      timeFrame: `${month}-${year}`,
+      startDate: startDate.toFormat('yyyy-MM-dd'),
+      endDate: index === 0 ? today : endDate.toFormat('yyyy-MM-dd'),
+      timeFrame: `${startDate.toFormat('MMM d, yyyy')} - ${index === 0 ? now.toFormat('MMM d, yyyy') : endDate.toFormat('MMM d, yyyy')}`,
     }
   }
+
+  const initialDateRange = getDateRangeByIndex(0)
+  const [selectedDateRangeValue, setSelectedDateRangeValue] = useState<string>('0')
   const [selectedDateRange, setSelectedDateRange] = useState<{
     startDate: string
     endDate: string
     timeFrame: string
-  }>(createApiParamObject(selectedMonth, selectedYear))
+  }>(initialDateRange)
 
-  const allMonthsOptions: Array<PickerItem> = useMemo(() => {
-    return MONTHS.map((month) => {
-      return {
-        label: month,
-        value: month,
-        testID: month,
-      }
-    })
-  }, [])
-
-  const allYearsOptions: Array<PickerItem> = useMemo(() => {
-    const currentYear = new Date().getFullYear()
-    const years = getListOfYearsSinceYear(currentYear - 100)
-    return years.map((year) => {
-      return {
-        label: year,
-        value: year,
-        testID: year,
-      }
-    })
-  }, [])
-
-  const onMonthSelectionChange = (selectValue: string) => {
-    const curSelectedMonth = allMonthsOptions.find((el) => el.value === selectValue)
-    if (curSelectedMonth) {
-      setSelectedMonth(curSelectedMonth.value)
-    }
-  }
-
-  const onYearSelectionChange = (selectValue: string) => {
-    const curSelectedYear = allYearsOptions.find((el) => el.value === selectValue)
-    if (curSelectedYear) {
-      setSelectedYear(curSelectedYear.value)
-    }
+  const onDateRangeChange = (selectValue: string) => {
+    setSelectedDateRangeValue(selectValue)
+    const index = parseInt(selectValue, 10)
+    const dateRange = getDateRangeByIndex(index)
+    setSelectedDateRange(dateRange)
+    setPage(1) // Reset to first page when date range changes
   }
 
   const labsAndTestsInDowntime = useError(ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID)
@@ -118,15 +125,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     const end = selectedDateRange?.endDate
     return !!start && !!end && start !== '' && end !== ''
   }
-
-  const applyNewDateFilters = useCallback(() => {
-    const { startDate, endDate, timeFrame } = createApiParamObject(selectedMonth, selectedYear)
-    setSelectedDateRange({
-      startDate,
-      endDate,
-      timeFrame,
-    })
-  }, [selectedMonth, selectedYear])
 
   const {
     data: labsAndTests,
@@ -236,41 +234,18 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       <Box mx={theme.dimensions.gutter}>
         <Box mt={theme.dimensions.contentMarginTop}>
           <VAModalPicker
-            selectedValue={selectedMonth}
-            onSelectionChange={onMonthSelectionChange}
-            pickerOptions={allMonthsOptions.map((option) => ({
-              ...option,
-              testID: option.testID,
-            }))}
-            labelKey={'labsAndTests.list.dateFilter.month'}
-            testID="labsAndTestDataRangeMonthTestID"
-            confirmTestID="labsAndTestsDateRangeMonthConfirmID"
-          />
-        </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>
-          <VAModalPicker
-            selectedValue={selectedYear}
-            onSelectionChange={onYearSelectionChange}
-            pickerOptions={allYearsOptions}
-            labelKey={'labsAndTests.list.dateFilter.year'}
-            testID="labsAndTestDataRangeYearTestID"
-            confirmTestID="labsAndTestsDateRangeYearConfirmID"
-          />
-        </Box>
-        <Box pt={theme.dimensions.standardMarginBetween}>
-          <Button
-            onPress={() => {
-              applyNewDateFilters()
-            }}
-            label={t('labsAndTests.list.dateFilter.buttonText')}
-            testID={'updateLabsAndTestsButtonTestID'}
-            buttonType={ButtonVariants.Primary}
+            selectedValue={selectedDateRangeValue}
+            onSelectionChange={onDateRangeChange}
+            pickerOptions={dateRangeOptions}
+            labelKey={'labsAndTests.list.dateFilter.selectPeriod'}
+            testID="labsAndTestDateRangePickerTestID"
+            confirmTestID="labsAndTestsDateRangeConfirmID"
           />
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextView testID="labsAndTestsDateRangeTestID">
-            {t('labsAndTests.list.dateFilter.displayLabel', {
-              timeFrame: selectedDateRange.timeFrame.replace('-', ' '),
+            {t('labsAndTests.list.dateFilter.showing90Days', {
+              timeFrame: selectedDateRange.timeFrame,
             })}
           </TextView>
         </Box>
