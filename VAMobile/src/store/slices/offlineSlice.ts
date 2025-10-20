@@ -8,7 +8,6 @@ export type OfflineState = {
   offlineTimestamp?: DateTime
   bannerExpanded: boolean
   isOffline: boolean
-  forceOffline?: boolean
   /**
    * When we are within a modal, toast notifications do not show. This flag
    * lets us display an alternative alert instead
@@ -95,7 +94,11 @@ const offlineSlice = createSlice({
           ...state.offlineEventsMap,
           [screen]: action.payload,
         }
-        console.debug('NEW QUEUE LENGTH', Object.keys(state.offlineEventsMap).length, action.payload.params?.screen_name)
+        console.debug(
+          'NEW QUEUE LENGTH',
+          Object.keys(state.offlineEventsMap).length,
+          action.payload.params?.screen_name,
+        )
       }
     },
     dispatchClearOfflineEventQueue: (state) => {
