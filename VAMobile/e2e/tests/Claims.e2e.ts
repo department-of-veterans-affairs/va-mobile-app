@@ -429,6 +429,10 @@ describe('Claims Screen', () => {
   })
 
   it('verify files tab shows timezone message when files exist', async () => {
+    // Note: This test checks if CLAIM_4 has uploaded files. If it does, we verify the timezone
+    // message is displayed. If not, we verify the timezone message is NOT displayed.
+    // The test adapts to the actual state of the claim's files.
+    
     // Navigate back to claims list
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
 
@@ -459,15 +463,27 @@ describe('Claims Screen', () => {
     // Check if files exist - if no files message appears, skip timezone test
     const noFilesElement = element(by.text("This claim doesn't have any files yet."))
 
+    // Use waitFor to properly check if no files message exists
+    let hasNoFiles = false
     try {
-      // Check if no files message exists (with short timeout)
-      await expect(noFilesElement).toExist()
+      await waitFor(noFilesElement)
+        .toExist()
+        .withTimeout(2000)
+      hasNoFiles = true
+    } catch {
+      // No files message doesn't exist, so we should have files
+      hasNoFiles = false
+    }
+
+    if (hasNoFiles) {
       // This claim has no files, so timezone message should not exist
       await expect(element(by.text('Files uploaded'))).not.toExist()
-    } catch {
+    } else {
       // This claim has files, so timezone message should exist
-      // Check for static parts of the timezone message that are always present
-      await expect(element(by.text('Files uploaded'))).toExist()
+      // Wait for the timezone message to appear
+      await waitFor(element(by.text('Files uploaded')))
+        .toExist()
+        .withTimeout(2000)
       await expect(element(by.text('but we record your submissions when you upload them.'))).toExist()
     }
   })
