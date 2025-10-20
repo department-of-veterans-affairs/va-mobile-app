@@ -22,7 +22,6 @@ type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Allergy
  */
 function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
   const { allergy } = route.params
-  console.info(allergy)
 
   const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_AllergyDetails') })
 
@@ -70,63 +69,29 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
         })
       : [placeHolder]
 
-  // const listOfReactions = (allergy.attributes as AllergyAttributesV0)?.reactions
-  //   ? (allergy.attributes as AllergyAttributesV0)?.reactions?.flatMap((reaction) => {
-  //       return reaction.manifestation?.map((manifestation) => {
-  //         return capitalizeFirstLetter(manifestation.text || placeHolder)
-  //       })
-  //     })
-  //   : (allergy.attributes as AllergyAttributesV1)?.reactions
-  //     ? (allergy.attributes as AllergyAttributesV1)?.reactions?.map((reaction) => {
-  //         return capitalizeFirstLetter(reaction || placeHolder)
-  //       })
-  //     : [placeHolder]
-
   const listOfReactions = allergy.attributes?.reactions
     ? allergy.attributes?.reactions?.flatMap((reaction) => {
-        console.info('reaction', reaction)
         return (reaction as Reaction).manifestation
           ? (reaction as Reaction).manifestation?.map((manifestation) => {
               return capitalizeFirstLetter(manifestation.text || placeHolder)
             })
           : capitalizeFirstLetter((reaction as unknown as string) || placeHolder)
       })
-    : // : (allergy.attributes as AllergyAttributesV1)?.reactions
-      //   ? (allergy.attributes as AllergyAttributesV1)?.reactions?.map((reaction) => {
-      //       return capitalizeFirstLetter(reaction || placeHolder)
-      //     })
-      [placeHolder]
-
-  console.info('listOfReactions', listOfReactions)
+    : [placeHolder]
 
   const listOfNotes = allergy.attributes?.notes
     ? allergy.attributes?.notes?.map((note) => {
-        console.info('note', note)
         return (note as NoteText).text
           ? capitalizeFirstLetter((note as NoteText).text || placeHolder)
           : capitalizeFirstLetter((note as unknown as string) || placeHolder)
       })
-    : // : (allergy.attributes as AllergyAttributesV1)?.notes
-      //   ? (allergy.attributes as AllergyAttributesV1)?.notes?.map((note) => {
-      //       return capitalizeFirstLetter(note || placeHolder)
-      //     })
-      [placeHolder]
-
-  console.info('listOfNotes', listOfNotes)
+    : [placeHolder]
 
   const providerName = (allergy.attributes as AllergyAttributesV0)?.recorder?.display
     ? capitalizeFirstLetter((allergy.attributes as AllergyAttributesV0)?.recorder?.display || placeHolder)
     : (allergy.attributes as AllergyAttributesV1)?.provider
       ? capitalizeFirstLetter((allergy.attributes as AllergyAttributesV1)?.provider || placeHolder)
       : placeHolder
-
-  // const displayDate = allergy.attributes?.recordedDate
-  //   ? formatDateMMMMDDYYYY(allergy.attributes.recordedDate)
-  //   : placeHolder
-
-  // const displayName = allergy.attributes?.code?.text
-  //   ? t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) })
-  //   : placeHolder
 
   return (
     <FeatureLandingTemplate
@@ -154,15 +119,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               {(allergy.attributes as AllergyAttributesV0)?.category?.length ||
               (allergy.attributes as AllergyAttributesV1)?.categories?.length ? (
                 <Box ml={theme.dimensions.standardMarginBetween}>
-                  <VABulletList
-                    listOfText={listOfCategories as string[]}
-
-                    // listOfText={
-                    //   allergy.attributes?.category?.map((category) => {
-                    //     return capitalizeFirstLetter(category || placeHolder)
-                    //   }) as string[]
-                    // }
-                  />
+                  <VABulletList listOfText={listOfCategories as string[]} />
                 </Box>
               ) : (
                 <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
@@ -183,16 +140,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
                   <Box ml={theme.dimensions.standardMarginBetween}>
-                    <VABulletList
-                      listOfText={
-                        listOfReactions as string[]
-                        // allergy.attributes?.reactions?.flatMap((reaction) => {
-                        //   return reaction.manifestation?.map((manifestation) => {
-                        //     return capitalizeFirstLetter(manifestation.text || placeHolder)
-                        //   })
-                        // }) as string[]
-                      }
-                    />
+                    <VABulletList listOfText={listOfReactions as string[]} />
                   </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
@@ -204,14 +152,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 {allergy?.attributes?.notes?.length ? (
                   <Box ml={theme.dimensions.standardMarginBetween}>
-                    <VABulletList
-                      listOfText={
-                        listOfNotes as string[]
-                        // allergy.attributes?.notes?.map((note) => {
-                        //   return capitalizeFirstLetter(note.text || placeHolder)
-                        // }) as string[]
-                      }
-                    />
+                    <VABulletList listOfText={listOfNotes as string[]} />
                   </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>
