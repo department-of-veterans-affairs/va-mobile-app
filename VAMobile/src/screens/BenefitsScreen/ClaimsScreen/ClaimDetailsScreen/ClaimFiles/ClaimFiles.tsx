@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIsFocused } from '@react-navigation/native'
@@ -28,7 +28,7 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   const events = attributes.eventsTimeline.filter(
     (event) => (event.filename && event.filename.length > 0) || (event.documents && event.documents.length > 0),
   )
-  const timezoneMessage = useMemo(() => getFileUploadTimezoneMessage(t), [t])
+  const timezoneMessage = getFileUploadTimezoneMessage(t)
   const files = (): Array<DefaultListItemObj> => {
     const items: Array<DefaultListItemObj> = []
 
