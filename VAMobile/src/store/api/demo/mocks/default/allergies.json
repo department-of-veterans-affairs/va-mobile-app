@@ -830,7 +830,10 @@
           "reactions": ["Sneezing", "Urticaria (Hives)"],
           "location": null,
           "observedHistoric": null,
-          "notes": ["Testing whether allergy with resolved status is still passed through !@\\#$%^&*()"],
+          "notes": [
+            "Testing whether allergy with resolved status is still passed through !@\\#$%^&*()",
+            "A second note for Grass pollen"
+          ],
           "provider": " Victoria A Borland"
         }
       },
