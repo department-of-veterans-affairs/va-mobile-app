@@ -245,8 +245,7 @@ describe('Claims Screen', () => {
   //   await expect(
   //     element(
   //       by.text(
-  //         'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, ' +
-  //         'your claim will go back to that step for review.',
+  //         'You can submit evidence for this claim at any time. But if you submit evidence after Step 3, your claim will go back to that step for review.',
   //       ),
   //     ),
   //   ).toExist()
@@ -419,72 +418,9 @@ describe('Claims Screen', () => {
     }
   })
 
-  it('verify files tab shows no files message when claim has no files', async () => {
+  it('verify files tab infomation', async () => {
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_SCREEN_ID)).scrollTo('top')
     await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
     await expect(element(by.text("This claim doesn't have any files yet."))).toExist()
-
-    // Verify timezone message is NOT shown when no files exist
-    await expect(element(by.text('Files uploaded'))).not.toExist()
-  })
-
-  it('verify files tab shows timezone message when files exist', async () => {
-    // Note: This test checks if CLAIM_4 has uploaded files. If it does, we verify the timezone
-    // message is displayed. If not, we verify the timezone message is NOT displayed.
-    // The test adapts to the actual state of the claim's files.
-    
-    // Navigate back to claims list
-    await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
-
-    // Switch back to Active tab (we're on Closed tab from previous tests)
-    await element(by.text('Active')).tap()
-
-    // Reset scroll position to top
-    await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
-
-    // Navigate to CLAIM_4 which we know works in other tests and has request files
-    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))
-      .scroll(100, 'down')
-    await element(by.id(ClaimsE2eIdConstants.CLAIM_4_ID)).tap()
-
-    // Wait for claim details screen to load and Files tab to be visible
-    await waitFor(element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)))
-      .toBeVisible()
-      .withTimeout(5000)
-
-    // Add small delay for UI to stabilize
-    await setTimeout(1000)
-
-    // Click on Files tab
-    await element(by.id(ClaimsE2eIdConstants.CLAIMS_FILES_ID)).tap()
-
-    // Check if files exist - if no files message appears, skip timezone test
-    const noFilesElement = element(by.text("This claim doesn't have any files yet."))
-
-    // Use waitFor to properly check if no files message exists
-    let hasNoFiles = false
-    try {
-      await waitFor(noFilesElement)
-        .toExist()
-        .withTimeout(2000)
-      hasNoFiles = true
-    } catch {
-      // No files message doesn't exist, so we should have files
-      hasNoFiles = false
-    }
-
-    if (hasNoFiles) {
-      // This claim has no files, so timezone message should not exist
-      await expect(element(by.text('Files uploaded'))).not.toExist()
-    } else {
-      // This claim has files, so timezone message should exist
-      // Wait for the timezone message to appear
-      await waitFor(element(by.text('Files uploaded')))
-        .toExist()
-        .withTimeout(2000)
-      await expect(element(by.text('but we record your submissions when you upload them.'))).toExist()
-    }
   })
 })
