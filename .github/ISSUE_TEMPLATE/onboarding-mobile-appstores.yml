@@ -10,8 +10,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        **Please read before continuing**: This issue form is to request to the VA Mobile App builds for your device.
-        After this issue is approved it will add the current user to the app stores they wish to access.
+        **Please read before continuing**: This issue form is to request access to the VA Mobile App builds for your device.
+        After this issue is approved we will add the current user to the app stores they wish to access.
 
   - type: input
     id: fullname
