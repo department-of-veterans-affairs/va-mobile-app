@@ -20,7 +20,7 @@ This update adds support for a new version (v1) of the VA Medications API that i
 
 ### 2. Feature Toggle Control ✓
 The new v1 API is only used when **BOTH** of these conditions are met:
-- `medicationsOracleHealthEnabled` = true (from authorization services)
+- `medicationsOracleHealthEnabled` = true (from authorization services, which is controlled by the `mhv_medications_cerner_pilot` vets-api Flipper toggle)
 - `WG_MedsOracleHealthApiEnabled` = true (waygate toggle)
 
 If either toggle is false, the app uses the legacy v0 API.
