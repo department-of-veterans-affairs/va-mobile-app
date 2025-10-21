@@ -604,6 +604,7 @@
   "copays.balanceOverdue.description": "Your balance due on <b>{{date}}</b> was <b>{{amount}}</b>. If you paid your full balance, you don't need to do anything else at this time.",
   "copays.chargeDetails.title": "Charge details",
   "copays.currentBalance": "Current balance",
+  "copays.currentBalance.amount": "Current balance: <bold>{{amount}}</bold>",
   "copays.details.title": "Details",
   "copays.disputeCopay.title": "Dispute copay",
   "copays.download.error": "We couldn't download your statement. Please try again.",
