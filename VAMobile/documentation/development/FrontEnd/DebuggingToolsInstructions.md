@@ -83,6 +83,8 @@ The React Profiler panel allows you to record performance profiles and understan
 ## Reactotron
 Reactotron is a debugging tool for both React and React Native applications. It offers a user-friendly interface that allows developers to inspect application state, track network requests, and analyze performance metrics.
 
+[Download the Reactotron Desktop App](https://github.com/infinitered/reactotron/releases?q=reactotron-app&expanded=true)
+
 Reactotron can be used for the following:
 - view your application state
 - show API requests & responses
@@ -95,7 +97,10 @@ Reactotron can be used for the following:
 - show image overlay in React Native
 - track your Async Storage in React Native
 
-[Quick Start Guide for Reactotron](https://docs.infinite.red/reactotron/quick-start/react-native/)
+To start the Reactotron tool
+1. Run `yarn install`
+2. Start the app in debug mode `yarn start:debug`
+
 
 ![Reactotron](/img/debuggingToolsImage/reactotron-example.jpg)
 
