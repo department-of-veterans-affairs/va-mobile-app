@@ -41,6 +41,7 @@ export type FeatureToggleType =
   | 'showCernerAlertSM'
   | 'showEmailConfirmationAlert'
   | 'overpayCopay'
+  | 'digitalWallet'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -69,6 +70,7 @@ type FeatureToggleValues = {
   showCernerAlertSM: boolean
   showEmailConfirmationAlert: boolean
   overpayCopay: boolean
+  digitalWallet: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -98,6 +100,7 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
+  digitalWallet: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults

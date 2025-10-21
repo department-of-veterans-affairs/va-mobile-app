@@ -29,6 +29,7 @@ import { isValidDisabilityRating } from 'utils/claims'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useBeforeNavBackListener, useOrientation } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 // import PhotoUpload from 'components/PhotoUpload'
@@ -237,7 +238,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           </WaygateWrapper>
         </>
       )}
-      {passPayload && (
+      {featureEnabled('digitalWallet') && passPayload && (
         <Box mt={16} px={horizontalPadding} style={containerStyle} width="100%">
           <AppleWalletButton payload={passPayload} />
         </Box>
