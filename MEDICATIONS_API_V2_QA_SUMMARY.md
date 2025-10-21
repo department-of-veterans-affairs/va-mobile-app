@@ -106,31 +106,3 @@ Use test accounts with varied prescription data:
 
 See: [Medications Test Accounts](https://github.com/department-of-veterans-affairs/va.gov-team-sensitive/blob/master/teams/medications/test-accounts.md)
 
-## Release Strategy
-
-1. **Initial State:** Both toggles OFF - all users use v0 API
-2. **Testing Phase:** Enable for test users only
-3. **Gradual Rollout:** Progressively enable for user segments
-4. **Full Deployment:** Enable for all users
-5. **Cleanup:** Eventually remove v0 support (future work)
-
-## Success Metrics
-
-✅ **Deployment is successful when:**
-- All prescription features work correctly with v1 API
-- User experience is identical to v0 API
-- No increase in error rates or crashes
-- Performance metrics remain acceptable
-- Both iOS and Android function properly
-
-## Questions or Issues?
-
-- **Development Team:** GitHub PR #11645
-- **QA Documentation:** `VAMobile/documentation/development/QA/MedicationsAPIv2-QA-Guide.md`
-- **Product Owner:** As per team communication channels
-
----
-
-**Created:** October 21, 2025
-**Status:** Ready for QA Testing
-**Related PR:** #11645
