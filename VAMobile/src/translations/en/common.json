@@ -1002,8 +1002,6 @@
   "labsAndTests.list.selectADateRange": "Select a date range",
   "labsAndTests.list.dateFilter.selectPeriod": "Select a 90-day period",
   "labsAndTests.list.dateFilter.showing90Days": "Showing labs and tests for {{timeFrame}}",
-  "labsAndTests.list.dateFilter.month": "Select a month",
-  "labsAndTests.list.dateFilter.year": "Select a year",
   "labsAndTests.list.dateFilter.buttonText": "Apply",
   "labsAndTests.list.dateFilter.displayLabel": "Showing labs and tests for {{timeFrame}}",
   "labsAndTests.loading": "Loading your labs and test results...",

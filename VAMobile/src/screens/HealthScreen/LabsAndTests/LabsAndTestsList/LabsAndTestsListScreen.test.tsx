@@ -65,6 +65,27 @@ context('LabsAndTestsListScreen', () => {
     )
   })
 
+  it('calls API with correct date range for "Last 90 days"', async () => {
+    const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+
+    initializeTestInstance()
+
+    await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
+
+    // Verify the API was called with the correct date range parameters
+    expect(mockApiGet).toHaveBeenCalledWith(
+      '/v1/health/labs-and-tests',
+      expect.objectContaining({
+        endDate: today,
+        startDate: ninetyDaysAgo,
+        page: '1',
+        useCache: 'false',
+      }),
+    )
+  })
+
   it('renders the expected data in the list of Labs and Tests', async () => {
     when(api.get as jest.Mock)
       .calledWith('/v1/health/labs-and-tests', expect.anything())
