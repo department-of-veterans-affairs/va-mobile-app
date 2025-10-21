@@ -64,8 +64,7 @@ export function useAppIsOnline(): boolean {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false): void {
   if (inModal) {
-    // TODO: CONFIRM CONTENT
-    Alert.alert('TEMP TITLE', t('offline.toast.checkConnection'), [{ text: t('dismiss'), style: 'default' }])
+    Alert.alert(t('offline.alert.title'), t('offline.alert.body'), [{ text: t('dismiss'), style: 'default' }])
   } else {
     snackbar.show(t('offline.toast.checkConnection'), { isError: true })
   }

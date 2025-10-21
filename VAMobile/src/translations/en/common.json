@@ -1170,6 +1170,8 @@
   "notifications.settings.privacy": "Your privacy is important to us. We won't show any personal information in your notifications.",
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",
   "notifications.title": "Notifications",
+  "offline.alert.body": "You're offline, check your connection and try again.",
+  "offline.alert.title": "This content isn't available",
   "offline.connectedToTheInternet": "Connected to the internet",
   "offline.banner.title": "No internet connection",
   "offline.lastConnected": "Last connected",
