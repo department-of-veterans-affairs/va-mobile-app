@@ -260,7 +260,6 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
   }
 
   const onSave = (): void => {
-    console.log('---- in editaddress save')
     if (!isConnected) {
       showOfflineSnackbar(snackbar, t)
       return

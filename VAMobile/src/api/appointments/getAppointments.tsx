@@ -27,7 +27,7 @@ const getAppointments = async (
     'include[]': 'travel_pay_claims',
   }
 
-  const res = await get<AppointmentsGetData>('/v0/appointments', {
+  return get<AppointmentsGetData>('/v0/appointments', {
     startDate: startDate,
     endDate: endDate,
     'page[number]': '1',
@@ -37,8 +37,6 @@ const getAppointments = async (
     useCache: 'false',
     ...pastParams,
   } as Params)
-  console.log('completed appointments get!')
-  return res
 }
 
 /**

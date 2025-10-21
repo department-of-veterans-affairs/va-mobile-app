@@ -54,6 +54,11 @@ export const offlineRetry = <TError = DefaultError>(_: number, error: TError) =>
   return featureEnabled('offlineMode') && !!error.networkError
 }
 
+/*
+  useQuery is a wrapper hook for the react-query useQuery. It acts the same but with two changes. First it adds tracking
+  for the last time the data was fetched from the api. And second it will kick off a retry when the device disconnects
+  mid-request to fetch the data from the cache instead.
+ */
 export const useQuery = <
   TQueryFnData = unknown,
   TError = DefaultError,
@@ -85,6 +90,9 @@ export const useQuery = <
   }
 }
 
+/*
+  useGetLastUpdatedTime returns the timestamp for a query based on the query key provided.
+ */
 const useGetLastUpdatedTime = (key: QueryKey) => {
   const [time, setTime] = useState<number>()
   const { lastUpdatedTimestamps } = useSelector<RootState, OfflineState>((state) => state.offline)

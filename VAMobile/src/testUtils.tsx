@@ -183,6 +183,9 @@ function render(
   ui,
   { preloadedState, navigationProvided = false, queriesData, isOnline = true, ...renderOptions }: RenderParams = {},
 ) {
+  ;(useNetInfo as jest.Mock).mockImplementation(jest.fn().mockReturnValue({ isConnected: isOnline }))
+  onlineManager.setOnline(isOnline)
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -190,8 +193,6 @@ function render(
       },
     },
   })
-  onlineManager.setOnline(isOnline)
-  ;(useNetInfo as jest.Mock).mockImplementation(jest.fn().mockReturnValue({ isConnected: isOnline }))
 
   //@ts-ignore
   function Wrapper({ children }) {
