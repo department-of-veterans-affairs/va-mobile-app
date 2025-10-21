@@ -97,6 +97,7 @@ function PastAppointments({
 
         setTimeFrame(timeFrameToQuery)
         setDateRange({ startDate, endDate })
+        setInvalidDateRange(undefined)
         setPage(1)
       }
     } else {
