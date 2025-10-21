@@ -20,7 +20,6 @@ context('OfflineBanner', () => {
   const testDate = DateTime.fromISO('2025-10-20T12:00:00.000Z')
 
   beforeEach(() => {
-    // Set the current date to May 28, 2025 for all tests
     jest.setSystemTime(testDate.toMillis())
   })
 
