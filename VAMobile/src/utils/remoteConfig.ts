@@ -100,7 +100,7 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
-  offlineMode: false,
+  offlineMode: true, // TODO: DO NOT MERGE UNTIL THIS IS FALSE!!!
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',
@@ -167,7 +167,6 @@ export const loadOverrides = async (): Promise<void> => {
  * we'll return the value of the key in devConfig, otherwise we return the remoteConfig value
  */
 export const featureEnabled = (feature: FeatureToggleType): boolean => {
-  console.log(overrideRemote)
   return overrideRemote ? devConfig[feature] : remoteConfig().getValue(feature)?.asBoolean()
 }
 

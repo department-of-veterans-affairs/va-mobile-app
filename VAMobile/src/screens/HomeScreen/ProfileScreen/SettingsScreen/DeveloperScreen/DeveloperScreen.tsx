@@ -27,7 +27,7 @@ import {
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
-import { AnalyticsState } from 'store/slices'
+import { AnalyticsState, OfflineState, setOfflineDebugEnabled } from 'store/slices'
 import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { AuthState, debugResetFirstTimeLogin, logout } from 'store/slices/authSlice'
 import { getHideWarningsPreference, toggleHideWarnings } from 'utils/consoleWarnings'
@@ -137,6 +137,7 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
 
   // push data
   const { firebaseDebugMode } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
+  const { offlineDebugEnabled } = useSelector<RootState, OfflineState>((state) => state.offline)
   const [hideWarnings, setHideWarnings] = useState<boolean>(true)
   const [deviceAppSid, setDeviceAppSid] = useState<string>('')
   const [deviceToken, setDeviceToken] = useState<string>('')
@@ -242,6 +243,18 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       },
     },
   ]
+  const offlineModeList: Array<SimpleListItemObj> = [
+    {
+      text: 'Offline Debug',
+      decorator: ButtonDecoratorType.Switch,
+      decoratorProps: {
+        on: offlineDebugEnabled,
+      },
+      onPress: async () => {
+        dispatch(setOfflineDebugEnabled(!offlineDebugEnabled))
+      },
+    },
+  ]
 
   const onFeedback = () => {
     inAppFeedback('Developer')
@@ -306,6 +319,14 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
           Console Warnings
         </TextView>
         {<SimpleList items={consoleWarningsList} />}
+        <TextView
+          variant={'MobileBodyBold'}
+          accessibilityRole={'header'}
+          mx={theme.dimensions.gutter}
+          my={theme.dimensions.standardMarginBetween}>
+          Offline Mode
+        </TextView>
+        <SimpleList items={offlineModeList} />
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>

@@ -8,6 +8,8 @@ export type OfflineState = {
   offlineTimestamp?: DateTime
   bannerExpanded: boolean
   isOffline: boolean
+  offlineDebugEnabled: boolean
+  forceOffline: boolean
   /**
    * When we are within a modal, toast notifications do not show. This flag
    * lets us display an alternative alert instead
@@ -20,6 +22,8 @@ export type OfflineState = {
 export const initialOfflineState: OfflineState = {
   bannerExpanded: false,
   isOffline: false,
+  offlineDebugEnabled: false,
+  forceOffline: false,
   lastUpdatedTimestamps: {},
   offlineEventsMap: {},
 }
@@ -67,6 +71,18 @@ export const logOfflineEventQueue = (): AppThunk => async (dispatch) => {
   dispatch(dispatchClearOfflineEventQueue())
 }
 
+export const setOfflineDebugEnabled =
+  (offlineDebugEnabled: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetOfflineDebugEnabled(offlineDebugEnabled))
+  }
+
+export const setForceOffline =
+  (forceOffline: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetForceOffline(forceOffline))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -104,6 +120,15 @@ const offlineSlice = createSlice({
     dispatchClearOfflineEventQueue: (state) => {
       state.offlineEventsMap = {}
     },
+    dispatchSetForceOffline: (state, action: PayloadAction<boolean>) => {
+      state.forceOffline = action.payload
+    },
+    dispatchSetOfflineDebugEnabled: (state, action: PayloadAction<boolean>) => {
+      state.offlineDebugEnabled = action.payload
+      if (!action.payload) {
+        state.forceOffline = false
+      }
+    },
   },
 })
 
@@ -114,5 +139,7 @@ const {
   dispatchSetLastUpdatedTime,
   dispatchQueueOfflineEvent,
   dispatchClearOfflineEventQueue,
+  dispatchSetForceOffline,
+  dispatchSetOfflineDebugEnabled,
 } = offlineSlice.actions
 export default offlineSlice.reducer
