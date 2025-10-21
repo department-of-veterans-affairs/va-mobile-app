@@ -93,7 +93,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="*.va.gov" />
+                <data android:host="staging.va.gov" />
                 <data android:path="/my-health/appointments" />
             </intent-filter>
             <intent-filter android:autoVerify="true">
@@ -103,39 +103,29 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="*.va.gov" />
+                <data android:host="staging.va.gov" />
                 <data android:path="/my-health/appointments/past" />
             </intent-filter>
-            <!--             Deep link for https://staging.va.gov/my-health/appointments -->
-            <!--            <intent-filter android:autoVerify="true">-->
-            <!--                <action android:name="android.intent.action.VIEW" />-->
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--                <data-->
-            <!--                    android:scheme="https"-->
-            <!--                    android:host="staging.va.gov"-->
-            <!--                    android:path="/my-health/appointments" />-->
-            <!--            </intent-filter>-->
-            <!--            &lt;!&ndash; Deep link for https://staging.va.gov/my-health/appointments/past &ndash;&gt;-->
-            <!--            <intent-filter android:autoVerify="true">-->
-            <!--                <action android:name="android.intent.action.VIEW" />-->
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--                <data-->
-            <!--                    android:scheme="https"-->
-            <!--                    android:host="staging.va.gov"-->
-            <!--                    android:path="/my-health/appointments/past" />-->
-            <!--            </intent-filter>-->
-            <!-- Deep link for all under /my-health/appointments -->
-            <!--            <intent-filter android:autoVerify="true">-->
-            <!--                <action android:name="android.intent.action.VIEW" />-->
-            <!--                <category android:name="android.intent.category.DEFAULT" />-->
-            <!--                <category android:name="android.intent.category.BROWSABLE" />-->
-            <!--                <data-->
-            <!--                    android:scheme="https"-->
-            <!--                    android:host="staging.va.gov"-->
-            <!--                    android:pathPrefix="/my-health/appointments" />-->
-            <!--            </intent-filter>-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="www.va.gov" />
+                <data android:path="/my-health/appointments" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="www.va.gov" />
+                <data android:path="/my-health/appointments/past" />
+            </intent-filter>
         </activity>
     </application>
     <uses-permission
