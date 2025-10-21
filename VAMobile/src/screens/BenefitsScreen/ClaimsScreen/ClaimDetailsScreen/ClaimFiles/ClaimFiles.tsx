@@ -10,6 +10,7 @@ import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'compon
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY, getFileUploadTimezoneMessage } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type ClaimFilesProps = {
   claim: ClaimData
@@ -94,9 +95,11 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   if (isFocused && filesList.length > 0) {
     return (
       <Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBody">{timezoneMessage}</TextView>
-        </Box>
+        {featureEnabled('showTimezoneMessage') && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBody">{timezoneMessage}</TextView>
+          </Box>
+        )}
         <DefaultList items={files()} />
       </Box>
     )
