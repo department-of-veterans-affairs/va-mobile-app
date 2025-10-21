@@ -287,7 +287,7 @@ export let waygateConfig: WaygateToggleValues = {
   WG_InAppRecruitment: { ...waygateDefault },
   WG_HealthHelp: { ...waygateDefault },
   WG_VeteranStatusCard: { ...waygateDefault },
-  WG_MedsOracleHealthApiEnabled: { enabled: false },
+  WG_MedsOracleHealthApiEnabled: { enabled: true },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
