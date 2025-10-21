@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { AccessibilityInfo, Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
@@ -28,11 +28,13 @@ export const OfflineBanner: FC = () => {
     if (!isConnected && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))
       setShouldAnnounceOffline(true)
-    } else if (isConnected) {
+    } else if (isConnected && offlineTimestamp) {
       dispatch(setOfflineTimestamp(undefined))
       setShouldAnnounceOffline(false)
+      dispatch(setBannerExpanded(false))
+      AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
     }
-  }, [isConnected, offlineTimestamp, dispatch])
+  }, [isConnected, offlineTimestamp, dispatch, t])
 
   const onBannerInteract = () => {
     dispatch(setBannerExpanded(!bannerExpanded))
@@ -49,25 +51,25 @@ export const OfflineBanner: FC = () => {
       px={theme.dimensions.gutter}
       pt={5}
       mb={theme.dimensions.condensedMarginBetween}>
-      <Box height={40} display="flex" flexDirection="row" justifyContent="space-between">
-        <TextView
-          accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
-          color="offlineText"
-          variant="MobileBodyBold">
-          {t('offline.banner.title')}
-        </TextView>
-        <Pressable
-          accessibilityState={{ expanded: bannerExpanded }}
-          onPress={onBannerInteract}
-          accessibilityRole="button">
+      <Pressable
+        accessibilityState={{ expanded: bannerExpanded }}
+        onPress={onBannerInteract}
+        accessibilityRole="button">
+        <Box height={40} display="flex" flexDirection="row" justifyContent="space-between">
+          <TextView
+            accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
+            color="offlineText"
+            variant="MobileBodyBold">
+            {t('offline.banner.title')}
+          </TextView>
           <Icon
             name={bannerExpanded ? 'ExpandLess' : 'ExpandMore'}
             fill={theme.colors.icon.contrast}
             width={theme.dimensions.chevronListItemWidth}
             height={theme.dimensions.chevronListItemHeight}
           />
-        </Pressable>
-      </Box>
+        </Box>
+      </Pressable>
       {bannerExpanded && (
         <Box pb={theme.dimensions.condensedMarginBetween}>
           <TextView

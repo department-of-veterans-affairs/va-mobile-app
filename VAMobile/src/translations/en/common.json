@@ -1170,6 +1170,7 @@
   "notifications.settings.privacy": "Your privacy is important to us. We won't show any personal information in your notifications.",
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",
   "notifications.title": "Notifications",
+  "offline.connectedToTheInternet": "Connected to the internet",
   "offline.banner.title": "No internet connection",
   "offline.lastConnected": "Last connected",
   "offline.toast.checkConnection": "Check your connection and try again",
