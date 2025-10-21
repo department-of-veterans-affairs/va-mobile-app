@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
+import { AccessibilityProps, KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 
 import { Box, BoxProps } from 'components'
 import {
@@ -23,6 +23,8 @@ export type VATextInputProps = {
   value?: string
   /** i18n key for the label */
   labelKey?: string
+  /** optional accessibilityValue */
+  a11yValue?: string
   /** Handle the change in input value */
   onChange: (val: string) => void
   /** Maximum length of the input */
@@ -57,6 +59,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     inputType,
     value,
     labelKey,
+    a11yValue,
     onChange,
     maxLength,
     onEndEditing,
@@ -154,11 +157,21 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     pl: 8,
   }
 
+  const a11yProps: AccessibilityProps = {
+    accessible: true,
+    accessibilityLabel: `${a11yValue ? a11yValue : value}. ${t('textInput.a11yLabel')}`,
+  }
+
   const renderTextInput = (): ReactElement => {
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
     const textInputBox = (
-      <Box display="flex" flexDirection="row" gap={theme.dimensions.smallMarginBetween} alignItems="center">
+      <Box
+        display="flex"
+        flexDirection="row"
+        gap={theme.dimensions.smallMarginBetween}
+        alignItems="center"
+        {...a11yProps}>
         {preAdornment}
         <Box flex={1} {...wrapperProps}>
           <TextInput testID={testID} {...inputProps} ref={inputRef || ref} />

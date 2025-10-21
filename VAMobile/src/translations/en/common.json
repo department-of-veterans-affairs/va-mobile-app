@@ -1599,6 +1599,7 @@
   "termsAndConditions.toAccept": "To accept the current terms and conditions, please go to the My HealtheVet website:  ",
   "termsAndConditions.toAccept.a11yLabel": "To accept the current terms and conditions, please go to the My Healthy Vet website:  ",
   "text.raw": "{{text}}",
+  "textInput.a11yLabel": "Textfield. Double tap to edit.",
   "thisFacilityWillContactYou": "This facility will contact you if we need more information about your request.",
   "travelPay.downtime.apptsTitle": "Some appointment features aren't available right now",
   "travelPay.downtime.title": "Travel Pay isn't available right now",

@@ -30,6 +30,7 @@ import { States } from 'constants/states'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import AddressValidation from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressValidation'
 import { GenerateAddressMessage } from 'translations/en/functions'
+import { a11yLabelID } from 'utils/a11yLabel'
 import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
 import { getAddressDataPayload } from 'utils/personalInformation'
 
@@ -518,6 +519,7 @@ function EditAddressScreen({ navigation, route }: IEditAddressScreen) {
         inputType: zipCodeInputType,
         labelKey: zipCodeLabelKey,
         value: zipCode,
+        a11yValue: a11yLabelID(zipCode),
         onChange: setZipCode,
         inputRef: zipCodeRef,
         isRequiredField: true,
