@@ -23,6 +23,68 @@ jobs:
       - name: Check QA approval
         shell: bash
         run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          # Ensure we have both base and head SHAs for diffing
+          git fetch origin "${BASE_SHA}"
+          git fetch origin "${HEAD_SHA}"
+
+          # Get all changed files between base and head
+          CHANGED_FILES=$(git diff --name-only "${BASE_SHA}" "${HEAD_SHA}")
+
+          # Flag to determine if QA approval is needed based on file changes
+          QA_APPROVAL_NEEDED_BY_FILES=false
+
+          # Define patterns for inclusion and exclusion
+          # These patterns use shell globbing for matching
+          # Note: For directory patterns like "VAMobile/src/", we need to match "VAMobile/src/*"
+          # and for ".github/", we need ".github/*"
+          INCLUDE_PATTERNS=(
+            "VAMobile/src/*"
+            "VAMobile/e2e/*"
+            "VAMobile/package.json"
+            "VAMobile/.detoxrc.json"
+          )
+          EXCLUDE_PATTERNS=(
+            ".github/*" # Exclude anything in .github/
+            "VAMobile/src/*.test.tsx" # Exclude test files
+          )
+
+          for file in $CHANGED_FILES; do
+            IS_EXCLUDED=false
+            # Check if the file matches any exclusion pattern
+            for exclude_pattern in "${EXCLUDE_PATTERNS[@]}"; do
+              if [[ "$file" == $exclude_pattern ]]; then
+                IS_EXCLUDED=true
+                break
+              fi
+            done
+
+            if $IS_EXCLUDED; then
+              continue # This file is explicitly excluded, move to next
+            fi
+
+            # If not excluded, check if it matches any inclusion pattern
+            for include_pattern in "${INCLUDE_PATTERNS[@]}"; do
+              if [[ "$file" == $include_pattern ]]; then
+                QA_APPROVAL_NEEDED_BY_FILES=true
+                break 2 # Found a relevant file, no need to check further
+              fi
+            done
+          done
+
+          if ! $QA_APPROVAL_NEEDED_BY_FILES; then
+            echo "No relevant files changed for QA approval based on workflow path filters. Skipping QA approval check."
+            exit 0
+          fi
+
+    name: Requires QA approval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check QA approval
+        shell: bash
+        run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
             then
             echo "PR opened by Dependabot. Skipping QA approval check."
