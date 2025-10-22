@@ -72,10 +72,17 @@ android {
 
     flavorDimensions "default"
 
+    buildFeatures {
+        compose true
+    }
+
     compileSdk rootProject.ext.compileSdkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     defaultConfig {
         applicationId "gov.va.mobileapp"
@@ -209,6 +216,12 @@ dependencies {
     androidTestImplementation('com.wix:detox:+') { exclude module: "protobuf-lite" }
 
     implementation project(':lottie-react-native')
+
+    //datePicker compose and material3
+    implementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-window-size-class")
+    implementation("androidx.activity:activity-compose")
 }
 
 // Run this once to be able to run the application with BUCK

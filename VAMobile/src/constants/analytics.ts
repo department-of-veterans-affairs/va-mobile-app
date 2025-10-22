@@ -122,6 +122,29 @@ export const Events = {
       },
     }
   },
+  vama_appt_noauth: (): Event => {
+    return {
+      name: 'vama_appt_noauth',
+    }
+  },
+  vama_appt_invalid_range: (): Event => {
+    return {
+      name: 'vama_appt_invalid_range',
+    }
+  },
+  vama_appt_empty_range: (): Event => {
+    return {
+      name: 'vama_appt_empty_range',
+    }
+  },
+  vama_appt_time_frame: (timeFrame: string): Event => {
+    return {
+      name: 'vama_appt_time_frame',
+      params: {
+        timeFrame,
+      },
+    }
+  },
   vama_cerner_alert: (): Event => {
     return {
       name: 'vama_cerner_alert',
