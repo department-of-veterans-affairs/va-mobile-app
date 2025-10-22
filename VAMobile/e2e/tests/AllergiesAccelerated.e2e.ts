@@ -8,6 +8,7 @@ import { by, element, expect } from 'detox'
 
 import {
   CommonE2eIdConstants,
+  checkImages,
   loginToDemoMode,
   openAllergyRecords,
   openHealth,
@@ -36,6 +37,11 @@ beforeAll(async () => {
 describe('Allergies Screen with OH data', () => {
   it('should show V1 allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
+    const acceleratedAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID)).takeScreenshot(
+      'acceleratedAllergyTemplate',
+    )
+    checkImages(acceleratedAllergyTemplate)
+    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID)).getAttributes()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID))).toExist()
