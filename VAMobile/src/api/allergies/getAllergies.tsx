@@ -12,14 +12,6 @@ import { featureEnabled } from 'utils/remoteConfig'
  */
 const getAllergies = ({ useV1 = false }: { useV1?: boolean }): Promise<AllergyListPayload | undefined> => {
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  if (useV1) {
-    return get<AllergyListPayload>(`/${API_VERSION}/health/allergy-intolerances`, {
-      'page[number]': '1',
-      'page[size]': LARGE_PAGE_SIZE.toString(),
-      sort: 'date',
-      useCache: 'false',
-    })
-  }
   return get<AllergyListPayload>(`/${API_VERSION}/health/allergy-intolerances`, {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
