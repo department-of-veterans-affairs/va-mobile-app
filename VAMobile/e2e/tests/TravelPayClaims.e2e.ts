@@ -7,6 +7,7 @@ const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIM_1_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
   TRAVEL_PAY_CLAIM_11_ID: 'claim_summary_4b99039f-208f-4c07-90b8-498f8466233e',
   TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID: 'TravelPayClaimDetailsScreen',
+  TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID: 'travelPayClaimHeaderTitle',
 }
 
 beforeAll(async () => {
@@ -67,8 +68,12 @@ describe('Travel Pay Claims Screen', () => {
   })
 
   it('opens claim details screen', async () => {
-    const { TRAVEL_PAY_CLAIMS_TEST_ID, TRAVEL_PAY_CLAIM_1_ID, TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID } =
-      TravePayClaimsE2eIds
+    const {
+      TRAVEL_PAY_CLAIMS_TEST_ID,
+      TRAVEL_PAY_CLAIM_1_ID,
+      TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID,
+      TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID,
+    } = TravePayClaimsE2eIds
 
     await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
     await waitFor(element(by.id(TRAVEL_PAY_CLAIM_1_ID)))
@@ -88,9 +93,9 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(6000) // Increased timeout for CI/CD
 
     // Verify we can see claim data
-    await waitFor(element(by.text('Claim information')))
+    await waitFor(element(by.id(TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID)))
       .toExist()
-      .withTimeout(8000) // Increased timeout for CI/CD
+      .withTimeout(6000) // Increased timeout for CI/CD
 
     // Navigate back using the back button
     await element(by.text('Travel')).tap()

@@ -226,7 +226,7 @@ context('TravelPayClaimAppeals', () => {
       const claimWithUndefinedDocs = {
         ...baseClaimDetails,
         documents: undefined,
-      }
+      } as unknown as TravelPayClaimDetails
 
       renderComponent(claimWithUndefinedDocs)
 
