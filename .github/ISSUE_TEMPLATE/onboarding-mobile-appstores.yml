@@ -1,5 +1,5 @@
 name: Onboarding Request (Mobile App Stores)
-description: Fill out this form to request access to the mobile app stores for builds.
+description: Testflight/AppTester Access
 title: 'Add user to App Stores: [name]'
 labels: [TestFlight & AppTester]
 assignees:
