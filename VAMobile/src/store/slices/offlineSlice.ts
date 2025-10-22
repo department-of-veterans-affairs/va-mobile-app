@@ -9,6 +9,7 @@ export type OfflineState = {
   bannerExpanded: boolean
   isOffline: boolean
   offlineDebugEnabled: boolean
+  shouldAnnounceOffline: boolean
   forceOffline: boolean
   /**
    * When we are within a modal, toast notifications do not show. This flag
@@ -24,6 +25,7 @@ export const initialOfflineState: OfflineState = {
   isOffline: false,
   offlineDebugEnabled: false,
   forceOffline: false,
+  shouldAnnounceOffline: false,
   lastUpdatedTimestamps: {},
   offlineEventsMap: {},
 }
@@ -83,6 +85,12 @@ export const setForceOffline =
     dispatch(dispatchSetForceOffline(forceOffline))
   }
 
+export const setShouldAnnounceOffline =
+  (shouldAnnounceOffline: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchSetShouldAnnounceOffline(shouldAnnounceOffline))
+  }
+
 /**
  * Redux slice that will create the actions and reducers
  */
@@ -123,6 +131,9 @@ const offlineSlice = createSlice({
     dispatchSetForceOffline: (state, action: PayloadAction<boolean>) => {
       state.forceOffline = action.payload
     },
+    dispatchSetShouldAnnounceOffline: (state, action: PayloadAction<boolean>) => {
+      state.shouldAnnounceOffline = action.payload
+    },
     dispatchSetOfflineDebugEnabled: (state, action: PayloadAction<boolean>) => {
       state.offlineDebugEnabled = action.payload
       if (!action.payload) {
@@ -141,5 +152,6 @@ const {
   dispatchClearOfflineEventQueue,
   dispatchSetForceOffline,
   dispatchSetOfflineDebugEnabled,
+  dispatchSetShouldAnnounceOffline,
 } = offlineSlice.actions
 export default offlineSlice.reducer

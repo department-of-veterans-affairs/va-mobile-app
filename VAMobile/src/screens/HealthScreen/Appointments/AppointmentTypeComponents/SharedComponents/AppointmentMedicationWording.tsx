@@ -17,7 +17,7 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -32,7 +32,7 @@ const WebViewLinkHelper = (
   t: TFunction,
   testID?: string,
 ) => {
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   return (
@@ -41,7 +41,7 @@ const WebViewLinkHelper = (
       icon={{ name: 'Launch', fill: 'default' }}
       testID={testID}
       onPress={() => {
-        if (!isConnected) {
+        if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
           showOfflineSnackbar(snackbar, t)
           return
         }

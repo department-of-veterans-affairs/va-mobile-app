@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react'
-import { Alert } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { AccessibilityInfo, Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import NetInfo, { addEventListener, useNetInfo } from '@react-native-community/netinfo'
@@ -7,10 +8,19 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { onlineManager } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
+import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { OfflineState, logOfflineEventQueue, queueOfflineEvent } from 'store/slices'
+import {
+  OfflineState,
+  logOfflineEventQueue,
+  queueOfflineEvent,
+  setBannerExpanded,
+  setOfflineTimestamp,
+  setShouldAnnounceOffline,
+} from 'store/slices'
 import { useAppDispatch } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -49,23 +59,33 @@ export const useOfflineEventQueue = (screen: string) => {
   )
 }
 
+export const CONNECTION_STATUS = {
+  CONNECTED: 'CONNECTED',
+  DISCONNECTED: 'DISCONNECTED',
+  UNKNOWN: 'UNKNOWN',
+}
+
 /**
  * Returns a value representing whether the app is able to connect to the internet. If
  * offline mode is disabled this will always return true
  */
-export function useAppIsOnline(): boolean {
+export function useAppIsOnline(): string {
   const { isConnected } = useNetInfo()
   const { forceOffline } = useSelector<RootState, OfflineState>((state) => state.offline)
 
   if (!featureEnabled('offlineMode')) {
-    return true
+    return CONNECTION_STATUS.CONNECTED
   }
 
   if (forceOffline) {
-    return false
+    return CONNECTION_STATUS.DISCONNECTED
   }
 
-  return !!isConnected
+  if (isConnected === null) {
+    return CONNECTION_STATUS.UNKNOWN
+  }
+
+  return isConnected ? CONNECTION_STATUS.CONNECTED : CONNECTION_STATUS.DISCONNECTED
 }
 
 export const useNetworkConnectionListener = () => {
@@ -81,6 +101,26 @@ export const useNetworkConnectionListener = () => {
       })
     }
   }, [remoteConfigActivated, forceOffline])
+}
+
+export const useOfflineAnnounce = () => {
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const connectionStatus = useAppIsOnline()
+  const { offlineTimestamp } = useSelector<RootState, OfflineState>((state) => state.offline)
+
+  // Update timestamp when connection status changes
+  useEffect(() => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED && !offlineTimestamp) {
+      dispatch(setOfflineTimestamp(DateTime.local()))
+      dispatch(setShouldAnnounceOffline(true))
+    } else if (connectionStatus === CONNECTION_STATUS.CONNECTED && offlineTimestamp) {
+      dispatch(setOfflineTimestamp(undefined))
+      dispatch(setShouldAnnounceOffline(false))
+      dispatch(setBannerExpanded(false))
+      AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
+    }
+  }, [connectionStatus, offlineTimestamp, dispatch, t])
 }
 
 // Enabling any to handle the type of the snackbar which is not exposed in the component library

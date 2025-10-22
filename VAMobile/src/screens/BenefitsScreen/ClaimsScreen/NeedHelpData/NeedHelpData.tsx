@@ -11,7 +11,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
@@ -23,7 +23,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   function renderAppealData() {
@@ -41,7 +41,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (!isConnected) {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                 showOfflineSnackbar(snackbar, t)
                 return
               }

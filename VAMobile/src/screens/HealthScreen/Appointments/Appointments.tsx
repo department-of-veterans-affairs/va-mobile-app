@@ -26,7 +26,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -51,7 +51,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   )
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const {
@@ -137,7 +137,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
         testID="startSchedulingTestID"
         label={t('appointments.startScheduling')}
         onPress={() => {
-          if (!isConnected) {
+          if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
             showOfflineSnackbar(snackbar, t)
             return
           }

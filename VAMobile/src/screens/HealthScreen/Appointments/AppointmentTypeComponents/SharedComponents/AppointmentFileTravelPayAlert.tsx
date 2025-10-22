@@ -9,7 +9,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 type AppointmentFileTravelPayAlertProps = {
@@ -24,7 +24,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
   const navigateTo = useRouteNavigation()
   const mutationState = useTravelClaimSubmissionMutationState(appointment.id)
   const mutationStatus = mutationState?.status
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
@@ -42,7 +42,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
-            if (!isConnected) {
+            if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
               showOfflineSnackbar(snackbar, t)
               return
             }

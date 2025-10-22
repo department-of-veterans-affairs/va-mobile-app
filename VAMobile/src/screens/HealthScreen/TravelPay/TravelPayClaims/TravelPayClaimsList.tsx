@@ -27,7 +27,7 @@ import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -58,7 +58,7 @@ function TravelPayClaimsList({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
   const pickerOptions = getPickerOptions(t, {
     dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
@@ -87,7 +87,7 @@ function TravelPayClaimsList({
   }, [claims, page, perPage])
 
   const goToClaimDetails = (claimId: string) => {
-    if (!isConnected) {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
       showOfflineSnackbar(snackbar, t)
       return
     }

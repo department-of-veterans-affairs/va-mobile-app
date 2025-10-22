@@ -23,7 +23,7 @@ import {
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
@@ -39,7 +39,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
@@ -89,7 +89,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (!isConnected) {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                 showOfflineSnackbar(snackbar, t)
                 return
               }
@@ -131,7 +131,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (!isConnected) {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                 showOfflineSnackbar(snackbar, t)
                 return
               }
@@ -194,7 +194,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (!isConnected) {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                 showOfflineSnackbar(snackbar, t)
                 return
               }

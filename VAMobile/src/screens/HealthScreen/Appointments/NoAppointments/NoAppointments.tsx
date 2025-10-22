@@ -11,7 +11,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
@@ -26,10 +26,10 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
-  if (!isConnected) {
+  if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
     return (
       <Box mx={theme.dimensions.gutter}>
         <ContentUnavailableCard textId="contentUnavailable" />
@@ -61,7 +61,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (!isConnected) {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                 showOfflineSnackbar(snackbar, t)
                 return
               }

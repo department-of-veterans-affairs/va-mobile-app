@@ -32,7 +32,7 @@ import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
@@ -80,7 +80,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const displayInternationalPhoneNumberSelect = featureEnabled('internationalPhoneNumber')
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
 
   // TODO Remove this once country codes can be saved
   const countryCode =
@@ -148,7 +148,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   }
 
   const onSave = (): void => {
-    if (!isConnected) {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
       showOfflineSnackbar(snackbar, t)
       return
     }
@@ -303,7 +303,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const buttonTitle = displayTitle.toLowerCase()
 
   const onDeletePressed = (): void => {
-    if (!isConnected) {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
       showOfflineSnackbar(snackbar, t)
       return
     }

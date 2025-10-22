@@ -1,47 +1,34 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AccessibilityInfo, Pressable } from 'react-native'
+import { Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { OfflineState, setBannerExpanded, setOfflineTimestamp } from 'store/slices'
+import { OfflineState, setBannerExpanded } from 'store/slices'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
-import { useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 
 export const OfflineBanner: FC = () => {
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useAppDispatch()
-  const { offlineTimestamp, bannerExpanded } = useSelector<RootState, OfflineState>((state) => state.offline)
+  const { offlineTimestamp, bannerExpanded, shouldAnnounceOffline } = useSelector<RootState, OfflineState>(
+    (state) => state.offline,
+  )
   // This is used to trigger the screen reader announcement for the screen disconnection occurs
-  const [shouldAnnounceOffline, setShouldAnnounceOffline] = useState(false)
-
-  // Update timestamp when connection status changes
-  useEffect(() => {
-    if (!isConnected && !offlineTimestamp) {
-      dispatch(setOfflineTimestamp(DateTime.local()))
-      setShouldAnnounceOffline(true)
-    } else if (isConnected && offlineTimestamp) {
-      dispatch(setOfflineTimestamp(undefined))
-      setShouldAnnounceOffline(false)
-      dispatch(setBannerExpanded(false))
-      AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
-    }
-  }, [isConnected, offlineTimestamp, dispatch, t])
 
   const onBannerInteract = () => {
     dispatch(setBannerExpanded(!bannerExpanded))
   }
 
   // If we are online, show nothing
-  if (isConnected) {
+  if (connectionStatus === CONNECTION_STATUS.CONNECTED) {
     return null
   }
 

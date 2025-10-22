@@ -52,7 +52,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -109,7 +109,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const [page, setPage] = useState(1)
@@ -420,7 +420,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
       ),
       onPress: (): void => {
-        if (!isConnected) {
+        if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
           showOfflineSnackbar(snackbar, t)
           return
         }
@@ -544,7 +544,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         testID="refillRequestTestID"
         label={t('prescription.history.startRefillRequest')}
         onPress={() => {
-          if (!isConnected) {
+          if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
             showOfflineSnackbar(snackbar, t)
             return
           }

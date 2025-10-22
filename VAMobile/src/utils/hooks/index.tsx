@@ -42,7 +42,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
-import { showOfflineSnackbar, useAppIsOnline, useIsWithinModal } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline, useIsWithinModal } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -189,7 +189,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
  */
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
   const inModal = useIsWithinModal()
 
@@ -202,7 +202,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     }
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
-      if (!isConnected) {
+      if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
         showOfflineSnackbar(snackbar, t, inModal)
         return
       }
@@ -504,11 +504,11 @@ export function useOpenAppStore(): () => void {
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   return () => {
-    if (!isConnected) {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
       showOfflineSnackbar(snackbar, t)
       return
     }

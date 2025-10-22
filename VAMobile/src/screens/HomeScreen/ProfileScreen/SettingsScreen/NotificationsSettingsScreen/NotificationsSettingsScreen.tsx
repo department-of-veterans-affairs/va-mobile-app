@@ -44,7 +44,7 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
-import { showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -62,7 +62,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
-  const isConnected = useAppIsOnline()
+  const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
   const {
@@ -238,7 +238,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
             <LinkWithAnalytics
               type="custom"
               onPress={() => {
-                if (!isConnected) {
+                if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
                   showOfflineSnackbar(snackbar, t)
                   return
                 }

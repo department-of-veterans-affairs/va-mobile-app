@@ -74,7 +74,7 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
-import { useNetworkConnectionListener } from 'utils/hooks/offline'
+import { useNetworkConnectionListener, useOfflineAnnounce } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
@@ -235,6 +235,7 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   useNetworkConnectionListener()
+  useOfflineAnnounce()
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed

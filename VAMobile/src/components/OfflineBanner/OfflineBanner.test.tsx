@@ -6,13 +6,14 @@ import { DateTime } from 'luxon'
 import OfflineBanner from 'components/OfflineBanner'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
+import { CONNECTION_STATUS } from 'utils/hooks/offline'
 
 jest.mock('utils/hooks/offline', () => {
   const original = jest.requireActual('utils/hooks/offline')
 
   return {
     ...original,
-    useAppIsOnline: jest.fn().mockReturnValue(false),
+    useAppIsOnline: jest.fn().mockReturnValue(CONNECTION_STATUS.DISCONNECTED),
   }
 })
 
