@@ -109,7 +109,8 @@ An assetlinks.json file has been uploaded to our [website server](https://github
       "package_name": "gov.va.mobileapp",
       "sha256_cert_fingerprints": [
         "04:0F:38:7B:1B:F0:11:D7:4D:2B:C4:B0:EC:AC:9C:A8:95:B9:7C:83:8E:B4:10:CF:EA:6A:C8:E4:E6:86:7A:25",
-        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C"
+        "FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C",
+        "E0:52:25:3C:47:D0:CC:5C:A8:5E:7D:8E:0D:88:8C:1B:A4:CF:87:5E:09:EE:01:C5:A8:C1:12:9F:0B:1E:D3:47"
       ]
     }
   }
@@ -118,7 +119,7 @@ An assetlinks.json file has been uploaded to our [website server](https://github
 The JSON file uses the following fields to identify associated apps: 
 - `package_name`: The application ID declared in the app's build.gradle file.
 - `sha256_cert_fingerprints`: The SHA256 fingerprints of your app's signing certificate
-  - This field supports multiple fingerprints, which can be used to support different versions of your app, such as debug and production builds
+  - This field supports multiple fingerprints, which can be used to support different versions of your app, such as dev, QA, and production builds
 
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
 - https://staging.va.gov/.well-known/assetlinks.json
