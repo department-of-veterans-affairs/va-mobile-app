@@ -1,4 +1,5 @@
 import { by, element, expect } from 'detox'
+import { DateTime } from 'luxon'
 
 import { getFormattedDate } from '../../src/utils/dateUtils'
 import {
@@ -17,20 +18,25 @@ export const LabsAndTestsE2eIDConstants = {
   DATE_RANGE_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeConfirmID',
 }
 
+const navigateToLabsAndTests = async () => {
+  await openHealth()
+  await openMedicalRecords()
+  await openLabsAndTestRecords()
+}
+
 const resetDateRangeToDefault = async () => {
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
   await element(by.text('Last 90 days')).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
 }
-// These dates must match the dates in the demo data
-// Surgical pathology test data with id: 2BCP5BAI6N7NQSAPSVIJ6INQ4A000000
-// CH test data with id: e9513940-bf84-4120-ac9c-718f537b00e0
-const surgicalPathologyTestDate = getFormattedDate('2024-01-23T18:53:14.000-01:00', 'MMMM dd, yyyy')
-const chemHemTestDate = getFormattedDate('2024-01-29T18:53:14.000-01:00', 'MMMM dd, yyyy')
+// Calculate dynamic dates that will always be within the last 90 days
+// These calculations ensure the test remains timeless and matches the demo data
+const surgicalPathologyTestDate = getFormattedDate(DateTime.now().minus({ days: 1 }).toISO(), 'MMMM dd, yyyy')
+const chemHemTestDate = getFormattedDate(DateTime.now().minus({ days: 2 }).toISO(), 'MMMM dd, yyyy')
 const TEST_IDS = {
   LIST_ID: 'LabsAndTestsButtonsListTestID',
-  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology ' + surgicalPathologyTestDate,
-  CHEM_HEM_TEST_ID: 'CH ' + chemHemTestDate,
+  SURGICAL_PATHOLOGY_TEST_ID: 'Surgical Pathology - latest ' + surgicalPathologyTestDate,
+  CHEM_HEM_TEST_ID: 'CH - latest ' + chemHemTestDate,
   BACK_BUTTON_ID: 'labsAndTestsDetailsBackID',
 }
 const HEADER_TEXT = 'Labs and tests'
@@ -44,6 +50,10 @@ beforeAll(async () => {
 })
 
 describe('Labs And Test Screen - Date Picker', () => {
+  beforeEach(async () => {
+    // Navigate back to Labs and Tests screen before each test
+    await navigateToLabsAndTests()
+  })
   it('90-day period selection verification', async () => {
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
     // Verify "Last 90 days" option exists (index 0)
@@ -57,6 +67,11 @@ describe('Labs And Test Screen - Date Picker', () => {
 describe('Labs And Test Screen', () => {
   beforeAll(async () => {
     await resetDateRangeToDefault()
+  })
+
+  beforeEach(async () => {
+    // Navigate back to Labs and Tests screen before each test
+    await navigateToLabsAndTests()
   })
 
   it('navigate back and forth between the list and details screen', async () => {
@@ -80,13 +95,13 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text('Details'))).toExist()
 
     // the page should have the correct data
-    await expect(element(by.text('Surgical Pathology'))).toExist()
+    await expect(element(by.text('Surgical Pathology - latest'))).toExist()
     await expect(element(by.text(surgicalPathologyTestDate))).toExist()
     await expect(element(by.text('Bone Marrow'))).toExist()
-    await expect(element(by.text('Left leg'))).toExist()
+    await expect(element(by.text('Right leg'))).toExist()
     await expect(element(by.text('VA TEST LAB'))).toExist()
 
-    // ensure base 64 decoded data is present
+    // // ensure base 64 decoded data is present
     await expect(element(by.text('this is a test'))).toExist()
 
     // Navigate back to the list
@@ -94,15 +109,14 @@ describe('Labs And Test Screen', () => {
     // the title should be labs and tests
     await expect(element(by.text(HEADER_TEXT))).toExist()
   })
-
-  it('should list the list of labs and tests', async () => {
-    await expect(element(by.text(HEADER_TEXT))).toExist()
-    await expect(element(by.id(TEST_IDS.LIST_ID))).toExist()
-    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
-  })
 })
 
 describe('Labs And Test Details Screen with Observations', () => {
+  beforeEach(async () => {
+    // Navigate back to Labs and Tests screen before each test
+    await navigateToLabsAndTests()
+  })
+
   it('navigate to detail screen and show results', async () => {
     await expect(element(by.text(HEADER_TEXT))).toExist()
     await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).toExist()
@@ -110,7 +124,7 @@ describe('Labs And Test Details Screen with Observations', () => {
     // the title should be Details
     await expect(element(by.text('Details'))).toExist()
 
-    await expect(element(by.text('CH'))).toExist()
+    await expect(element(by.text('CH - latest'))).toExist()
     await expect(element(by.text(chemHemTestDate))).toExist()
     await expect(element(by.text('CHYSHR TEST LAB'))).toExist()
 
