@@ -1,0 +1,79 @@
+name: Onboarding Request (Mobile App Stores)
+description: Fill out this form to request access to the mobile app stores for builds.
+title: 'Add user to App Stores: [name]'
+labels: [TestFlight & AppTester]
+assignees:
+  - jbergman-oddball
+  - jonbindbeutel
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please read before continuing**: This issue form is to request access to the VA Mobile App builds for your device.
+        After this issue is approved we will add the current user to the app stores they wish to access.
+
+  - type: input
+    id: fullname
+    attributes:
+      label: Full Name
+      description: Users Full Name
+      placeholder: Alex Smith
+    validations:
+      required: true
+
+  - type: input
+    id: username
+    attributes:
+      label: GitHub Username
+      description: Before mobile onboarding this user must already be within the VA Github Organization
+      placeholder: '@Alex-smith-va'
+    validations:
+      required: true
+
+  - type: input
+    id: vaemail
+    attributes:
+      label: VA Email Address
+      description: The VA email address to send the invites to.
+      placeholder: 'Alex.Smith1@va.gov'
+    validations:
+      required: true
+
+  - type: input
+    id: teamname
+    attributes:
+      label: Which team is this person on?
+      description: Exposing the primary team name helps us sort access requests
+    validations:
+      required: true
+
+  - type: input
+    id: vaoctopo
+    attributes:
+      label: Who is the OCTO Product Owner for this person's team?
+      description: Add a PO helps us triage requests, and know who the main point of contact is.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: iosapp
+    attributes:
+      label: Access to Test Flight? (iOS Build)
+      description: Do you need access to Test Flight?  This is used for iOS builds.
+      options:
+        - 'No'
+        - 'Yes'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: androidapp
+    attributes:
+      label: Access to App Tester? (Android Build)
+      description: Do you need access to App Tester?  This is used for Android builds.
+      options:
+        - 'No'
+        - 'Yes'
+    validations:
+      required: true
