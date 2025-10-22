@@ -34,11 +34,11 @@ describe('Travel Pay Claims Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
     await expect(element(by.id('next-page'))).toExist()
-    await expect(element(by.text('1 to 10 of 31'))).toExist()
+    await expect(element(by.text('1 to 10 of 32'))).toExist()
 
     // Can't go to previous page because we're on the first
     await element(by.id('previous-page')).tap()
-    await expect(element(by.text('1 to 10 of 31'))).toExist()
+    await expect(element(by.text('1 to 10 of 32'))).toExist()
 
     // Go to the second page
     await element(by.id('next-page')).tap()
@@ -50,7 +50,7 @@ describe('Travel Pay Claims Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
 
-    await expect(element(by.text('11 to 20 of 31'))).toExist()
+    await expect(element(by.text('11 to 20 of 32'))).toExist()
     await expect(element(by.id(TRAVEL_PAY_CLAIM_1_ID))).not.toExist()
     await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).toExist()
 
@@ -61,7 +61,7 @@ describe('Travel Pay Claims Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
 
-    await expect(element(by.text('1 to 10 of 31'))).toExist()
+    await expect(element(by.text('1 to 10 of 32'))).toExist()
     await expect(element(by.id(TRAVEL_PAY_CLAIM_1_ID))).toExist()
     await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).not.toExist()
   })
@@ -83,12 +83,12 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(4000) // Increased timeout for CI/CD
 
     // Verify the screen title (confirms we're on the right screen)
-    await waitFor(element(by.text('Travel Pay Claim Details')))
+    await waitFor(element(by.text('Details')))
       .toExist()
       .withTimeout(6000) // Increased timeout for CI/CD
 
     // Verify we can see claim data
-    await waitFor(element(by.text('Claimant')))
+    await waitFor(element(by.text('Claim information')))
       .toExist()
       .withTimeout(8000) // Increased timeout for CI/CD
 

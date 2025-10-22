@@ -28,7 +28,16 @@ function TravelPayClaimStatusDefinition({ claimStatus }: TravelPayClaimStatusDef
       .join('')
   }
 
-  const statusKey = toPascalCase(claimStatus) as keyof typeof TravelPayClaimStatuses
+  // Handle null, undefined, or empty status
+  if (!claimStatus || typeof claimStatus !== 'string') {
+    return (
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBody">{t('travelPay.claimDetails.status.genericHelp')}</TextView>
+      </Box>
+    )
+  }
+
+  const statusKey = toPascalCase(claimStatus.trim()) as keyof typeof TravelPayClaimStatuses
   const statusInfo = TravelPayClaimStatuses[statusKey]
 
   // If no status definition found, show generic help text
@@ -42,7 +51,9 @@ function TravelPayClaimStatusDefinition({ claimStatus }: TravelPayClaimStatusDef
 
   return (
     <Box>
-      <TextView variant="MobileBody">{statusInfo.definition}</TextView>
+      <TextView variant="MobileBody" testID="travelPayClaimStatusDefinitionTestID">
+        {statusInfo.definition}
+      </TextView>
     </Box>
   )
 }

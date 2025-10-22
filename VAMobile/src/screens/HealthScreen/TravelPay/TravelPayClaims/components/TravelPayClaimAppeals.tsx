@@ -9,7 +9,7 @@ import TravelPayDocumentDownload from 'screens/HealthScreen/TravelPay/TravelPayC
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-const { LINK_URL_VA_FORM_10_0998, LINK_URL_SECURE_MESSAGING } = getEnv()
+const { LINK_URL_VA_FORM_10_0998 } = getEnv()
 
 type TravelPayClaimAppealsProps = {
   /** The claim details data */
@@ -35,7 +35,7 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
 
   // Look for VA Form 10-0998 in documents
   const form100998 = claimDetails.documents?.find(
-    (doc) => doc.filename.includes('10-0998') || doc.filename.includes('Form 10-0998'),
+    (doc) => doc.filename?.includes('10-0998') || doc.filename?.includes('Form 10-0998'),
   )
 
   return (
@@ -76,8 +76,7 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
 
         <Box mb={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_SECURE_MESSAGING}
+            type="custom"
             text={t('travelPay.claimDetails.appeals.sendMessage')}
             a11yLabel={t('travelPay.claimDetails.appeals.sendMessageA11y')}
             onPress={onSendSecureMessage}

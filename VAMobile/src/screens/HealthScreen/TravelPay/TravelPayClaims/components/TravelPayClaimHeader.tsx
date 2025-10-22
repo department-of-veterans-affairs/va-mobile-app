@@ -36,19 +36,27 @@ function TravelPayClaimHeader({ appointmentDate, claimNumber, claimStatus }: Tra
   )
 
   return (
-    <Box>
+    <Box testID="travelPayClaimHeader">
       {/* Main title with appointment date */}
-      <TextView variant="MobileBody" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
+      <TextView
+        variant="MobileBody"
+        accessibilityRole="header"
+        mb={theme.dimensions.standardMarginBetween}
+        testID="travelPayClaimHeaderTitle">
         {t('travelPay.claimDetails.header.title', { appointmentDate: formattedAppointmentDate })}
       </TextView>
 
       {/* Claim number */}
-      <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
+      <TextView
+        variant="MobileBodyBold"
+        accessibilityRole="header"
+        mb={theme.dimensions.condensedMarginBetween}
+        testID="travelPayClaimHeaderNumber">
         {t('travelPay.claimDetails.header.claimNumber', { claimNumber })}
       </TextView>
 
       {/* Claim status */}
-      <TextView variant="MobileBodyBold" color="bodyText">
+      <TextView variant="MobileBodyBold" color="bodyText" testID="travelPayClaimHeaderStatus">
         {t('travelPay.claimDetails.header.claimStatus', { claimStatus })}
       </TextView>
     </Box>

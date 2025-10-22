@@ -28,20 +28,22 @@ function TravelPayClaimInformation({ claimDetails }: TravelPayClaimInformationPr
     ) || []
 
   return (
-    <Box mt={theme.dimensions.standardMarginBetween}>
+    <Box mt={theme.dimensions.condensedMarginBetween}>
       {/* Section Header */}
       <TextView variant="MobileBodyBold">{t('travelPay.claimDetails.information.title')}</TextView>
 
       {/* When Section */}
       <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold">{t('travelPay.claimDetails.information.when')}</TextView>
-        <TextView variant="MobileBody">
+        <TextView variant="MobileBodyBold" testID="travelPayClaimInformationWhenTitleTestID">
+          {t('travelPay.claimDetails.information.when')}
+        </TextView>
+        <TextView variant="MobileBody" testID="travelPayClaimInformationSubmittedOnTestID">
           {t('travelPay.claimDetails.information.submittedOn', {
             date: getFormattedDate(claimDetails.createdOn, 'EEEE, MMMM d, yyyy'),
             time: getFormattedDate(claimDetails.createdOn, 'h:mm a'),
           })}
         </TextView>
-        <TextView variant="MobileBody">
+        <TextView variant="MobileBody" testID="travelPayClaimInformationUpdatedOnTestID">
           {t('travelPay.claimDetails.information.updatedOn', {
             date: getFormattedDate(claimDetails.modifiedOn, 'EEEE, MMMM d, yyyy'),
             time: getFormattedDate(claimDetails.modifiedOn, 'h:mm a'),
@@ -52,13 +54,17 @@ function TravelPayClaimInformation({ claimDetails }: TravelPayClaimInformationPr
       {/* Where Section */}
       <Box mb={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold">{t('travelPay.claimDetails.information.where')}</TextView>
-        <TextView variant="MobileBody">{claimDetails.facilityName}</TextView>
+        <TextView variant="MobileBody" testID="travelPayClaimInformationWhereTestID">
+          {claimDetails.facilityName}
+        </TextView>
       </Box>
 
       {/* Documents Section */}
       {userSubmittedDocuments.length > 0 && (
         <Box mb={theme.dimensions.condensedMarginBetween}>
-          <TextView variant="MobileBodyBold">{t('travelPay.claimDetails.information.documentsSubmitted')}</TextView>
+          <TextView variant="MobileBodyBold" testID="travelPayClaimInformationDocumentsSubmittedTitleTestID">
+            {t('travelPay.claimDetails.information.documentsSubmitted')}
+          </TextView>
           {userSubmittedDocuments.map((document) => (
             <TravelPayDocumentDownload key={document.documentId} document={document} claimId={claimDetails.id} />
           ))}

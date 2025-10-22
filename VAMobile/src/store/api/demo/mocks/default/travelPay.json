@@ -688,18 +688,18 @@
       }
     }
   },
-  "/v0/travel-pay/claims/7519378a-e9ef-4a84-8673-591776c8f06b": {
+  "/v0/travel-pay/claims/a3e6fb0d-5d30-48d7-9b4b-129b44d46088": {
     "data": {
-      "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+      "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
       "type": "travelPayClaimDetails",
       "attributes": {
-        "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
-        "claimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+        "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
+        "claimNumber": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
         "claimName": "Travel reimbursement",
         "claimantFirstName": "Samantha",
         "claimantMiddleName": "Michelle",
         "claimantLastName": "Doe",
-        "claimStatus": "PartialPayment",
+        "claimStatus": "Partial payment",
         "appointmentDate": "{{now - 4 days}}",
         "facilityName": "Tomah VA Medical Center",
         "totalCostRequested": 250.0,
