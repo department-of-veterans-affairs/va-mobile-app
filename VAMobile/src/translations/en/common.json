@@ -1816,6 +1816,8 @@
   "veteranStatus.noBenefitsEntitled": "This card doesn't entitle you to any VA benefits.",
   "veteranStatus.noBenefitsEntitled.A11yLabel": "This status doesn't entitle you to any V-A benefits.",
   "veteranStatus.uploadPhoto": "Upload photo",
+  "veteranStatus.wallet.google.addButton": "Add to Google Wallet",
+  "veteranStatus.wallet.google.addButton.hint": "Add your Veteran Status Card to Google Wallet",
   "video": "Video",
   "webview.appointments.loading": "Loading appointment scheduling...",
   "webview.claims.loading": "Loading claims and appeal page...",

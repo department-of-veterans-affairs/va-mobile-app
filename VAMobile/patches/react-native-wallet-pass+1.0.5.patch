@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-native-wallet-pass/android/build.gradle b/node_modules/react-native-wallet-pass/android/build.gradle
+index 2c9d579..9b16fe1 100644
+--- a/node_modules/react-native-wallet-pass/android/build.gradle
++++ b/node_modules/react-native-wallet-pass/android/build.gradle
+@@ -1,17 +1,16 @@
+ apply plugin: 'com.android.library'
+ 
+ android {
+-    compileSdkVersion 23
+-    buildToolsVersion "23.0.1"
++    compileSdkVersion 35
+ 
+     defaultConfig {
+-        minSdkVersion 16
+-        targetSdkVersion 22
++        minSdkVersion 28
++        targetSdkVersion 35
+         versionCode 1
+         versionName "1.0"
+     }
+ }
+ 
+ dependencies {
+-    provided 'com.facebook.react:react-native:+'
++    compileOnly 'com.facebook.react:react-native:+'
+ }

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Platform } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -22,6 +23,7 @@ import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import AppleWalletButton from 'screens/HomeScreen/VeteranStatusScreen/AddToWalletButton/AppleWalletButton'
+import GoogleWalletButton from 'screens/HomeScreen/VeteranStatusScreen/AddToWalletButton/GoogleWalletButton'
 import VeteranStatusCard from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusCard/VeteranStatusCard'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -207,11 +209,11 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
   const passPayload: VeteranPassPayload | undefined = personalInfo?.fullName
     ? {
-        name: personalInfo.fullName,
-        id: personalInfo?.edipi ?? 'V00000000',
-        disability_percent: ratingIsDefined ? Number(ratingPercent) : undefined,
-        as_of_date: new Date().toISOString().slice(0, 10),
-      }
+      name: personalInfo.fullName,
+      id: personalInfo?.edipi ?? 'V00000000',
+      disability_percent: ratingIsDefined ? Number(ratingPercent) : undefined,
+      as_of_date: new Date().toISOString().slice(0, 10),
+    }
     : undefined
 
   return (
@@ -240,7 +242,11 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
       )}
       {featureEnabled('digitalWallet') && passPayload && (
         <Box mt={16} px={horizontalPadding} style={containerStyle} width="100%">
-          <AppleWalletButton payload={passPayload} />
+          {Platform.OS === 'ios' ? (
+            <AppleWalletButton payload={passPayload} />
+          ) : (
+            <GoogleWalletButton payload={passPayload} />
+          )}
         </Box>
       )}
       {getHelperText()}
