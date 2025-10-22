@@ -10579,10 +10579,10 @@ react-native-screens@^3.37.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-shadow-2@^7.1.1:
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.1.1.tgz#3ef760f629bd3678eab68de5ef352a1b79302c49"
-  integrity sha512-zmzcVFzys+jMe1UJUKaNsMEpFa2/1o9SoUjweapolcgxq0h935VCSAqxkUwkYpOpxFhK9BmcmYy5xZLO9dnkIw==
+react-native-shadow-2@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-shadow-2/-/react-native-shadow-2-7.1.2.tgz#21f71e585c61ad8b60d87116a879e53c729f6802"
+  integrity sha512-K2McEwf3D6MbtofmhQyeEJxTC9L0uebed53vxQcaUvKYIcoDUmfsqgRJtftvx9NHxJwuF5f/K6SfUyhYV2qr4w==
   dependencies:
     colord "2.9.2"
 
