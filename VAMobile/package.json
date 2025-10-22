@@ -110,7 +110,7 @@
     "@react-native-community/cli-platform-ios": "15.0.1",
     "@react-native/babel-preset": "0.76.9",
     "@react-native/eslint-config": "0.76.9",
-    "@react-native/metro-config": "^0.78.0",
+    "@react-native/metro-config": "^0.82.1",
     "@react-native/typescript-config": "0.76.9",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react-native": "^12.9.0",
