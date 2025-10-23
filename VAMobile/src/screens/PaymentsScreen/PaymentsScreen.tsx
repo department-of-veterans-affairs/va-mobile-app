@@ -22,7 +22,6 @@ import DebtDetails from 'screens/PaymentsScreen/Debts/DebtDetails/DebtDetailsScr
 import DisputeDebt from 'screens/PaymentsScreen/Debts/DisputeDebt/DisputeDebtScreen'
 import PayDebt from 'screens/PaymentsScreen/Debts/PayDebt/PayDebtScreen'
 import DebtRequestHelp from 'screens/PaymentsScreen/Debts/RequestHelp/DebtRequestHelpScreen'
-import TransactionDetails from 'screens/PaymentsScreen/Debts/TransactionDetails/TransactionDetailsScreen'
 import DirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/HowToUpdateDirectDepositScreen'
 import PaymentDetailsScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
@@ -206,12 +205,6 @@ function PaymentsStackScreen({}: PaymentsStackScreenProps) {
         key={'DebtRequestHelp'}
         name="DebtRequestHelp"
         component={DebtRequestHelp}
-        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
-      />
-      <PaymentsScreenStack.Screen
-        key={'TransactionDetails'}
-        name="TransactionDetails"
-        component={TransactionDetails}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <PaymentsScreenStack.Screen
