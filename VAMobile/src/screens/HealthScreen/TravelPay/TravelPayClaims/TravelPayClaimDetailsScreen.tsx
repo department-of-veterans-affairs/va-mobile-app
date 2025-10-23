@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -7,6 +7,7 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { useTravelPayClaimDetails } from 'api/travelPay'
 import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimAmount from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimAmount'
@@ -16,6 +17,7 @@ import TravelPayClaimInformation from 'screens/HealthScreen/TravelPay/TravelPayC
 import TravelPayClaimStatusDefinition from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimStatusDefinition'
 import TravelPayDocumentDownload from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type TravelPayClaimDetailsScreenProps = StackScreenProps<HealthStackParamList, 'TravelPayClaimDetailsScreen'>
@@ -48,6 +50,28 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     refetch: refetchClaimDetails,
   } = useTravelPayClaimDetails(claimId)
   const claimDetails = claimDetailsData?.data?.attributes
+
+  // Track page view analytics when claim details are loaded
+  useEffect(() => {
+    if (claimDetails && !loadingClaimDetails && !claimDetailsError) {
+      const appointmentDate = new Date(claimDetails.appointmentDate)
+      const daysSinceAppointment = Math.floor((Date.now() - appointmentDate.getTime()) / (1000 * 60 * 60 * 24))
+
+      // Set user property to track travel pay usage
+      setAnalyticsUserProperty(UserAnalytics.vama_uses_travel_pay())
+
+      // Log page view event
+      logAnalyticsEvent(
+        Events.vama_travel_claim_detail(
+          claimDetails.id,
+          claimDetails.claimStatus,
+          claimDetails.claimName || 'travel_reimbursement',
+          daysSinceAppointment,
+          claimDetails.facilityName,
+        ),
+      )
+    }
+  }, [claimDetails, loadingClaimDetails, claimDetailsError])
 
   if (loadingClaimDetails) {
     return (
