@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { Alert, AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -287,6 +287,7 @@ export function AuthGuard() {
   useEffect(() => {
     if (!remoteConfigActivated) {
       dispatch(fetchAndActivateRemoteConfig())
+      Alert.alert('Remote Config Fetch', 'Remote Config is being fetched and activated...')
     }
   }, [dispatch, remoteConfigActivated])
 
