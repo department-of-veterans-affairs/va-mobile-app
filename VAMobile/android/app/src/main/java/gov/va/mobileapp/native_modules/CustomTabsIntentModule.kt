@@ -38,16 +38,37 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
             promise: Promise
     ) {
         try {
+            val uri = Uri.parse(authEndPoint)
+            val host = uri.host ?: ""
+            
+            // Check if this is a local URL (for Mocked Authentication)
+            // Use Uri.host which provides the hostname from the URL
+            val isLocalUrl = host == "localhost" ||
+                host == "127.0.0.1" ||
+                host.startsWith("192.168.") ||
+                host.startsWith("10.") ||
+                host.startsWith("172.")
+            
             val authURI =
-                    Uri.parse(authEndPoint)
-                            .buildUpon()
+                    uri.buildUpon()
                             .also {
                                 with(it) {
                                     appendQueryParameter("code_challenge_method", "S256")
                                     appendQueryParameter("code_challenge", codeChallenge)
                                     appendQueryParameter("application", "vamobile")
                                     appendQueryParameter("oauth", "true")
-                                    appendQueryParameter("scope", "device_sso")
+                                    
+                                    // Add scope only for non-local URLs (staging/production)
+                                    if (!isLocalUrl) {
+                                        appendQueryParameter("scope", "device_sso")
+                                    }
+                                    
+                                    // Add client_id, type, and acr for local development with Mocked Authentication
+                                    if (isLocalUrl) {
+                                        appendQueryParameter("client_id", "vamock-mobile")
+                                        appendQueryParameter("type", "idme")
+                                        appendQueryParameter("acr", "min")
+                                    }
                                 }
                             }
                             .build()

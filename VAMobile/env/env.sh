@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-while getopts e:t:d:r: option
+while getopts e:t:d:r:l: option
 do
 case "${option}"
 in
@@ -7,32 +7,64 @@ e) environment=${OPTARG};;
 t) isTest=${OPTARG};;
 d) showDebug=${OPTARG};;
 r) reactotron=${OPTARG};;
+l) localApiUrl=${OPTARG};;
 esac
 done
 cd ./env
 # clear the env file
 echo "" > .env
 # Get the environment related variables
-if [[ $environment == 'staging' ]]
+if [[ $environment == 'local' ]]
+then
+  echo "Setting up Local environment with Mocked Authentication"
+  # Use provided local URL or default to localhost:3000
+  LOCAL_API_URL=${localApiUrl:-"http://localhost:3000"}
+  
+  # Extract base URL without /mobile for auth endpoints
+  LOCAL_BASE_URL=${LOCAL_API_URL}
+  
+  # Add /mobile suffix for API_ROOT if not already present
+  if [[ ! $LOCAL_API_URL == */mobile ]]; then
+    LOCAL_API_URL="${LOCAL_API_URL}/mobile"
+  fi
+  
+  echo "API_ROOT=$LOCAL_API_URL" >> .env
+  echo "ENVIRONMENT=local" >> .env
+  
+  # Use local vets-api for authentication (Mocked Authentication)
+  # For local, we use the API authorize endpoint directly, not the frontend route
+  echo "AUTH_SIS_ENDPOINT=${LOCAL_BASE_URL}/v0/sign_in/authorize" >> .env
+  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
+  echo "AUTH_SIS_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
+  echo "AUTH_SIS_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
+  
+  # Use staging website links (unchanged from before)
+  WEBSITE_PREFIX="staging."
+elif [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
   WEBSITE_PREFIX="staging."
   API_PREFIX="staging-api."
+  echo "ENVIRONMENT=$environment" >> .env
+  echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
+  # set SIS vars
+  AUTH_SIS_ROOT="https://${WEBSITE_PREFIX}va.gov"
+  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
+  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 else
   echo "Setting up Production environment"
   API_PREFIX="api."
+  echo "ENVIRONMENT=$environment" >> .env
+  echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
+  # set SIS vars
+  AUTH_SIS_ROOT="https://www.va.gov"
+  echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
+  echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
+  echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
+  echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 fi
-# set environment
-echo "ENVIRONMENT=$environment" >> .env
-# set api endpoints
-echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
-
-# set SIS vars
-AUTH_SIS_ROOT="https://${WEBSITE_PREFIX}va.gov"
-echo "AUTH_SIS_ENDPOINT=${AUTH_SIS_ROOT}/sign-in" >> .env
-echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
-echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
-echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
 
 if [[ $showDebug == 'true' ]]
 then
@@ -59,7 +91,11 @@ fi
 # set demo mode password
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
-# set website URLs
+# set website URLs - use staging prefix for local by default
+if [[ -z "$WEBSITE_PREFIX" ]]; then
+  WEBSITE_PREFIX="staging."
+fi
+
 echo "LINK_URL_VA_NOTIFICATIONS=https://${WEBSITE_PREFIX}va.gov/profile/notifications/" >> .env
 echo "LINK_URL_CLAIM_APPEAL_STATUS=https://${WEBSITE_PREFIX}va.gov/track-claims/appeals/" >> .env
 echo "LINK_URL_VA_SCHEDULING=https://${WEBSITE_PREFIX}va.gov/health-care/schedule-view-va-appointments/" >> .env

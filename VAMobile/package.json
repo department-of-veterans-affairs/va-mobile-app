@@ -31,6 +31,8 @@
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
     "env:production": "./env/env.sh -e production -d false -t false",
+    "env:local": "./env/env.sh -e local -d true",
+    "start:local": "yarn run env:local && concurrently \"yarn run start:metro-server\" \"yarn run lint:watch\"",
     "postinstall": "yarn prepare && yarn patch-package",
     "prepare": "cd .. && husky VAMobile/.husky",
     "e2e:ios-build": "yarn run bundle:ios && detox build -c ios",
