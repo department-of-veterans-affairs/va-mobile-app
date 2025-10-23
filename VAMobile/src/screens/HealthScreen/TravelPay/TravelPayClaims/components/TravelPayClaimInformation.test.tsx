@@ -15,12 +15,20 @@ jest.mock('utils/formattingUtils', () => ({
 
 // Mock the child component
 jest.mock('screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload', () => {
-  return ({ document, claimId }: { document: { documentId: string; filename: string }; claimId: string }) => {
-    return React.createElement(
-      'Text' as React.ComponentType<{ testID: string; children: React.ReactNode }>,
-      { testID: `document-download-${document.documentId}` },
-      `Document: ${document.filename} (Claim: ${claimId})`,
-    )
+  return function MockTravelPayDocumentDownload({
+    document,
+    claimId,
+  }: {
+    document: { documentId: string; filename: string }
+    claimId: string
+  }) {
+    // Return a simple object that represents the component for testing
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const ReactLib = require('react')
+    return ReactLib.createElement('Text', {
+      testID: `document-download-${document.documentId}`,
+      children: `Document: ${document.filename} (Claim: ${claimId})`,
+    })
   }
 })
 
