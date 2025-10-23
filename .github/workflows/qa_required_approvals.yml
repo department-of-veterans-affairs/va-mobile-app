@@ -7,9 +7,8 @@ on:
     types: [opened, edited, converted_to_draft, ready_for_review, reopened]
     paths:
       - 'VAMobile/src'
-      - 'VAMobile/e2e'
       - 'VAMobile/package.json'
-      - 'VAMobile/.detoxrc.json'
+      - 'VAMobile/env'
       - '!VAMobile/src/*.test.tsx'
       - '!.github/**'
   pull_request_review:
