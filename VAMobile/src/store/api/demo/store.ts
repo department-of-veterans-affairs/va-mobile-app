@@ -24,7 +24,12 @@ import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
-import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
+import {
+  PrescriptionsDemoReturnTypes,
+  PrescriptionsDemoStore,
+  getPrescriptions,
+  requestRefill,
+} from 'store/api/demo/prescriptions'
 import {
   ProfileDemoReturnTypes,
   ProfileDemoStore,
@@ -340,6 +345,12 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
      */
     case '/v0/user/preferred_name': {
       return updatePreferredName(store, params as PreferredNameUpdatePayload)
+    } /**
+     * PRESCRIPTIONS REFILL
+     */
+    case `/v0/health/rx/prescriptions/refill`:
+    case `/v1/health/rx/prescriptions/refill`: {
+      return requestRefill(store, params as { ids: string[] | Array<{ id: string; stationNumber: string }> })
     }
     default: {
       return undefined

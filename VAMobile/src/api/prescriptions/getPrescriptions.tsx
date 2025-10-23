@@ -2,24 +2,25 @@ import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { prescriptionKeys } from 'api/prescriptions/queryKeys'
 import { PrescriptionsGetData } from 'api/types'
 import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
-
-import { prescriptionKeys } from './queryKeys'
+import { waygateEnabled } from 'utils/waygateConfig'
 
 /**
  * Fetch user prescriptions
  */
-const getPrescriptions = (): Promise<PrescriptionsGetData | undefined> => {
+const getPrescriptions = ({ useV1 }: { useV1: boolean | undefined }): Promise<PrescriptionsGetData | undefined> => {
   const params = {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'refill_status', // Parameters are snake case for the back end
   }
-  return get<PrescriptionsGetData>('/v0/health/rx/prescriptions', params)
+  const API_VERSION = useV1 ? 'v1' : 'v0'
+  return get<PrescriptionsGetData>(`/${API_VERSION}/health/rx/prescriptions`, params)
 }
 
 /**
@@ -29,12 +30,16 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
+  const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
+  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
+
+  const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: prescriptionKeys.prescriptions,
-    queryFn: () => getPrescriptions(),
+    queryFn: () => getPrescriptions({ useV1: shouldUseV1 }),
     meta: {
       errorName: 'getPrescriptions: Service error',
     },
