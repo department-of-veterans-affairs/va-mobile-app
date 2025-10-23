@@ -108,19 +108,22 @@ export const useOfflineAnnounce = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const connectionStatus = useAppIsOnline()
   const { offlineTimestamp } = useSelector<RootState, OfflineState>((state) => state.offline)
+  const remoteConfigActivated = useSelector<RootState>((state) => state.settings.remoteConfigActivated)
 
   // Update timestamp when connection status changes
   useEffect(() => {
-    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED && !offlineTimestamp) {
-      dispatch(setOfflineTimestamp(DateTime.local()))
-      dispatch(setShouldAnnounceOffline(true))
-    } else if (connectionStatus === CONNECTION_STATUS.CONNECTED && offlineTimestamp) {
-      dispatch(setOfflineTimestamp(undefined))
-      dispatch(setShouldAnnounceOffline(false))
-      dispatch(setBannerExpanded(false))
-      AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
+    if (remoteConfigActivated && featureEnabled('offlineMode')) {
+      if (connectionStatus === CONNECTION_STATUS.DISCONNECTED && !offlineTimestamp) {
+        dispatch(setOfflineTimestamp(DateTime.local()))
+        dispatch(setShouldAnnounceOffline(true))
+      } else if (connectionStatus === CONNECTION_STATUS.CONNECTED && offlineTimestamp) {
+        dispatch(setOfflineTimestamp(undefined))
+        dispatch(setShouldAnnounceOffline(false))
+        dispatch(setBannerExpanded(false))
+        AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
+      }
     }
-  }, [connectionStatus, offlineTimestamp, dispatch, t])
+  }, [connectionStatus, offlineTimestamp, dispatch, t, remoteConfigActivated])
 }
 
 // Enabling any to handle the type of the snackbar which is not exposed in the component library
