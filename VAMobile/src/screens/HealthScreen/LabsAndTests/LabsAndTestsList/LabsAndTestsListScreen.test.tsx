@@ -6,7 +6,6 @@ import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { MONTHS } from 'utils/dateUtils'
 
 context('LabsAndTestsListScreen', () => {
   afterEach(() => {
@@ -52,21 +51,38 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to current month and year in pickers', async () => {
+  it('defaults to "Last 90 days" in date range picker', async () => {
     initializeTestInstance()
-    const currentTime = new Date()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID').children[0]).toEqual(
-      currentTime.getFullYear().toString(),
-    )
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID').children[0]).toEqual(MONTHS[currentTime.getMonth()])
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
+    // The first option (index 0) should be "Last 90 days"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Last 90 days')
   })
 
   it('renders the correct availability timing', async () => {
     initializeTestInstance()
     await waitFor(() =>
       expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
+    )
+  })
+
+  it('calls API with correct date range for "Last 90 days"', async () => {
+    const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+
+    initializeTestInstance()
+
+    await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
+
+    // Verify the API was called with the correct date range parameters
+    expect(mockApiGet).toHaveBeenCalledWith(
+      '/v1/health/labs-and-tests',
+      expect.objectContaining({
+        endDate: today,
+        startDate: ninetyDaysAgo,
+        page: '1',
+        useCache: 'false',
+      }),
     )
   })
 
