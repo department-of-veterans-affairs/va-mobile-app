@@ -63,10 +63,15 @@ export const getTravelPayClaims = (store: DemoStore, params: Params): GetTravelP
   const endDate = params.end_date
   const startDate = params.start_date as string
   const pageNumber = (params.page_number as unknown as number) || 1
-  const pageSize = 25 // mock a page size to test pagination
+
+  // If page size is lower than the total number of mock claims then we force a scenario where
+  // pagination occurs. However, in practice (and confirmed through monitoring),
+  // this is almost never going to happen given how the backend call to the backing service works.
+  // So for a realistic demo scenario the page size should be set >= the number of mock claims.
+  const pageSize = 50
 
   if (endDate && typeof endDate === 'string' && startDate && typeof startDate === 'string') {
-    const travelPayClaims = JSON.parse(JSON.stringify(store['/v0/travel-pay/claims']))
+    const travelPayClaims: GetTravelPayClaimsResponse = JSON.parse(JSON.stringify(store['/v0/travel-pay/claims']))
     const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
     const filteredClaimsData = travelPayClaims.data.filter((claim: TravelPayClaimData) => {
       const claimDate = DateTime.fromISO(claim.attributes.appointmentDateTime)
