@@ -45,6 +45,7 @@ import {
 import {
   TravelPayDemoReturnTypes,
   TravelPayDemoStore,
+  getTravelPayClaimDetails,
   getTravelPayClaims,
   submitAppointmentClaim,
 } from 'store/api/demo/travelPay'
@@ -217,6 +218,18 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
 
   if (endpoint.startsWith('/v0/push/prefs/')) {
     return store['/v0/push/prefs'] as DemoApiReturns
+  }
+
+  // Handle dynamic travel pay claims details endpoint
+  if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+    console.log('DEBUG: Matched dynamic travel pay endpoint:', endpoint)
+    // Check if it's a specific claim ID that has its own endpoint
+    if (store[endpoint as keyof DemoStore]) {
+      console.log('DEBUG: Found specific endpoint for:', endpoint)
+      return store[endpoint as keyof DemoStore] as DemoApiReturns
+    }
+    // Fall back to generic claim details
+    return getTravelPayClaimDetails(store)
   }
 
   switch (endpoint) {

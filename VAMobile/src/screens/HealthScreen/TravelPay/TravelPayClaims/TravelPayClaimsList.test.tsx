@@ -6,9 +6,6 @@ import { GetTravelPayClaimsResponse } from 'api/types'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsList'
 import { fireEvent, screen } from 'testUtils'
 import { render } from 'testUtils'
-import getEnv from 'utils/env'
-
-const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 let mockLogAnalyticsEvent: jest.Mock
 jest.mock('utils/analytics', () => {
@@ -27,6 +24,16 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useRouteNavigation: () => mockNavigateTo,
+  }
+})
+
+let mockFeatureEnabled: jest.Mock
+jest.mock('utils/remoteConfig', () => {
+  mockFeatureEnabled = jest.fn()
+  const original = jest.requireActual('utils/remoteConfig')
+  return {
+    ...original,
+    featureEnabled: mockFeatureEnabled,
   }
 })
 
@@ -130,6 +137,7 @@ describe('TravelPayClaimsList', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockFeatureEnabled.mockReturnValue(true)
   })
 
   it('renders list and items', () => {
@@ -173,21 +181,25 @@ describe('TravelPayClaimsList', () => {
     expect(screen.getByText(/Showing 1 - 10 of \(12\) claims/)).toBeTruthy()
   })
 
-  it('navigates to Webview and logs analytics when an item is pressed', () => {
+  it('navigates to TravelPayClaimDetailsScreen when an item is pressed', () => {
+    mockFeatureEnabled.mockImplementation((flag) => flag === 'travelPayClaimDetails')
+
     initialize()
     const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
     fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
 
-    expect(mockLogAnalyticsEvent).toHaveBeenCalled()
-    expect(mockNavigateTo).toHaveBeenCalledWith(
-      'Webview',
-      expect.objectContaining({
-        url: `${LINK_URL_TRAVEL_PAY_WEB_DETAILS}${firstId}`,
-        displayTitle: t('travelPay.webview.claims.displayTitle'),
-        loadingMessage: t('travelPay.webview.claims.loading'),
-        useSSO: true,
-        backButtonTestID: 'webviewBack',
-      }),
-    )
+    expect(mockNavigateTo).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
+      claimId: firstId,
+    })
+  })
+
+  it('does not navigate when travelPayClaimDetails feature is disabled', () => {
+    mockFeatureEnabled.mockReturnValue(false)
+
+    initialize()
+    const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
+    fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
+
+    expect(mockNavigateTo).not.toHaveBeenCalled()
   })
 })

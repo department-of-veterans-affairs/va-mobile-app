@@ -122,18 +122,31 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-                displayTitle: t('travelPay.webview.claims.displayTitle'),
-                loadingMessage: t('travelPay.webview.claims.loading'),
-                useSSO: true,
-                backButtonTestID: `webviewBack`,
-              })
+              if (featureEnabled('travelPayClaimDetails')) {
+                logAnalyticsEvent(Events.vama_link_click)
+                navigateTo('TravelPayClaimDetailsScreen', { claimId })
+              } else {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+                navigateTo('Webview', {
+                  url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+                  displayTitle: t('travelPay.webview.claims.displayTitle'),
+                  loadingMessage: t('travelPay.webview.claims.loading'),
+                  useSSO: true,
+                  backButtonTestID: `webviewBack`,
+                })
+              }
             }}
-            text={t('travelPay.travelClaimFiledDetails.goToVAGov')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
-            testID={`goToVAGovID-${claimId}`}
+            text={
+              featureEnabled('travelPayClaimDetails')
+                ? t('travelPay.travelClaimFiledDetails.goToClaimDetails')
+                : t('travelPay.travelClaimFiledDetails.goToVAGov')
+            }
+            a11yLabel={
+              featureEnabled('travelPayClaimDetails')
+                ? a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))
+                : a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))
+            }
+            testID={featureEnabled('travelPayClaimDetails') ? `goToClaimDetails-${claimId}` : `goToVAGovID-${claimId}`}
           />
           <TravelPayHelp />
         </>

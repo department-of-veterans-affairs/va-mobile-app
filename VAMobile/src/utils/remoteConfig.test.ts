@@ -37,6 +37,7 @@ const mockOverrides = {
   testFeature: false,
   travelPaySMOC: false,
   travelPayClaimsFullHistory: false,
+  travelPayClaimDetails: false,
   travelPayStatusList: false,
   useOldLinkComponent: false,
   appointmentsTestTime: true,
