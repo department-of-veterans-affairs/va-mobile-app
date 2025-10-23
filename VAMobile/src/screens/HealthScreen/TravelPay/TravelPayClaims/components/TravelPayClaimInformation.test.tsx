@@ -324,7 +324,7 @@ context('TravelPayClaimInformation', () => {
         documents: undefined,
       }
 
-      renderComponent(claimWithUndefinedDocs as TravelPayClaimDetails)
+      renderComponent(claimWithUndefinedDocs as unknown as TravelPayClaimDetails)
 
       expect(screen.queryByTestId('travelPayClaimInformationDocumentsSubmittedTitleTestID')).toBeFalsy()
     })
