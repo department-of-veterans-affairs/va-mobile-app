@@ -111,6 +111,10 @@ export const useOfflineAnnounce = () => {
 
   // Update timestamp when connection status changes
   useEffect(() => {
+    if (!featureEnabled('offlineMode')) {
+      return
+    }
+
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))
       dispatch(setShouldAnnounceOffline(true))
