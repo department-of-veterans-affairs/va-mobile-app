@@ -5,11 +5,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, LargePanel, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { TravelPayStack } from 'screens/HealthScreen/TravelPay/SubmitMileageTravelPayScreen'
 import { FileOnlineComponent, TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { useTheme } from 'utils/hooks'
 
-type TravelClaimHelpScreenProps = StackScreenProps<HealthStackParamList, 'TravelClaimHelpScreen'>
+type TravelClaimHelpScreenProps = StackScreenProps<TravelPayStack, 'TravelClaimHelpScreen'>
 
 function TravelClaimHelpScreen({ route }: TravelClaimHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
