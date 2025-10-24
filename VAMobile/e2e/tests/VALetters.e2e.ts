@@ -29,6 +29,7 @@ export const LettersConstants = {
   LETTER_BENEFIT_SUMMARY_ASK_VA_LINK_ID: 'lettersBenefitServiceGoToAskVAID',
   LETTER_BENEFIT_SUMMARY_BACK_ID: 'BenefitSummaryServiceVerificationBackID',
   LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID: 'lettersBenefitServiceViewLetterID',
+  WEBVIEW_BACK_BUTTON_ID: 'webviewBack',
   LETTER_TYPES: [
     {
       name: 'Benefit summary and service verification letter',
@@ -136,10 +137,9 @@ describe('VA Letters', () => {
         if (isBenefitSummaryLetter) {
           await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_ROW_ID)).scrollTo('bottom')
           await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_ASK_VA_LINK_ID)).tap()
-          await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
           await setTimeout(2000)
           await device.takeScreenshot('benefitSummaryLetterAskVAWebpage')
-          await device.launchApp({ newInstance: false })
+          await element(by.id(LettersConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
 
           await element(by.id(LettersConstants.LETTER_BENEFIT_SUMMARY_VIEW_LETTER_ID)).tap()
           await waitFor(element(by.text(LettersConstants.LETTER_FILE_NAME)))
