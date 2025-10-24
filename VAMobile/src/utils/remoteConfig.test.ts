@@ -18,6 +18,7 @@ jest.mock('@react-native-firebase/remote-config', () => () => ({
 }))
 
 const mockOverrides = {
+  allergiesOracleHealthApiEnabled: true,
   appointmentRequests: true,
   cernerTrueForDemo: false,
   COEAvailable: false,

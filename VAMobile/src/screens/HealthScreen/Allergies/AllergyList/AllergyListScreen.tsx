@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 
 import { useAllergies } from 'api/allergies/getAllergies'
-import { Allergy } from 'api/types'
+import { AllergyAttributesV0, AllergyAttributesV1, AllergyData } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -52,7 +52,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const [AllergiesToShow, setAllergiesToShow] = useState<Array<Allergy>>([])
+  const [AllergiesToShow, setAllergiesToShow] = useState<Array<AllergyData>>([])
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -72,10 +72,22 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
       {
-        text: t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) }),
+        text: t('allergies.allergyName', {
+          name: capitalizeFirstLetter(
+            (allergy.attributes as AllergyAttributesV0)?.code?.text ||
+              (allergy.attributes as AllergyAttributesV1)?.name ||
+              '',
+          ),
+        }),
         variant: 'MobileBodyBold',
       },
-      { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
+      {
+        text: formatDateMMMMDDYYYY(
+          (allergy.attributes as AllergyAttributesV0)?.recordedDate ||
+            (allergy.attributes as AllergyAttributesV1)?.date ||
+            '',
+        ),
+      },
     ]
 
     const allergyButton: DefaultListItemObj = {
