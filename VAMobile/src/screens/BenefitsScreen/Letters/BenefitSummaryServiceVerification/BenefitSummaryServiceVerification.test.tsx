@@ -233,7 +233,7 @@ context('BenefitSummaryServiceVerification', () => {
     initializeTestInstance(123, date, 88)
     await waitFor(() => fireEvent.press(screen.getByRole('link', { name: t('letters.benefitService.sendMessage') })))
     const expectNavArgs = {
-      url: 'https://ask.va.gov/',
+      url: 'https://va.gov/contact-us/ask-va/introduction',
       displayTitle: t('webview.vagov'),
       loadingMessage: t('loading.vaWebsite'),
       useSSO: true,
