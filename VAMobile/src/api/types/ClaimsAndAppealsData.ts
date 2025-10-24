@@ -519,6 +519,8 @@ export type ClaimAttributesData = {
   requestedDecision: boolean
   claimType: string
   claimTypeCode: string
+  displayTitle?: string
+  claimTypeBase?: string
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string
