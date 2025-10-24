@@ -4,19 +4,21 @@ title: Universal and app links
 
 ## Overview
 
-In React Native, Universal links (iOS) and App links (Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
+Universal links (iOS) and App links (Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
 
 These type of deep linking function across both web and mobile platforms. For example, when a user taps a link, it can open the related screen directly within the React Native app instead of loading a webpage. This creates a more seamless and integrated user experience between mobile and web content.
 
 ## Configurations
 :::note
 Deep linking support for both iOS and Android should already be configured. However, here's a brief overview of the setup process for those who want to review or customize the implementation.
+
+If you are adding a new deeplink then go **[adding a new linking path to app](./DeepLinks.md#adding-a-new-linking-path-in-the-app)** section.
 :::
 
 ### iOS
 
 **An apple-app-site-association (AASA) file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
-An AASA format will follow a format like this. `BundleId` and `TeamID` can be found from the apple developer account.
+An AASA format will follow a format like this. `BundleId` and `TeamID` can be found from the apple developer account. Additional information about generation of this file can be found [here](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
 
 ```json
 {
@@ -66,6 +68,9 @@ With this in place, the json file should be accessible on the browser. Content s
 - https://staging.va.gov/.well-known/apple-app-site-association
 - https://va.gov/.well-known/apple-app-site-association
 
+:::note
+Ensure that content-type for this file is `application/json` when it hits the url
+:::
 
 **Adding Associated Domain in App Configuration**
 
@@ -120,6 +125,8 @@ The JSON file uses the following fields to identify associated apps:
 - `package_name`: The application ID declared in the app's build.gradle file.
 - `sha256_cert_fingerprints`: The SHA256 fingerprints of your app's signing certificate
   - This field supports multiple fingerprints, which can be used to support different versions of your app, such as dev, QA, and production builds
+  - Fingerprints for production and QA can be found on Google Play Console(App Integrity and Test/Internal app sharing)
+  - Dev fingerprints are found in Android studio using App Links Assistant or running `./gradlew signingReport`
 
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
 - https://staging.va.gov/.well-known/assetlinks.json
@@ -131,7 +138,7 @@ With this in place, the json file should be accessible on the browser. Content s
 ### Basic steps
 
 1. Obtain the https link that will be used to redirect to the app `ex: https://staging.va.gov/my-health/appointments`
-2. Update the `getStateFromPath` function within the `linking.tsx` file. An example is provided below. 
+2. Update the `getStateFromPath` function within the `src/constants/linking.tsx` file. An example is provided below. 
 - Note that within the `prefixes` array, `https://staging.va.gov` and `https://va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the [configurations](#configurations).
 ```tsx
 // Handles https://staging.va.gov/my-health/appointments & https://staging.va.gov/my-health/appointments/past
@@ -189,7 +196,9 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 </intent-filter>
 ```
 :::note
-Ensure that `android:autoVerify="true"` is present 
+Ensure that `android:autoVerify="true"` is present.
+
+Add a path for both **staging.va.gov** and **va.gov** as QA builds and local testing are done using staging to verify and va.gov for production.
 :::
 
 
@@ -231,7 +240,8 @@ As an example:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d "https://staging.va.gov/my-health/appointments" 
 ```
-
+You can also verify that the app has been linked properly by checking the list of verified links in your App settings. `Settings` -> `Apps` -> `VA`
+-> `Open by default` -> `Links to open in this app`. Should see 2 verified links - va.gov and staging.va.gov
 ## Useful Links
 https://medium.com/@fashad.ahmed20/how-to-implement-universal-links-in-react-native-19a424db4dcf
 
