@@ -39,6 +39,7 @@ export type VATextColors = {
   activityFooter: string
   categoryLandingError: string
   categoryLandingWarning: string
+  lastUpdated: string
 }
 
 export type VAIconColors = {
@@ -70,6 +71,7 @@ export type VAIconColors = {
   linkRow: string
   largeNavButton: string
   ussf: string
+  contrast: string
 }
 
 export type VATypographyThemeVariants = {
@@ -152,6 +154,7 @@ export type VABackgroundColors = {
   skeletonLoaderSecondary: string
   bullet: string
   carouselBullet: string
+  offlineBanner: string
 }
 
 export type VABorderColors = {

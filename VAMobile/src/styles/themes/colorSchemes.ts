@@ -39,6 +39,7 @@ export const lightTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLightest,
     bullet: colors.vadsColorBaseDarker,
     carouselBullet: colors.uswdsSystemColorGray10,
+    offlineBanner: colors.vadsColorBase,
   },
   border: {
     aboutYou: colors.vadsColorGrayWarmLight,
@@ -91,6 +92,7 @@ export const lightTheme = {
     categoryLandingAlert: colors.vadsColorSecondaryDark,
     linkRow: colors.vadsColorPrimary,
     ussf: colors.vadsColorBlack,
+    contrast: colors.vadsColorBaseLightest,
   },
   text: {
     appVersionAndBuild: colors.vadsColorBlack,
@@ -122,6 +124,8 @@ export const lightTheme = {
     categoryLandingWarning: colors.vadsColorBase,
     cernerPanel: colors.vadsColorBase,
     cernerFooter: colors.vadsColorBaseDark,
+    lastUpdated: colors.vadsColorBorderStrongOnLight,
+    offlineText: colors.vadsColorBaseLighter,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,
@@ -178,6 +182,7 @@ export const darkTheme = {
     skeletonLoaderSecondary: colors.vadsColorBaseLight,
     bullet: colors.uswdsSystemColorGray10,
     carouselBullet: colors.uswdsSystemColorGray10,
+    offlineBanner: colors.vadsColorBaseLightest,
   },
   border: {
     aboutYou: colors.uswdsSystemColorGray60,
@@ -230,6 +235,7 @@ export const darkTheme = {
     categoryLandingAlert: colors.uswdsSystemColorRedVivid40,
     linkRow: colors.uswdsSystemColorBlueVivid30,
     ussf: colors.vadsColorWhite,
+    contrast: colors.vadsColorBase,
   },
   text: {
     appVersionAndBuild: colors.vadsColorWhite,
@@ -261,6 +267,8 @@ export const darkTheme = {
     categoryLandingWarning: colors.vadsColorBaseLightest,
     cernerPanel: colors.vadsColorBaseLightest,
     cernerFooter: colors.vadsColorBaseLightest,
+    lastUpdated: colors.vadsColorBorderStrongOnDark,
+    offlineText: colors.vadsColorInk,
   },
   buttonBackground: {
     buttonPrimary: colors.vadsColorPrimary,

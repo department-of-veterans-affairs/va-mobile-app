@@ -827,6 +827,14 @@ export const Events = {
       },
     }
   },
+  vama_offline_access: (screen_name: string): Event => {
+    return {
+      name: 'vama_offline_access',
+      params: {
+        screen_name,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',

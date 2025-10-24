@@ -73,6 +73,7 @@ import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
@@ -86,6 +87,8 @@ export function HomeScreen({}: HomeScreenProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
   const ref = useRef(null)
+  const snackbar = useSnackbar()
+  const connectionStatus = useAppIsOnline()
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -300,6 +303,11 @@ export function HomeScreen({}: HomeScreenProps) {
   )
 
   const onFacilityLocator = () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,

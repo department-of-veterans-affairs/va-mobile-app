@@ -12,6 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useShowActionSheet, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
@@ -24,6 +25,7 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const confirmAlert = useShowActionSheet()
+  const connectionStatus = useAppIsOnline()
 
   const getInitialState = (): string => {
     const item = demographics?.preferredName
@@ -76,6 +78,11 @@ function PreferredNameScreen({ navigation }: PreferredNameScreenProps) {
   }
 
   const onSave = (): void => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     if (preferredName !== '') {
       updatePreferredName()
     }

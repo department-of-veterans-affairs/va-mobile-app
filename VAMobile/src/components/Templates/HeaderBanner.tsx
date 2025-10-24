@@ -9,6 +9,7 @@ import { IconProps } from '@department-of-veterans-affairs/mobile-component-libr
 
 import { Box, BoxProps, DescriptiveBackButton, IconWithText, TextView, TextViewProps } from 'components'
 import MenuView, { MenuViewActionsType } from 'components/Menu'
+import OfflineModeDebugToggle from 'components/OfflineModeDebugToggle'
 import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 
 export type HeaderLeftButtonProps = {
@@ -296,7 +297,7 @@ const HeaderBanner: FC<HeaderBannerProps> = ({
                 </View>
               ) : null}
             </Box>
-
+            <OfflineModeDebugToggle />
             {title && (
               <Box mt={theme.dimensions.buttonPadding} flex={constrainTitle ? 5 : undefined}>
                 <View {...titleViewProps} ref={focus === 'Title' ? focusTitle : () => {}}>

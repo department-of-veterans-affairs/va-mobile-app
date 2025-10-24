@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
@@ -26,6 +27,7 @@ import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
 import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -56,6 +58,8 @@ function TravelPayClaimsList({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const connectionStatus = useAppIsOnline()
+  const snackbar = useSnackbar()
   const pickerOptions = getPickerOptions(t, {
     dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
     allOfTKey: 'travelPay.statusList.allOf',
@@ -83,6 +87,11 @@ function TravelPayClaimsList({
   }, [claims, page, perPage])
 
   const goToClaimDetails = (claimId: string) => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
     navigateTo('Webview', {
       url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,

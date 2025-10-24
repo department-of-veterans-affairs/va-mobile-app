@@ -4,11 +4,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
+import Appointments from 'screens/HealthScreen/Appointments'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import Appointments from './Appointments'
 
 const mockNavigationSpy = jest.fn()
 
@@ -20,6 +19,23 @@ jest.mock('utils/hooks', () => {
     ...original,
     useBeforeNavBackListener: jest.fn(),
     useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
+jest.mock('api/queryClient', () => {
+  const original = jest.requireActual('@tanstack/react-query')
+
+  return {
+    useQuery: original.useQuery,
+  }
+})
+
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+
+  return {
+    ...original,
+    useOfflineEventQueue: () => jest.fn(),
   }
 })
 
