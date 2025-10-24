@@ -4,7 +4,7 @@ title: 'Add user to App Stores: [name]'
 labels: [TestFlight & AppTester]
 assignees:
   - jbergman-oddball
-  - jonbindbeutel
+  - dumathane
 
 body:
   - type: markdown
