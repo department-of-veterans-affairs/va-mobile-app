@@ -51,6 +51,13 @@ jobs:
           echo "Will add milestone to PR instead"
           echo "force_pr_milestone=true" >> $GITHUB_OUTPUT
 
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
       - name: Conditional Action Add Milestone to issue or PR
         if: ${{ always() }}
         run: |
@@ -81,4 +88,4 @@ jobs:
             gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
           fi
         env:
-          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
