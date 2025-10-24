@@ -1,5 +1,23 @@
 [
   {
+    "title": "v2.62.0",
+    "due_on": "2025-11-04T08:00:00Z",
+    "issues": [
+      {
+        "title": "Revert \"#121006 [Benefits Management Team 2] [Appeals] Show list item under appeal claims that shows the number of issues with null descriptions\"",
+        "number": 11808,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11808",
+        "isPR": true
+      },
+      {
+        "title": "#121006 [Benefits Management Team 2] [Appeals] Show list item under appeal claims that shows the number of issues with null descriptions",
+        "number": 11715,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11715",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.61.0",
     "due_on": "2025-10-21T07:00:00Z",
     "issues": [
