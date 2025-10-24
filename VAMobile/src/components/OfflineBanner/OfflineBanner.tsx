@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
+import { AccessibilityInfo, Pressable } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
@@ -8,23 +8,42 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { OfflineState, setBannerExpanded } from 'store/slices'
+import { OfflineState } from 'store/slices'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { useAppDispatch, useTheme } from 'utils/hooks'
+import { useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+
+const OfflineBannerTimestamp: FC = () => {
+  const { t } = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
+  const { offlineTimestamp } = useSelector<RootState, OfflineState>((state) => state.offline)
+
+  useEffect(() => {
+    console.log('announcing!')
+    AccessibilityInfo.announceForAccessibilityWithOptions(
+      `${t('offline.lastConnected')} ${getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}`,
+      { queue: true },
+    )
+  }, [offlineTimestamp, t])
+
+  return (
+    <Box pb={theme.dimensions.condensedMarginBetween}>
+      <TextView color="offlineText" variant="HelperText">
+        {t('offline.lastConnected')} {getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}
+      </TextView>
+    </Box>
+  )
+}
 
 export const OfflineBanner: FC = () => {
   const connectionStatus = useAppIsOnline()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const dispatch = useAppDispatch()
-  const { offlineTimestamp, bannerExpanded, shouldAnnounceOffline } = useSelector<RootState, OfflineState>(
-    (state) => state.offline,
-  )
+  const [bannerExpanded, setBannerExpanded] = useState(false)
   // This is used to trigger the screen reader announcement for the screen disconnection occurs
 
   const onBannerInteract = () => {
-    dispatch(setBannerExpanded(!bannerExpanded))
+    setBannerExpanded(!bannerExpanded)
   }
 
   // If we are online, show nothing
@@ -43,10 +62,7 @@ export const OfflineBanner: FC = () => {
         onPress={onBannerInteract}
         accessibilityRole="button">
         <Box height={40} display="flex" flexDirection="row" justifyContent="space-between">
-          <TextView
-            accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
-            color="offlineText"
-            variant="MobileBodyBold">
+          <TextView color="offlineText" variant="MobileBodyBold">
             {t('offline.banner.title')}
           </TextView>
           <Icon
@@ -57,16 +73,7 @@ export const OfflineBanner: FC = () => {
           />
         </Box>
       </Pressable>
-      {bannerExpanded && (
-        <Box pb={theme.dimensions.condensedMarginBetween}>
-          <TextView
-            accessibilityLiveRegion={shouldAnnounceOffline ? 'polite' : 'none'}
-            color="offlineText"
-            variant="HelperText">
-            {t('offline.lastConnected')} {getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}
-          </TextView>
-        </Box>
-      )}
+      {bannerExpanded && <OfflineBannerTimestamp />}
     </Box>
   )
 }

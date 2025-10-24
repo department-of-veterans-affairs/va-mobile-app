@@ -114,11 +114,12 @@ export const useOfflineAnnounce = () => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED && !offlineTimestamp) {
       dispatch(setOfflineTimestamp(DateTime.local()))
       dispatch(setShouldAnnounceOffline(true))
+      AccessibilityInfo.announceForAccessibilityWithOptions(t('offline.banner.title'), { queue: true })
     } else if (connectionStatus === CONNECTION_STATUS.CONNECTED && offlineTimestamp) {
       dispatch(setOfflineTimestamp(undefined))
       dispatch(setShouldAnnounceOffline(false))
       dispatch(setBannerExpanded(false))
-      AccessibilityInfo.announceForAccessibility(t('offline.connectedToTheInternet'))
+      AccessibilityInfo.announceForAccessibilityWithOptions(t('offline.connectedToTheInternet'), { queue: true })
     }
   }, [connectionStatus, offlineTimestamp, dispatch, t])
 }
