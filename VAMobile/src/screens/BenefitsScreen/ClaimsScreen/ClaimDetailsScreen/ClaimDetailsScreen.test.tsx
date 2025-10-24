@@ -7,13 +7,12 @@ import { t } from 'i18next'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import { claim as claimData } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { claim as claimData } from '../claimData'
-import ClaimDetailsScreen from './ClaimDetailsScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -199,6 +198,54 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() =>
         expect(screen.getByRole('header', { name: t('errors.networkConnection.header') })).toBeTruthy(),
       )
+    })
+  })
+
+  describe('claim title display', () => {
+    it('should use displayTitle when available', async () => {
+      const claimWithDisplayTitle: ClaimData = {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: 'Request to add or remove a dependent',
+          claimTypeBase: 'request to add or remove a dependent',
+          claimType: 'Dependency',
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: claimWithDisplayTitle,
+        })
+
+      renderWithData(ClaimTypeConstants.ACTIVE, false, claimWithDisplayTitle)
+
+      await waitFor(() => {
+        expect(screen.getByText('Request to add or remove a dependent')).toBeTruthy()
+      })
+    })
+
+    it('should use default claim type when displayTitle is not available', async () => {
+      const claimWithoutDisplayTitle: ClaimData = {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: undefined,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: claimWithoutDisplayTitle,
+        })
+
+      renderWithData(ClaimTypeConstants.ACTIVE, false, claimWithoutDisplayTitle)
+
+      await waitFor(() => {
+        expect(screen.getByText(t('claimDetails.titleWithType', { type: t('claims.defaultClaimType') }))).toBeTruthy()
+      })
     })
   })
 })

@@ -12,7 +12,6 @@ import {
   ButtonProps,
 } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
-import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaim, useDownloadEFolderDocument, useEFolderDocuments } from 'api/claimsAndAppeals'
@@ -32,6 +31,9 @@ import { Events } from 'constants/analytics'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import ClaimFiles from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimFiles/ClaimFiles'
+import ClaimStatus from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimStatus'
+import NeedHelpData from 'screens/BenefitsScreen/ClaimsScreen/NeedHelpData/NeedHelpData'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { isDisabilityCompensationClaim, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
@@ -40,14 +42,6 @@ import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/ho
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import NeedHelpData from '../NeedHelpData/NeedHelpData'
-import ClaimFiles from './ClaimFiles/ClaimFiles'
-import ClaimStatus from './ClaimStatus/ClaimStatus'
-
-export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
-  return claim?.attributes?.claimType || translation('claims.defaultClaimType')
-}
 
 type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
 
@@ -334,7 +328,10 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
         <Box mb={theme.dimensions.contentMarginBottom}>
           <Box mx={theme.dimensions.condensedMarginBetween}>
             <TextView variant={'MobileBodyBold'} accessibilityRole="header">
-              {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
+              {claim?.attributes?.displayTitle ||
+                t('claimDetails.titleWithType', {
+                  type: t('claims.defaultClaimType'),
+                })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           </Box>
