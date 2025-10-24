@@ -244,7 +244,7 @@ context('ClaimDetailsScreen', () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, claimWithoutDisplayTitle)
 
       await waitFor(() => {
-        expect(screen.getByText(t('claimDetails.titleWithType', { type: t('claims.defaultClaimType') }))).toBeTruthy()
+        expect(screen.getByText('Your compensation claim')).toBeTruthy()
       })
     })
   })

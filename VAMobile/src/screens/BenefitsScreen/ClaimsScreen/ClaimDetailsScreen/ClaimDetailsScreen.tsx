@@ -12,6 +12,7 @@ import {
   ButtonProps,
 } from '@department-of-veterans-affairs/mobile-component-library/src/components/Button/Button'
 import { useQueryClient } from '@tanstack/react-query'
+import { TFunction } from 'i18next'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaim, useDownloadEFolderDocument, useEFolderDocuments } from 'api/claimsAndAppeals'
@@ -42,6 +43,10 @@ import { useBeforeNavBackListener, useRouteNavigation, useTheme } from 'utils/ho
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
+  return claim?.attributes?.claimType || translation('claims.defaultClaimType')
+}
 
 type ClaimDetailsScreenProps = StackScreenProps<BenefitsStackParamList, 'ClaimDetailsScreen'>
 
@@ -330,7 +335,7 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
             <TextView variant={'MobileBodyBold'} accessibilityRole="header">
               {claim?.attributes?.displayTitle ||
                 t('claimDetails.titleWithType', {
-                  type: t('claims.defaultClaimType'),
+                  type: getClaimType(claim, t).toLowerCase(),
                 })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
