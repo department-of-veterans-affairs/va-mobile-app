@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import {
+  Box,
   HeaderBanner,
   HeaderBannerProps,
   HeaderButton,
@@ -160,8 +161,10 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
           </View>
         ) : null}
         <WaygateWrapper>
-          {children}
-          <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+          <Box display="flex" justifyContent="space-between" flex={1}>
+            <Box>{children}</Box>
+            <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+          </Box>
         </WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
