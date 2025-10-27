@@ -4,16 +4,25 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
 import OfflineBanner from 'components/OfflineBanner'
+import { initialOfflineState } from 'store/slices'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-import { CONNECTION_STATUS } from 'utils/hooks/offline'
 
 jest.mock('utils/hooks/offline', () => {
   const original = jest.requireActual('utils/hooks/offline')
 
   return {
     ...original,
-    useAppIsOnline: jest.fn().mockReturnValue(CONNECTION_STATUS.DISCONNECTED),
+    useAppIsOnline: jest.fn().mockReturnValue('DISCONNECTED'),
+  }
+})
+
+jest.mock('react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo', () => {
+  return {
+    _esModule: true,
+    default: {
+      announceForAccessibilityWithOptions: jest.fn(),
+    },
   }
 })
 
@@ -27,6 +36,12 @@ context('OfflineBanner', () => {
   const initializeTest = (mockIsOffline: boolean) => {
     const renderParams = {
       isOnline: !mockIsOffline,
+      preloadedState: {
+        offline: {
+          ...initialOfflineState,
+          offlineTimestamp: testDate,
+        },
+      },
     }
     render(<OfflineBanner />, renderParams)
   }
