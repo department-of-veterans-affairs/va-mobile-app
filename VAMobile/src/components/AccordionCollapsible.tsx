@@ -30,7 +30,7 @@ export type AccordionCollapsibleProps = {
 }
 
 /**
- * A common component to show content inside of a collapsible accordion.
+ * A common component to show content inside a collapsible accordion.
  */
 const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
   header,
