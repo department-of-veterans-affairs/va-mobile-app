@@ -524,11 +524,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .scroll(200, 'down')
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(600, 'down')
-    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
+    await scrollToIDThenTap(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
