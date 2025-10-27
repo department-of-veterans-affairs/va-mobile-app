@@ -19,7 +19,6 @@ const OfflineBannerTimestamp: FC = () => {
   const { offlineTimestamp } = useSelector<RootState, OfflineState>((state) => state.offline)
 
   useEffect(() => {
-    console.log('announcing!')
     AccessibilityInfo.announceForAccessibilityWithOptions(
       `${t('offline.lastConnected')} ${getFormattedDateAndTimeZone(offlineTimestamp?.toISO() || '')}`,
       { queue: true },
