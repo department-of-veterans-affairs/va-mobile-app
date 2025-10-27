@@ -14,7 +14,7 @@ Due of the growing complexity of the Flagship app and the types of features we a
 
 The values set in Firebase are for production only. Any overrides we'll use for development or in QA will be stored and overridden in our FE code in `src/utils/remoteConfig.ts`. The app will only fetch values from Firebase if it detects that our `ENVIRONMENT === 'Production'`. Otherwise it will use the defaults for staging/dev that are set in `remoteConfig.ts`
 
-Remote Config values are fetched from Firebase only once—when the app is first launched. The app does not periodically re-fetch values while running or when resumed from the background. To apply updated Remote Config values, users must completely restart the app. For this reason, Remote Config should not be relied when real-time immediate configuration changes are necessary.
+Note: Remote config values are fetched from Firebase only once—when the app is first launched. The app does not periodically re-fetch values while running or when resumed from the background. To fetch and apply updated remote config values, users must completely restart the app. For this reason, remote config should not be relied on when immediate configuration changes are required.
 
 ## Guidelines
 
