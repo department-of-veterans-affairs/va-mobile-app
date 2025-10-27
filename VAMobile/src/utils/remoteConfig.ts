@@ -100,7 +100,7 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
-  offlineMode: true, // TODO: DO NOT MERGE UNTIL THIS IS FALSE!!!
+  offlineMode: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
   offlineMode: '(Restart required)',

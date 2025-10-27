@@ -48,6 +48,7 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
     const toggleItems = Object.keys(toggles).map((key): SimpleListItemObj => {
       return {
         text: `${key} ${FeatureToggleDescriptions[key] || ''}`,
+        detoxTestID: key,
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
           on: toggles[key as FeatureToggleType],
