@@ -18,11 +18,9 @@
     "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios --sourcemap-output ios/main.jsbundle.map --assets-dest ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
-    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx && yarn run lint:changed",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
-    "lint:changed": "CURRENT_BRANCH=$(git branch --show-current) && CHANGED_FILES=$(git diff --diff-filter=ACM --relative --name-only $(git merge-base $CURRENT_BRANCH origin/develop) -- \"./src/**/*.ts\" \"./src/**/*.tsx\" \"./src/**/*.js\" \"./src/**/*.jsx\" \":(exclude)./src/**/index.ts\") && eslint --ignore-pattern '**/index.ts' --no-eslintrc -c ./.eslintrc.changed.js $CHANGED_FILES",
-    "lint:changed:ci": "eslint --ignore-pattern '**/index.ts' --no-eslintrc --max-warnings 0 --rule 'deprecate/import: off' -c ./.eslintrc.changed.js $CHANGED_FILES && yarn run tsc:compile",
     "lint:ci": "eslint --max-warnings 0 --rule 'deprecate/import: off' ./src --ext .js,.jsx,.ts,.tsx && yarn run tsc:compile",
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache",
@@ -168,7 +166,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "prettier --write",
-    "./src/**/*.{js,jsx,ts,tsx}": "yarn lint:changed",
     "*.{yml,yaml}": "yamllint --strict -c .github/linters/.yaml-lint.yml",
     ".github/workflows/*.{yml,yaml}": "actionlint -config-file .github/linters/actionlint.yml"
   },

@@ -5,9 +5,8 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import styled from 'styled-components'
 
+import { TextView } from 'components'
 import { VATheme } from 'styles/theme'
-
-import TextView from '../components/TextView'
 
 /**
  * A hidden text view that will still be read by the screen reader
