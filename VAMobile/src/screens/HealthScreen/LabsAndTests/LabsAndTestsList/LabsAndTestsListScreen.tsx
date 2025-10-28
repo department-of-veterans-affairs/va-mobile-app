@@ -50,9 +50,9 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 
   const [page, setPage] = useState(1)
 
-  // Generate 90-day period options going back approximately 2 years
+  // Generate 90-day period options going back approximately 2.2 years
   // This provides reasonable coverage while maintaining good UX
-  // 2 years * 365.25 days / 90 days ≈ 9 ranges
+  // 9 ranges × 90 days = 810 days ≈ 2.2 years
   const dateRangeOptions: Array<PickerItem> = useMemo(() => {
     const now = DateTime.now()
     const options: Array<PickerItem> = []
