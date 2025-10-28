@@ -33,7 +33,7 @@ jobs:
         run: |
           GITHUB_USERNAME="${{ github.actor }}"
           # Use jq to extract the email from the EMAIL_MAP based on the GitHub username
-          EMAIL_FROM_MAP=$(echo "$EMAIL_MAP" | jq -r ".""$GITHUB_USERNAME""")
+          EMAIL_FROM_MAP=$(echo "$EMAIL_MAP" | jq -r --arg gh_user "$GITHUB_USERNAME" '.[$gh_user]')
 
           if [ "$EMAIL_FROM_MAP" == "null" ] || [ -z "$EMAIL_FROM_MAP" ]; then
             echo "Email not found in internal mapping for GitHub user $GITHUB_USERNAME. Attempting GitHub API fallback."
