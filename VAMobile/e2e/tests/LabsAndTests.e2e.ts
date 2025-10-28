@@ -101,7 +101,7 @@ describe('Labs And Test Screen', () => {
     await expect(element(by.text('Right leg'))).toExist()
     await expect(element(by.text('VA TEST LAB'))).toExist()
 
-    // // ensure base 64 decoded data is present
+    // ensure base 64 decoded data is present
     await expect(element(by.text('this is a test'))).toExist()
 
     // Navigate back to the list
