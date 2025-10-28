@@ -6,8 +6,7 @@ import { DateTime } from 'luxon'
 import { Events } from 'constants/analytics'
 import { RootState } from 'store'
 import { ErrorObject } from 'store/api'
-
-import { isErrorObject } from './common'
+import { isErrorObject } from 'utils/common'
 
 export type EventParams = { [key: string]: unknown }
 

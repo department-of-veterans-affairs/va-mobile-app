@@ -4,7 +4,7 @@ import { reduce } from 'underscore'
 
 import { CommonErrorTypes } from 'constants/errors'
 import { AppThunk } from 'store'
-import { get } from 'store/api'
+import { ScreenIDTypesConstants, get } from 'store/api'
 import {
   DowntimeFeatureType,
   DowntimeFeatureTypeConstants,
@@ -12,8 +12,6 @@ import {
   ScreenIDTypes,
 } from 'store/api/types'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-
-import { ScreenIDTypesConstants } from '../api/types/Screens'
 
 export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes
