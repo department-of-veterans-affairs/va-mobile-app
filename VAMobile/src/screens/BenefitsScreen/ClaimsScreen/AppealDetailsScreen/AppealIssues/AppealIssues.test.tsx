@@ -4,9 +4,8 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AppealIssue } from 'api/types'
+import AppealIssues from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealIssues/AppealIssues'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AppealIssues from './AppealIssues'
 
 context('AppealIssues', () => {
   beforeEach(() => {

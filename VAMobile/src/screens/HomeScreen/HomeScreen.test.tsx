@@ -13,6 +13,7 @@ import {
   ServiceHistoryAttributes,
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
+import { HomeScreen } from 'screens/index'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
@@ -24,8 +25,6 @@ import {
   getFoldersPayload,
   getPrescriptionsPayload,
 } from 'utils/tests/personalization'
-
-import { HomeScreen } from './HomeScreen'
 
 jest.mock('utils/remoteConfig')
 

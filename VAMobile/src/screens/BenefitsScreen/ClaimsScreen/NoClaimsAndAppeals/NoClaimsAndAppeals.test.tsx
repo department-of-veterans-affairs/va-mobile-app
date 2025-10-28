@@ -7,10 +7,9 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import NoClaimsAndAppeals from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppeals/NoClaimsAndAppeals'
 import * as api from 'store/api'
 import { QueriesData, context, render, waitFor, when } from 'testUtils'
-
-import NoClaimsAndAppeals from './NoClaimsAndAppeals'
 
 const mockPayload: ClaimsAndAppealsListPayload = {
   data: [],

@@ -5,11 +5,10 @@ import { DateTime } from 'luxon'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { AppealData } from 'api/types'
+import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
+import { appeal as appealData } from 'screens/BenefitsScreen/ClaimsScreen/appealData'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-
-import { appeal as appealData } from '../appealData'
-import AppealDetailsScreen from './AppealDetailsScreen'
 
 context('AppealDetailsScreen', () => {
   const renderWithData = (appeal?: Partial<AppealData>): void => {

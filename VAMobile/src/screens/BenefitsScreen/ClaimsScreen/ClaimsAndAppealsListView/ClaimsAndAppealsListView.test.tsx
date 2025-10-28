@@ -7,10 +7,9 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import ClaimsAndAppealsListView from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-
-import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
