@@ -143,7 +143,7 @@ context('errors', () => {
       )
     })
 
-    it.only('should not mark downtime for future maintenance windows', async () => {
+    it('should not mark downtime for future maintenance windows', async () => {
       const store = await initializeMaintenanceWindows()
 
       expect(store.getState().errors.errorsByScreenID).toMatchObject({
