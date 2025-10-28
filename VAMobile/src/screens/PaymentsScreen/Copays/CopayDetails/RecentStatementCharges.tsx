@@ -68,7 +68,7 @@ function RecentStatementCharges({ copay }: { copay: MedicalCopayRecord }) {
   const expandedContent = (
     <Box>
       <Box py={theme.dimensions.standardMarginBetween}>
-        <TextView>This statement shows your current charges.</TextView>
+        <TextView>{t('copays.recentCharges.description')}</TextView>
       </Box>
       <Box {...chargeBoxProps}>
         <TextView variant="vadsFontHeadingXsmall">{t('copays.recentCharges.previousBalance')}</TextView>

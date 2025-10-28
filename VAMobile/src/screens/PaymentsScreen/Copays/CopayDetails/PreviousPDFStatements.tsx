@@ -39,7 +39,7 @@ function PreviousPDFStatements({
             accessible={true}
             accessibilityRole="link"
             accessibilityLabel={t('copays.goToStatement')}
-            accessibilityHint="Opens PDF in viewer">
+            accessibilityHint={t('copays.goToStatement.a11yLabel')}>
             <Box
               {...statementBoxProps}
               display={'flex'}
