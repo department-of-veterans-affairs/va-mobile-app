@@ -412,6 +412,14 @@ export const Events = {
       },
     }
   },
+  vama_copay_stmt_download: (id: string): Event => {
+    return {
+      name: 'vama_copay_stmt_download',
+      params: {
+        id,
+      },
+    }
+  },
   vama_ddl_landing_click: (): Event => {
     return {
       name: 'vama_ddl_landing_click',
