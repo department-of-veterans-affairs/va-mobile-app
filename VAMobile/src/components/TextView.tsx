@@ -4,13 +4,12 @@ import { useSelector } from 'react-redux'
 
 import styled from 'styled-components'
 
+import { BoxProps, createBoxStyles } from 'components'
 import { RootState } from 'store'
 import { AccessibilityState } from 'store/slices/accessibilitySlice'
 import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-
-import { BoxProps, createBoxStyles } from './Box'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants

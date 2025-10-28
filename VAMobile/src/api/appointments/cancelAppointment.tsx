@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
+import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { AppointmentStatusConstants, AppointmentsGetData } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
 import { put } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { appointmentsKeys } from './queryKeys'
 
 /**
  * Determines whether a date is within the specified number of days (defaults to 7 days)
