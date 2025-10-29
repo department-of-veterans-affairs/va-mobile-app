@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { DateTime } from 'luxon'
-
 import { TravelPayClaimData } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
 import { Events } from 'constants/analytics'
@@ -11,7 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
@@ -57,9 +55,7 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
 
       const textLines: Array<TextLine> = []
 
-      const dateString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.DATE_FULL, undefined, {
-        weekday: 'long',
-      })
+      const dateString = formatDateMMMMDDYYYY(appointmentDateTime)
 
       const timeString = getFormattedTimeForTimeZone(appointmentDateTime)
       textLines.push({

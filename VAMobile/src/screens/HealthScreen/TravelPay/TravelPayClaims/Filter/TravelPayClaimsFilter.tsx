@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimData } from 'api/types'
-import { Box, BoxProps, TextView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { Box, BoxProps } from 'components'
 import TravelClaimsFilterModal from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterModal'
 import { useTheme } from 'utils/hooks'
 import { CheckboxOption, SortOptionType } from 'utils/travelPay'
@@ -25,7 +23,6 @@ function TravelPayClaimsFilter({
   sortBy,
   onSortByChanged,
 }: TravelPayClaimsFilterProps) {
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const filterContainerProps: BoxProps = {
@@ -37,8 +34,6 @@ function TravelPayClaimsFilter({
     mx: theme.dimensions.gutter,
     mb: theme.dimensions.standardMarginBetween,
   }
-
-  const onClearFiltersPress = () => onFilterChanged(new Set())
 
   const filterOptions = useMemo(() => {
     // Allow filtering by any of the statuses that appear in the list
@@ -74,15 +69,6 @@ function TravelPayClaimsFilter({
           onSortByChanged={onSortByChanged}
         />
       </Box>
-      <TextView
-        onPress={onClearFiltersPress}
-        accessibilityRole="button"
-        accessibilityLabel={t('travelPay.statusList.clearFilters')}
-        accessibilityHint={t('travelPay.statusList.clearFilters.a11yHint')}
-        color="link"
-        testID="clearFiltersButton">
-        {t('travelPay.statusList.clearFilters')}
-      </TextView>
     </Box>
   )
 }

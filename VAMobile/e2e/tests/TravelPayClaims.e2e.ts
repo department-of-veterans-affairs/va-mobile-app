@@ -15,7 +15,6 @@ const TravePayClaimsE2eIds = {
 
   FILTER_MODAL_CANCEL_BUTTON_ID: 'filterButtonCancelTestID',
   FILTER_MODAL_APPLY_BUTTON_ID: 'filterButtonApplyTestID',
-  CLEAR_FILTERS_BUTTON_ID: 'clearFiltersButton',
 
   DATE_PICKER_ID: 'getDateRangeTestID',
   DATE_PICKER_HEADER_TEXT: 'Select a date range',
@@ -103,7 +102,6 @@ describe('Travel Pay Claims Screen', () => {
       FILTER_MODAL_APPLY_BUTTON_ID,
       SHOW_FILTERS_BUTTON_ID,
       TRAVEL_PAY_CLAIMS_TEST_ID,
-      CLEAR_FILTERS_BUTTON_ID,
       DATE_PICKER_DONE_BUTTON_ID,
       DATE_PICKER_HEADER_TEXT,
       DATE_PICKER_ID,
@@ -130,11 +128,6 @@ describe('Travel Pay Claims Screen', () => {
     await waitFor(element(by.text(FILTERED_RESULTS_TEXT)))
       .toExist()
       .withTimeout(4000)
-
-    // Clearing the filters should show "All" again
-    await waitFor(element(by.id(CLEAR_FILTERS_BUTTON_ID))).toExist()
-    await element(by.id(CLEAR_FILTERS_BUTTON_ID)).tap()
-    await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
 
     // Use the date range selector
     await element(by.id(DATE_PICKER_ID)).tap()

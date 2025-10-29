@@ -69,7 +69,6 @@ context('TravelPayClaimsFilter', () => {
     )
 
     expect(screen.getByTestId('travelPayClaimsFilterModalContainer')).toBeTruthy()
-    expect(screen.getByTestId('clearFiltersButton')).toBeTruthy()
   })
 
   it('renders the correct checkboxes in the modal from the list of claims', async () => {
