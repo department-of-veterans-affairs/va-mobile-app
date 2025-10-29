@@ -23,9 +23,8 @@ jobs:
         id: determine_email
         run: |
           TARGET_EMAIL="${{ github.event.inputs.email_address }}"
-          # Trim leading/trailing whitespace using bash parameter expansion
-          TARGET_EMAIL="${TARGET_EMAIL%${TARGET_EMAIL##*[![:space:]]}}" # Trim trailing
-          TARGET_EMAIL="${TARGET_EMAIL#[${TARGET_EMAIL%%[![:space:]]*}]" # Trim leading
+          # Trim leading/trailing whitespace from the email address
+          TARGET_EMAIL=$(echo "$TARGET_EMAIL" | xargs)
 
           if [[ -n "$TARGET_EMAIL" ]]; then
             echo "Email provided: $TARGET_EMAIL"
@@ -33,18 +32,20 @@ jobs:
             echo "Error: No email_address input was provided. Cannot determine target email."
             exit 1 # Exit with an error if no email is provided
           fi
-          
+
           echo "target_email=$TARGET_EMAIL" >> "$GITHUB_OUTPUT"
 
       - name: Validate Email Domain
         id: validate_email
         run: |
           TARGET_EMAIL="${{ steps.determine_email.outputs.target_email }}"
-          # Case-insensitive check for @VA.gov at the end of the email address
-          if [[ "$TARGET_EMAIL" =~ "@VA.gov$" || "$TARGET_EMAIL" =~ "@va.gov$" ]]; then
+          # Extract domain and convert to lowercase for case-insensitive check
+          EMAIL_DOMAIN=$(echo "$TARGET_EMAIL" | awk -F'@' '{print tolower($2)}')
+
+          if [[ "$EMAIL_DOMAIN" == "va.gov" ]]; then
             echo "Email domain is valid: $TARGET_EMAIL"
           else
-            echo "Error: VA email is required. The provided email '$TARGET_EMAIL' does not end with @VA.gov."
+            echo "Error: VA email is required. The provided email '$TARGET_EMAIL' does not end with @va.gov (case-insensitive)."
             exit 1 # Fail the job
           fi
 
@@ -56,9 +57,9 @@ jobs:
           echo "Attempting to find Slack ID for email: $TARGET_EMAIL"
           SLACK_USER_DATA=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
                                   "https://slack.com/api/users.lookupByEmail?email=$TARGET_EMAIL")
-          
+
           SLACK_USER_ID=$(echo "$SLACK_USER_DATA" | jq -r '.user.id')
-          
+
           if [ "$SLACK_USER_ID" == "null" ] || [ -z "$SLACK_USER_ID" ]; then
             echo "Warning: Could not find Slack user for email $TARGET_EMAIL via API."
             echo "slack_user_id=" >> "$GITHUB_OUTPUT" # Set empty if not found
