@@ -17,9 +17,7 @@ on:
 
 jobs:
   check_for_qa_approval:
-    name: Requires QA approval
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@v1
