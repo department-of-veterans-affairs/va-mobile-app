@@ -4,7 +4,7 @@ name: '[Utils] QA required approval'
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, synchronize, reopened]
     paths:
       - 'VAMobile/src'
       - 'VAMobile/package.json'
