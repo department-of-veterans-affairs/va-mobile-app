@@ -25,7 +25,7 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-      - name: Check QA approval
+      - name: Check QA approval - Part 1 (File changes)
         shell: bash
         env:
           APP_TOKEN: ${{ steps.generate_token.outputs.token }}
@@ -60,7 +60,7 @@ jobs:
               if [[ "$file" == $exclude_pattern ]]; then
                 IS_EXCLUDED=true
                 break
-              fi
+              }
             done
             if $IS_EXCLUDED; then
               continue # This file is explicitly excluded, move to next
@@ -77,11 +77,10 @@ jobs:
             echo "No relevant files changed for QA approval based on workflow path filters. Skipping QA approval check."
             exit 0
           fi
-    name: Requires QA approval
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check QA approval
+      - name: Check QA approval - Part 2 (Review logic)
         shell: bash
+        env:
+          APP_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
           then
@@ -90,7 +89,7 @@ jobs:
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
           --header "Authorization: Bearer $APP_TOKEN" \
-          --header 'Content-Type: application/json' |
+          --header 'Content-Type: application/json' |\
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
