@@ -2,9 +2,7 @@
 
 name: '[Utils] QA required approval'
 
-on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+on: [pull_request]
 
 jobs:
   check_for_qa_approval:
