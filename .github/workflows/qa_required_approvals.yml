@@ -23,7 +23,9 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          requested_reviewers: ${{ toJson(github.event.pull_request.requested_reviewers) }}
         run: |
+          echo $requested_reviewers
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
           # Ensure we have both base and head SHAs for diffing
