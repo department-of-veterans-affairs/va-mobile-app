@@ -19,12 +19,6 @@ jobs:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Check QA approval - Part 1 (File changes)
         shell: bash
         env:
