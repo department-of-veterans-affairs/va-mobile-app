@@ -1,100 +1,73 @@
 name: Lookup Slack Username
 
 on:
-  push:
+  workflow_dispatch:
+    inputs:
+      email_address:
+        description: 'Email address to lookup Slack ID for'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      email_address:
+        description: 'Email address to lookup Slack ID for'
+        required: true
+        type: string
 
 jobs:
   get-slack-name:
     runs-on: ubuntu-latest
 
-    env:
-      # Access the custom variable defined in your repository settings
-      # This variable should now map GitHub handles to email addresses
-      EMAIL_MAP: ${{ vars.EMAIL_MAP }}
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Generate GitHub App token
-        id: generate_github_app_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Lookup Email from internal mapping
-        id: lookup_email_from_map
+      - name: Determine Target Email
+        id: determine_email
         run: |
-          GITHUB_USERNAME="${{ github.actor }}"
-          # Use jq to extract the email from the EMAIL_MAP based on the GitHub username
-          EMAIL_FROM_MAP=$(echo "$EMAIL_MAP" | jq -r --arg gh_user "$GITHUB_USERNAME" '.[$gh_user]')
+          TARGET_EMAIL="${{ github.event.inputs.email_address }}"
+          # Trim leading/trailing whitespace using bash parameter expansion
+          TARGET_EMAIL="${TARGET_EMAIL%${TARGET_EMAIL##*[![:space:]]}}" # Trim trailing
+          TARGET_EMAIL="${TARGET_EMAIL#[${TARGET_EMAIL%%[![:space:]]*}]" # Trim leading
 
-          if [ "$EMAIL_FROM_MAP" == "null" ] || [ -z "$EMAIL_FROM_MAP" ]; then
-            echo "Email not found in internal mapping for GitHub user $GITHUB_USERNAME. Attempting GitHub API fallback."
-            echo "github_email=" >> "$GITHUB_OUTPUT" # Set empty if not found
+          if [[ -n "$TARGET_EMAIL" ]]; then
+            echo "Email provided: $TARGET_EMAIL"
           else
-            echo "github_email=$EMAIL_FROM_MAP" >> "$GITHUB_OUTPUT"
-            echo "Found Email from mapping: $EMAIL_FROM_MAP"
+            echo "Error: No email_address input was provided. Cannot determine target email."
+            exit 1 # Exit with an error if no email is provided
           fi
+          
+          echo "target_email=$TARGET_EMAIL" >> "$GITHUB_OUTPUT"
 
-      # Fallback: Get GitHub User Email from GitHub API (only if not found in the internal map)
-      - name: 'Fallback: Get GitHub User Email from API'
-        id: get_github_email_from_api_fallback
-        if: steps.lookup_email_from_map.outputs.github_email == ''
+      - name: Validate Email Domain
+        id: validate_email
         run: |
-          GITHUB_USERNAME="${{ github.actor }}"
-          # Fetch user details from GitHub API
-          # Requires GITHUB_TOKEN (provided by GitHub Actions)
-          GITHUB_USER_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                                  "https://api.github.com/users/$GITHUB_USERNAME")
-          
-          GITHUB_EMAIL=$(echo "$GITHUB_USER_DATA" | jq -r '.email')
-          
-          if [ "$GITHUB_EMAIL" == "null" ] || [ -z "$GITHUB_EMAIL" ]; then
-            echo "Warning: Could not retrieve public email for GitHub user $GITHUB_USERNAME from API."
-            echo "github_email=" >> "$GITHUB_OUTPUT" # Set empty if not found
+          TARGET_EMAIL="${{ steps.determine_email.outputs.target_email }}"
+          # Case-insensitive check for @VA.gov at the end of the email address
+          if [[ "$TARGET_EMAIL" =~ "@VA.gov$" || "$TARGET_EMAIL" =~ "@va.gov$" ]]; then
+            echo "Email domain is valid: $TARGET_EMAIL"
           else
-            echo "github_email=$GITHUB_EMAIL" >> "$GITHUB_OUTPUT"
-            echo "Found GitHub Email from API fallback: $GITHUB_EMAIL"
+            echo "Error: VA email is required. The provided email '$TARGET_EMAIL' does not end with @VA.gov."
+            exit 1 # Fail the job
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Default token provided by GitHub Actions
 
       - name: Lookup Slack User ID by Email
         id: lookup_slack_id_by_email
-        if: steps.lookup_email_from_map.outputs.github_email != '' || steps.get_github_email_from_api_fallback.outputs.github_email != ''
+        if: steps.determine_email.outputs.target_email != ''
         run: |
-          TARGET_EMAIL="${{ steps.lookup_email_from_map.outputs.github_email }}"
-          if [ -z "$TARGET_EMAIL" ]; then
-            TARGET_EMAIL="${{ steps.get_github_email_from_api_fallback.outputs.github_email }}"
-          fi
-
-          if [ -n "$TARGET_EMAIL" ]; then
-            echo "Attempting to find Slack ID for email: $TARGET_EMAIL"
-            SLACK_USER_DATA=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
-                                    "https://slack.com/api/users.lookupByEmail?email=$TARGET_EMAIL")
-            
-            SLACK_USER_ID=$(echo "$SLACK_USER_DATA" | jq -r '.user.id')
-            
-            if [ "$SLACK_USER_ID" == "null" ] || [ -z "$SLACK_USER_ID" ]; then
-              echo "Warning: Could not find Slack user for email $TARGET_EMAIL via API."
-              echo "slack_user_id=" >> "$GITHUB_OUTPUT" # Set empty if not found
-            else
-              echo "slack_user_id=$SLACK_USER_ID" >> "$GITHUB_OUTPUT"
-              echo "Found Slack ID for $TARGET_EMAIL: $SLACK_USER_ID"
-            fi
+          TARGET_EMAIL="${{ steps.determine_email.outputs.target_email }}"
+          echo "Attempting to find Slack ID for email: $TARGET_EMAIL"
+          SLACK_USER_DATA=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
+                                  "https://slack.com/api/users.lookupByEmail?email=$TARGET_EMAIL")
+          
+          SLACK_USER_ID=$(echo "$SLACK_USER_DATA" | jq -r '.user.id')
+          
+          if [ "$SLACK_USER_ID" == "null" ] || [ -z "$SLACK_USER_ID" ]; then
+            echo "Warning: Could not find Slack user for email $TARGET_EMAIL via API."
+            echo "slack_user_id=" >> "$GITHUB_OUTPUT" # Set empty if not found
           else
-            echo "No email available to lookup Slack ID."
-            echo "slack_user_id=" >> "$GITHUB_OUTPUT"
+            echo "slack_user_id=$SLACK_USER_ID" >> "$GITHUB_OUTPUT"
+            echo "Found Slack ID for $TARGET_EMAIL: $SLACK_USER_ID"
           fi
         env:
-          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }} # You need to set this as a GitHub Secret
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
       - name: Use Slack username
         id: output-slack-user-id
@@ -105,6 +78,6 @@ jobs:
             echo "Final Slack User ID is: $FINAL_SLACK_ID"
             echo "slack_username=$FINAL_SLACK_ID" >> "$GITHUB_OUTPUT" 
           else
-            echo "Could not determine Slack User ID for ${{ github.actor }}".
-            echo "slack_username=unknown" >> "$GITHUB_OUTPUT" # Or handle this as an error
+            echo "Could not determine Slack User ID for the provided email."
+            echo "slack_username=unknown" >> "$GITHUB_OUTPUT"
           fi
