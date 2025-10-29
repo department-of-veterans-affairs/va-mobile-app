@@ -35,6 +35,7 @@ export type FeatureToggleType =
   | 'testFeature'
   | 'travelPaySMOC'
   | 'travelPayClaimsFullHistory'
+  | 'travelPayClaimDetails'
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
@@ -63,6 +64,7 @@ type FeatureToggleValues = {
   testFeature: boolean
   travelPaySMOC: boolean
   travelPayClaimsFullHistory: boolean
+  travelPayClaimDetails: boolean
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
@@ -92,6 +94,7 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   travelPaySMOC: true,
   travelPayClaimsFullHistory: false,
+  travelPayClaimDetails: false,
   travelPayStatusList: false,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
