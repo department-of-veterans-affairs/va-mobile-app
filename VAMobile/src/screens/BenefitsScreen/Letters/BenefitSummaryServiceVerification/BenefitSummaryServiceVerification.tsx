@@ -316,7 +316,6 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
           <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <LinkWithAnalytics
               type="custom"
-              icon={{ name: 'Launch', fill: 'default' }}
               text={t('letters.benefitService.sendMessage')}
               a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
               a11yHint={t('letters.benefitService.sendMessageA11yHint')}
