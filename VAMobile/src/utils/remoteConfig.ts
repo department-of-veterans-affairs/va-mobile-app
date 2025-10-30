@@ -15,6 +15,7 @@ export let overrideRemote = false
 
 /* Valid feature toggles.  Should match firebase */
 export type FeatureToggleType =
+  | 'allergiesOracleHealthApiEnabled'
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'COEAvailable'
@@ -43,6 +44,7 @@ export type FeatureToggleType =
   | 'overpayCopay'
 
 type FeatureToggleValues = {
+  allergiesOracleHealthApiEnabled: boolean
   appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
@@ -72,6 +74,7 @@ type FeatureToggleValues = {
 }
 
 export const defaults: FeatureToggleValues = {
+  allergiesOracleHealthApiEnabled: false,
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,

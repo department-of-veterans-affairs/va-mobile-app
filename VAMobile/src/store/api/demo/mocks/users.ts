@@ -10,7 +10,7 @@ type DemoUsersT = Record<
 const DemoUsers: DemoUsersT = {
   kimberlyWashington: {
     name: 'Kimberly Washington',
-    notes: 'US Coast Guard. Default demo user.',
+    notes: 'US Coast Guard. Default demo user. All OH authorized services enabled.',
   },
   benjaminAdams: {
     name: 'Benjamin Adams',
