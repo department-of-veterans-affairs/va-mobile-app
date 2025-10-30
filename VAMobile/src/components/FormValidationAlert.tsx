@@ -29,7 +29,7 @@ const FormValidationAlert: FC<FormValidationAlertProps> = ({
 }) => {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
-  // test
+
   return hasValidationError && errorList?.length ? (
     <Box mb={theme.dimensions.standardMarginBetween}>
       <AlertWithHaptics
