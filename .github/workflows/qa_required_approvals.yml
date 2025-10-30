@@ -43,21 +43,23 @@ jobs:
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | \
           jq -c '.required_pull_request_reviews.required_approving_review_count')
           
-          echo $required_approval_count
-          
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
           then
             if [[ $(jq --argjson engineers "$engineers" '[.[] | select(. | IN($engineers[]))] | length' <<< "$approvals") -gt 0 ]]
             then
               if [[ $(jq --argjson qa_members "$qa_members" '[.[] | select(. | IN($qa_members[]))] | length' <<< "$approvals") -gt 0 ]]
               then
+                echo "Pull request has approvals from engineers and qa_members"
                 exit 0
               else
+                echo "Pull request does not have approvals from qa_members"
                 exit 1
               fi
             else
+              echo "Pull request does not have approvals from engineers"
               exit 1
             fi
           else
+              echo "Pull request does not have any approvals"
             exit 1
           fi
