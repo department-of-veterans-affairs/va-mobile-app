@@ -44,10 +44,12 @@ jobs:
           )
           echo "$CHANGED_FILES"
           for file in "${CHANGED_FILES[@]}"; do
+            echo "$file"
             IS_EXCLUDED=false
             # Check if the file matches any exclusion pattern
             for exclude_pattern in "${EXCLUDE_PATTERNS[@]}"; do
               if [[ "$file" == $exclude_pattern ]]; then
+                echo "$file" + " is excluded"
                 IS_EXCLUDED=true
                 break
               fi
@@ -58,6 +60,7 @@ jobs:
             # If not excluded, check if it matches any inclusion pattern
             for include_pattern in "${INCLUDE_PATTERNS[@]}"; do
               if [[ "$file" == $include_pattern ]]; then
+                echo "$file" + " is included!"
                 QA_APPROVAL_NEEDED_BY_FILES=true
                 break 2 # Found a relevant file, no need to check further
               fi
