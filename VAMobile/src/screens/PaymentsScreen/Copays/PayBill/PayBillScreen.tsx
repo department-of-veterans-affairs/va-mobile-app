@@ -28,7 +28,7 @@ import { useTheme } from 'utils/hooks'
 
 type PayBillScreenProps = StackScreenProps<PaymentsStackParamList, 'PayBill'>
 
-const { LINK_URL_ASK_VA_GOV } = getEnv()
+const { PAY_GOV_URL } = getEnv()
 
 function splitAccountNumber(raw?: string): string[] {
   const acct = (raw || '').trim()
@@ -113,7 +113,7 @@ function PayBillScreen({ route, navigation }: PayBillScreenProps) {
 
             <LinkWithAnalytics
               type="url"
-              url={LINK_URL_ASK_VA_GOV}
+              url={PAY_GOV_URL}
               text={t('copays.payBill.payOnPayGov')}
               a11yLabel={a11yLabelVA(t('copays.payBill.payOnPayGov'))}
               a11yHint={t('copays.payBill.payOnPayGov')}
