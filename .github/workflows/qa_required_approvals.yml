@@ -34,15 +34,13 @@ jobs:
           # and for ".github/", we need ".github/*"
           INCLUDE_PATTERNS=(
             "VAMobile/src/*"
-            "VAMobile/e2e/*"
             "VAMobile/package.json"
-            "VAMobile/.detoxrc.json"
           )
           EXCLUDE_PATTERNS=(
             ".github/*" # Exclude anything in .github/
             "VAMobile/src/*.test.tsx" # Exclude test files
           )
-          for file in "$CHANGED_FILES"; do
+          for file in $CHANGED_FILES; do
             echo "$file"
             IS_EXCLUDED=false
             # Check if the file matches any exclusion pattern
