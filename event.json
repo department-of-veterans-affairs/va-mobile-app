@@ -1,5 +1,10 @@
 {
-  "inputs": {
-    "email_address": "joshua.bergman@va.gov"
+  "jbergman-oddball": {
+    "email": "joshua.bergman@va.gov",
+    "fullname": "Josh Bergman"
+  },
+  "dumathane": {
+    "email": "jonathan.bindbeutel@va.gov",
+    "fullname": "Jon Bindbeutel"
   }
 }
