@@ -19,6 +19,11 @@ jobs:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@v1
