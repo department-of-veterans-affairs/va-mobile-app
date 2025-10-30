@@ -16,6 +16,9 @@ import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const CONFIRM_EMAIL_ALERT_DISMISSED = '@confirm_email_alert_dismissed'
 
+// Only render alert to users who HAVE NOT confirmed, edited, or updated their email since March 1, 2025
+export const EMAIL_UPDATED_AT_THRESHOLD = '2025-03-01T00:00:00.000Z'
+
 export type EmailConfirmationAlertProps = {
   /** A different variation of the alert is shown within the contact information screen */
   inContactInfoScreen?: boolean
@@ -30,6 +33,10 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { displayEmailConfirmationAlert } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  const isEmailStale = contactInformation?.contactEmail?.updatedAt
+    ? contactInformation.contactEmail.updatedAt < EMAIL_UPDATED_AT_THRESHOLD
+    : true
 
   useEffect(() => {
     const checkEmailConfirmAlertDismissed = async () => {
@@ -80,10 +87,13 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   // Display email alert in contact screen if no email associated
   const contactScreenNoEmail = inContactInfoScreen && !emailOnFile
+
+  // Don't display alert if not enrolled in healthcare, loading, user already dismissed, or email has been updated recently
   if (
     !enrolledInVAHealthCare ||
     loadingContactInformation ||
-    (!displayEmailConfirmationAlert && !contactScreenNoEmail)
+    (!displayEmailConfirmationAlert && !contactScreenNoEmail) ||
+    !isEmailStale
   ) {
     return <></>
   }
