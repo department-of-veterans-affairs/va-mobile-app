@@ -5,9 +5,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  LoadingComponent,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
+import ErrorComponent, { ErrorComponentProps } from 'components/CommonErrorComponents/ErrorComponent'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypes } from 'store/api'
 import { useTheme } from 'utils/hooks'
 
 /* To use these templates:
@@ -16,6 +26,9 @@ import { useTheme } from 'utils/hooks'
 2. In the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
+export type ScreenError = Partial<ErrorComponentProps> & {
+  errorCheck: boolean
+}
 
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
@@ -38,6 +51,14 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional boolean to display loading component */
+  isLoading?: boolean
+  /** Optional text for loading screen */
+  loadingText?: string
+  /** Optional screen id for the screen that has errors*/
+  screenID?: ScreenIDTypes
+  /** Optional array of errors to be handled by the given screen */
+  errors?: Array<ScreenError>
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -54,6 +75,10 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  isLoading,
+  loadingText,
+  screenID,
+  errors,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -125,6 +150,20 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     setTransitionHeaderHeight(height)
   }
 
+  const getScreenError = () => {
+    if (errors && screenID) {
+      const screenError = errors.find((error) => error.errorCheck)
+
+      return (
+        screenError && (
+          <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
+        )
+      )
+    }
+  }
+
+  const errorToDisplay = getScreenError()
+
   return (
     <View style={fillStyle}>
       <StatusBar
@@ -146,7 +185,9 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>{children}</WaygateWrapper>
+        <WaygateWrapper>
+          {isLoading ? <LoadingComponent text={loadingText} /> : errorToDisplay || children}
+        </WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
