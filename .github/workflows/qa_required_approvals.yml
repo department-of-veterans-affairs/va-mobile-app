@@ -26,10 +26,11 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+          permission-administration: true
       - name: Check QA approval - Part 2 (Review logic)
         shell: bash
         env:
-          GH_TOKEN: ${{ steps.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
           then
