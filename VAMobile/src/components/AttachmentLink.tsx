@@ -57,7 +57,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({
           <Box mt={theme.dimensions.attachmentIconTopMargin} mr={theme.dimensions.textIconMargin}>
             <Icon name="AttachFile" width={20} height={20} fill={theme.colors.icon.link} />
           </Box>
-          <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'}>
+          <TextView mr={theme.dimensions.textIconMargin} variant={'HelperText'}>
             {text}
           </TextView>
         </Box>

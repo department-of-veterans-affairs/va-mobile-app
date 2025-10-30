@@ -18,6 +18,23 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('api/queryClient', () => {
+  const original = jest.requireActual('@tanstack/react-query')
+
+  return {
+    useQuery: original.useQuery,
+  }
+})
+
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+
+  return {
+    ...original,
+    useOfflineEventQueue: () => jest.fn(),
+  }
+})
+
 context('UpcomingAppointments', () => {
   const currentDate = DateTime.local().plus({ hours: 1 })
 

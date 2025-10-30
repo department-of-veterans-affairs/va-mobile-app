@@ -21,6 +21,14 @@ jest.mock('./store/slices', () => {
   }
 })
 
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+  return {
+    ...original,
+    useOfflineAnnounce: jest.fn(),
+  }
+})
+
 jest.mock('react-native-keyboard-manager', () => ({
   setEnable: jest.fn(() => {}),
   setKeyboardDistanceFromTextField: jest.fn(() => {}),

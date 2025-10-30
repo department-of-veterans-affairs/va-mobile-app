@@ -448,3 +448,11 @@ export const formatDateMMMyyyy = (date: DateTime): string => {
 export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
   return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
 }
+
+export const formatEpochReadable = (epoch?: number): string => {
+  if (!epoch) {
+    return ''
+  }
+
+  return DateTime.fromSeconds(epoch).toFormat('LLLL d, y H:mm ZZZZ')
+}

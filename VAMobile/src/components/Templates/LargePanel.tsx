@@ -9,7 +9,8 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { VAScrollView, WaygateWrapper } from 'components'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import { NAMESPACE } from 'constants/namespaces'
-import { useShowActionSheet, useTheme } from 'utils/hooks'
+import { setViewingModal } from 'store/slices'
+import { useAppDispatch, useShowActionSheet, useTheme } from 'utils/hooks'
 
 /* To use this template to wrap the screen you want in <LargePanel> </LargePanel> and supply the needed props for them to display
 in the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
@@ -70,6 +71,7 @@ export const LargePanel: FC<LargePanelProps> = ({
   const confirmAlert = useShowActionSheet()
   const theme = useTheme()
   const message = t('areYouSure')
+  const dispatch = useAppDispatch()
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822
@@ -81,6 +83,18 @@ export const LargePanel: FC<LargePanelProps> = ({
       setShowScrollView(false)
     }
   }, [hideModal])
+
+  useEffect(() => {
+    /**
+     * Used for offline app state to determine whether to show toast notifications
+     */
+    dispatch(setViewingModal(true))
+  })
+
+  const exitPanel = () => {
+    dispatch(setViewingModal(false))
+    navigation.goBack()
+  }
 
   const leftTitleButtonPress = () => {
     const options = [t('close'), t('cancel')]
@@ -95,7 +109,7 @@ export const LargePanel: FC<LargePanelProps> = ({
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            navigation.goBack()
+            exitPanel()
             break
         }
       },
@@ -107,7 +121,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     if (onRightButtonPress) {
       onRightButtonPress
     }
-    navigation.goBack()
+    exitPanel()
     return
   }
 
