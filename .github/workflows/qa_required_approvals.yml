@@ -14,6 +14,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Check QA approval - Part 1 (File changes)
+        id: check-qa-approval
         shell: bash
         env:
           APP_TOKEN: ${{ steps.generate_token.outputs.token }}
@@ -61,11 +62,15 @@ jobs:
               fi
             done
           done
+          
+          echo "QA_APPROVAL_NEEDED_BY_FILES=$QA_APPROVAL_NEEDED_BY_FILES" >> "$GITHUB_OUTPUT"
+         
           if ! $QA_APPROVAL_NEEDED_BY_FILES; then
             echo "No relevant files changed for QA approval based on workflow path filters. Skipping QA approval check."
             exit 0
           fi
       - name: Check QA approval - Part 2 (Review logic)
+        if: steps.check-qa-approval.outputs.QA_APPROVAL_NEEDED_BY_FILES == 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
