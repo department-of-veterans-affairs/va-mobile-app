@@ -2,7 +2,14 @@
 
 name: '[Utils] QA required approval'
 
-on: [pull_request]
+on:
+  pull_request:
+    paths:
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - 'VAMobile/env'
+      - '!VAMobile/src/*.test.tsx'
+      - '!.github/**'
 
 jobs:
   check_for_qa_approval:
