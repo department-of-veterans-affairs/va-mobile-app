@@ -20,6 +20,8 @@ jobs:
       pull-requests: read
       repository-projects: read
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@v1
@@ -43,12 +45,8 @@ jobs:
           --header 'Content-Type: application/json' |\
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
           
-          rac=$(curl --request GET \
-          --url https://api.github.com/repos/${{ github.repository }}/branches/develop/protection \
-          --header "Authorization: Bearer $GH_TOKEN" \
-          --header 'Content-Type: application/json'
-          )
-          echo "$rac"
+          echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+          gh auth login --with-token < token.txt
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
