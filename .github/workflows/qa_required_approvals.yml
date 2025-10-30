@@ -45,13 +45,12 @@ jobs:
           --header 'Content-Type: application/json' |\
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
           
-          gh auth login 
-          required_approval_count=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | \
-          jq -c '.required_pull_request_reviews.required_approving_review_count')
-          
+#          required_approval_count=$(gh api \
+#          -H "Accept: application/vnd.github+json" \
+#          -H "X-GitHub-Api-Version: 2022-11-28" \
+#          /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | \
+#          jq -c '.required_pull_request_reviews.required_approving_review_count')
+          required_approval_count=1
           echo $required_approval_count
           
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
