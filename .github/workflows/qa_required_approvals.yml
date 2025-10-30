@@ -42,7 +42,7 @@ jobs:
             ".github/*" # Exclude anything in .github/
             "VAMobile/src/*.test.tsx" # Exclude test files
           )
-          for file in "${CHANGED_FILES[@]}"; do
+          for file in "$CHANGED_FILES"; do
             echo "$file"
             IS_EXCLUDED=false
             # Check if the file matches any exclusion pattern
