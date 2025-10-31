@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux'
 import { useQuery } from '@tanstack/react-query'
 import { has } from 'underscore'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { AuthorizedServicesPayload, UserAuthorizedServicesData } from 'api/types'
 import { RootState } from 'store'
 import { get } from 'store/api'
 import { AuthState } from 'store/slices'
-
-import { authorizedServicesKeys } from './queryKeys'
 
 /**
  * Fetch user demographics

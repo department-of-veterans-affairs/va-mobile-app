@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { allergyKeys } from 'api/allergies/queryKeys'
 import { AllergyListPayload } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
-
-import { allergyKeys } from './queryKeys'
 
 /**
  * Fetch user Allergies

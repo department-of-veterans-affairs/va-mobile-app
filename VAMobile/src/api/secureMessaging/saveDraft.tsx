@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { SaveDraftParameters, SecureMessagingSaveDraftData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { Params, post, put } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Creates or updates a user's draft message depending on whether the `message id` field is present

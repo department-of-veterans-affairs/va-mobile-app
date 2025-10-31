@@ -4,6 +4,7 @@ import { SetDataOptions, useMutation, useQueryClient } from '@tanstack/react-que
 import { DateTime } from 'luxon'
 import { find, map } from 'underscore'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import {
   ClaimData,
   ClaimDocUploadData,
@@ -17,8 +18,6 @@ import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScre
 import { Params, contentTypes, post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Uploads a File to Claim

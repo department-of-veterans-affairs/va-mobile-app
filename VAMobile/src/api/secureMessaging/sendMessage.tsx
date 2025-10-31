@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { SecureMessagingFormData, SecureMessagingMessageData, SendMessageParameters } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { Params, contentTypes, post } from 'store/api'
 import { logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Sends a message

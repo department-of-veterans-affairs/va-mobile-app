@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { prescriptionKeys } from 'api/prescriptions'
 import { PrescriptionTrackingInfo, PrescriptionTrackingInfoGetData } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-
-import { prescriptionKeys } from './queryKeys'
 
 /**
  * Fetch user prescription tracking information

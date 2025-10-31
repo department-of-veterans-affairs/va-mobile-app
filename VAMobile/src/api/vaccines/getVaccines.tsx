@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { VaccineListPayload } from 'api/types'
+import { vaccineKeys } from 'api/vaccines/queryKeys'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
-
-import { vaccineKeys } from './queryKeys'
 
 /**
  * Fetch user Vaccines

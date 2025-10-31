@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
+import { contactInformationKeys } from 'api/contactInformation/queryKeys'
+import { saveAddress } from 'api/contactInformation/saveAddress'
 import queryClient from 'api/queryClient'
 import { AddressData, AddressValidationData, ValidateAddressData } from 'api/types'
 import { Params as APIParams, post } from 'store/api'
@@ -12,9 +14,6 @@ import {
   getValidationKey,
   showValidationScreen,
 } from 'utils/personalInformation'
-
-import { contactInformationKeys } from './queryKeys'
-import { saveAddress } from './saveAddress'
 
 type ValidateAddressParameters = {
   addressData: AddressData

@@ -2,14 +2,13 @@ import FileViewer from 'react-native-file-viewer'
 
 import { useQuery } from '@tanstack/react-query'
 
+import { decisionLettersKeys } from 'api/decisionLetters/queryKeys'
 import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { decisionLettersKeys } from './queryKeys'
 
 const { API_ROOT } = getEnv()
 

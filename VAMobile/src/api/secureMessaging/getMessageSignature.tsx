@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { SecureMessagingSignatureData, SecureMessagingSignatureDataAttributes } from 'api/types'
 import { get } from 'store/api'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Fetch user message signature

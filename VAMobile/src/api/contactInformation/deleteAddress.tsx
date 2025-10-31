@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { AddressData } from 'api/types'
 import { Events } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, del } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { contactInformationKeys } from './queryKeys'
 
 /**
  * Deletes a user's address

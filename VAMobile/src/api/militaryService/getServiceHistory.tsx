@@ -2,14 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 import { has, max } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { militaryServiceHistoryKeys } from 'api/militaryService/queryKeys'
 import { MilitaryServiceHistoryData, ServiceData, ServiceHistoryAttributes, ServiceHistoryData } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getDateFromString } from 'utils/formattingUtils'
 import { useDowntime } from 'utils/hooks'
-
-import { militaryServiceHistoryKeys } from './queryKeys'
 
 /**
  * Fetch user service history

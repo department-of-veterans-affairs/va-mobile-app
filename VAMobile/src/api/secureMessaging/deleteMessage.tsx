@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { DeleteMessageParameters } from 'api/types'
 import { del } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * deletes a user's message based on `message id` field

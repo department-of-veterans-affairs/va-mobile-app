@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { prescriptionKeys } from 'api/prescriptions'
 import { PrescriptionRefillData, PrescriptionsList, RefillRequestSummaryItems } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { prescriptionKeys } from './queryKeys'
 
 /**
  * Requests refills for a users prescriptions
