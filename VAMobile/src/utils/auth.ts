@@ -4,9 +4,8 @@ import CookieManager from '@react-native-cookies/cookies'
 
 import { Events } from 'constants/analytics'
 import * as api from 'store/api'
+import { logAnalyticsEvent, logNonFatalErrorToFirebase } from 'utils/analytics'
 import getEnv from 'utils/env'
-
-import { logAnalyticsEvent, logNonFatalErrorToFirebase } from './analytics'
 
 const { AUTH_SIS_TOKEN_EXCHANGE_URL } = getEnv()
 

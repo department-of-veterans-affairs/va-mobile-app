@@ -10,10 +10,9 @@ import {
 } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
+import { useAppDispatch } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { startAuthSession } from 'utils/rnAuthSesson'
-
-import { useAppDispatch } from '.'
 
 /**
  * Launches the native auth implementation and navigates to VA.gov login. For iOS,

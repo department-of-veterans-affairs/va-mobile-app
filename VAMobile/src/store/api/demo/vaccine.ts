@@ -1,7 +1,6 @@
 import { VaccineListPayload, VaccineLocationPayload } from 'api/types/VaccineData'
-
-import { Params } from '..'
-import { DemoStore } from './store'
+import { Params } from 'store/api/api'
+import { DemoStore } from 'store/api/demo/store'
 
 type VaccinePageNumber = '1'
 

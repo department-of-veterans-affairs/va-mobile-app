@@ -16,8 +16,7 @@ import { TextLine } from 'components/types'
 import { EMAIL_REGEX_EXP_PII, MAIL_TO_REGEX_EXP_PII, PHONE_REGEX_EXP_PII, SSN_REGEX_EXP_PII } from 'constants/common'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { ErrorObject } from 'store/api'
-
-import { formatPhoneNumber } from './formattingUtils'
+import { formatPhoneNumber } from 'utils/formattingUtils'
 
 /**
  * Generates testID string for reusable components

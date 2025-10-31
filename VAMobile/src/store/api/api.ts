@@ -6,12 +6,11 @@ import { deviceKeys } from 'api/device/queryKeys'
 import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
+import { transform } from 'store/api/demo/store'
+import { APIError } from 'store/api/types'
 import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-
-import { transform } from './demo/store'
-import { APIError } from './types'
 
 const { API_ROOT } = getEnv()
 

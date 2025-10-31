@@ -1,7 +1,7 @@
 import { NativeModules, PermissionsAndroid } from 'react-native'
 
-import { logNonFatalErrorToFirebase } from './analytics'
-import { isIOS } from './platform'
+import { logNonFatalErrorToFirebase } from 'utils/analytics'
+import { isIOS } from 'utils/platform'
 
 // Calendar bridge from iOS and Android
 const RNCal = NativeModules.RNCalendar

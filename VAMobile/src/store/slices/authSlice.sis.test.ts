@@ -4,12 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import _ from 'underscore'
 
+import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
-import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
-
-import getEnv from '../../utils/env'
-import { isAndroid } from '../../utils/platform'
-import * as api from '../api'
 import {
   cancelWebLogin,
   checkFirstTimeLogin,
@@ -23,7 +19,10 @@ import {
   setDisplayBiometricsPreferenceScreen,
   startBiometricsLogin,
   startWebLogin,
-} from './authSlice'
+} from 'store/slices/authSlice'
+import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
+import getEnv from 'utils/env'
+import { isAndroid } from 'utils/platform'
 
 export const ActionTypes: {
   AUTH_START_LOGIN: string

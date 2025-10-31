@@ -11,9 +11,8 @@ import {
   MaintenanceWindowsGetData,
   ScreenIDTypes,
 } from 'store/api/types'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-
-import { ScreenIDTypesConstants } from '../api/types/Screens'
 
 export type ErrorsByScreenIDType = {
   [key in ScreenIDTypes]?: CommonErrorTypes

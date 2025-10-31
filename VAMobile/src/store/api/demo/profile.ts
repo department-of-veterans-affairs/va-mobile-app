@@ -14,11 +14,10 @@ import {
   PhoneTypeConstants,
   addressPouTypes,
 } from 'api/types'
-
-import { Params } from '../api'
-import { EditResponseData } from '../types'
-import { DemoStore } from './store'
-import { MOCK_EDIT_RESPONSE } from './utils'
+import { Params } from 'store/api/api'
+import { DemoStore } from 'store/api/demo/store'
+import { MOCK_EDIT_RESPONSE } from 'store/api/demo/utils'
+import { EditResponseData } from 'store/api/types'
 
 /**
  * Type denoting the demo data store
