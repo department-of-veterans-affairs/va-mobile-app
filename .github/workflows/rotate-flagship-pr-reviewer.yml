@@ -1,0 +1,96 @@
+name: '[Admin] Weekly Flagship Mobile PR Reviewer Assignment'
+
+on:
+  schedule:
+    # Run every Monday at 8:33 AM EST (1:33 PM UTC)
+    - cron: '33 13 * * 1'
+
+env:
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+jobs:
+  assign-reviewer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Set reviewer and backup for the week
+        id: select-reviewer
+        run: |
+          WEEK_NUM=$(date +%U)
+          echo "Current week number: $WEEK_NUM"
+          # Map week number to reviewer and backup (weeks 40-52)
+          case $WEEK_NUM in
+            40) REVIEWER="matthew-df"; BACKUP="dftony";;
+            41) REVIEWER="AdryienH"; BACKUP="matthew-df";;
+            42) REVIEWER="dumathane"; BACKUP="AdryienH";;
+            43) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
+            44) REVIEWER="keli13"; BACKUP="jmarchi";;
+            45) REVIEWER="dftony"; BACKUP="keli13";;
+            46) REVIEWER="matthew-df"; BACKUP="dftony";;
+            47) REVIEWER="AdryienH"; BACKUP="matthew-df";;
+            48) REVIEWER="dumathane"; BACKUP="AdryienH";;
+            49) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
+            50) REVIEWER="keli13"; BACKUP="jmarchi";;
+            51) REVIEWER="dftony"; BACKUP="keli13";;
+            52) REVIEWER="matthew-df"; BACKUP="dftony";;
+            *) REVIEWER="AdryienH"; BACKUP="matthew-df";;
+          esac
+          declare -A GITHUB_TO_SLACK=(
+            ["AdryienH"]="U08N85KC05Q"
+            ["jmarchi"]="U01APSBG86A"
+            ["dumathane"]="U08HW514Y8Y"
+            ["keli13"]="U01ATFT0XBP"
+            ["dftony"]="U08HW41SBUG"
+            ["matthew-df"]="U08UWE4S3GW"
+          )
+          SLACK_MENTION="<@${GITHUB_TO_SLACK[$REVIEWER]}>"
+          BACKUP_SLACK_MENTION="<@${GITHUB_TO_SLACK[$BACKUP]}>"
+          echo "reviewer_person=$REVIEWER" >> $GITHUB_OUTPUT
+          echo "slack_mention=$SLACK_MENTION" >> $GITHUB_OUTPUT
+          echo "backup_person=$BACKUP" >> $GITHUB_OUTPUT
+          echo "backup_slack_mention=$BACKUP_SLACK_MENTION" >> $GITHUB_OUTPUT
+          echo "week_number=$WEEK_NUM" >> $GITHUB_OUTPUT
+          echo "Selected reviewer: $REVIEWER and backup: $BACKUP for week $WEEK_NUM"
+
+      - name: Get Slack channel ID
+        id: get-channel
+        run: |
+          CHANNEL_NAME="va-mobile-app"
+          fetch_page() {
+            last_response=$(curl -X GET -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+            -H 'Content-type: application/x-www-form-urlencoded' \
+            https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
+          }
+          get_id() {
+            id=$(jq '.channels[] | .name as $data | select($data == "'$CHANNEL_NAME'").id' <<< $last_response)
+          }
+          get_cursor() {
+            cursor=$(jq '.response_metadata.next_cursor' <<< $last_response)
+          }
+          id=""
+          cursor=""
+          last_response=""
+          fetch_page
+          get_id
+          while [[ -z "$id" ]]
+          do
+            get_cursor
+            fetch_page
+            get_id
+          done
+          echo "channel_id=${id}" >> $GITHUB_OUTPUT
+
+      - name: Send Slack notification
+        run: |
+          SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
+          BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
+          CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
+          URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
+          MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
+          echo "Sending Slack notification..."
+          curl -X POST \
+            -H "Authorization: Bearer $SLACK_API_TOKEN" \
+            -H "Content-type: application/json" \
+            -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
+            https://slack.com/api/chat.postMessage

@@ -125,9 +125,14 @@ context('AppealDetailsScreen', () => {
         ...appealData,
         type: 'appeal',
       })
-      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Issues' })))
+
+      await waitFor(() => expect(api.get).toHaveBeenCalledWith(`/v0/appeal/0`, {}))
+
       await waitFor(() => expect(screen.getByRole('header', { name: 'Appeal for compensation' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
+
+      await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'Issues' })))
+
       await waitFor(() => expect(screen.getByRole('header', { name: 'Currently on appeal' })).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Service connection, Post-traumatic stress disorder')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Eligibility for loan guaranty benefits')).toBeTruthy())

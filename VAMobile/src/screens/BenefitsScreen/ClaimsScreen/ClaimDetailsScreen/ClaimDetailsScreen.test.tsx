@@ -116,6 +116,7 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
+      fireEvent.press(screen.getByText(t('files')))
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })

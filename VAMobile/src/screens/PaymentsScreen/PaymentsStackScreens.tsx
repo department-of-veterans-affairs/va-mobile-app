@@ -24,28 +24,27 @@ export type PaymentsStackParamList = {
   PaymentMissing: undefined
   Copays: undefined
   ChargeDetails: {
-    copayDetail: MedicalCopayDetail
+    details: MedicalCopayDetail
   }
   CopayDetails: {
-    copayRecord: MedicalCopayRecord
+    copay: MedicalCopayRecord
   }
   CopayHelp: undefined
   CopayRequestHelp: undefined
   DisputeCopay: undefined
   PayBill: {
-    copayRecord: MedicalCopayRecord
+    copay: MedicalCopayRecord
   }
   Debts: undefined
   DebtDetails: {
-    debtRecord: DebtRecord
+    debt: DebtRecord
   }
   DebtHelp: undefined
   DebtRequestHelp: undefined
   DisputeDebt: undefined
   PayDebt: {
-    debtRecord: DebtRecord
+    debt: DebtRecord
   }
-  TransactionDetails: undefined // TODO: add param when available
 }
 
 const PaymentsStack = createStackNavigator<PaymentsStackParamList>()
