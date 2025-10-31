@@ -123,6 +123,7 @@ function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
     <FeatureLandingTemplate
       backLabel={t(backLabelKey)}
       backLabelOnPress={navigation.goBack}
+      backLabelTestID="travelPayClaimsBackButton"
       title={t('travelPay.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
