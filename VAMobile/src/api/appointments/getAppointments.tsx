@@ -99,7 +99,7 @@ export const useAppointments = (
         })
       }
 
-      if (timeFrame !== TimeFrameTypeConstants.UPCOMING) {
+      if (featureEnabled('datePickerUpdate') && timeFrame !== TimeFrameTypeConstants.UPCOMING) {
         const cachedPastAppointments = getCachedPastAppointments()
         if (cachedPastAppointments) return cachedPastAppointments
       }
