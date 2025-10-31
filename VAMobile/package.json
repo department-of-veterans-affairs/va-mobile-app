@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@department-of-veterans-affairs/mobile-assets": "0.15.1",
-    "@department-of-veterans-affairs/mobile-component-library": "0.30.3",
+    "@department-of-veterans-affairs/mobile-component-library": "0.35.0",
     "@department-of-veterans-affairs/mobile-tokens": "0.23.0",
     "@expo/react-native-action-sheet": "^4.1.1",
     "@react-native-async-storage/async-storage": "^2.0.0",
