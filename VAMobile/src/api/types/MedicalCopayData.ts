@@ -98,6 +98,11 @@ export type MedicalCopayRecord = {
   details: MedicalCopayDetail[]
 }
 
+export type MedicalCenter = {
+  value: string // facility id, e.g. "123" or "123F"
+  label: string // facility name
+}
+
 export type MedicalCopayPayload = {
   data: MedicalCopayRecord
   status: number

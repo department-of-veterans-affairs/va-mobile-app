@@ -38,7 +38,7 @@ function ResolveBillButton() {
   }
 
   return (
-    <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
+    <Box my={theme.dimensions.buttonPadding}>
       <Button label={t('copays.resolveBill')} onPress={onButtonPress} />
     </Box>
   )
