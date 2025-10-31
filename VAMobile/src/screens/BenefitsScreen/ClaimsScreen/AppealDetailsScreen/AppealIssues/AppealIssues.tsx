@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealIssue, AppealIssueLastAction, AppealTypes } from 'api/types'
+import { AppealIssue, AppealIssueLastAction, AppealTypes, AppealTypesConstants } from 'api/types'
 import { AppealTypesDisplayNames } from 'api/types/ClaimsAndAppealsData'
 import { AccordionCollapsible, Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -122,22 +122,24 @@ function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   }
   return (
     <>
-      <AccordionCollapsible
-        header={
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('appealDetails.issuesDifferentHeader')}
-          </TextView>
-        }
-        expandedContent={
-          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
-            mt={theme.dimensions.condensedMarginBetween}>
-            {t('appealDetails.issuesDifferentBody')}
-          </TextView>
-        }
-      />
+      {appealType === AppealTypesConstants.appeal || appealType === AppealTypesConstants.legacyAppeal ? (
+        <AccordionCollapsible
+          header={
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('appealDetails.issuesDifferentHeader')}
+            </TextView>
+          }
+          expandedContent={
+            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+            <TextView
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
+              mt={theme.dimensions.condensedMarginBetween}>
+              {t('appealDetails.issuesDifferentBody')}
+            </TextView>
+          }
+        />
+      ) : null}
       {showCurrentlyOnAppeal ? (
         <TextArea
           borderBoxStyle={{
