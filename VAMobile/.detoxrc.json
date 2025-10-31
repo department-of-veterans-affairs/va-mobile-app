@@ -31,6 +31,13 @@
         "os": "iOS 18.2"
       }
     },
+    "ipadSimulator": {
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPad Pro 13-inch (M4)",
+        "os": "iOS 18.2"
+      }
+    },
     "emulator": {
       "type": "android.emulator",
       "device": {
@@ -47,6 +54,11 @@
   "configurations": {
     "ios": {
       "device": "simulator",
+      "app": "ios",
+      "headless": "false"
+    },
+    "ipad": {
+      "device": "ipadSimulator",
       "app": "ios",
       "headless": "false"
     },
