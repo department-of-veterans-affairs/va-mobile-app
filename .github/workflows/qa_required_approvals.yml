@@ -2,64 +2,118 @@
 
 name: '[Utils] QA required approval'
 
-on:
-  pull_request:
-    types: [opened, edited, converted_to_draft, ready_for_review, reopened]
-    paths:
-      - 'VAMobile/src'
-      - 'VAMobile/package.json'
-      - 'VAMobile/env'
-      - '!VAMobile/src/*.test.tsx'
-      - '!.github/**'
-  pull_request_review:
-    types: [submitted, dismissed]
+on: pull_request
 
 jobs:
   check_for_qa_approval:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
-          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-      - name: Check QA approval
+          fetch-depth: 0 # Fetch all history for all branches and tags
+      - name: Checkout branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check QA approval - Part 1 (File changes)
+        id: check-qa-approval
         shell: bash
         env:
-          APP_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
-          echo "$APP_TOKEN" | gh auth login --with-token
-          engineers=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-pr-reviewers/members | jq -c '[.[] .login]')
-          qa_members=$(gh api orgs/department-of-veterans-affairs/teams/flagship-mobile-qa/members | jq -c '[.[] .login]')
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          # Ensure we have both base and head SHAs for diffing
+          git fetch origin "${BASE_SHA}"
+          git fetch origin "${HEAD_SHA}"
+          # Get all changed files between base and head
+          CHANGED_FILES=$(git diff --name-only "${BASE_SHA}" "${HEAD_SHA}")
+          # Flag to determine if QA approval is needed based on file changes
+          QA_APPROVAL_NEEDED_BY_FILES=false
+          # Define patterns for inclusion and exclusion
+          # These patterns use shell globbing for matching
+          # Note: For directory patterns like "VAMobile/src/", we need to match "VAMobile/src/*"
+          # and for ".github/", we need ".github/*"
+          INCLUDE_PATTERNS=(
+            "VAMobile/src/*"
+            "VAMobile/package.json"
+          )
+          EXCLUDE_PATTERNS=(
+            ".github/*" # Exclude anything in .github/
+            "VAMobile/src/*.test.tsx" # Exclude test files
+          )
+          for file in $CHANGED_FILES; do
+            echo "$file"
+            IS_EXCLUDED=false
+            # Check if the file matches any exclusion pattern
+            for exclude_pattern in "${EXCLUDE_PATTERNS[@]}"; do
+              if [[ "$file" == $exclude_pattern ]]; then
+                echo "$file" + " is excluded"
+                IS_EXCLUDED=true
+                break
+              fi
+            done
+            if $IS_EXCLUDED; then
+              continue # This file is explicitly excluded, move to next
+            fi
+            # If not excluded, check if it matches any inclusion pattern
+            for include_pattern in "${INCLUDE_PATTERNS[@]}"; do
+              if [[ "$file" == $include_pattern ]]; then
+                echo "$file" + " is included!"
+                QA_APPROVAL_NEEDED_BY_FILES=true
+                break 2 # Found a relevant file, no need to check further
+              fi
+            done
+          done
+          
+          echo "QA_APPROVAL_NEEDED_BY_FILES=$QA_APPROVAL_NEEDED_BY_FILES" >> "$GITHUB_OUTPUT"
+         
+          if ! $QA_APPROVAL_NEEDED_BY_FILES; then
+            echo "No relevant files changed for QA approval based on workflow path filters. Skipping QA approval check."
+            exit 0
+          fi
+      - name: Check QA approval - Part 2 (Review logic)
+        if: steps.check-qa-approval.outputs.QA_APPROVAL_NEEDED_BY_FILES == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+        run: |
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
           then
             exit 0
           fi
           approvals=$(curl --request GET \
           --url https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews?per_page=100 \
-          --header "Authorization: Bearer $APP_TOKEN" \
-          --header 'Content-Type: application/json' |
+          --header "Authorization: Bearer $GH_TOKEN" \
+          --header 'Content-Type: application/json' |\
           jq -c '[map(select(.state == "APPROVED")) | .[] .user.login]')
+          
           required_approval_count=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           /repos/department-of-veterans-affairs/va-mobile-app/branches/develop/protection | \
           jq -c '.required_pull_request_reviews.required_approving_review_count')
+          
           if [[ $(jq '. | length' <<< "$approvals") -ge $required_approval_count ]]
           then
-            if [[ $(jq --argjson engineers "$engineers" '[.[] | select(. | IN($engineers[]))] | length' <<< "$approvals") -gt 0 ]]
-            then
-              if [[ $(jq --argjson qa_members "$qa_members" '[.[] | select(. | IN($qa_members[]))] | length' <<< "$approvals") -gt 0 ]]
+            if [[ $(jq '[.[] | select(. | IN("dumathane", "jmarchi", "keli13", "dftony", "AdryienH", "matthew-df"))] | length' <<< "$approvals") -gt 0 ]]
               then
+              echo 'This PR has at least one engineer approval. Now checking for QA approval...'
+              if [[ $(jq '[.[] | select(. | IN("digitalken", "SKMOstudio"))] | length' <<< "$approvals") -gt 0 ]]
+              then
+                echo "Pull request has approvals from engineers and qa_members"
                 exit 0
               else
+                echo "Pull request does not have approvals from qa_members"
                 exit 1
               fi
             else
+              echo "Pull request does not have approvals from engineers"
               exit 1
             fi
           else
+              echo "Pull request does not have any approvals"
             exit 1
           fi
