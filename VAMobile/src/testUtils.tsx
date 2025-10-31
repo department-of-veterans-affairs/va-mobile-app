@@ -23,6 +23,7 @@ import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
+import travelClaimsUIReducer from 'store/slices/travelClaimsUISlice'
 import theme from 'styles/themes/standardTheme'
 import i18nReal from 'utils/i18n'
 
@@ -82,6 +83,7 @@ const getConfiguredStore = (state?: Partial<RootState>) => {
       errors: errorReducer as any,
       analytics: analyticsReducer as any,
       settings: settingsReducer as any,
+      travelClaimsUI: travelClaimsUIReducer as any,
     },
     middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
     preloadedState: { ...state },

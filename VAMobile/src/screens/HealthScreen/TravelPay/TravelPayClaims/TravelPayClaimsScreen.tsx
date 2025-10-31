@@ -1,6 +1,7 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -10,7 +11,7 @@ import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
+import { TimeFrameType } from 'constants/timeframes'
 import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -19,9 +20,17 @@ import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaim
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
 import NoTravelClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/NoTravelClaims'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
+import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api'
-import { useTheme } from 'utils/hooks'
-import { SortOption, SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
+import {
+  TravelClaimsUIState,
+  updateTravelClaimsFilter,
+  updateTravelClaimsPage,
+  updateTravelClaimsSortBy,
+  updateTravelClaimsTimeFrame,
+} from 'store/slices'
+import { useAppDispatch, useTheme } from 'utils/hooks'
+import { SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
 
 type TravelPayClaimsProps = StackScreenProps<
   HealthStackParamList | BenefitsStackParamList | PaymentsStackParamList,
@@ -40,17 +49,21 @@ const emptyClaims: Array<TravelPayClaimData> = []
 function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
+
+  const backLabelKey = backLabelForNavigation[route.params?.from ?? 'Back']
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
   }
-  const [filter, setFilter] = useState<Set<string>>(new Set())
-  const [sortBy, setSortBy] = useState(SortOption.Recent)
-  const [currentPage, setCurrentPage] = useState(1)
-  const backLabelKey = backLabelForNavigation[route.params?.from ?? 'Back']
 
-  const [timeFrame, setTimeFrame] = useState<TimeFrameType>(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+  const {
+    timeFrame: timeFrame,
+    claimsFilter: filter,
+    claimsSortBy: sortBy,
+    currentPage,
+  } = useSelector<RootState, TravelClaimsUIState>((state) => state.travelClaimsUI)
 
   const {
     data: claimsPayload,
@@ -89,18 +102,18 @@ function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
   }
 
   const onTimeFrameChanged = (value: TimeFrameType) => {
-    setCurrentPage(1)
-    setTimeFrame(value)
+    dispatch(updateTravelClaimsPage(1))
+    dispatch(updateTravelClaimsTimeFrame(value))
   }
 
   const onFilterChanged = (value: Set<string>) => {
-    setFilter(value)
-    setCurrentPage(1)
+    dispatch(updateTravelClaimsFilter(value))
+    dispatch(updateTravelClaimsPage(1))
   }
 
   const onSortByChanged = (value: SortOptionType) => {
-    setSortBy(value)
-    setCurrentPage(1)
+    dispatch(updateTravelClaimsSortBy(value))
+    dispatch(updateTravelClaimsPage(1))
   }
 
   const onNextPage = (nextPage: number) => {
@@ -110,18 +123,19 @@ function TravelPayClaimsScreen({ navigation, route }: TravelPayClaimsProps) {
       fetchNextPage()
     }
     scrollToTop()
-    setCurrentPage(nextPage)
+    dispatch(updateTravelClaimsPage(nextPage))
   }
 
   const onPrevPage = (prevPage: number) => {
     scrollToTop()
-    setCurrentPage(prevPage)
+    dispatch(updateTravelClaimsPage(prevPage))
   }
 
   return (
     <FeatureLandingTemplate
       backLabel={t(backLabelKey)}
       backLabelOnPress={navigation.goBack}
+      backLabelTestID="travelPayClaimsBackButton"
       title={t('travelPay.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>

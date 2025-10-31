@@ -6,6 +6,7 @@ import authReducer from 'store/slices/authSlice'
 import demoReducer from 'store/slices/demoSlice'
 import errorReducer from 'store/slices/errorSlice'
 import settingsReducer from 'store/slices/settingsSlice'
+import travelClaimsUIReducer from 'store/slices/travelClaimsUISlice'
 import getEnv from 'utils/env'
 
 import reactotron from '../../ReactotronConfig'
@@ -21,6 +22,7 @@ const store = configureStore({
     errors: errorReducer,
     analytics: analyticsReducer,
     settings: settingsReducer,
+    travelClaimsUI: travelClaimsUIReducer,
   },
   middleware: (getDefaultMiddleWare) => getDefaultMiddleWare({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production',
