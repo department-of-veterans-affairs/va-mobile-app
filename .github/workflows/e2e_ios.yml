@@ -2,26 +2,26 @@
 # Detox e2e tests in CI
 #
 
-name: "[e2e] iOS Detox Test Run"
+name: '[e2e] iOS Detox Test Run'
 
 on:
   push:
     branches:
-      - "dependabot/**"
+      - 'dependabot/**'
   pull_request:
     types:
       - synchronize
       - opened
     paths:
-      - "VAMobile/src/**"
-      - "VAMobile/package.json"
-      - ".github/workflows/e2e_android.yml"
-      - ".github/workflows/e2e_ios.yml"
-      - ".github/workflows/e2e_detox_mapping.yml"
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - '.github/workflows/e2e_android.yml'
+      - '.github/workflows/e2e_ios.yml'
+      - '.github/workflows/e2e_detox_mapping.yml'
   workflow_dispatch:
     inputs:
       run_full_test:
-        description: "Run full e2e test?"
+        description: 'Run full e2e test?'
         type: boolean
         required: false
       tests_to_run:
@@ -29,26 +29,26 @@ on:
         type: string
         required: false
       testRail_name:
-        description: "Name testRail run (will default to date if blank)"
+        description: 'Name testRail run (will default to date if blank)'
         type: string
         required: false
       run_testRail:
-        description: "Add results to testRail?"
+        description: 'Add results to testRail?'
         type: boolean
         required: false
   schedule:
-    - cron: "0 4 * * 1,2,3,4,5"
+    - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
-    workflows: ["[Release] New Release Issue"]
+    workflows: ['[Release] New Release Issue']
     types:
       - in_progress
   workflow_call:
     secrets:
       TEST_RAIL_USER:
-        description: "TestRail robot userid"
+        description: 'TestRail robot userid'
         required: true
       TEST_RAIL_KEY:
-        description: "TestRail api key"
+        description: 'TestRail api key'
         required: true
 
 concurrency:
@@ -75,7 +75,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "Starting E2E iOS tests. Please see :thread: for results. This process may take a while."
+      message: 'Starting E2E iOS tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
     uses: ./.github/workflows/e2e_detox_mapping.yml
@@ -91,7 +91,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: "Get Matrix Value"
+      - name: 'Get Matrix Value'
         id: matrix_value
         run: |
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
@@ -134,15 +134,15 @@ jobs:
 
   matrix-e2e-ios:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
-    runs-on: macos-latest-large
+    runs-on: macos-15-xlarge
     needs: [start_slack_thread, output_detox_tests_to_run]
     env:
       # Path to write secret key to. Also used by fastlane
-      APPSTORE_CONNECT_FILEPATH: "./AppStoreConnectKey.p8"
+      APPSTORE_CONNECT_FILEPATH: './AppStoreConnectKey.p8'
       # Xcode project file name
-      IOS_PROJ_FILE: "VAMobile.xcodeproj"
+      IOS_PROJ_FILE: 'VAMobile.xcodeproj'
       # Xcode scheme to build
-      IOS_SCHEME: "VAMobileRelease"
+      IOS_SCHEME: 'VAMobileRelease'
     strategy:
       fail-fast: false
       matrix:
@@ -164,12 +164,15 @@ jobs:
         with:
           xcode-version: 16.2
 
+      - name: Download ios 18.2
+        run: xcodebuild -downloadPlatform iOS -buildVersion 18.2
+
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "./VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install macOS dependencies
         run: |
@@ -324,7 +327,7 @@ jobs:
           search_existing: open
         env:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
-          OS: "iOS"
+          OS: 'iOS'
           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: create-issue
@@ -336,7 +339,7 @@ jobs:
     uses: ./.github/workflows/update_testrail_results.yml
     with:
       testRail_name: ${{ inputs.testRail_name }}
-      test_OS_name: "iOS"
+      test_OS_name: 'iOS'
     secrets: inherit
 
   update-test-names:

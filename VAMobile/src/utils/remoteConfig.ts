@@ -17,6 +17,7 @@ export let overrideRemote = false
 export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
+  | 'COEAvailable'
   | 'appointmentsTestTime'
   | 'decisionLettersWaygate'
   | 'haptics'
@@ -34,14 +35,18 @@ export type FeatureToggleType =
   | 'testFeature'
   | 'travelPaySMOC'
   | 'travelPayClaimsFullHistory'
+  | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
+  | 'showEmailConfirmationAlert'
+  | 'overpayCopay'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
+  COEAvailable: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
@@ -58,15 +63,19 @@ type FeatureToggleValues = {
   testFeature: boolean
   travelPaySMOC: boolean
   travelPayClaimsFullHistory: boolean
+  travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
+  showEmailConfirmationAlert: boolean
+  overpayCopay: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
+  COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
@@ -74,7 +83,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: true,
   inAppReview: true,
   labsAndTests: false,
-  nonVAMedsLink: false,
+  nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
   shareMyHealthDataLink: true,
@@ -83,9 +92,12 @@ export const defaults: FeatureToggleValues = {
   testFeature: false,
   travelPaySMOC: true,
   travelPayClaimsFullHistory: false,
+  travelPayStatusList: false,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
+  showEmailConfirmationAlert: true,
+  overpayCopay: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults

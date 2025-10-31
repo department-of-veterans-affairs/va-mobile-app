@@ -246,8 +246,36 @@ function render(ui, { preloadedState, navigationProvided = false, queriesData, .
   return { queryClient, screen: rtlRender(ui, { wrapper: Wrapper, ...renderOptions }) }
 }
 
-// renderMutation is used to unit test mutation hooks. Returned is the queryClient to test the state before and after the mutation is called,
-// a function to trigger the mutation and the result to check error/success state
+/**
+ * Used to unit test query hooks.
+ * @param useHook - The query hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `result`: The result of the hook
+ */
+const renderQuery = <T,>(useHook: () => T) => {
+  const queryClient = new QueryClient()
+  const wrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer initialState={{ routes: [] }}>{children}</NavigationContainer>
+      </QueryClientProvider>
+    )
+  }
+
+  const { result } = rtlRenderHook(useHook, { wrapper })
+
+  return { queryClient, result }
+}
+
+/**
+ * Used to unit test mutation hooks
+ * @param useHook - The mutation hook to be tested
+ * @returns An object containing:
+ * - `queryClient`: QueryClient instance to test the state
+ * - `mutate`: Function to trigger the mutation
+ * - `result`: The result of the hook
+ */
 const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) => {
   const queryClient = new QueryClient()
   const wrapper = ({ children }: { children: Element }) => (
@@ -270,5 +298,5 @@ const renderMutation = (useHook: () => UseMutationResult<any, Error, any, any>) 
 // re-export everything
 export * from '@testing-library/react-native'
 // override render method
-export { render, renderMutation }
+export { render, renderQuery, renderMutation }
 export * from 'jest-when'

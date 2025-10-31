@@ -15,9 +15,10 @@ export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
   LOCATION_FINDER_TEXT: 'Find a VA location',
   CONTACT_VA_ROW_TEXT: 'Contact us',
-  CONTACT_VA_TITLE: 'Call My V-A 4 1 1',
-  CONTACT_VA_BODY:
-    'My V-A 4 1 1 is our main V-A information line. We can help connect you to any of our V-A contact centers.',
+  CONTACT_VA_TITLE: 'Call us anytime',
+  CONTACT_VA_BODY: "You'll choose from the recorded menu to connect to a specific department or office.",
+  CONTACT_VA_MAIN_INFO_TITLE: 'Main information (MyVA411)',
+  CONTACT_VA_TECH_SUPPORT_TITLE: 'Technical support',
   WEBVIEW_ID: 'Webview-web',
   UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '6 in the next 30 days',
   PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '5 eligible for travel reimbursement',
@@ -38,6 +39,7 @@ export const HomeE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -52,6 +54,7 @@ describe('Home Screen', () => {
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
     await loginToDemoMode()
   })
 
@@ -95,10 +98,10 @@ describe('Home Screen', () => {
     await expect(element(by.id(CommonE2eIdConstants.CLAIMS_LANDING_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.LETTERS_LANDING_BUTTON_ID))).toExist()
   })
-
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
@@ -240,21 +243,23 @@ describe('Home Screen', () => {
 
   it('should tap on contact VA', async () => {
     await element(by.text(HomeE2eIdConstants.CONTACT_VA_ROW_TEXT)).tap()
-    await expect(element(by.text('Call MyVA411'))).toExist()
-    await expect(
-      element(
-        by.text('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.'),
-      ),
-    ).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_TITLE))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_BODY))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_MAIN_INFO_TITLE))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CONTACT_VA_TECH_SUPPORT_TITLE))).toExist()
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
-      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ContactVAAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
       await element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('ContactVATTYAndroidCallingScreen')
+      await device.launchApp({ newInstance: false })
+      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(1).tap()
+      await setTimeout(5000)
+      await device.takeScreenshot('ContactVATechSupportAndroidCallingScreen')
       await device.launchApp({ newInstance: false })
       await device.enableSynchronization()
     }

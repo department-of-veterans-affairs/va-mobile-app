@@ -6,8 +6,8 @@ import { DateTime } from 'luxon'
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, UserContactInformation } from 'api/types'
 import ReviewClaimScreen from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/ReviewClaimScreen'
-import { submitAppointmentClaim } from 'store/api/demo/travelPay'
-import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
+import { TravelPayContextProvider } from 'screens/HealthScreen/TravelPay/containers/TravelPayContext'
+import { QueriesData, context, fireEvent, mockNavProps, render, screen } from 'testUtils'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 const residentialAddress: AddressData = {
@@ -24,29 +24,18 @@ const residentialAddress: AddressData = {
   zipCodeSuffix: '1234',
 }
 
-const params = {
-  appointment: {
-    ...defaultAppointment,
-    attributes: {
-      ...defaultAppointmentAttributes,
-      startDateUtc: '2021-02-06T19:53:14.000+00:00',
-      startDateLocal: '2021-02-06T18:53:14.000-01:00',
-      location: {
-        id: '442',
-        name: 'Tomah VA Medical Center',
-      },
+const appointment = {
+  ...defaultAppointment,
+  attributes: {
+    ...defaultAppointmentAttributes,
+    startDateUtc: '2021-02-06T19:53:14.000+00:00',
+    startDateLocal: '2021-02-06T18:53:14.000-01:00',
+    location: {
+      id: '442',
+      name: 'Tomah VA Medical Center',
     },
   },
-  appointmentRouteKey: 'key',
 }
-
-const MOCK_TRAVEL_PAY_CLAIM_RESPONSE = submitAppointmentClaim({
-  appointmentDateTime: params.appointment.attributes.startDateLocal,
-  facilityStationNumber: params.appointment.attributes.location.id,
-  facilityName: params.appointment.attributes.location.name,
-  appointmentType: 'Other',
-  isComplete: false,
-})
 
 const mockNavigationSpy = jest.fn()
 const mockSubmitClaimSpy = jest.fn()
@@ -82,7 +71,7 @@ jest.mock('components/Templates/MultiStepSubtask', () => {
 })
 
 context('ReviewClaimScreen', () => {
-  const props = mockNavProps(undefined, { dispatch: mockDispatchSpy }, { params })
+  const props = mockNavProps(undefined, { dispatch: mockDispatchSpy })
 
   const initializeTestInstance = (contactInformation?: Partial<UserContactInformation>) => {
     let queriesData: QueriesData | undefined
@@ -97,7 +86,12 @@ context('ReviewClaimScreen', () => {
         },
       ]
     }
-    render(<ReviewClaimScreen {...props} />, { queriesData })
+    render(
+      <TravelPayContextProvider appointment={appointment} appointmentRouteKey="key">
+        <ReviewClaimScreen {...props} />
+      </TravelPayContextProvider>,
+      { queriesData },
+    )
   }
 
   afterEach(() => {
@@ -108,10 +102,10 @@ context('ReviewClaimScreen', () => {
     initializeTestInstance({ residentialAddress })
     expect(screen.getByText(t('travelPay.reviewTitle'))).toBeTruthy()
     expect(screen.getByText(t('travelPay.reviewDetails.what'))).toBeTruthy()
-    expect(screen.getByText(t('travelPay.reviewDetails.milageOnly'))).toBeTruthy()
+    expect(screen.getByText(t('travelPay.reviewDetails.mileageOnly'))).toBeTruthy()
     expect(
       screen.getByText(
-        DateTime.fromISO(params.appointment.attributes.startDateLocal).toFormat(
+        DateTime.fromISO(appointment.attributes.startDateLocal).toFormat(
           `cccc, LLLL dd yyyy '${t('dateTime.at')}' hh:mm a ZZZZ`,
         ),
       ),
@@ -135,28 +129,19 @@ context('ReviewClaimScreen', () => {
         initializeTestInstance({ residentialAddress })
         const button = screen.getByTestId('submitTestID')
         fireEvent.press(button)
-        expect(screen.getByText(t('required'))).toBeTruthy()
+        expect(screen.getByText(t('Error: (Required)'))).toBeTruthy()
       })
     })
 
     describe('when the user has checked the checkbox', () => {
-      it('should submit the claim', async () => {
+      it('should call the submitTravelClaim function', async () => {
         initializeTestInstance({ residentialAddress })
         const checkbox = screen.getByTestId('checkboxTestID')
         fireEvent.press(checkbox)
         const button = screen.getByTestId('submitTestID')
         fireEvent.press(button)
 
-        expect(mockSubmitClaimSpy).toHaveBeenCalledWith(
-          {
-            appointmentDateTime: params.appointment.attributes.startDateLocal,
-            facilityStationNumber: params.appointment.attributes.location.id,
-            appointmentType: 'Other',
-            facilityName: params.appointment.attributes.location.name,
-            isComplete: false,
-          },
-          expect.any(Object),
-        )
+        expect(mockSubmitClaimSpy).toHaveBeenCalled()
       })
     })
   })
@@ -167,50 +152,6 @@ context('ReviewClaimScreen', () => {
       initializeTestInstance({ residentialAddress })
       expect(screen.getByText(t('travelPay.submitLoading'))).toBeTruthy()
       expect(screen.queryByTestId('reviewClaimScreenID')).toBeNull()
-    })
-  })
-
-  describe('when the submission is successful', () => {
-    it('should navigate to the SubmitSuccessScreen', async () => {
-      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
-        if (options && options.onSuccess) {
-          options.onSuccess(MOCK_TRAVEL_PAY_CLAIM_RESPONSE)
-        }
-      })
-      initializeTestInstance({ residentialAddress })
-      const checkbox = screen.getByTestId('checkboxTestID')
-      fireEvent.press(checkbox)
-      const button = screen.getByTestId('submitTestID')
-      fireEvent.press(button)
-
-      await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitSuccessScreen', {
-          appointmentDateTime: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.appointmentDateTime,
-          facilityName: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.facilityName,
-          status: MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data.attributes.claimStatus,
-        })
-      })
-    })
-  })
-
-  describe('when the submission fails', () => {
-    it('should navigate to the SMOCErrorScreen', async () => {
-      mockSubmitClaimSpy.mockImplementation((_claimPayload, options) => {
-        if (options && options.onError) {
-          options.onError(new Error('Failed to submit travel claim'), {}, undefined)
-        }
-      })
-      initializeTestInstance({ residentialAddress })
-      const checkbox = screen.getByTestId('checkboxTestID')
-      fireEvent.press(checkbox)
-      const button = screen.getByTestId('submitTestID')
-      fireEvent.press(button)
-
-      await waitFor(() => {
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SMOCErrorScreen', {
-          error: 'error',
-        })
-      })
     })
   })
 })

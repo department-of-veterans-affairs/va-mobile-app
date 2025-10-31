@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
@@ -13,7 +12,14 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
-import { AnnouncementBanner, Box, CategoryLanding, CategoryLandingAlert, LargeNavButton, TextView } from 'components'
+import {
+  AnnouncementBanner,
+  Box,
+  CategoryLanding,
+  CategoryLandingAlert,
+  EmailConfirmationAlert,
+  LargeNavButton,
+} from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
@@ -31,6 +37,7 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
+import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -38,7 +45,9 @@ import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
@@ -101,14 +110,13 @@ export function HealthScreen({}: HealthScreenProps) {
       const newSession = await AsyncStorage.getItem(NEW_SESSION)
 
       if (isScreenContentAllowed && cernerExist && ((firstTimeLogin && mixedCerner) || (newSession && allCerner))) {
-        navigateTo('HealthHelp')
         await AsyncStorage.setItem(FIRST_TIME_LOGIN, '')
         await AsyncStorage.setItem(NEW_SESSION, '')
       }
     }
 
     healthHelpScreenCheck()
-  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner, navigateTo])
+  }, [allCerner, cernerExist, isScreenContentAllowed, mixedCerner])
 
   const featureInDowntime = appointmentsInDowntime || smInDowntime || rxInDowntime
   const activityError = appointmentsError || inboxError || prescriptionsError
@@ -124,6 +132,7 @@ export function HealthScreen({}: HealthScreenProps) {
   return (
     <CategoryLanding title={t('health.title')} testID="healthCategoryTestID">
       <Box mb={!cernerExist ? theme.dimensions.contentMarginBottom : theme.dimensions.standardMarginBetween}>
+        {featureEnabled('showEmailConfirmationAlert') && <EmailConfirmationAlert />}
         <LargeNavButton
           title={t('appointments')}
           onPress={() => navigateTo('Appointments')}
@@ -138,6 +147,23 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton
+            title={t('travelPay.title')}
+            onPress={() => navigateTo('TravelPayClaims')}
+            testID="toTravelPayClaimsID"
+          />
+        )}
+        {featureEnabled('overpayCopay') && (
+          <LargeNavButton
+            title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
+            subText={t('copays.activityButton.subText', {
+              amount: numberToUSDollars(0),
+              count: 0,
+            })}
+          />
+        )}
         <LargeNavButton
           title={t('secureMessaging.title')}
           onPress={() => navigateTo('SecureMessaging', { activeTab: 0 })}
@@ -167,23 +193,6 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
-      {cernerExist && (
-        <Box mx={theme.dimensions.buttonPadding}>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView variant="TableFooterLabel" accessibilityLabel={a11yLabelVA(t('healthHelp.info'))}>
-            {t('healthHelp.info')}
-          </TextView>
-          <Pressable onPress={() => navigateTo('HealthHelp')} accessibilityRole="link" accessible={true}>
-            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-            <TextView
-              variant="MobileFooterLink"
-              accessibilityLabel={a11yLabelVA(t('healthHelp.checkFacility'))}
-              paragraphSpacing={true}>
-              {t('healthHelp.checkFacility')}
-            </TextView>
-          </Pressable>
-        </Box>
-      )}
       {!enrolledInVAHealthCare && (
         <Box mb={theme.dimensions.contentMarginBottom}>
           <AnnouncementBanner
@@ -233,6 +242,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
         component={PastAppointmentDetails}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HealthScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaimsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen

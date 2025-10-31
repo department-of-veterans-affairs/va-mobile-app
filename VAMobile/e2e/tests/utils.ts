@@ -86,6 +86,8 @@ export const CommonE2eIdConstants = {
   HOME_SCREEN_SHOW_COMPENSATION_BUTTON_ID: 'showCompensationTestID',
   HOME_SCREEN_SEE_LATEST_PAYMENT_DETAILS_BUTTON_ID: 'seePaymentBreakdownButtonTestID',
   LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
+  CONFIRM_EMAIL_TEXT: 'Confirm',
+  SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
@@ -186,6 +188,10 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
+  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
+  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
+  DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
+  DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
 }
 
 /** Logs into demo mode.
@@ -246,6 +252,18 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   )
   if (turnOnNotificationsBtnExist) {
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
+  if (confirmEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
+  }
+
+  const skipEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.SKIP_EMAIL_TEXT, true)
+  if (skipEmailBtnExist) {
+    await element(by.text(CommonE2eIdConstants.SKIP_EMAIL_TEXT)).tap()
+    await element(by.text(CommonE2eIdConstants.DISMISS_TEXT)).tap()
   }
 }
 
@@ -409,6 +427,10 @@ export async function openHealth() {
 
 export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
+}
+
+export async function openTravelPayClaims() {
+  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
@@ -788,5 +810,20 @@ export async function toggleOverrideApi(endpoint: string, { otherStatus }: { oth
     await element(by.id(`otherStatus-${endpoint}`)).replaceText(otherStatus)
   }
 
-  await element(by.label('Set API Errors')).tap()
+  await element(by.id('saveErrors')).tap()
+}
+
+export async function changeDemoModeUser(testIdOfDesiredUser: string) {
+  await element(by.id(CommonE2eIdConstants.HOME_TAB_BUTTON_ID)).tap()
+  await openProfile()
+  await openSettings()
+  await openDeveloperScreen()
+  await scrollToIDThenTap(
+    CommonE2eIdConstants.DEMO_MODE_USERS_BUTTON_ID,
+    CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID,
+  )
+  waitFor(element(by.id(testIdOfDesiredUser))).toBeVisible()
+  await element(by.id(testIdOfDesiredUser)).tap()
+  await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
+  await loginToDemoMode()
 }

@@ -13,12 +13,14 @@
           "directDepositBenefitsUpdate": true,
           "disabilityRating": true,
           "lettersAndDocuments": true,
+          "medicationsOracleHealthEnabled": false,
           "militaryServiceHistory": true,
           "paymentHistory": true,
           "preferredName": true,
           "prescriptions": true,
           "scheduleAppointments": true,
           "secureMessaging": true,
+          "secureMessagingOracleHealthEnabled": false,
           "userProfileUpdate": true
         }
       }

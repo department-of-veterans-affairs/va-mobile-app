@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, Modal, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -68,6 +68,7 @@ import {
   sendUsesLargeTextAnalytics,
   sendUsesScreenReaderAnalytics,
 } from 'store/slices/accessibilitySlice'
+import { DemoState } from 'store/slices/demoSlice'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
@@ -79,10 +80,14 @@ import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/header
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
-const { ENVIRONMENT, IS_TEST } = getEnv()
+const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 
 enableScreens(true)
 injectStore(store)
+
+if (__DEV__ && REACTOTRON_ENABLED) {
+  require('../ReactotronConfig')
+}
 
 const Stack = createStackNavigator<StackNavParamList>()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
@@ -233,6 +238,7 @@ export function AuthGuard() {
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -274,11 +280,17 @@ export function AuthGuard() {
     // staging or test and turn off analytics if that is the case
     const toggle =
       firebaseDebugMode ||
-      !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
+      !(
+        utils().isRunningInTestLab ||
+        ENVIRONMENT === EnvironmentTypesConstants.Staging ||
+        __DEV__ ||
+        IS_TEST ||
+        demoMode
+      )
     crashlytics().setCrashlyticsCollectionEnabled(toggle)
     analytics().setAnalyticsCollectionEnabled(toggle)
     performance().setPerformanceCollectionEnabled(toggle)
-  }, [firebaseDebugMode])
+  }, [firebaseDebugMode, demoMode])
 
   useEffect(() => {
     if (!remoteConfigActivated) {
@@ -435,6 +447,16 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
 
+  const [appInactive, setAppInactive] = useState(AppState.currentState !== 'active')
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (isIOS()) {
+        setAppInactive(state !== 'active')
+      }
+    })
+    return (): void => sub?.remove()
+  }, [])
+
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
   useEffect(() => {
@@ -456,6 +478,13 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
 
   return (
     <>
+      <Modal
+        visible={appInactive}
+        animationType={'fade'}
+        presentationStyle={'fullScreen'}
+        supportedOrientations={['portrait', 'landscape']}>
+        <SplashScreen />
+      </Modal>
       <RootNavStack.Navigator
         screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
         initialRouteName="Tabs"

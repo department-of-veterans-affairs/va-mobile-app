@@ -17,13 +17,16 @@ const importKimberlyWashingtonData = () => {
     import('store/api/demo/mocks/default/prescriptions.json'),
     import('store/api/demo/mocks/default/notifications.json'),
     import('store/api/demo/mocks/default/contactInformation.json'),
-    import('store/api/demo/mocks/default/getAuthorizedServices.json'),
+    import('store/api/demo/mocks/kimberlyWashington/getAuthorizedServices.json'),
     featureEnabled('cernerTrueForDemo')
       ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
       : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
     import('store/api/demo/mocks/default/demographics.json'),
     import('store/api/demo/mocks/kimberlyWashington/personalInformation.json'),
     import('store/api/demo/mocks/default/allergies.json'),
+    import('store/api/demo/mocks/default/travelPay.json'),
+    import('store/api/demo/mocks/default/medicalCopays.json'),
+    import('store/api/demo/mocks/default/debts.json'),
   ]
 }
 

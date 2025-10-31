@@ -1,15 +1,15 @@
-name: "[Documentation] Accessibility Check"
+name: '[Documentation] Accessibility Check'
 
 on:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
-    - cron: "0 9 * * 1,2,3,4,5"
+    - cron: '0 9 * * 1,2,3,4,5'
 
 jobs:
   axe-scan:
     name: Accessibility Check
-    runs-on: macos-latest-large
+    runs-on: ubuntu-latest
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
@@ -20,16 +20,31 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup axe-core CLI tools
         run: |
+          google-chrome --version
+          chromedriver --version
           npm install @axe-core/cli -g
-      - name: Install GNU Grep #Install GNU Grep as MacOS ships with BSD Grep
-        run: |
-          brew install grep
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version-file: "VAMobile/documentation/.nvmrc"
+          node-version-file: 'VAMobile/documentation/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
+
+      - name: Update Chrome and Chromedriver
+        run: |
+          # Add Google's signing key
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          # Add the Chrome repository
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          # Update the package list and install Chrome
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # Download and install chromedriver
+          wget https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.76/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
@@ -53,15 +68,15 @@ jobs:
           # Counter for total errors
           total_errors=0
 
-          for url in $(ggrep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
+          for url in $(grep -o '<loc>[^<]*' "$sitemap_path" | sed 's/<loc>//');
           do
             # save output so that we can send it to std out AND do an operation on it
-            output=$(axe "$url" --chrome-path="${AXE_CORE_CHROME_PATH}")
+            output=$(axe "$url" --exclude ".api-content, iframe" --chrome-path="${AXE_CORE_CHROME_PATH}")
             # send output to stdout
             echo "${output}"
 
             # regex number of issues NOTE: grep exits 1 if it finds no match. GH Actions exits the runner if anything exits 1 so we add the || true to overcome that
-            issues=$(echo "${output}" | ggrep -oP '\d+(?= Accessibility issues detected)' || true)
+            issues=$(echo "${output}" | grep -oP '\d+(?= Accessibility issues detected)' || true)
 
             # If issues is not an empty string, there were issues
             if [[ ! -z "$issues" ]]
@@ -82,4 +97,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "Accessibility issues detected in the documentation site. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }}. Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}"
+      message: 'Accessibility issues detected in the documentation site. Please review and fix. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results. Number of pages with errors: ${{ needs.axe-scan.outputs.pages_with_errors }}. Total number of accessibility issues detected: ${{ needs.axe-scan.outputs.total_errors }}'

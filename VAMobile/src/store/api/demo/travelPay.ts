@@ -1,6 +1,19 @@
-import { DateTime } from 'luxon'
+import { DateTime, Interval } from 'luxon'
 
-import { SubmitSMOCTravelPayClaimParameters, SubmitTravelPayClaimResponse } from 'api/types'
+import {
+  GetTravelPayClaimsResponse,
+  SubmitSMOCTravelPayClaimParameters,
+  SubmitTravelPayClaimResponse,
+  TravelPayClaimData,
+} from 'api/types'
+import { Params } from 'store/api'
+import { DemoStore } from 'store/api/demo/store'
+
+type TravelPayClaimsData = {
+  '/v0/travel-pay/claims': GetTravelPayClaimsResponse
+}
+export type TravelPayDemoStore = TravelPayClaimsData
+export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
   data: {
@@ -42,8 +55,29 @@ const createMockClaimResponse = (params: SubmitSMOCTravelPayClaimParameters): Su
   return mockClaimResponse
 }
 
-export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse
-
 export const submitAppointmentClaim = (params: SubmitSMOCTravelPayClaimParameters): SubmitTravelPayClaimResponse => {
   return createMockClaimResponse(params)
+}
+
+export const getTravelPayClaims = (store: DemoStore, params: Params): GetTravelPayClaimsResponse | undefined => {
+  const endDate = params.end_date
+  const startDate = params.start_date as string
+  const pageNumber = (params.page_number as unknown as number) || 1
+  const pageSize = 25 // mock a page size to test pagination
+
+  if (endDate && typeof endDate === 'string' && startDate && typeof startDate === 'string') {
+    const travelPayClaims = JSON.parse(JSON.stringify(store['/v0/travel-pay/claims']))
+    const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
+    const filteredClaimsData = travelPayClaims.data.filter((claim: TravelPayClaimData) => {
+      const claimDate = DateTime.fromISO(claim.attributes.appointmentDateTime)
+      return interval.contains(claimDate)
+    })
+
+    travelPayClaims.meta.pageNumber = pageNumber
+    travelPayClaims.data = [...filteredClaimsData.slice(pageSize * (pageNumber - 1), pageSize * pageNumber)]
+    travelPayClaims.meta.totalRecordCount = filteredClaimsData.length
+    return travelPayClaims
+  } else {
+    return undefined
+  }
 }
