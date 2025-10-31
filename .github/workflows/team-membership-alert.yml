@@ -1,0 +1,35 @@
+name: '[Admin] Team Membership Alert'
+
+on:
+  membership:
+    types:
+      - added
+jobs:
+  generate_token_job:
+    runs-on: ubuntu-latest
+    if: github.event.team.slug == 'flagship-mobile-team'
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: Map GitHub usernames to Slack IDs
+        id: map_slack_ids
+        run: |
+          declare -A GITHUB_TO_SLACK_MAP
+          GITHUB_TO_SLACK_MAP["b-rocha"]="U01AWJEH5UJ"
+          GITHUB_TO_SLACK_MAP["becca"]="U08AWC7DQA2"
+          for key in "${!GITHUB_TO_SLACK_MAP[@]}"; do
+            echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
+          done
+
+  notify_slack:
+    needs: generate_token_job
+    uses: ./.github/workflows/start_slack_thread.yml
+    with:
+      channel_name: va-mobile-app
+      message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User  @${{ github.event.member.login }} has been added to the ${{ github.event.team.name }}. Please update the slack mapping data and open an on boarding ticket.'
+    secrets: inherit
+
