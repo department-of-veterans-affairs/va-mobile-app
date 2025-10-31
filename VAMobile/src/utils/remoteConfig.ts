@@ -77,7 +77,7 @@ export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
-  datePickerUpdate: true,
+  datePickerUpdate: false,
   COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,
