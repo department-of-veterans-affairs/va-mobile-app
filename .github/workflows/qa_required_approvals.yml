@@ -9,6 +9,10 @@ jobs:
     name: Requires QA approval
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
@@ -17,7 +21,7 @@ jobs:
         id: check-qa-approval
         shell: bash
         env:
-          APP_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
