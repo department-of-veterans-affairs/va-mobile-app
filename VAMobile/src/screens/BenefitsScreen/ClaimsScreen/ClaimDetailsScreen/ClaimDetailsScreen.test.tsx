@@ -201,4 +201,52 @@ context('ClaimDetailsScreen', () => {
       )
     })
   })
+
+  describe('claim title display', () => {
+    it('should use displayTitle when available', async () => {
+      const claimWithDisplayTitle: ClaimData = {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: 'Request to add or remove a dependent',
+          claimTypeBase: 'request to add or remove a dependent',
+          claimType: 'Dependency',
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: claimWithDisplayTitle,
+        })
+
+      renderWithData(ClaimTypeConstants.ACTIVE, false, claimWithDisplayTitle)
+
+      await waitFor(() => {
+        expect(screen.getByText('Request to add or remove a dependent')).toBeTruthy()
+      })
+    })
+
+    it('should use default claim type when displayTitle is not available', async () => {
+      const claimWithoutDisplayTitle: ClaimData = {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: undefined,
+        },
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claim/600156928`, {})
+        .mockResolvedValue({
+          data: claimWithoutDisplayTitle,
+        })
+
+      renderWithData(ClaimTypeConstants.ACTIVE, false, claimWithoutDisplayTitle)
+
+      await waitFor(() => {
+        expect(screen.getByText('Your compensation claim')).toBeTruthy()
+      })
+    })
+  })
 })
