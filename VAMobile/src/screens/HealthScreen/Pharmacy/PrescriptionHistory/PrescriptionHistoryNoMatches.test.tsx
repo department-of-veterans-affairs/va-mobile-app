@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PrescriptionHistoryNoMatches from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoMatches'
 import { context, render } from 'testUtils'
-
-import PrescriptionHistoryNoMatches from './PrescriptionHistoryNoMatches'
 
 context('PrescriptionHistoryNoMatches', () => {
   it('should show tab based content with no filter', () => {

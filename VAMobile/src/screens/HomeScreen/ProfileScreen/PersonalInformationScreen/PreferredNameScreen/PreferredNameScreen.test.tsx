@@ -3,9 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PreferredNameScreen from 'screens/HomeScreen/ProfileScreen/PersonalInformationScreen/PreferredNameScreen/PreferredNameScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import PreferredNameScreen from './PreferredNameScreen'
 
 context('PreferredNameScreen', () => {
   beforeEach(() => {

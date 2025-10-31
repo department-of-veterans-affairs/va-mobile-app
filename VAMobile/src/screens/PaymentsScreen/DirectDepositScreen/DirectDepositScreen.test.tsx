@@ -5,10 +5,9 @@ import { t } from 'i18next'
 
 import { directDepositKeys } from 'api/directDeposit'
 import { DirectDepositData } from 'api/types'
+import DirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/DirectDepositScreen'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import DirectDepositScreen from './index'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

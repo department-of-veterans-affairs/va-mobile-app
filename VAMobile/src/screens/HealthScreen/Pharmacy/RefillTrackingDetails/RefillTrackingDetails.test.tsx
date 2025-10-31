@@ -5,6 +5,7 @@ import { t } from 'i18next'
 import { when } from 'jest-when'
 
 import { PrescriptionData } from 'api/types'
+import RefillTrackingDetails from 'screens/HealthScreen/Pharmacy/RefillTrackingDetails/RefillTrackingDetails'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
 import {
@@ -13,8 +14,6 @@ import {
   defaultPrescriptionsList as mockData,
   multipleTrackingInfoList as multipleTrackingInfoData,
 } from 'utils/tests/prescription'
-
-import RefillTrackingDetails from './RefillTrackingDetails'
 
 context('RefillTrackingDetails', () => {
   const initializeTestInstance = (paramPrescription?: PrescriptionData) => {

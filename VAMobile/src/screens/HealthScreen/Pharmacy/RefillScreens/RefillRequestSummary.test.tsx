@@ -4,11 +4,10 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { RefillRequestSummaryItems } from 'api/types'
+import RefillRequestSummary from 'screens/HealthScreen/Pharmacy/RefillScreens/RefillRequestSummary'
 import { context, mockNavProps, render } from 'testUtils'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { defaultPrescriptionsList as mockData } from 'utils/tests/prescription'
-
-import RefillRequestSummary from './RefillRequestSummary'
 
 context('RefillRequestSummary', () => {
   const initializeTestInstance = (refillRequestSummaryItems?: RefillRequestSummaryItems) => {

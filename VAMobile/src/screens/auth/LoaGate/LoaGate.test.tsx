@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import LoaGate from 'screens/auth/LoaGate/LoaGate'
 import { context, render } from 'testUtils'
-
-import LoaGate from './LoaGate'
 
 context('LoaGate', () => {
   beforeEach(() => {

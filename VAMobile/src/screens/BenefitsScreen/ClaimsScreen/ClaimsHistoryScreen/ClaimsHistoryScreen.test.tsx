@@ -7,10 +7,9 @@ import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { ClaimsAndAppealsListPayload } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import ClaimsHistoryScreen from './ClaimsHistoryScreen'
 
 const mockPayload: ClaimsAndAppealsListPayload = {
   data: [

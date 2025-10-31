@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { PaymentsData } from 'api/types'
+import PaymentDetailsScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import { context, mockNavProps, render } from 'testUtils'
 import { formatDateUtc } from 'utils/formattingUtils'
-
-import PaymentDetailsScreen from './PaymentDetailsScreen'
 
 context('PaymentDetailsScreen', () => {
   const paymentDate = '2021-02-01T00:00:00.000-07:00'

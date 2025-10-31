@@ -3,11 +3,10 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { SyncScreen } from 'screens/SyncScreen'
 import * as api from 'store/api'
 import { completeSync, initialAuthState } from 'store/slices'
 import { context, render, waitFor, when } from 'testUtils'
-
-import { SyncScreen } from './index'
 
 jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')

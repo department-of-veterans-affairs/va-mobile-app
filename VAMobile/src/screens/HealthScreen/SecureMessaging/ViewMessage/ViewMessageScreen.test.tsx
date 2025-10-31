@@ -11,10 +11,9 @@ import {
   SecureMessagingThreadGetData,
 } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import ViewMessageScreen from './ViewMessageScreen'
 
 context('ViewMessageScreen', () => {
   const thread: SecureMessagingThreadGetData = {

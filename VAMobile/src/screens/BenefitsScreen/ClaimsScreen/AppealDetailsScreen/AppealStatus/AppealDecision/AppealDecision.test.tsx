@@ -4,9 +4,8 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
+import AppealDecision from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealDecision/AppealDecision'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AppealDecision from './AppealDecision'
 
 context('AppealDecision', () => {
   const initializeTestInstance = (

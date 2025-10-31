@@ -5,9 +5,11 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { RootNavStackParamList } from 'App'
 
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
-
-import { FileRequestStackParams, fileRequestSharedScreens } from './FileRequestSubtask'
-import SubmitEvidence from './SubmitEvidence'
+import {
+  FileRequestStackParams,
+  fileRequestSharedScreens,
+} from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
+import SubmitEvidence from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 
 export type SubmitEvidenceStackParams = FileRequestStackParams & {
   SubmitEvidence: {

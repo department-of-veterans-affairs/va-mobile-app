@@ -17,11 +17,10 @@ import {
 } from 'api/types'
 import { Box, LinkWithAnalytics, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import AppealDecision from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 import { camelToIndividualWords, capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useExternalLink, useTheme } from 'utils/hooks'
-
-import AppealDecision from '../AppealDecision/AppealDecision'
 
 const { LINK_URL_DECISION_REVIEWS, LINK_URL_YOUR_CLAIMS } = getEnv()
 

@@ -6,10 +6,9 @@ import styled from 'styled-components'
 
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import WebviewControlButton from 'screens/WebviewScreen/WebviewControlButton'
 import { useTheme } from 'utils/hooks'
 import { themeFn } from 'utils/theme'
-
-import WebviewControlButton from './WebviewControlButton'
 
 const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${themeFn((theme) => theme.colors.background.webviewControls)};

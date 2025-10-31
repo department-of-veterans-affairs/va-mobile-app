@@ -4,9 +4,8 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { LetterTypeConstants, LetterTypes } from 'api/types'
+import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
 import { context, mockNavProps, render } from 'testUtils'
-
-import GenericLetter from './GenericLetter'
 
 jest.mock('store/slices', () => {
   return {

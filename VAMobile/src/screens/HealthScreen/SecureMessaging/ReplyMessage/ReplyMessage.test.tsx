@@ -4,11 +4,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { CategoryTypeFields, SecureMessagingMessageGetData, SecureMessagingThreadGetData } from 'api/types'
+import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/ReplyMessage'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import { isIOS } from '../../../../utils/platform'
-import ReplyMessage from './ReplyMessage'
+import { isIOS } from 'utils/platform'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import WebviewTitle from 'screens/WebviewScreen/WebviewTitle'
 import { context, render } from 'testUtils'
-
-import WebviewTitle from './WebviewTitle'
 
 context('WebviewTitle', () => {
   it('initializes correctly', () => {

@@ -23,12 +23,11 @@ import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 

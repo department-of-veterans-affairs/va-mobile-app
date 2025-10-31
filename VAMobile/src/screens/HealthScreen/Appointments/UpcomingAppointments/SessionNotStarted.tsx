@@ -5,9 +5,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 
 import { Box, LargePanel, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { useTheme } from 'utils/hooks'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
 
 type SessionNotStartedProps = StackScreenProps<HealthStackParamList, 'SessionNotStarted'>
 

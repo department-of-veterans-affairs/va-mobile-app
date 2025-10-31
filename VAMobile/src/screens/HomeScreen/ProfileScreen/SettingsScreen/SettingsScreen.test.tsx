@@ -5,11 +5,10 @@ import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import SettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/SettingsScreen'
 import { InitialState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import SettingsScreen from './index'
 
 jest.mock('utils/remoteConfig')
 when(featureEnabled as jest.Mock)

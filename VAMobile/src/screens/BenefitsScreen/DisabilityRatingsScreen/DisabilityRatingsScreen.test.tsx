@@ -4,11 +4,10 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { RatingData } from 'api/types'
+import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen/DisabilityRatingsScreen'
 import * as api from 'store/api'
 import { context, render, waitFor, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 
 context('DisabilityRatingsScreen', () => {
   const ratingDataMock = {

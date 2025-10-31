@@ -4,10 +4,9 @@ import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
-
-import VaccineListScreen from './VaccineListScreen'
 
 context('VaccineListScreen', () => {
   const vaccineData = [

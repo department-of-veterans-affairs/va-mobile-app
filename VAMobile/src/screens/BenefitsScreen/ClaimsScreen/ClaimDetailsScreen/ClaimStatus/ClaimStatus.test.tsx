@@ -5,10 +5,9 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { ClaimType } from 'constants/claims'
+import ClaimStatus from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimStatus'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { context, mockNavProps, render } from 'testUtils'
-
-import { claim } from '../../claimData'
-import ClaimStatus from './ClaimStatus'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

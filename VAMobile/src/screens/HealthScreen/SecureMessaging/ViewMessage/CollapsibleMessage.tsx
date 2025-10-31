@@ -20,13 +20,12 @@ import {
   TextView,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import IndividualMessageErrorComponent from 'screens/HealthScreen/SecureMessaging/ViewMessage/IndividualMessageErrorComponent'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useOrientation, useTheme } from 'utils/hooks'
 import { fixSpecialCharacters } from 'utils/jsonFormatting'
 import { getLinkifiedText } from 'utils/secureMessaging'
-
-import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
   /* message object */

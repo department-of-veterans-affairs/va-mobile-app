@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoClaimsAndAppealsAccess from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess'
 
 context('NoClaimsAndAppealsAccess', () => {
   beforeEach(() => {

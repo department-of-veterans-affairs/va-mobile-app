@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import NoInboxMessages from 'screens/HealthScreen/SecureMessaging/NoInboxMessages/NoInboxMessages'
 import { context, render } from 'testUtils'
-
-import NoInboxMessages from './NoInboxMessages'
 
 context('NoInboxMessages', () => {
   it('initializes correctly', () => {

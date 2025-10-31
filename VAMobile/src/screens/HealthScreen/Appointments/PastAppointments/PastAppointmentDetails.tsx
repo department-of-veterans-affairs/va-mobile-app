@@ -7,19 +7,6 @@ import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, App
 import { FeatureLandingTemplate } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { useDowntime } from 'utils/hooks'
-import { useReviewEvent } from 'utils/inAppReviews'
-import { featureEnabled } from 'utils/remoteConfig'
-
-import {
-  AppointmentDetailsSubTypeConstants,
-  getAppointmentAnalyticsDays,
-  getAppointmentAnalyticsStatus,
-  isAPendingAppointment,
-} from '../../../../utils/appointments'
-import { HealthStackParamList } from '../../HealthStackScreens'
 import {
   ClaimExamAppointment,
   CommunityCareAppointment,
@@ -29,8 +16,20 @@ import {
   VideoGFEAppointment,
   VideoHomeAppointment,
   VideoVAAppointment,
-} from '../AppointmentTypeComponents'
-import AppointmentFileTravelPayAlert from '../AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
+} from 'screens/HealthScreen/Appointments/AppointmentTypeComponents'
+import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import {
+  AppointmentDetailsSubTypeConstants,
+  getAppointmentAnalyticsDays,
+  getAppointmentAnalyticsStatus,
+  isAPendingAppointment,
+} from 'utils/appointments'
+import { useDowntime } from 'utils/hooks'
+import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 

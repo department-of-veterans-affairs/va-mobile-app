@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import { context, mockNavProps, render } from 'testUtils'
-
-import TakePhotos from './TakePhotos'
 
 context('TakePhotos', () => {
   const request = {

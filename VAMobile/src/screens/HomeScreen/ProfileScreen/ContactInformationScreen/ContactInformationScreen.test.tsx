@@ -5,10 +5,9 @@ import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { AddressData, ContactInformationPayload, EmailData, PhoneData } from 'api/types'
+import ContactInformationScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/ContactInformationScreen'
 import { get } from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-
-import ContactInformationScreen from './index'
 
 const residentialAddress: AddressData = {
   id: 1,

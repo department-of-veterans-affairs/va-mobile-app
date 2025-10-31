@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { Box, LargePanel, LinkWithAnalytics, TextView } from 'components'
 import { UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
-
-import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 
 const { LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 

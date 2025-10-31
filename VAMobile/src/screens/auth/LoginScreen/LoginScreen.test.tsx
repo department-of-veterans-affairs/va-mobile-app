@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { LoginScreen } from 'screens/index'
 import { context, render } from 'testUtils'
-
-import LoginScreen from './LoginScreen'
 
 context('LoginScreen', () => {
   beforeEach(() => {

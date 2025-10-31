@@ -3,9 +3,8 @@ import { Alert } from 'react-native'
 
 import { t } from 'i18next'
 
+import NoAccessSM from 'screens/HealthScreen/SecureMessaging/NoAccessSM/NoAccessSM'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import NoAccessSM from './NoAccessSM'
 
 context('NoAccessSM', () => {
   beforeEach(() => {

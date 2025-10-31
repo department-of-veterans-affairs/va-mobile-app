@@ -20,6 +20,7 @@ import {
   TextViewProps,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import NoDisabilityRatings from 'screens/BenefitsScreen/DisabilityRatingsScreen/NoDisabilityRatings/NoDisabilityRatings'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { isValidDisabilityRating } from 'utils/claims'
@@ -28,8 +29,6 @@ import { capitalizeFirstLetter, displayedTextPhoneNumber } from 'utils/formattin
 import { useDowntime, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import NoDisabilityRatings from './NoDisabilityRatings/NoDisabilityRatings'
 
 function DisabilityRatingsScreen() {
   const theme = useTheme()

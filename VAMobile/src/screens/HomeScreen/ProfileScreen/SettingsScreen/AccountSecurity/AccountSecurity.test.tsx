@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/AccountSecurity/AccountSecurity'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AccountSecurity from './AccountSecurity'
 
 context('AccountSecurity', () => {
   beforeEach(() => {

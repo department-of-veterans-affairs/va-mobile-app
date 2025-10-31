@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/NoClaimLettersScreen/NoClaimLettersScreen'
 import { context, render } from 'testUtils'
-
-import NoClaimLettersScreen from './NoClaimLettersScreen'
 
 context('NoClaimLettersScreen', () => {
   it('Renders NoClaimLettersScreen', () => {

@@ -4,12 +4,11 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { PaymentsGetData } from 'api/types'
+import PaymentBreakdownModal from 'screens/HomeScreen/PaymentBreakdownModal/PaymentBreakdownModal'
 import { get } from 'store/api'
 import { context, render } from 'testUtils'
 import { when } from 'testUtils'
 import { formatDateUtc } from 'utils/formattingUtils'
-
-import PaymentBreakdownModal from './PaymentBreakdownModal'
 
 const PAYMENT_HISTORY_PAYLOAD = {
   data: [

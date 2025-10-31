@@ -4,9 +4,8 @@ import { Alert } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import TermsAndConditions from 'screens/HealthScreen/SecureMessaging/TermsAndConditions/TermsAndConditions'
 import { context, render } from 'testUtils'
-
-import TermsAndConditions from './TermsAndConditions'
 
 context('TermsAndConditions', () => {
   beforeEach(() => {

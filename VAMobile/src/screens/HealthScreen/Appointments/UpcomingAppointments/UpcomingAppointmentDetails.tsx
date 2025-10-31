@@ -9,6 +9,17 @@ import { ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'compon
 import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import {
+  ClaimExamAppointment,
+  CommunityCareAppointment,
+  InPersonVAAppointment,
+  PhoneAppointment,
+  VideoAtlasAppointment,
+  VideoGFEAppointment,
+  VideoHomeAppointment,
+  VideoVAAppointment,
+} from 'screens/HealthScreen/Appointments/AppointmentTypeComponents'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import {
@@ -19,18 +30,6 @@ import {
   isAPendingAppointment,
 } from 'utils/appointments'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
-import {
-  ClaimExamAppointment,
-  CommunityCareAppointment,
-  InPersonVAAppointment,
-  PhoneAppointment,
-  VideoAtlasAppointment,
-  VideoGFEAppointment,
-  VideoHomeAppointment,
-  VideoVAAppointment,
-} from '../AppointmentTypeComponents'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 

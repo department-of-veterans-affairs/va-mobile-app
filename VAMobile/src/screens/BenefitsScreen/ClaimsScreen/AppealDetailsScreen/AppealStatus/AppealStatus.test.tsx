@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import AppealStatus from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealStatus'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AppealStatus from './AppealStatus'
 
 context('AppealStatus', () => {
   const initializeTestInstance = (numAppealsAhead: number | undefined, isActiveAppeal?: boolean) => {

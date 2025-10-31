@@ -7,11 +7,10 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, FeatureLandingTemplate, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { DIRECT_DEPOSIT } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { formatDateUtc } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { PaymentsStackParamList } from '../../PaymentsStackScreens'
 
 type PaymentDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentDetails'>
 

@@ -4,11 +4,10 @@ import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import BiometricsPreferenceScreen from 'screens/auth/BiometricsPreferenceScreen/BiometricsPreferenceScreen'
 import { InitialState, setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/slices'
 import { context, render } from 'testUtils'
 import { getSupportedBiometricText } from 'utils/formattingUtils'
-
-import BiometricsPreferenceScreen from './BiometricsPreferenceScreen'
 
 jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')

@@ -4,10 +4,11 @@ import { ScrollView } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import ClaimPhase, {
+  ClaimPhaseProps,
+} from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/ClaimPhase'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { context, render } from 'testUtils'
-
-import { claim } from '../../../claimData'
-import ClaimPhase, { ClaimPhaseProps } from './ClaimPhase'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

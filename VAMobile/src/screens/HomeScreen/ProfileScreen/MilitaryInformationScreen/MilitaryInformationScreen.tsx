@@ -20,11 +20,10 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import NoMilitaryInformationAccess from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen/NoMilitaryInformationAccess'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-
-import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 type MilitaryInformationScreenProps = StackScreenProps<HomeStackParamList, 'MilitaryInformation'>
 

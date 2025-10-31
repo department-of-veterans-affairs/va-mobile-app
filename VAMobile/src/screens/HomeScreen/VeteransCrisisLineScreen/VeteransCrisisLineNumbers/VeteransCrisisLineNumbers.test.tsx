@@ -3,9 +3,8 @@ import { Alert, Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import VeteransCrisisLineNumbers from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineNumbers/VeteransCrisisLineNumbers'
 import { context, render } from 'testUtils'
-
-import VeteransCrisisLineNumbers from './VeteransCrisisLineNumbers'
 
 context('VeteransCrisisLineNumbers', () => {
   beforeEach(() => {

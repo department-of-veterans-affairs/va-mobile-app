@@ -5,10 +5,9 @@ import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation'
 import { AddressData, DeliveryPointValidationTypesConstants, UserContactInformation } from 'api/types'
+import EditAddressScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditAddressScreen/EditAddressScreen'
 import { post } from 'store/api'
 import { QueriesData, mockNavProps, render, when } from 'testUtils'
-
-import EditAddressScreen from './EditAddressScreen'
 
 const residentialAddress: AddressData = {
   id: 0,

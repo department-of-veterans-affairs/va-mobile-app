@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import GenericOnboarding from 'screens/OnboardingCarousel/GenericOnboarding/GenericOnboarding'
 import { context, render } from 'testUtils'
-
-import GenericOnboarding from './GenericOnboarding'
 
 context('GenericOnboarding', () => {
   const initializeTestInstance = (displayLogo: boolean = false) => {

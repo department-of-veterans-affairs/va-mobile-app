@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import WebviewScreen from 'screens/WebviewScreen/WebviewScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import WebviewScreen from './WebviewScreen'
 
 context('WebviewScreen', () => {
   const mockProps = mockNavProps(

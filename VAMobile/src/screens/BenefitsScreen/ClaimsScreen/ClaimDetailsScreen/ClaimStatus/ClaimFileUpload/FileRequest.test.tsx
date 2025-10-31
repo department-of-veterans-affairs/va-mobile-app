@@ -4,11 +4,10 @@ import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimEventData } from 'api/types'
+import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import * as api from 'store/api'
 import { QueriesData, context, fireEvent, mockNavProps, render, screen, waitFor, when } from 'testUtils'
-
-import FileRequest from './FileRequest'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

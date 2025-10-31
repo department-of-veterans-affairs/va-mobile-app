@@ -4,10 +4,9 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { Vaccine } from 'api/types'
+import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import VaccineDetailsScreen from './VaccineDetailsScreen'
 
 context('VaccineDetailsScreen', () => {
   const defaultVaccine = {

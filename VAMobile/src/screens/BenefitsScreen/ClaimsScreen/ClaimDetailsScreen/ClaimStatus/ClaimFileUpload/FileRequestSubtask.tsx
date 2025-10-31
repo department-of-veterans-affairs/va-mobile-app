@@ -8,14 +8,13 @@ import { RootNavStackParamList } from 'App'
 import { ClaimData, ClaimEventData } from 'api/types'
 import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
-
-import AskForClaimDecision from './AskForClaimDecision/AskForClaimDecision'
-import FileRequest from './FileRequest'
-import FileRequestDetails from './FileRequestDetails/FileRequestDetails'
-import SelectFile from './SelectFile/SelectFile'
-import UploadFile from './SelectFile/UploadFile/UploadFile'
-import TakePhotos from './TakePhotos/TakePhotos'
-import UploadOrAddPhotos from './TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
+import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
+import FileRequest from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequest'
+import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
+import SelectFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
+import UploadFile from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
+import TakePhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
+import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 
 export type FileRequestStackParams = {
   AskForClaimDecision: {

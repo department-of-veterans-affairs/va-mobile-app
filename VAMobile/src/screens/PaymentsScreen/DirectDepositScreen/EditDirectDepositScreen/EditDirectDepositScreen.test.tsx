@@ -4,10 +4,9 @@ import { t } from 'i18next'
 
 import { PaymentAccountData } from 'api/types'
 import { DirectDepositErrors } from 'constants/errors'
+import EditDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/EditDirectDepositScreen/EditDirectDepositScreen'
 import * as api from 'store/api'
 import { context, fireEvent, mockNavProps, render, screen, waitFor, when } from 'testUtils'
-
-import EditDirectDepositScreen from './EditDirectDepositScreen'
 
 context('EditDirectDepositScreen', () => {
   const initializeTestInstance = () => {

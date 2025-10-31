@@ -4,10 +4,9 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoPaymentsScreen from 'screens/PaymentsScreen/PaymentHistory/NoPayments/NoPaymentsScreen'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import NoPaymentsScreen from './NoPaymentsScreen'
 
 context('NoPaymentsScreen', () => {
   beforeEach(() => {

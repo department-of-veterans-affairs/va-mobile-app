@@ -4,10 +4,9 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import IndividualMessageErrorComponent from 'screens/HealthScreen/SecureMessaging/ViewMessage/IndividualMessageErrorComponent'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 context('IndividualMessageErrorComponent', () => {
   beforeEach(() => {

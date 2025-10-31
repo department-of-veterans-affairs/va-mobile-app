@@ -7,10 +7,9 @@ import { t } from 'i18next'
 
 import { notificationKeys } from 'api/notifications'
 import { GetPushPrefsResponse, PushPreference } from 'api/types'
+import NotificationsSettingsScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/NotificationsSettingsScreen/NotificationsSettingsScreen'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import NotificationsSettingsScreen from './NotificationsSettingsScreen'
 
 let mockPushEnabled = false
 jest.mock('utils/notifications', () => {

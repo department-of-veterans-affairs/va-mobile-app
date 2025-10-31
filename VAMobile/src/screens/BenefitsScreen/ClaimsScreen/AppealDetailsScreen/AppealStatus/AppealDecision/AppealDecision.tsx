@@ -6,9 +6,8 @@ import _ from 'underscore'
 import { AppealAOJTypes, AppealStatusDetailsIssue } from 'api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { getAojDescription } from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealCurrentStatus/AppealCurrentStatus'
 import { useTheme } from 'utils/hooks'
-
-import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>

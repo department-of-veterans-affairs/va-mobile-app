@@ -4,10 +4,9 @@ import { ScrollView } from 'react-native'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import ClaimTimeline from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/ClaimTimeline'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { context, render } from 'testUtils'
-
-import { claim } from '../../../claimData'
-import ClaimTimeline from './ClaimTimeline'
 
 context('ClaimTimeline', () => {
   const { attributes, id } = claim

@@ -4,10 +4,9 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import UploadOrAddPhotos from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import { claim as Claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
-
-import UploadOrAddPhotos from './UploadOrAddPhotos'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

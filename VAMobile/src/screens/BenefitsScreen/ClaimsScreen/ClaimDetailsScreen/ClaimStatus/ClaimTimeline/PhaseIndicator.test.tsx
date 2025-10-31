@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import PhaseIndicator from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 import { context, render } from 'testUtils'
-
-import PhaseIndicator from './PhaseIndicator'
 
 context('PhaseIndicator', () => {
   const initializeTextInstance = (phase: number, current: number) => {

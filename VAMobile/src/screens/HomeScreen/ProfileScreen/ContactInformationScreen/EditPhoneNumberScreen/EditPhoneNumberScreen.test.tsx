@@ -7,9 +7,8 @@ import { t } from 'i18next'
 
 import { PhoneData, PhoneType } from 'api/types'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
+import EditPhoneNumberScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import { mockNavProps, render } from 'testUtils'
-
-import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 
 describe('EditPhoneNumberScreen', () => {
   let props: StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>

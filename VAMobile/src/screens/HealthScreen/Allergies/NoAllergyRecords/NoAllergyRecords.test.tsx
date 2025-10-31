@@ -3,9 +3,8 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import NoAllergyRecords from 'screens/HealthScreen/Allergies/NoAllergyRecords/NoAllergyRecords'
 import { context, render } from 'testUtils'
-
-import NoAllergyRecords from './NoAllergyRecords'
 
 context('NoVaccineRecords', () => {
   beforeEach(() => {
