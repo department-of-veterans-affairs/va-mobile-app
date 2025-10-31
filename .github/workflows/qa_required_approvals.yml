@@ -23,7 +23,6 @@ jobs:
       - name: Check QA approval
         shell: bash
         run: |
-          # Original QA approval logic starts here
           if [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]
             then
             echo "PR opened by Dependabot. Skipping QA approval check."
@@ -62,7 +61,7 @@ jobs:
               else
                 echo 'This PR requires Engineer approval before QA review'
                 exit 1
-              fi  
+              fi 
           else
             echo 'This PR requires two approvals, including one QA approval, before merging.'
             exit 1
