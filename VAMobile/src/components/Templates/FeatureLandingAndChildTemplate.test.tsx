@@ -1,10 +1,8 @@
 import React from 'react'
 
-import TextView from 'components/TextView'
+import { FeatureLandingTemplate, TextView } from 'components'
 import { HeaderButton } from 'components/types'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import { FeatureLandingTemplate } from './FeatureLandingAndChildTemplate'
 
 context('FeatureLandingAndChildTemplate', () => {
   const onPressSpy = jest.fn()

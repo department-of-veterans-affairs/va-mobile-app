@@ -2,11 +2,9 @@ import React, { FC } from 'react'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, TextView } from 'components'
+import { InlineText } from 'components/types'
 import { useTheme } from 'utils/hooks'
-
-import Box from './Box'
-import TextView from './TextView'
-import { InlineText } from './types'
 
 export type InlineTextWithIconsProps = {
   /** replaces left text with icon when true */

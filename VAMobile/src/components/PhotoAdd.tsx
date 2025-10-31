@@ -4,11 +4,9 @@ import { Pressable, PressableProps } from 'react-native'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, BoxProps, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-
-import TextView, { TextViewProps } from './TextView'
-import { Box, BoxProps } from './index'
 
 type PhotoAddProps = {
   /** width of the component */

@@ -1,9 +1,8 @@
 import React from 'react'
 
+import { CategoryLanding } from 'components/Templates/CategoryLanding'
 import { HeaderButton } from 'components/types'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import { CategoryLanding } from './CategoryLanding'
 
 context('CategoryLandingTemplate', () => {
   const onPressSpy = jest.fn()

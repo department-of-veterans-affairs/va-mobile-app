@@ -5,12 +5,10 @@ import { Pressable, PressableProps } from 'react-native'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { mapObject, values } from 'underscore'
 
+import { Box, BoxProps, TextView } from 'components'
+import SelectionListItem, { SelectionListItemObj } from 'components/SelectionList/SelectionListItem'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from '../Box'
-import TextView from '../TextView'
-import SelectionListItem, { SelectionListItemObj } from './SelectionListItem'
 
 export type SelectionListProps = {
   /** list of items to show */

@@ -1,9 +1,7 @@
 import React from 'react'
 
+import { List, TextView } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import List from './List'
-import TextView from './TextView'
 
 import Mock = jest.Mock
 

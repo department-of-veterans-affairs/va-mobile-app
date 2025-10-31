@@ -2,9 +2,12 @@ import React from 'react'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
+import HeaderBanner, {
+  HeaderLeftButtonProps,
+  HeaderRightButtonProps,
+  HeaderStaticTitleProps,
+} from 'components/Templates/HeaderBanner'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import HeaderBanner, { HeaderLeftButtonProps, HeaderRightButtonProps, HeaderStaticTitleProps } from './HeaderBanner'
 
 context('HeaderBanner', () => {
   const onPressSpy = jest.fn(() => {})

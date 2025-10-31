@@ -3,16 +3,21 @@ import { useTranslation } from 'react-i18next'
 
 import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { ButtonDecoratorType } from 'components'
+import {
+  Box,
+  ButtonDecoratorType,
+  InlineTextWithIcons,
+  InlineTextWithIconsProps,
+  LabelTag,
+  LabelTagTypeConstants,
+  List,
+  ListItemObj,
+  ListProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { READ } from 'constants/secureMessaging'
 import { generateTestIDForInlineTextIconList } from 'utils/common'
 import { useTheme } from 'utils/hooks'
-
-import { READ } from '../constants/secureMessaging'
-import Box from './Box'
-import { InlineTextWithIcons } from './InlineTextWithIcons'
-import LabelTag, { LabelTagTypeConstants } from './LabelTag'
-import { InlineTextWithIconsProps, List, ListItemObj, ListProps } from './index'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}

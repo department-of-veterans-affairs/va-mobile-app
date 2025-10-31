@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { LoadingComponent } from 'components'
 import { context, render } from 'testUtils'
-
-import LoadingComponent from './LoadingComponent'
 
 context('LoadingComponent', () => {
   beforeEach(() => {

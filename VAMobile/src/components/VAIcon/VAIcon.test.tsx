@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { VAIcon } from 'components'
 import { context, render, screen } from 'testUtils'
-
-import VAIcon from './VAIcon'
 
 jest.mock('../../utils/hooks', () => {
   const original = jest.requireActual('../../utils/hooks')

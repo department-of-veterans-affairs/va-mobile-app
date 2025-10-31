@@ -3,9 +3,8 @@ import { Pressable } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import Box, { BoxProps } from 'components/Box'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from '../Box'
 
 export type SelectionListItemObj = {
   /** Display content for the list item */

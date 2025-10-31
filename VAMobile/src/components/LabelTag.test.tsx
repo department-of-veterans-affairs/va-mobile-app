@@ -1,8 +1,7 @@
 import React from 'react'
 
+import LabelTag from 'components/LabelTag'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import LabelTag from './LabelTag'
 
 context('LabelTag', () => {
   const onPressSpy = jest.fn()

@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { VAImage } from 'components'
 import { context, render, screen } from 'testUtils'
-
-import VAImage from './VAImage'
 
 jest.mock('../../utils/platform', () => ({
   isIOS: jest.fn(() => false),

@@ -1,8 +1,7 @@
 import React from 'react'
 
+import VATextInput from 'components/FormWrapper/FormFields/VATextInput'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import VATextInput from './VATextInput'
 
 context('VATextInput', () => {
   const onChangeSpy = jest.fn()

@@ -2,11 +2,9 @@ import React, { FC } from 'react'
 
 import _ from 'underscore'
 
+import { BackgroundVariant, Box, FontVariant, TextView, TextViewProps } from 'components'
 import { VATextColors } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BackgroundVariant } from './Box'
-import TextView, { FontVariant, TextViewProps } from './TextView'
 
 /**
  * Props for item in {@link listOfText}

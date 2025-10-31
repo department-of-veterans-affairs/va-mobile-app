@@ -4,13 +4,11 @@ import { Pressable, PressableProps } from 'react-native'
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
+import { Box, BoxProps, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from './Box'
-import TextView from './TextView'
 
 export type PaginationProps = {
   /** page number */

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import { VABulletList } from 'components'
 import { context, render } from 'testUtils'
-
-import VABulletList from './VABulletList'
 
 context('VABulletList', () => {
   beforeEach(() => {

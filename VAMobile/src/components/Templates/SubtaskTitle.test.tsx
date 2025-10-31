@@ -1,8 +1,7 @@
 import React from 'react'
 
+import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { context, render, screen } from 'testUtils'
-
-import SubtaskTitle from './SubtaskTitle'
 
 context('SubtaskTitle', () => {
   beforeEach(() => {

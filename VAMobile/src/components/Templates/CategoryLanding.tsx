@@ -12,11 +12,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { CrisisLineButton, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  CrisisLineButton,
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { useTheme } from 'utils/hooks'
-
-import HeaderBanner, { HeaderBannerProps } from './HeaderBanner'
 
 /* To use these templates:
 1. Wrap the screen content you want in <CategoryLanding> </CategoryLanding> and supply the appropriate props for desired functionality
