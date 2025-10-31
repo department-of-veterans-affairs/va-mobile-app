@@ -31,6 +31,9 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
 		B27EF35E2CA1E2B900260C8D /* assets in Resources */ = {isa = PBXBuildFile; fileRef = B27EF35D2CA1E2B800260C8D /* assets */; };
+		C14286A22E45106500B43C45 /* RNDatePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C142869F2E45106500B43C45 /* RNDatePickerManager.m */; };
+		C14286A32E45106500B43C45 /* RNDatePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14286A02E45106500B43C45 /* RNDatePickerManager.swift */; };
+		C14286A42E45106500B43C45 /* RNDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14286A12E45106500B43C45 /* RNDatePicker.swift */; };
 		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
 		EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */; };
@@ -80,6 +83,9 @@
 		8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Italic.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Italic.ttf"; sourceTree = "<group>"; };
 		9B813ABE0AE22DAE9FEB2530 /* Pods-VAMobile.qa.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.qa.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.qa.xcconfig"; sourceTree = "<group>"; };
 		B27EF35D2CA1E2B800260C8D /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
+		C142869F2E45106500B43C45 /* RNDatePickerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNDatePickerManager.m; sourceTree = "<group>"; };
+		C14286A02E45106500B43C45 /* RNDatePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNDatePickerManager.swift; sourceTree = "<group>"; };
+		C14286A12E45106500B43C45 /* RNDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNDatePicker.swift; sourceTree = "<group>"; };
 		DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Bold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf"; sourceTree = "<group>"; };
@@ -101,6 +107,9 @@
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
+				C142869F2E45106500B43C45 /* RNDatePickerManager.m */,
+				C14286A02E45106500B43C45 /* RNDatePickerManager.swift */,
+				C14286A12E45106500B43C45 /* RNDatePicker.swift */,
 				4091AC6226B0850E00DFE08C /* VAMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -450,6 +459,9 @@
 				40B4AE292682CC8A00BD1DD9 /* RNSecureRandom.swift in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
+				C14286A22E45106500B43C45 /* RNDatePickerManager.m in Sources */,
+				C14286A32E45106500B43C45 /* RNDatePickerManager.swift in Sources */,
+				C14286A42E45106500B43C45 /* RNDatePicker.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				1101F1DD291F0F8D00366337 /* RNInAppUpdate.m in Sources */,
 				4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */,

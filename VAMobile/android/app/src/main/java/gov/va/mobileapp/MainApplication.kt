@@ -24,6 +24,7 @@ import com.wix.reactnativenotifications.core.notification.IPushNotification
 import gov.va.mobileapp.native_modules.CustomTabsIntentManager
 import gov.va.mobileapp.native_modules.DeviceDataPackage
 import gov.va.mobileapp.native_modules.RNCalendarPackage
+import gov.va.mobileapp.native_modules.RNDatePickerPackage
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage
 import gov.va.mobileapp.native_modules.RNInAppUpdatePackage
 import gov.va.mobileapp.native_modules.RNNativeUIUtilitiesPackage
@@ -40,6 +41,7 @@ class MainApplication : Application(), ReactApplication, INotificationsApplicati
                     // Packages that cannot be autolinked yet can be added manually here, for example:
                     add(DeviceDataPackage())
                     add(RNCalendarPackage())
+                    add(RNDatePickerPackage())
                     add(RNCheckVoiceOverPackage())
                     add(RNNotificationPrefsPackage())
                     add(RNSecureRandomPackage())
