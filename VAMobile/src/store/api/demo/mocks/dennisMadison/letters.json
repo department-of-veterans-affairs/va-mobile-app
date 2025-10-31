@@ -18,6 +18,11 @@
             "letterType": "civil_service"
           },
           {
+            "name": "Certificate of Eligibility for Home Loan Letter",
+            "letterType": "certificate_of_eligibility_home_loan",
+            "coeStatus": "AVAILABLE"
+          },
+          {
             "name": "Commissary Letter",
             "letterType": "commissary"
           },

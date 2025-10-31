@@ -34,6 +34,8 @@ export type LetterTypes =
 export type LetterData = {
   name: string
   letterType: LetterTypes
+  coeStatus?: string
+  referenceNum?: string
 }
 
 export type LettersList = Array<LetterData>
