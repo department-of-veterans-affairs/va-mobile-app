@@ -23,13 +23,13 @@ jobs:
           case $WEEK_NUM in
             40) REVIEWER="matthew-df"; BACKUP="dftony";;
             41) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            42) REVIEWER="jonbindbeutel"; BACKUP="AdryienH";;
+            42) REVIEWER="dumathane"; BACKUP="AdryienH";;
             43) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
             44) REVIEWER="keli13"; BACKUP="jmarchi";;
             45) REVIEWER="dftony"; BACKUP="keli13";;
             46) REVIEWER="matthew-df"; BACKUP="dftony";;
             47) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            48) REVIEWER="jonbindbeutel"; BACKUP="AdryienH";;
+            48) REVIEWER="dumathane"; BACKUP="AdryienH";;
             49) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
             50) REVIEWER="keli13"; BACKUP="jmarchi";;
             51) REVIEWER="dftony"; BACKUP="keli13";;
@@ -39,7 +39,7 @@ jobs:
           declare -A GITHUB_TO_SLACK=(
             ["AdryienH"]="U08N85KC05Q"
             ["jmarchi"]="U01APSBG86A"
-            ["jonbindbeutel"]="U08HW514Y8Y"
+            ["dumathane"]="U08HW514Y8Y"
             ["keli13"]="U01ATFT0XBP"
             ["dftony"]="U08HW41SBUG"
             ["matthew-df"]="U08UWE4S3GW"
@@ -94,17 +94,3 @@ jobs:
             -H "Content-type: application/json" \
             -d "{\"channel\": \"$CHANNEL_ID\", \"text\": \"$MESSAGE\"}" \
             https://slack.com/api/chat.postMessage
-
-      # - name: Update channel topic
-      #   run: |
-      #     SLACK_MENTION="${{ steps.select-reviewer.outputs.slack_mention }}"
-      #     BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
-      #     CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
-      #     URL="https://department-of-veterans-affairs.github.io/va-mobile-app/docs/Engineering/BackEnd/Monitoring/ReviewProcedure/"
-      #     TOPIC_TEXT="Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.\nPull Request reviewer rotation this week: $SLACK_MENTION"
-      #     echo "Updating channel topic..."
-      #     curl -X POST \
-      #       -H "Authorization: Bearer $SLACK_API_TOKEN" \
-      #       -H "Content-type: application/json" \
-      #       -d "{\"channel\": \"$CHANNEL_ID\", \"topic\": \"$TOPIC_TEXT\"}" \
-      #       https://slack.com/api/conversations.setTopic
