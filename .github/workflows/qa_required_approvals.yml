@@ -21,7 +21,7 @@ jobs:
         id: check-qa-approval
         shell: bash
         env:
-          APP_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
         run: |
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
