@@ -18,7 +18,7 @@ export type FormValidationAlertProps = {
   /** optional list of alertbox failed reasons*/
   errorList?: Array<string>
 }
-// test check
+
 /**Common component to show a message alert when submitting a form */
 const FormValidationAlert: FC<FormValidationAlertProps> = ({
   description,
