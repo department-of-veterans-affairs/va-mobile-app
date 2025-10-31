@@ -11,21 +11,21 @@ import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { Box, CategoryLanding, CategoryLandingAlert, LargeNavButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import AppealDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import ClaimLettersScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 import ClaimsHistoryScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimsHistoryScreen/ClaimsHistoryScreen'
 import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScreen'
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
+import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { BenefitsStackParamList } from './BenefitsStackScreens'
-import ClaimLettersScreen from './ClaimsScreen/ClaimLettersScreen/ClaimLettersScreen'
 
 type BenefitsScreenProps = StackScreenProps<BenefitsStackParamList, 'Benefits'>
 
@@ -132,6 +132,11 @@ function BenefitsStackScreen() {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaimsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <BenefitsScreenStack.Screen
         name="ClaimLettersScreen"
         component={ClaimLettersScreen}

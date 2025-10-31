@@ -3,7 +3,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native'
 import { QueryKey, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { appointmentsKeys } from 'api/appointments'
-import { travelPayMutationKeys } from 'api/travelPay'
+import { travelPayKeys, travelPayMutationKeys } from 'api/travelPay'
 import {
   AppointmentData,
   AppointmentsGetData,
@@ -78,6 +78,11 @@ export const useSubmitTravelClaim = (appointmentId: string, appointmentRouteKey:
       // Update the query data for the valid appointment queries
       newAppointmentsQueryData.forEach(([queryKey, queryData]) => {
         queryClient.setQueryData(queryKey, queryData)
+      })
+
+      // Invalidate travel pay claims list queries since we just submitted a new claim
+      queryClient.invalidateQueries({
+        queryKey: [travelPayKeys.claims],
       })
 
       if (aptmnt) {
