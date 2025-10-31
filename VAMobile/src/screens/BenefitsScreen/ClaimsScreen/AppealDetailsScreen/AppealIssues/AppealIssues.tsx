@@ -1,17 +1,18 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealIssue, AppealIssueLastAction } from 'api/types'
+import { AppealIssue, AppealIssueLastAction, AppealTypes, AppealTypesConstants } from 'api/types'
 import { AccordionCollapsible, Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type AppealIssuesProps = {
+  appealType: AppealTypes
   issues: Array<AppealIssue>
 }
 
-function AppealIssues({ issues }: AppealIssuesProps) {
+function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -96,22 +97,24 @@ function AppealIssues({ issues }: AppealIssuesProps) {
   }
   return (
     <>
-      <AccordionCollapsible
-        header={
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('appealDetails.issuesDifferentHeader')}
-          </TextView>
-        }
-        expandedContent={
-          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
-            mt={theme.dimensions.condensedMarginBetween}>
-            {t('appealDetails.issuesDifferentBody')}
-          </TextView>
-        }
-      />
+      {appealType === AppealTypesConstants.appeal || appealType === AppealTypesConstants.legacyAppeal ? (
+        <AccordionCollapsible
+          header={
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('appealDetails.issuesDifferentHeader')}
+            </TextView>
+          }
+          expandedContent={
+            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+            <TextView
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
+              mt={theme.dimensions.condensedMarginBetween}>
+              {t('appealDetails.issuesDifferentBody')}
+            </TextView>
+          }
+        />
+      ) : null}
       {showCurrentlyOnAppeal ? (
         <TextArea
           borderBoxStyle={{
