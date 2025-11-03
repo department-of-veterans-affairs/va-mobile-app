@@ -5,7 +5,7 @@ on:
     inputs:
       va_email:
         description: 'VA Email address to lookup Slack ID for'
-        required: true
+        required: false
         type: string
       git_handle:
         description: 'Git handle to lookup email and then Slack ID for'
@@ -15,17 +15,22 @@ on:
     inputs:
       va_email:
         description: 'VA Email address to lookup Slack ID for'
-        required: true
+        required: false
         type: string
       git_handle:
         description: 'Git handle to lookup email and then Slack ID for'
         required: false
         type: string
+    outputs:
+      slackId:
+        description: 'The Slack user ID found for the given input.'
+        value: ${{ jobs.get-slack-name.outputs.slackId }}
 
 jobs:
   get-slack-name:
     runs-on: ubuntu-latest
-
+    outputs:
+      slackId: ${{ steps.output-slack-id.outputs.slackId }}
     steps:
       - name: Determine and Validate Target Email
         id: determine_and_validate_email
@@ -35,6 +40,11 @@ jobs:
           GIT_HANDLE="${{ github.event.inputs.git_handle }}"
           EMAIL_INPUT="${{ github.event.inputs.va_email }}"
           TARGET_EMAIL=""
+
+          if [[ -z "$GIT_HANDLE" && -z "$EMAIL_INPUT" ]]; then
+            echo "Error: You must provide either a 'git_handle' or a 'va_email'."
+            exit 1
+          fi
 
           MAP_SOURCE=""
           if [[ -n "${{ vars.EMAIL_MAP }}" ]]; then
@@ -104,15 +114,15 @@ jobs:
         env:
           SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
-      - name: Use Slack username
-        id: output-slack-user-id
+      - name: Output Slack ID
+        id: output-slack-id
         run: |
           FINAL_SLACK_ID="${{ steps.lookup_slack_id_by_email.outputs.slack_user_id }}"
 
           if [ -n "$FINAL_SLACK_ID" ]; then
-            echo "Final Slack User ID is: $FINAL_SLACK_ID"
-            echo "slack_username=$FINAL_SLACK_ID" >> "$GITHUB_OUTPUT" 
+            echo "Final Slack ID is: $FINAL_SLACK_ID"
+            echo "slackId=$FINAL_SLACK_ID" >> "$GITHUB_OUTPUT" 
           else
-            echo "Could not determine Slack User ID for the provided email."
-            echo "slack_username=unknown" >> "$GITHUB_OUTPUT"
+            echo "Could not determine Slack ID for the provided email."
+            echo "slackId=unknown" >> "$GITHUB_OUTPUT"
           fi
