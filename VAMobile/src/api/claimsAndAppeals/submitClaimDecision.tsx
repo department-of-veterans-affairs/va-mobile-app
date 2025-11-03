@@ -1,12 +1,11 @@
 import { SetDataOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
+import { claimsAndAppealsKeys } from 'api/claimsAndAppeals/queryKeys'
 import { ClaimData, ClaimDecisionResponseData } from 'api/types'
 import { post } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { claimsAndAppealsKeys } from './queryKeys'
 
 /**
  * Notifes VA to make a claim decision
