@@ -453,8 +453,8 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
       if (isIOS()) {
         setAppInactive(state !== 'active')
       }
+      return (): void => sub?.remove()
     })
-    return (): void => sub?.remove()
   }, [])
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in
