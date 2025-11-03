@@ -19,8 +19,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { InfoRow } from 'screens/PaymentsScreen/Debts/PayDebt/InfoRow'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+const { PAY_VA_GOV_URL } = getEnv()
 
 type PayDebtScreenProps = StackScreenProps<PaymentsStackParamList, 'PayDebt'>
 
@@ -84,7 +87,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
 
             <LinkWithAnalytics
               type="url"
-              url={'https://www.pay.va.gov/'}
+              url={PAY_VA_GOV_URL}
               text={t('debts.payDebt.payOnSite')}
               a11yLabel={a11yLabelVA(t('debts.payDebt.payOnSite'))}
               a11yHint={t('debts.payDebt.payOnSite')}
