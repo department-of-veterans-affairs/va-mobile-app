@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import FloatingButton from 'components/FloatingButton'
 import { context, render, waitFor } from 'testUtils'
-
-import FloatingButton from './FloatingButton'
 
 context('FloatingButton', () => {
   const onPressSpy = jest.fn()
