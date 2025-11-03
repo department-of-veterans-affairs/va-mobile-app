@@ -12,6 +12,15 @@ jest.mock('utils/analytics', () => ({
   logAnalyticsEvent: jest.fn(),
 }))
 
+// Mock environment variables
+jest.mock('utils/env', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    LINK_URL_TRAVEL_EXPENSE_DEDUCTIBLE:
+      'https://www.va.gov/resources/reimbursed-va-travel-expenses-and-mileage-rate#monthlydeductible',
+  })),
+}))
+
 // Test data
 const baseClaimDetails: TravelPayClaimDetails = {
   id: 'test-claim-id',

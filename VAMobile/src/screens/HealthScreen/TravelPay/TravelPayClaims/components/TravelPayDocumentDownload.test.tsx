@@ -133,7 +133,7 @@ context('TravelPayDocumentDownload', () => {
       await waitFor(() => {
         expect(mockDownloadFile).toHaveBeenCalledWith(
           'GET',
-          'https://api.va.gov/v0/travel-pay/claims/claim-123/documents/doc-123/download',
+          'https://api.va.gov/v0/travel-pay/claims/claim-123/documents/doc-123',
           'Decision_Letter.pdf',
           undefined,
           3,
@@ -178,7 +178,7 @@ context('TravelPayDocumentDownload', () => {
     })
 
     it('should handle download failure gracefully', async () => {
-      mockDownloadFile.mockResolvedValue(null)
+      mockDownloadFile.mockResolvedValue(undefined)
 
       renderComponent()
 
@@ -390,7 +390,7 @@ context('TravelPayDocumentDownload', () => {
         await waitFor(() => {
           expect(mockDownloadFile).toHaveBeenCalledWith(
             'GET',
-            `https://api.va.gov/v0/travel-pay/claims/claim-123/documents/${doc.documentId}/download`,
+            `https://api.va.gov/v0/travel-pay/claims/claim-123/documents/${doc.documentId}`,
             doc.filename,
             undefined,
             3,
@@ -460,7 +460,7 @@ context('TravelPayDocumentDownload', () => {
       await waitFor(() => {
         expect(mockDownloadFile).toHaveBeenCalledWith(
           'GET',
-          'https://api.va.gov/v0/travel-pay/claims/test-claim-456/documents/doc-123/download',
+          'https://api.va.gov/v0/travel-pay/claims/test-claim-456/documents/doc-123',
           'Decision_Letter.pdf',
           undefined,
           3,
@@ -482,7 +482,7 @@ context('TravelPayDocumentDownload', () => {
       await waitFor(() => {
         expect(mockDownloadFile).toHaveBeenCalledWith(
           'GET',
-          'https://api.va.gov/v0/travel-pay/claims/claim-456-xyz/documents/doc-123-áéí/download',
+          'https://api.va.gov/v0/travel-pay/claims/claim-456-xyz/documents/doc-123-áéí',
           'Decision_Letter.pdf',
           undefined,
           3,

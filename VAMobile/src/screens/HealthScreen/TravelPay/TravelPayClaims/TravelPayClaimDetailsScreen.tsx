@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
@@ -6,20 +6,22 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useTravelPayClaimDetails } from 'api/travelPay'
-import { Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent, TextView } from 'components'
-import { Events, UserAnalytics } from 'constants/analytics'
+import { Box, ErrorComponent, FeatureLandingTemplate, LinkWithAnalytics, LoadingComponent, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import TravelPayClaimAmount from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimAmount'
 import TravelPayClaimAppeals from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimAppeals'
+import TravelPayClaimDecisionReason from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDecisionReason'
 import TravelPayClaimHeader from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimHeader'
 import TravelPayClaimInformation from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimInformation'
 import TravelPayClaimStatusDefinition from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimStatusDefinition'
 import TravelPayDocumentDownload from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
+const { LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT } = getEnv()
 type TravelPayClaimDetailsScreenProps = StackScreenProps<HealthStackParamList, 'TravelPayClaimDetailsScreen'>
 
 function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetailsScreenProps) {
@@ -50,28 +52,6 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     refetch: refetchClaimDetails,
   } = useTravelPayClaimDetails(claimId)
   const claimDetails = claimDetailsData?.data?.attributes
-
-  // Track page view analytics when claim details are loaded
-  useEffect(() => {
-    if (claimDetails && !loadingClaimDetails && !claimDetailsError) {
-      const appointmentDate = new Date(claimDetails.appointmentDate)
-      const daysSinceAppointment = Math.floor((Date.now() - appointmentDate.getTime()) / (1000 * 60 * 60 * 24))
-
-      // Set user property to track travel pay usage
-      setAnalyticsUserProperty(UserAnalytics.vama_uses_travel_pay())
-
-      // Log page view event
-      logAnalyticsEvent(
-        Events.vama_travel_claim_detail(
-          claimDetails.id,
-          claimDetails.claimStatus,
-          claimDetails.claimName || 'travel_reimbursement',
-          daysSinceAppointment,
-          claimDetails.facilityName,
-        ),
-      )
-    }
-  }, [claimDetails, loadingClaimDetails, claimDetailsError])
 
   if (loadingClaimDetails) {
     return (
@@ -119,7 +99,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     )
   }
 
-  const { appointmentDate, claimNumber, claimStatus, documents, id } = claimDetails
+  const { appointmentDate, claimNumber, claimStatus, documents, decisionLetterReason, id } = claimDetails
 
   return (
     <FeatureLandingTemplate
@@ -136,6 +116,11 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
           {/* Status Definition */}
           <TravelPayClaimStatusDefinition claimStatus={claimStatus} />
 
+          {/* Decision Reason (for denied/partial payment claims) */}
+          {decisionLetterReason && (claimStatus === 'Denied' || claimStatus === 'Claim paid') && (
+            <TravelPayClaimDecisionReason claimStatus={claimStatus} decisionLetterReason={decisionLetterReason} />
+          )}
+
           {/* Decision Letter Download (for denied/partial payment claims) */}
           {documents && documents.length > 0 && (
             <>
@@ -147,6 +132,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
                     document={doc}
                     linkText={t('travelPay.claimDetails.document.decisionLetter')}
                     claimId={id}
+                    claimStatus={claimStatus}
                   />
                 ))}
             </>
@@ -157,6 +143,28 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
           {/* Claim Information Section */}
           <TravelPayClaimInformation claimDetails={claimDetails} />
+
+          {/* Direct Deposit Information Section */}
+          {/* Gray divider */}
+          <Box height={1} borderTopWidth={1} borderTopColor={'divider'} mt={theme.dimensions.standardMarginBetween} />
+          <Box
+            testID="travelPayDirectDepositInfo"
+            mt={theme.dimensions.standardMarginBetween}
+            mb={theme.dimensions.standardMarginBetween}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('travelPay.claimDetails.directDeposit.title')}
+            </TextView>
+            <TextView variant="MobileBody">{t('travelPay.claimDetails.directDeposit.description')}</TextView>
+            <LinkWithAnalytics
+              type="url"
+              url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
+              text={t('travelPay.claimDetails.directDeposit.link.text')}
+              a11yLabel={a11yLabelVA(t('travelPay.claimDetails.directDeposit.link.text'))}
+              testID="travelPayDirectDepositLinkTestID"
+              icon="no icon"
+              disablePadding={true}
+            />
+          </Box>
 
           {/* Appeals Section (only for denied claims) */}
           <TravelPayClaimAppeals claimDetails={claimDetails} />

@@ -45,7 +45,9 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
 
       {/* Appeals Section */}
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <TextView variant="MobileBodyBold">{t('travelPay.claimDetails.appeals.title')}</TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('travelPay.claimDetails.appeals.title')}
+        </TextView>
 
         <TextView variant="MobileBody">{t('travelPay.claimDetails.appeals.description')}</TextView>
 
@@ -55,6 +57,7 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
             document={form100998}
             linkText={t('travelPay.claimDetails.appeals.formDownload')}
             claimId={claimDetails.id}
+            claimStatus={claimDetails.claimStatus}
           />
         ) : (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -68,7 +71,11 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
         )}
 
         {/* Option 1: Online */}
-        <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween}>
+        <TextView
+          variant="MobileBodyBold"
+          mt={theme.dimensions.standardMarginBetween}
+          mb={theme.dimensions.condensedMarginBetween}
+          accessibilityRole="header">
           {t('travelPay.claimDetails.appeals.option1Title')}
         </TextView>
 
@@ -84,7 +91,7 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
         </Box>
 
         {/* Option 2: By mail */}
-        <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween}>
+        <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
           {t('travelPay.claimDetails.appeals.option2Title')}
         </TextView>
 

@@ -7,15 +7,37 @@ import { useQuery } from '@tanstack/react-query'
 
 import { TravelPayClaimDocument } from 'api/types'
 import { Box, LinkWithAnalytics } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import store from 'store'
 import { DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME } from 'store/api/demo/letters'
+import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { downloadDemoFile, downloadFile } from 'utils/filesystem'
 import { useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 
 const { API_ROOT } = getEnv()
+
+/**
+ * Determines the document type based on filename patterns
+ * Following the same logic used in TravelPayClaimDetailsScreen and TravelPayClaimInformation
+ */
+const getDocumentType = (filename: string): string => {
+  if (!filename) {
+    return 'unknown'
+  }
+  if (filename.includes('Rejection Letter')) {
+    return 'rejection_letter'
+  }
+  if (filename.includes('Decision Letter')) {
+    return 'decision_letter'
+  }
+  if (filename.includes('10-0998') || filename.includes('Form 10-0998')) {
+    return 'form_10_0998'
+  }
+  return 'user_submitted'
+}
 
 type TravelPayDocumentDownloadProps = {
   /** The document to download */
@@ -24,6 +46,8 @@ type TravelPayDocumentDownloadProps = {
   linkText?: string
   /** The claim ID for analytics */
   claimId: string
+  /** The claim status for analytics */
+  claimStatus?: string
 }
 
 /**
@@ -36,7 +60,7 @@ const downloadTravelPayDocument = async (
   filename: string,
   onPreviewDismiss: () => Promise<void> = async () => {},
 ): Promise<boolean | undefined> => {
-  const decisionLettersEndpoint = `${API_ROOT}/v0/travel-pay/claims/${claimId}/documents/${documentId}/download`
+  const decisionLettersEndpoint = `${API_ROOT}/v0/travel-pay/claims/${claimId}/documents/${documentId}`
 
   const filePath = store.getState().demo.demoMode
     ? await downloadDemoFile(DEMO_MODE_LETTER_ENDPOINT, DEMO_MODE_LETTER_NAME)
@@ -52,12 +76,13 @@ const downloadTravelPayDocument = async (
  * Component that displays a downloadable document link
  * Uses the established document download pattern from the codebase
  */
-function TravelPayDocumentDownload({ document, linkText, claimId }: TravelPayDocumentDownloadProps) {
+function TravelPayDocumentDownload({ document, linkText, claimId, claimStatus }: TravelPayDocumentDownloadProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const registerReviewEvent = useReviewEvent()
 
   const displayText = linkText || document.filename
+  const documentType = getDocumentType(document.filename)
 
   const { refetch: downloadDocument, isFetching: isDownloading } = useQuery({
     queryKey: ['travelPayDocument', claimId, document.documentId],
@@ -67,6 +92,11 @@ function TravelPayDocumentDownload({ document, linkText, claimId }: TravelPayDoc
 
   const handleDocumentDownload = () => {
     if (!isDownloading) {
+      // Log analytics for document download
+      logAnalyticsEvent(
+        Events.vama_travel_pay_doc_dl(claimId, claimStatus || 'unknown', documentType, document.filename),
+      )
+
       downloadDocument()
     }
   }
@@ -82,6 +112,7 @@ function TravelPayDocumentDownload({ document, linkText, claimId }: TravelPayDoc
         text={isDownloading ? t('travelPay.claimDetails.document.downloading') : displayText}
         a11yLabel={t('travelPay.claimDetails.document.downloadA11yLabel', { filename: displayText })}
         testID={`document-download-${document.documentId}`}
+        disablePadding={true}
       />
     </Box>
   )

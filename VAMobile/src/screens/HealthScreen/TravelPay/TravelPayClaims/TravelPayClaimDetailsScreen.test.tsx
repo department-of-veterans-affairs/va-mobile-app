@@ -33,6 +33,16 @@ jest.mock('utils/remoteConfig', () => ({
 // Mock analytics
 jest.mock('utils/analytics', () => ({
   logAnalyticsEvent: jest.fn(),
+  setAnalyticsUserProperty: jest.fn(),
+}))
+
+// Mock environment variables
+jest.mock('utils/env', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT:
+      'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/',
+  })),
 }))
 
 // Mock haptic feedback
@@ -548,6 +558,60 @@ context('TravelPayClaimDetailsScreen', () => {
 
       // Should handle empty ID gracefully
       expect(screen.queryByText(t('travelPay.claimDetails.noData'))).toBeTruthy()
+    })
+  })
+
+  describe('Direct Deposit Section', () => {
+    beforeEach(() => {
+      mockUseTravelPayClaimDetails.mockReturnValue({
+        data: createMockResponse(baseClaimDetails),
+        error: null,
+        isFetching: false,
+        refetch: jest.fn(),
+      })
+    })
+
+    it('should render direct deposit section with all elements', () => {
+      initializeTestInstance()
+
+      // Should show section with testID
+      expect(screen.getByTestId('travelPayDirectDepositInfo')).toBeTruthy()
+
+      // Should show link
+      expect(screen.getByTestId('travelPayDirectDepositLinkTestID')).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.directDeposit.link.text'))).toBeTruthy()
+    })
+
+    it('should not crash when direct deposit link is pressed', () => {
+      initializeTestInstance()
+
+      const link = screen.getByTestId('travelPayDirectDepositLinkTestID')
+      expect(() => fireEvent.press(link)).not.toThrow()
+    })
+
+    it('should render direct deposit section for all claim statuses', () => {
+      const testStatuses = ['In manual review', 'Denied', 'Partial payment', 'Claim paid', 'In process']
+
+      testStatuses.forEach((status) => {
+        const claimWithStatus = {
+          ...baseClaimDetails,
+          claimStatus: status,
+        }
+
+        mockUseTravelPayClaimDetails.mockReturnValue({
+          data: createMockResponse(claimWithStatus),
+          error: null,
+          isFetching: false,
+          refetch: jest.fn(),
+        })
+
+        initializeTestInstance()
+
+        expect(screen.getByTestId('travelPayDirectDepositInfo')).toBeTruthy()
+        expect(screen.getByText(t('travelPay.claimDetails.directDeposit.title'))).toBeTruthy()
+
+        screen.unmount()
+      })
     })
   })
 

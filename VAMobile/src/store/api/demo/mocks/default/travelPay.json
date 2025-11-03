@@ -87,13 +87,13 @@
         "attributes": {
           "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
           "claimNumber": "96b54742-b5e4-46a3-b37a-a3c47453d875",
-          "claimStatus": "Appealed",
+          "claimStatus": "Claim paid",
           "appointmentDateTime": "{{now - 6 days}}",
-          "facilityName": "Dubuque VA Clinic",
+          "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 5 days}}",
           "modifiedOn": "{{now - 5 days}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 180.0
         }
       },
       {
@@ -117,13 +117,13 @@
         "attributes": {
           "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
           "claimNumber": "a9777414-b4b5-4830-84f7-61016027c7c4",
-          "claimStatus": "Claim submitted",
+          "claimStatus": "Claim paid",
           "appointmentDateTime": "{{now - 10 days}}",
           "facilityName": "Minnepolis VA Medical Center",
           "createdOn": "{{now - 7 days}}",
           "modifiedOn": "{{now - 7 days}}",
           "totalCostRequested": 150.0,
-          "reimbursementAmount": 100.0
+          "reimbursementAmount": 150.0
         }
       },
       {
@@ -548,7 +548,7 @@
         "appointmentDate": "{{now - 2 days}}",
         "facilityName": "Cheyenne VA Medical Center",
         "totalCostRequested": 47.5,
-        "reimbursementAmount": 47.5,
+        "reimbursementAmount": 0,
         "rejectionReason": null,
         "appointment": {
           "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -627,6 +627,7 @@
           "rejectionReasonTitle": "Distance requirement not met",
           "rejectionReasonDescription": "Your home address is less than 30 miles from the VA medical facility. Travel reimbursement is only available for Veterans who live more than 30 miles from their VA medical facility or have other qualifying circumstances."
         },
+        "decisionLetterReason": "Your home address is less than 30 miles from the VA medical facility. Travel reimbursement is only available for Veterans who live more than 30 miles from their VA medical facility or have other qualifying circumstances.",
         "appointment": {
           "id": "7519378a-appointment-id",
           "appointmentSource": "VAOS",
@@ -694,17 +695,18 @@
       "type": "travelPayClaimDetails",
       "attributes": {
         "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
-        "claimNumber": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
+        "claimNumber": "96b54742-b5e4-46a3-b37a-a3c47453d875",
         "claimName": "Travel reimbursement",
         "claimantFirstName": "Samantha",
         "claimantMiddleName": "Michelle",
         "claimantLastName": "Doe",
-        "claimStatus": "Partial payment",
+        "claimStatus": "Claim paid",
         "appointmentDate": "{{now - 4 days}}",
         "facilityName": "Tomah VA Medical Center",
         "totalCostRequested": 250.0,
         "reimbursementAmount": 180.0,
         "rejectionReason": null,
+        "decisionLetterReason": "Mileage approved but parking not eligible per policy. Only travel expenses over 30 miles are reimbursable.",
         "appointment": {
           "id": "7519378a-appointment-id",
           "appointmentSource": "VAOS",
@@ -759,6 +761,79 @@
             "filename": "Decision Letter.pdf",
             "mimetype": "application/pdf",
             "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 2 days}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
+  },
+  "/v0/travel-pay/claims/3158ca03-e28b-49f9-ab6f-10ad809de7a4": {
+    "data": {
+      "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
+        "claimNumber": "a9777414-b4b5-4830-84f7-61016027c7c4",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "Claim paid",
+        "appointmentDate": "{{now - 10 days}}",
+        "facilityName": "Minnepolis VA Medical Cente",
+        "totalCostRequested": 150.0,
+        "reimbursementAmount": 150.0,
+        "rejectionReason": null,
+        "decisionLetterReason": null,
+        "appointment": {
+          "id": "7519378a-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 10 days}}",
+          "appointmentName": "Mental Health Appointment",
+          "appointmentType": "Mental Health",
+          "facilityId": "618",
+          "facilityName": "Minnepolis VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-67890",
+          "associatedClaimId": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "associatedClaimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-partial-claim-mileage",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 225.0,
+            "costSubmitted": 180.0
+          },
+          {
+            "id": "exp2-partial-claim-parking",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Medical center parking",
+            "costRequested": 25.0,
+            "costSubmitted": 0.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-partial-mileage-receipt",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc2-partial-parking-receipt",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 3 days}}"
           }
         ],
         "createdOn": "{{now - 2 days}}",

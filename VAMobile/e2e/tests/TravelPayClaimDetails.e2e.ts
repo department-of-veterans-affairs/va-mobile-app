@@ -10,10 +10,10 @@ const TravelPayClaimDetailsE2eIds = {
   TRAVEL_PAY_CLAIM_DETAILS_HEADER_NUMBER_TEST_ID: 'travelPayClaimHeaderNumber',
   TRAVEL_PAY_CLAIM_DETAILS_HEADER_STATUS_TEST_ID: 'travelPayClaimHeaderStatus',
   TRAVEL_PAY_CLAIM_DETAILS_STATUS_DEFINITION_TEST_ID: 'travelPayClaimStatusDefinitionTestID',
-  TRAVEL_PAY_CLAIM_DETAILS_WHEN_TITLE_TEST_ID: 'travelPayClaimInformationWhenTitleTestID',
+  TRAVEL_PAY_CLAIM_DETAILS_SUBMISSION_TIMELINE_TITLE_TEST_ID: 'travelPayClaimInformationSubmissionTimelineTestID',
   TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID: 'travelPayClaimInformationSubmittedOnTestID',
   TRAVEL_PAY_CLAIM_DETAILS_UPDATED_ON_TEST_ID: 'travelPayClaimInformationUpdatedOnTestID',
-  TRAVEL_PAY_CLAIM_DETAILS_WHERE_TEST_ID: 'travelPayClaimInformationWhereTestID',
+  TRAVEL_PAY_CLAIM_DETAILS_APPOINTMENT_DATE_TEST_ID: 'travelPayClaimInformationAppointmentDateTestID',
   TRAVEL_PAY_CLAIM_DETAILS_AMOUNT_TITLE_TEST_ID: 'travelPayClaimAmountTitleTestID',
   TRAVEL_PAY_CLAIM_DETAILS_AMOUNT_SUBMITTED_TEST_ID: 'travelPayClaimAmountSubmittedTestID',
   TRAVEL_PAY_CLAIM_DETAILS_AMOUNT_REIMBURSEMENT_TEST_ID: 'travelPayClaimAmountReimbursementTestID',
@@ -32,6 +32,7 @@ const TravelPayClaimDetailsE2eIds = {
 }
 
 beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
@@ -231,17 +232,20 @@ describe('Travel Pay Claim Details Screen', () => {
     })
 
     it('should display claim information section', async () => {
-      // Should show "When" section
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_WHEN_TITLE_TEST_ID))).toExist()
+      // Should show "Submission timeline" section
+      await waitFor(
+        element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMISSION_TIMELINE_TITLE_TEST_ID)),
+      ).toExist()
 
       // Should show submitted and updated dates
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID))).toExist()
 
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_UPDATED_ON_TEST_ID))).toExist()
 
-      // Should show "Where" section
-      await expect(element(by.text('Where'))).toExist()
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_WHERE_TEST_ID))).toExist()
+      // Should show "Appointment information" section
+      await waitFor(
+        element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_APPOINTMENT_DATE_TEST_ID)),
+      ).toExist()
     })
   })
 
@@ -264,6 +268,15 @@ describe('Travel Pay Claim Details Screen', () => {
       await waitFor(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_DESCRIPTION_PART1_TEST_ID)),
       ).toExist()
+
+      // Scroll down to make the link visible
+      await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)).scroll(250, 'down')
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
+      // Wait for the link to be visible
+      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_DEDUCTIBLE_INFO_LINK_TEST_ID)))
+        .toBeVisible()
+        .withTimeout(3000)
 
       await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_DEDUCTIBLE_INFO_LINK_TEST_ID)).tap()
 

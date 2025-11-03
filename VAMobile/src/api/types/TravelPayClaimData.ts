@@ -105,6 +105,7 @@ export type TravelPayClaimDetails = {
   totalCostRequested: number
   reimbursementAmount: number
   rejectionReason?: TravelPayClaimRejectionReason
+  decisionLetterReason?: string
   appointment: TravelPayClaimAppointment
   expenses: TravelPayClaimExpense[]
   documents: TravelPayClaimDocument[]

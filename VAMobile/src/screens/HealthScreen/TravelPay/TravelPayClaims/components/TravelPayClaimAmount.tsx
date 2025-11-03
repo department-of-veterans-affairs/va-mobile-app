@@ -5,7 +5,10 @@ import { TravelPayClaimDetails } from 'api/types'
 import { AccordionCollapsible, Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
+
+const { LINK_URL_TRAVEL_EXPENSE_DEDUCTIBLE } = getEnv()
 
 type TravelPayClaimAmountProps = {
   /** The claim details data */
@@ -28,8 +31,8 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
   }
 
   return (
-    <Box mt={theme.dimensions.condensedMarginBetween}>
-      <TextView variant="MobileBodyBold" testID="travelPayClaimAmountTitleTestID">
+    <Box mt={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBodyBold" accessibilityRole="header" testID="travelPayClaimAmountTitleTestID">
         {t('travelPay.claimDetails.amount.title')}
       </TextView>
 
@@ -48,10 +51,13 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
       )}
 
       {reimbursementAmount > 0 && totalCostRequested !== reimbursementAmount && (
-        <Box ml={-theme.dimensions.cardPadding}>
+        <Box ml={-theme.dimensions.cardPadding} mb={-20}>
           <AccordionCollapsible
             header={
-              <TextView variant="MobileBodyBold" testID="travelPayAmountDifferenceTitleTestID">
+              <TextView
+                variant="MobileBodyBold"
+                accessibilityRole="header"
+                testID="travelPayAmountDifferenceTitleTestID">
                 {t('travelPay.claimDetails.amount.reimbursement.difference.title')}
               </TextView>
             }
@@ -62,22 +68,20 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
                 py={theme.dimensions.condensedMarginBetween}>
                 <Box flexDirection="row" flexWrap="wrap">
                   <TextView variant="MobileBody" testID="travelPayAmountDifferenceDescriptionPart1TestID">
-                    {t('travelPay.claimDetails.amount.reimbursement.difference.description.part1')}{' '}
+                    {t('travelPay.claimDetails.amount.reimbursement.difference.description.part1')}
                   </TextView>
                   <LinkWithAnalytics
                     type="url"
-                    url={t('travelPay.claimDetails.amount.reimbursement.difference.description.link.url')}
+                    url={LINK_URL_TRAVEL_EXPENSE_DEDUCTIBLE}
                     text={t('travelPay.claimDetails.amount.reimbursement.difference.description.link.text')}
                     a11yLabel={a11yLabelVA(
                       t('travelPay.claimDetails.amount.reimbursement.difference.description.link.text'),
                     )}
                     testID="travelPayDeductibleInfoLinkTestID"
                     icon="no icon"
-                    disablePadding={true}
                   />
-                  <Box mt={theme.dimensions.standardMarginBetween}>
-                    <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-                      {' '}
+                  <Box>
+                    <TextView variant="MobileBody">
                       {t('travelPay.claimDetails.amount.reimbursement.difference.description.part2')}
                     </TextView>
                   </Box>
