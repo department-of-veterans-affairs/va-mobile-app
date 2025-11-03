@@ -1,10 +1,9 @@
 import React, { FC, ReactElement } from 'react'
 import { Pressable, PressableProps } from 'react-native'
 
+import { Box, BoxProps } from 'components'
 import { HiddenA11yElement } from 'styles/common'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from './Box'
 
 export type MultiTouchCardProps = {
   /** read by screen readers to identify the cards place in a list */

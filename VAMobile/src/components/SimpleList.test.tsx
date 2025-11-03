@@ -1,8 +1,7 @@
 import React from 'react'
 
+import { SimpleList } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import SimpleList from './SimpleList'
 
 import Mock = jest.Mock
 
