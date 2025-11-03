@@ -3,8 +3,8 @@ name: Lookup Slack Username
 on:
   workflow_dispatch:
     inputs:
-      email_address:
-        description: 'Email address to lookup Slack ID for'
+      va_email:
+        description: 'VA Email address to lookup Slack ID for'
         required: true
         type: string
       git_handle:
@@ -13,8 +13,8 @@ on:
         type: string
   workflow_call:
     inputs:
-      email_address:
-        description: 'Email address to lookup Slack ID for'
+      va_email:
+        description: 'VA Email address to lookup Slack ID for'
         required: true
         type: string
       git_handle:
@@ -33,7 +33,7 @@ jobs:
           EMAIL_MAP_ACT: ${{ vars.EMAIL_MAP }} # This will be empty in act unless explicitly passed via --env
         run: |
           GIT_HANDLE="${{ github.event.inputs.git_handle }}"
-          EMAIL_INPUT="${{ github.event.inputs.email_address }}"
+          EMAIL_INPUT="${{ github.event.inputs.va_email }}"
           TARGET_EMAIL=""
 
           MAP_SOURCE=""
@@ -56,19 +56,19 @@ jobs:
               TARGET_EMAIL=$(echo "$MAPPED_DATA" | jq -r '.email')
               echo "Mapped Git handle '$GIT_HANDLE' to email '$TARGET_EMAIL' using map variable."
             else
-              echo "Warning: Git handle '$GIT_HANDLE' not found in map variable. Attempting to use email_address input."
+              echo "Warning: Git handle '$GIT_HANDLE' not found in map variable. Attempting to use va_email input."
             fi
           fi
 
-          # If email not found via git_handle, use direct email_address input
+          # If email not found via git_handle, use direct va_email input
           if [[ -z "$TARGET_EMAIL" && -n "$EMAIL_INPUT" ]]; then
             TARGET_EMAIL=$(echo "$EMAIL_INPUT" | xargs) # Trim whitespace
-            echo "Using provided email_address input: $TARGET_EMAIL"
+            echo "Using provided va_email input: $TARGET_EMAIL"
           fi
 
           # Check if an email was successfully determined
           if [[ -z "$TARGET_EMAIL" ]]; then
-            echo "Error: No email_address or valid git_handle was provided, and no email could be determined. Cannot proceed."
+            echo "Error: No va_email or valid git_handle was provided, and no email could be determined. Cannot proceed."
             exit 1
           fi
 
