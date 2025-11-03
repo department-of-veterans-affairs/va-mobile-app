@@ -3,10 +3,9 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import PrescriptionsDetailsBanner from './PrescriptionsDetailsBanner'
 
 context('PrescriptionsDetailsBanner', () => {
   it('initializes correctly', () => {
