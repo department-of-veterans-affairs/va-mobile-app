@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, TextView } from 'components'
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 
@@ -17,11 +17,18 @@ function NoTravelClaims() {
       alignItems="center"
       mt={theme.dimensions.textAndButtonLargeMargin}>
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
-        {t('travelPay.statusList.youDontHave')}
+        {t('travelPay.statusList.noClaims.youDontHave')}
       </TextView>
       <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessible={true}>
-        {t('travelPay.statusList.youDontHaveForDates')}
+        {t('travelPay.statusList.noClaims.youCanFile')}
       </TextView>
+      <LinkWithAnalytics // TODO: should this be this component for a native link or something else?
+        type="custom"
+        onPress={() => {}} // Go to past appointments list
+        text={t('travelPay.statusList.noClaims.startNewClaim')}
+        // a11yLabel={a11yLabelVA(t(linkTextKey))}
+        testID={`goToVAGovTravelClaimStatus`}
+      />
     </Box>
   )
 }
