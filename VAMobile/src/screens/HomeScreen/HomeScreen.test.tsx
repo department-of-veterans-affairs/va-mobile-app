@@ -5,6 +5,8 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
+import { useDebts } from 'api/debts'
+import { useMedicalCopays } from 'api/medicalCopays'
 import {
   DisabilityRatingData,
   FacilitiesPayload,
@@ -17,7 +19,7 @@ import { HomeScreen } from 'screens/HomeScreen/HomeScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
-import { formatDateUtc } from 'utils/formattingUtils'
+import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import {
   getAppointmentsPayload,
@@ -37,6 +39,22 @@ jest.mock('utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+jest.mock('api/medicalCopays', () => ({
+  useMedicalCopays: jest.fn(() => ({
+    summary: { amountDue: 0, count: 0 },
+    isLoading: false,
+    error: undefined,
+  })),
+}))
+
+jest.mock('api/debts', () => ({
+  useDebts: jest.fn(() => ({
+    summary: { amountDue: 0, count: 0 },
+    isLoading: false,
+    error: undefined,
+  })),
+}))
 
 const getFacilitiesPayload = (isCernerPatient: boolean): FacilitiesPayload => ({
   data: {
@@ -494,6 +512,69 @@ context('HomeScreen', () => {
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
+    })
+  })
+
+  describe('Copay & Overpayment modules', () => {
+    beforeEach(() => {
+      jest.clearAllMocks()
+    })
+
+    it('renders Copays and Debts with correct subtext when amount & count > 0', async () => {
+      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      ;(useMedicalCopays as jest.Mock).mockReturnValue({
+        summary: { amountDue: 396.93, count: 6 },
+        isLoading: false,
+        error: undefined,
+      })
+      ;(useDebts as jest.Mock).mockReturnValue({
+        summary: { amountDue: 347.5, count: 2 },
+        isLoading: false,
+        error: undefined,
+      })
+
+      initializeTestInstance()
+
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+
+      const copaysTitle = t('copays.title')
+      const debtsTitle = t('debts.title')
+
+      const copaysSub = t('copays.activityButton.subText', {
+        amount: numberToUSDollars(396.93),
+        count: 6,
+      })
+      const debtsSub = t('debts.activityButton.subText', {
+        amount: numberToUSDollars(347.5),
+        count: 2,
+      })
+
+      expect(screen.getByRole('link', { name: copaysTitle })).toBeTruthy()
+      expect(screen.getByRole('link', { name: debtsTitle })).toBeTruthy()
+
+      expect(screen.getByRole('link', { name: copaysSub })).toBeTruthy()
+      expect(screen.getByRole('link', { name: debtsSub })).toBeTruthy()
+    })
+
+    it('hides Copays and Debts tiles when summaries are empty', async () => {
+      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      ;(useMedicalCopays as jest.Mock).mockReturnValue({
+        summary: { amountDue: 0, count: 0 },
+        isLoading: false,
+        error: undefined,
+      })
+      ;(useDebts as jest.Mock).mockReturnValue({
+        summary: { amountDue: 0, count: 0 },
+        isLoading: false,
+        error: undefined,
+      })
+
+      initializeTestInstance()
+
+      await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
+
+      expect(screen.queryByRole('link', { name: t('copays.title') })).toBeFalsy()
+      expect(screen.queryByRole('link', { name: t('debts.title') })).toBeFalsy()
     })
   })
 

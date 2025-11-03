@@ -1,8 +1,7 @@
 import React from 'react'
 
+import FormAttachments from 'components/FormWrapper/FormFields/FormAttachments'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import FormAttachments from './FormAttachments'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

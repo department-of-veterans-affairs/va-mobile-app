@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { Allergy } from 'api/types'
+import AllergyDetailsScreen from 'screens/HealthScreen/Allergies/AllergyDetails/AllergyDetailsScreen'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
-
-import AllergyDetailsScreen from './AllergyDetailsScreen'
 
 context('AllergyDetailsScreen', () => {
   const defaultAllergy = {
