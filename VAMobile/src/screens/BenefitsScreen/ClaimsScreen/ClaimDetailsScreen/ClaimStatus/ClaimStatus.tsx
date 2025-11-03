@@ -8,11 +8,10 @@ import { ClaimData } from 'api/types'
 import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import ClaimTimeline from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/ClaimTimeline'
+import ClosedClaimStatusDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClosedClaimInfo/ClosedClaimStatusDetails'
+import EstimatedDecisionDate from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/EstimatedDecisionDate/EstimatedDecisionDate'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
-import ClosedClaimStatusDetails from './ClosedClaimInfo/ClosedClaimStatusDetails'
-import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {

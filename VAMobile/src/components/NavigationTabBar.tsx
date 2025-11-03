@@ -9,14 +9,12 @@ import { NavigationHelpers, ParamListBase, TabNavigationState, useIsFocused } fr
 import { TFunction } from 'i18next'
 import styled from 'styled-components'
 
+import { Box, IconWithText, IconWithTextProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yValueProp } from 'utils/accessibility'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { changeNavigationBarColor } from 'utils/rnNativeUIUtilities'
 import { themeFn } from 'utils/theme'
-
-import Box from './Box'
-import IconWithText, { IconWithTextProps } from './IconWithText'
 
 type TabBarRoute = {
   key: string

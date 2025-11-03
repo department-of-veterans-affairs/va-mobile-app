@@ -3,10 +3,8 @@ import { AccessibilityRole, Pressable, PressableProps, useWindowDimensions } fro
 
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { Box, BoxProps, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from './Box'
-import TextView from './TextView'
 
 export const LabelTagTypeConstants: {
   tagBlue: LabelTagTypes

@@ -6,9 +6,8 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import Attachments from 'screens/HealthScreen/SecureMessaging/StartNewMessage/Attachments/Attachments'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
-
-import Attachments from './Attachments'
 
 const mockShowActionSheetWithOptions = jest.fn()
 jest.mock('@expo/react-native-action-sheet', () => {

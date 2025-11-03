@@ -6,10 +6,9 @@ import { t } from 'i18next'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import SecureMessaging from 'screens/HealthScreen/SecureMessaging/SecureMessaging'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import SecureMessaging from './SecureMessaging'
 
 context('SecureMessaging', () => {
   const initializeTestInstance = (authorized = true) => {

@@ -1,6 +1,6 @@
-import { AddressData } from './AddressData'
-import { EmailData } from './EmailData'
-import { PhoneData } from './PhoneData'
+import { AddressData } from 'api/types/AddressData'
+import { EmailData } from 'api/types/EmailData'
+import { PhoneData } from 'api/types/PhoneData'
 
 export type ContactInformationPayload = {
   data: {
