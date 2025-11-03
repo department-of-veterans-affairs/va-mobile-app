@@ -244,7 +244,7 @@ const ComboBox: FC<ComboBoxProps> = ({
       <Box {...inputContainerStyle}>
         <Box {...wrapperProps}>
           <Box width="100%">
-            <TextInput {...inputProps} ref={inputRef} />
+            <TextInput {...inputProps} ref={inputRef} testID="comboBoxTextInputID" />
           </Box>
         </Box>
       </Box>
