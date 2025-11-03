@@ -4,7 +4,7 @@ App icons represent your app in places such as the App Store, the Home Screen, S
 
 ## iOS Configuration
 
-To display your app icon correctly across iOS, iPadOS, and related system surfaces, you must provide the required icon assets and configure them in your Xcode project. iOS uses different icon sizes for various contexts, such as the Home Screen, Spotlight search, Settings, and notifications.
+To display your app icon correctly across iOS devices, you must provide the required icon assets and configure them in your Xcode project. iOS uses different icon sizes for various contexts, such as the Home Screen, Spotlight search, Settings, and notifications.
 
 ### Context
 In Xcode, under `VAMobile`, navigate to the `General` tab to view the app icons configured for each environment.
