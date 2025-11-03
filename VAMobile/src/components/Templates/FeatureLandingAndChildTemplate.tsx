@@ -27,6 +27,7 @@ import { useTheme } from 'utils/hooks'
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
 export type ScreenError = Partial<ErrorComponentProps> & {
+  /** Boolean to determine if error should be displayed */
   errorCheck: boolean
 }
 
@@ -151,15 +152,13 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   }
 
   const getScreenError = () => {
-    if (errors && screenID) {
-      const screenError = errors.find((error) => error.errorCheck)
-
-      return (
-        screenError && (
-          <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
-        )
+    if (!errors || !screenID) return null
+    const screenError = errors.find((error) => error.errorCheck)
+    return (
+      screenError && (
+        <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
       )
-    }
+    )
   }
 
   const errorToDisplay = getScreenError()

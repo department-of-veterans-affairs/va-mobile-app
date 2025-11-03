@@ -9,18 +9,17 @@ import { SegmentedControl } from '@department-of-veterans-affairs/mobile-compone
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsErrorServiceTypesConstants } from 'api/types'
-import { AlertWithHaptics, Box, ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
+import { AlertWithHaptics, Box, FeatureLandingTemplate, ScreenError } from 'components'
 import { VAScrollViewProps } from 'components/VAScrollView'
 import { ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import ClaimsAndAppealsListView from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import NoClaimsAndAppealsAccess from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { useDowntime, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import ClaimsAndAppealsListView from '../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import NoClaimsAndAppealsAccess from '../NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsHistoryScreen = StackScreenProps<BenefitsStackParamList, 'ClaimsHistoryScreen'>
 
@@ -119,6 +118,22 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     setSelectedTab(tab)
   }
 
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !claimsNotInDowntime && !appealsNotInDowntime,
+    },
+    {
+      errorCheck: !!getUserAuthorizedServicesError,
+      onTryAgain: fetchInfoAgain,
+      error: getUserAuthorizedServicesError,
+    },
+    {
+      errorCheck: !!(claimsAndAppealsAccess && claimsAndAppealsListError),
+      onTryAgain: refetchClaimsAndAppealsList,
+      error: claimsAndAppealsListError,
+    },
+  ]
+
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
@@ -126,25 +141,13 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       title={title}
       testID="claimsHistoryID"
       scrollViewProps={scrollViewProps}
-      backLabelTestID="claimsHistoryBackTestID">
-      {!claimsNotInDowntime && !appealsNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
-        <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
-      ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          onTryAgain={fetchInfoAgain}
-          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
-        />
-      ) : !claimsAndAppealsAccess ? (
+      backLabelTestID="claimsHistoryBackTestID"
+      screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
+      isLoading={loadingClaimsAndAppealsList || loadingUserAuthorizedServices}
+      loadingText={t('claimsAndAppeals.loadingClaimsAndAppeals')}
+      errors={screenErrors}>
+      {!claimsAndAppealsAccess ? (
         <NoClaimsAndAppealsAccess />
-      ) : claimsAndAppealsListError ? (
-        <ErrorComponent
-          onTryAgain={refetchClaimsAndAppealsList}
-          screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}
-          error={claimsAndAppealsListError}
-        />
       ) : (
         <Box flex={1} justifyContent="flex-start" mb={theme.dimensions.contentMarginBottom}>
           {!claimsAndAppealsServiceErrors && (
