@@ -24,13 +24,13 @@ jobs:
             40) REVIEWER="matthew-df"; BACKUP="dftony";;
             41) REVIEWER="AdryienH"; BACKUP="matthew-df";;
             42) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            43) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
+            43) REVIEWER="jmarchi"; BACKUP="dumathane";;
             44) REVIEWER="keli13"; BACKUP="jmarchi";;
             45) REVIEWER="dftony"; BACKUP="keli13";;
             46) REVIEWER="matthew-df"; BACKUP="dftony";;
             47) REVIEWER="AdryienH"; BACKUP="matthew-df";;
             48) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            49) REVIEWER="jmarchi"; BACKUP="jonbindbeutel";;
+            49) REVIEWER="jmarchi"; BACKUP="dumathane";;
             50) REVIEWER="keli13"; BACKUP="jmarchi";;
             51) REVIEWER="dftony"; BACKUP="keli13";;
             52) REVIEWER="matthew-df"; BACKUP="dftony";;
