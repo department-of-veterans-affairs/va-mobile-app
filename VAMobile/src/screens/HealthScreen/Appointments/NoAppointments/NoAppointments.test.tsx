@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { context, render } from 'testUtils'
-
-import NoAppointments from './NoAppointments'
 
 context('NoAppointments', () => {
   it('initializes correctly', () => {

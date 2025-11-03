@@ -1,8 +1,7 @@
 import React from 'react'
 
+import VAModalPicker from 'components/FormWrapper/FormFields/Picker/VAModalPicker'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import VAModalPicker from './VAModalPicker'
 
 context('VAModalPicker', () => {
   let selected: string

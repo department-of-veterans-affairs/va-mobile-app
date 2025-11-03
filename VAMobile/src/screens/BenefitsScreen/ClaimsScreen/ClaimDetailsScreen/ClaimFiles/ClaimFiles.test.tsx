@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { ClaimData } from 'api/types'
+import ClaimFiles from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimFiles/ClaimFiles'
+import { claim as claimData } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { context, render } from 'testUtils'
-
-import { claim as claimData } from '../../claimData'
-import ClaimFiles from './ClaimFiles'
 
 jest.mock('utils/remoteConfig')
 
