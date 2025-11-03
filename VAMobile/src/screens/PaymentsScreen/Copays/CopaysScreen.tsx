@@ -53,10 +53,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       ) : (
         <>
           <Box mx={theme.dimensions.cardPadding} my={theme.dimensions.buttonPadding}>
-            <Button
-              label={t('copays.reviewDetails')}
-              onPress={() => navigateTo('CopayDetails', { copayRecord: null })}
-            />
+            <Button label={t('copays.reviewDetails')} onPress={() => navigateTo('CopayDetails', { copay: null })} />
           </Box>
           <ResolveBillButton />
         </>
