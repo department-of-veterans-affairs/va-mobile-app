@@ -1,6 +1,6 @@
 import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback'
 
-import { featureEnabled } from './remoteConfig'
+import { featureEnabled } from 'utils/remoteConfig'
 
 export const triggerHaptic = (impact: HapticFeedbackTypes) => {
   const options = {

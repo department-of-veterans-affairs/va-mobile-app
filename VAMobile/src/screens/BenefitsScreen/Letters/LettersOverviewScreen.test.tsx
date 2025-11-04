@@ -4,10 +4,9 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
+import { LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import { profileAddressOptions } from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary'
 import { context, mockNavProps, render } from 'testUtils'
-
-import { LettersOverviewScreen } from './index'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

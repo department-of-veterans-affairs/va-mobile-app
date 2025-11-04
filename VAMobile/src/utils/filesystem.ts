@@ -1,10 +1,9 @@
 import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
 
+import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
+import { Params, getAccessToken, getRefreshToken } from 'store/api'
 import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
-
-import { DocumentPickerResponse } from '../screens/BenefitsScreen/BenefitsStackScreens'
-import { Params, getAccessToken, getRefreshToken } from '../store/api'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
 

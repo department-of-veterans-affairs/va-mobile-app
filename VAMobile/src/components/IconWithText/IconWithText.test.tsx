@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import IconWithText from 'components/IconWithText'
 import { context, render } from 'testUtils'
-
-import IconWithText from './IconWithText'
 
 context('VAIconWithText', () => {
   beforeEach(() => {
