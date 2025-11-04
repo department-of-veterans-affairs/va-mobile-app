@@ -121,6 +121,7 @@ context('StartNewMessage', () => {
           locationName: 'test_location',
           suggestedNameDisplay: 'test_suggested_name',
           healthCareSystemName: 'test_healthcare_system_name',
+          ohTriageGroup: false,
         },
       },
       {
@@ -135,6 +136,7 @@ context('StartNewMessage', () => {
           locationName: 'test_location',
           suggestedNameDisplay: 'test_suggested_name',
           healthCareSystemName: 'test_healthcare_system_name',
+          ohTriageGroup: false,
         },
       },
     ],
