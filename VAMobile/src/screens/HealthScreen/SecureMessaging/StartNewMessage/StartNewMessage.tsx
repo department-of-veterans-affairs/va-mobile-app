@@ -396,7 +396,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
     } else {
       const isRecipientOh =
         recipients?.find((recipient) => recipient.attributes.triageTeamId === messageDataRef.current.recipient_id)
-          ?.attributes.ohTriageGroup || false
+          ?.attributes.ohTriageGroup ?? false
       const mutateOptions = {
         onSuccess: () => {
           snackbar.show(t('secureMessaging.startNewMessage.sent'))

@@ -12,11 +12,11 @@ import { useReviewEvent } from 'utils/inAppReviews'
  * Sends a message
  */
 const sendMessage = ({ messageData, replyToID, uploads, isRecipientOh }: SendMessageParameters) => {
-  let postData: FormData | SecureMessagingFormData = messageData
-  postData.is_oh_triage_group = isRecipientOh ? isRecipientOh : false
+  const messageDataWithTriage = { ...messageData, is_oh_triage_group: isRecipientOh ? isRecipientOh : false }
+  let postData: FormData | SecureMessagingFormData = messageDataWithTriage
   if (uploads && uploads.length !== 0) {
     const formData = new FormData()
-    formData.append('message', JSON.stringify(messageData))
+    formData.append('message', JSON.stringify(messageDataWithTriage))
     uploads.forEach((attachment) => {
       let nameOfFile: string | undefined
       let typeOfFile: string | undefined
@@ -47,6 +47,7 @@ const sendMessage = ({ messageData, replyToID, uploads, isRecipientOh }: SendMes
     postData = formData
   }
 
+  console.log('postData:', postData)
   return post<SecureMessagingMessageData>(
     replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
     postData as unknown as Params,
