@@ -6,18 +6,18 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-    branches:
-      - 'dependabot/**'
-  pull_request:
-    types:
-      - synchronize
-      - opened
-    paths:
-      - 'VAMobile/src/**'
-      - 'VAMobile/package.json'
-      - '.github/workflows/e2e_android.yml'
-      - '.github/workflows/e2e_ios.yml'
-      - '.github/workflows/e2e_detox_mapping.yml'
+  #   branches:
+  #     - 'dependabot/**'
+  # pull_request:
+  #   types:
+  #     - synchronize
+  #     - opened
+  #   paths:
+  #     - 'VAMobile/src/**'
+  #     - 'VAMobile/package.json'
+  #     - '.github/workflows/e2e_android.yml'
+  #     - '.github/workflows/e2e_ios.yml'
+  #     - '.github/workflows/e2e_detox_mapping.yml'
   workflow_dispatch:
     inputs:
       run_full_test:
@@ -97,10 +97,17 @@ jobs:
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: 'Get Matrix Value'
         id: matrix_value
         run: |
@@ -140,7 +147,7 @@ jobs:
             fi
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
@@ -152,9 +159,16 @@ jobs:
         testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       # https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
       - name: Enable KVM group perms
@@ -300,9 +314,16 @@ jobs:
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Download results
         uses: actions/download-artifact@v4
@@ -352,7 +373,7 @@ jobs:
 
       - name: Github CLI Authentication
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+          echo "${{ steps.generate_token.outputs.token }}" >> token.txt
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
@@ -370,7 +391,7 @@ jobs:
             echo "TICKET_EXISTS=" >> "$GITHUB_OUTPUT"
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
       - name: Make a ticket on failure (if needed)
         if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
@@ -382,7 +403,7 @@ jobs:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
           OS: 'Android'
           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         id: create-issue
 
   matrix_send_test_results_to_testrail:
@@ -406,8 +427,17 @@ jobs:
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: update-test-names
         run: |
           for ((i=0; ; i+=250)); do
