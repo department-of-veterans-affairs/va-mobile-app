@@ -4,8 +4,7 @@ import _ from 'underscore'
 
 import { AppealEventData } from 'api/types'
 import { Box } from 'components'
-
-import AppealPhase from './AppealPhase'
+import AppealPhase from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealTimeline/AppealPhase'
 
 type AppealTimelineProps = {
   events: Array<AppealEventData>

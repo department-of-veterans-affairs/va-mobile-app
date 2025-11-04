@@ -2,13 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { notificationKeys } from 'api/notifications/queryKeys'
+import { DEVICE_ENDPOINT_SID } from 'api/notifications/registerDevice'
 import { LoadPushPreferencesData, PushPreference } from 'api/types'
 import { put } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { notificationKeys } from './queryKeys'
-import { DEVICE_ENDPOINT_SID } from './registerDevice'
 
 /**
  * Updates a user's push preference

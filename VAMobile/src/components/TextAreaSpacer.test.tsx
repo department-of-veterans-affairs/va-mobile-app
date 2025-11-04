@@ -1,9 +1,8 @@
 import React from 'react'
 
+import { TextAreaSpacer } from 'components'
 import { context, render, screen } from 'testUtils'
 import { useTheme } from 'utils/hooks'
-
-import TextAreaSpacer from './TextAreaSpacer'
 
 // Mock the useTheme hook
 jest.mock('utils/hooks', () => ({

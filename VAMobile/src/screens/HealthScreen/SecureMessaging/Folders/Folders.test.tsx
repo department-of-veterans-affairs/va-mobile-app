@@ -3,10 +3,9 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import { SecureMessagingFoldersGetData } from 'api/types'
+import Folders from 'screens/HealthScreen/SecureMessaging/Folders/Folders'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import Folder from './Folders'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -96,7 +95,7 @@ context('Folder', () => {
 
   const initializeTestInstance = () => {
     const props = mockNavProps()
-    render(<Folder {...props} />)
+    render(<Folders {...props} />)
   }
 
   describe('handles folders as expected', () => {
