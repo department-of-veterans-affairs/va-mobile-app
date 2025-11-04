@@ -19,12 +19,11 @@ import {
   VAModalPickerProps,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import NoPaymentsScreen from 'screens/PaymentsScreen/PaymentHistory/NoPayments/NoPaymentsScreen'
+import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { getGroupedPayments } from 'utils/payments'
-
-import { PaymentsStackParamList } from '../PaymentsStackScreens'
-import NoPaymentsScreen from './NoPayments/NoPaymentsScreen'
 
 type PaymentHistoryScreenProps = StackScreenProps<PaymentsStackParamList, 'PaymentHistory'>
 

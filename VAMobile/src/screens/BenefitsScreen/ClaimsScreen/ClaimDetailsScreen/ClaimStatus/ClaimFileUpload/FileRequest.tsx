@@ -22,13 +22,12 @@ import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { FileRequestStackParams } from './FileRequestSubtask'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
