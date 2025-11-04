@@ -45,12 +45,13 @@ export const useClaimsAndAppeals = (claimType: ClaimType, options?: { enabled?: 
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const appealsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appeals)
 
+  const claimsAndAppealsUp = !claimsInDowntime && !appealsInDowntime
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
-  const claimsAndAppealAccess = authorizedServices?.claims || authorizedServices?.appeals
+  const claimsAndAppealAccess = authorizedServices?.claims && authorizedServices?.appeals
 
   return useQuery({
     ...options,
-    enabled: !!(claimsAndAppealAccess && (!claimsInDowntime || !appealsInDowntime) && queryEnabled),
+    enabled: !!(claimsAndAppealAccess && claimsAndAppealsUp && queryEnabled),
     queryKey: [claimsAndAppealsKeys.claimsAndAppeals, claimType],
     queryFn: () => {
       return getClaimsAndAppeals(claimType)
