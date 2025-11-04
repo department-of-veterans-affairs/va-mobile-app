@@ -8,7 +8,6 @@ import { Params, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 /**
  * Type guard to check if a failed prescription ID is a V1 object format
@@ -70,14 +69,12 @@ const requestRefills = async (
 export const useRequestRefills = () => {
   const { data: authorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-  const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
 
   const registerReviewEvent = useReviewEvent(false, 'refillRequest')
 
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (prescriptions: PrescriptionsList) => requestRefills(prescriptions, shouldUseV1),
+    mutationFn: (prescriptions: PrescriptionsList) => requestRefills(prescriptions, medicationsOracleHealthEnabled),
     onMutate: () => {
       setAnalyticsUserProperty(UserAnalytics.vama_uses_rx())
     },

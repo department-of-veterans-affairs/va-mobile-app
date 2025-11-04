@@ -13,13 +13,11 @@ import * as api from 'store/api'
 import { TrackedStore } from 'testUtils'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 jest.mock('store/api')
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('utils/analytics')
 jest.mock('utils/inAppReviews')
-jest.mock('utils/waygateConfig')
 
 describe('requestRefills', () => {
   let store: TrackedStore
@@ -129,7 +127,6 @@ describe('requestRefills', () => {
         medicationsOracleHealthEnabled: false,
       },
     })
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
     ;(useReviewEvent as jest.Mock).mockReturnValue(jest.fn())
   })
 
@@ -182,7 +179,6 @@ describe('requestRefills', () => {
           medicationsOracleHealthEnabled: true,
         },
       })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
       const { result } = renderHook(() => useRequestRefills(), { wrapper })
 
@@ -240,32 +236,6 @@ describe('requestRefills', () => {
       expect(result.current.error).toBe(mockError)
       expect(logAnalyticsEvent).toHaveBeenCalledWith(Events.vama_rx_refill_fail(['123', '456']))
       expect(logNonFatalErrorToFirebase).toHaveBeenCalledWith(mockError, 'requestRefills: Service error')
-    })
-
-    it('should use v0 API when waygate is disabled even if Oracle health is enabled', async () => {
-      const mockPut = api.put as jest.Mock
-      mockPut.mockResolvedValueOnce(mockSuccessfulRefillResponse)
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          prescriptions: true,
-          medicationsOracleHealthEnabled: true,
-        },
-      })
-      ;(waygateEnabled as jest.Mock).mockReturnValue(false)
-
-      const { result } = renderHook(() => useRequestRefills(), { wrapper })
-
-      await act(async () => {
-        result.current.mutate(mockPrescriptions)
-      })
-
-      await waitFor(() => {
-        expect(result.current.isSuccess).toBeTruthy()
-      })
-
-      expect(mockPut).toHaveBeenCalledWith('/v0/health/rx/prescriptions/refill', {
-        ids: ['123', '456'],
-      })
     })
 
     it('should handle empty prescription list', async () => {
@@ -469,7 +439,6 @@ describe('requestRefills', () => {
             medicationsOracleHealthEnabled: false,
           },
         })
-        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
         const mockPut = api.put as jest.Mock
         mockPut.mockResolvedValueOnce(responseWithStringIds)
@@ -518,7 +487,6 @@ describe('requestRefills', () => {
             medicationsOracleHealthEnabled: true,
           },
         })
-        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
         const mockPut = api.put as jest.Mock
         mockPut.mockResolvedValueOnce(responseWithObjectIds)
@@ -568,7 +536,6 @@ describe('requestRefills', () => {
             medicationsOracleHealthEnabled: true,
           },
         })
-        ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
         const mockPut = api.put as jest.Mock
         mockPut.mockResolvedValueOnce(responseWithMixedIds)

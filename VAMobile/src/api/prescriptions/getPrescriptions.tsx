@@ -8,7 +8,6 @@ import { ACTIVITY_STALE_TIME, LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime } from 'utils/hooks'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 /**
  * Fetch user prescriptions
@@ -31,15 +30,12 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-
-  const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: prescriptionKeys.prescriptions,
-    queryFn: () => getPrescriptions({ useV1: shouldUseV1 }),
+    queryFn: () => getPrescriptions({ useV1: medicationsOracleHealthEnabled }),
     meta: {
       errorName: 'getPrescriptions: Service error',
     },

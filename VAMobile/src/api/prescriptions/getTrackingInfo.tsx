@@ -14,7 +14,6 @@ import {
 import { UserAnalytics } from 'constants/analytics'
 import { get } from 'store/api'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 /**
  * Fetch user prescription tracking information
@@ -63,9 +62,6 @@ const getTrackingDataForPrescription = async ({
 export const useTrackingInfo = (id: string, options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
-  const { enabled: oracleMedsEnabled } = waygateEnabled('WG_MedsOracleHealthApiEnabled')
-
-  const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
   const { data: prescriptionData } = usePrescriptions()
 
   // The data for v1 is already on the prescription data
@@ -73,7 +69,7 @@ export const useTrackingInfo = (id: string, options?: { enabled?: boolean }) => 
     ...options,
     queryKey: [prescriptionKeys.trackingInfo, id],
     queryFn: () => {
-      if (shouldUseV1) {
+      if (medicationsOracleHealthEnabled) {
         return getTrackingDataForPrescription({
           id,
           prescriptionData: prescriptionData?.data,

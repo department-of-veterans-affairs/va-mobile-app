@@ -18,11 +18,9 @@ import { UserAnalytics } from 'constants/analytics'
 import * as api from 'store/api'
 import { TrackedStore } from 'testUtils'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 jest.mock('store/api')
 jest.mock('utils/analytics')
-jest.mock('utils/waygateConfig')
 jest.mock('api/authorizedServices/getAuthorizedServices')
 jest.mock('api/prescriptions/getPrescriptions')
 
@@ -47,7 +45,6 @@ describe('useTrackingInfo', () => {
         medicationsOracleHealthEnabled: false,
       },
     })
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
     ;(usePrescriptions as jest.Mock).mockReturnValue({
       data: undefined,
     })
@@ -191,7 +188,6 @@ describe('useTrackingInfo', () => {
           medicationsOracleHealthEnabled: false,
         },
       })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
     })
 
     it('should fetch tracking info using V0 API', async () => {
@@ -254,7 +250,6 @@ describe('useTrackingInfo', () => {
           medicationsOracleHealthEnabled: true,
         },
       })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
       ;(usePrescriptions as jest.Mock).mockReturnValue({
         data: mockPrescriptionsV1Data,
       })
@@ -357,69 +352,6 @@ describe('useTrackingInfo', () => {
     })
   })
 
-  describe('API switching logic', () => {
-    it('should use V0 when medicationsOracleHealthEnabled is false but waygate is enabled', async () => {
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          medicationsOracleHealthEnabled: false,
-        },
-      })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
-
-      const mockGet = api.get as jest.Mock
-      mockGet.mockResolvedValueOnce(mockTrackingInfoV0)
-
-      const { result } = renderHook(() => useTrackingInfo('123'), { wrapper })
-
-      await waitFor(() => {
-        expect(result.current.isFetched).toBeTruthy()
-      })
-
-      expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions/123/tracking')
-    })
-
-    it('should use V0 when medicationsOracleHealthEnabled is true but waygate is disabled', async () => {
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          medicationsOracleHealthEnabled: true,
-        },
-      })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
-
-      const mockGet = api.get as jest.Mock
-      mockGet.mockResolvedValueOnce(mockTrackingInfoV0)
-
-      const { result } = renderHook(() => useTrackingInfo('123'), { wrapper })
-
-      await waitFor(() => {
-        expect(result.current.isFetched).toBeTruthy()
-      })
-
-      expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions/123/tracking')
-    })
-
-    it('should use V1 only when both medicationsOracleHealthEnabled and waygate are enabled', async () => {
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          medicationsOracleHealthEnabled: true,
-        },
-      })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
-      ;(usePrescriptions as jest.Mock).mockReturnValue({
-        data: mockPrescriptionsV1Data,
-      })
-
-      const { result } = renderHook(() => useTrackingInfo('456'), { wrapper })
-
-      await waitFor(() => {
-        expect(result.current.isFetched).toBeTruthy()
-      })
-
-      expect(api.get).not.toHaveBeenCalled() // Should not call V0 API
-      expect(result.current.data).toBeDefined()
-    })
-  })
-
   describe('query configuration', () => {
     it('should use correct query key', () => {
       renderHook(() => useTrackingInfo('123'), { wrapper })
@@ -458,7 +390,6 @@ describe('useTrackingInfo', () => {
           medicationsOracleHealthEnabled: true,
         },
       })
-      ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
 
       const prescriptionWithNullTracking: PrescriptionData = {
         ...mockPrescriptionWithTracking,

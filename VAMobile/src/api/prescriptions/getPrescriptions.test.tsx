@@ -9,10 +9,8 @@ import { usePrescriptions } from 'api/prescriptions/getPrescriptions'
 import { PrescriptionsGetData } from 'api/types'
 import * as api from 'store/api'
 import { TrackedStore } from 'testUtils'
-import { waygateEnabled } from 'utils/waygateConfig'
 
 jest.mock('store/api')
-jest.mock('utils/waygateConfig')
 jest.mock('api/authorizedServices/getAuthorizedServices')
 
 describe('usePrescriptions', () => {
@@ -34,7 +32,6 @@ describe('usePrescriptions', () => {
         medicationsOracleHealthEnabled: false,
       },
     })
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
   })
 
   afterEach(() => {
@@ -141,10 +138,9 @@ describe('usePrescriptions', () => {
     expect(result.current.data).toEqual(mockPrescriptionsV0)
   })
 
-  it('should use v1 API when waygate and authorization are enabled', async () => {
+  it('should use v1 API when authorization is enabled', async () => {
     const mockGet = api.get as jest.Mock
     mockGet.mockResolvedValueOnce(mockPrescriptionsV1)
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
       data: {
         prescriptions: true,
@@ -232,7 +228,6 @@ describe('usePrescriptions', () => {
   it('should match v1 response type when using v1 API', async () => {
     const mockGet = api.get as jest.Mock
     mockGet.mockResolvedValueOnce(mockPrescriptionsV1)
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
       data: {
         prescriptions: true,
@@ -259,31 +254,9 @@ describe('usePrescriptions', () => {
     }
   })
 
-  it('should use v0 API when waygate is disabled even if authorization is enabled', async () => {
+  it('should use v0 API when authorization is disabled', async () => {
     const mockGet = api.get as jest.Mock
     mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: false })
-    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-      data: {
-        prescriptions: true,
-        medicationsOracleHealthEnabled: true,
-      },
-    })
-
-    const { result } = renderHook(() => usePrescriptions(), { wrapper })
-
-    await waitFor(() => {
-      expect(result.current.isFetched).toBeTruthy()
-    })
-
-    expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions', expect.any(Object))
-    expect(result.current.data).toEqual(mockPrescriptionsV0)
-  })
-
-  it('should use v0 API when authorization is disabled even if waygate is enabled', async () => {
-    const mockGet = api.get as jest.Mock
-    mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
-    ;(waygateEnabled as jest.Mock).mockReturnValue({ enabled: true })
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
       data: {
         prescriptions: true,
@@ -299,18 +272,5 @@ describe('usePrescriptions', () => {
 
     expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions', expect.any(Object))
     expect(result.current.data).toEqual(mockPrescriptionsV0)
-  })
-
-  it('should call waygateEnabled with correct parameter', async () => {
-    const mockGet = api.get as jest.Mock
-    mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
-
-    const { result } = renderHook(() => usePrescriptions(), { wrapper })
-
-    await waitFor(() => {
-      expect(result.current.isFetched).toBeTruthy()
-    })
-
-    expect(waygateEnabled).toHaveBeenCalledWith('WG_MedsOracleHealthApiEnabled')
   })
 })

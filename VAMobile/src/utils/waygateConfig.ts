@@ -108,7 +108,6 @@ export type WaygateToggleType =
   | 'WG_InAppRecruitment'
   | 'WG_HealthHelp'
   | 'WG_VeteranStatusCard'
-  | 'WG_MedsOracleHealthApiEnabled'
 
 type WaygateToggleValues = {
   WG_Home: Waygate
@@ -193,7 +192,6 @@ type WaygateToggleValues = {
   WG_InAppRecruitment: Waygate
   WG_HealthHelp: Waygate
   WG_VeteranStatusCard: Waygate
-  WG_MedsOracleHealthApiEnabled: Waygate
 }
 
 const waygateDefault: Waygate = {
@@ -287,7 +285,6 @@ export let waygateConfig: WaygateToggleValues = {
   WG_InAppRecruitment: { ...waygateDefault },
   WG_HealthHelp: { ...waygateDefault },
   WG_VeteranStatusCard: { ...waygateDefault },
-  WG_MedsOracleHealthApiEnabled: { enabled: false },
 }
 
 export const waygateEnabled = (feature: WaygateToggleType): Waygate => {
