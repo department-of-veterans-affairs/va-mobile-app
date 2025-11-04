@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimData } from 'api/types'
-import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
+import {
+  Box,
+  DefaultList,
+  DefaultListItemObj,
+  LabelTagTypeConstants,
+  Pagination,
+  PaginationProps,
+  TextLine,
+} from 'components'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -67,7 +75,13 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
         variant: 'MobileBodyBold',
       })
 
-      textLines.push({ text: t('travelPay.statusList.claimStatus', { status: claimStatus }) })
+      const margin = theme.dimensions.condensedMarginBetween
+      textLines.push({
+        text: t('travelPay.statusList.claimStatus', { status: claimStatus }),
+        textTag: { labelType: LabelTagTypeConstants.tagBlue },
+        mt: margin,
+        mb: margin,
+      })
 
       const a11yValue = t('listPosition', { position: index + 1, total: totalEntries })
 

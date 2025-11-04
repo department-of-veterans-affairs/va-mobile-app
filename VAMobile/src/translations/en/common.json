@@ -1703,7 +1703,7 @@
   "travelPay.statusList.allOf": "All of {{year}}",
   "travelPay.statusList.appointmentDateLine1": "{{date}} at",
   "travelPay.statusList.appointmentDateLine2": "{{time}} appointment",
-  "travelPay.statusList.claimStatus": "Claim status: {{status}}",
+  "travelPay.statusList.claimStatus": "{{status}}",
   "travelPay.statusList.loading": "Loading your travel claims...",
   "travelPay.statusList.filterBy": "Filter by",
   "travelPay.statusList.list.title": "{{filter}} travel claims ({{count}}), sorted by {{sort}}",
