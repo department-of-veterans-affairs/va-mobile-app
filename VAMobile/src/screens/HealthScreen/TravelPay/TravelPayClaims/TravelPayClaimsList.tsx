@@ -157,8 +157,8 @@ function TravelPayClaimsList({
   }
 
   return (
-    <Box testID="travelPayClaimsListTestId">
-      <Box mx={theme.dimensions.gutter} accessible={true}>
+    <>
+      <Box mx={theme.dimensions.gutter}>
         <VAModalPicker
           selectedValue={datePickerOption.value}
           onSelectionChange={(value) => {
@@ -173,6 +173,8 @@ function TravelPayClaimsList({
           labelKey={'travelPay.statusList.selectADateRange'}
           testID="getDateRangeTestID"
         />
+      </Box>
+      <Box mx={theme.dimensions.gutter}>
         <TextView my={theme.dimensions.lineItemSpacing} variant="MobileBodyBold">
           {getResultsText(t, totalEntries, pageStart, pageEnd)}
         </TextView>
@@ -185,7 +187,7 @@ function TravelPayClaimsList({
         mx={theme.dimensions.gutter}>
         {!isLoading && <Pagination {...paginationProps} />}
       </Box>
-    </Box>
+    </>
   )
 }
 
