@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { deviceKeys } from 'api/device/queryKeys'
 import { getVersionName } from 'utils/deviceData'
-
-import { deviceKeys } from './queryKeys'
 
 /**
  * Returns a query for the installed app version on device

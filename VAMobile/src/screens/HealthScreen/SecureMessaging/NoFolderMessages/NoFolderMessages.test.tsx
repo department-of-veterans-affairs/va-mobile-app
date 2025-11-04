@@ -3,9 +3,8 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { when } from 'jest-when'
 
+import NoFolderMessages from 'screens/HealthScreen/SecureMessaging/NoFolderMessages/NoFolderMessages'
 import { context, render } from 'testUtils'
-
-import NoFolderMessages from './NoFolderMessages'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { Pagination, PaginationProps } from 'components'
 import { context, render } from 'testUtils'
-
-import Pagination, { PaginationProps } from './Pagination'
 
 context('Pagination', () => {
   const prevSpy = jest.fn()

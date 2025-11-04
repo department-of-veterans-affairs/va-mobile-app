@@ -3,10 +3,9 @@ import React from 'react'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import { InitialState, setNotificationsPreferenceScreen, setRequestNotifications } from 'store/slices'
 import { context, render } from 'testUtils'
-
-import RequestNotificationsScreen from './RequestNotificationsScreen'
 
 jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')
