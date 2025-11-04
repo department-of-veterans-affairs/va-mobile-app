@@ -12,7 +12,7 @@ import { useReviewEvent } from 'utils/inAppReviews'
  * Sends a message
  */
 const sendMessage = ({ messageData, replyToID, uploads, isRecipientOh }: SendMessageParameters) => {
-  const messageDataWithTriage = { ...messageData, is_oh_triage_group: isRecipientOh ? isRecipientOh : false }
+  const messageDataWithTriage = { ...messageData, is_oh_triage_group: isRecipientOh }
   let postData: FormData | SecureMessagingFormData = messageDataWithTriage
   if (uploads && uploads.length !== 0) {
     const formData = new FormData()
