@@ -158,7 +158,7 @@ function TravelPayClaimsList({
 
   return (
     <>
-      <Box mx={theme.dimensions.gutter}>
+      <Box mx={theme.dimensions.gutter} testID="travelPayClaimsListTestId">
         <VAModalPicker
           selectedValue={datePickerOption.value}
           onSelectionChange={(value) => {
