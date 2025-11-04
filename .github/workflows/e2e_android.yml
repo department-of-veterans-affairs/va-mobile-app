@@ -6,18 +6,18 @@ name: '[e2e] Android Detox Test Run'
 
 on:
   push:
-  #   branches:
-  #     - 'dependabot/**'
-  # pull_request:
-  #   types:
-  #     - synchronize
-  #     - opened
-  #   paths:
-  #     - 'VAMobile/src/**'
-  #     - 'VAMobile/package.json'
-  #     - '.github/workflows/e2e_android.yml'
-  #     - '.github/workflows/e2e_ios.yml'
-  #     - '.github/workflows/e2e_detox_mapping.yml'
+    branches:
+      - 'dependabot/**'
+  pull_request:
+    types:
+      - synchronize
+      - opened
+    paths:
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - '.github/workflows/e2e_android.yml'
+      - '.github/workflows/e2e_ios.yml'
+      - '.github/workflows/e2e_detox_mapping.yml'
   workflow_dispatch:
     inputs:
       run_full_test:

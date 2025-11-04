@@ -520,5 +520,3 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
 const App = connectActionSheet(MainApp)
 
 export default App
-// adding comment
-// one more comment
