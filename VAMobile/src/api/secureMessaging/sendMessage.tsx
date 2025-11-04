@@ -47,7 +47,6 @@ const sendMessage = ({ messageData, replyToID, uploads, isRecipientOh }: SendMes
     postData = formData
   }
 
-  console.log('postData:', postData)
   return post<SecureMessagingMessageData>(
     replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
     postData as unknown as Params,
