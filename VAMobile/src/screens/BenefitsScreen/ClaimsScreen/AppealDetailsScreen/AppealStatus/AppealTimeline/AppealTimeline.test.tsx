@@ -2,9 +2,8 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 
+import AppealTimeline from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealTimeline/AppealTimeline'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AppealTimeline from './AppealTimeline'
 
 context('AppealTimeline', () => {
   beforeEach(() => {

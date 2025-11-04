@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
 
+import List, { ListItemObj, ListProps } from 'components/List'
+import { TextLines } from 'components/TextLines'
+import { TextLine } from 'components/types'
 import { generateTestIDForTextList } from 'utils/common'
-
-import { TextLines } from './TextLines'
-import { List, ListItemObj, ListProps } from './index'
-import { TextLine } from './types'
 
 /**
  * Signifies each item in the list of items in {@link SimpleListProps}

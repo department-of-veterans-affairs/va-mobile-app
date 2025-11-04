@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { waitFor } from '@testing-library/react-native'
 
+import AllergyListScreen from 'screens/HealthScreen/Allergies/AllergyList/AllergyListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
-
-import AllergyListScreen from './AllergyListScreen'
 
 context('AllergyListScreen', () => {
   const allergyData = [

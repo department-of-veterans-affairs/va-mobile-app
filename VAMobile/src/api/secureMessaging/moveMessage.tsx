@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { MoveMessageParameters } from 'api/types'
 import { Params, patch } from 'store/api'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
-
-import { secureMessagingKeys } from './queryKeys'
 
 /**
  * Moves a user's message from one folder to another

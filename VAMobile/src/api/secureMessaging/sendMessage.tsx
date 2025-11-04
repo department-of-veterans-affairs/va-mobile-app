@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { secureMessagingKeys } from 'api/secureMessaging/queryKeys'
+import { secureMessagingKeys } from 'api/secureMessaging'
 import { SecureMessagingFormData, SecureMessagingMessageData, SendMessageParameters } from 'api/types'
 import { UserAnalytics } from 'constants/analytics'
 import { Params, contentTypes, post } from 'store/api'
