@@ -22,11 +22,10 @@ function NoTravelClaims() {
       <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessible={true}>
         {t('travelPay.statusList.noClaims.youCanFile')}
       </TextView>
-      <LinkWithAnalytics // TODO: should this be this component for a native link or something else?
+      <LinkWithAnalytics
         type="custom"
         onPress={() => {}} // Go to past appointments list
         text={t('travelPay.statusList.noClaims.startNewClaim')}
-        // a11yLabel={a11yLabelVA(t(linkTextKey))}
         testID={`goToVAGovTravelClaimStatus`}
       />
     </Box>

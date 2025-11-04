@@ -15,7 +15,6 @@ import {
 } from 'api/types'
 import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
-import { TravelClaimsScreenEntryType } from 'constants/travelPay'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
 import PrescriptionHelp from 'screens/HealthScreen/Pharmacy/PrescriptionHelp/PrescriptionHelp'
@@ -55,9 +54,6 @@ export type HealthStackParamList = WebviewStackParams & {
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
   TravelClaimHelpScreen: undefined
-  TravelPayClaims: {
-    from: TravelClaimsScreenEntryType
-  }
   Messages: undefined
   SecureMessaging: {
     activeTab: number

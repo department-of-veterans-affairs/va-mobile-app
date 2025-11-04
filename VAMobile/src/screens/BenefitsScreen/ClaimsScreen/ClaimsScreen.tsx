@@ -6,7 +6,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -30,7 +29,7 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
   }
 
   const onTravelClaimsPress = () => {
-    navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.Claims)
+    navigateToTravelClaims(navigateTo)
   }
 
   return (
@@ -42,7 +41,11 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
         <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} testID="toClaimsHistoryID" />
         <LargeNavButton title={t('claimLetters.title')} onPress={onClaimLettersPress} testID="toClaimLettersID" />
         {featureEnabled('travelPayStatusList') && (
-          <LargeNavButton title={t('travelPay.title')} onPress={onTravelClaimsPress} testID="toTravelPayClaimsID" />
+          <LargeNavButton
+            title={t('travelPay.claims.title')}
+            onPress={onTravelClaimsPress}
+            testID="toTravelPayClaimsButtonID"
+          />
         )}
       </Box>
     </FeatureLandingTemplate>

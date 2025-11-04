@@ -50,7 +50,7 @@ context('ClaimsScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.queryByTestId('toTravelPayClaimsID')).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsButtonID')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -60,7 +60,7 @@ context('ClaimsScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByTestId('toTravelPayClaimsID')).toBeTruthy()
+      expect(screen.getByTestId('toTravelPayClaimsButtonID')).toBeTruthy()
     })
 
     it('should navigate to the Travel Claims screen', () => {
@@ -69,7 +69,7 @@ context('ClaimsScreen', () => {
         .mockReturnValue(true)
       initializeTestInstance()
 
-      fireEvent.press(screen.getByTestId('toTravelPayClaimsID'))
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsButtonID'))
 
       expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', { from: TravelClaimsScreenEntry.Claims })
     })

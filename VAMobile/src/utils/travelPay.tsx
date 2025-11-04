@@ -10,7 +10,6 @@ import { sortBy } from 'underscore'
 import { travelPayMutationKeys } from 'api/travelPay'
 import { AppointmentData, TravelPayClaimData, TravelPayClaimSummary } from 'api/types'
 import { Events } from 'constants/analytics'
-import { TravelClaimsScreenEntryType } from 'constants/travelPay'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { RouteNavigationFunction } from 'utils/hooks'
 
@@ -249,11 +248,10 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
 /**
  * Navigates to the travel claims list screen from various entry points
  * @param navigateTo - The navigation function to navigate between screens
- * @param from - The entry point from which the user is navigating from
  */
-export const navigateToTravelClaims = (
-  navigateTo: RouteNavigationFunction<ParamListBase>,
-  from: TravelClaimsScreenEntryType,
-) => {
-  navigateTo('TravelPayClaims', { from })
+export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  navigateTo('BenefitsTab', {
+    screen: 'TravelPayClaims',
+    initial: false,
+  })
 }

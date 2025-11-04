@@ -133,7 +133,7 @@ const detoxMapping = {
     OnboardingCarousel: ['Onboarding'],
     payments: ['Payments'],
     PaymentHistory: ['Payments'],
-    PaymentsScreen: ['Payments', 'DirectDeposit', 'TravelPay'],
+    PaymentsScreen: ['Payments', 'DirectDeposit'],
     personalInformation: demographicsArray,
     PersonalInformationScreen: demographicsArray,
     Pharmacy: ['Prescriptions'],

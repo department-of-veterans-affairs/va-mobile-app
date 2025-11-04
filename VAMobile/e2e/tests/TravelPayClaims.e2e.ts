@@ -41,30 +41,26 @@ describe('Travel Pay Claims Screen', () => {
     // Visit through Benefits tab
     await openBenefits()
     await openClaims()
-    await openTravelPayClaims()
-    await waitFor(element(by.text('Claims')))
-      .toBeVisible()
+    await openTravelPayClaims({ useNativeLink: false })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
       .withTimeout(4000)
     await element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)).tap()
-    await element(by.text('Claims history')).tap() // Went back to the Claims tab list
 
     // Visit through Payments tab
     await openPayments()
-    await openTravelPayClaims()
-    await waitFor(element(by.text('Payments')))
-      .toBeVisible()
+    await openTravelPayClaims({ useNativeLink: true })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
       .withTimeout(4000)
     await element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)).tap()
-    await expect(element(by.text('VA payment history'))).toExist() // Went back to the Payments tab list
 
     // Visit through Health tab
     await openHealth()
-    await openTravelPayClaims()
-    await waitFor(element(by.text('Health')))
-      .toBeVisible()
+    await openTravelPayClaims({ useNativeLink: true })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
       .withTimeout(4000)
-    await element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)).tap()
-    await expect(element(by.text('Medical records'))).toExist() // Went back to the Health tab list
   })
 
   it('navigates to the Travel Pay Claims screen and display title', async () => {

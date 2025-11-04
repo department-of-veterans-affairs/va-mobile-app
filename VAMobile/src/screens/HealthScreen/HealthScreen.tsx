@@ -20,11 +20,11 @@ import {
   CategoryLandingAlert,
   EmailConfirmationAlert,
   LargeNavButton,
+  LinkWithAnalytics,
 } from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import AllergyDetailsScreen from 'screens/HealthScreen/Allergies/AllergyDetails/AllergyDetailsScreen'
 import AllergyListScreen from 'screens/HealthScreen/Allergies/AllergyList/AllergyListScreen'
 import Appointments from 'screens/HealthScreen/Appointments'
@@ -39,7 +39,6 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
-import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -191,11 +190,14 @@ export function HealthScreen({}: HealthScreenProps) {
           testID="toMedicalRecordsListID"
         />
         {featureEnabled('travelPayStatusList') && (
-          <LargeNavButton
-            title={t('travelPay.title')}
-            onPress={() => navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.Health)}
-            testID="toTravelPayClaimsID"
-          />
+          <Box ml={theme.dimensions.gutter}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('travelPay.claims.viewYourClaims')}
+              testID="toTravelPayClaimsLinkID"
+              onPress={() => navigateToTravelClaims(navigateTo)}
+            />
+          </Box>
         )}
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
@@ -248,11 +250,6 @@ function HealthStackScreen({}: HealthStackScreenProps) {
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
         component={PastAppointmentDetails}
-        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
-      />
-      <HealthScreenStack.Screen
-        name="TravelPayClaims"
-        component={TravelPayClaimsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen

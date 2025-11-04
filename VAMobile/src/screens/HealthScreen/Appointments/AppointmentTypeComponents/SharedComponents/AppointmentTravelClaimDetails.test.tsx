@@ -10,7 +10,6 @@ import {
   AppointmentType,
   AppointmentTypeConstants,
 } from 'api/types'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { AppointmentTravelClaimDetails } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, fireEvent, render, screen, when } from 'testUtils'
@@ -387,8 +386,9 @@ describe('AppointmentTravelClaimDetails', () => {
                 screen.getByText(t('travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link')),
               ).toBeTruthy()
               expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
-              expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
-                from: TravelClaimsScreenEntry.AppointmentDetail,
+              expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+                screen: 'TravelPayClaims',
+                initial: false,
               })
             })
           })
@@ -506,9 +506,7 @@ describe('AppointmentTravelClaimDetails', () => {
           fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
 
           expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link'))).toBeTruthy()
-          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
-            from: TravelClaimsScreenEntry.AppointmentDetail,
-          })
+          expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
         })
       })
     })

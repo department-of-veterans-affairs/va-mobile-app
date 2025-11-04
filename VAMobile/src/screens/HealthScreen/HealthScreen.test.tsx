@@ -8,7 +8,6 @@ import { appointmentsKeys } from 'api/appointments'
 import { prescriptionKeys } from 'api/prescriptions'
 import { secureMessagingKeys } from 'api/secureMessaging'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
@@ -104,7 +103,7 @@ context('HealthScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.queryByTestId('toTravelPayClaimsID')).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -114,7 +113,7 @@ context('HealthScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByTestId('toTravelPayClaimsID')).toBeTruthy()
+      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
     })
 
     it('navigates to Travel Claims screen when pressed', () => {
@@ -123,11 +122,9 @@ context('HealthScreen', () => {
         .mockReturnValue(true)
       initializeTestInstance()
 
-      fireEvent.press(screen.getByTestId('toTravelPayClaimsID'))
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
-        from: TravelClaimsScreenEntry.Health,
-      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims' })
     })
   })
 

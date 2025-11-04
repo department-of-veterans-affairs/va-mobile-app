@@ -6,7 +6,6 @@ import { AppointmentAttributes } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import { TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -55,7 +54,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     // Go to the native screen if the FF is on, otherwise
     // continue to go to the web view
     if (featureEnabled('travelPayStatusList')) {
-      navigateToTravelClaims(navigateTo, TravelClaimsScreenEntry.AppointmentDetail)
+      navigateToTravelClaims(navigateTo)
     } else {
       // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
       // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,

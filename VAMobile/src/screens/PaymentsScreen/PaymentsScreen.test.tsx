@@ -6,7 +6,6 @@ import { t } from 'i18next'
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import PaymentsScreen from 'screens/PaymentsScreen'
 import { context, render, when } from 'testUtils'
 import { numberToUSDollars } from 'utils/formattingUtils'
@@ -164,7 +163,7 @@ context('PaymentsScreen', () => {
     it('is not displayed if feature toggle is disabled', () => {
       initializeTestInstance()
 
-      expect(screen.queryByTestId('toTravelPayClaimsID')).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -174,7 +173,7 @@ context('PaymentsScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByTestId('toTravelPayClaimsID')).toBeTruthy()
+      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
     })
 
     it('navigates to Travel Claims screen when pressed', () => {
@@ -184,11 +183,9 @@ context('PaymentsScreen', () => {
 
       initializeTestInstance()
 
-      fireEvent.press(screen.getByTestId('toTravelPayClaimsID'))
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', {
-        from: TravelClaimsScreenEntry.Payments,
-      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims' })
     })
   })
 })
