@@ -126,4 +126,3 @@ jobs:
             echo "Could not determine Slack ID for the provided email."
             echo "slackId=unknown" >> "$GITHUB_OUTPUT"
           fi
-
