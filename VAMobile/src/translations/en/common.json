@@ -1741,7 +1741,7 @@
   "travelPay.claimDetails.information.updatedOn": "Updated on {{date}} at {{time}}",
   "travelPay.claimDetails.information.appointmentDate": "{{date}} at {{time}}",
   "travelPay.claimDetails.information.facilityId": "Facility ID: {{id}}",
-  "travelPay.claimDetails.information.documentsSubmitted": "Documents you submitted",
+  "travelPay.claimDetails.information.documentsSubmitted": "Documents added to this claim",
   "travelPay.statusList.title": "Travel Claims",
   "travelPay.statusList.allOf": "All of {{year}}",
   "travelPay.statusList.appointmentDateLine1": "{{date}} at",
