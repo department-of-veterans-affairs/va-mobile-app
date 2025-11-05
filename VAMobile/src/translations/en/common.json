@@ -1195,7 +1195,7 @@
   "letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint": "Select whether to include number of service connected disabilities information in your letter",
   "letters.benefitService.ourRecordsShow": "Our records list your 3 most recent service periods. You may have more service periods that aren't listed here.",
   "letters.benefitService.sendMessage": "Go to Ask VA",
-  "letters.benefitService.sendMessageA11yHint": "Takes you to the Ask V-A page. This page will open in your device's browser",
+  "letters.benefitService.sendMessageA11yHint": "Takes you to the Ask V-A page.",
   "letters.benefitService.sendMessageIfIncorrectInfo": "If your service period or disability status information is incorrect, contact us online through Ask VA.",
   "letters.benefitService.separationDate": "Separation date",
   "letters.benefitService.summary": "This letter shows your service history and some benefit information. You can customize this letter and use it for many things, including to apply for housing assistance, civil service jobs, and state or local property and car tax relief.",

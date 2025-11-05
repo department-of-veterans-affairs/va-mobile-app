@@ -87,10 +87,15 @@ After adding the variables, restart your terminal window and the variables shoul
 1. Open a terminal and type `nvm use` and press enter to set the node version for the project (if the version isn't installed, it will prompt you with the install command).
 2. In a terminal, type `yarn` or `yarn install` and press enter to install the projects dependencies. This will create the `node_modules` folder.
 3. After dependencies are installed, type `cd ios && pod install && cd ..` and press enter to install pods on iOS (This is done once unless you installed new dependencies that need pods created).
-4. Run `yarn env:staging` and press enter to setup the staging environment and create the `.env` file. Verify the file has the client key and demo password that is in your `.zshrc` file.
+4. **Choose your environment** and run the appropriate command to create the `.env` file:
+   - **Staging** (default): `yarn env:staging` - Points to staging VA APIs
+   - **Production**: `yarn env:production` - Points to production VA APIs  
+   - **Local**: `yarn env:local` - Points to local vets-api instance (see [Local API Setup](./LocalAPISetup.md))
+   
+   Verify the `.env` file has the client key and demo password from your `.zshrc` file.
 5. Run `yarn bundle:ios` and press enter to create the IOS bundle.
 6. Run `yarn bundle:android` and press enter to create the android bundle.
-7. Run `yarn start` to start the metro development server.
+7. Run `yarn start` to start the metro development server or `yarn start:local` for local API development. (see [Local API Setup](./LocalAPISetup.md))
 
 ## Android Setup
 

@@ -5,7 +5,7 @@ name: '[Documentation] Test Build'
 on:
   pull_request:
     branches: [develop]
-    paths: 
+    paths:
       - VAMobile/src/components/**
       - VAMobile/documentation/**
       - VAMobile/src/utils/hooks.tsx
@@ -14,9 +14,13 @@ jobs:
   test-deploy:
     name: Test
     runs-on: ubuntu-latest
-    env:
-      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -25,6 +29,8 @@ jobs:
           cache-dependency-path: VAMobile/documentation/yarn.lock
       - name: Test build
         working-directory: VAMobile
+        env:
+          DOCS_RELEASE_REPORT_PAT: ${{ steps.generate_token.outputs.token }}
         run: |
           yarn install --frozen-lockfile
           cd documentation

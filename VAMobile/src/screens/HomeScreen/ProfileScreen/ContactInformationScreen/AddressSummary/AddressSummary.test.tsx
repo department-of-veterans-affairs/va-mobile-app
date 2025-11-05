@@ -5,9 +5,11 @@ import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { AddressData, UserContactInformation } from 'api/types'
+import AddressSummary, {
+  addressDataField,
+  profileAddressOptions,
+} from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/AddressSummary/AddressSummary'
 import { QueriesData, render } from 'testUtils'
-
-import AddressSummary, { addressDataField, profileAddressOptions } from './AddressSummary'
 
 const mailingAddressOnPressSpy = jest.fn()
 const residentialAddressOnPressSpy = jest.fn()

@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import ClosedClaimStatusDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClosedClaimInfo/ClosedClaimStatusDetails'
+import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import { context, render } from 'testUtils'
-
-import { claim } from '../../../claimData'
-import ClosedClaimStatusDetails from './ClosedClaimStatusDetails'
 
 const renderWithProps = (letterIsDownloadable = true) => {
   render(<ClosedClaimStatusDetails claim={claim} claimType="CLOSED" letterIsDownloadable={letterIsDownloadable} />)
