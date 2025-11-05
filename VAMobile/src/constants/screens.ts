@@ -19,7 +19,7 @@ export const LARGE_PANEL_OPTIONS: StackNavigationOptions = {
   cardOverlayEnabled: true,
   headerStatusBarHeight: 0,
   // Hardcode card style for VoiceOver to prevent a race condition that causes announcements to fail when using interpolator
-  ...(isIOS() && store.getState().accessibility.isVoiceOverTalkBackRunning
+  ...(isIOS() && store.getState().accessibility?.isVoiceOverTalkBackRunning
     ? {
         ...TransitionPresets.ModalSlideFromBottomIOS,
         cardStyle: {

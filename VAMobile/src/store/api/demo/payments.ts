@@ -1,8 +1,7 @@
 import { PaymentsGetData } from 'api/types'
+import { Params } from 'store/api/api'
+import { DemoStore } from 'store/api/demo/store'
 import { getFormattedDate } from 'utils/formattingUtils'
-
-import { Params } from '..'
-import { DemoStore } from './store'
 
 type PaymentsPageNumber = '1' & '2'
 type PaymentsYearNumber = '2024' | '2023'
