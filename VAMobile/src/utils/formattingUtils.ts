@@ -446,5 +446,5 @@ export const formatDateMMMyyyy = (date: DateTime): string => {
  * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
  */
 export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
-  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
+  return `${formatDateMMMyyyy(startDate)} \u2013 ${formatDateMMMyyyy(endDate)}`
 }
