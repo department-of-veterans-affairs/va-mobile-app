@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
-import { AppState, AppStateStatus, Linking, Modal, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
@@ -447,16 +447,6 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
 
-  const [appInactive, setAppInactive] = useState(AppState.currentState !== 'active')
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', (state) => {
-      if (isIOS()) {
-        setAppInactive(state !== 'active')
-      }
-    })
-    return (): void => sub?.remove()
-  }, [])
-
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.
   useEffect(() => {
@@ -478,13 +468,6 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
 
   return (
     <>
-      <Modal
-        visible={appInactive}
-        animationType={'fade'}
-        presentationStyle={'fullScreen'}
-        supportedOrientations={['portrait', 'landscape']}>
-        <SplashScreen />
-      </Modal>
       <RootNavStack.Navigator
         screenOptions={{ ...headerStyles, detachPreviousScreen: false }}
         initialRouteName="Tabs"

@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
 import { context, render } from 'testUtils'
-
-import NoMatchInRecords from './NoMatchInRecords'
 
 context('NoMatchInRecords', () => {
   it('initializes correctly', () => {
