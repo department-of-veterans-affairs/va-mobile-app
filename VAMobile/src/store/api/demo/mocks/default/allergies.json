@@ -866,6 +866,21 @@
           "notes": ["This allergy duplicates an allergy entered into VistA"],
           "provider": " Victoria A Borland"
         }
+      },
+      {
+        "id": "132312397",
+        "type": "allergy",
+        "attributes": {
+          "id": "132312397",
+          "name": "Penicillins",
+          "date": "2023-01-10T18:26:28Z",
+          "categories": ["medication", "biologic"],
+          "reactions": ["Urticaria (Hives)", "Anaphylaxis"],
+          "location": null,
+          "observedHistoric": null,
+          "notes": [],
+          "provider": "Nurse2, VA-HBPC"
+        }
       }
     ],
     "meta": {
