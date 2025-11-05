@@ -228,16 +228,7 @@ context('AllergyListScreen', () => {
       await waitFor(() => expect(screen.getByText('Penicillin allergy')).toBeTruthy())
     })
 
-    it('initializes with v0 endpoint when flag is disabled even if services is authorized', async () => {
-      when(api.get as jest.Mock)
-        .calledWith('/v0/health/allergy-intolerances', expect.anything())
-        .mockResolvedValue({ data: allergyData })
-      initializeTestInstance({})
-      await waitFor(() => expect(screen.getByText('Sulfonamides allergy')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Penicillins allergy')).toBeTruthy())
-    })
-
-    it('initializes with v0 endpoint when flag is enabled if services are not authorized', async () => {
+    it('initializes with v0 endpoint when services are not authorized', async () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/allergy-intolerances', expect.anything())
         .mockResolvedValue({ data: allergyData })
