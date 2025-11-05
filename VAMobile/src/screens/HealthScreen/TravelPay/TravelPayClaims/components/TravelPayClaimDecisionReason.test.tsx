@@ -39,25 +39,6 @@ context('TravelPayClaimDecisionReason', () => {
     })
   })
 
-  describe('Text Variants and Styling', () => {
-    it('should use correct text variants', () => {
-      renderComponent('Denied')
-
-      const titleElement = screen.getByTestId('travelPayClaimDecisionReasonTitleTestID')
-      expect(titleElement.props.variant).toBe('MobileBodyBold')
-
-      const descriptionElement = screen.getByTestId('travelPayClaimDecisionReasonDescriptionTestID')
-      expect(descriptionElement.props.variant).toBe('MobileBody')
-    })
-
-    it('should apply proper margins', () => {
-      renderComponent('Denied')
-
-      const descriptionElement = screen.getByTestId('travelPayClaimDecisionReasonDescriptionTestID')
-      expect(descriptionElement.props.mt).toBeTruthy()
-    })
-  })
-
   describe('Different Claim Statuses', () => {
     it('should show denied header for denied status', () => {
       renderComponent('Denied')

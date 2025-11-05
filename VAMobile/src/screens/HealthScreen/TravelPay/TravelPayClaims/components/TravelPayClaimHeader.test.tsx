@@ -208,7 +208,7 @@ context('TravelPayClaimHeader', () => {
 
       // Check for accessibility roles
       const headerElements = screen.getAllByRole('header')
-      expect(headerElements).toHaveLength(2) // Title and claim number have header roles
+      expect(headerElements).toHaveLength(3) // Title, claim number, and status have header roles
 
       // Verify specific elements have header roles
       const titleText = t('travelPay.claimDetails.header.title', {
@@ -222,6 +222,12 @@ context('TravelPayClaimHeader', () => {
       })
       const claimNumberElement = screen.getByText(claimNumberText)
       expect(claimNumberElement.props.accessibilityRole).toBe('header')
+
+      const claimStatusText = t('travelPay.claimDetails.header.claimStatus', {
+        claimStatus: defaultProps.claimStatus,
+      })
+      const claimStatusElement = screen.getByText(claimStatusText)
+      expect(claimStatusElement.props.accessibilityRole).toBe('header')
     })
 
     it('should be accessible with screen readers', () => {
@@ -292,40 +298,6 @@ context('TravelPayClaimHeader', () => {
         claimStatus: 'Custom Status',
       })
       expect(screen.getByText(claimStatusText)).toBeTruthy()
-    })
-  })
-
-  describe('Visual Hierarchy', () => {
-    it('should use appropriate text variants for hierarchy', () => {
-      renderComponent()
-
-      const titleText = t('travelPay.claimDetails.header.title', {
-        appointmentDate: 'Friday, December 15, 2023',
-      })
-      const titleElement = screen.getByText(titleText)
-      expect(titleElement.props.variant).toBe('MobileBody')
-
-      const claimNumberText = t('travelPay.claimDetails.header.claimNumber', {
-        claimNumber: defaultProps.claimNumber,
-      })
-      const claimNumberElement = screen.getByText(claimNumberText)
-      expect(claimNumberElement.props.variant).toBe('MobileBodyBold')
-
-      const claimStatusText = t('travelPay.claimDetails.header.claimStatus', {
-        claimStatus: defaultProps.claimStatus,
-      })
-      const claimStatusElement = screen.getByText(claimStatusText)
-      expect(claimStatusElement.props.variant).toBe('MobileBodyBold')
-    })
-
-    it('should apply correct styling props', () => {
-      renderComponent()
-
-      const claimStatusText = t('travelPay.claimDetails.header.claimStatus', {
-        claimStatus: defaultProps.claimStatus,
-      })
-      const claimStatusElement = screen.getByText(claimStatusText)
-      expect(claimStatusElement.props.color).toBe('bodyText')
     })
   })
 

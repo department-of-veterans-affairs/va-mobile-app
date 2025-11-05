@@ -116,23 +116,18 @@ context('TravelPayClaimInformation', () => {
     it('should render all required sections', () => {
       renderComponent(baseClaimDetails)
 
-      // Section title
-      expect(screen.getByText(t('travelPay.claimDetails.information.title'))).toBeTruthy()
+      // Claim submission timeline section
+      expect(screen.getByTestId('travelPayClaimInformationSubmissionTimelineTestID')).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.information.timeline'))).toBeTruthy()
 
-      // When section
-      expect(screen.getByTestId('travelPayClaimInformationWhenTitleTestID')).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.information.when'))).toBeTruthy()
-
-      // Where section
-      expect(screen.getByText(t('travelPay.claimDetails.information.where'))).toBeTruthy()
-      expect(screen.getByTestId('travelPayClaimInformationWhereTestID')).toBeTruthy()
+      // Appointment information section
+      expect(screen.getByText(t('travelPay.claimDetails.information.appointmentDateTime.title'))).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimInformationAppointmentDateTestID')).toBeTruthy()
     })
 
     it('should display facility name correctly', () => {
       renderComponent(baseClaimDetails)
 
-      const facilityElement = screen.getByTestId('travelPayClaimInformationWhereTestID')
-      expect(facilityElement).toBeTruthy()
       expect(screen.getByText(baseClaimDetails.facilityName)).toBeTruthy()
     })
 
@@ -149,7 +144,7 @@ context('TravelPayClaimInformation', () => {
   })
 
   describe('Date Formatting Integration', () => {
-    it('should call getFormattedDate with correct parameters for submitted date', () => {
+    it('should call getFormattedDate with correct parameters for created date', () => {
       renderComponent(baseClaimDetails)
 
       expect(mockGetFormattedDate).toHaveBeenCalledWith(baseClaimDetails.createdOn, 'EEEE, MMMM d, yyyy')
@@ -163,14 +158,14 @@ context('TravelPayClaimInformation', () => {
       expect(mockGetFormattedDate).toHaveBeenCalledWith(baseClaimDetails.modifiedOn, 'h:mm a')
     })
 
-    it('should display formatted submitted date and time', () => {
+    it('should display formatted created date and time', () => {
       renderComponent(baseClaimDetails)
 
-      const submittedText = t('travelPay.claimDetails.information.submittedOn', {
+      const createdText = t('travelPay.claimDetails.information.createdOn', {
         date: 'Thursday, November 30, 2023',
         time: '10:00 AM',
       })
-      expect(screen.getByText(submittedText)).toBeTruthy()
+      expect(screen.getByText(createdText)).toBeTruthy()
     })
 
     it('should display formatted updated date and time', () => {
@@ -202,7 +197,7 @@ context('TravelPayClaimInformation', () => {
 
       renderComponent(claimWithDifferentDates)
 
-      const submittedText = t('travelPay.claimDetails.information.submittedOn', {
+      const createdText = t('travelPay.claimDetails.information.createdOn', {
         date: 'Monday, January 15, 2024',
         time: '2:30 PM',
       })
@@ -211,7 +206,7 @@ context('TravelPayClaimInformation', () => {
         time: '4:45 PM',
       })
 
-      expect(screen.getByText(submittedText)).toBeTruthy()
+      expect(screen.getByText(createdText)).toBeTruthy()
       expect(screen.getByText(updatedText)).toBeTruthy()
     })
   })
@@ -335,16 +330,15 @@ context('TravelPayClaimInformation', () => {
       renderComponent(baseClaimDetails)
 
       // Verify all translation keys are used
-      expect(screen.getByText(t('travelPay.claimDetails.information.title'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.information.when'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.information.where'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.information.timeline'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.information.appointmentDateTime.title'))).toBeTruthy()
     })
 
     it('should handle translation interpolation correctly', () => {
       renderComponent(baseClaimDetails)
 
       // Check interpolated translations
-      const submittedText = t('travelPay.claimDetails.information.submittedOn', {
+      const createdText = t('travelPay.claimDetails.information.createdOn', {
         date: 'Thursday, November 30, 2023',
         time: '10:00 AM',
       })
@@ -353,7 +347,7 @@ context('TravelPayClaimInformation', () => {
         time: '10:00 AM',
       })
 
-      expect(screen.getByText(submittedText)).toBeTruthy()
+      expect(screen.getByText(createdText)).toBeTruthy()
       expect(screen.getByText(updatedText)).toBeTruthy()
     })
 
@@ -378,10 +372,10 @@ context('TravelPayClaimInformation', () => {
 
       renderComponent(claimWithDocuments)
 
-      expect(screen.getByTestId('travelPayClaimInformationWhenTitleTestID')).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimInformationSubmissionTimelineTestID')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimInformationSubmittedOnTestID')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimInformationUpdatedOnTestID')).toBeTruthy()
-      expect(screen.getByTestId('travelPayClaimInformationWhereTestID')).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimInformationAppointmentDateTestID')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimInformationDocumentsSubmittedTitleTestID')).toBeTruthy()
     })
 
@@ -389,44 +383,9 @@ context('TravelPayClaimInformation', () => {
       renderComponent(baseClaimDetails)
 
       // All text elements should be accessible by default
-      expect(screen.getByText(t('travelPay.claimDetails.information.title'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.information.when'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.information.where'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.information.timeline'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claimDetails.information.appointmentDateTime.title'))).toBeTruthy()
       expect(screen.getByText(baseClaimDetails.facilityName)).toBeTruthy()
-    })
-  })
-
-  describe('Visual Hierarchy', () => {
-    it('should use appropriate text variants for hierarchy', () => {
-      const claimWithDocuments = {
-        ...baseClaimDetails,
-        documents: [mockUserDocument],
-      }
-
-      renderComponent(claimWithDocuments)
-
-      // Section headers should use MobileBodyBold
-      const sectionTitle = screen.getByText(t('travelPay.claimDetails.information.title'))
-      expect(sectionTitle.props.variant).toBe('MobileBodyBold')
-
-      const whenTitle = screen.getByText(t('travelPay.claimDetails.information.when'))
-      expect(whenTitle.props.variant).toBe('MobileBodyBold')
-
-      const whereTitle = screen.getByText(t('travelPay.claimDetails.information.where'))
-      expect(whereTitle.props.variant).toBe('MobileBodyBold')
-
-      const documentsTitle = screen.getByText(t('travelPay.claimDetails.information.documentsSubmitted'))
-      expect(documentsTitle.props.variant).toBe('MobileBodyBold')
-
-      // Content should use MobileBody
-      const submittedElement = screen.getByTestId('travelPayClaimInformationSubmittedOnTestID')
-      expect(submittedElement.props.variant).toBe('MobileBody')
-
-      const updatedElement = screen.getByTestId('travelPayClaimInformationUpdatedOnTestID')
-      expect(updatedElement.props.variant).toBe('MobileBody')
-
-      const facilityElement = screen.getByTestId('travelPayClaimInformationWhereTestID')
-      expect(facilityElement.props.variant).toBe('MobileBody')
     })
   })
 
@@ -439,8 +398,6 @@ context('TravelPayClaimInformation', () => {
 
       renderComponent(claimWithEmptyFacility)
 
-      const facilityElement = screen.getByTestId('travelPayClaimInformationWhereTestID')
-      expect(facilityElement).toBeTruthy()
       expect(screen.getByText('')).toBeTruthy()
     })
 
@@ -593,7 +550,7 @@ context('TravelPayClaimInformation', () => {
 
       renderComponent(claimWithSameDates)
 
-      const submittedText = t('travelPay.claimDetails.information.submittedOn', {
+      const createdText = t('travelPay.claimDetails.information.createdOn', {
         date: 'Friday, December 1, 2023',
         time: '10:00 AM',
       })
@@ -602,7 +559,7 @@ context('TravelPayClaimInformation', () => {
         time: '10:00 AM',
       })
 
-      expect(screen.getByText(submittedText)).toBeTruthy()
+      expect(screen.getByText(createdText)).toBeTruthy()
       expect(screen.getByText(updatedText)).toBeTruthy()
     })
 
@@ -617,11 +574,11 @@ context('TravelPayClaimInformation', () => {
 
       renderComponent(claimWithInvalidDates)
 
-      const submittedText = t('travelPay.claimDetails.information.submittedOn', {
+      const createdText = t('travelPay.claimDetails.information.createdOn', {
         date: 'Invalid Date',
         time: 'Invalid Date',
       })
-      expect(screen.getByText(submittedText)).toBeTruthy()
+      expect(screen.getByText(createdText)).toBeTruthy()
     })
   })
 

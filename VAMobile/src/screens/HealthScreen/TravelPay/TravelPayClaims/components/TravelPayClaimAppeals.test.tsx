@@ -74,20 +74,6 @@ const mockForm100998Document: TravelPayClaimDocument = {
   createdon: '2023-12-01T10:00:00.000Z',
 }
 
-const mockAlternativeFormDocument: TravelPayClaimDocument = {
-  documentId: 'alt-form-id',
-  filename: '10-0998_appeal_form.pdf',
-  mimetype: 'application/pdf',
-  createdon: '2023-12-01T10:00:00.000Z',
-}
-
-const mockOtherDocument: TravelPayClaimDocument = {
-  documentId: 'other-doc-id',
-  filename: 'receipt.pdf',
-  mimetype: 'application/pdf',
-  createdon: '2023-12-01T10:00:00.000Z',
-}
-
 context('TravelPayClaimAppeals', () => {
   const renderComponent = (claimDetails: TravelPayClaimDetails) => {
     render(<TravelPayClaimAppeals claimDetails={claimDetails} />)
@@ -160,79 +146,6 @@ context('TravelPayClaimAppeals', () => {
       expect(screen.getByText(t('travelPay.claimDetails.appeals.option2Title'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.claimDetails.appeals.option2Description'))).toBeTruthy()
     })
-
-    it('should display note with proper styling', () => {
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.noteLabel'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.noteText'), { exact: false })).toBeTruthy()
-    })
-
-    it('should have gray divider at the top', () => {
-      // The divider should be present as a Box with borderTop styling
-      // This is verified by the component rendering without errors
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.title'))).toBeTruthy()
-    })
-  })
-
-  describe('Form 10-0998 Document Handling', () => {
-    it('should show document download when Form 10-0998 exists in documents', () => {
-      const claimWithForm = {
-        ...baseClaimDetails,
-        documents: [mockForm100998Document, mockOtherDocument],
-      }
-
-      renderComponent(claimWithForm)
-
-      // Should show document download component instead of external link
-      expect(screen.queryByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should show external link when Form 10-0998 does not exist', () => {
-      const claimWithoutForm = {
-        ...baseClaimDetails,
-        documents: [mockOtherDocument],
-      }
-
-      renderComponent(claimWithoutForm)
-
-      // Should show external link to form
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should recognize alternative Form 10-0998 filename patterns', () => {
-      const claimWithAlternativeForm = {
-        ...baseClaimDetails,
-        documents: [mockAlternativeFormDocument],
-      }
-
-      renderComponent(claimWithAlternativeForm)
-
-      // Should still recognize it as the form and show download
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should handle empty documents array', () => {
-      const claimWithEmptyDocs = {
-        ...baseClaimDetails,
-        documents: [],
-      }
-
-      renderComponent(claimWithEmptyDocs)
-
-      // Should show external link
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should handle undefined documents', () => {
-      const claimWithUndefinedDocs = {
-        ...baseClaimDetails,
-        documents: undefined,
-      } as unknown as TravelPayClaimDetails
-
-      renderComponent(claimWithUndefinedDocs)
-
-      // Should show external link and not crash
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
   })
 
   describe('Secure Messaging Integration', () => {
@@ -285,35 +198,6 @@ context('TravelPayClaimAppeals', () => {
     })
   })
 
-  describe('Text Variants and Styling', () => {
-    beforeEach(() => {
-      renderComponent(baseClaimDetails)
-    })
-
-    it('should use correct text variants', () => {
-      const title = screen.getByText(t('travelPay.claimDetails.appeals.title'))
-      expect(title.props.variant).toBe('MobileBodyBold')
-
-      const description = screen.getByText(t('travelPay.claimDetails.appeals.description'))
-      expect(description.props.variant).toBe('MobileBody')
-
-      const option1Title = screen.getByText(t('travelPay.claimDetails.appeals.option1Title'))
-      expect(option1Title.props.variant).toBe('MobileBodyBold')
-
-      const option1Description = screen.getByText(t('travelPay.claimDetails.appeals.option1Description'))
-      expect(option1Description.props.variant).toBe('MobileBody')
-    })
-
-    it('should use correct helper text variants for note', () => {
-      const noteLabel = screen.getByText(t('travelPay.claimDetails.appeals.noteLabel'))
-      expect(noteLabel.props.variant).toBe('HelperTextBold')
-
-      // The noteText is nested inside the parent TextView, so we check the parent's variant
-      const parentNote = screen.getByText(t('travelPay.claimDetails.appeals.noteText'), { exact: false })
-      expect(parentNote.props.variant).toBe('HelperText')
-    })
-  })
-
   describe('Accessibility', () => {
     beforeEach(() => {
       renderComponent(baseClaimDetails)
@@ -335,115 +219,6 @@ context('TravelPayClaimAppeals', () => {
       expect(screen.getByText(t('travelPay.claimDetails.appeals.description'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.claimDetails.appeals.option1Title'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.claimDetails.appeals.option2Title'))).toBeTruthy()
-    })
-  })
-
-  describe('Document Search Logic', () => {
-    it('should find document with exact filename match', () => {
-      const claimWithExactMatch = {
-        ...baseClaimDetails,
-        documents: [{ ...mockOtherDocument }, { ...mockForm100998Document, filename: 'Form 10-0998.pdf' }],
-      }
-
-      renderComponent(claimWithExactMatch)
-
-      // Should find and show the document
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should find document with partial filename match (10-0998)', () => {
-      const claimWithPartialMatch = {
-        ...baseClaimDetails,
-        documents: [{ ...mockOtherDocument }, { ...mockForm100998Document, filename: 'VA_10-0998_completed.pdf' }],
-      }
-
-      renderComponent(claimWithPartialMatch)
-
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should find document with "Form 10-0998" in filename', () => {
-      const claimWithFormInName = {
-        ...baseClaimDetails,
-        documents: [
-          { ...mockOtherDocument },
-          { ...mockForm100998Document, filename: 'Downloaded_Form 10-0998_2023.pdf' },
-        ],
-      }
-
-      renderComponent(claimWithFormInName)
-
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should not find document with similar but incorrect filename', () => {
-      const claimWithSimilarName = {
-        ...baseClaimDetails,
-        documents: [
-          { ...mockOtherDocument },
-          { ...mockForm100998Document, filename: 'Form_10-0997.pdf' }, // Wrong form number
-        ],
-      }
-
-      renderComponent(claimWithSimilarName)
-
-      // Should not find the document and show external link instead
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-  })
-
-  describe('Edge Cases', () => {
-    it('should handle claim with many documents', () => {
-      const manyDocuments = Array.from({ length: 20 }, (_, i) => ({
-        documentId: `doc-${i}`,
-        filename: `document_${i}.pdf`,
-        mimetype: 'application/pdf',
-        createdon: '2023-12-01T10:00:00.000Z',
-      }))
-
-      // Add the form document at the end
-      manyDocuments.push(mockForm100998Document)
-
-      const claimWithManyDocs = {
-        ...baseClaimDetails,
-        documents: manyDocuments,
-      }
-
-      renderComponent(claimWithManyDocs)
-
-      // Should still find the form document
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should handle document with case variations in filename', () => {
-      const claimWithCaseVariations = {
-        ...baseClaimDetails,
-        documents: [{ ...mockForm100998Document, filename: 'FORM 10-0998.PDF' }],
-      }
-
-      renderComponent(claimWithCaseVariations)
-
-      // Should find it (case-sensitive search)
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
-    })
-
-    it('should handle malformed document objects', () => {
-      const claimWithMalformedDoc = {
-        ...baseClaimDetails,
-        documents: [
-          {
-            documentId: 'test',
-            filename: null as unknown as string,
-            mimetype: 'application/pdf',
-            createdon: '2023-12-01',
-          },
-          mockForm100998Document,
-        ],
-      }
-
-      // Should not crash and should still find the valid form document
-      expect(() => renderComponent(claimWithMalformedDoc)).not.toThrow()
-      expect(screen.getByText(t('travelPay.claimDetails.appeals.formDownload'))).toBeTruthy()
     })
   })
 

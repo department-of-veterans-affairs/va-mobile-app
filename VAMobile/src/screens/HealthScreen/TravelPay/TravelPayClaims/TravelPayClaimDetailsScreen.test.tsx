@@ -391,12 +391,6 @@ context('TravelPayClaimDetailsScreen', () => {
 
       // Should render TravelPayClaimAmount component (when amounts > 0)
       expect(screen.getByTestId('travelPayClaimAmountTitleTestID')).toBeTruthy()
-
-      // Should render TravelPayClaimInformation component
-      expect(screen.getByText('Claim information')).toBeTruthy()
-
-      // Should render TravelPayClaimAppeals component (conditionally based on status)
-      // This will be null for 'In manual review' status, which is correct
     })
 
     it('should render document download section when documents are present', () => {
@@ -478,9 +472,6 @@ context('TravelPayClaimDetailsScreen', () => {
 
       const screen_element = screen.getByTestId('TravelPayClaimDetailsScreen')
       expect(screen_element).toBeTruthy()
-
-      // Title is accessible via testID and accessibility labels, not direct text
-      // The FeatureLandingTemplate handles title accessibility properly
     })
 
     it('should have accessible help button', () => {

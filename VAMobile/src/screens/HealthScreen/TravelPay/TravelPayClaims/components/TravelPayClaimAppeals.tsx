@@ -71,11 +71,7 @@ function TravelPayClaimAppeals({ claimDetails }: TravelPayClaimAppealsProps) {
         )}
 
         {/* Option 1: Online */}
-        <TextView
-          variant="MobileBodyBold"
-          mt={theme.dimensions.standardMarginBetween}
-          mb={theme.dimensions.condensedMarginBetween}
-          accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
           {t('travelPay.claimDetails.appeals.option1Title')}
         </TextView>
 

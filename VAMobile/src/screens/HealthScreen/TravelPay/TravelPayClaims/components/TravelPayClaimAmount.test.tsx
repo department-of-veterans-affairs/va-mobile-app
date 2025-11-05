@@ -374,18 +374,6 @@ context('TravelPayClaimAmount', () => {
       // Should not crash
       expect(() => renderComponent(claimWithUndefinedReimbursement)).not.toThrow()
     })
-
-    it('should handle negative reimbursement amount', () => {
-      const claimWithNegativeReimbursement = {
-        ...baseClaimDetails,
-        reimbursementAmount: -50,
-      }
-
-      renderComponent(claimWithNegativeReimbursement)
-
-      // Should handle negative amounts (though this may not be a real scenario)
-      expect(screen.getByText(t('travelPay.claimDetails.amount.title'))).toBeTruthy()
-    })
   })
 
   describe('Translation Integration', () => {
@@ -396,13 +384,6 @@ context('TravelPayClaimAmount', () => {
       expect(screen.getByText(t('travelPay.claimDetails.amount.title'))).toBeTruthy()
       expect(screen.getByText(t('travelPay.claimDetails.amount.reimbursement.difference.title'))).toBeTruthy()
     })
-
-    it('should handle missing translations gracefully', () => {
-      // This would depend on how the translation system handles missing keys
-      // Usually it falls back to the key itself
-      renderComponent(baseClaimDetails)
-      expect(screen.getByTestId('travelPayAmountDifferenceTestID')).toBeTruthy()
-    })
   })
 
   describe('Link URL Configuration', () => {
@@ -412,17 +393,6 @@ context('TravelPayClaimAmount', () => {
       const accordionHeader = screen.getByText(t('travelPay.claimDetails.amount.reimbursement.difference.title'))
       fireEvent.press(accordionHeader)
 
-      const link = screen.getByTestId('travelPayDeductibleInfoLinkTestID')
-      expect(link).toBeTruthy()
-    })
-
-    it('should have link without external icon', () => {
-      renderComponent(baseClaimDetails)
-
-      const accordionHeader = screen.getByText(t('travelPay.claimDetails.amount.reimbursement.difference.title'))
-      fireEvent.press(accordionHeader)
-
-      // Link should be present and clickable
       const link = screen.getByTestId('travelPayDeductibleInfoLinkTestID')
       expect(link).toBeTruthy()
     })

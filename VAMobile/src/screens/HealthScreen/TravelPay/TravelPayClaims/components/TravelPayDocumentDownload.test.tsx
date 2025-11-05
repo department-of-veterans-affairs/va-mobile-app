@@ -315,9 +315,6 @@ context('TravelPayDocumentDownload', () => {
 
       const downloadLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
       expect(downloadLink).toBeTruthy()
-
-      // Should have a11y label for screen readers
-      // The exact implementation depends on LinkWithAnalytics component
     })
 
     it('should have accessibility label with custom link text', () => {

@@ -1735,7 +1735,6 @@
   "travelPay.claimDetails.appeals.option2Description": "Mail a printed copy of VA Form 10-0998 and any supporting documents to the address listed in your decision letter.",
   "travelPay.claimDetails.appeals.noteLabel": "Note:",
   "travelPay.claimDetails.appeals.noteText": "If you'd like to submit an appeal via the Board of Veterans' Appeals, follow the instructions in your decision letter.",
-  "travelPay.claimDetails.information.title": "Claim information",
   "travelPay.claimDetails.information.timeline": "Claim submission timeline",
   "travelPay.claimDetails.information.appointmentDateTime.title": "Appointment information",
   "travelPay.claimDetails.information.createdOn": "Created on {{date}} at {{time}}",

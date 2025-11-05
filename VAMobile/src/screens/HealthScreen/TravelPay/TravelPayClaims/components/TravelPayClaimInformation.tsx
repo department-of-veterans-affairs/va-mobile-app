@@ -29,13 +29,8 @@ function TravelPayClaimInformation({ claimDetails }: TravelPayClaimInformationPr
 
   return (
     <Box mt={theme.dimensions.standardMarginBetween}>
-      {/* Section Header */}
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('travelPay.claimDetails.information.title')}
-      </TextView>
-
       {/* Claim Submission Timeline Section */}
-      <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <TextView
           variant="MobileBodyBold"
           accessibilityRole="header"

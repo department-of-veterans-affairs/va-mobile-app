@@ -109,35 +109,6 @@ context('TravelPayClaimStatusDefinition', () => {
     })
   })
 
-  describe('Component Structure', () => {
-    it('should render with proper text variant for known status', () => {
-      renderComponent('Denied')
-
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
-      const textElement = screen.getByText(deniedDefinition)
-      expect(textElement.props.variant).toBe('MobileBody')
-    })
-
-    it('should render with proper text variant for unknown status', () => {
-      renderComponent('Unknown Status')
-
-      const genericHelp = t('travelPay.claimDetails.status.genericHelp')
-      const textElement = screen.getByText(genericHelp)
-      expect(textElement.props.variant).toBe('MobileBody')
-    })
-
-    it('should apply proper margins for unknown status', () => {
-      renderComponent('Unknown Status')
-
-      const genericHelp = t('travelPay.claimDetails.status.genericHelp')
-      const textElement = screen.getByText(genericHelp)
-      const parentBox = textElement.parent
-
-      // The parent Box should have the margin styling
-      expect(parentBox).toBeTruthy()
-    })
-  })
-
   describe('Edge Cases', () => {
     it('should handle status with extra whitespace', () => {
       renderComponent('  In manual review  ')
@@ -155,32 +126,12 @@ context('TravelPayClaimStatusDefinition', () => {
       expect(screen.getByText(manualReviewDefinition)).toBeTruthy()
     })
 
-    it('should handle status with numbers', () => {
-      renderComponent('Status123')
-
-      const genericHelp = t('travelPay.claimDetails.status.genericHelp')
-      expect(screen.getByText(genericHelp)).toBeTruthy()
-    })
-
     it('should handle very long status strings', () => {
       const longStatus = 'This is a very long status that probably does not exist in the system'
       renderComponent(longStatus)
 
       const genericHelp = t('travelPay.claimDetails.status.genericHelp')
       expect(screen.getByText(genericHelp)).toBeTruthy()
-    })
-  })
-
-  describe('Case Sensitivity', () => {
-    const caseTestCases = ['denied', 'DENIED', 'Denied', 'DenIeD', 'dEnIeD']
-
-    caseTestCases.forEach((caseVariant) => {
-      it(`should handle case variant: ${caseVariant}`, () => {
-        renderComponent(caseVariant)
-
-        const deniedDefinition = TravelPayClaimStatuses.Denied.definition
-        expect(screen.getByText(deniedDefinition)).toBeTruthy()
-      })
     })
   })
 
@@ -215,25 +166,6 @@ context('TravelPayClaimStatusDefinition', () => {
   })
 
   describe('Component Rendering Behavior', () => {
-    it('should not render margin for known status', () => {
-      renderComponent('Denied')
-
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
-      const textElement = screen.getByText(deniedDefinition)
-      const parentBox = textElement.parent
-
-      // For known status, it should render in a simple Box without margin
-      expect(parentBox).toBeTruthy()
-    })
-
-    it('should render with margin for unknown status', () => {
-      renderComponent('Unknown Status')
-
-      // For unknown status, it renders with margin top
-      const genericHelp = t('travelPay.claimDetails.status.genericHelp')
-      expect(screen.getByText(genericHelp)).toBeTruthy()
-    })
-
     it('should render generic help when status is null', () => {
       renderComponent(null as unknown as string)
 

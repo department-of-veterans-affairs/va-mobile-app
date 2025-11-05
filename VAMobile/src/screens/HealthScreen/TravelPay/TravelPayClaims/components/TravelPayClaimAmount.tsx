@@ -51,7 +51,8 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
       )}
 
       {reimbursementAmount > 0 && totalCostRequested !== reimbursementAmount && (
-        <Box ml={-theme.dimensions.cardPadding} mb={-20}>
+        // <Box ml={-theme.dimensions.cardPadding} mb={-20}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <AccordionCollapsible
             header={
               <TextView
@@ -89,7 +90,6 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
               </Box>
             }
             testID="travelPayAmountDifferenceTestID"
-            noBorder={true}
           />
         </Box>
       )}
