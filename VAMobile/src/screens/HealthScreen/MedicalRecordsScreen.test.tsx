@@ -26,18 +26,6 @@ jest.mock('utils/platform', () => ({
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
-  //   const initializeTestInstance = ({ serviceEnabled = true }) => {
-  //   render(<AllergyListScreen {...mockNavProps()} />, {
-  //     queriesData: [
-  //       {
-  //         queryKey: authorizedServicesKeys.authorizedServices,
-  //         data: {
-  //           allergiesOracleHealthEnabled: serviceEnabled,
-  //         },
-  //       },
-  //     ],
-  //   })
-  // }
   const initializeTestInstance = (labsEnabled = true) => {
     when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />, {
