@@ -94,7 +94,7 @@ export type SecureMessagingFormData = {
   body: string
   subject?: string
   draft_id?: number
-  is_oh_triage_group?: boolean
+  is_oh_triage_group: boolean
 }
 
 /**
