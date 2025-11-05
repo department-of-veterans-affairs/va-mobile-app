@@ -4,6 +4,7 @@ import { Alert } from 'react-native'
 import { screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import MedicalRecordsScreen from 'screens/HealthScreen/MedicalRecordsScreen'
 import { context, fireEvent, mockNavProps, render, when } from 'testUtils'
 import getEnv from 'utils/env'
@@ -25,9 +26,30 @@ jest.mock('utils/platform', () => ({
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
-  const initializeTestInstance = () => {
+  //   const initializeTestInstance = ({ serviceEnabled = true }) => {
+  //   render(<AllergyListScreen {...mockNavProps()} />, {
+  //     queriesData: [
+  //       {
+  //         queryKey: authorizedServicesKeys.authorizedServices,
+  //         data: {
+  //           allergiesOracleHealthEnabled: serviceEnabled,
+  //         },
+  //       },
+  //     ],
+  //   })
+  // }
+  const initializeTestInstance = (labsEnabled = true) => {
     when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
-    render(<MedicalRecordsScreen {...mockNavProps()} />)
+    render(<MedicalRecordsScreen {...mockNavProps()} />, {
+      queriesData: [
+        {
+          queryKey: authorizedServicesKeys.authorizedServices,
+          data: {
+            labsAndTestsEnabled: labsEnabled,
+          },
+        },
+      ],
+    })
   }
 
   it('initializes correctly', async () => {
