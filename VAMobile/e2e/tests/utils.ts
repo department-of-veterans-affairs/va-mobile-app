@@ -106,7 +106,6 @@ export const CommonE2eIdConstants = {
   PRESCRIPTION_REFILL_DIALOG_YES_TEXT: device.getPlatform() === 'ios' ? 'Request Refill' : 'Request refill ',
   VACCINES_BUTTON_ID: 'toVaccineListID',
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
-  ALLERGIES_TOGGLE_TEXT: 'allergiesOracleHealthApiEnabled',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
   LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',

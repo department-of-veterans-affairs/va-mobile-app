@@ -7,9 +7,6 @@ import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import AllergyListScreen from 'screens/HealthScreen/Allergies/AllergyList/AllergyListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, when } from 'testUtils'
-import { featureEnabled } from 'utils/remoteConfig'
-
-jest.mock('utils/remoteConfig')
 
 context('AllergyListScreen', () => {
   const allergyData = [
@@ -209,9 +206,7 @@ context('AllergyListScreen', () => {
       },
     ]
 
-    const initializeTestInstance = ({ flagEnabled = true, serviceEnabled = true }) => {
-      when(featureEnabled).calledWith('allergiesOracleHealthApiEnabled').mockReturnValue(flagEnabled)
-
+    const initializeTestInstance = ({ serviceEnabled = true }) => {
       render(<AllergyListScreen {...mockNavProps()} />, {
         queriesData: [
           {
@@ -237,7 +232,7 @@ context('AllergyListScreen', () => {
       when(api.get as jest.Mock)
         .calledWith('/v0/health/allergy-intolerances', expect.anything())
         .mockResolvedValue({ data: allergyData })
-      initializeTestInstance({ flagEnabled: false })
+      initializeTestInstance({})
       await waitFor(() => expect(screen.getByText('Sulfonamides allergy')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Penicillins allergy')).toBeTruthy())
     })

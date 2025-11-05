@@ -5,7 +5,6 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { AllergyListPayload } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
-import { featureEnabled } from 'utils/remoteConfig'
 
 /**
  * Fetch user Allergies
@@ -26,13 +25,10 @@ const getAllergies = ({ useV1 = false }: { useV1?: boolean }): Promise<AllergyLi
 export const useAllergies = (options?: { enabled?: boolean }) => {
   const { data: authorizedServices } = useAuthorizedServices()
 
-  const shouldUseV1 =
-    authorizedServices?.allergiesOracleHealthEnabled && featureEnabled('allergiesOracleHealthApiEnabled')
-
   return useQuery({
     ...options,
     queryKey: [allergyKeys.allergies],
-    queryFn: () => getAllergies({ useV1: shouldUseV1 }),
+    queryFn: () => getAllergies({ useV1: authorizedServices?.allergiesOracleHealthEnabled }),
     meta: {
       errorName: 'getAllergies: Service error',
     },
