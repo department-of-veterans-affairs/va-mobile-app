@@ -10,10 +10,9 @@ import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { SubmitEvidenceStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidenceSubtask'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { SubmitEvidenceStackParams } from './SubmitEvidenceSubtask'
 
 type SubmitEvidenceProps = StackScreenProps<SubmitEvidenceStackParams, 'SubmitEvidence'>
 

@@ -2,9 +2,8 @@ import React from 'react'
 
 import { t } from 'i18next'
 
+import SubmitEvidence from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SubmitEvidence'
 import { context, fireEvent, mockNavProps, render, screen, waitFor } from 'testUtils'
-
-import SubmitEvidence from './SubmitEvidence'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
