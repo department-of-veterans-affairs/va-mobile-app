@@ -11,6 +11,7 @@ import {
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
 import { LabsAndTests } from 'api/types'
 import {
@@ -40,7 +41,6 @@ import { getA11yLabelText } from 'utils/common'
 import { MONTHS, getCurrentMonth, getFormattedDate, getListOfYearsSinceYear } from 'utils/dateUtils'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -51,6 +51,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const { data: authorizedServices } = useAuthorizedServices()
   const [LabsAndTestsToShow, setLabsAndTestsToShow] = useState<Array<LabsAndTests>>([])
 
   const [page, setPage] = useState(1)
@@ -141,7 +142,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: selectedDateRange.timeFrame,
     },
-    { enabled: screenContentAllowed('WG_LabsAndTestsList') && !labsAndTestsInDowntime && hasValidDates() },
+    { enabled: authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime && hasValidDates() },
   )
 
   // Analytics
