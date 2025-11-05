@@ -200,8 +200,15 @@ function EditDraft({ navigation, route }: EditDraftProps) {
         setReplyTriageError(true)
       } else {
         const messageData = isReplyDraft
-          ? { body, draft_id: messageID, category }
-          : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
+          ? { body, draft_id: messageID, category, is_oh_triage_group: false }
+          : {
+              recipient_id: parseInt(to?.value || '', 10),
+              category,
+              body,
+              subject,
+              draft_id: messageID,
+              is_oh_triage_group: false,
+            }
         const mutateOptions = {
           onSuccess: () => {
             snackbar.show(t('secureMessaging.startNewMessage.sent'))
@@ -242,8 +249,15 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   const getMessageData = (): SecureMessagingFormData => {
     return isReplyDraft
-      ? { body, draft_id: messageID, category }
-      : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
+      ? { body, draft_id: messageID, category, is_oh_triage_group: false }
+      : {
+          recipient_id: parseInt(to?.value || '', 10),
+          category,
+          body,
+          subject,
+          draft_id: messageID,
+          is_oh_triage_group: false,
+        }
   }
 
   const noRecipientsReceived = !recipients || recipients.length === 0
