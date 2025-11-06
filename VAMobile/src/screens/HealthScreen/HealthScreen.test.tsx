@@ -124,7 +124,7 @@ context('HealthScreen', () => {
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims' })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })
   })
 

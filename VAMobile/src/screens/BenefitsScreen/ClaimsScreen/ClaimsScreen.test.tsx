@@ -2,7 +2,6 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { TravelClaimsScreenEntry } from 'constants/travelPay'
 import ClaimsScreen from 'screens/BenefitsScreen/ClaimsScreen'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -71,7 +70,7 @@ context('ClaimsScreen', () => {
 
       fireEvent.press(screen.getByTestId('toTravelPayClaimsButtonID'))
 
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims', { from: TravelClaimsScreenEntry.Claims })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })
   })
 })
