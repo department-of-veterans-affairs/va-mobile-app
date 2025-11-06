@@ -1,5 +1,77 @@
 [
   {
+    "title": "v2.63.0",
+    "due_on": "2025-11-18T08:00:00Z",
+    "issues": [
+      {
+        "title": "Disable analytic collection during demo mode",
+        "number": 11871,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11871",
+        "isPR": false
+      },
+      {
+        "title": "#121259 [Benefits Management Team 2] Update appeal explanation to only be displayed for `appeal`s and `legacyAppeal`s",
+        "number": 11745,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11745",
+        "isPR": true
+      },
+      {
+        "title": "BUG - Sev 3 - All - Homescreen Obfuscated Text not meeting WCAG Contrast Criteria",
+        "number": 11720,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11720",
+        "isPR": false
+      },
+      {
+        "title": "Feature/877 - Overpayment debts list screen",
+        "number": 11697,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11697",
+        "isPR": true
+      },
+      {
+        "title": "876 - Activity section (Home Tab): Add Overpayment and Copayment components",
+        "number": 11685,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11685",
+        "isPR": true
+      },
+      {
+        "title": "Support 16KB Page Sizes by November 1st, 2025",
+        "number": 11281,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11281",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 10)",
+        "number": 10879,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10879",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 6)",
+        "number": 10875,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10875",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 5)",
+        "number": 10874,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10874",
+        "isPR": false
+      },
+      {
+        "title": "iOS: Suppress App Preview in App Switcher",
+        "number": 3820,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/3820",
+        "isPR": false
+      },
+      {
+        "title": "Reset appointments scroll position to top for consistent pagination padding",
+        "number": 880,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/880",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.62.0",
     "due_on": "2025-11-04T08:00:00Z",
     "issues": [
