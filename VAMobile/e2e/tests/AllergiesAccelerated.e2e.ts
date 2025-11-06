@@ -9,12 +9,13 @@ import { by, element, expect } from 'detox'
 import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
 
 export const AllergiesE2eIdConstants = {
-  ALLERGY_1_ID: 'Coconut (substance) allergy November 08, 2024',
-  ALLERGY_2_ID: 'Radish (substance) allergy January 01, 1966',
-  ALLERGY_3_ID: 'Grass pollen (substance) allergy January 01, 2022',
-  ALLERGY_4_ID: 'Penicillin allergy January 01, 2002',
-  ALLERGY_5_ID: 'ASPIRIN allergy ',
-  ALLERGY_6_ID: 'TRAZODONE allergy ',
+  ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
+  ALLERGY_2_ID: 'Coconut (substance) allergy November 08, 2024',
+  ALLERGY_3_ID: 'Radish (substance) allergy January 01, 1966',
+  ALLERGY_4_ID: 'Grass pollen (substance) allergy January 01, 2022',
+  ALLERGY_5_ID: 'Penicillin allergy January 01, 2002',
+  ALLERGY_6_ID: 'ASPIRIN allergy ',
+  ALLERGY_7_ID: 'TRAZODONE allergy ',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
 }
 
@@ -28,7 +29,7 @@ beforeAll(async () => {
 describe('Allergies Screen with OH data', () => {
   it('should show V1 allergy list content', async () => {
     await expect(element(by.text('Allergies'))).toExist()
-    const acceleratedAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID)).takeScreenshot(
+    const acceleratedAllergyTemplate = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).takeScreenshot(
       'acceleratedAllergyTemplate',
     )
     checkImages(acceleratedAllergyTemplate)
@@ -39,10 +40,11 @@ describe('Allergies Screen with OH data', () => {
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_4_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_5_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID))).toExist()
+    await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID))).toExist()
   })
 
   it('verify V1 details screen fields', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID)).tap()
     await expect(element(by.text('Details'))).toExist()
     await expect(element(by.text('November 08, 2024'))).toExist()
     await expect(element(by.text('Coconut (substance) allergy'))).toExist()
@@ -65,7 +67,7 @@ describe('Allergies Screen with OH data', () => {
   })
 
   it('verify disclaimer is displayed even when all V1 fields are populated', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_5_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_6_ID)).tap()
     await expect(element(by.text('None noted '))).not.toExist()
     await expect(
       element(
@@ -78,7 +80,7 @@ describe('Allergies Screen with OH data', () => {
   })
 
   it('multi-line note for Grass pollen allergy', async () => {
-    await element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID)).tap()
+    await element(by.id(AllergiesE2eIdConstants.ALLERGY_4_ID)).tap()
     await expect(element(by.text('A second note for Grass pollen'))).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
   })
