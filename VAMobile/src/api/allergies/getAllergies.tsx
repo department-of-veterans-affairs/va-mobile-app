@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { allergyKeys } from 'api/allergies/queryKeys'
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AllergyListPayload } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { get } from 'store/api'
@@ -22,13 +21,11 @@ const getAllergies = ({ useV1 = false }: { useV1?: boolean }): Promise<AllergyLi
 /**
  * Returns a query for user Allergies
  */
-export const useAllergies = (options?: { enabled?: boolean }) => {
-  const { data: authorizedServices } = useAuthorizedServices()
-
+export const useAllergies = (options?: { enabled?: boolean; useV1?: boolean }) => {
   return useQuery({
     ...options,
     queryKey: [allergyKeys.allergies],
-    queryFn: () => getAllergies({ useV1: authorizedServices?.allergiesOracleHealthEnabled }),
+    queryFn: () => getAllergies({ useV1: options?.useV1 }),
     meta: {
       errorName: 'getAllergies: Service error',
     },

@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 
 import { useAllergies } from 'api/allergies/getAllergies'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AllergyAttributesV0, AllergyAttributesV1, AllergyData } from 'api/types'
 import {
   Box,
@@ -42,12 +43,28 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const [page, setPage] = useState(1)
   // checks for downtime, immunizations downtime constant is having an issue with unit test
   const allergiesInDowntime = useError(ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID)
+
+  const {
+    data: authorizedServices,
+    isFetching: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+  } = useAuthorizedServices()
+
+  const useV1Api =
+    authorizedServices?.allergiesOracleHealthEnabled &&
+    !loadingUserAuthorizedServices &&
+    !getUserAuthorizedServicesError
+
   const {
     data: allergies,
     isFetching: loading,
     error: allergyError,
     refetch: refetchAllergies,
-  } = useAllergies({ enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime })
+  } = useAllergies({
+    enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime,
+    useV1: useV1Api,
+  })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -138,13 +155,19 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       title="Allergies"
       titleA11y={a11yLabelVA(t('vaAllergies'))}
       scrollViewProps={scrollViewProps}>
-      {loading ? (
+      {loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('allergies.loading')} />
       ) : allergyError || allergiesInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
           error={allergyError}
           onTryAgain={refetchAllergies}
+        />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
         />
       ) : allergies?.data?.length === 0 ? (
         <NoAllergyRecords />
