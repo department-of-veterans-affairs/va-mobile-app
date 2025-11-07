@@ -37,6 +37,21 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+   UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle: UIBlurEffectStyleDark];
+   UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+   blurEffectView.frame = [self.window frame];
+   blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   blurEffectView.tag = 221122;
+  [self.window addSubview: blurEffectView];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+  [[self.window viewWithTag: 221122] removeFromSuperview];
+}
+
 - (NSDictionary *)prepareInitialProps
 {
   NSMutableDictionary *initProps = [NSMutableDictionary new];
