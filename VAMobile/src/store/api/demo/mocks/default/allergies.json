@@ -838,6 +838,21 @@
         }
       },
       {
+        "id": "132320345",
+        "type": "allergy",
+        "attributes": {
+          "id": "132320345",
+          "name": "Dust",
+          "date": "2020-12-22T08:45:00Z",
+          "categories": ["environment"],
+          "reactions": ["Wheezing"],
+          "location": null,
+          "observedHistoric": null,
+          "notes": ["Dust", "More Dust", "Even More Dust"],
+          "provider": "Dr. Sarah Lee MD"
+        }
+      },
+      {
         "id": "132320343",
         "type": "allergy",
         "attributes": {
