@@ -202,7 +202,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.4'
           working-directory: VAMobile/android
 
       - name: Install bundle
