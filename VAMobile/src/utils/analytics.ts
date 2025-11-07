@@ -4,10 +4,9 @@ import crashlytics from '@react-native-firebase/crashlytics'
 import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
-import { RootState } from 'store'
+import store, { RootState } from 'store'
 import { ErrorObject } from 'store/api'
-
-import { isErrorObject } from './common'
+import { isErrorObject } from 'utils/common'
 
 export type EventParams = { [key: string]: unknown }
 
@@ -23,14 +22,26 @@ export type UserAnalytic = {
 
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
-  console.debug(`logging analytics event ${name}`, params)
-  await analytics().logEvent(name, params)
+  const demoMode = store.getState().demo.demoMode
+
+  if (demoMode) {
+    console.debug(`(analytics collection disabled in demo mode) triggered analytics event ${name}`, params)
+  } else {
+    console.debug(`logging analytics event ${name}`, params)
+    await analytics().logEvent(name, params)
+  }
 }
 
 export const setAnalyticsUserProperty = async (property: UserAnalytic): Promise<void> => {
   const { name, value } = property
-  console.debug(`setAnalyticsUserProperty ${name} ${value}`)
-  await analytics().setUserProperty(name, value)
+  const demoMode = store.getState().demo.demoMode
+
+  if (demoMode) {
+    console.debug(`(analytics collection disabled in demo mode) setAnalyticsUserProperty ${name} ${value}`)
+  } else {
+    console.debug(`setAnalyticsUserProperty ${name} ${value}`)
+    await analytics().setUserProperty(name, value)
+  }
 }
 
 export const setAnalyticsUserProperties = async (properties: { [key: string]: string | null }): Promise<void> => {

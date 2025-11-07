@@ -4,11 +4,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { AppointmentsErrorServiceTypesConstants } from 'api/types'
+import Appointments from 'screens/HealthScreen/Appointments/Appointments'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import Appointments from './Appointments'
 
 const mockNavigationSpy = jest.fn()
 

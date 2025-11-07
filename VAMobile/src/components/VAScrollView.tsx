@@ -4,8 +4,7 @@ import { IOScrollView } from 'react-native-intersection-observer'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { VABackgroundColors } from 'styles/theme'
-
-import { useTheme } from '../utils/hooks'
+import { useTheme } from 'utils/hooks'
 
 export type VAScrollViewProps = {
   /** Optional reference prop to determine scroll position */

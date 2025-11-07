@@ -1,9 +1,7 @@
 import React from 'react'
 
+import { TextArea, TextView } from 'components'
 import { context, fireEvent, render, screen } from 'testUtils'
-
-import TextArea from './TextArea'
-import TextView from './TextView'
 
 import Mock = jest.Mock
 

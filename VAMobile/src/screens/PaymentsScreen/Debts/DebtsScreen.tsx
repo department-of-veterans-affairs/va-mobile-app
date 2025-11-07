@@ -73,10 +73,6 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     testID: 'debtHelpID',
   }
 
-  const debtDetailsClicked = (debt: DebtRecord) => {
-    navigateTo('DebtDetails', { debt })
-  }
-
   function renderPagination() {
     const paginationProps: PaginationProps = {
       onNext: () => {
@@ -103,18 +99,45 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     )
   }
 
+  function renderReviewDetailsLink(debt: DebtRecord) {
+    const detailsPressableProps: PressableProps = {
+      onPress: () => {
+        navigateTo('DebtDetails', { debt })
+      },
+      accessible: true,
+      accessibilityRole: 'link',
+      accessibilityLabel: t('debts.reviewDetails'),
+    }
+
+    return (
+      <Pressable {...detailsPressableProps}>
+        <Box
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          alignItems={'center'}
+          minHeight={theme.dimensions.touchableMinHeight}
+          pt={5}>
+          <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
+            {t('debts.reviewDetails')}
+          </TextView>
+          <Icon
+            name={'ChevronRight'}
+            fill={theme.colors.icon.chevronListItem}
+            width={theme.dimensions.chevronListItemWidth}
+            height={theme.dimensions.chevronListItemHeight}
+          />
+        </Box>
+      </Pressable>
+    )
+  }
+
   function renderContent() {
     const listItems = debtsToShow.map((debt, idx) => {
       const debtInfo = getDebtInfo(t, debt)
       const iconProps: IconProps = {
         name: debtInfo.variant === 'info' ? 'Info' : 'Warning',
         fill: debtInfo.variant === 'info' ? theme.colors.icon.info : theme.colors.icon.warning,
-      }
-      const detailsPressableProps: PressableProps = {
-        onPress: () => debtDetailsClicked(debt),
-        accessible: true,
-        accessibilityRole: 'link',
-        accessibilityLabel: t('debts.reviewDetails'),
       }
 
       const mainContent = (
@@ -153,25 +176,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             </Box>
           </Box>
           {/* Review details link */}
-          <Pressable {...detailsPressableProps}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'space-between'}
-              alignItems={'center'}
-              minHeight={theme.dimensions.touchableMinHeight}
-              pt={5}>
-              <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
-                {t('debts.reviewDetails')}
-              </TextView>
-              <Icon
-                name={'ChevronRight'}
-                fill={theme.colors.icon.chevronListItem}
-                width={theme.dimensions.chevronListItemWidth}
-                height={theme.dimensions.chevronListItemHeight}
-              />
-            </Box>
-          </Pressable>
+          {renderReviewDetailsLink(debt)}
           {/* Resolve debt button */}
           {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
         </>
