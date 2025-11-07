@@ -3,10 +3,9 @@ import { ScrollView } from 'react-native'
 
 import { ClaimAttributesData } from 'api/types'
 import { Box } from 'components'
+import ClaimPhase from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimTimeline/ClaimPhase'
 import theme from 'styles/themes/standardTheme'
 import { isDisabilityCompensationClaim, needItemsFromVet } from 'utils/claims'
-
-import ClaimPhase from './ClaimPhase'
 
 export type ClaimTimelineProps = {
   /** attributes object from ClaimData */

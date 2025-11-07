@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import LinkRow from 'components/LinkRow'
 import { context, render } from 'testUtils'
-
-import LinkRow from './LinkRow'
 
 context('LinkRow', () => {
   const onPressSpy = jest.fn()

@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native'
 import { Notifications } from 'react-native-notifications'
 
-import { isIOS } from './platform'
+import { isIOS } from 'utils/platform'
 
 const { RNNotificationPrefs } = NativeModules
 

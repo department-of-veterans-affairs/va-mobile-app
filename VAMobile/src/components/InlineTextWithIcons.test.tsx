@@ -3,11 +3,9 @@ import React from 'react'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
 import { screen } from '@testing-library/react-native'
 
-import { Box, InlineTextWithIconsProps } from 'components'
+import { Box, InlineTextWithIcons, InlineTextWithIconsProps } from 'components'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { context, render } from 'testUtils'
-
-import InlineTextWithIcons from './InlineTextWithIcons'
-import Unread from './VAIcon/svgs/Unread.svg'
 
 context('InlineTextWithIcons', () => {
   beforeEach(() => {
