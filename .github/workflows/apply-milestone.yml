@@ -18,6 +18,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Install GitHub CLI
+        run: |
+          type -p curl >/dev/null || (sudo apt-get update && sudo apt-get install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt-get update \
+          && sudo apt-get install gh -y
+
       - name: Check Linked Issues
         uses: nearform-actions/github-action-check-linked-issues@v1
         id: check-linked-issues
@@ -33,14 +42,20 @@ jobs:
         id: found_linked_issues
         if: steps.check-linked-issues.outcome == 'success'
         run: |
-          LINKED_ISSUE=${{ steps.check-linked-issues.outputs.issues }}
-          LINKED_ISSUE_NUMBER=$(echo "$LINKED_ISSUE" | cut -d '#' -f 2)
+          LINKED_ISSUE_STRING="${{ steps.check-linked-issues.outputs.issues }}"
+          # Using jq to safely parse the JSON array and get the first element
+          LINKED_ISSUE=$(echo "$LINKED_ISSUE_STRING" | jq -r ''.[0]')
 
-          if [[ -z "$LINKED_ISSUE_NUMBER" ]]; then
+          if [[ -z "$LINKED_ISSUE" || "$LINKED_ISSUE" == "null" ]]; then
             echo "No explicit linked issue found in PR description for PR #${{ github.event.pull_request.number }}."
           else
-            echo "Linked issue number found: #$LINKED_ISSUE_NUMBER"
+            LINKED_ISSUE_REPO=$(echo "$LINKED_ISSUE" | cut -d '#' -f 1)
+            LINKED_ISSUE_NUMBER=$(echo "$LINKED_ISSUE" | cut -d '#' -f 2)
+            echo "Linked issue found: $LINKED_ISSUE"
+            echo "Linked issue number: #$LINKED_ISSUE_NUMBER"
+            echo "Linked issue repo: $LINKED_ISSUE_REPO"
             echo "linked_issue_number=$LINKED_ISSUE_NUMBER" >> $GITHUB_OUTPUT
+            echo "linked_issue_repo=$LINKED_ISSUE_REPO" >> $GITHUB_OUTPUT
           fi
 
       - name: Handle check-linked-issues failure
@@ -63,27 +78,24 @@ jobs:
         run: |
           PR_NUM="${{ github.event.pull_request.number }}"
           LINKED_ISSUE_NUM="${{ steps.found_linked_issues.outputs.linked_issue_number }}"
-          LINKED_ISSUE_N=$(echo "$LINKED_ISSUE_NUM" | sed 's/]$//g')
+          LINKED_ISSUE_REPO="${{ steps.found_linked_issues.outputs.linked_issue_repo }}"
+          CURRENT_REPO="${{ github.repository }}"
           FORCE_PR_MILESTONE="${{ steps.handle_failure.outputs.force_pr_milestone }}"
           MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=due_on&direction=asc" --jq '([.[] | select(.due_on != null).number][0])')
           MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=due_on&direction=asc" --jq '([.[] | select(.due_on != null).title][0])')
-
-          if [[ -z "$LINKED_ISSUE_N" ]]; then
-            echo "PR Number $PR_NUM"
-          else
-            echo "Linked Issue Number: $LINKED_ISSUE_N"
-          fi
 
           # If the check-linked-issues step failed, force milestone on PR
           if [[ "$FORCE_PR_MILESTONE" == "true" ]]; then
             echo "Check linked issues failed - adding milestone $MILESTONE_TITLE to PR $PR_NUM"
             gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
-          elif [[ -n "$LINKED_ISSUE_N" ]]; then
-            echo "Linked issue $LINKED_ISSUE_N found. Adding milestone $MILESTONE_TITLE."
-            gh issue edit $LINKED_ISSUE_N --milestone $MILESTONE_TITLE
+          elif [[ -n "$LINKED_ISSUE_NUM" && "$LINKED_ISSUE_REPO" == "$CURRENT_REPO" ]]; then
+            echo "Linked issue #$LINKED_ISSUE_NUM found in current repo. Adding milestone $MILESTONE_TITLE."
+            gh issue edit $LINKED_ISSUE_NUM --milestone $MILESTONE_TITLE
+          elif [[ -n "$LINKED_ISSUE_NUM" && "$LINKED_ISSUE_REPO" != "$CURRENT_REPO" ]]; then
+            echo "Linked issue #$LINKED_ISSUE_NUM is in external repo '$LINKED_ISSUE_REPO'. Adding milestone to PR #$PR_NUM instead."
+            gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
           else
-            echo "Setting milestone $MILESTONE_TITLE for PR $PR_NUM"
-            echo "Linked Issue Number: $LINKED_ISSUE_N"
+            echo "No linked issue found or other condition. Setting milestone $MILESTONE_TITLE for PR $PR_NUM"
             echo "Processing PR $PR_NUM..."
             gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
           fi
