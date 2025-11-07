@@ -4,11 +4,10 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import AskForClaimDecision from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/AskForClaimDecision/AskForClaimDecision'
 import { claim } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-
-import AskForClaimDecision from './AskForClaimDecision'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
