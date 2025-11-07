@@ -1,6 +1,7 @@
 name: '[Documentation] Accessibility Check'
 
 on:
+  push:
   workflow_dispatch:
   # Run on Weekdays at 9:00 AM UTC, 4AM ET, 1:00 AM PT
   schedule:
@@ -13,9 +14,13 @@ jobs:
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
-    env:
-      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Setup axe-core CLI tools
@@ -51,6 +56,8 @@ jobs:
           yarn install --frozen-lockfile
       - name: Create the build and start web server
         working-directory: VAMobile/documentation
+        env:
+          DOCS_RELEASE_REPORT_PAT: ${{ steps.generate_token.outputs.token }}
         run: |
           yarn install --frozen-lockfile
           yarn build
