@@ -407,6 +407,18 @@ export const AppealTypesConstants: {
   appeal: 'appeal',
 }
 
+export const AppealTypesDisplayNames: {
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview'
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim'
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal'
+  appeal: 'appealDetails.appealTypesDisplayName.appeal'
+} = {
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview',
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim',
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal',
+  appeal: 'appealDetails.appealTypesDisplayName.appeal',
+}
+
 export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'
 
 export type AppealGetData = {
