@@ -1,0 +1,11 @@
+---
+title: How We Work
+---
+- [Where we work](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Tools)
+- [Working with others](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Collaboration)
+- [Designing the UI](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/General)
+- [Design Librarian](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Collaboration#design-librarian)
+- [Branching in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Figma/Branching)
+- [Building screens in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Figma/Building%20Screens)
+- [Creating components in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Figma/Components)
+- [Permissions and sharing in Figma](https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/Contributing/Best%20practices/Designers/Figma/Permissions%20and%20sharing)

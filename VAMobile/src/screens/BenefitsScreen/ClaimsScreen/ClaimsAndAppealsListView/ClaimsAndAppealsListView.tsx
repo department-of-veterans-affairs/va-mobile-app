@@ -18,13 +18,12 @@ import {
 } from 'components'
 import { ClaimType, ClaimTypeConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import NoClaimsAndAppeals from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppeals/NoClaimsAndAppeals'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { getUserPhase, isDisabilityCompensationClaim } from 'utils/claims'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType

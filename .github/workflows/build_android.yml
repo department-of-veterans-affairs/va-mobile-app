@@ -67,11 +67,18 @@ env:
 
 jobs:
   build_android:
-    runs-on: ubuntu-4-cores-latest
+    runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Set git config
         run: |
           git config --global user.name 'VA Mobile Automation Bot'
@@ -95,7 +102,7 @@ jobs:
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: "3.3"
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache

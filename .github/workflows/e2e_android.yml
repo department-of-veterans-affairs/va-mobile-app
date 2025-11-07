@@ -2,26 +2,26 @@
 # Detox e2e tests in CI
 #
 
-name: "[e2e] Android Detox Test Run"
+name: '[e2e] Android Detox Test Run'
 
 on:
   push:
     branches:
-      - "dependabot/**"
+      - 'dependabot/**'
   pull_request:
     types:
       - synchronize
       - opened
     paths:
-      - "VAMobile/src/**"
-      - "VAMobile/package.json"
-      - ".github/workflows/e2e_android.yml"
-      - ".github/workflows/e2e_ios.yml"
-      - ".github/workflows/e2e_detox_mapping.yml"
+      - 'VAMobile/src/**'
+      - 'VAMobile/package.json'
+      - '.github/workflows/e2e_android.yml'
+      - '.github/workflows/e2e_ios.yml'
+      - '.github/workflows/e2e_detox_mapping.yml'
   workflow_dispatch:
     inputs:
       run_full_test:
-        description: "Run full e2e test?"
+        description: 'Run full e2e test?'
         type: boolean
         required: false
       tests_to_run:
@@ -29,26 +29,26 @@ on:
         type: string
         required: false
       testRail_name:
-        description: "Name testRail run (will default to date if blank)"
+        description: 'Name testRail run (will default to date if blank)'
         type: string
         required: false
       run_testRail:
-        description: "Add results to testRail?"
+        description: 'Add results to testRail?'
         type: boolean
         required: false
   schedule:
-    - cron: "0 4 * * 1,2,3,4,5"
+    - cron: '0 4 * * 1,2,3,4,5'
   workflow_run:
-    workflows: ["[Release] New Release Issue"]
+    workflows: ['[Release] New Release Issue']
     types:
       - in_progress
   workflow_call:
     secrets:
       TEST_RAIL_USER:
-        description: "TestRail robot userid"
+        description: 'TestRail robot userid'
         required: true
       TEST_RAIL_KEY:
-        description: "TestRail api key"
+        description: 'TestRail api key'
         required: true
 
 concurrency:
@@ -85,7 +85,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "Starting E2E Android tests. Please see :thread: for results. This process may take a while."
+      message: 'Starting E2E Android tests. Please see :thread: for results. This process may take a while.'
 
   find_detox_tests_to_run:
     uses: ./.github/workflows/e2e_detox_mapping.yml
@@ -97,11 +97,18 @@ jobs:
       output1: ${{ steps.matrix_value.outputs.matrix }}
       output2: ${{ steps.matrix_value.outputs.individual_matrix}}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
-      - name: "Get Matrix Value"
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: 'Get Matrix Value'
         id: matrix_value
         run: |
           if [[ "${{ inputs.run_full_test }}" == "true" ]] || [[ ${{ github.event_name }} == 'schedule' ]] || [[ "${{ inputs.tests_to_run}}" != "" ]] || [[ "${{ github.event.pull_request.user.login }}" == "dependabot[bot]" ]]; then
@@ -140,7 +147,7 @@ jobs:
             fi
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
   matrix-e2e-android:
     if: (!cancelled()) && needs.output_detox_tests_to_run.outputs.output1 != ''
@@ -152,9 +159,16 @@ jobs:
         testsuite: ${{fromJson(needs.output_detox_tests_to_run.outputs.output1)}}
 
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       # https://github.blog/changelog/2023-02-23-hardware-accelerated-android-virtualization-on-actions-windows-and-linux-larger-hosted-runners/
       - name: Enable KVM group perms
@@ -188,7 +202,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: '3.3'
           working-directory: VAMobile/android
 
       - name: Install bundle
@@ -199,14 +213,14 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: "microsoft"
+          distribution: 'microsoft'
 
       - name: Setup node and restore yarn cache
         uses: actions/setup-node@v3
         with:
-          node-version-file: "VAMobile/.nvmrc"
-          cache: "yarn"
-          cache-dependency-path: "./VAMobile/yarn.lock"
+          node-version-file: 'VAMobile/.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: './VAMobile/yarn.lock'
 
       - name: Install npm dependencies
         run: yarn install --frozen-lockfile --non-interactive
@@ -300,9 +314,16 @@ jobs:
     needs: [matrix-e2e-android, start_slack_thread]
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Download results
         uses: actions/download-artifact@v4
@@ -352,7 +373,7 @@ jobs:
 
       - name: Github CLI Authentication
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
+          echo "${{ steps.generate_token.outputs.token }}" >> token.txt
           gh auth login --with-token < token.txt
 
       - name: Update a ticket on failure (if needed)
@@ -370,7 +391,7 @@ jobs:
             echo "TICKET_EXISTS=" >> "$GITHUB_OUTPUT"
           fi
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
 
       - name: Make a ticket on failure (if needed)
         if: steps.inform_slack.outputs.TEST_FAILURE != '' && steps.find_if_ticket_already_exists.outputs.TICKET_EXISTS == ''
@@ -380,9 +401,9 @@ jobs:
           search_existing: open
         env:
           dateOfIssue: ${{ env.DATE_OF_ISSUE }}
-          OS: "Android"
+          OS: 'Android'
           issues: ${{steps.failing_tests.outputs.FAILING_TEST}}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         id: create-issue
 
   matrix_send_test_results_to_testrail:
@@ -392,7 +413,7 @@ jobs:
     uses: ./.github/workflows/update_testrail_results.yml
     with:
       testRail_name: ${{ inputs.testRail_name }}
-      test_OS_name: "Android"
+      test_OS_name: 'Android'
     secrets: inherit
 
   update-test-names:
@@ -406,8 +427,17 @@ jobs:
     continue-on-error: false
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: update-test-names
         run: |
           for ((i=0; ; i+=250)); do

@@ -10,6 +10,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useMedicalCopays } from 'api/medicalCopays'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import {
@@ -45,6 +46,7 @@ import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
+import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -103,6 +105,16 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
+  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+
+  const copaysSubText =
+    !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+      ? t('copays.activityButton.subText', {
+          amount: numberToUSDollars(copaysSummary.amountDue),
+          count: copaysSummary.count,
+        })
+      : undefined
+
   useEffect(() => {
     async function healthHelpScreenCheck() {
       const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
@@ -152,6 +164,9 @@ export function HealthScreen({}: HealthScreenProps) {
             onPress={() => navigateTo('TravelPayClaims')}
             testID="toTravelPayClaimsID"
           />
+        )}
+        {featureEnabled('overpayCopay') && (
+          <LargeNavButton title={t('copays.title')} onPress={() => navigateTo('Copays')} subText={copaysSubText} />
         )}
         <LargeNavButton
           title={t('secureMessaging.title')}

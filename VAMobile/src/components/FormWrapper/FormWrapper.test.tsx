@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { VAModalPicker } from 'components'
+import VASelector, { VASelectorProps } from 'components/FormWrapper/FormFields/VASelector'
+import VATextInput from 'components/FormWrapper/FormFields/VATextInput'
+import FormWrapper, { FieldType, FormFieldType } from 'components/FormWrapper/FormWrapper'
 import { context, render, screen } from 'testUtils'
-
-import VASelector, { VASelectorProps } from './FormFields/VASelector'
-import VATextInput from './FormFields/VATextInput'
-import FormWrapper, { FieldType, FormFieldType } from './FormWrapper'
 
 import Mock = jest.Mock
 

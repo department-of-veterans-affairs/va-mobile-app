@@ -1,8 +1,7 @@
 import { find } from 'underscore'
 
+import { toggleFirebaseDebugMode } from 'store/slices/analyticsSlice'
 import { context, realStore } from 'testUtils'
-
-import { toggleFirebaseDebugMode } from './analyticsSlice'
 
 context('analytics', () => {
   describe('toggle firebase debug mode', () => {

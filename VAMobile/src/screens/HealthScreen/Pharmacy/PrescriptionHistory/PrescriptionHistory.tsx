@@ -214,7 +214,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
     },
     {
-      display: 'prescription.history.tag.unknown',
+      display: 'prescription.history.tag.statusNotAvailable',
       value: RefillStatusConstants.UNKNOWN,
       count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
     },
@@ -463,6 +463,33 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
       variant: 'base',
       testID: 'goToMyVAHealthPrescriptionHistoryID',
+    }
+
+    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
+      logAnalyticsEvent(Events.vama_blue_alert_rx())
+      return (
+        <Box mx={theme.dimensions.gutter}>
+          <AlertWithHaptics
+            variant="info"
+            expandable={true}
+            focusOnError={false}
+            header={t('healthHelp.cernerTransitionInfoBanner.header')}
+            headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
+            testID="smCernerInfoAlertTestID">
+            <TextView variant="MobileBody">
+              {t('healthHelp.cernerTransitionInfoBanner.content')}
+              <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
+              {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
+            </TextView>
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <LinkWithAnalytics
+                {...linkProps}
+                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_rx_link_conf())}
+              />
+            </Box>
+          </AlertWithHaptics>
+        </Box>
+      )
     }
 
     return (
