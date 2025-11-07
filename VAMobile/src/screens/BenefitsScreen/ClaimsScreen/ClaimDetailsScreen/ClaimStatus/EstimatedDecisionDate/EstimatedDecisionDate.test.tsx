@@ -4,9 +4,8 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
+import EstimatedDecisionDate from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/EstimatedDecisionDate/EstimatedDecisionDate'
 import { context, mockNavProps, render } from 'testUtils'
-
-import EstimatedDecisionDate from './EstimatedDecisionDate'
 
 const mockExternalLinkSpy = jest.fn()
 
