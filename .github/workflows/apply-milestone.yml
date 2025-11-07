@@ -1,4 +1,4 @@
-name: "[Admin] Milestone Linker"
+name: '[Admin] Milestone Linker'
 
 on:
   pull_request:
@@ -44,7 +44,7 @@ jobs:
         run: |
           LINKED_ISSUE_STRING="${{ steps.check-linked-issues.outputs.issues }}"
           # Using jq to safely parse the JSON array and get the first element
-          LINKED_ISSUE=$(echo "$LINKED_ISSUE_STRING" | jq -r ''.[0]')
+          LINKED_ISSUE=$(echo "$LINKED_ISSUE_STRING" | jq -r '.[0]')
 
           if [[ -z "$LINKED_ISSUE" || "$LINKED_ISSUE" == "null" ]]; then
             echo "No explicit linked issue found in PR description for PR #${{ github.event.pull_request.number }}."
