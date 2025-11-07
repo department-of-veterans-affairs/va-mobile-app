@@ -83,13 +83,18 @@ context('TravelPayClaimsFilter', () => {
       />,
     )
 
-    fireEvent.press(screen.getByTestId('travelClaimsFilterModalButtonTestId'))
+    await waitFor(() => {
+      fireEvent.press(screen.getByTestId('travelClaimsFilterModalButtonTestId'))
+    })
+
+    // Modal is appearing after the button press
     await waitFor(() => {
       expect(screen.getByTestId(`checkbox_${FILTER_KEY_ALL}`)).toBeTruthy()
-      expect(screen.getByTestId('checkbox_Claim submitted')).toBeTruthy()
-      expect(screen.getByTestId('checkbox_Saved')).toBeTruthy()
-      expect(screen.getByTestId('checkbox_In process')).toBeTruthy()
-      expect(screen.getAllByTestId('checkbox_label_', { exact: false })).toHaveLength(4)
     })
+
+    expect(screen.getByTestId('checkbox_Claim submitted')).toBeTruthy()
+    expect(screen.getByTestId('checkbox_Saved')).toBeTruthy()
+    expect(screen.getByTestId('checkbox_In process')).toBeTruthy()
+    expect(screen.getAllByTestId('checkbox_label_', { exact: false })).toHaveLength(4)
   })
 })
