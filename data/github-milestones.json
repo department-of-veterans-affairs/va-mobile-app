@@ -58,12 +58,6 @@
         "isPR": false
       },
       {
-        "title": "iOS: Suppress App Preview in App Switcher",
-        "number": 3820,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/3820",
-        "isPR": false
-      },
-      {
         "title": "Reset appointments scroll position to top for consistent pagination padding",
         "number": 880,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/880",
