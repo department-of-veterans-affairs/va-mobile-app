@@ -136,7 +136,8 @@
             "senderName": "MARTHA KAPLAN, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "UNREAD"
+            "readReceipt": "UNREAD",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -157,7 +158,8 @@
             "senderName": "DIANA PERSSON, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "UNREAD"
+            "readReceipt": "UNREAD",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
@@ -178,7 +180,8 @@
             "senderName": "SARAH KOTAGAL, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "UNREAD"
+            "readReceipt": "UNREAD",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
@@ -199,7 +202,8 @@
             "senderName": "CHERYL RODGER, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092775"
@@ -220,7 +224,8 @@
             "senderName": "VIJA A. RAVI, MD",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088259"
@@ -241,7 +246,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
@@ -262,7 +268,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060125"
@@ -283,7 +290,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060114"
@@ -304,7 +312,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060047"
@@ -325,7 +334,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060025"
@@ -346,7 +356,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060013"
@@ -367,7 +378,8 @@
             "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2060006"
@@ -410,7 +422,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "UNREAD"
+        "readReceipt": "UNREAD",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -459,7 +472,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
@@ -484,7 +498,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -508,7 +523,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "UNREAD"
+        "readReceipt": "UNREAD",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -558,7 +574,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "UNREAD"
+        "readReceipt": "UNREAD",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -589,7 +606,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -620,7 +638,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -651,7 +670,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -679,7 +699,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -727,7 +748,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2084703"
@@ -748,7 +770,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243"
@@ -772,7 +795,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -803,7 +827,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -834,7 +859,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -865,7 +891,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -896,7 +923,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -927,7 +955,8 @@
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
         "recipientName": "FREEMAN, MELVIN  V",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -976,7 +1005,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": "READ"
+            "readReceipt": "READ",
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113100"
@@ -997,7 +1027,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098942"
@@ -1018,7 +1049,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098929"
@@ -1039,7 +1071,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098888"
@@ -1060,7 +1093,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 1918816,
             "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1081,7 +1115,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 7840123,
             "recipientName": "SHOULDNT_SHOW_IN_RECENTS",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1102,7 +1137,8 @@
             "senderName": "FREEMAN, MELVIN  V",
             "recipientId": 7840491,
             "recipientName": "Rajesh-PCMM-WEB_TST",
-            "readReceipt": null
+            "readReceipt": null,
+            "isOhMessage": true
           },
           "links": {
             "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095016"
@@ -1145,7 +1181,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": "READ"
+        "readReceipt": "READ",
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1174,7 +1211,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2109451"
@@ -1195,7 +1233,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2088250"
@@ -1216,7 +1255,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2084703"
@@ -1237,7 +1277,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2069243"
@@ -1261,7 +1302,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1290,7 +1332,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098903"
@@ -1311,7 +1354,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095725"
@@ -1332,7 +1376,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -1356,7 +1401,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1406,7 +1452,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1456,7 +1503,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1504,7 +1552,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2112896"
@@ -1525,7 +1574,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113141"
@@ -1546,7 +1596,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2113020"
@@ -1699,7 +1750,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1730,7 +1782,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1759,7 +1812,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
@@ -1783,7 +1837,8 @@
         "senderName": "FREEMAN, MELVIN  V",
         "recipientId": 1918816,
         "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-        "readReceipt": null
+        "readReceipt": null,
+        "isOhMessage": true
       },
       "relationships": {
         "attachments": {
@@ -1812,7 +1867,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098942"
@@ -1833,7 +1889,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2098903"
@@ -1854,7 +1911,8 @@
           "senderName": "FREEMAN, MELVIN  V",
           "recipientId": 1918816,
           "recipientName": "VA Flagship mobile applications interface 2_DAYT29",
-          "readReceipt": null
+          "readReceipt": null,
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2095725"
@@ -1875,7 +1933,8 @@
           "senderName": "RATANA, NARIN ",
           "recipientId": 523757,
           "recipientName": "FREEMAN, MELVIN  V",
-          "readReceipt": "READ"
+          "readReceipt": "READ",
+          "isOhMessage": true
         },
         "links": {
           "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
@@ -1924,7 +1983,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -1937,7 +1997,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -1950,7 +2011,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -1963,7 +2025,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -1976,7 +2039,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -1989,7 +2053,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2002,7 +2067,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2015,7 +2081,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2028,7 +2095,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2041,7 +2109,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2054,7 +2123,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2067,7 +2137,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2080,7 +2151,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2093,7 +2165,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2106,7 +2179,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2119,7 +2193,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2132,7 +2207,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2145,7 +2221,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2158,7 +2235,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2171,7 +2249,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2184,7 +2263,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2197,7 +2277,8 @@
           "relationType": "PATIENT",
           "locationName": null,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": true
         }
       },
       {
@@ -2211,7 +2292,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2225,7 +2307,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2239,7 +2322,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2253,7 +2337,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2267,7 +2352,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2281,7 +2367,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2295,7 +2382,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2309,7 +2397,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2323,7 +2412,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2337,7 +2427,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2351,7 +2442,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2365,7 +2457,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2379,7 +2472,8 @@
           "locationName": null,
           "suggestedNameDisplay": null,
           "preferredTeam": true,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2393,7 +2487,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2407,7 +2502,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2421,7 +2517,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       },
       {
@@ -2435,7 +2532,8 @@
           "locationName": null,
           "preferredTeam": true,
           "suggestedNameDisplay": null,
-          "healthCareSystemName": null
+          "healthCareSystemName": null,
+          "ohTriageGroup": false
         }
       }
     ],
