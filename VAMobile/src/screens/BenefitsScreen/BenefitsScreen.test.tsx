@@ -7,13 +7,12 @@ import { DateTime } from 'luxon'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsGetDataMetaError } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
+import { BenefitsScreen } from 'screens'
 import { RootState } from 'store'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { getClaimsAndAppealsPayload } from 'utils/tests/personalization'
-
-import { BenefitsScreen } from './BenefitsScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

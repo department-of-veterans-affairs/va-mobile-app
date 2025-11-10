@@ -68,6 +68,7 @@ import {
   sendUsesLargeTextAnalytics,
   sendUsesScreenReaderAnalytics,
 } from 'store/slices/accessibilitySlice'
+import { DemoState } from 'store/slices/demoSlice'
 import { fetchAndActivateRemoteConfig } from 'store/slices/settingsSlice'
 import { useColorScheme } from 'styles/themes/colorScheme'
 import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
@@ -237,6 +238,7 @@ export function AuthGuard() {
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
+  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -278,11 +280,17 @@ export function AuthGuard() {
     // staging or test and turn off analytics if that is the case
     const toggle =
       firebaseDebugMode ||
-      !(utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST)
+      !(
+        utils().isRunningInTestLab ||
+        ENVIRONMENT === EnvironmentTypesConstants.Staging ||
+        __DEV__ ||
+        IS_TEST ||
+        demoMode
+      )
     crashlytics().setCrashlyticsCollectionEnabled(toggle)
     analytics().setAnalyticsCollectionEnabled(toggle)
     performance().setPerformanceCollectionEnabled(toggle)
-  }, [firebaseDebugMode])
+  }, [firebaseDebugMode, demoMode])
 
   useEffect(() => {
     if (!remoteConfigActivated) {
