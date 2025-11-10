@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import PrescriptionHistoryNotAuthorized from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNotAuthorized'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import PrescriptionHistoryNotAuthorized from './PrescriptionHistoryNotAuthorized'
 
 const mockExternalLinkSpy = jest.fn()
 

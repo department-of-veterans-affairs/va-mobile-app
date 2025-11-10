@@ -1,8 +1,7 @@
 import React from 'react'
 
+import HeaderTitle from 'components/HeaderTitle'
 import { context, render, screen } from 'testUtils'
-
-import HeaderTitle from './HeaderTitle'
 
 context('HeaderTitle', () => {
   beforeEach(() => {

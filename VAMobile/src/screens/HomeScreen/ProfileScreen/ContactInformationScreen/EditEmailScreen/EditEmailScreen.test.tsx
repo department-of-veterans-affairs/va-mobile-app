@@ -4,10 +4,9 @@ import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { contactInformationKeys } from 'api/contactInformation/queryKeys'
+import EditEmailScreen from 'screens/HomeScreen/ProfileScreen/ContactInformationScreen/EditEmailScreen/EditEmailScreen'
 import { put } from 'store/api'
 import { QueriesData, mockNavProps, render, when } from 'testUtils'
-
-import EditEmailScreen from './EditEmailScreen'
 
 describe('EditEmailScreen', () => {
   let onBackSpy: jest.Mock

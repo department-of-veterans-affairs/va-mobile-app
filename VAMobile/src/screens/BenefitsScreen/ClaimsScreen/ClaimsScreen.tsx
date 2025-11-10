@@ -6,10 +6,9 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, FeatureLandingTemplate, LargeNavButton } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { BenefitsStackParamList } from '../BenefitsStackScreens'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 

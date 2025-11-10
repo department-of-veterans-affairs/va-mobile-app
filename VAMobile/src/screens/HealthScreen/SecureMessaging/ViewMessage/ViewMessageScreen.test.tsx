@@ -11,10 +11,9 @@ import {
   SecureMessagingThreadGetData,
 } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import ViewMessageScreen from './ViewMessageScreen'
 
 context('ViewMessageScreen', () => {
   const thread: SecureMessagingThreadGetData = {
@@ -35,6 +34,7 @@ context('ViewMessageScreen', () => {
           recipientId: 3,
           recipientName: 'mock recipient name 1',
           readReceipt: 'mock read receipt 1',
+          isOhMessage: false,
         },
       },
       {
@@ -53,6 +53,7 @@ context('ViewMessageScreen', () => {
           recipientId: 3,
           recipientName: 'mock recipient name 2',
           readReceipt: 'mock read receipt 2',
+          isOhMessage: false,
         },
       },
       {
@@ -71,6 +72,7 @@ context('ViewMessageScreen', () => {
           recipientId: 3,
           recipientName: 'mock recipient name 3',
           readReceipt: 'mock read receipt',
+          isOhMessage: false,
         },
       },
     ],
@@ -95,6 +97,7 @@ context('ViewMessageScreen', () => {
         recipientId: 3,
         recipientName: 'mock recipient name',
         readReceipt: 'mock read receipt',
+        isOhMessage: false,
       },
     },
     included: [],
@@ -117,6 +120,7 @@ context('ViewMessageScreen', () => {
         recipientId: 3,
         recipientName: 'mock recipient name 3',
         readReceipt: 'mock read receipt',
+        isOhMessage: false,
       },
     },
     included: [],
@@ -216,6 +220,7 @@ context('ViewMessageScreen', () => {
           recipientId: 3,
           recipientName: 'mock recipient name',
           readReceipt: 'mock read receipt',
+          isOhMessage: false,
         },
       },
     ],
