@@ -261,6 +261,7 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
                     messageData: messageDataRef.current,
                     uploads: attachmentsList,
                     replyToID: message.messageId,
+                    isRecipientOh: message.isOhMessage,
                   },
                   mutateOptions,
                 ),
@@ -268,10 +269,12 @@ function ReplyMessage({ navigation, route }: ReplyMessageProps) {
           }
         },
       }
+
       const params: SendMessageParameters = {
         messageData: messageData,
         uploads: attachmentsList,
         replyToID: message.messageId,
+        isRecipientOh: message.isOhMessage,
       }
       receiverID && sendMessage(params, mutateOptions)
     }
