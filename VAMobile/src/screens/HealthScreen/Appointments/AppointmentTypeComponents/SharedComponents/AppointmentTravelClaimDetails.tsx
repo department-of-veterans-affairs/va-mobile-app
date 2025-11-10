@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { AppointmentAttributes } from 'api/types'
+import { useRoute } from '@react-navigation/native'
+
+import { QueryClient, useQueryClient } from '@tanstack/react-query'
+
+import { appointmentsKeys } from 'api/appointments'
+import { AppointmentAttributes, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -32,10 +37,29 @@ type TravelClaimFiledDetailsProps = {
   subType: AppointmentDetailsSubType
 }
 
+export const getCachedAppointmentById = (queryClient: QueryClient, appointmentID: string) => {
+  const appointmentQueries = queryClient.getQueriesData<AppointmentsGetData>({
+    queryKey: [appointmentsKeys.appointments],
+  })
+
+  for (const [, queryData] of appointmentQueries) {
+    if (queryData?.data) {
+      const found = queryData.data.find((appt) => appt.id === appointmentID)
+      if (found) {
+        return found
+      }
+    }
+  }
+
+  return null
+}
+
 function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const queryClient = useQueryClient()
+  const route = useRoute()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -45,6 +69,12 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
   const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
   const isSubmitting = mutationState?.status === 'pending'
+
+  const appointment = useMemo(() => {
+    return getCachedAppointmentById(queryClient, appointmentID)
+  }, [appointmentID, queryClient])
+
+  const appointmentLookupError = !appointment
 
   if (!featureEnabled('travelPaySMOC')) {
     return null
@@ -84,20 +114,13 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
-              // but the base web URL is actually /claims
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
-                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
-                useSSO: true,
+              navigateTo('SubmitTravelPayClaimScreen', {
+                appointment,
+                appointmentRouteKey: route.key,
               })
             }}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
-            testID={`goToVAGovTravelClaimStatus`}
+            text={t('travelPay.travelClaimFiledDetails.fileTravelReimbursement.link')}
+            testID={`goToFileTravelClaimLink`}
           />
           <TravelPayHelp />
         </>
@@ -141,7 +164,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     }
 
     // When travel pay call fails, display an error message
-    if (claimError) {
+    // Also show in the odd case the appointment can't be looked up in the query data
+    if (claimError || appointmentLookupError) {
       return (
         <>
           <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
@@ -170,30 +194,26 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
       return (
         <>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.daysLeftToFile', { daysLeft: Math.max(daysLeftToFileTravelPay, 0) })}
+          </TextView>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
             accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
             mb={theme.dimensions.condensedMarginBetween}
             variant="MobileBody">
-            {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
+            {t('travelPay.travelClaimFiledDetails.fileWhenNoDaysLeft')}
           </TextView>
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
-              // but the base web URL is actually /claims
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
-                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
-                useSSO: true,
+              navigateTo('SubmitTravelPayClaimScreen', {
+                appointment,
+                appointmentRouteKey: route.key,
               })
             }}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
-            testID={`goToVAGovTravelClaimStatus`}
+            text={t('travelPay.travelClaimFiledDetails.fileTravelReimbursement.link')}
+            testID={`goToFileTravelClaimLink`}
           />
           <TravelPayHelp />
         </>
