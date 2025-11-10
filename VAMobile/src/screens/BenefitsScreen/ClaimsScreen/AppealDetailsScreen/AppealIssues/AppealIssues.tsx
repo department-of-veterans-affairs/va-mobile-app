@@ -1,19 +1,25 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AppealIssue, AppealIssueLastAction } from 'api/types'
+import { AppealIssue, AppealIssueLastAction, AppealTypes, AppealTypesConstants } from 'api/types'
+import { AppealTypesDisplayNames } from 'api/types/ClaimsAndAppealsData'
 import { AccordionCollapsible, Box, BoxProps, TextArea, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
 
 type AppealIssuesProps = {
+  appealType: AppealTypes
   issues: Array<AppealIssue>
 }
 
-function AppealIssues({ issues }: AppealIssuesProps) {
+const UNABLE_TO_SHOW = "We're unable to show"
+
+function AppealIssues({ appealType, issues }: AppealIssuesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  const appealTypeName = t(AppealTypesDisplayNames[appealType])
 
   const issuesByStatus = useMemo(() => {
     const byStatus: {
@@ -71,7 +77,27 @@ function AppealIssues({ issues }: AppealIssuesProps) {
     if (!items.length) {
       return null
     }
-    const listOfIssues = items.map((item) => item.description)
+
+    // Separate issues with "We're unable..." descriptions from regular issue descriptions
+    const unableToShowIssues = items.filter((item) => item.description.includes(UNABLE_TO_SHOW))
+    const issuesWithRegularDescriptions = items.filter((item) => !item.description.includes(UNABLE_TO_SHOW))
+
+    // Start with regular descriptions
+    const listOfIssues = issuesWithRegularDescriptions.map((item) => item.description)
+
+    // Add one aggregated message for all "We're unable..." issues at the end
+    if (unableToShowIssues.length > 0) {
+      const count = unableToShowIssues.length
+      const translationKey = count === 1 ? 'appealDetails.unableToShowIssue' : 'appealDetails.unableToShowIssues'
+
+      listOfIssues.push(
+        t(translationKey, {
+          count,
+          appealType: appealTypeName,
+        }),
+      )
+    }
+
     return (
       <>
         <TextView
@@ -96,22 +122,24 @@ function AppealIssues({ issues }: AppealIssuesProps) {
   }
   return (
     <>
-      <AccordionCollapsible
-        header={
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('appealDetails.issuesDifferentHeader')}
-          </TextView>
-        }
-        expandedContent={
-          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-          <TextView
-            variant="MobileBody"
-            accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
-            mt={theme.dimensions.condensedMarginBetween}>
-            {t('appealDetails.issuesDifferentBody')}
-          </TextView>
-        }
-      />
+      {appealType === AppealTypesConstants.appeal || appealType === AppealTypesConstants.legacyAppeal ? (
+        <AccordionCollapsible
+          header={
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('appealDetails.issuesDifferentHeader')}
+            </TextView>
+          }
+          expandedContent={
+            // eslint-disable-next-line react-native-a11y/has-accessibility-hint
+            <TextView
+              variant="MobileBody"
+              accessibilityLabel={a11yLabelVA(t('appealDetails.issuesDifferentBody'))}
+              mt={theme.dimensions.condensedMarginBetween}>
+              {t('appealDetails.issuesDifferentBody')}
+            </TextView>
+          }
+        />
+      ) : null}
       {showCurrentlyOnAppeal ? (
         <TextArea
           borderBoxStyle={{

@@ -102,7 +102,7 @@ jobs:
       - name: Setup ruby and restore bundler cache
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: "3.3"
           bundler-cache: true
           working-directory: VAMobile/android
       - name: Setup node and restore yarn cache
