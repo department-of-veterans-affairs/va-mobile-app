@@ -4,11 +4,10 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { CategoryTypeFields, SecureMessagingMessageGetData, SecureMessagingThreadGetData } from 'api/types'
+import ReplyMessage from 'screens/HealthScreen/SecureMessaging/ReplyMessage/ReplyMessage'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import { isIOS } from '../../../../utils/platform'
-import ReplyMessage from './ReplyMessage'
+import { isIOS } from 'utils/platform'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -54,6 +53,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 1',
         readReceipt: 'mock read receipt 1',
+        isOhMessage: false,
       },
     },
     {
@@ -72,6 +72,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 2',
         readReceipt: 'mock read receipt 2',
+        isOhMessage: false,
       },
     },
     {
@@ -90,6 +91,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 3',
         readReceipt: 'mock read receipt',
+        isOhMessage: false,
       },
     },
   ],
@@ -112,6 +114,7 @@ const message: SecureMessagingMessageGetData = {
       recipientId: 3,
       recipientName: 'mock recipient name 3',
       readReceipt: 'mock read receipt',
+      isOhMessage: false,
     },
   },
   included: [],
