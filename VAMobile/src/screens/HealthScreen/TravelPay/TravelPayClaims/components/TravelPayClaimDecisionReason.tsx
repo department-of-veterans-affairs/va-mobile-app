@@ -38,7 +38,7 @@ function TravelPayClaimDecisionReason({ claimStatus, decisionLetterReason }: Tra
         variant="MobileBody"
         testID="travelPayClaimDecisionReasonDescriptionTestID"
         mt={theme.dimensions.condensedMarginBetween}
-        mb={theme.dimensions.condensedMarginBetween}>
+        mb={theme.dimensions.standardMarginBetween}>
         {decisionLetterReason}
       </TextView>
     </Box>

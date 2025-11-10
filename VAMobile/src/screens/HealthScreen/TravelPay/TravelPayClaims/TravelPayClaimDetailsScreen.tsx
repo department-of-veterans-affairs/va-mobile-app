@@ -52,54 +52,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     refetch: refetchClaimDetails,
   } = useTravelPayClaimDetails(claimId)
   const claimDetails = claimDetailsData?.data?.attributes
-
-  if (loadingClaimDetails) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('travelPay.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('travelPay.claimDetails.title')}
-        headerButton={headerButton}>
-        <LoadingComponent text={t('travelPay.claimDetails.loading')} />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (claimDetailsError) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('travelPay.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('travelPay.claimDetails.title')}
-        testID="TravelPayClaimDetailsScreen"
-        headerButton={headerButton}>
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID}
-          error={claimDetailsError}
-          onTryAgain={refetchClaimDetails}
-        />
-      </FeatureLandingTemplate>
-    )
-  }
-
-  if (!claimDetails) {
-    return (
-      <FeatureLandingTemplate
-        backLabel={t('travelPay.title')}
-        backLabelOnPress={navigation.goBack}
-        title={t('travelPay.claimDetails.title')}
-        testID="TravelPayClaimDetailsScreen"
-        headerButton={headerButton}>
-        <Box m={theme.dimensions.standardMarginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('travelPay.claimDetails.noData')}
-          </TextView>
-        </Box>
-      </FeatureLandingTemplate>
-    )
-  }
-
-  const { appointmentDate, claimNumber, claimStatus, documents, decisionLetterReason, id } = claimDetails
+  const { appointmentDate, claimNumber, claimStatus, documents, decisionLetterReason, id } = claimDetails || {}
 
   return (
     <FeatureLandingTemplate
@@ -108,68 +61,98 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
       title={t('travelPay.claimDetails.title')}
       testID="TravelPayClaimDetailsScreen"
       headerButton={headerButton}>
-      <Box borderTopWidth={1} borderTopColor={'divider'} backgroundColor={'list'}>
-        <Box m={theme.dimensions.standardMarginBetween}>
-          {/* Claim Header */}
-          <TravelPayClaimHeader appointmentDate={appointmentDate} claimNumber={claimNumber} claimStatus={claimStatus} />
+      {loadingClaimDetails ? (
+        <LoadingComponent text={t('travelPay.claimDetails.loading')} />
+      ) : claimDetailsError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID}
+          error={claimDetailsError}
+          onTryAgain={refetchClaimDetails}
+        />
+      ) : (
+        <Box borderTopWidth={1} borderTopColor={'divider'} backgroundColor={'list'}>
+          <Box m={theme.dimensions.standardMarginBetween}>
+            {claimDetails && (
+              <>
+                {/* Claim Header */}
+                <TravelPayClaimHeader
+                  appointmentDate={appointmentDate!}
+                  claimNumber={claimNumber!}
+                  claimStatus={claimStatus!}
+                />
 
-          {/* Status Definition */}
-          <TravelPayClaimStatusDefinition claimStatus={claimStatus} />
+                {/* Status Definition */}
+                <TravelPayClaimStatusDefinition claimStatus={claimStatus!} />
 
-          {/* Decision Reason (for denied/partial payment claims) */}
-          {decisionLetterReason && (claimStatus === 'Denied' || claimStatus === 'Claim paid') && (
-            <TravelPayClaimDecisionReason claimStatus={claimStatus} decisionLetterReason={decisionLetterReason} />
-          )}
-
-          {/* Decision Letter Download (for denied/partial payment claims) */}
-          {documents && documents.length > 0 && (
-            <>
-              {documents
-                .filter((doc) => doc.filename.includes('Rejection Letter') || doc.filename.includes('Decision Letter'))
-                .map((doc) => (
-                  <TravelPayDocumentDownload
-                    key={doc.documentId}
-                    document={doc}
-                    linkText={t('travelPay.claimDetails.document.decisionLetter')}
-                    claimId={id}
-                    claimStatus={claimStatus}
+                {/* Decision Reason (for denied/partial payment claims) */}
+                {decisionLetterReason && (claimStatus === 'Denied' || claimStatus === 'Claim paid') && (
+                  <TravelPayClaimDecisionReason
+                    claimStatus={claimStatus!}
+                    decisionLetterReason={decisionLetterReason}
                   />
-                ))}
-            </>
-          )}
+                )}
 
-          {/* Amount Section */}
-          <TravelPayClaimAmount claimDetails={claimDetails} />
+                {/* Decision Letter Download (for denied/partial payment claims) */}
+                {documents && documents.length > 0 && (
+                  <>
+                    {documents
+                      .filter(
+                        (doc) => doc.filename.includes('Rejection Letter') || doc.filename.includes('Decision Letter'),
+                      )
+                      .map((doc) => (
+                        <TravelPayDocumentDownload
+                          key={doc.documentId}
+                          document={doc}
+                          linkText={t('travelPay.claimDetails.document.decisionLetter')}
+                          claimId={id!}
+                          claimStatus={claimStatus!}
+                        />
+                      ))}
+                  </>
+                )}
 
-          {/* Claim Information Section */}
-          <TravelPayClaimInformation claimDetails={claimDetails} />
+                {/* Amount Section */}
+                <TravelPayClaimAmount claimDetails={claimDetails} />
 
-          {/* Direct Deposit Information Section */}
-          {/* Gray divider */}
-          <Box height={1} borderTopWidth={1} borderTopColor={'divider'} mt={theme.dimensions.standardMarginBetween} />
-          <Box
-            testID="travelPayDirectDepositInfo"
-            mt={theme.dimensions.standardMarginBetween}
-            mb={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('travelPay.claimDetails.directDeposit.title')}
-            </TextView>
-            <TextView variant="MobileBody">{t('travelPay.claimDetails.directDeposit.description')}</TextView>
-            <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
-              text={t('travelPay.claimDetails.directDeposit.link.text')}
-              a11yLabel={a11yLabelVA(t('travelPay.claimDetails.directDeposit.link.text'))}
-              testID="travelPayDirectDepositLinkTestID"
-              icon="no icon"
-              disablePadding={true}
-            />
+                {/* Claim Information Section */}
+                <TravelPayClaimInformation claimDetails={claimDetails} />
+
+                {/* Direct Deposit Information Section */}
+                {/* Gray divider - only show if there are documents */}
+                {documents && documents.length < 0 && (
+                  <Box
+                    height={1}
+                    borderTopWidth={1}
+                    borderTopColor={'divider'}
+                    mt={theme.dimensions.standardMarginBetween}
+                  />
+                )}
+                <Box
+                  testID="travelPayDirectDepositInfo"
+                  mt={theme.dimensions.standardMarginBetween}
+                  mb={theme.dimensions.standardMarginBetween}>
+                  <TextView variant="MobileBodyBold" accessibilityRole="header">
+                    {t('travelPay.claimDetails.directDeposit.title')}
+                  </TextView>
+                  <TextView variant="MobileBody">{t('travelPay.claimDetails.directDeposit.description')}</TextView>
+                  <LinkWithAnalytics
+                    type="url"
+                    url={LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT}
+                    text={t('travelPay.claimDetails.directDeposit.link.text')}
+                    a11yLabel={a11yLabelVA(t('travelPay.claimDetails.directDeposit.link.text'))}
+                    testID="travelPayDirectDepositLinkTestID"
+                    icon="no icon"
+                    disablePadding={true}
+                  />
+                </Box>
+
+                {/* Appeals Section (only for denied claims) */}
+                <TravelPayClaimAppeals claimDetails={claimDetails} />
+              </>
+            )}
           </Box>
-
-          {/* Appeals Section (only for denied claims) */}
-          <TravelPayClaimAppeals claimDetails={claimDetails} />
         </Box>
-      </Box>
+      )}
     </FeatureLandingTemplate>
   )
 }

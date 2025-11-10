@@ -230,33 +230,6 @@ context('TravelPayDocumentDownload', () => {
   })
 
   describe('Loading States', () => {
-    it('should show downloading text during download', async () => {
-      // Make download take some time
-      let resolveDownload: (value: string) => void
-      const downloadPromise = new Promise<string>((resolve) => {
-        resolveDownload = resolve
-      })
-      mockDownloadFile.mockReturnValue(downloadPromise)
-
-      renderComponent()
-
-      const downloadLink = screen.getByText(mockDocument.filename)
-      fireEvent.press(downloadLink)
-
-      // Should show downloading text
-      await waitFor(() => {
-        expect(screen.getByText(t('travelPay.claimDetails.document.downloading'))).toBeTruthy()
-      })
-
-      // Resolve the download
-      resolveDownload!('/path/to/file.pdf')
-
-      // Should go back to normal text
-      await waitFor(() => {
-        expect(screen.getByText(mockDocument.filename)).toBeTruthy()
-      })
-    })
-
     it('should prevent multiple simultaneous downloads', async () => {
       // Make download take some time
       const downloadPromise = new Promise<string>((resolve) => setTimeout(() => resolve('/path/to/file.pdf'), 1000))

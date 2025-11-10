@@ -51,8 +51,7 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
       )}
 
       {reimbursementAmount > 0 && totalCostRequested !== reimbursementAmount && (
-        // <Box ml={-theme.dimensions.cardPadding} mb={-20}>
-        <Box mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween} mx={-theme.dimensions.standardMarginBetween}>
           <AccordionCollapsible
             header={
               <TextView
@@ -65,7 +64,7 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
             expandedContent={
               <Box
                 backgroundColor="contentBox"
-                pr={theme.dimensions.standardMarginBetween}
+                // px={theme.dimensions.standardMarginBetween}
                 py={theme.dimensions.condensedMarginBetween}>
                 <Box flexDirection="row" flexWrap="wrap">
                   <TextView variant="MobileBody" testID="travelPayAmountDifferenceDescriptionPart1TestID">
