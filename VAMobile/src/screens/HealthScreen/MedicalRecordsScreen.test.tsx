@@ -27,6 +27,7 @@ jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
   const initializeTestInstance = (labsEnabled = true) => {
+    when(featureEnabled).calledWith('labsAndTests').mockReturnValue(labsEnabled)
     when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />, {
       queriesData: [
@@ -56,6 +57,17 @@ context('MedicalRecordsScreen', () => {
     initializeTestInstance()
     fireEvent.press(screen.getByTestId('toAllergyListID'))
     expect(mockNavigationSpy).toHaveBeenCalledWith('AllergyList')
+  })
+
+  it('should navigate to LabsList on button press if flags enabled', () => {
+    initializeTestInstance()
+    fireEvent.press(screen.getByTestId('toLabsAndTestListID'))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('LabsAndTestsList')
+  })
+
+  it('should not display the LabsList button if flags disabled', () => {
+    initializeTestInstance(false)
+    expect(screen.queryByTestId('toLabsAndTestListID')).toBeNull()
   })
 
   it('should navigate to webview with correct parameters when view complete medical record link is pressed', () => {

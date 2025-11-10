@@ -41,6 +41,7 @@ import { getA11yLabelText } from 'utils/common'
 import { MONTHS, getCurrentMonth, getFormattedDate, getListOfYearsSinceYear } from 'utils/dateUtils'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -134,7 +135,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     })
   }, [selectedMonth, selectedYear])
 
-  const featureEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
+  const labsEnabled =
+    authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime && featureEnabled('labsAndTests')
 
   const {
     data: labsAndTests,
@@ -149,7 +151,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: selectedDateRange.timeFrame,
     },
-    { enabled: featureEnabled && hasValidDates() },
+    { enabled: labsEnabled && hasValidDates() },
   )
 
   // Analytics
