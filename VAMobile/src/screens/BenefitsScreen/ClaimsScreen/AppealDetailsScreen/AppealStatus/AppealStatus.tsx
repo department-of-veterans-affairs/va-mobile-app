@@ -4,10 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import AppealCurrentStatus from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealCurrentStatus/AppealCurrentStatus'
+import AppealTimeline from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealTimeline/AppealTimeline'
 import { useTheme } from 'utils/hooks'
-
-import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
-import AppealTimeline from './AppealTimeline/AppealTimeline'
 
 type AppealStatusProps = {
   events: Array<AppealEventData>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { atob } from 'react-native-quick-base64'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
