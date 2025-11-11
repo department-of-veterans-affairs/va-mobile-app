@@ -51,7 +51,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     refetch: refetchAuthServices,
   } = useAuthorizedServices()
 
-  const useV1Api =
+  const isAccelerating =
     authorizedServices?.allergiesOracleHealthEnabled &&
     !loadingUserAuthorizedServices &&
     !getUserAuthorizedServicesError
@@ -63,7 +63,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     refetch: refetchAllergies,
   } = useAllergies({
     enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime,
-    useV1: useV1Api,
+    isV1Api: isAccelerating,
   })
 
   const theme = useTheme()
