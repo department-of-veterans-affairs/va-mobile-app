@@ -43,7 +43,7 @@ describe('Allergies Screen', () => {
       'defaultAllergyTemplate',
     )
     checkImages(defaultAllergyTemplate)
-    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).getAttributes()
+    // const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).getAttributes()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID))).toExist()
