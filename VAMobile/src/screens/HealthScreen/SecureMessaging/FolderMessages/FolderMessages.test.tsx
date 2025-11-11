@@ -36,6 +36,7 @@ context('FolderMessages', () => {
           senderName: 'name',
           recipientId: 1,
           recipientName: 'recipient',
+          isOhMessage: false,
         },
       },
     ],
