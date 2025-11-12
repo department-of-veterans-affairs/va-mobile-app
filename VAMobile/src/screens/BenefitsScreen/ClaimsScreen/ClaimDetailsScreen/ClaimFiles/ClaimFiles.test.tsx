@@ -11,6 +11,11 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+// Regex pattern to match timezone message regardless of user's timezone
+// Validates format: "If you uploaded files [before|after] [hour] [AM|PM] [timezone], we'll show them as received on the [previous|next] day"
+const TIMEZONE_MESSAGE_PATTERN =
+  /If you uploaded files (before|after) \d{1,2} (AM|PM) \w+, we'll show them as received on the (previous|next) day/
+
 context('ClaimDetailsScreen', () => {
   const renderWithData = (claim: ClaimData): void => {
     render(
@@ -38,14 +43,7 @@ context('ClaimDetailsScreen', () => {
       expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
       expect(screen.getByText('Document type: L533')).toBeTruthy()
       expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
-
-      // Verify timezone message is displayed
-      // Using regex pattern to match message regardless of developer's timezone (PDT, EDT, etc.)
-      expect(
-        screen.getByText(
-          /Files uploaded (before|after) .+ will show as received on the (previous|next) day, but we record your submissions when you upload them/,
-        ),
-      ).toBeTruthy()
+      expect(screen.getByText(TIMEZONE_MESSAGE_PATTERN)).toBeTruthy()
     })
 
     it('should render without timezone message when feature flag is disabled', async () => {
@@ -61,13 +59,7 @@ context('ClaimDetailsScreen', () => {
       expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
       expect(screen.getByText('Document type: L533')).toBeTruthy()
       expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
-
-      // Verify timezone message is NOT displayed when flag is off
-      expect(
-        screen.queryByText(
-          /Files uploaded (before|after) .+ will show as received on the (previous|next) day, but we record your submissions when you upload them/,
-        ),
-      ).toBeFalsy()
+      expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
     })
   })
 
@@ -85,13 +77,7 @@ context('ClaimDetailsScreen', () => {
 
       // Verify no files message
       expect(screen.getByText(t('claimDetails.noFiles'))).toBeTruthy()
-
-      // Verify timezone message is NOT shown
-      expect(
-        screen.queryByText(
-          /Files uploaded (before|after) .+ will show as received on the (previous|next) day, but we record your submissions when you upload them/,
-        ),
-      ).toBeFalsy()
+      expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
     })
   })
 })
