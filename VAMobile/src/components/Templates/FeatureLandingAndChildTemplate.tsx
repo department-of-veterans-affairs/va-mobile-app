@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -161,7 +161,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     )
   }
 
-  const errorToDisplay = getScreenError()
+  const errorToDisplay = useMemo(() => getScreenError(), [errors])
 
   return (
     <View style={fillStyle}>
