@@ -26,7 +26,9 @@ jest.mock('utils/platform', () => ({
 jest.mock('utils/remoteConfig')
 
 context('MedicalRecordsScreen', () => {
-  const initializeTestInstance = (labsEnabled = true) => {
+  // TODO: update tests to cover flag disabled
+  const initializeTestInstance = (flagEnabled = true, labsEnabled = true) => {
+    when(featureEnabled).calledWith('labsAndTests').mockReturnValue(flagEnabled)
     when(featureEnabled).calledWith('shareMyHealthDataLink').mockReturnValue(true)
     render(<MedicalRecordsScreen {...mockNavProps()} />, {
       queriesData: [
@@ -75,5 +77,21 @@ context('MedicalRecordsScreen', () => {
     initializeTestInstance()
     fireEvent.press(screen.getByRole('link', { name: t('vaMedicalRecords.shareMyHealthDataApp.link') }))
     expect(Alert.alert).toHaveBeenCalled()
+  })
+
+  it('should navigate to LabsList on button press if flags enabled', () => {
+    initializeTestInstance()
+    fireEvent.press(screen.getByTestId('toLabsAndTestListID'))
+    expect(mockNavigationSpy).toHaveBeenCalledWith('LabsAndTestsList')
+  })
+
+  it('should not display the LabsList button if remote config flag disabled', () => {
+    initializeTestInstance(false)
+    expect(screen.queryByTestId('toLabsAndTestListID')).toBeNull()
+  })
+
+  it('should not display the LabsList button if authorized services flag disabled', () => {
+    initializeTestInstance(true, false)
+    expect(screen.queryByTestId('toLabsAndTestListID')).toBeNull()
   })
 })
