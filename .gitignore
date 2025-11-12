@@ -22,6 +22,8 @@ DerivedData
 project.xcworkspace
 .yarn
 .tool-versions
+.secrets
+event.json
 
 # Gradle
 /build/

@@ -201,7 +201,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       } else {
         const messageData = isReplyDraft
           ? { body, draft_id: messageID, category }
-          : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
+          : {
+              recipient_id: parseInt(to?.value || '', 10),
+              category,
+              body,
+              subject,
+              draft_id: messageID,
+            }
         const mutateOptions = {
           onSuccess: () => {
             snackbar.show(t('secureMessaging.startNewMessage.sent'))
@@ -209,7 +215,12 @@ function EditDraft({ navigation, route }: EditDraftProps) {
             navigateTo('SecureMessaging', { activeTab: 1 })
           },
         }
-        const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList }
+        //Currently hardcoding isRecipientOh to false until we have isOhMessage available from draft endpoint
+        const params: SendMessageParameters = {
+          messageData: messageData,
+          uploads: attachmentsList,
+          isRecipientOh: false,
+        }
         snackbar.show(t('secureMessaging.startNewMessage.sent.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
@@ -238,7 +249,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
   const getMessageData = (): SecureMessagingFormData => {
     return isReplyDraft
       ? { body, draft_id: messageID, category }
-      : { recipient_id: parseInt(to?.value || '', 10), category, body, subject, draft_id: messageID }
+      : {
+          recipient_id: parseInt(to?.value || '', 10),
+          category,
+          body,
+          subject,
+          draft_id: messageID,
+        }
   }
 
   const noRecipientsReceived = !recipients || recipients.length === 0
@@ -576,7 +593,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           goToDraftFolder(false)
         },
       }
-      const params: SendMessageParameters = { messageData: messageData, uploads: attachmentsList, replyToID: replyToID }
+      //Currently hardcoding isRecipientOh to false until we have isOhMessage available from draft endpoint
+      const params: SendMessageParameters = {
+        messageData: messageData,
+        uploads: attachmentsList,
+        replyToID: replyToID,
+        isRecipientOh: false,
+      }
       sendMessage(params, mutateOptions)
     }
   }
