@@ -48,6 +48,8 @@ export type VAIconColors = {
   deleteFill: string
   success: string
   error: string
+  info: string
+  warning: string
   active: string
   inactive: string
   checkboxEnabledPrimary: string
