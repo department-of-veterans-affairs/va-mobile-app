@@ -165,6 +165,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     )
   }, [errors, screenID])
 
+  const renderContent = () => {
+    if (isLoading) return <LoadingComponent text={loadingText} />
+    if (errorToDisplay) return errorToDisplay
+    return children
+  }
+
   return (
     <View style={fillStyle}>
       <StatusBar
@@ -186,9 +192,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>
-          {isLoading ? <LoadingComponent text={loadingText} /> : errorToDisplay || children}
-        </WaygateWrapper>
+        <WaygateWrapper>{renderContent()}</WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>
