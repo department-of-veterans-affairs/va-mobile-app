@@ -140,38 +140,30 @@ export const getEpochSecondsOfDate = (date: string): number => {
 }
 
 /**
- * Format time in VA.gov style
+ * Returns timezone-aware warning message about file upload date display discrepancies.
  *
- * @param date - JavaScript Date object
- * @param timeZone - Optional IANA timezone identifier
- * @returns Time formatted as "8 AM" or "5 PM"
- */
-const formatTimeVaStyle = (date: Date, timeZone?: string): string => {
-  let dt = DateTime.fromJSDate(date)
-  if (timeZone) {
-    dt = dt.setZone(timeZone)
-  }
-  // Format as hour followed by uppercase AM/PM (no minutes)
-  return dt.toFormat('h a')
-}
-
-/**
- * Get timezone abbreviation from a date using native Intl API
- * Uses native Date.toLocaleString() like web implementation, with GMT fallback workaround
+ * Due to API returning date-only strings, files display with UTC date instead of local date.
+ * Uses Luxon's DateTime methods directly to format time and timezone abbreviations.
  *
- * @param date - JavaScript Date object
- * @param timeZone - Optional IANA timezone identifier
- * @returns Timezone abbreviation (e.g., 'EDT', 'JST', 'PDT')
+ * @param t - Translation function from i18next
+ * @returns Localized message string explaining upload time and display date behavior
+ *
+ * @example
+ * // West of UTC (PST):
+ * // "If you uploaded files after 4 PM PST, we'll show them as received on the next day"
+ *
+ * // East of UTC (JST):
+ * // "If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day"
  */
-const getTimezoneAbbr = (date: Date, timeZone?: string): string => {
-  const options: Intl.DateTimeFormatOptions = { timeZoneName: 'short' }
-  if (timeZone) {
-    options.timeZone = timeZone
-  }
-  let tzAbbr = date.toLocaleString('en-US', options).split(' ').pop() || ''
+export const getFileUploadTimezoneMessage = (t: TFunction): string => {
+  // Get midnight UTC converted to local time
+  const localTime = DateTime.utc().startOf('day').toLocal()
 
-  // Workaround: Native Intl API falls back to GMT format for some timezones
-  // Replace with more user-friendly abbreviations
+  // Format time using Luxon's built-in methods
+  const timeStr = localTime.toFormat('h a')
+  let tzAbbr = localTime.offsetNameShort || ''
+
+  // Apply GMT → friendly abbreviation replacements for U.S. territories and Philippines
   if (tzAbbr.includes(GMTPrefix)) {
     for (const { pattern, value } of GMTTimezones) {
       if (tzAbbr === pattern) {
@@ -181,50 +173,15 @@ const getTimezoneAbbr = (date: Date, timeZone?: string): string => {
     }
   }
 
-  return tzAbbr
-}
-
-/**
- * Returns timezone-aware warning message about file upload date display discrepancies.
- *
- * Due to API returning date-only strings, files display with UTC date instead of local date.
- *
- * @returns Message string: "Files uploaded [before/after] [time] will show as received on the [previous/next] day..."
- *
- * @example
- * // PDT: "Files uploaded after 5:00 p.m. PDT will show as received on the next day..."
- * // JST: "Files uploaded before 9:00 a.m. GMT+9 will show as received on the previous day..."
- */
-export const getFileUploadTimezoneMessage = (t: TFunction): string => {
-  // Create a DateTime for midnight UTC (today)
-  const midnightUTC = DateTime.utc().startOf('day')
-
-  // Convert to local timezone
-  const localTime = midnightUTC.toLocal()
-
-  // Get timezone offset in minutes (positive = east of UTC, negative = west)
-  const offsetMinutes = localTime.offset
-
-  // Determine if we're east of UTC
-  const isEastOfUTC = offsetMinutes > 0
-
-  // Format the time with timezone abbreviation using VA.gov style helpers
-  const localDate = localTime.toJSDate()
-  const timeZone = localTime.zoneName
-  const timeStr = formatTimeVaStyle(localDate, timeZone)
-  const tzAbbr = getTimezoneAbbr(localDate, timeZone)
-  const time = `${timeStr} ${tzAbbr}`.trim()
-
-  // The display bug: API returns date-only strings without timezone info
-  // - West of UTC: Upload after cutoff → UTC date is NEXT day → shows as next day
-  // - East of UTC: Upload before cutoff → UTC date is PREVIOUS day → shows as previous day
-  const beforeAfter = isEastOfUTC ? 'before' : 'after'
-  const nextPrevious = isEastOfUTC ? 'previous' : 'next'
+  // Determine message direction based on timezone offset
+  // - West of UTC (negative offset): Upload after cutoff → shows as next day
+  // - East of UTC (positive offset): Upload before cutoff → shows as previous day
+  const isEastOfUTC = localTime.offset > 0
 
   return t('fileUpload.timezoneMessage', {
-    beforeAfter,
-    time,
-    nextPrevious,
+    beforeAfter: isEastOfUTC ? 'before' : 'after',
+    time: `${timeStr} ${tzAbbr}`.trim(),
+    nextPrevious: isEastOfUTC ? 'previous' : 'next',
   })
 }
 
