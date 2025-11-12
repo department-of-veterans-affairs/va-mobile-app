@@ -22,6 +22,7 @@ import { InfoRowCopay } from 'screens/PaymentsScreen/Copays/PayBill/InfoRowCopay
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { getMedicalCenterNameByID } from 'utils/copays'
+import { splitAccountNumber } from 'utils/copays'
 import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
@@ -29,26 +30,6 @@ import { useTheme } from 'utils/hooks'
 type PayBillScreenProps = StackScreenProps<PaymentsStackParamList, 'PayBill'>
 
 const { PAY_GOV_URL } = getEnv()
-
-function splitAccountNumber(raw?: string): string[] {
-  const acct = (raw || '').trim()
-  if (!acct) return ['', '', '', '', '']
-
-  const delimParts = acct.split(/[^A-Za-z0-9]+/).filter(Boolean)
-  if (delimParts.length >= 5) return delimParts.slice(0, 5)
-  if (delimParts.length > 1) {
-    while (delimParts.length < 5) delimParts.push('')
-    return delimParts
-  }
-
-  const s = acct.replace(/[^A-Za-z0-9]/g, '')
-  const p1 = s.slice(0, 3)
-  const p2 = s.slice(3, 7)
-  const p3 = s.slice(7, 11)
-  const p4 = s.slice(11, 16)
-  const p5 = s.slice(16)
-  return [p1, p2, p3, p4, p5].map((x) => x || '')
-}
 
 function PayBillScreen({ route, navigation }: PayBillScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
