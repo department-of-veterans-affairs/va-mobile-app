@@ -3,10 +3,9 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoLettersScreen from 'screens/BenefitsScreen/Letters/NoLettersScreen/NoLettersScreen'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-
-import NoLettersScreen from './NoLettersScreen'
 
 context('NoLettersScreen', () => {
   it('initializes correctly', () => {

@@ -2,11 +2,9 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
-import { InlineTextWithIconsProps, MessageListItemObj, TextLine } from 'components'
+import { InlineTextWithIconsProps, MessageList, MessageListItemObj, TextLine } from 'components'
+import Unread from 'components/VAIcon/svgs/Unread.svg'
 import { context, render } from 'testUtils'
-
-import MessageList from './MessageList'
-import Unread from './VAIcon/svgs/Unread.svg'
 
 context('MessageList', () => {
   const onPressSpy = jest.fn(() => {})

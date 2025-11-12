@@ -11,10 +11,9 @@ import {
   SecureMessagingSystemFolderIdConstants,
 } from 'api/types'
 import { READ } from 'constants/secureMessaging'
+import MessageCard from 'screens/HealthScreen/SecureMessaging/ViewMessage/MessageCard'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-
-import MessageCard from './MessageCard'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => ({
@@ -45,6 +44,7 @@ const messageAttributes: SecureMessagingMessageAttributes = {
   recipientId: 2,
   recipientName: 'Jane Smith',
   readReceipt: READ,
+  isOhMessage: false,
 }
 
 context('MessageCard', () => {
