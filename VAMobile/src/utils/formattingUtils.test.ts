@@ -90,6 +90,13 @@ describe('formatting utils: getFileUploadTimezoneMessage', () => {
 
       expect(message).toBe("If you uploaded files after 4 PM PST, we'll show them as received on the next day")
     })
+
+    it('should return complete message for UTC+0 (GMT - London in winter)', () => {
+      Settings.defaultZone = 'Europe/London'
+      const message = getFileUploadTimezoneMessage(mockT)
+
+      expect(message).toBe("If you uploaded files after 12 AM GMT, we'll show them as received on the next day")
+    })
   })
 
   describe('timezones without DST', () => {
