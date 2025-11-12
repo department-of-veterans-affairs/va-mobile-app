@@ -95,7 +95,7 @@ function ClaimFiles({ claim, eFolderDocuments, setDownloadFile, setDocumentID, s
   if (isFocused && filesList.length > 0) {
     return (
       <Box>
-        {featureEnabled('showTimezoneMessage') && (
+        {featureEnabled('showTimezoneMessage') && timezoneMessage && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBody">{timezoneMessage}</TextView>
           </Box>

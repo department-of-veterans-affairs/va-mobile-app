@@ -146,7 +146,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  * Uses Luxon's DateTime methods directly to format time and timezone abbreviations.
  *
  * @param t - Translation function from i18next
- * @returns Localized message string explaining upload time and display date behavior
+ * @returns Localized message string explaining upload time and display date behavior, or empty string if no discrepancy exists
  *
  * @example
  * // West of UTC (PST):
@@ -154,10 +154,18 @@ export const getEpochSecondsOfDate = (date: string): number => {
  *
  * // East of UTC (JST):
  * // "If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day"
+ *
+ * // At UTC+0 (GMT):
+ * // "" (empty string - no discrepancy exists)
  */
 export const getFileUploadTimezoneMessage = (t: TFunction): string => {
   // Get midnight UTC converted to local time
   const localTime = DateTime.utc().startOf('day').toLocal()
+
+  // At UTC+0, local time matches UTC time - no date discrepancy exists
+  if (localTime.offset === 0) {
+    return ''
+  }
 
   // Format time using Luxon's built-in methods
   const timeStr = localTime.toFormat('h a')
