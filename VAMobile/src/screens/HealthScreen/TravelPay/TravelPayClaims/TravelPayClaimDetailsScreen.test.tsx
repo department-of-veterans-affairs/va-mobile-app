@@ -212,7 +212,7 @@ context('TravelPayClaimDetailsScreen', () => {
   })
 
   describe('No Data State', () => {
-    it('should show no data message when claim details are not available', () => {
+    it('should show error component when claim details are not available', () => {
       mockUseTravelPayClaimDetails.mockReturnValue({
         data: undefined,
         error: null,
@@ -222,8 +222,16 @@ context('TravelPayClaimDetailsScreen', () => {
 
       initializeTestInstance()
 
-      expect(screen.getByText(t('travelPay.claimDetails.noData'))).toBeTruthy()
+      // Should render the screen container
       expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
+
+      // Should show error component when data is undefined (treated as an error)
+      expect(
+        screen.getByText("We're sorry. Something went wrong on our end. Refresh this screen or try again later."),
+      ).toBeTruthy()
+
+      // Should not render any claim details components
+      expect(screen.queryByText(baseClaimDetails.claimNumber, { exact: false })).toBeFalsy()
     })
   })
 
@@ -547,8 +555,12 @@ context('TravelPayClaimDetailsScreen', () => {
 
       initializeTestInstance('')
 
-      // Should handle empty ID gracefully
-      expect(screen.queryByText(t('travelPay.claimDetails.noData'))).toBeTruthy()
+      // Should show error component when claim ID is empty and no data returned
+      expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
+      expect(
+        screen.getByText("We're sorry. Something went wrong on our end. Refresh this screen or try again later."),
+      ).toBeTruthy()
+      expect(screen.queryByText(baseClaimDetails.claimNumber, { exact: false })).toBeFalsy()
     })
   })
 

@@ -54,6 +54,9 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
   const claimDetails = claimDetailsData?.data?.attributes
   const { appointmentDate, claimNumber, claimStatus, documents, decisionLetterReason, id } = claimDetails || {}
 
+  // Show error if there's an API error OR if data is undefined (defensive programming)
+  const hasError = claimDetailsError || (!loadingClaimDetails && !claimDetails)
+
   return (
     <FeatureLandingTemplate
       backLabel={t('travelPay.title')}
@@ -63,7 +66,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
       headerButton={headerButton}>
       {loadingClaimDetails ? (
         <LoadingComponent text={t('travelPay.claimDetails.loading')} />
-      ) : claimDetailsError ? (
+      ) : hasError ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID}
           error={claimDetailsError}
