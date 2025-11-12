@@ -343,6 +343,10 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
+  const numClaimsWithEvidenceRequests = claimsAndAppealsQuery.data?.data.filter(
+    (claim) => claim.attributes.documentsNeeded,
+  ).length
+
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
       <Box>
@@ -418,9 +422,14 @@ export function HomeScreen({}: HomeScreenProps) {
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
-                  subText={t('claims.activityButton.subText', {
-                    count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
-                  })}
+                  subText={
+                    t('claims.activityButton.subText', {
+                      count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                    }) +
+                    (numClaimsWithEvidenceRequests
+                      ? t('claims.evidenceRequest.subText', { count: numClaimsWithEvidenceRequests })
+                      : '')
+                  }
                   deepLink={'claims'}
                 />
               )}
