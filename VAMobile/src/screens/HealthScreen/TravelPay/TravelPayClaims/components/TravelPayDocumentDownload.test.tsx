@@ -114,7 +114,8 @@ context('TravelPayDocumentDownload', () => {
     it('should have proper test ID', () => {
       renderComponent()
 
-      const expectedTestId = `document-download-${mockDocument.documentId}`
+      // TestID is based on the filename (using getA11yLabelText)
+      const expectedTestId = mockDocument.filename
       expect(screen.getByTestId(expectedTestId)).toBeTruthy()
     })
   })
@@ -266,16 +267,15 @@ context('TravelPayDocumentDownload', () => {
       const downloadLink = screen.getByText(customText)
       fireEvent.press(downloadLink)
 
-      // Should show downloading text instead of custom text
+      // The text should remain the same during download (no "downloading" state in current implementation)
       await waitFor(() => {
-        expect(screen.getByText(t('travelPay.claimDetails.document.downloading'))).toBeTruthy()
-        expect(screen.queryByText(customText)).toBeFalsy()
+        expect(screen.getByText(customText)).toBeTruthy()
       })
 
       // Resolve the download
       resolveDownload!('/path/to/file.pdf')
 
-      // Should go back to custom text
+      // Should still show custom text
       await waitFor(() => {
         expect(screen.getByText(customText)).toBeTruthy()
       })
@@ -286,7 +286,8 @@ context('TravelPayDocumentDownload', () => {
     it('should have proper accessibility label', () => {
       renderComponent()
 
-      const downloadLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
+      // TestID is based on the filename
+      const downloadLink = screen.getByTestId(mockDocument.filename)
       expect(downloadLink).toBeTruthy()
     })
 
@@ -297,7 +298,8 @@ context('TravelPayDocumentDownload', () => {
         linkText: customText,
       })
 
-      const downloadLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
+      // TestID is based on the custom link text
+      const downloadLink = screen.getByTestId(customText)
       expect(downloadLink).toBeTruthy()
     })
 
@@ -315,7 +317,7 @@ context('TravelPayDocumentDownload', () => {
 
       // Should still be accessible during download
       await waitFor(() => {
-        const downloadingLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
+        const downloadingLink = screen.getByTestId(mockDocument.filename)
         expect(downloadingLink).toBeTruthy()
       })
 
@@ -504,10 +506,11 @@ context('TravelPayDocumentDownload', () => {
   })
 
   describe('Component Integration', () => {
-    it('should integrate with LinkWithAnalytics correctly', () => {
+    it('should integrate with DefaultList correctly', () => {
       renderComponent()
 
-      const downloadLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
+      // TestID is based on the filename
+      const downloadLink = screen.getByTestId(mockDocument.filename)
       expect(downloadLink).toBeTruthy()
 
       // Should be pressable
@@ -524,31 +527,22 @@ context('TravelPayDocumentDownload', () => {
   })
 
   describe('Translation Integration', () => {
-    it('should use correct translation for downloading text', async () => {
-      let resolveDownload: (value: string) => void
-      const downloadPromise = new Promise<string>((resolve) => {
-        resolveDownload = resolve
-      })
-      mockDownloadFile.mockReturnValue(downloadPromise)
-
+    it('should use correct translation for accessibility hint', () => {
       renderComponent()
 
-      const downloadLink = screen.getByText(mockDocument.filename)
-      fireEvent.press(downloadLink)
-
-      await waitFor(() => {
-        expect(screen.getByText(t('travelPay.claimDetails.document.downloading'))).toBeTruthy()
-      })
-
-      resolveDownload!('/path/to/file.pdf')
+      // The a11y hint should use the correct translation
+      const downloadLink = screen.getByTestId(mockDocument.filename)
+      expect(downloadLink).toBeTruthy()
+      expect(downloadLink.props.accessibilityHint).toBe(t('travelPay.claimDetails.document.downloadDecisionLetter'))
     })
 
     it('should use correct translation for accessibility label', () => {
       renderComponent()
 
       // The a11y label should be properly formatted with filename
-      const downloadLink = screen.getByTestId(`document-download-${mockDocument.documentId}`)
+      const downloadLink = screen.getByTestId(mockDocument.filename)
       expect(downloadLink).toBeTruthy()
+      expect(downloadLink.props.accessibilityLabel).toBe(mockDocument.filename)
     })
   })
 
