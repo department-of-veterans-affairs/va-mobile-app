@@ -509,13 +509,13 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending CC appt', async () => {
-    await scrollToThenTap('GUARINO, ANTHONY', pastAppointmentString)
+    await scrollToThenTap('Guarino, Anthony', pastAppointmentString)
     await checkUpcomingApptDetails(
       'CC',
       'Pending',
       pastAppointment,
       'Podiatry',
-      'GUARINO, ANTHONY',
+      'Guarino, Anthony',
       undefined,
       undefined,
       undefined,
