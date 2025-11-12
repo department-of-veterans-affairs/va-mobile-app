@@ -1,32 +1,39 @@
-name: "[Code Quality] Update Bundler"
+name: '[Code Quality] Update Bundler'
 
 on:
-  schedule:
-    - cron: "0 7 * * 3"
+  push:
+  # schedule:
+  #   - cron: "0 7 * * 3"
   workflow_dispatch:
 
 jobs:
   update_bundler:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout repo"
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: 'Checkout repo'
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
-      - name: "Run update script for android files"
+          ruby-version: '3.1'
+      - name: 'Run update script for android files'
         run: |
           bundle update --all
           bundle exec fastlane update_plugins
         working-directory: VAMobile/android/
-      - name: "Run update script for ios files"
+      - name: 'Run update script for ios files'
         run: |
           bundle update --all
           bundle exec fastlane update_plugins
         working-directory: VAMobile/ios/
-      - name: "Push any changes to remote"
+      - name: 'Push any changes to remote'
         run: |
           if [[ -n $(git status --porcelain --untracked-files=no) ]]
           then
