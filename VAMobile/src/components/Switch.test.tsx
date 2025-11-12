@@ -2,9 +2,8 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { Switch } from 'components'
 import { context, render } from 'testUtils'
-
-import Switch from './Switch'
 
 context('Switch', () => {
   const onPressSpy = jest.fn(() => {})

@@ -12,7 +12,9 @@ Due of the growing complexity of the Flagship app and the types of features we a
 
 ## Environments
 
-The values set in Firebase are for production only. Any overrides we'll use for development or in QA will be stored and overridden in our FE code in `src/utils/remoteConfig.ts`.  The app will only fetch values from Firebase if it detects that our `ENVIRONMENT === 'Production'`. Otherwise it will use the defaults for staging/dev that are set in `remoteConfig.ts`
+The values set in Firebase are for production only. Any overrides we'll use for development or in QA will be stored and overridden in our FE code in `src/utils/remoteConfig.ts`. The app will only fetch values from Firebase if it detects that our `ENVIRONMENT === 'Production'`. Otherwise it will use the defaults for staging/dev that are set in `remoteConfig.ts`
+
+Note: Remote config values are fetched from Firebase only once—when the app is first launched. The app does not periodically re-fetch values while running or when resumed from the background. To fetch and apply updated remote config values, users must completely restart the app. For this reason, remote config should not be relied on when immediate configuration changes are required.
 
 ## Guidelines
 
@@ -27,10 +29,10 @@ While the number of remote config values we have will be small, it's important t
 
 Firebase allows for 4 different data types:
 
-* String
-* Boolean
-* Number
-* JSON
+- String
+- Boolean
+- Number
+- JSON
 
 For the foreseeable future, we'll only make use of the Boolean data type.
 
@@ -45,4 +47,3 @@ The data schema will be a flat structure consisting of booleans:
   "appointment_requests": false
 }
 ```
-

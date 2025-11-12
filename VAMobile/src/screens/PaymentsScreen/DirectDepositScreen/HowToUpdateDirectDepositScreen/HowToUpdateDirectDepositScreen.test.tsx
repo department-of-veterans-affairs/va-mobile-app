@@ -4,9 +4,8 @@ import { Linking } from 'react-native'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import HowToUpdateDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/HowToUpdateDirectDepositScreen/HowToUpdateDirectDepositScreen'
 import { context, mockNavProps, render } from 'testUtils'
-
-import HowToUpdateDirectDepositScreen from './HowToUpdateDirectDepositScreen'
 
 context('HowToUpdateDirectDepositScreen', () => {
   beforeEach(() => {
