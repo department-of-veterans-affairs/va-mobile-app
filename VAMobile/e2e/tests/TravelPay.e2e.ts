@@ -495,7 +495,7 @@ const openTravelPayFlow = async (text: string, login: boolean = true) => {
 describe('Travel Pay', () => {
   beforeAll(async () => {
     await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-    // await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   })
 
   describe('when the user presses "File a Travel Pay Claim" from the Appointment details screen', () => {
