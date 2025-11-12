@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+import { contactInformationKeys } from 'api/contactInformation/queryKeys'
 import { PhoneData } from 'api/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { Params as APIParams, EditResponseData, post, put } from 'store/api'
 import { logAnalyticsEvent, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useReviewEvent } from 'utils/inAppReviews'
-
-import { contactInformationKeys } from './queryKeys'
 
 /**
  * Creates or updates a user's phone number depending on whether the `id` field is present

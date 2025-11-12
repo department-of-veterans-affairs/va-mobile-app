@@ -33,7 +33,7 @@ export const GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=g
 export const LINK_URL_GO_TO_BTSSS = 'https://dvagov-btsss.dynamics365portals.us/'
 export const LINK_URL_CLAIM_APPEAL_STATUS = 'https://va.gov/track-claims/appeals/'
 export const LINK_URL_GO_TO_PATIENT_PORTAL = 'https://patientportal.myhealth.va.gov/'
-export const LINK_URL_ASK_VA_GOV = 'https://ask.va.gov/'
+export const LINK_URL_ASK_VA_GOV = 'https://va.gov/contact-us/ask-va/introduction'
 export const LINK_URL_GO_TO_VA_GOV = 'https://va.gov'
 export const LINK_URL_ABOUT_PACT_ACT = 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/'
 export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/apply/application/introduction'

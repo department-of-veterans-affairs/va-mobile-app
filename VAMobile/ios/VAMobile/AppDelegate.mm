@@ -1,12 +1,14 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #import <React/RCTLinkingManager.h>
 #import <Firebase.h>
 #import "RNNotifications.h"
 
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
+const int blurryScreenTag = 221122;
 
 @implementation AppDelegate
 
@@ -26,6 +28,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
     }
   
   self.moduleName = @"VAMobile";
+  self.dependencyProvider = [RCTAppDependencyProvider new];
    // You can add your custom initial props in the dictionary below.
    // They will be passed down to the ViewController used by React Native.
   self.initialProps = [self prepareInitialProps];
@@ -33,6 +36,21 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   [RNNotifications startMonitorNotifications];
   
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+   UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle: UIBlurEffectStyleDark];
+   UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+   blurEffectView.frame = [self.window frame];
+   blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   blurEffectView.tag = blurryScreenTag;
+  [self.window addSubview: blurEffectView];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+  [[self.window viewWithTag: blurryScreenTag] removeFromSuperview];
 }
 
 - (NSDictionary *)prepareInitialProps

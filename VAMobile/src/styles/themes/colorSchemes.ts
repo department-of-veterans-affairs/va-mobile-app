@@ -105,7 +105,7 @@ export const lightTheme = {
     input: colors.vadsColorBlack,
     inputFocused: colors.vadsColorBlack,
     actionBar: colors.vadsColorWhite,
-    disabled: colors.vadsColorBaseLight,
+    disabled: colors.vadsColorBaseDark,
     bodyText: primaryTextColor,
     showAll: colors.vadsColorPrimary,
     labelTag: colors.vadsColorBase,

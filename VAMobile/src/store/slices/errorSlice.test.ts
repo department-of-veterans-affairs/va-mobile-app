@@ -3,17 +3,16 @@ import { DateTime, Settings } from 'luxon'
 import { find } from 'underscore'
 
 import { CommonErrorTypesConstants } from 'constants/errors'
+import * as api from 'store/api'
 import { DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, ScreenIDTypesConstants } from 'store/api/types'
-import { context, realStore } from 'testUtils'
-
-import * as api from '../api'
 import {
   checkForDowntimeErrors,
   dispatchClearErrors,
   dispatchSetError,
   initialErrorsState,
   initializeErrorsByScreenID,
-} from './errorSlice'
+} from 'store/slices/errorSlice'
+import { context, realStore } from 'testUtils'
 
 export const ActionTypes: {
   ERRORS_SET_ERROR: string

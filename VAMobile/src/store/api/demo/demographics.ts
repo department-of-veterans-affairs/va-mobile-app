@@ -1,6 +1,5 @@
 import { DemographicsPayload, PreferredNameUpdatePayload } from 'api/types/DemographicsData'
-
-import { DemoStore } from './store'
+import { DemoStore } from 'store/api/demo/store'
 
 export type DemographicsDemoStore = {
   '/v0/user/demographics': DemographicsPayload

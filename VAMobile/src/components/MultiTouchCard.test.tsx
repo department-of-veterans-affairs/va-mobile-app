@@ -2,11 +2,9 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
+import { MultiTouchCard, MultiTouchCardProps, TextLine } from 'components'
+import { TextLines } from 'components/TextLines'
 import { context, render } from 'testUtils'
-
-import MultiTouchCard, { MultiTouchCardProps } from './MultiTouchCard'
-import { TextLines } from './TextLines'
-import { TextLine } from './types'
 
 context('MultiTouchCard', () => {
   const onPressSpy = jest.fn(() => {})

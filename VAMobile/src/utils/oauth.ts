@@ -1,4 +1,4 @@
-import { generateBase64, generateSHA256String } from './rnSecureRandom'
+import { generateBase64, generateSHA256String } from 'utils/rnSecureRandom'
 
 export type PKCEParameters = {
   codeVerifier: string

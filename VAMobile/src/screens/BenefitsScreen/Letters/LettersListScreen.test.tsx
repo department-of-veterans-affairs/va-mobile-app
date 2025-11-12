@@ -6,11 +6,10 @@ import { when } from 'jest-when'
 
 import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { LettersList } from 'api/types'
+import { LettersListScreen } from 'screens/BenefitsScreen/Letters/index'
 import * as api from 'store/api'
 import { APIError } from 'store/api/types'
 import { context, mockNavProps, render, waitFor } from 'testUtils'
-
-import { LettersListScreen } from './index'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

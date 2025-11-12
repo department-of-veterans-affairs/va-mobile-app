@@ -11,12 +11,11 @@ import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
-
-import { FileRequestStackParams } from '../FileRequestSubtask'
 
 type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
 
