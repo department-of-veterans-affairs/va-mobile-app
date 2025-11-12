@@ -30,41 +30,48 @@ context('ClaimDetailsScreen', () => {
   }
 
   describe('When there are files to display', () => {
-    it('should render correctly with timezone message when feature flag is enabled', async () => {
+    it('should render correctly', async () => {
+      renderWithData(claimData)
+      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
+      expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
+      expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
+
+      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
+      expect(screen.getByText('Document type: L533')).toBeTruthy()
+      expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
+    })
+  })
+
+  describe('Timezone message feature (temporary)', () => {
+    it('should show timezone message when feature flag is enabled', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('showTimezoneMessage')
         .mockReturnValue(true)
 
       renderWithData(claimData)
-      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
-      expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
-      expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
 
-      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
-      expect(screen.getByText('Document type: L533')).toBeTruthy()
-      expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
       expect(screen.getByText(TIMEZONE_MESSAGE_PATTERN)).toBeTruthy()
+      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
+      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
     })
 
-    it('should render without timezone message when feature flag is disabled', async () => {
+    it('should not show timezone message when feature flag is disabled', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('showTimezoneMessage')
         .mockReturnValue(false)
 
       renderWithData(claimData)
-      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
-      expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
-      expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
 
-      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
-      expect(screen.getByText('Document type: L533')).toBeTruthy()
-      expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
       expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
+      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
+      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
     })
-  })
 
-  describe('When there are no files to display', () => {
-    it('should show no files message without timezone message', () => {
+    it('should not show timezone message when there are no files', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('showTimezoneMessage')
+        .mockReturnValue(true)
+
       const claimWithNoFiles = {
         ...claimData,
         attributes: {
@@ -75,7 +82,6 @@ context('ClaimDetailsScreen', () => {
 
       renderWithData(claimWithNoFiles)
 
-      // Verify no files message
       expect(screen.getByText(t('claimDetails.noFiles'))).toBeTruthy()
       expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
     })
