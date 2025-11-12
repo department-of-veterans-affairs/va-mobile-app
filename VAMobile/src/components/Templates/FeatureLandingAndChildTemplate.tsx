@@ -151,7 +151,11 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     setTransitionHeaderHeight(height)
   }
 
-  const getScreenError = () => {
+  /**
+   * Determines if there is an error to display based on the provided errors array.
+   * If a valid error with `errorCheck` is found, it renders the ErrorComponent.
+   */
+  const errorToDisplay = useMemo(() => {
     if (!errors || !screenID) return null
     const screenError = errors.find((error) => error.errorCheck)
     return (
@@ -159,9 +163,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
       )
     )
-  }
-
-  const errorToDisplay = useMemo(() => getScreenError(), [errors])
+  }, [errors, screenID])
 
   return (
     <View style={fillStyle}>
