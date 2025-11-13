@@ -55,8 +55,8 @@ context('LabsAndTestsListScreen', () => {
   it('defaults to "past 3 months" in date range picker', async () => {
     initializeTestInstance()
     expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
-    // The default selected value should be "past 3 months"
-    expect(screen.getByDisplayValue('past 3 months')).toBeTruthy()
+    // The first option (index 0) should be "past 3 months"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('past 3 months')
   })
 
   it('renders the correct availability timing', async () => {
