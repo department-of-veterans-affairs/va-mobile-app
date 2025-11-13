@@ -114,13 +114,20 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              navigateTo('SubmitTravelPayClaimScreen', {
-                appointment,
-                appointmentRouteKey: route.key,
+              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
+              // but the base web URL is actually /claims
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+              navigateTo('Webview', {
+                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+                useSSO: true,
               })
             }}
-            text={t('travelPay.travelClaimFiledDetails.fileTravelReimbursement.link')}
-            testID={`goToFileTravelClaimLink`}
+            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
+            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            testID={`goToVAGovTravelClaimStatus`}
           />
           <TravelPayHelp />
         </>
@@ -177,7 +184,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     }
 
     // When the appointment was eligible for travel pay but not filed within 30 days
-    const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
+    const daysLeftToFileTravelPay = -3 //= getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
     // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
     // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
