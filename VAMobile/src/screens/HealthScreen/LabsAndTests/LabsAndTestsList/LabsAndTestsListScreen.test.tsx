@@ -52,11 +52,11 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to "past 3 months" in date range picker', async () => {
+  it('defaults to "Past 3 months" in date range picker', async () => {
     initializeTestInstance()
     expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
-    // The first option (index 0) should be "past 3 months"
-    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('past 3 months')
+    // The first option (index 0) should be "Past 3 months"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Past 3 months')
   })
 
   it('renders the correct availability timing', async () => {
