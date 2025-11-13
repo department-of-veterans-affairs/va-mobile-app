@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
@@ -343,9 +343,9 @@ export function HomeScreen({}: HomeScreenProps) {
     },
   }
 
-  const numClaimsWithEvidenceRequests = claimsAndAppealsQuery.data?.data.filter(
-    (claim) => claim.attributes.documentsNeeded,
-  ).length
+  const numClaimsWithEvidenceRequests = useMemo(() => {
+    return claimsAndAppealsQuery.data?.data.filter((claim) => claim.attributes.documentsNeeded).length
+  }, [claimsAndAppealsQuery.data?.data])
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
