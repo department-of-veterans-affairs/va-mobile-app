@@ -2,6 +2,7 @@ import React from 'react'
 
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime, Settings } from 'luxon'
 
 import { ClaimData } from 'api/types'
 import ClaimFiles from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimFiles/ClaimFiles'
@@ -29,61 +30,96 @@ context('ClaimDetailsScreen', () => {
     )
   }
 
+  const expectFilesToBeRendered = () => {
+    expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
+    expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
+    expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
+    expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
+    expect(screen.getByText('Document type: L533')).toBeTruthy()
+    expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
+  }
+
   describe('When there are files to display', () => {
     it('should render correctly', async () => {
       renderWithData(claimData)
-      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
-      expect(screen.getAllByText('Request type: other_documents_list')).toBeTruthy()
-      expect(screen.getAllByText('Received: July 16, 2020')).toBeTruthy()
-
-      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
-      expect(screen.getByText('Document type: L533')).toBeTruthy()
-      expect(screen.getByText('Received: June 06, 2019')).toBeTruthy()
+      expectFilesToBeRendered()
     })
   })
 
   describe('Timezone message feature (temporary)', () => {
-    it('should show timezone message when feature flag is enabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('showTimezoneMessage')
-        .mockReturnValue(true)
+    const originalDefaultZone = Settings.defaultZone
+    const originalNow = Settings.now
 
-      renderWithData(claimData)
-
-      expect(screen.getByText(TIMEZONE_MESSAGE_PATTERN)).toBeTruthy()
-      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
-      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
+    beforeEach(() => {
+      // Set fixed date in winter (January) for consistent timezone behavior
+      const fixedDate = DateTime.utc(2025, 1, 15, 12)
+      Settings.now = () => fixedDate.toMillis()
     })
 
-    it('should not show timezone message when feature flag is disabled', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('showTimezoneMessage')
-        .mockReturnValue(false)
-
-      renderWithData(claimData)
-
-      expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
-      expect(screen.getAllByText('filter-sketch.pdf')).toBeTruthy()
-      expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy()
+    afterEach(() => {
+      Settings.defaultZone = originalDefaultZone
+      Settings.now = originalNow
     })
 
-    it('should not show timezone message when there are no files', () => {
-      when(featureEnabled as jest.Mock)
-        .calledWith('showTimezoneMessage')
-        .mockReturnValue(true)
+    describe('when feature flag is enabled', () => {
+      beforeEach(() => {
+        when(featureEnabled as jest.Mock)
+          .calledWith('showTimezoneMessage')
+          .mockReturnValue(true)
+      })
 
-      const claimWithNoFiles = {
-        ...claimData,
-        attributes: {
-          ...claimData.attributes,
-          eventsTimeline: [],
-        },
-      }
+      it('should show timezone message in non-UTC+0 timezone', () => {
+        Settings.defaultZone = 'America/New_York'
 
-      renderWithData(claimWithNoFiles)
+        renderWithData(claimData)
 
-      expect(screen.getByText(t('claimDetails.noFiles'))).toBeTruthy()
-      expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
+        expect(screen.getByText(TIMEZONE_MESSAGE_PATTERN)).toBeTruthy()
+        expectFilesToBeRendered()
+      })
+
+      it('should not show timezone message in UTC+0 timezone', () => {
+        Settings.defaultZone = 'Europe/London'
+
+        renderWithData(claimData)
+
+        // Feature flag is ON, but message should NOT appear (UTC+0 returns empty string)
+        expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
+        expectFilesToBeRendered()
+      })
+
+      it('should not show timezone message when there are no files', () => {
+        Settings.defaultZone = 'America/New_York'
+
+        const claimWithNoFiles = {
+          ...claimData,
+          attributes: {
+            ...claimData.attributes,
+            eventsTimeline: [],
+          },
+        }
+
+        renderWithData(claimWithNoFiles)
+
+        expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
+        expect(screen.getByText(t('claimDetails.noFiles'))).toBeTruthy()
+      })
+    })
+
+    describe('when feature flag is disabled', () => {
+      beforeEach(() => {
+        when(featureEnabled as jest.Mock)
+          .calledWith('showTimezoneMessage')
+          .mockReturnValue(false)
+      })
+
+      it('should not show timezone message', () => {
+        Settings.defaultZone = 'America/New_York'
+
+        renderWithData(claimData)
+
+        expect(screen.queryByText(TIMEZONE_MESSAGE_PATTERN)).toBeFalsy()
+        expectFilesToBeRendered()
+      })
     })
   })
 })
