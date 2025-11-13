@@ -107,6 +107,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 
     // Yearly ranges
     const year = parseInt(value, 10)
+    if (isNaN(year)) {
+      // Handle invalid year - return default
+      console.warn(`Invalid year value: ${value}`)
+      return getDateRangeByValue('past-3-months')
+    }
     return {
       startDate: `${year}-01-01`,
       endDate: `${year}-12-31`,

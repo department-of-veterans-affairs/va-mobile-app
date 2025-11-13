@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
@@ -67,10 +68,8 @@ context('LabsAndTestsListScreen', () => {
 
   it('calls API with correct date range for "past 3 months"', async () => {
     const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
-    const threeMonthsAgo = new Date()
-    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
-    const threeMonthsAgoStr = threeMonthsAgo.toISOString().split('T')[0]
+    const today = DateTime.now().toFormat('yyyy-MM-dd')
+    const threeMonthsAgoStr = DateTime.now().minus({ months: 3 }).toFormat('yyyy-MM-dd')
 
     initializeTestInstance()
 
