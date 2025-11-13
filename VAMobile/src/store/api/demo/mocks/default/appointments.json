@@ -345,7 +345,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": "Please arrive early",
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "travelPayEligible": true,
             "location": {
@@ -395,7 +395,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": "Please arrive early",
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -444,7 +444,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - ATLAS - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -503,7 +503,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - HOME - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -552,7 +552,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "ami Alsahhar - HOME - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -601,7 +601,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - HOME - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -661,7 +661,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -710,7 +710,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -759,7 +759,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_GFE",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "Sami Alsahhar",
+            "healthcareProvider": "Sami Alsahhar - GFE - Pending",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -822,7 +822,7 @@
             "healthcareService": "C&P BEV AUDIO FTC",
             "location": {
               "id": "983GC",
-              "name": "Fort Collins VA Clinic",
+              "name": "Fort Collins VA Clinic - Claim - Canceled",
               "address": {
                 "street": "2509 Research Boulevard",
                 "city": "Fort Collins",
@@ -873,7 +873,7 @@
             "healthcareService": "C&P BEV AUDIO FTC",
             "location": {
               "id": "983GC",
-              "name": "Fort Collins VA Clinic",
+              "name": "Fort Collins VA Clinic - Claim - Confirmed",
               "address": {
                 "street": "2509 Research Boulevard",
                 "city": "Fort Collins",
