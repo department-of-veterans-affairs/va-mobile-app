@@ -50,58 +50,72 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 
   const [page, setPage] = useState(1)
 
-  // Generate 90-day period options going back approximately 2.2 years
-  // This provides reasonable coverage while maintaining good UX
-  // 9 ranges × 90 days = 810 days ≈ 2.2 years
+  // Generate date range options: past 3 months, past 6 months, then yearly back to 2013
   const dateRangeOptions: Array<PickerItem> = useMemo(() => {
     const now = DateTime.now()
+    const currentYear = now.year
     const options: Array<PickerItem> = []
-    const totalRanges = 9
-    for (let i = 0; i < totalRanges; i += 1) {
-      const rangeEndDaysAgo = i * 90
-      const rangeStartDaysAgo = (i + 1) * 90
 
-      const endDate = now.minus({ days: rangeEndDaysAgo })
-      const startDate = now.minus({ days: rangeStartDaysAgo })
+    // Past 3 months
+    options.push({
+      label: 'past 3 months',
+      value: 'past-3-months',
+      testID: 'range-past-3-months',
+    })
 
-      let label
-      if (i === 0) {
-        label = 'Last 90 days'
-      } else {
-        const startFormatted = startDate.toFormat('MMM d, yyyy')
-        const endFormatted = endDate.toFormat('MMM d, yyyy')
-        label = `${startFormatted} to ${endFormatted}`
-      }
+    // Past 6 months
+    options.push({
+      label: 'past 6 months',
+      value: 'past-6-months',
+      testID: 'range-past-6-months',
+    })
 
+    // Yearly options from current year back to 2013
+    for (let year = currentYear; year >= 2013; year--) {
       options.push({
-        label,
-        value: String(i),
-        testID: `range-${i}`,
+        label: `All of ${year}`,
+        value: String(year),
+        testID: `range-${year}`,
       })
     }
 
     return options
   }, [])
 
-  // Get initial date range (last 90 days)
-  const getDateRangeByIndex = (index: number) => {
+  // Get date range based on selected value
+  const getDateRangeByValue = (value: string) => {
     const now = DateTime.now()
     const today = now.toFormat('yyyy-MM-dd')
-    const rangeEndDaysAgo = index * 90
-    const rangeStartDaysAgo = (index + 1) * 90
 
-    const endDate = now.minus({ days: rangeEndDaysAgo })
-    const startDate = now.minus({ days: rangeStartDaysAgo })
+    if (value === 'past-3-months') {
+      const startDate = now.minus({ months: 3 }).toFormat('yyyy-MM-dd')
+      return {
+        startDate,
+        endDate: today,
+        timeFrame: `${now.minus({ months: 3 }).toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`,
+      }
+    }
 
+    if (value === 'past-6-months') {
+      const startDate = now.minus({ months: 6 }).toFormat('yyyy-MM-dd')
+      return {
+        startDate,
+        endDate: today,
+        timeFrame: `${now.minus({ months: 6 }).toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`,
+      }
+    }
+
+    // Yearly ranges
+    const year = parseInt(value, 10)
     return {
-      startDate: startDate.toFormat('yyyy-MM-dd'),
-      endDate: index === 0 ? today : endDate.toFormat('yyyy-MM-dd'),
-      timeFrame: `${startDate.toFormat('MMM d, yyyy')} - ${index === 0 ? now.toFormat('MMM d, yyyy') : endDate.toFormat('MMM d, yyyy')}`,
+      startDate: `${year}-01-01`,
+      endDate: `${year}-12-31`,
+      timeFrame: `Jan 1, ${year} - Dec 31, ${year}`,
     }
   }
 
-  const initialDateRange = getDateRangeByIndex(0)
-  const [selectedDateRangeValue, setSelectedDateRangeValue] = useState<string>('0')
+  const initialDateRange = getDateRangeByValue('past-3-months')
+  const [selectedDateRangeValue, setSelectedDateRangeValue] = useState<string>('past-3-months')
   const [selectedDateRange, setSelectedDateRange] = useState<{
     startDate: string
     endDate: string
@@ -110,8 +124,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 
   const onDateRangeChange = (selectValue: string) => {
     setSelectedDateRangeValue(selectValue)
-    const index = parseInt(selectValue, 10)
-    const dateRange = getDateRangeByIndex(index)
+    const dateRange = getDateRangeByValue(selectValue)
     setSelectedDateRange(dateRange)
     setPage(1) // Reset to first page when date range changes
   }

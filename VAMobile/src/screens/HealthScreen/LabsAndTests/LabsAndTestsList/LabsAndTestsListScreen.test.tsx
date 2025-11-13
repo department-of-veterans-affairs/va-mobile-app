@@ -51,11 +51,11 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to "Last 90 days" in date range picker', async () => {
+  it('defaults to "past 3 months" in date range picker', async () => {
     initializeTestInstance()
     expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
-    // The first option (index 0) should be "Last 90 days"
-    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Last 90 days')
+    // The first option (index 0) should be "past 3 months"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('past 3 months')
   })
 
   it('renders the correct availability timing', async () => {
@@ -65,10 +65,12 @@ context('LabsAndTestsListScreen', () => {
     )
   })
 
-  it('calls API with correct date range for "Last 90 days"', async () => {
+  it('calls API with correct date range for "past 3 months"', async () => {
     const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD format
-    const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    const threeMonthsAgo = new Date()
+    threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3)
+    const threeMonthsAgoStr = threeMonthsAgo.toISOString().split('T')[0]
 
     initializeTestInstance()
 
@@ -79,7 +81,7 @@ context('LabsAndTestsListScreen', () => {
       '/v1/health/labs-and-tests',
       expect.objectContaining({
         endDate: today,
-        startDate: ninetyDaysAgo,
+        startDate: threeMonthsAgoStr,
         page: '1',
         useCache: 'false',
       }),
