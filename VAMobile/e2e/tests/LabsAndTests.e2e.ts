@@ -64,7 +64,8 @@ describe('Labs And Test Screen - Date Picker', () => {
     await expect(element(by.text('past 6 months'))).toExist()
 
     // Verify current year option exists
-    await expect(element(by.text('All of 2025'))).toExist()
+    const currentYear = DateTime.now().year
+    await expect(element(by.text(`All of ${currentYear}`))).toExist()
 
     // Select "past 3 months" to confirm it works
     await element(by.text('past 3 months')).tap()
