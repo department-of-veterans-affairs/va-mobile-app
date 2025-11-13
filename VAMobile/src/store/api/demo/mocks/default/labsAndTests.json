@@ -7,7 +7,7 @@
             "id": "I2-2BCP5BAI6N7NQSAPSVIJ6INQ4A000000",
             "type": "diagnostic_report",
             "attributes": {
-              "display": "Surgical Pathology ",
+              "display": "Surgical Pathology",
               "testCode": "SP",
               "dateCompleted": "{{now - 1 days}}",
               "encodedData": "dGhpcyBpcyBhIHRlc3Q=",
