@@ -440,6 +440,17 @@ export const formatDateMMMyyyy = (date: DateTime): string => {
 }
 
 /**
+ * Returns the date formatted in the format MMMM yyyy
+ *
+ * @param date - DateTime object representing the date to format
+ *
+ * @returns date string formatted as MMMM yyyy (e.g. "January 2025")
+ */
+export const formatDateMMMMyyyy = (date: DateTime): string => {
+  return getFormattedDate(date.toISO(), 'MMMM yyyy')
+}
+
+/**
  * Returns the date range formatted in the format MMM yyyy
  *
  * @param startDate - DateTime object representing the start of the date range
