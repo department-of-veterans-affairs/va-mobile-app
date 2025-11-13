@@ -1,15 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentAttributes } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
@@ -38,10 +36,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const theme = useTheme()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const endTime = formatDateTimeReadable(
-    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime,
-  )
+  const { maintenanceWindows } = useMaintenanceWindows()
+  const endTime = formatDateTimeReadable(maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime)
 
   const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
   const isSubmitting = mutationState?.status === 'pending'

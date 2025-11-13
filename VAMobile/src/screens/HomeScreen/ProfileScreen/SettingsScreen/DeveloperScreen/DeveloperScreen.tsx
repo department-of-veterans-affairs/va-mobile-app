@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { pick } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -295,6 +294,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
           <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
+        </TextArea>
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={() => navigateTo('MaintenanceWindows')} label={'Override Maintenance Windows'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
