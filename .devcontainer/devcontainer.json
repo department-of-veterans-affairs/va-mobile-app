@@ -1,5 +1,6 @@
 {
 "name": "Codespaces: Documentation Preview",
+"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
 "postCreateCommand": "cd VAMobile && yarn && cd documentation && yarn && yarn build && yarn serve",
 "forwardPorts": [
   3000
