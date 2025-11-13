@@ -26,10 +26,10 @@ const navigateToLabsAndTests = async () => {
 
 const resetDateRangeToDefault = async () => {
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
-  await element(by.text('Last 90 days')).tap()
+  await element(by.text('past 3 months')).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
 }
-// Calculate dynamic dates that will always be within the last 90 days
+// Calculate dynamic dates that will always be within the past 3 months
 // These calculations ensure the test remains timeless and matches the demo data
 const surgicalPathologyTestDate = getFormattedDate(DateTime.now().minus({ days: 1 }).toISO(), 'MMMM dd, yyyy')
 const chemHemTestDate = getFormattedDate(DateTime.now().minus({ days: 2 }).toISO(), 'MMMM dd, yyyy')
@@ -54,12 +54,20 @@ describe('Labs And Test Screen - Date Picker', () => {
     // Navigate back to Labs and Tests screen before each test
     await navigateToLabsAndTests()
   })
-  it('90-day period selection verification', async () => {
+  it('date range selection verification', async () => {
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
-    // Verify "Last 90 days" option exists (index 0)
-    await expect(element(by.text('Last 90 days'))).toExist()
-    // Select "Last 90 days" to confirm it works
-    await element(by.text('Last 90 days')).tap()
+
+    // Verify "past 3 months" option exists (default)
+    await expect(element(by.text('past 3 months'))).toExist()
+
+    // Verify "past 6 months" option exists
+    await expect(element(by.text('past 6 months'))).toExist()
+
+    // Verify current year option exists
+    await expect(element(by.text('All of 2025'))).toExist()
+
+    // Select "past 3 months" to confirm it works
+    await element(by.text('past 3 months')).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
   })
 })
