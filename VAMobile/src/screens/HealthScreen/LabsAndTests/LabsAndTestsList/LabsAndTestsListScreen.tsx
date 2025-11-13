@@ -58,14 +58,14 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 
     // Past 3 months
     options.push({
-      label: 'past 3 months',
+      label: t('labsAndTests.list.pastThreeMonths'),
       value: 'past-3-months',
       testID: 'range-past-3-months',
     })
 
     // Past 6 months
     options.push({
-      label: 'past 6 months',
+      label: t('labsAndTests.list.pastSixMonths'),
       value: 'past-6-months',
       testID: 'range-past-6-months',
     })
@@ -73,14 +73,14 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     // Yearly options from current year back to 2013
     for (let year = currentYear; year >= 2013; year--) {
       options.push({
-        label: `All of ${year}`,
+        label: t('labsAndTests.list.allOfYear', { year }),
         value: String(year),
         testID: `range-${year}`,
       })
     }
 
     return options
-  }, [])
+  }, [t])
 
   // Get date range based on selected value
   const getDateRangeByValue = (value: string) => {
