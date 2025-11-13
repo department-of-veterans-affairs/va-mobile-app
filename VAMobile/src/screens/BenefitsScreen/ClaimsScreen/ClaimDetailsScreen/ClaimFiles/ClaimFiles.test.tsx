@@ -78,7 +78,7 @@ context('ClaimDetailsScreen', () => {
       })
 
       it('should not show timezone message in UTC+0 timezone', () => {
-        Settings.defaultZone = 'Europe/London'
+        Settings.defaultZone = 'UTC'
 
         renderWithData(claimData)
 

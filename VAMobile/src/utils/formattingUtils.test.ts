@@ -1,6 +1,7 @@
 import { TFunction } from 'i18next'
 import { DateTime, Settings } from 'luxon'
 
+import commonTranslations from 'translations/en/common.json'
 import {
   formatDateMMMyyyy,
   formatDateRangeMMMyyyy,
@@ -34,90 +35,118 @@ describe('formatting utils: getFileUploadTimezoneMessage', () => {
   const originalDefaultZone = Settings.defaultZone
   const originalNow = Settings.now
 
-  // Mock translation function
-  const mockT = jest.fn((key: string, values?: Record<string, string>) => {
-    if (key === 'fileUpload.timezoneMessage' && values) {
-      return `If you uploaded files ${values.beforeAfter} ${values.time}, we'll show them as received on the ${values.nextPrevious} day`
+  // Mock translation function using actual translation from common.json
+  const mockT = ((key: string, options?: { [key: string]: string }) => {
+    if (key === 'fileUpload.timezoneMessage' && options) {
+      const template = commonTranslations['fileUpload.timezoneMessage']
+      return Object.entries(options).reduce(
+        (result, [varName, value]) => result.replace(`{{${varName}}}`, value),
+        template,
+      )
     }
     return key
-  }) as unknown as TFunction
+  }) as TFunction
 
   afterEach(() => {
     Settings.defaultZone = originalDefaultZone
     Settings.now = originalNow
-    jest.clearAllMocks()
   })
 
-  describe('during Daylight Saving Time (summer)', () => {
+  describe('Daylight Saving Time', () => {
     beforeEach(() => {
       // Set fixed date during DST (July 15, 2025 at noon UTC)
       const fixedDate = DateTime.utc(2025, 7, 15, 12)
       Settings.now = () => fixedDate.toMillis()
     })
 
-    it('should return complete message for EDT (west of UTC)', () => {
-      Settings.defaultZone = 'America/New_York'
-      const message = getFileUploadTimezoneMessage(mockT)
+    describe('west of UTC', () => {
+      it('should return complete message for EDT', () => {
+        Settings.defaultZone = 'America/New_York'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-      expect(message).toBe("If you uploaded files after 8 PM EDT, we'll show them as received on the next day")
+        expect(message).toBe("If you uploaded files after 8 PM EDT, we'll show them as received on the next day")
+      })
+
+      it('should return complete message for PDT', () => {
+        Settings.defaultZone = 'America/Los_Angeles'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 5 PM PDT, we'll show them as received on the next day")
+      })
     })
 
-    it('should return complete message for PDT (west of UTC)', () => {
-      Settings.defaultZone = 'America/Los_Angeles'
-      const message = getFileUploadTimezoneMessage(mockT)
+    describe('at UTC', () => {
+      it('should return empty string for UTC', () => {
+        Settings.defaultZone = 'UTC'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-      expect(message).toBe("If you uploaded files after 5 PM PDT, we'll show them as received on the next day")
+        expect(message).toBe('')
+      })
+    })
+
+    describe('east of UTC', () => {
+      it('should return complete message for JST', () => {
+        Settings.defaultZone = 'Asia/Tokyo'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day")
+      })
+
+      it('should return complete message for PHT', () => {
+        Settings.defaultZone = 'Asia/Manila'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 8 AM PHT, we'll show them as received on the previous day")
+      })
     })
   })
 
-  describe('during Standard Time (winter)', () => {
+  describe('Standard Time', () => {
     beforeEach(() => {
       // Set fixed date during standard time (January 15, 2025 at noon UTC)
       const fixedDate = DateTime.utc(2025, 1, 15, 12)
       Settings.now = () => fixedDate.toMillis()
     })
 
-    it('should return complete message for EST (west of UTC)', () => {
-      Settings.defaultZone = 'America/New_York'
-      const message = getFileUploadTimezoneMessage(mockT)
+    describe('west of UTC', () => {
+      it('should return complete message for EST', () => {
+        Settings.defaultZone = 'America/New_York'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-      expect(message).toBe("If you uploaded files after 7 PM EST, we'll show them as received on the next day")
+        expect(message).toBe("If you uploaded files after 7 PM EST, we'll show them as received on the next day")
+      })
+
+      it('should return complete message for PST', () => {
+        Settings.defaultZone = 'America/Los_Angeles'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 4 PM PST, we'll show them as received on the next day")
+      })
     })
 
-    it('should return complete message for PST (west of UTC)', () => {
-      Settings.defaultZone = 'America/Los_Angeles'
-      const message = getFileUploadTimezoneMessage(mockT)
+    describe('at UTC', () => {
+      it('should return empty string for UTC', () => {
+        Settings.defaultZone = 'UTC'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-      expect(message).toBe("If you uploaded files after 4 PM PST, we'll show them as received on the next day")
+        expect(message).toBe('')
+      })
     })
 
-    it('should return empty string for UTC+0 (no discrepancy at GMT)', () => {
-      Settings.defaultZone = 'Europe/London'
-      const message = getFileUploadTimezoneMessage(mockT)
+    describe('east of UTC', () => {
+      it('should return complete message for JST', () => {
+        Settings.defaultZone = 'Asia/Tokyo'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-      expect(message).toBe('')
-    })
-  })
+        expect(message).toBe("If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day")
+      })
 
-  describe('timezones without DST', () => {
-    beforeEach(() => {
-      // Fixed date (DST doesn't matter for these timezones)
-      const fixedDate = DateTime.utc(2025, 7, 15, 12)
-      Settings.now = () => fixedDate.toMillis()
-    })
+      it('should return complete message for PHT', () => {
+        Settings.defaultZone = 'Asia/Manila'
+        const message = getFileUploadTimezoneMessage(mockT)
 
-    it('should return complete message for JST (east of UTC)', () => {
-      Settings.defaultZone = 'Asia/Tokyo'
-      const message = getFileUploadTimezoneMessage(mockT)
-
-      expect(message).toBe("If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day")
-    })
-
-    it('should return complete message for PHT (east of UTC)', () => {
-      Settings.defaultZone = 'Asia/Manila'
-      const message = getFileUploadTimezoneMessage(mockT)
-
-      expect(message).toBe("If you uploaded files before 8 AM PHT, we'll show them as received on the previous day")
+        expect(message).toBe("If you uploaded files before 8 AM PHT, we'll show them as received on the previous day")
+      })
     })
   })
 })
