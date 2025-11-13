@@ -5,12 +5,12 @@
 name: '[Code Quality] Code Checks'
 
 on:
-  # pull_request:
+  pull_request:
   push:
-    # branches:
-    #   - main
-    #   - develop
-    #   - 'release/v**'
+    branches:
+      - main
+      - develop
+      - 'release/v**'
 
 defaults:
   run:
