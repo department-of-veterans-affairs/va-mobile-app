@@ -184,31 +184,15 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     }
 
     // When the appointment was eligible for travel pay but not filed within 30 days
-    const daysLeftToFileTravelPay = -3 //= getDaysLeftToFileTravelPay(attributes.startDateUtc)
+    const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
-    // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
-    const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
-
-    if (apiReturnsFullHistory && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
-      return (
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {t('travelPay.travelClaimFiledDetails.noClaim')}
-        </TextView>
-      )
-    }
-
-    if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
+    if (isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0) {
       return (
         <>
           <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
             {t('travelPay.travelClaimFiledDetails.daysLeftToFile', { daysLeft: Math.max(daysLeftToFileTravelPay, 0) })}
           </TextView>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
-            mb={theme.dimensions.condensedMarginBetween}
-            variant="MobileBody">
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
             {t('travelPay.travelClaimFiledDetails.fileWhenNoDaysLeft')}
           </TextView>
           <LinkWithAnalytics
@@ -229,7 +213,6 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
     return null
   }
-
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Past:
       const content = getContent()

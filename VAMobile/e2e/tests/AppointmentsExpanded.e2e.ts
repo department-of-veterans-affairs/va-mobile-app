@@ -120,7 +120,6 @@ const checkUpcomingApptDetails = async (
   locationAddress?: string,
   travelClaimId?: string,
   daysSinceAppointmentStart?: number,
-  travelPayClaimsFullHistory?: boolean,
 ) => {
   if (typeOfCare != undefined) {
     if (appointmentStatus === 'Pending') {
@@ -376,22 +375,15 @@ const checkUpcomingApptDetails = async (
           await expect(element(by.id('travelPayHelp'))).toExist()
         }
       } else {
-        if (travelPayClaimsFullHistory) {
-          await expect(
-            element(
-              by.text(
-                'You didn’t file a claim for this appointment. You can only file for reimbursement within 30 days of the appointment.',
-              ),
+        await expect(
+          element(
+            by.text(
+              'You didn’t file a claim for this appointment within the 30-day limit. You can still review and file your claim. But claims filed after 30 days are usually denied.',
             ),
-          ).toExist()
-        } else {
-          await expect(
-            element(
-              by.text('Your appointment is older than 30 days. You can still view your travel claim status on VA.gov.'),
-            ),
-          ).toExist()
-          await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
-        }
+          ),
+        ).toExist()
+        await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
+
         await expect(element(by.id('travelPayHelp'))).toExist()
         await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
       }
