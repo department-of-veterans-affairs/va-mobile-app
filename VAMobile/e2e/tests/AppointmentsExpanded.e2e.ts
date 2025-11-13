@@ -1160,7 +1160,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'John Smith',
       undefined,
       undefined,
-      'routine-follow-up',
+      'routine follow-up',
       undefined,
       undefined,
       undefined,
@@ -1172,7 +1172,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await expect(element(by.text('How you prefer to attend'))).toExist()
     await expect(element(by.text('Phone'))).toExist()
     await expect(element(by.text('Facility'))).toExist()
-    await expect(element(by.text('Test clinic 2'))).toExist()
+    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
     await element(by.text('Appointments')).tap()
   })
 }
