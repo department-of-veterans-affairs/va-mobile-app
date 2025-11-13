@@ -4,10 +4,9 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
 import { CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'api/types'
+import CollapsibleMessage from 'screens/HealthScreen/SecureMessaging/ViewMessage/CollapsibleMessage'
 import { context, render } from 'testUtils'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
-
-import CollapsibleMessage from './CollapsibleMessage'
 
 jest.mock('store/slices', () => {
   const actual = jest.requireActual('store/slices')
@@ -48,6 +47,7 @@ context('CollapsibleMessage', () => {
       senderName: 'John Smith',
       recipientId: 2,
       recipientName: 'Jane Smith',
+      isOhMessage: false,
     }
     const mockProps = {
       message: messageAttributes,
