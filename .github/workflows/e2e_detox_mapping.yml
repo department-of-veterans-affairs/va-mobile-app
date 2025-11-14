@@ -13,6 +13,11 @@ on:
       test_run:
         description: 'String saying test has been run'
         value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
+    secrets:
+      FLAGSHIP_MOBILE_APP_ID:
+        required: true
+      FLAGSHIP_MOBILE_APP_PRIVATE_KEY:
+        required: true
 
 defaults:
   run:
