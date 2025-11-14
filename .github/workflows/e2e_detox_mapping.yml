@@ -2,16 +2,17 @@
 # Detox e2e tests in CI
 #
 
-name: "[e2e] Detox Mapping"
+name: '[e2e] Detox Mapping'
 
 on:
+  push:
   workflow_call:
     outputs:
       test_matrix:
-        description: "The matrix output for the e2e tests"
+        description: 'The matrix output for the e2e tests'
         value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
       test_run:
-        description: "String saying test has been run"
+        description: 'String saying test has been run'
         value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
 
 defaults:
@@ -62,7 +63,7 @@ jobs:
         id: changed_files_file_name
         uses: tj-actions/changed-files@v46
         with:
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
+          base_sha: '${{ steps.get-sha.outputs.sha }}'
           path: './VAMobile/src'
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -79,19 +80,19 @@ jobs:
             fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
             console.log('Successfully converted detoxMapping.js to JSON');
           "
-          
+
           # Verify the JSON file was created and is valid
           if [ ! -f "/tmp/detoxMapping.json" ]; then
             echo "Failed to create detoxMapping.json"
             exit 1
           fi
-          
+
           # Validate JSON format
           if ! jq empty /tmp/detoxMapping.json; then
             echo "Generated JSON is invalid"
             exit 1
           fi
-          
+
           echo "detoxMapping.json created successfully"
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
