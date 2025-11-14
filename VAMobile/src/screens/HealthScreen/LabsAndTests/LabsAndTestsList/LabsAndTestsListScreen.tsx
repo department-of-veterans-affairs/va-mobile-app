@@ -113,7 +113,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     // Yearly ranges
     const year = parseInt(value, 10)
     if (isNaN(year)) {
-      // if not year, default to the lats three months
+      // if not year, default to the last three months
       return formatMonthsRange(3)
     }
     return {
