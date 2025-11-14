@@ -2166,7 +2166,7 @@
             "appointmentType": "COMMUNITY_CARE",
             "appointmentIen": null,
             "cancelId": null,
-            "comment": "Please arrive ten minutes early",
+            "comment": "Please arrive ten minutes early.",
             "healthcareProvider": "Jim Smith",
             "healthcareService": null,
             "location": {
