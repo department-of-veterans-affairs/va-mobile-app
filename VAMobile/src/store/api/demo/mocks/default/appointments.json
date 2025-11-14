@@ -1278,6 +1278,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
