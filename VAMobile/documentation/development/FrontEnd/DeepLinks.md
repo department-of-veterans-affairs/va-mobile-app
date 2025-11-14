@@ -48,25 +48,39 @@ As a more specific example:
   "applinks": {
     "details": [
       {
-        "appIDs": ["W2VK9K4NG2.gov.va.vamobileapp"],
+        "appIDs": [
+          "93B5WX72RE.gov.va.vamobileapp",
+          "W2VK9K4NG2.gov.va.vamobileapp"
+        ],
         "components": [
           {
             "/": "/my-health/appointments/past",
             "comment": "Matches any URL with a path that starts with /my-health/appointments/past and send to the mobile app."
+          },
+          {
+            "/": "/my-health/appointments",
+            "comment": "Matches any URL with a path that starts with /my-health/appointments and send to the mobile app."
           }
         ]
       }
     ]
   },
   "webcredentials": {
-    "apps": [ "W2VK9K4NG2.gov.va.vamobileapp" ]
+    "apps": [
+      "93B5WX72RE.gov.va.vamobileapp",
+      "W2VK9K4NG2.gov.va.vamobileapp"
+    ]
   }
 }
 ```
 
+The file uses the following fields to identify associated apps:
+ - `appIDs/apps`: a unique identifier to distinguish the application. We have two on the va mobile app: one for QA/production and building to device. Another for local development on the emulator. These values can be found on apple developer account.
+ - `components`: whitelist of acceptable paths the app will navigate to. These paths should mirror the web side while the mobile side consumes them and navigates to the proper screen.
+
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
 - https://staging.va.gov/.well-known/apple-app-site-association
-- https://va.gov/.well-known/apple-app-site-association
+- https://www.va.gov/.well-known/apple-app-site-association
 
 :::note
 Ensure that content-type for this file is `application/json` when it hits the url
@@ -130,7 +144,13 @@ The JSON file uses the following fields to identify associated apps:
 
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
 - https://staging.va.gov/.well-known/assetlinks.json
-- https://va.gov/.well-known/assetlinks.json
+- https://www.va.gov/.well-known/assetlinks.json
+
+#### App settings
+After installing the app, you can go to `Settings -> Apps -> VA -> Open by default` and confirm that staging.va.gov and www.va.gov are verified links
+
+![App Link Assistant](/img/deepLinks/androidAppSettings.png)
+
 
 
 ## Adding a new linking path in the app
@@ -139,7 +159,7 @@ With this in place, the json file should be accessible on the browser. Content s
 
 1. Obtain the https link that will be used to redirect to the app `ex: https://staging.va.gov/my-health/appointments`
 2. Update the `getStateFromPath` function within the `src/constants/linking.tsx` file. An example is provided below. 
-- Note that within the `prefixes` array, `https://staging.va.gov` and `https://va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the [configurations](#configurations).
+- Note that within the `prefixes` array, `https://staging.va.gov` and `https://www.va.gov` have already been added. If your new universal link does not include these options as a prefix, a new element will need to be added here in addition to the relevant portions within the [configurations](#configurations).
 ```tsx
 // Handles https://staging.va.gov/my-health/appointments & https://staging.va.gov/my-health/appointments/past
 if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
@@ -198,7 +218,7 @@ if (pathParts[0] === 'my-health' && pathParts[1] === 'appointments') {
 :::note
 Ensure that `android:autoVerify="true"` is present.
 
-Add a path for both **staging.va.gov** and **va.gov** as QA builds and local testing are done using staging to verify and va.gov for production.
+Add a path for both **staging.va.gov** and **www.va.gov** as QA builds and local testing are done using staging to verify and va.gov for production.
 :::
 
 
@@ -225,12 +245,27 @@ Make sure to validate that the result is valid `json` after the update
 
 ## Testing
 
-Before testing deep links, make sure that you rebuild and install the app in your emulator/simulator/device.
+Before testing deep links, make sure that you rebuild and install the app in your emulator/simulator/device. Testing can be done on the emulator or on a physical device for both iOS and Android.
 
-### iOS
+:::important
+Log into demo mode or a user before deep linking, or you will land on the initial screen of the app instead of the intended screen.
+
+For iOS, deep links can be tested on staging.va.gov and www.va.gov domains once updates to AASA file have been updated and can be viewed via public url.
+
+On Android, staging.va.gov and www.va.gov can be used once the AndroidManifest updates have been made as the assetLinks.json does not require additional changes usually.
+:::
+
+### Opening deep links
+On devices, you can use the following to test your deep links:
+- opening a link from an email
+- tapping a link on slack
+- text message or notifications
+
 
 ### Android
+Android has an additional way to test deep links.
 
+#### Command line
 The adb command can be used to test deep links with the Android emulator or a connected device:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d [your deep link]
@@ -240,8 +275,7 @@ As an example:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d "https://staging.va.gov/my-health/appointments" 
 ```
-You can also verify that the app has been linked properly by checking the list of verified links in your App settings. `Settings` -> `Apps` -> `VA`
--> `Open by default` -> `Links to open in this app`. Should see 2 verified links - va.gov and staging.va.gov
+
 ## Useful Links
 https://medium.com/@fashad.ahmed20/how-to-implement-universal-links-in-react-native-19a424db4dcf
 
@@ -254,5 +288,7 @@ https://github.com/department-of-veterans-affairs/content-build/tree/main/src/si
 https://www.ebay.com/.well-known/apple-app-site-association
 
 https://www.ebay.com/.well-known/assetlinks.json
+
+https://developer.apple.com/documentation/xcode/supporting-associated-domains
 
 
