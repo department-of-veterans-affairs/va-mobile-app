@@ -6,10 +6,9 @@ import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'api/
 import { SecureMessagingFolderMessagesGetData } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import FolderMessages from './FolderMessages'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -37,6 +36,7 @@ context('FolderMessages', () => {
           senderName: 'name',
           recipientId: 1,
           recipientName: 'recipient',
+          isOhMessage: false,
         },
       },
     ],

@@ -74,7 +74,7 @@ function PastAppointments({
         ...option,
         value: option.label,
         timeFrame: option.value as TimeFrameType, // We know the value is a TimeFrameType because we filtered out the fourteen to twelve months option
-        testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
+        testID: option.a11yLabel, // testID is used as both test id and accessibility label
       }))
     return pickerOptions
   }

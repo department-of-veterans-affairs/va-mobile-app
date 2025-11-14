@@ -7,13 +7,12 @@ import { useAllergies } from 'api/allergies/getAllergies'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { capitalizeFirstLetter, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useAppDispatch, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
 
 type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'AllergyDetails'>
 
