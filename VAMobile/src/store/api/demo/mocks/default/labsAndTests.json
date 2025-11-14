@@ -520,6 +520,32 @@
             "sampleTested": "Bone Marrow",
             "bodySite": "Right leg"
           }
+        },
+        {
+          "id": "I2-LASTYEAR-TEST-001",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "Blood Work - Last Year",
+            "testCode": "BW",
+            "dateCompleted": "{{now - 1 years}}",
+            "encodedData": "",
+            "location": "VA HISTORICAL LAB",
+            "sampleTested": "Blood",
+            "bodySite": "Right arm"
+          }
+        },
+        {
+          "id": "I2-LASTYEAR-TEST-002",
+          "type": "diagnostic_report",
+          "attributes": {
+            "display": "X-Ray - Last Year",
+            "testCode": "XR",
+            "dateCompleted": "{{now - 380 days}}",
+            "encodedData": "",
+            "location": "VA RADIOLOGY LAB",
+            "sampleTested": "Chest",
+            "bodySite": "Chest"
+          }
         }
       ]
     }

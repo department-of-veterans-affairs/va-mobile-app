@@ -1,4 +1,4 @@
-import { by, element, expect } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 
 import { getFormattedDate } from '../../src/utils/dateUtils'
@@ -70,6 +70,39 @@ describe('Labs And Test Screen - Date Picker', () => {
     // Select "Past 3 months" to confirm it works
     await element(by.id('range-past-3-months')).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
+  })
+
+  it('should show different results when selecting last year', async () => {
+    const currentYear = DateTime.now().year
+    const lastYear = currentYear - 1
+
+    // First, verify current default selection (past 3 months) shows current records
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).toExist()
+    await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).toExist()
+
+    // Verify last year's records are not visible
+    await expect(element(by.text('Blood Work - Last Year'))).not.toExist()
+    await expect(element(by.text('X-Ray - Last Year'))).not.toExist()
+
+    // Open the date picker and select last year
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
+    await element(by.id(`range-${lastYear}`)).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
+
+    // Wait for data to load and verify the date range text updated to show last year
+
+    await waitFor(element(by.text(`Jan 1, ${lastYear} - Dec 31, ${lastYear}`))).toExist()
+
+    // Verify last year's records are now visible
+    await expect(element(by.text('Blood Work - Last Year'))).toExist()
+    await expect(element(by.text('X-Ray - Last Year'))).toExist()
+
+    // Verify current records are not in the list anymore
+    await expect(element(by.id(TEST_IDS.SURGICAL_PATHOLOGY_TEST_ID))).not.toExist()
+    await expect(element(by.id(TEST_IDS.CHEM_HEM_TEST_ID))).not.toExist()
+
+    // Reset back to past 3 months for other tests
+    await resetDateRangeToDefault()
   })
 })
 

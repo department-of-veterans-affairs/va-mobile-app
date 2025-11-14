@@ -93,30 +93,28 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     const now = DateTime.now()
     const today = now.toFormat('yyyy-MM-dd')
 
-    if (value === 'past-3-months') {
-      const startDate = now.minus({ months: 3 }).toFormat('yyyy-MM-dd')
+    const formatMonthsRange = (months: number) => {
+      const startDate = now.minus({ months })
       return {
-        startDate,
+        startDate: startDate.toFormat('yyyy-MM-dd'),
         endDate: today,
-        timeFrame: `${now.minus({ months: 3 }).toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`,
+        timeFrame: `${startDate.toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`,
       }
     }
 
+    if (value === 'past-3-months') {
+      return formatMonthsRange(3)
+    }
+
     if (value === 'past-6-months') {
-      const startDate = now.minus({ months: 6 }).toFormat('yyyy-MM-dd')
-      return {
-        startDate,
-        endDate: today,
-        timeFrame: `${now.minus({ months: 6 }).toFormat('MMM d, yyyy')} - ${now.toFormat('MMM d, yyyy')}`,
-      }
+      return formatMonthsRange(6)
     }
 
     // Yearly ranges
     const year = parseInt(value, 10)
     if (isNaN(year)) {
-      // Handle invalid year - return default
-      console.warn(`Invalid year value: ${value}`)
-      return getDateRangeByValue('past-3-months')
+      // if not year, default to the lats three months
+      return formatMonthsRange(3)
     }
     return {
       startDate: `${year}-01-01`,
@@ -267,8 +265,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextView testID="labsAndTestsDateRangeTestID">
-            {t('labsAndTests.list.dateFilter.dateRange')}
-            <TextView variant="MobileBodyBold"> {selectedDateRange.timeFrame}</TextView>
+            {t('labsAndTests.list.dateFilter.dateRange')}{' '}
+            <TextView variant="MobileBodyBold">{selectedDateRange.timeFrame}</TextView>
           </TextView>
         </Box>
       </Box>
@@ -297,8 +295,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
                     <TextView
                       variant="MobileBody"
                       mt={theme.dimensions.standardMarginBetween}
-                      accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}
-                      accessibilityHint="">
+                      accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text'))}
+                      accessibilityHint={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}>
                       {t('labsAndTests.details.imageDisclaimer.text')}
                     </TextView>
                     <Box mt={theme.dimensions.standardMarginBetween}>
