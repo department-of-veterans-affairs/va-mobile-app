@@ -17,7 +17,7 @@ import {
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import HomeScreen from 'screens/HomeScreen'
 import { get } from 'store/api'
-import { ErrorsState } from 'store/slices'
+import { AuthState, ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -116,6 +116,58 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
 context('HomeScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
   const initializeTestInstance = (options?: RenderParams) => {
+    const startTime = DateTime.now()
+    const endTime = DateTime.now().plus({ minutes: 1 })
+
+    when(get as jest.Mock)
+      .calledWith('/v0/maintenance_windows')
+      .mockResolvedValue({
+        data: [
+          {
+            attributes: {
+              service: 'rx_refill',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'appointments',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'appeals',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'claims',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'secure_messaging',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'payment_history',
+              startTime,
+              endTime,
+            },
+          },
+        ],
+      })
+
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     render(<HomeScreen {...props} />, { ...options })
   }
@@ -149,14 +201,9 @@ context('HomeScreen', () => {
 
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              rx_refill: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -180,15 +227,9 @@ context('HomeScreen', () => {
 
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: downtimeWindow,
-              appeals: downtimeWindow,
-              claims: downtimeWindow,
-              secure_messaging: downtimeWindow,
-              rx_refill: downtimeWindow,
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -281,14 +322,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(3, 0))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -349,14 +385,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getAppointmentsPayload(0, 3))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -437,12 +468,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appeals: downtimeWindow,
-              claims: downtimeWindow,
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -500,14 +528,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getFoldersPayload(3))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              secure_messaging: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -630,14 +653,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPrescriptionsPayload(3))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              rx_refill: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
@@ -751,14 +769,9 @@ context('HomeScreen', () => {
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
       initializeTestInstance({
         preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              payment_history: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+          auth: {
+            loggedIn: true,
+          } as AuthState,
         },
       })
       await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())

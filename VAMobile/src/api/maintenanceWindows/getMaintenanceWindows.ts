@@ -9,15 +9,14 @@ import { DateTime } from 'luxon'
 import { each, reduce } from 'underscore'
 
 import { maintenanceWindowsKeys } from 'api/maintenanceWindows/queryKeys'
-import {
-  MAINTENANCE_WINDOW_OVERRIDES,
-  MaintenanceWindowOverrideStorage,
-} from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideMaintenanceWindows'
 import { RootState } from 'store'
 import { DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, get } from 'store/api'
 import { AuthState, DowntimeWindowsByFeatureType } from 'store/slices'
 
-export const initializeDowntimeWindowsByFeature = (): DowntimeWindowsByFeatureType => {
+export type MaintenanceWindowOverrideStorage = Record<string, { startTime: string; endTime: string } | undefined>
+export const MAINTENANCE_WINDOW_OVERRIDES = '@maintenance_window_overrides'
+
+const initializeDowntimeWindowsByFeature = (): DowntimeWindowsByFeatureType => {
   return reduce(
     DowntimeFeatureTypeConstants,
     (memo: DowntimeWindowsByFeatureType, value: DowntimeFeatureType): DowntimeWindowsByFeatureType => {
@@ -31,7 +30,7 @@ export const initializeDowntimeWindowsByFeature = (): DowntimeWindowsByFeatureTy
 /**
  * Fetch maintenance windows
  */
-export const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> => {
+const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> => {
   if (__DEV__) {
     const overrideStr = await AsyncStorage.getItem(MAINTENANCE_WINDOW_OVERRIDES)
 
@@ -49,7 +48,6 @@ export const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureT
         }
       })
 
-      console.log(maintenanceWindows)
       return maintenanceWindows
     }
   }
@@ -73,7 +71,7 @@ export const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureT
 /**
  * Returns a query for maintenance windows
  */
-export const useMaintenanceWindowQuery = () => {
+const useMaintenanceWindowQuery = () => {
   const { loggedIn } = useSelector<RootState, AuthState>((state) => state.auth)
 
   return useQuery({

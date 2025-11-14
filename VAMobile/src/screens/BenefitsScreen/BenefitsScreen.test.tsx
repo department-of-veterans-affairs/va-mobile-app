@@ -9,8 +9,8 @@ import { ClaimsAndAppealsGetDataMetaError } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
 import { BenefitsScreen } from 'screens'
 import { RootState } from 'store'
-import { get } from 'store/api'
-import { ErrorsState } from 'store/slices'
+import { MaintenanceWindowsGetData, get } from 'store/api'
+import { AuthState, ErrorsState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
 import { getClaimsAndAppealsPayload } from 'utils/tests/personalization'
 
@@ -94,43 +94,78 @@ context('BenefitsScreen', () => {
   })
 
   it('displays downtime message when claims or appeals is in downtime', () => {
+    const startTime = DateTime.now()
+    const endTime = DateTime.now().plus({ minutes: 1 })
+    when(get as jest.Mock)
+      .calledWith('/v0/maintenance_windows')
+      .mockResolvedValueOnce({
+        data: [
+          {
+            attributes: {
+              service: 'appeals',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'claims',
+              startTime,
+              endTime,
+            },
+          },
+        ],
+      })
+
     const activeClaimsCount = 3
-    const downtimeWindow = {
-      startTime: DateTime.now(),
-      endTime: DateTime.now().plus({ minutes: 1 }),
-    }
+
     const preloadedState = {
-      errors: {
-        downtimeWindowsByFeature: {
-          appeals: downtimeWindow,
-          claims: downtimeWindow,
-        },
-      } as ErrorsState,
+      auth: {
+        loggedIn: true,
+      } as AuthState,
     }
 
     initializeTestInstance(activeClaimsCount, undefined, preloadedState)
     expect(screen.getByText(t('benefits.activity.warning.downtime'))).toBeTruthy()
   })
 
-  it('does not display active claims when claims or appeals is in downtime', () => {
+  it('does not display active claims when claims or appeals is in downtime', async () => {
+    const startTime = DateTime.now()
+    const endTime = DateTime.now().plus({ minutes: 1 })
+    when(get as jest.Mock)
+      .calledWith('/v0/maintenance_windows')
+      .mockResolvedValueOnce({
+        data: [
+          {
+            attributes: {
+              service: 'appeals',
+              startTime,
+              endTime,
+            },
+          },
+          {
+            attributes: {
+              service: 'claims',
+              startTime,
+              endTime,
+            },
+          },
+        ],
+      })
+
     const activeClaimsCount = 3
-    const downtimeWindow = {
-      startTime: DateTime.now(),
-      endTime: DateTime.now().plus({ minutes: 1 }),
-    }
     const preloadedState = {
-      errors: {
-        downtimeWindowsByFeature: {
-          appeals: downtimeWindow,
-          claims: downtimeWindow,
-        },
-      } as ErrorsState,
+      auth: {
+        loggedIn: true,
+      } as AuthState,
     }
 
     initializeTestInstance(activeClaimsCount, undefined, preloadedState)
-    expect(
-      screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
-    ).toBeFalsy()
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
+      ).toBeFalsy()
+    })
   })
 
   it('displays error message when the claims API call throws an error', async () => {

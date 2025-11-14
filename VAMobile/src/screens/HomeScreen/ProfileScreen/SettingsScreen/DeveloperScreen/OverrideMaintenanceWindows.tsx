@@ -8,6 +8,10 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { DateTime } from 'luxon'
 import { each, map } from 'underscore'
 
+import {
+  MAINTENANCE_WINDOW_OVERRIDES,
+  MaintenanceWindowOverrideStorage,
+} from 'api/maintenanceWindows/getMaintenanceWindows'
 import { Box, FeatureLandingTemplate, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -16,10 +20,6 @@ import { useTheme } from 'utils/hooks'
 
 type OverrideMaintenanceWindowsProps = StackScreenProps<HomeStackParamList, 'MaintenanceWindows'>
 type MaintenanceWindowOverrideState = Record<string, { minutesStartsIn: null | number; lengthInMinutes: null | number }>
-
-export type MaintenanceWindowOverrideStorage = Record<string, { startTime: string; endTime: string } | undefined>
-
-export const MAINTENANCE_WINDOW_OVERRIDES = '@maintenance_window_overrides'
 
 const initMaintenanceWindowOverrideState = () => {
   const state: MaintenanceWindowOverrideState = {}
