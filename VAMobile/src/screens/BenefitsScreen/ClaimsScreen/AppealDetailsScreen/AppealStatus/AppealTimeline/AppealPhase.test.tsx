@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 
 import { AppealEventTypes } from 'api/types'
+import AppealPhase from 'screens/BenefitsScreen/ClaimsScreen/AppealDetailsScreen/AppealStatus/AppealTimeline/AppealPhase'
 import { context, mockNavProps, render } from 'testUtils'
-
-import AppealPhase from './AppealPhase'
 
 context('AppealPhase', () => {
   const initializeTestInstance = (type: AppealEventTypes): void => {

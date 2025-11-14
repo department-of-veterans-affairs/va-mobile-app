@@ -5,10 +5,9 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { CategoryTypeFields, CategoryTypes } from 'api/types'
 import { SecureMessagingFolderMessagesGetData, SecureMessagingSystemFolderIdConstants } from 'api/types'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import Inbox from 'screens/HealthScreen/SecureMessaging/Inbox/Inbox'
 import * as api from 'store/api'
 import { context, render, waitFor, when } from 'testUtils'
-
-import Inbox from './Inbox'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -42,6 +41,7 @@ context('Inbox', () => {
             recipientId: 3,
             recipientName: 'mock recipient name',
             readReceipt: 'mock read receipt',
+            isOhMessage: false,
           },
         },
       ],

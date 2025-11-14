@@ -4,9 +4,8 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { ClaimEventData } from 'api/types'
+import FileRequestDetails from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestDetails/FileRequestDetails'
 import { context, mockNavProps, render } from 'testUtils'
-
-import FileRequestDetails from './FileRequestDetails'
 
 context('FileRequestDetails', () => {
   const requestWithoutFiles = {
