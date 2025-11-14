@@ -23,7 +23,7 @@ export const HomeE2eIdConstants = {
   UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '6 in the next 30 days',
   PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '5 eligible for travel reimbursement',
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
-  CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT: '5 active and 1 evidence request',
+  CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT: '5 active with 1 evidence request',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
   PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
