@@ -478,7 +478,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       'New issue',
-      'Please arrive ten minutes early.',
+      undefined,
       undefined,
       '2341 North Ave',
       '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
