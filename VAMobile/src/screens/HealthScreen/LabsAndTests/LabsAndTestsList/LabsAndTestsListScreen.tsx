@@ -10,6 +10,7 @@ import { map } from 'underscore'
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
 import { LabsAndTests } from 'api/types'
 import {
+  AccordionCollapsible,
   Box,
   DefaultList,
   DefaultListItemObj,
@@ -288,28 +289,38 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
               <DefaultList items={labsAndTestsButtons} />
             </Box>
             {renderPagination()}
-            <Box mx={theme.dimensions.gutter}>
-              <TextView
-                accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}
-                accessibilityHint="">
-                {t('labsAndTests.details.imageDisclaimer.text')}
-              </TextView>
-            </Box>
-            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-              <LinkWithAnalytics
-                type="custom"
-                onPress={() => {
-                  logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
-                  navigateTo('Webview', {
-                    url: LINK_URL_MHV_LABS_AND_TESTS,
-                    displayTitle: t('webview.vagov'),
-                    loadingMessage: t('webview.medicalRecords.loading'),
-                    useSSO: true,
-                  })
-                }}
-                text={t('labsAndTests.details.imageDisclaimer.linkText')}
-                a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText.a11yHint'))}
-                testID="viewMedicalRecordsLinkID"
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AccordionCollapsible
+                header={<TextView>{t('labsAndTests.details.imageDisclaimer.header')}</TextView>}
+                expandedContent={
+                  <>
+                    <TextView
+                      variant="MobileBody"
+                      mt={theme.dimensions.standardMarginBetween}
+                      accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}
+                      accessibilityHint="">
+                      {t('labsAndTests.details.imageDisclaimer.text')}
+                    </TextView>
+                    <Box mt={theme.dimensions.standardMarginBetween}>
+                      <LinkWithAnalytics
+                        type="custom"
+                        onPress={() => {
+                          logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
+                          navigateTo('Webview', {
+                            url: LINK_URL_MHV_LABS_AND_TESTS,
+                            displayTitle: t('webview.vagov'),
+                            loadingMessage: t('webview.medicalRecords.loading'),
+                            useSSO: true,
+                          })
+                        }}
+                        text={t('labsAndTests.details.imageDisclaimer.linkText')}
+                        a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText.a11yHint'))}
+                        testID="viewMedicalRecordsLinkID"
+                      />
+                    </Box>
+                  </>
+                }
+                testID="medicalImagesAccordionTestID"
               />
             </Box>
           </Box>

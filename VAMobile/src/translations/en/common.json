@@ -996,6 +996,7 @@
   "labsAndTests.details.sampleTested": "Sample tested",
   "labsAndTests.details.status": "Status",
   "labsAndTests.details.typeOfTest": "Type of test",
+  "labsAndTests.details.imageDisclaimer.header": "Need to find your medical images?",
   "labsAndTests.details.imageDisclaimer.text": "If you need to see the images for your VA imaging tests, like X-rays, MRIs, and CT scans, go to VA.gov. You may view the written reports for these imaging tests here in this app",
   "labsAndTests.details.imageDisclaimer.text.a11yHint": "If you need to see the images for your V-A imaging tests, like X-rays, MRIs, and CT scans, go to VA.gov. You may view the written reports for these imaging tests here in this app",
   "labsAndTests.details.imageDisclaimer.linkText": "View medical images on VA.gov",
