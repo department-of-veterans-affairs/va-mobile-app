@@ -261,9 +261,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextView testID="labsAndTestsDateRangeTestID">
-            {t('labsAndTests.list.dateFilter.showing90Days', {
-              timeFrame: selectedDateRange.timeFrame,
-            })}
+            {t('labsAndTests.list.dateFilter.dateRange')}
+            <TextView variant="MobileBodyBold">{selectedDateRange.timeFrame}</TextView>
           </TextView>
         </Box>
       </Box>
