@@ -5,10 +5,9 @@ import { t } from 'i18next'
 
 import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import { BranchesOfServiceConstants, MilitaryServiceHistoryData, ServiceHistoryAttributes } from 'api/types'
+import ProfileScreen from 'screens/HomeScreen/ProfileScreen/ProfileScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-
-import ProfileScreen from './ProfileScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {

@@ -13,13 +13,19 @@ jobs:
     outputs:
       pages_with_errors: ${{ steps.accessibility_check.outputs.pages_with_errors }}
       total_errors: ${{ steps.accessibility_check.outputs.total_errors }}
-    env:
-      DOCS_RELEASE_REPORT_PAT: ${{ secrets.DOCS_RELEASE_REPORT_PAT }}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Setup axe-core CLI tools
         run: |
+          google-chrome --version
+          chromedriver --version
           npm install @axe-core/cli -g
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -27,12 +33,30 @@ jobs:
           node-version-file: 'VAMobile/documentation/.nvmrc'
           cache: yarn
           cache-dependency-path: VAMobile/documentation/yarn.lock
+
+      - name: Update Chrome and Chromedriver
+        run: |
+          # Add Google's signing key
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          # Add the Chrome repository
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          # Update the package list and install Chrome
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # Download and install chromedriver
+          wget https://storage.googleapis.com/chrome-for-testing-public/141.0.7390.76/linux64/chromedriver-linux64.zip
+          unzip chromedriver-linux64.zip
+          sudo mv chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+
       - name: Install mobile app modules
         working-directory: VAMobile
         run: |
           yarn install --frozen-lockfile
       - name: Create the build and start web server
         working-directory: VAMobile/documentation
+        env:
+          DOCS_RELEASE_REPORT_PAT: ${{ steps.generate_token.outputs.token }}
         run: |
           yarn install --frozen-lockfile
           yarn build

@@ -9,10 +9,9 @@ import { Box, LoadingComponent, MessageList, Pagination, PaginationProps } from 
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import NoInboxMessages from 'screens/HealthScreen/SecureMessaging/NoInboxMessages/NoInboxMessages'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { getMessagesListItems } from 'utils/secureMessaging'
-
-import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = {
   setScrollPage: React.Dispatch<React.SetStateAction<number>>

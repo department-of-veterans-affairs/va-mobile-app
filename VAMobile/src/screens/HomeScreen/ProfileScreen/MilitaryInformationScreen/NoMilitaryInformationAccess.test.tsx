@@ -3,9 +3,8 @@ import React from 'react'
 import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import NoMilitaryInformationAccess from 'screens/HomeScreen/ProfileScreen/MilitaryInformationScreen/NoMilitaryInformationAccess'
 import { context, render } from 'testUtils'
-
-import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 context('NoMilitaryInformationAccess', () => {
   it('should render text fields correctly', () => {

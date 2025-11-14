@@ -1,10 +1,7 @@
 import React, { FC } from 'react'
 
-import Box from './Box'
-import LabelTag from './LabelTag'
-import TextLineWithIcon, { TextLineWithIconProps } from './TextLineWithIcon'
-import TextView from './TextView'
-import { TextLine } from './types'
+import { Box, LabelTag, TextLineWithIcon, TextLineWithIconProps, TextView } from 'components'
+import { TextLine } from 'components/types'
 
 type TextLinesProps = {
   /** List of text for the button */
