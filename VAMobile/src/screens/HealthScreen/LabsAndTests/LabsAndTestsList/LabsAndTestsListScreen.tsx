@@ -312,7 +312,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
                           })
                         }}
                         text={t('labsAndTests.details.imageDisclaimer.linkText')}
-                        a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText.a11yHint'))}
+                        a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText'))}
                         testID="viewMedicalRecordsLinkID"
                       />
                     </Box>
