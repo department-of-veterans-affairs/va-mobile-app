@@ -15,6 +15,7 @@ import {
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
+  LinkWithAnalytics,
   LoadingComponent,
   Pagination,
   PaginationProps,
@@ -33,9 +34,13 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
+import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
+const LINK_URL_MHV_LABS_AND_TESTS = `${LINK_URL_MHV_VA_MEDICAL_RECORDS}labs-and-tests`
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -283,6 +288,30 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
               <DefaultList items={labsAndTestsButtons} />
             </Box>
             {renderPagination()}
+            <Box mx={theme.dimensions.gutter}>
+              <TextView
+                accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}
+                accessibilityHint="">
+                {t('labsAndTests.details.imageDisclaimer.text')}
+              </TextView>
+            </Box>
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <LinkWithAnalytics
+                type="custom"
+                onPress={() => {
+                  logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
+                  navigateTo('Webview', {
+                    url: LINK_URL_MHV_LABS_AND_TESTS,
+                    displayTitle: t('webview.vagov'),
+                    loadingMessage: t('webview.medicalRecords.loading'),
+                    useSSO: true,
+                  })
+                }}
+                text={t('labsAndTests.details.imageDisclaimer.linkText')}
+                a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText.a11yHint'))}
+                testID="viewMedicalRecordsLinkID"
+              />
+            </Box>
           </Box>
         </>
       )}
