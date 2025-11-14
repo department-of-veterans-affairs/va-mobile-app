@@ -37,7 +37,7 @@ export const getLabsAndTestsList = (store: DemoStore, params: Params): LabsAndTe
     const defaultRecords = store['/v1/health/labs-and-tests'].DEFAULT
 
     // Create a date interval for filtering
-    const interval = Interval.fromDateTimes(new Date(startDate), new Date(endDate))
+    const interval = Interval.fromDateTimes(DateTime.fromISO(startDate), DateTime.fromISO(endDate))
 
     // Filter records that fall within the date range
     const filteredData = defaultRecords.data.filter((record: LabsAndTests) => {
