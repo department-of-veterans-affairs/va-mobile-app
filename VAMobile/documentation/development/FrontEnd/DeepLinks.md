@@ -4,21 +4,19 @@ title: Universal and app links
 
 ## Overview
 
-Universal links (iOS) and App links (Android), a type of deep linking, enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
+Universal links (iOS) and App links (Android) enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
 
-These type of deep linking function across both web and mobile platforms. For example, when a user taps a link, it can open the related screen directly within the React Native app instead of loading a webpage. This creates a more seamless and integrated user experience between mobile and web content.
+When a user taps a link, it will decide whether to open the link on the website or in the app. Any path whitelisted will navigate into the app while any other link will go to the website.
 
 ## Configurations
 :::note
-Deep linking support for both iOS and Android should already be configured. However, here's a brief overview of the setup process for those who want to review or customize the implementation.
-
-If you are adding a new deeplink then go **[adding a new linking path to app](./DeepLinks.md#adding-a-new-linking-path-in-the-app)** section.
+If you are adding a new deep link then go **[adding a new linking path to app](./DeepLinks.md#adding-a-new-linking-path-in-the-app)** section.
 :::
 
 ### iOS
 
-**An apple-app-site-association (AASA) file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
-An AASA format will follow a format like this. `BundleId` and `TeamID` can be found from the apple developer account. Additional information about generation of this file can be found [here](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
+**An apple-app-site-association (AASA) file has been uploaded to [content-build repository](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). New paths will require a PR to the [content-build repo](https://github.com/department-of-veterans-affairs/content-build).** 
+An AASA format will follow a format like this. `BundleId` and `TeamID` can be found from the Apple developer account. Additional information about generation of this file can be found [here](https://developer.apple.com/documentation/xcode/supporting-associated-domains).
 
 ```json
 {
@@ -75,7 +73,7 @@ As a more specific example:
 ```
 
 The file uses the following fields to identify associated apps:
- - `appIDs/apps`: a unique identifier to distinguish the application. We have two on the va mobile app: one for QA/production and building to device. Another for local development on the emulator. These values can be found on apple developer account.
+ - `appIDs/apps`: a unique identifier to distinguish the application. We have two on the va mobile app: one for QA/production and building to device. Another for local development on the emulator. These values can be found on Apple developer account.
  - `components`: whitelist of acceptable paths the app will navigate to. These paths should mirror the web side while the mobile side consumes them and navigates to the proper screen.
 
 With this in place, the json file should be accessible on the browser. Content should be viewable at:
@@ -117,7 +115,7 @@ Code snippet added in project’s “AppDelegate.mm”
 
 ### Android
 
-An assetlinks.json file has been uploaded to our [website server](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). Additional information about generation of this file can be found [here](https://medium.com/@fashad.ahmed20/how-to-implement-universal-links-in-react-native-19a424db4dcf)
+An assetlinks.json file has been uploaded to [content-build repository](https://github.com/department-of-veterans-affairs/content-build/tree/main/src/site/assets/.well-known). Additional information about generation of this file can be found [here](https://medium.com/@fashad.ahmed20/how-to-implement-universal-links-in-react-native-19a424db4dcf)
 
 ```json
 [
