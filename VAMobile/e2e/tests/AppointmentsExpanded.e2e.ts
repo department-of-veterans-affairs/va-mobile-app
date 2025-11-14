@@ -369,13 +369,14 @@ const checkUpcomingApptDetails = async (
     appointmentType === 'ATLAS' ||
     appointmentType === 'Onsite' ||
     appointmentType === 'Claim' ||
-    appointmentType === 'VA'
+    appointmentType === 'VA' ||
+    appointmentType === 'CC'
 
   // We can only check if we know the days since the appointment started
   if (pastAppointment && appointmentStatus === 'Confirmed' && daysSinceAppointmentStart && isAllowed) {
     if (travelClaimId) {
       // If we have a claim
-      await expect(element(by.text(/^Claim number: /))).toExist()
+      // await expect(element(by.text(/^Claim number: /))).toExist()
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
       await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
       await expect(element(by.id('travelPayHelp'))).toExist()

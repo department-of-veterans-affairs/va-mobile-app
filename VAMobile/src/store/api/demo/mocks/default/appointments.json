@@ -41,7 +41,7 @@
             "reason": "Test",
             "isCovidVaccine": false,
             "typeOfCare": "Podiatry",
-            "travelPayEligible": false,
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -972,6 +972,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "claim": {
                 "claimNumber": "TC0928098230498",
@@ -1387,6 +1388,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1507,6 +1509,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1573,6 +1576,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1746,6 +1750,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,

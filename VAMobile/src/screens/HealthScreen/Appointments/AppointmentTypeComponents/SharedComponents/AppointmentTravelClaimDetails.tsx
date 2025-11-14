@@ -102,6 +102,19 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     const { claim } = attributes.travelPayClaim || {}
     const claimError = attributes.travelPayClaim?.metadata.success === false
 
+    // When travel pay call fails, display an error message
+    // Also show in the odd case the appointment can't be looked up in the query data
+    if (claimError || appointmentLookupError) {
+      return (
+        <>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.error.general')}
+          </TextView>
+          <TravelPayHelp />
+        </>
+      )
+    }
+
     if (isSubmitting) {
       // We are in the process of submitting a travel pay claim and don't yet have the claim details from the API
       // so we're displaying a placeholder status
@@ -165,19 +178,6 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
             a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
             testID={`goToVAGovID-${claimId}`}
           />
-          <TravelPayHelp />
-        </>
-      )
-    }
-
-    // When travel pay call fails, display an error message
-    // Also show in the odd case the appointment can't be looked up in the query data
-    if (claimError || appointmentLookupError) {
-      return (
-        <>
-          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-            {t('travelPay.error.general')}
-          </TextView>
           <TravelPayHelp />
         </>
       )
