@@ -6,7 +6,7 @@ title: Universal and app links
 
 Universal links (iOS) and App links (Android) enable an app to respond to specific URLs by navigating to a particular screen or triggering a defined action even if the app is not currently running.
 
-When a user taps a link, it will decide whether to open the link on the website or in the app. Any path whitelisted will navigate into the app while any other link will go to the website.
+When a user taps a link, it will decide whether to open the link on the website or in the app. If a user is logged into the app, any path whitelisted will navigate to the correct screen otherwise will navigate you to the login screen. Any link not on the whitelist will go to the website.
 
 ## Configurations
 :::note
