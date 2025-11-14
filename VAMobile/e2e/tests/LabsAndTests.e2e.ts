@@ -26,7 +26,7 @@ const navigateToLabsAndTests = async () => {
 
 const resetDateRangeToDefault = async () => {
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
-  await element(by.text('Past 3 months')).tap()
+  await element(by.id('range-past-3-months')).tap()
   await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
 }
 // Calculate dynamic dates that will always be within the past 3 months
@@ -58,17 +58,17 @@ describe('Labs And Test Screen - Date Picker', () => {
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
 
     // Verify "Past 3 months" option exists (default)
-    await expect(element(by.text('Past 3 months'))).toExist()
+    await expect(element(by.id('range-past-3-months'))).toExist()
 
     // Verify "Past 6 months" option exists
-    await expect(element(by.text('Past 6 months'))).toExist()
+    await expect(element(by.id('range-past-6-months'))).toExist()
 
     // Verify current year option exists
     const currentYear = DateTime.now().year
-    await expect(element(by.text(`All of ${currentYear}`))).toExist()
+    await expect(element(by.id(`range-${currentYear}`))).toExist()
 
     // Select "Past 3 months" to confirm it works
-    await element(by.text('Past 3 months')).tap()
+    await element(by.id('range-past-3-months')).tap()
     await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
   })
 })
