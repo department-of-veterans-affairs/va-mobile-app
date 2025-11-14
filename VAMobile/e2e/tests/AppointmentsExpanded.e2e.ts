@@ -365,16 +365,29 @@ const checkUpcomingApptDetails = async (
     daysSinceAppointmentStart,
   )
 
-  if (pastAppointment && appointmentStatus === 'Confirmed') {
-    // We can only check if we know the days since the appointment started
-    if (daysSinceAppointmentStart) {
+  const isAllowed =
+    appointmentType === 'ATLAS' ||
+    appointmentType === 'Onsite' ||
+    appointmentType === 'Claim' ||
+    appointmentType === 'VA'
+
+  // We can only check if we know the days since the appointment started
+  if (pastAppointment && appointmentStatus === 'Confirmed' && daysSinceAppointmentStart && isAllowed) {
+    if (travelClaimId) {
+      // If we have a claim
+      await expect(element(by.text(/^Claim number: /))).toExist()
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+      await expect(element(by.id('travelPayHelp'))).toExist()
+    } else {
       if (daysSinceAppointmentStart < 30) {
-        if (travelClaimId) {
-          await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-          await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
-          await expect(element(by.id('travelPayHelp'))).toExist()
-        }
+        // If we have no claim and are within 30 days, show nothing here
+        await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
       } else {
+        // If we have no claim and are past 30 days, show a message
+        await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+        await expect(element(by.text('Days left to file: 0'))).toExist()
+        await expect(element(by.id('goToFileTravelClaimLink'))).toExist()
         await expect(
           element(
             by.text(
@@ -382,10 +395,6 @@ const checkUpcomingApptDetails = async (
             ),
           ),
         ).toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID))).toExist()
-
-        await expect(element(by.id('travelPayHelp'))).toExist()
-        await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
       }
     }
   } else {
