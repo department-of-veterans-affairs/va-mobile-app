@@ -552,7 +552,7 @@
             "appointmentType": "VA_VIDEO_CONNECT_HOME",
             "cancelId": "190305",
             "comment": null,
-            "healthcareProvider": "ami Alsahhar - HOME - Canceled",
+            "healthcareProvider": "Sami Alsahhar - HOME - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
               "id": "984GA",
@@ -1001,11 +1001,11 @@
             "healthcareService": null,
             "location": {
               "id": "442",
-              "name": "Cheyenne VA Medical Center",
+              "name": "LA VA Medical Center",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "Los Angeles",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -1024,7 +1024,7 @@
             "startDateUtc": "{{now - 27 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": null,
@@ -2027,7 +2027,7 @@
                 "time": "PM"
               }
             ],
-            "typeOfCare": "Phone consultation",
+            "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
             "bestTimeToCall": ["Afternoon", "Evening", "Morning"],

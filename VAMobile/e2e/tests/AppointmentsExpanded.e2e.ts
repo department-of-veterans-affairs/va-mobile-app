@@ -500,7 +500,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
-      'Please arrive ten minutes early.',
+      undefined,
       undefined,
       '2341 North Ave',
       undefined,
