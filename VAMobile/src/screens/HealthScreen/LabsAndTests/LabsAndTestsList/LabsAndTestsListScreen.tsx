@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
 import { LabsAndTests } from 'api/types'
 import {
@@ -52,6 +53,12 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const {
+    data: authorizedServices,
+    isLoading: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+  } = useAuthorizedServices()
   const [LabsAndTestsToShow, setLabsAndTestsToShow] = useState<Array<LabsAndTests>>([])
 
   const [page, setPage] = useState(1)
@@ -147,6 +154,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     return !!start && !!end && start !== '' && end !== ''
   }
 
+  const featureEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
+
   const {
     data: labsAndTests,
     isFetching: loading,
@@ -160,7 +169,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: selectedDateRange.timeFrame,
     },
-    { enabled: screenContentAllowed('WG_LabsAndTestsList') && !labsAndTestsInDowntime && hasValidDates() },
+    { enabled: screenContentAllowed('WG_LabsAndTestsList') && featureEnabled && hasValidDates() },
   )
 
   // Analytics
@@ -270,13 +279,19 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
           </TextView>
         </Box>
       </Box>
-      {loading ? (
+      {loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('labsAndTests.loading')} />
       ) : labsAndTestsError || labsAndTestsInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID}
           error={labsAndTestsError}
           onTryAgain={refetchLabs}
+        />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
         />
       ) : labsAndTests?.data?.length === 0 ? (
         <NoLabsAndTestsRecords />
