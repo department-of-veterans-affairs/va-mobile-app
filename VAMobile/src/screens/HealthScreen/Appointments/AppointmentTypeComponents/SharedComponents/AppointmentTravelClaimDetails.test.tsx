@@ -367,6 +367,21 @@ describe('AppointmentTravelClaimDetails', () => {
             expect(screen.getByTestId('goToFileTravelClaimLink')).toBeTruthy()
           })
 
+          it('should not render travel claim section if the appointment was ineligible', () => {
+            const missedClaimDeadlineData = createTestAppointmentAttributes({
+              startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+              appointmentType: AppointmentTypeConstants.VA,
+              travelPayEligible: false,
+              travelPayClaim: {
+                ...travelPayClaimData,
+                claim: undefined,
+              },
+            })
+            initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, undefined)
+            expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.fileWhenNoDaysLeft'))).toBeNull()
+            expect(screen.queryByTestId('goToFileTravelClaimLink')).toBeNull()
+          })
+
           it('should navigate to filing a claim when the over 30 days file link is pressed', () => {
             const missedClaimDeadlineData = createTestAppointmentAttributes({
               startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
