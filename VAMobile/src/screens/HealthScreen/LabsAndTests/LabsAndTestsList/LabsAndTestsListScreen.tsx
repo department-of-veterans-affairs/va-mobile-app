@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView } from 'react-native'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -260,6 +260,34 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             {t('labsAndTests.availability.end')}
           </TextView>
         </TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+          <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>
+          {t('labsAndTests.medicalImages.noteText')}{' '}
+          <Text
+            style={[
+              styles.inlineLink,
+              {
+                color: theme.colors.text.link,
+                textDecorationColor: theme.colors.text.link,
+              },
+            ]}
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
+              navigateTo('Webview', {
+                url: LINK_URL_MHV_LABS_AND_TESTS,
+                displayTitle: t('labsAndTests.medicalImages.linkTitle'),
+                loadingMessage: t('webview.medicalRecords.loading'),
+                useSSO: true,
+              })
+            }}
+            accessibilityRole="link"
+            accessibilityLabel={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
+            accessibilityHint={t('webview.vagov.a11yHint')}
+            testID="viewMedicalImagesNoteLinkID">
+            {t('labsAndTests.medicalImages.linkText')}
+          </Text>
+          .
+        </TextView>
       </Box>
       <Box mx={theme.dimensions.gutter}>
         <Box mt={theme.dimensions.contentMarginTop}>
@@ -342,5 +370,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     </FeatureLandingTemplate>
   )
 }
+
+const styles = StyleSheet.create({
+  inlineLink: {
+    textDecorationLine: 'underline',
+  },
+})
 
 export default LabsAndTestsListScreen
