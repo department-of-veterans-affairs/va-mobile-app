@@ -193,7 +193,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     message?.subject,
     message.recipientId,
     message.recipientName,
-    messageRecipient?.attributes.stationNumber,
+    messageRecipient,
   ])
 
   useEffect(() => {
