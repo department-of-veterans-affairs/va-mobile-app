@@ -40,8 +40,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
-const LINK_URL_MHV_LABS_AND_TESTS = `${LINK_URL_MHV_VA_MEDICAL_RECORDS}labs-and-tests`
+const { LINK_URL_MHV_LABS_AND_TESTS } = getEnv()
 const DATE_RANGE_PAST_THREE_MONTHS = 'past-3-months'
 const DATE_RANGE_PAST_SIX_MONTHS = 'past-6-months'
 
