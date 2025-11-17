@@ -12,6 +12,7 @@
           "directDepositBenefits": true,
           "directDepositBenefitsUpdate": true,
           "disabilityRating": true,
+          "labsAndTestsEnabled": true,
           "lettersAndDocuments": true,
           "medicationsOracleHealthEnabled": true,
           "militaryServiceHistory": true,
