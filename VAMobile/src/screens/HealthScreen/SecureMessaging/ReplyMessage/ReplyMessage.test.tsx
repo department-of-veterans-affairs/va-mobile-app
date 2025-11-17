@@ -53,6 +53,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 1',
         readReceipt: 'mock read receipt 1',
+        isOhMessage: false,
       },
     },
     {
@@ -71,6 +72,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 2',
         readReceipt: 'mock read receipt 2',
+        isOhMessage: false,
       },
     },
     {
@@ -89,6 +91,7 @@ const thread: SecureMessagingThreadGetData = {
         recipientId: 3,
         recipientName: 'mock recipient name 3',
         readReceipt: 'mock read receipt',
+        isOhMessage: false,
       },
     },
   ],
@@ -111,6 +114,7 @@ const message: SecureMessagingMessageGetData = {
       recipientId: 3,
       recipientName: 'mock recipient name 3',
       readReceipt: 'mock read receipt',
+      isOhMessage: false,
     },
   },
   included: [],
