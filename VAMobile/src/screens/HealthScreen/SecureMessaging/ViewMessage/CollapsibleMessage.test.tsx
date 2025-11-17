@@ -47,6 +47,7 @@ context('CollapsibleMessage', () => {
       senderName: 'John Smith',
       recipientId: 2,
       recipientName: 'Jane Smith',
+      isOhMessage: false,
     }
     const mockProps = {
       message: messageAttributes,
