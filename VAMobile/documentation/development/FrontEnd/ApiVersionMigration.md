@@ -49,7 +49,7 @@ export type PrescriptionTrackingItem = PrescriptionTrackingItemV0 | Prescription
 export type PrescriptionRefillAttributeData = PrescriptionRefillAttributeDataV0 | PrescriptionRefillAttributeDataV1
 ```
 
-### Key Differences Between Versions
+### Example Key Differences Between Versions
 
 | Aspect                | V0                        | V1                                             |
 | --------------------- | ------------------------- | ---------------------------------------------- |
@@ -62,8 +62,19 @@ export type PrescriptionRefillAttributeData = PrescriptionRefillAttributeDataV0 
 
 ### 1. Feature Flag Control
 
-```typescript
-const shouldUseV1 = medicationsOracleHealthEnabled && oracleMedsEnabled
+This happens on the authorized services level:
+
+``` typescript
+const { medicationsOracleHealthEnabled = false } = authorizedServices || {};
+const useV1 = medicationsOracleHealthEnabled;
+```
+
+Thanks to the existing flipper logic in the vets-api, this flag can be toggled per user, use a phased rollout strategy and/or dependant on API version which is sent in the header of every request.
+
+Vets-api sample code;
+
+```ruby
+# TODO come back to 
 ```
 
 ### 2. API Switching Logic
