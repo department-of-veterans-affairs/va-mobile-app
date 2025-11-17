@@ -63,7 +63,7 @@ function TravelPayClaimsList({
     pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
   }).map((option) => ({
     ...option,
-    testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
+    testID: option.a11yLabel, // testID is used as both test id and accessibility label
   }))
 
   const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
@@ -165,8 +165,8 @@ function TravelPayClaimsList({
   }
 
   return (
-    <Box testID="travelPayClaimsListTestId">
-      <Box mx={theme.dimensions.gutter} accessible={true}>
+    <>
+      <Box mx={theme.dimensions.gutter} testID="travelPayClaimsListTestId">
         <VAModalPicker
           selectedValue={datePickerOption.value}
           onSelectionChange={(value) => {
@@ -181,6 +181,8 @@ function TravelPayClaimsList({
           labelKey={'travelPay.statusList.selectADateRange'}
           testID="getDateRangeTestID"
         />
+      </Box>
+      <Box mx={theme.dimensions.gutter}>
         <TextView my={theme.dimensions.lineItemSpacing} variant="MobileBodyBold">
           {getResultsText(t, totalEntries, pageStart, pageEnd)}
         </TextView>
@@ -193,7 +195,7 @@ function TravelPayClaimsList({
         mx={theme.dimensions.gutter}>
         {!isLoading && <Pagination {...paginationProps} />}
       </Box>
-    </Box>
+    </>
   )
 }
 
