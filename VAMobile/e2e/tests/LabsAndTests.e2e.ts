@@ -45,7 +45,7 @@ const TEST_IDS = {
 const HEADER_TEXT = 'Labs and tests'
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TEST_TOGGLE_TEXT)
+  // await toggleRemoteConfigFlag(CommonE2eIdConstants.LABS_AND_TEST_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openMedicalRecords()
