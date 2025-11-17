@@ -5,22 +5,10 @@ import { t } from 'i18next'
 
 import { TravelPayClaimDocument } from 'api/types'
 import TravelPayClaimDocuments from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDocuments'
-import * as documentDownloadModule from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload'
 import { context, render } from 'testUtils'
 
-// Mock the useTravelPayDocumentDownload hook
-const mockDownloadDocument = jest.fn()
-jest.mock('screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload', () => {
-  const actualModule = jest.requireActual(
-    'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload',
-  )
-  return {
-    ...actualModule,
-    useTravelPayDocumentDownload: jest.fn(() => ({
-      downloadDocument: mockDownloadDocument,
-    })),
-  }
-})
+// Mock the onDocumentPress callback
+const mockOnDocumentPress = jest.fn()
 
 // Test data
 const mockUserDocument1: TravelPayClaimDocument = {
@@ -60,7 +48,14 @@ context('TravelPayClaimDocuments', () => {
     claimId: string = mockClaimId,
     claimStatus: string = mockClaimStatus,
   ) => {
-    render(<TravelPayClaimDocuments documents={documents} claimId={claimId} claimStatus={claimStatus} />)
+    render(
+      <TravelPayClaimDocuments
+        documents={documents}
+        claimId={claimId}
+        claimStatus={claimStatus}
+        onDocumentPress={mockOnDocumentPress}
+      />,
+    )
   }
 
   beforeEach(() => {
@@ -189,10 +184,10 @@ context('TravelPayClaimDocuments', () => {
       const documentLink = screen.getByText('receipt-1.pdf')
       fireEvent.press(documentLink)
 
-      expect(mockDownloadDocument).toHaveBeenCalledWith('doc-123', 'receipt-1.pdf')
+      expect(mockOnDocumentPress).toHaveBeenCalledWith('doc-123', 'receipt-1.pdf')
     })
 
-    it('should call downloadDocument with correct parameters for each document', () => {
+    it('should call onDocumentPress with correct parameters for each document', () => {
       renderComponent([mockUserDocument1, mockUserDocument2])
 
       // Expand the accordion
@@ -202,14 +197,16 @@ context('TravelPayClaimDocuments', () => {
       // Press first document
       const document1 = screen.getByText('receipt-1.pdf')
       fireEvent.press(document1)
-      expect(mockDownloadDocument).toHaveBeenCalledWith('doc-123', 'receipt-1.pdf')
+
+      expect(mockOnDocumentPress).toHaveBeenCalledWith('doc-123', 'receipt-1.pdf')
 
       // Press second document
       const document2 = screen.getByText('mileage-form.pdf')
       fireEvent.press(document2)
-      expect(mockDownloadDocument).toHaveBeenCalledWith('doc-456', 'mileage-form.pdf')
 
-      expect(mockDownloadDocument).toHaveBeenCalledTimes(2)
+      expect(mockOnDocumentPress).toHaveBeenCalledWith('doc-456', 'mileage-form.pdf')
+
+      expect(mockOnDocumentPress).toHaveBeenCalledTimes(2)
     })
 
     it('should display multiple documents correctly when expanded', () => {
@@ -263,16 +260,6 @@ context('TravelPayClaimDocuments', () => {
       expect(
         screen.getByText('Very-Long-Filename-That-Contains-Many-Characters-And-Details-About-The-Document.pdf'),
       ).toBeTruthy()
-    })
-  })
-
-  describe('Document Download', () => {
-    it('should call useTravelPayDocumentDownload hook with correct parameters', () => {
-      const spy = jest.spyOn(documentDownloadModule, 'useTravelPayDocumentDownload')
-
-      renderComponent([mockUserDocument1], 'test-claim-123', 'Approved for payment')
-
-      expect(spy).toHaveBeenCalledWith('test-claim-123', 'Approved for payment')
     })
   })
 

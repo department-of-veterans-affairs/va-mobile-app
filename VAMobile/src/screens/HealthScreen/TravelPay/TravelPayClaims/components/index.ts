@@ -1,6 +1,4 @@
 export { default as TravelPayClaimHeader } from './TravelPayClaimHeader'
 export { default as TravelPayClaimStatusDefinition } from './TravelPayClaimStatusDefinition'
 export { default as TravelPayClaimAmount } from './TravelPayClaimAmount'
-export { default as TravelPayDocumentDownload } from './TravelPayDocumentDownload'
 export { default as TravelPayClaimInformation } from './TravelPayClaimInformation'
-export { default as TravelPayClaimAppeals } from './TravelPayClaimAppeals'

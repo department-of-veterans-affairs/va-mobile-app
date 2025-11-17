@@ -320,23 +320,6 @@ describe('Travel Pay Claim Details Screen', () => {
     })
   })
 
-  describe('Appeals Section for denied claims', () => {
-    it('should show appeals section for denied claims', async () => {
-      await safeTap(TravelPayClaimDetailsE2eIds.CLAIM_2_DENIED_ID, true)
-
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
-        .toExist()
-        .withTimeout(2000)
-
-      // Should show appeals title
-      await waitFor(element(by.text('Appealing a claim decision'))).toExist()
-
-      // Go back to claims list
-      await element(by.text('Travel')).tap()
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
-    })
-  })
-
   describe('Claim Details content for claims other than denied/partial payment', () => {
     it('should not show decision letter download nor amount difference accordion', async () => {
       await safeTap(TravelPayClaimDetailsE2eIds.CLAIM_1_IN_MANUAL_REVIEW_ID, true)

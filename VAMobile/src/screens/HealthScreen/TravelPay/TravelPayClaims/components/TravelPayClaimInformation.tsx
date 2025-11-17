@@ -11,13 +11,15 @@ import { useTheme } from 'utils/hooks'
 type TravelPayClaimInformationProps = {
   /** The claim details data */
   claimDetails: TravelPayClaimDetails
+  /** Callback for document downloads */
+  onDocumentPress?: (documentId: string, filename: string) => void
 }
 
 /**
  * Component that displays the "Claim information" section
  * Shows When (submitted/updated dates), Where (facility info), and Documents
  */
-function TravelPayClaimInformation({ claimDetails }: TravelPayClaimInformationProps) {
+function TravelPayClaimInformation({ claimDetails, onDocumentPress }: TravelPayClaimInformationProps) {
   const { id, claimStatus, documents, createdOn, modifiedOn, appointmentDate, facilityName } = claimDetails
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -67,7 +69,12 @@ function TravelPayClaimInformation({ claimDetails }: TravelPayClaimInformationPr
 
       {/* Documents Section */}
       {documents && documents.length > 0 && (
-        <TravelPayClaimDocuments documents={documents} claimId={id} claimStatus={claimStatus} />
+        <TravelPayClaimDocuments
+          documents={documents}
+          claimId={id}
+          claimStatus={claimStatus}
+          onDocumentPress={onDocumentPress}
+        />
       )}
     </Box>
   )

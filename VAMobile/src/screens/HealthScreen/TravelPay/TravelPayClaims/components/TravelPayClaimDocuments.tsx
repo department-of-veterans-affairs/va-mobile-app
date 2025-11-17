@@ -2,13 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TravelPayClaimDocument } from 'api/types'
-import { AccordionCollapsible, Box, DefaultList, DefaultListItemObj, TextView } from 'components'
-import { TextLine } from 'components/types'
+import { AccordionCollapsible, Box, DefaultList, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTravelPayDocumentDownload } from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayDocumentDownload'
-import { VATypographyThemeVariants } from 'styles/theme'
-import { getA11yLabelText } from 'utils/common'
 import { useTheme } from 'utils/hooks'
+import { createTravelPayDocumentListItem } from 'utils/travelPay'
 
 type TravelPayClaimDocumentsProps = {
   /** Array of documents to display */
@@ -17,44 +14,17 @@ type TravelPayClaimDocumentsProps = {
   claimId: string
   /** The claim status for analytics */
   claimStatus: string
-}
-
-/**
- * Helper function to create document list items for the accordion
- */
-const createDocumentListItems = (
-  documents: TravelPayClaimDocument[],
-  claimId: string,
-  claimStatus: string,
-  onDownload: (documentId: string, filename: string) => void,
-): Array<DefaultListItemObj> => {
-  const variant = 'MobileBody' as keyof VATypographyThemeVariants
-
-  return documents.map((document) => {
-    const textLines: Array<TextLine> = [
-      {
-        text: document.filename,
-        variant,
-      },
-    ]
-
-    return {
-      textLines,
-      onPress: () => onDownload(document.documentId, document.filename),
-      testId: getA11yLabelText(textLines),
-      a11yHintText: `Download ${document.filename}`,
-    }
-  })
+  /** Callback for document downloads */
+  onDocumentPress?: (documentId: string, filename: string) => void
 }
 
 /**
  * Component that displays the "Documents added to this claim" section
  * Shows user-submitted documents in a collapsible accordion with a list
  */
-function TravelPayClaimDocuments({ documents, claimId, claimStatus }: TravelPayClaimDocumentsProps) {
+function TravelPayClaimDocuments({ documents, claimId, claimStatus, onDocumentPress }: TravelPayClaimDocumentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { downloadDocument } = useTravelPayDocumentDownload(claimId, claimStatus)
 
   // Filter out decision/rejection letters since those are handled separately
   const userSubmittedDocuments = documents.filter(
@@ -66,6 +36,11 @@ function TravelPayClaimDocuments({ documents, claimId, claimStatus }: TravelPayC
     return null
   }
 
+  // Handler that calls parent's download function
+  const handleDownload = (documentId: string, filename: string) => {
+    onDocumentPress?.(documentId, filename)
+  }
+
   const accordionHeader = (
     <TextView variant="MobileBodyBold" accessibilityRole="header">
       {t('travelPay.claimDetails.information.documentsSubmitted')}
@@ -74,7 +49,11 @@ function TravelPayClaimDocuments({ documents, claimId, claimStatus }: TravelPayC
 
   const accordionContent = (
     <Box mx={-theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-      <DefaultList items={createDocumentListItems(userSubmittedDocuments, claimId, claimStatus, downloadDocument)} />
+      <DefaultList
+        items={userSubmittedDocuments.map((doc) =>
+          createTravelPayDocumentListItem(doc, claimId, claimStatus, handleDownload, theme, t),
+        )}
+      />
     </Box>
   )
 

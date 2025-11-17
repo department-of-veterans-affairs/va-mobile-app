@@ -8,10 +8,12 @@ import TravelPayClaimDetailsScreen from 'screens/HealthScreen/TravelPay/TravelPa
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
-// Mock the API hook
+// Mock the API hooks
 const mockUseTravelPayClaimDetails = jest.fn()
+const mockUseDownloadTravelPayDocument = jest.fn()
 jest.mock('api/travelPay', () => ({
   useTravelPayClaimDetails: (...args: unknown[]) => mockUseTravelPayClaimDetails(...args),
+  useDownloadTravelPayDocument: (...args: unknown[]) => mockUseDownloadTravelPayDocument(...args),
 }))
 
 // Mock navigation
@@ -154,6 +156,13 @@ context('TravelPayClaimDetailsScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockFeatureEnabled.mockReturnValue(true)
+    // Default mock for document download hook
+    mockUseDownloadTravelPayDocument.mockReturnValue({
+      data: undefined,
+      error: null,
+      isFetching: false,
+      refetch: jest.fn(),
+    })
   })
 
   describe('Loading State', () => {
@@ -205,9 +214,6 @@ context('TravelPayClaimDetailsScreen', () => {
 
       expect(screen.getByText(t('errors.callHelpCenter.sorry'))).toBeTruthy()
       expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
-
-      // Note: For this screen ID, ErrorComponent renders CallHelpCenter without onTryAgain,
-      // so no refresh button is rendered. The error is handled by the generic error flow.
     })
   })
 
@@ -373,7 +379,6 @@ context('TravelPayClaimDetailsScreen', () => {
         initializeTestInstance()
 
         expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
-        // The status should be handled by child components
       })
     })
   })
@@ -427,27 +432,6 @@ context('TravelPayClaimDetailsScreen', () => {
 
       // Should render TravelPayDocumentDownload for decision/rejection letters
       expect(screen.getByText(t('travelPay.claimDetails.document.decisionLetter'))).toBeTruthy()
-    })
-
-    it('should conditionally render appeals section for denied claims', () => {
-      const deniedClaim = {
-        ...baseClaimDetails,
-        claimStatus: 'Denied',
-      }
-
-      mockUseTravelPayClaimDetails.mockReturnValue({
-        data: createMockResponse(deniedClaim),
-        error: null,
-        isFetching: false,
-        refetch: jest.fn(),
-      })
-
-      initializeTestInstance()
-
-      expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
-
-      // Should render TravelPayClaimAppeals component for denied claims
-      expect(screen.getByText('Appealing a claim decision')).toBeTruthy()
     })
 
     it('should pass correct props to child components', () => {

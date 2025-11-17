@@ -5,9 +5,12 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimDocument, TravelPayClaimSummary } from 'api/types'
+import { DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { Events } from 'constants/analytics'
+import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getA11yLabelText } from 'utils/common'
 import { RouteNavigationFunction } from 'utils/hooks'
 
 /**
@@ -129,5 +132,67 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
   if (smocFlowStartDate) {
     const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
+  }
+}
+
+// ============================================================================
+// Travel Pay Document Helpers
+// ============================================================================
+
+/**
+ * Determines the document type based on filename patterns
+ * Used for analytics tracking
+ */
+export const getDocumentType = (filename: string): string => {
+  if (!filename) {
+    return 'unknown'
+  }
+  if (filename.includes('Rejection Letter')) {
+    return 'rejection_letter'
+  }
+  if (filename.includes('Decision Letter')) {
+    return 'decision_letter'
+  }
+  return 'user_submitted'
+}
+
+/**
+ * Helper function to create a document list item
+ */
+export const createTravelPayDocumentListItem = (
+  document: TravelPayClaimDocument,
+  claimId: string,
+  claimStatus: string,
+  onDocumentPress: (docId: string, filename: string) => void,
+  theme: VATheme,
+  t: TFunction,
+  linkText?: string,
+): DefaultListItemObj => {
+  const handlePress = () => {
+    // Log analytics before triggering download
+    const documentType = getDocumentType(document.filename)
+    logAnalyticsEvent(Events.vama_travel_pay_doc_dl(claimId, claimStatus, documentType, document.filename))
+    onDocumentPress(document.documentId, document.filename)
+  }
+
+  const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
+  const textLines: Array<TextLineWithIconProps> = [
+    {
+      text: linkText || document.filename,
+      variant,
+      iconProps: {
+        name: 'Description',
+        width: 24,
+        height: 24,
+        fill: theme.colors.text.primary,
+      },
+    },
+  ]
+
+  return {
+    textLines,
+    onPress: handlePress,
+    testId: getA11yLabelText(textLines),
+    a11yHintText: t('travelPay.claimDetails.document.downloadDecisionLetter'),
   }
 }
