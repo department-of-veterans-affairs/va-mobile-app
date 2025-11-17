@@ -1051,6 +1051,7 @@
   "labsAndTests.medicalImages.note": "Note:",
   "labsAndTests.medicalImages.noteText": "If you need to view your medical images,",
   "labsAndTests.medicalImages.linkText": "go to VA.gov",
+  "labsAndTests.medicalImages.linkText.a11yHint": "go to V-A dot gov",
   "labsAndTests.list.dateRangeA11yLabel": "{{date1}} to {{date2}}",
   "labsAndTests.list.dateRateLabel": "{{date1}} to {{date2}}",
   "labsAndTests.list.pastThreeMonths": "Past 3 months",

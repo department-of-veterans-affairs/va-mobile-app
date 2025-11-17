@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, StyleSheet, Text } from 'react-native'
+import { Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
@@ -11,13 +12,11 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useLabsAndTests } from 'api/labsAndTests/getLabsAndTests'
 import { LabsAndTests } from 'api/types'
 import {
-  AccordionCollapsible,
   Box,
   DefaultList,
   DefaultListItemObj,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkWithAnalytics,
   LoadingComponent,
   Pagination,
   PaginationProps,
@@ -43,6 +42,8 @@ import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_MHV_VA_MEDICAL_RECORDS } = getEnv()
 const LINK_URL_MHV_LABS_AND_TESTS = `${LINK_URL_MHV_VA_MEDICAL_RECORDS}labs-and-tests`
+const DATE_RANGE_PAST_THREE_MONTHS = 'past-3-months'
+const DATE_RANGE_PAST_SIX_MONTHS = 'past-6-months'
 
 type LabsAndTestsListScreenProps = StackScreenProps<HealthStackParamList, 'LabsAndTestsList'>
 
@@ -72,14 +73,14 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     // Past 3 months
     options.push({
       label: t('labsAndTests.list.pastThreeMonths'),
-      value: 'past-3-months',
+      value: DATE_RANGE_PAST_THREE_MONTHS,
       testID: 'range-past-3-months',
     })
 
     // Past 6 months
     options.push({
       label: t('labsAndTests.list.pastSixMonths'),
-      value: 'past-6-months',
+      value: DATE_RANGE_PAST_SIX_MONTHS,
       testID: 'range-past-6-months',
     })
 
@@ -109,11 +110,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       }
     }
 
-    if (value === 'past-3-months') {
+    if (value === DATE_RANGE_PAST_THREE_MONTHS) {
       return formatMonthsRange(3)
     }
 
-    if (value === 'past-6-months') {
+    if (value === DATE_RANGE_PAST_SIX_MONTHS) {
       return formatMonthsRange(6)
     }
 
@@ -130,8 +131,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     }
   }
 
-  const initialDateRange = getDateRangeByValue('past-3-months')
-  const [selectedDateRangeValue, setSelectedDateRangeValue] = useState<string>('past-3-months')
+  const initialDateRange = getDateRangeByValue(DATE_RANGE_PAST_THREE_MONTHS)
+  const [selectedDateRangeValue, setSelectedDateRangeValue] = useState<string>(DATE_RANGE_PAST_THREE_MONTHS)
   const [selectedDateRange, setSelectedDateRange] = useState<{
     startDate: string
     endDate: string
@@ -260,17 +261,11 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             {t('labsAndTests.availability.end')}
           </TextView>
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>
-          {t('labsAndTests.medicalImages.noteText')}{' '}
-          <Text
-            style={[
-              styles.inlineLink,
-              {
-                color: theme.colors.text.link,
-                textDecorationColor: theme.colors.text.link,
-              },
-            ]}
+          <TextView variant="MobileBody">{t('labsAndTests.medicalImages.noteText')}</TextView>
+          <Pressable
+            style={styles.pressableLink}
             onPress={() => {
               logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
               navigateTo('Webview', {
@@ -282,12 +277,14 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             }}
             accessibilityRole="link"
             accessibilityLabel={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
-            accessibilityHint={t('webview.vagov.a11yHint')}
+            accessibilityHint={t('labsAndTests.medicalImages.linkText.a11yHint')}
             testID="viewMedicalImagesNoteLinkID">
-            {t('labsAndTests.medicalImages.linkText')}
-          </Text>
-          .
-        </TextView>
+            <TextView variant="MobileBodyLink">{t('labsAndTests.medicalImages.linkText')}</TextView>
+            <Box ml={4}>
+              <Icon name="Launch" fill={theme.colors.icon.link} width={22} height={22} />
+            </Box>
+          </Pressable>
+        </Box>
       </Box>
       <Box mx={theme.dimensions.gutter}>
         <Box mt={theme.dimensions.contentMarginTop}>
@@ -330,40 +327,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
               <DefaultList items={labsAndTestsButtons} />
             </Box>
             {renderPagination()}
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AccordionCollapsible
-                header={<TextView>{t('labsAndTests.details.imageDisclaimer.header')}</TextView>}
-                expandedContent={
-                  <>
-                    <TextView
-                      variant="MobileBody"
-                      mt={theme.dimensions.standardMarginBetween}
-                      accessibilityLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text'))}
-                      accessibilityHint={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.text.a11yHint'))}>
-                      {t('labsAndTests.details.imageDisclaimer.text')}
-                    </TextView>
-                    <Box mt={theme.dimensions.standardMarginBetween}>
-                      <LinkWithAnalytics
-                        type="custom"
-                        onPress={() => {
-                          logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_LABS_AND_TESTS))
-                          navigateTo('Webview', {
-                            url: LINK_URL_MHV_LABS_AND_TESTS,
-                            displayTitle: t('webview.vagov'),
-                            loadingMessage: t('webview.medicalRecords.loading'),
-                            useSSO: true,
-                          })
-                        }}
-                        text={t('labsAndTests.details.imageDisclaimer.linkText')}
-                        a11yLabel={a11yLabelVA(t('labsAndTests.details.imageDisclaimer.linkText'))}
-                        testID="viewMedicalRecordsLinkID"
-                      />
-                    </Box>
-                  </>
-                }
-                testID="medicalImagesAccordionTestID"
-              />
-            </Box>
           </Box>
         </>
       )}
@@ -374,6 +337,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
 const styles = StyleSheet.create({
   inlineLink: {
     textDecorationLine: 'underline',
+  },
+  pressableLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })
 
