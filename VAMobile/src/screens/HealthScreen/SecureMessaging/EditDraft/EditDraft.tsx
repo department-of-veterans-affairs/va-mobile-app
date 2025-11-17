@@ -612,7 +612,6 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           goToDraftFolder(false)
         },
       }
-
       const params: SendMessageParameters = {
         messageData: messageData,
         uploads: attachmentsList,
