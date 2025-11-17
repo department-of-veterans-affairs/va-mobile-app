@@ -69,7 +69,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const [AllergiesToShow, setAllergiesToShow] = useState<Array<AllergyData>>([])
+  const [allergiesToShow, setAllergiesToShow] = useState<Array<AllergyData>>([])
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -86,7 +86,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 
-  const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
+  const allergyButtons: Array<DefaultListItemObj> = map(allergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
       {
         text: t('allergies.allergyName', {
