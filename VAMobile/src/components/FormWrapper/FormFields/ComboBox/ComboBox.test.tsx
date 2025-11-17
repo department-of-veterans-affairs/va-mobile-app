@@ -1,13 +1,27 @@
 import React from 'react'
+import { Keyboard, KeyboardEventListener } from 'react-native'
 
 import { t } from 'i18next'
 
 import ComboBox from 'components/FormWrapper/FormFields/ComboBox/ComboBox'
 import { ComboBoxOptions } from 'components/FormWrapper/FormFields/ComboBox/ComboBoxInput'
-import { fireEvent, render, screen } from 'testUtils'
+import { fireEvent, render, screen, waitFor } from 'testUtils'
 
 const mockOnSelectionChange = jest.fn()
 const mockOnClose = jest.fn()
+
+let listeners: Record<string, KeyboardEventListener> = {}
+
+// @ts-expect-error mock EmitterSubscription
+jest.spyOn(Keyboard, 'addListener').mockImplementation((event, callback) => {
+  listeners[event] = callback
+  return { remove: jest.fn() }
+})
+
+// @ts-expect-error mock KeyboardMetrics
+jest.spyOn(Keyboard, 'metrics').mockReturnValue({
+  height: 300,
+})
 
 const defaultComboBoxOptions = {
   Group1: [
@@ -47,6 +61,7 @@ describe('ComboBox Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    listeners = {}
   })
 
   it('renders the ComboBox with the correct title', () => {
@@ -108,6 +123,21 @@ describe('ComboBox Component', () => {
     fireEvent.press(screen.getByRole('button', { name: t('close') }))
 
     expect(mockOnClose).toHaveBeenCalled()
+  })
+
+  it('should set padding on ScrollView when keyboard opens', async () => {
+    initializeTestInstance()
+
+    // Simulate the keyboardWillShow event
+    listeners.keyboardWillShow({
+      duration: 0,
+      easing: 'linear',
+      endCoordinates: { height: 300, width: 0, screenX: 0, screenY: 0 },
+    })
+
+    // Verify that padding on ScrollView is properly set
+    const scrollView = screen.getByTestId('comboBoxScrollViewID')
+    await waitFor(() => expect(scrollView.props.contentContainerStyle.paddingBottom).toBe(300))
   })
 
   it('renders without group headers when hideGroupsHeaders is true', () => {

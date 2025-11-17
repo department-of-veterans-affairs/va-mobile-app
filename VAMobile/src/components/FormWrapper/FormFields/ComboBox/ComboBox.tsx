@@ -248,7 +248,9 @@ const ComboBox: FC<ComboBoxProps> = ({
           </Box>
         </Box>
       </Box>
-      <VAScrollView contentContainerStyle={scrollContainerStyle}>{renderItems()}</VAScrollView>
+      <VAScrollView contentContainerStyle={scrollContainerStyle} testID="comboBoxScrollViewID">
+        {renderItems()}
+      </VAScrollView>
     </Box>
   )
 }
