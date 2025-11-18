@@ -39,11 +39,11 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   const updatedAtTimeStale =
     !contactInformation?.contactEmail?.updatedAt ||
-    contactInformation.contactEmail.updatedAt < EMAIL_UPDATED_AT_THRESHOLD
+    new Date(contactInformation.contactEmail.updatedAt) < new Date(EMAIL_UPDATED_AT_THRESHOLD)
 
   const confirmationDateStale =
     !contactInformation?.contactEmail?.confirmationDate ||
-    contactInformation.contactEmail.confirmationDate < EMAIL_UPDATED_AT_THRESHOLD
+    new Date(contactInformation.contactEmail.confirmationDate) < new Date(EMAIL_UPDATED_AT_THRESHOLD)
 
   useEffect(() => {
     const checkEmailConfirmAlertDismissed = async () => {
