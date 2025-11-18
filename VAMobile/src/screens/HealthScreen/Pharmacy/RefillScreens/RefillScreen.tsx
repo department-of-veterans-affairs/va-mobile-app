@@ -54,7 +54,12 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return prescription.attributes.isRefillable
   })
 
-  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefills } = useRequestRefills()
+  const {
+    mutate: requestRefill,
+    isPending: showLoadingScreenRequestRefills,
+    isError: refillRequestHasError,
+    reset: resetRefillRequest,
+  } = useRequestRefills()
 
   const refillable = refillablePrescriptions || []
 
@@ -201,6 +206,22 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
                 variant="error"
                 description={t('prescriptions.refill.pleaseSelect')}
                 scrollViewRef={scrollViewRef}
+              />
+            </Box>
+          )}
+          {refillRequestHasError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="error"
+                header={t('prescriptions.refill.error.title')}
+                description={t('prescriptions.refill.error.description')}
+                scrollViewRef={scrollViewRef}
+                primaryButton={{
+                  label: t('dismiss'),
+                  onPress: () => {
+                    resetRefillRequest()
+                  },
+                }}
               />
             </Box>
           )}

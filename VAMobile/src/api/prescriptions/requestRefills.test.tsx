@@ -635,5 +635,64 @@ describe('requestRefills', () => {
         expect(result.current.data).toEqual(expectedResult)
       })
     })
+
+    describe('Error handling', () => {
+      it('should handle 400 bad request error correctly', async () => {
+        const mock400Error = {
+          response: {
+            status: 400,
+            data: {
+              errors: [
+                {
+                  title: 'Bad Request',
+                  detail: 'One or more prescriptions are not eligible for refill',
+                  code: 'RX_REFILL_400',
+                  source: 'VA Prescription Service',
+                },
+              ],
+            },
+          },
+          message: 'Request failed with status code 400',
+          json: async () => ({
+            errors: [
+              {
+                title: 'Bad Request',
+                detail: 'One or more prescriptions are not eligible for refill',
+                code: 'RX_REFILL_400',
+                source: 'VA Prescription Service',
+              },
+            ],
+          }),
+        }
+
+        const mockPut = api.put as jest.Mock
+        mockPut.mockRejectedValueOnce(mock400Error)
+
+        const { result } = renderHook(() => useRequestRefills(), { wrapper })
+
+        await act(async () => {
+          result.current.mutate(mockPrescriptions)
+        })
+
+        await waitFor(() => {
+          expect(result.current.isError).toBeTruthy()
+        })
+
+        // Verify the mutation is in error state
+        expect(result.current.isError).toBe(true)
+        expect(result.current.error).toEqual(mock400Error)
+
+        // Verify API was called with correct parameters
+        expect(mockPut).toHaveBeenCalledWith('/v0/health/rx/prescriptions/refill', {
+          ids: ['123', '456'],
+        })
+
+        // Verify analytics were logged
+        expect(logAnalyticsEvent).toHaveBeenCalledWith(Events.vama_rx_refill_fail(['123', '456']))
+
+        // Verify error was logged to Firebase
+        expect(logNonFatalErrorToFirebase).toHaveBeenCalledWith(mock400Error, 'requestRefills: Service error')
+      })
+    })
   })
 })

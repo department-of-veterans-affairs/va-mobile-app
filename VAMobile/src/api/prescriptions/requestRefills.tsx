@@ -39,13 +39,11 @@ const requestRefills = async (
   let requestBody: RefillRequestData
 
   if (useV1) {
-    // v1 API expects SingleRefillRequest[]
     requestBody = prescriptions.map((prescription) => ({
       id: prescription.id,
       stationNumber: prescription.attributes.stationNumber,
     }))
   } else {
-    // v0 API expects { ids: string[] }
     requestBody = {
       ids: prescriptions.map((prescription) => prescription.id),
     }
@@ -54,6 +52,7 @@ const requestRefills = async (
     `/${API_VERSION}/health/rx/prescriptions/refill`,
     requestBody as Params,
   )
+
   const failedPrescriptionIds =
     response?.data.attributes.failedPrescriptionIds?.map((failed) => extractPrescriptionId(failed, useV1)) || []
   results = prescriptions.map((prescription) => ({
@@ -85,6 +84,7 @@ export const useRequestRefills = () => {
       registerReviewEvent()
     },
     onError: (error, variables) => {
+      console.log('error', { error })
       const prescriptionIds = variables.map((prescription) => prescription.id)
       logAnalyticsEvent(Events.vama_rx_refill_fail(prescriptionIds))
       if (isErrorObject(error)) {
