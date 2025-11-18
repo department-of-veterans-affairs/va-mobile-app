@@ -41,6 +41,7 @@ export type FeatureToggleType =
   | 'showCernerAlertSM'
   | 'showEmailConfirmationAlert'
   | 'overpayCopay'
+  | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -69,6 +70,7 @@ type FeatureToggleValues = {
   showCernerAlertSM: boolean
   showEmailConfirmationAlert: boolean
   overpayCopay: boolean
+  remoteConfigRefreshTest: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -98,9 +100,26 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
+  remoteConfigRefreshTest: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
+
+export const fetchAndActivate = async () => {
+  console.log('fetchAndActivate called')
+  /**
+   * If in staging or production, fetch and activate remote settings.  Otherwise,
+   * we'll use the devConfig for local development.
+   */
+  if (fetchRemote) {
+    console.debug('Remote Config: Fetching and activating')
+    await remoteConfig().fetch(RC_CACHE_TIME)
+    await remoteConfig().activate()
+    console.debug('Remote Config: Activated config')
+  }
+
+  await loadOverrides()
+}
 
 /**
  * Sets up Remote Config, sets defaults, fetches and activates config from firebase
@@ -114,18 +133,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
     await remoteConfig().setDefaults(defaults)
     console.debug('Remote Config: Defaults set', defaults)
 
-    /**
-     * If in staging or production, fetch and activate remote settings.  Otherwise,
-     * we'll use the devConfig for local development.
-     */
-    if (fetchRemote) {
-      console.debug('Remote Config: Fetching and activating')
-      await remoteConfig().fetch(RC_CACHE_TIME)
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated config')
-    }
-
-    await loadOverrides()
+    await fetchAndActivate()
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')

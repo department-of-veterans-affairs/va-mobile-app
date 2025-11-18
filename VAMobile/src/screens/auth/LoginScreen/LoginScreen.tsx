@@ -33,6 +33,8 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
 
+import { featureEnabled } from '../../../utils/remoteConfig'
+
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { firstTimeLogin, loadingRefreshToken } = useSelector<RootState, AuthState>((state) => state.auth)
@@ -81,6 +83,16 @@ function LoginScreen() {
     if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
+    }
+  }
+
+  const remoteConfigTest = () => {
+    if (featureEnabled('remoteConfigRefreshTest')) {
+      return (
+        <TextView variant={'VAHeader'} color={'green'}>
+          Remote config test flag enabled
+        </TextView>
+      )
     }
   }
 
@@ -136,6 +148,7 @@ function LoginScreen() {
           accessibilityRole="image"
           accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
+          {remoteConfigTest()}
           {loadingRefreshToken && (
             <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={70}>
               <LoadingComponent
