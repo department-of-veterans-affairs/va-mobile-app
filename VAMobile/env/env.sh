@@ -104,7 +104,7 @@ echo "LINK_URL_TRAVEL_PAY_WEB_DETAILS=https://${WEBSITE_PREFIX}va.gov/my-health/
 echo "LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS=https://${WEBSITE_PREFIX}va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt" >> .env
 echo "LINK_URL_MHV_VA_MEDICATIONS=https://${WEBSITE_PREFIX}va.gov/my-health/medications" >> .env
 echo "LINK_URL_MHV_VA_MEDICAL_RECORDS=https://${WEBSITE_PREFIX}va.gov/my-health/medical-records/" >> .env
-echo "LINK_URL_MHV_LABS_AND_TESTS=https://${WEBSITE_PREFIX}va.gov/my-health/labs-and-tests/" >> .env
+echo "LINK_URL_MHV_LABS_AND_TESTS=https://${WEBSITE_PREFIX}va.gov/my-health/medical-records/labs-and-tests/" >> .env
 echo "LINK_URL_ASK_VA_GOV=https://${WEBSITE_PREFIX}va.gov/contact-us/ask-va/introduction" >> .env
 
 # Get all vars that are the same across environments
