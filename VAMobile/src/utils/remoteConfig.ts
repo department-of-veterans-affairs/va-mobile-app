@@ -1,3 +1,5 @@
+import { Alert } from 'react-native'
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
@@ -115,6 +117,16 @@ export const fetchAndActivate = async () => {
     console.debug('Remote Config: Fetching and activating')
     await remoteConfig().fetch(RC_CACHE_TIME)
     await remoteConfig().activate()
+
+    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
+
+    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+    ])
+
     console.debug('Remote Config: Activated config')
   }
 

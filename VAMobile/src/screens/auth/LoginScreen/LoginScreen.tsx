@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StatusBar, StyleProp, ViewStyle } from 'react-native'
+import { Alert, StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -32,8 +32,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
-
-import { featureEnabled } from '../../../utils/remoteConfig'
+import { featureEnabled } from 'utils/remoteConfig'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -84,6 +83,15 @@ function LoginScreen() {
       demoTaps = 0
       setDemoPromptVisible(true)
     }
+
+    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
+
+    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+    ])
   }
 
   const remoteConfigTest = () => {
