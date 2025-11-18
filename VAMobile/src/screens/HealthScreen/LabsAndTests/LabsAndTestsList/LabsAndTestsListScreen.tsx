@@ -276,7 +276,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             }}
             accessibilityRole="link"
             accessibilityLabel={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
-            accessibilityHint={t('labsAndTests.medicalImages.linkText.a11yHint')}
+            accessibilityHint={a11yLabelVA(t('labsAndTests.medicalImages.linkText'))}
             testID="viewMedicalImagesNoteLinkID">
             <TextView variant="MobileBodyLink">{t('labsAndTests.medicalImages.linkText')}</TextView>
             <Box ml={4}>
