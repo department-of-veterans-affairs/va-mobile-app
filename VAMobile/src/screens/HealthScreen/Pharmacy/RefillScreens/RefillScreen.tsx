@@ -215,6 +215,7 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
               <AlertWithHaptics
                 variant="error"
                 header={t('prescriptions.refill.error.title')}
+                description={t('prescriptions.refill.error.description')}
                 descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
                 scrollViewRef={scrollViewRef}
                 primaryButton={{
