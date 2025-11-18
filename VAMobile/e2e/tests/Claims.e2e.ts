@@ -12,12 +12,16 @@ import {
 } from './utils'
 
 export const ClaimsE2eIdConstants = {
-  CLAIM_1_ID: 'claim-600461886',
-  CLAIM_2_ID: 'claim-600461885',
-  CLAIM_3_ID: 'claim-600246732',
-  CLAIM_4_ID: 'claim-600236068',
-  CLAIM_5_ID: 'claim-600236070',
-  CLAIM_6_ID: 'claim-600080331',
+  CLAIM_1_ID:
+    'Compensation Received December 05, 2021 Step 1 of 5: Claim received Moved to this step on December 05, 2021',
+  CLAIM_2_ID: 'Compensation Received December 04, 2021 Step 5 of 5: Complete Moved to this step on December 04, 2021',
+  CLAIM_3_ID: 'Compensation Received July 20, 2021 Step 2 of 5: Initial review Moved to this step on July 20, 2021',
+  CLAIM_4_ID:
+    'Compensation More information needed Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
+  CLAIM_5_ID:
+    'Compensation Received March 22, 2019 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on July 18, 2019',
+  CLAIM_6_ID:
+    'Dependency Received January 01, 2016 Step 4 of 5: Preparation for notification Moved to this step on July 30, 2016',
   CLAIM_3_STATUS_STEP_1_ID: 'Step 1 of 5. Claim received. Complete.',
   CLAIM_3_STATUS_STEP_2_ID: 'Step 2 of 5. Initial review. Current step. Step 1 complete.',
   CLAIM_3_STATUS_STEP_3_ID: 'Step 3 of 5. Evidence gathering, review, and decision. Incomplete.',
