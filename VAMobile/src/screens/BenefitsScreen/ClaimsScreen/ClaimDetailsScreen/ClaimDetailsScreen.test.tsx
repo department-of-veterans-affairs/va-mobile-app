@@ -101,6 +101,12 @@ context('ClaimDetailsScreen', () => {
       )
     })
 
+    it('should display the claim received on date', async () => {
+      await waitFor(() => expect(screen.getByText('Received June 06, 2019')).toBeTruthy())
+    })
+  })
+
+  describe('header section - fallback', () => {
     it('should display the claim header fallback if no displayTitle is available', async () => {
       renderWithData(ClaimTypeConstants.ACTIVE, false, {
         ...claimData,
@@ -113,10 +119,6 @@ context('ClaimDetailsScreen', () => {
       await waitFor(() =>
         expect(screen.getByRole('header', { name: 'Claim for disability compensation' })).toBeTruthy(),
       )
-    })
-
-    it('should display the claim received on date', async () => {
-      await waitFor(() => expect(screen.getByText('Received June 06, 2019')).toBeTruthy())
     })
   })
 
