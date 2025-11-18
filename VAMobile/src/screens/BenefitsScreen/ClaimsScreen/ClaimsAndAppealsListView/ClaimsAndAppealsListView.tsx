@@ -120,6 +120,7 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
         a11yValue,
         onPress: () => (type === ClaimOrAppealConstants.claim ? onClaimDetails(id) : onAppealDetails(id)),
         testId: getTestIDFromTextLines(textLines),
+        detoxTestID: `${type}-${id}`,
       })
     })
 
