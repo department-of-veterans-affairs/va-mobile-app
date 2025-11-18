@@ -84,7 +84,6 @@ export const useRequestRefills = () => {
       registerReviewEvent()
     },
     onError: (error, variables) => {
-      console.log('error', { error })
       const prescriptionIds = variables.map((prescription) => prescription.id)
       logAnalyticsEvent(Events.vama_rx_refill_fail(prescriptionIds))
       if (isErrorObject(error)) {
