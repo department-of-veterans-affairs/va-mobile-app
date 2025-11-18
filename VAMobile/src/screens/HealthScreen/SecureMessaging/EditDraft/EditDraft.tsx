@@ -411,6 +411,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     setTo(undefined)
   }
 
+  // Fallback in case messageRecipients is empty
   useEffect(() => {
     if (careSystems.length === 1) {
       setCareSystem(careSystems[0].value)
