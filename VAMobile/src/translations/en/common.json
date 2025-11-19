@@ -1433,6 +1433,8 @@
   "prescriptions.refill.instructions.beforeYouNeed": "before you need more medication.",
   "prescriptions.refill.instructions.fifteenDays": "15 days ",
   "prescriptions.refill.instructions.requestRefills": "Request refills at least ",
+  "prescriptions.refill.error.title": "We couldn't submit your refill request",
+  "prescriptions.refill.error.description": "We're sorry. Something went wrong on our end. Please try again or contact your local VA pharmacy.",
   "prescriptions.refill.pleaseSelect": "Please select a prescription",
   "prescriptions.refill.prescriptionsCount": "Prescriptions for refill ({{ count }})",
   "prescriptions.refill.send": "Sending your refill request...",
