@@ -1,5 +1,53 @@
 [
   {
+    "title": "v2.64.0",
+    "due_on": "2025-12-02T08:00:00Z",
+    "issues": [
+      {
+        "title": "120354 update send reply to flag oh messages for drafts",
+        "number": 11999,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11999",
+        "isPR": true
+      },
+      {
+        "title": "consume new is OH field and pass to send/reply",
+        "number": 11932,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11932",
+        "isPR": true
+      },
+      {
+        "title": "removed workflow for relative imports",
+        "number": 11875,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11875",
+        "isPR": true
+      },
+      {
+        "title": "Feature: updated Labs and Test Date Selector",
+        "number": 11817,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11817",
+        "isPR": true
+      },
+      {
+        "title": "Revert \"Revert \"#121006 [Benefits Management Team 2] [Appeals] Show list item under appeal claims that shows the number of issues with null descriptions\"\"",
+        "number": 11816,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11816",
+        "isPR": true
+      },
+      {
+        "title": "Add Oracle health Data to Prescriptions",
+        "number": 11645,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11645",
+        "isPR": true
+      },
+      {
+        "title": "update RN dependency",
+        "number": 123,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/123",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.63.0",
     "due_on": "2025-11-18T08:00:00Z",
     "issues": [
