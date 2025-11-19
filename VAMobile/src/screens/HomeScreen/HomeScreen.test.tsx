@@ -16,7 +16,7 @@ import {
   ServiceHistoryAttributes,
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
-import HomeScreen from 'screens/HomeScreen'
+import { HomeScreen } from 'screens/HomeScreen/HomeScreen'
 import { get } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'

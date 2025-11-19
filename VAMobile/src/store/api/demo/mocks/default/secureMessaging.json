@@ -1974,6 +1974,17 @@
   "/v0/messaging/health/allrecipients": {
     "data": [
       {
+        "id": "1918816",
+        "type": "triage_teams",
+        "attributes": {
+          "triageTeamId": 1918816,
+          "stationNumber": "357",
+          "name": "VA Flagship mobile applications interface 2_DAYT29",
+          "relationType": "PATIENT",
+          "preferredTeam": true
+        }
+      },
+      {
         "id": "2336822",
         "type": "all_triage_teams",
         "attributes": {
@@ -2507,10 +2518,10 @@
         }
       },
       {
-        "id": "1918816",
+        "id": "1918819",
         "type": "all_triage_teams",
         "attributes": {
-          "triageTeamId": 1918816,
+          "triageTeamId": 1918819,
           "name": "UAT_Reg_Jun5 ++",
           "stationNumber": "357",
           "relationType": "PATIENT",
