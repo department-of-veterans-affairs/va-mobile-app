@@ -16,11 +16,9 @@ export const Appointmentse2eConstants = {
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
   DATE_PICKER_LABEL_TEXT: 'Select a past date range',
   RESET_SELECTED_DATES_BUTTON_TEXT: 'Reset',
-  DATE_PICKER_UPDATE_TOGGLE_TEXT: 'datePickerUpdate',
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(Appointmentse2eConstants.DATE_PICKER_UPDATE_TOGGLE_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
