@@ -147,7 +147,6 @@ function MainApp() {
   const navigationRef = useNavigationContainerRef()
   const routeNameRef = useRef('')
 
-  // Testing e2e
   const scheme = useColorScheme()
   setColorScheme(scheme)
 
