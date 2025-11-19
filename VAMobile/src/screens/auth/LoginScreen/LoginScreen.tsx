@@ -64,12 +64,20 @@ function LoginScreen() {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = () => {
-    logAnalyticsEvent(Events.vama_find_location())
-    navigateTo('Webview', {
-      url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
-      loadingMessage: t('webview.valocation.loading'),
-    })
+    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
+
+    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+    ])
+    // logAnalyticsEvent(Events.vama_find_location())
+    // navigateTo('Webview', {
+    //   url: WEBVIEW_URL_FACILITY_LOCATOR,
+    //   displayTitle: t('webview.vagov'),
+    //   loadingMessage: t('webview.valocation.loading'),
+    // })
   }
 
   const handleUpdateDemoMode = async () => {
@@ -83,15 +91,6 @@ function LoginScreen() {
       demoTaps = 0
       setDemoPromptVisible(true)
     }
-
-    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
-
-    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
-      {
-        text: 'cancel',
-        style: 'cancel',
-      },
-    ])
   }
 
   const remoteConfigTest = () => {
