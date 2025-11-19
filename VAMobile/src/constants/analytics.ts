@@ -1237,24 +1237,6 @@ export const Events = {
       },
     }
   },
-  vama_travel_claim_detail: (
-    claim_id: string,
-    claim_status: string,
-    claim_type: string,
-    days_since_appointment?: number,
-    facility_name?: string,
-  ): Event => {
-    return {
-      name: 'vama_travel_claim_detail',
-      params: {
-        claim_id,
-        claim_status,
-        claim_type,
-        days_since_appointment,
-        facility_name,
-      },
-    }
-  },
   vama_travel_pay_doc_dl: (
     claim_id: string,
     claim_status: string,
@@ -1361,12 +1343,6 @@ export const UserAnalytics = {
   vama_uses_vcl: (): UserAnalytic => {
     return {
       name: 'vama_uses_vcl',
-      value: 'true',
-    }
-  },
-  vama_uses_travel_pay: (): UserAnalytic => {
-    return {
-      name: 'vama_uses_travel_pay',
       value: 'true',
     }
   },

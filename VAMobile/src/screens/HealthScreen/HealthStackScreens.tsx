@@ -13,7 +13,7 @@ import {
   SecureMessagingFormData,
   Vaccine,
 } from 'api/types'
-import { FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
+import { FEATURE_LANDING_TEMPLATE_OPTIONS, FULLSCREEN_SUBTASK_OPTIONS, LARGE_PANEL_OPTIONS } from 'constants/screens'
 import { FormHeaderType } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import SessionNotStarted from 'screens/HealthScreen/Appointments/UpcomingAppointments/SessionNotStarted'
@@ -61,6 +61,7 @@ export type HealthStackParamList = WebviewStackParams & {
   TravelPayClaims: undefined
   TravelPayClaimDetailsScreen: {
     claimId: string
+    backLabel?: string
   }
   Messages: undefined
   SecureMessaging: {
@@ -235,7 +236,7 @@ export const getHealthScreens = () => {
       key={'TravelPayClaimDetailsScreen'}
       name="TravelPayClaimDetailsScreen"
       component={TravelPayClaimDetailsScreen}
-      options={FULLSCREEN_SUBTASK_OPTIONS}
+      options={FEATURE_LANDING_TEMPLATE_OPTIONS}
     />,
     <HealthStack.Screen
       key={'TravelClaimHelpScreen'}

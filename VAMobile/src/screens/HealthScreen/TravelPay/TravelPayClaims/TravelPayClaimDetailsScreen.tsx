@@ -38,7 +38,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { claimId } = route.params
+  const { claimId, backLabel } = route.params
   const [documentIdToDownload, setDocumentIdToDownload] = useState<string>('')
   const [documentFilename, setDocumentFilename] = useState<string>('')
   const [isDecisionLetter, setIsDecisionLetter] = useState<boolean>(false)
@@ -66,13 +66,14 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
   } = useTravelPayClaimDetails(claimId)
   const claimDetails = claimDetailsData?.data?.attributes
   const { appointmentDate, claimNumber, claimStatus, documents, decisionLetterReason, id } = claimDetails || {}
+  const isDownloadEnabled = documentIdToDownload.length > 0 && documentFilename.length > 0
 
   const {
     isFetching: downloading,
     error: downloadDocumentError,
     refetch: refetchDocument,
   } = useDownloadTravelPayDocument(claimId, documentIdToDownload, documentFilename, {
-    enabled: documentIdToDownload.length > 0 && documentFilename.length > 0,
+    enabled: isDownloadEnabled,
   })
 
   const hasError = claimDetailsError || (!loadingClaimDetails && !claimDetails)
@@ -116,7 +117,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('travelPay.title')}
+      backLabel={backLabel || t('travelPay.claims.title')}
       backLabelOnPress={navigation.goBack}
       title={t('travelPay.claimDetails.title')}
       testID="TravelPayClaimDetailsScreen"
@@ -197,7 +198,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
 
                 {/* Direct Deposit Information Section */}
                 {/* Gray divider - only show if there are no documents */}
-                {documents && documents.length < 0 && (
+                {!documents?.length && (
                   <Box
                     height={1}
                     borderTopWidth={1}

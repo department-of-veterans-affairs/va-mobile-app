@@ -41,7 +41,7 @@ function TravelPayClaimStatusDefinition({ claimStatus }: TravelPayClaimStatusDef
   const statusInfo = TravelPayClaimStatuses[statusKey]
 
   // If no status definition found, show generic help text
-  if (!statusInfo) {
+  if (!statusInfo || !statusInfo.definitionKey) {
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody">{t('travelPay.claimDetails.status.genericHelp')}</TextView>
@@ -52,7 +52,7 @@ function TravelPayClaimStatusDefinition({ claimStatus }: TravelPayClaimStatusDef
   return (
     <Box>
       <TextView variant="MobileBody" testID="travelPayClaimStatusDefinitionTestID">
-        {statusInfo.definition}
+        {t(statusInfo.definitionKey)}
       </TextView>
     </Box>
   )

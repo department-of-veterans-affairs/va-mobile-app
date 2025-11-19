@@ -193,6 +193,6 @@ export const createTravelPayDocumentListItem = (
     textLines,
     onPress: handlePress,
     testId: getA11yLabelText(textLines),
-    a11yHintText: t('travelPay.claimDetails.document.downloadDecisionLetter'),
+    a11yHintText: t('travelPay.claimDetails.document.decisionLetter'),
   }
 }

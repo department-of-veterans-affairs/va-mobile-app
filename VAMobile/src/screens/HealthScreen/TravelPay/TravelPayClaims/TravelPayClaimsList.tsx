@@ -97,6 +97,7 @@ function TravelPayClaimsList({
     } else {
       navigateTo('TravelPayClaimDetailsScreen', {
         claimId: claimId,
+        backLabel: t('travelPay.claims.title'),
       })
     }
   }

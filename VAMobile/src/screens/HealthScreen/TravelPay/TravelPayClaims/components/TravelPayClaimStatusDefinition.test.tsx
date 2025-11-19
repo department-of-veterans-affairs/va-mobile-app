@@ -40,8 +40,8 @@ context('TravelPayClaimStatusDefinition', () => {
       it(`should display definition for status: ${status}`, () => {
         renderComponent(status)
 
-        const expectedDefinition =
-          TravelPayClaimStatuses[expectedKey as keyof typeof TravelPayClaimStatuses]?.definition
+        const statusInfo = TravelPayClaimStatuses[expectedKey as keyof typeof TravelPayClaimStatuses]
+        const expectedDefinition = statusInfo?.definitionKey ? t(statusInfo.definitionKey) : null
         if (expectedDefinition) {
           expect(screen.getByText(expectedDefinition)).toBeTruthy()
         }
@@ -53,28 +53,28 @@ context('TravelPayClaimStatusDefinition', () => {
     it('should convert single word status correctly', () => {
       renderComponent('denied')
 
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
+      const deniedDefinition = t(TravelPayClaimStatuses.Denied.definitionKey)
       expect(screen.getByText(deniedDefinition)).toBeTruthy()
     })
 
     it('should convert multi-word status correctly', () => {
       renderComponent('in manual review')
 
-      const manualReviewDefinition = TravelPayClaimStatuses.InManualReview.definition
+      const manualReviewDefinition = t(TravelPayClaimStatuses.InManualReview.definitionKey)
       expect(screen.getByText(manualReviewDefinition)).toBeTruthy()
     })
 
     it('should handle mixed case input', () => {
       renderComponent('CLAIM SUBMITTED')
 
-      const claimSubmittedDefinition = TravelPayClaimStatuses.ClaimSubmitted.definition
+      const claimSubmittedDefinition = t(TravelPayClaimStatuses.ClaimSubmitted.definitionKey)
       expect(screen.getByText(claimSubmittedDefinition)).toBeTruthy()
     })
 
     it('should handle status with lowercase', () => {
       renderComponent('partial payment')
 
-      const partialPaymentDefinition = TravelPayClaimStatuses.PartialPayment.definition
+      const partialPaymentDefinition = t(TravelPayClaimStatuses.PartialPayment.definitionKey)
       expect(screen.getByText(partialPaymentDefinition)).toBeTruthy()
     })
   })
@@ -113,7 +113,7 @@ context('TravelPayClaimStatusDefinition', () => {
     it('should handle status with extra whitespace', () => {
       renderComponent('  In manual review  ')
 
-      const manualReviewDefinition = TravelPayClaimStatuses.InManualReview.definition
+      const manualReviewDefinition = t(TravelPayClaimStatuses.InManualReview.definitionKey)
       expect(screen.getByText(manualReviewDefinition)).toBeTruthy()
     })
 
@@ -122,7 +122,7 @@ context('TravelPayClaimStatusDefinition', () => {
 
       // The component trims the input and split/join handles multiple spaces,
       // so it should actually find the InManualReview definition
-      const manualReviewDefinition = TravelPayClaimStatuses.InManualReview.definition
+      const manualReviewDefinition = t(TravelPayClaimStatuses.InManualReview.definitionKey)
       expect(screen.getByText(manualReviewDefinition)).toBeTruthy()
     })
 
@@ -139,28 +139,28 @@ context('TravelPayClaimStatusDefinition', () => {
     it('should display definition for Incomplete status', () => {
       renderComponent('Incomplete')
 
-      const expectedDefinition = TravelPayClaimStatuses.Incomplete.definition
+      const expectedDefinition = t(TravelPayClaimStatuses.Incomplete.definitionKey)
       expect(screen.getByText(expectedDefinition)).toBeTruthy()
     })
 
     it('should display definition for Saved status', () => {
       renderComponent('Saved')
 
-      const expectedDefinition = TravelPayClaimStatuses.Saved.definition
+      const expectedDefinition = t(TravelPayClaimStatuses.Saved.definitionKey)
       expect(screen.getByText(expectedDefinition)).toBeTruthy()
     })
 
     it('should display definition for Denied status', () => {
       renderComponent('Denied')
 
-      const expectedDefinition = TravelPayClaimStatuses.Denied.definition
+      const expectedDefinition = t(TravelPayClaimStatuses.Denied.definitionKey)
       expect(screen.getByText(expectedDefinition)).toBeTruthy()
     })
 
     it('should display definition for Claim paid status', () => {
       renderComponent('Claim paid')
 
-      const expectedDefinition = TravelPayClaimStatuses.ClaimPaid.definition
+      const expectedDefinition = t(TravelPayClaimStatuses.ClaimPaid.definitionKey)
       expect(screen.getByText(expectedDefinition)).toBeTruthy()
     })
   })
@@ -198,7 +198,7 @@ context('TravelPayClaimStatusDefinition', () => {
       // First render
       renderComponent('Denied')
 
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
+      const deniedDefinition = t(TravelPayClaimStatuses.Denied.definitionKey)
       expect(screen.getByText(deniedDefinition)).toBeTruthy()
 
       // Clear and render again with same props
@@ -213,7 +213,7 @@ context('TravelPayClaimStatusDefinition', () => {
       // Initial render
       renderComponent('Denied')
 
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
+      const deniedDefinition = t(TravelPayClaimStatuses.Denied.definitionKey)
       expect(screen.getByText(deniedDefinition)).toBeTruthy()
 
       // Clear and render with different status
@@ -223,7 +223,7 @@ context('TravelPayClaimStatusDefinition', () => {
       // Should show new status definition
       expect(screen.queryByText(deniedDefinition)).toBeFalsy()
 
-      const paidDefinition = TravelPayClaimStatuses.ClaimPaid.definition
+      const paidDefinition = t(TravelPayClaimStatuses.ClaimPaid.definitionKey)
       expect(screen.getByText(paidDefinition)).toBeTruthy()
     })
   })
@@ -232,7 +232,7 @@ context('TravelPayClaimStatusDefinition', () => {
     it('should be accessible with proper text elements', () => {
       renderComponent('Denied')
 
-      const deniedDefinition = TravelPayClaimStatuses.Denied.definition
+      const deniedDefinition = t(TravelPayClaimStatuses.Denied.definitionKey)
       const textElement = screen.getByText(deniedDefinition)
 
       // Should be a proper text element accessible to screen readers

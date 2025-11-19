@@ -51,6 +51,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   }
 
   const getContent = () => {
+    const showTravelPayClaimDetails = featureEnabled('travelPayClaimDetails')
+
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {
       return (
@@ -122,9 +124,12 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              if (featureEnabled('travelPayClaimDetails')) {
+              if (showTravelPayClaimDetails) {
                 logAnalyticsEvent(Events.vama_link_click)
-                navigateTo('TravelPayClaimDetailsScreen', { claimId })
+                navigateTo('TravelPayClaimDetailsScreen', {
+                  claimId,
+                  backLabel: t('appointments.appointment'),
+                })
               } else {
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
                 navigateTo('Webview', {
@@ -137,16 +142,16 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
               }
             }}
             text={
-              featureEnabled('travelPayClaimDetails')
+              showTravelPayClaimDetails
                 ? t('travelPay.travelClaimFiledDetails.goToClaimDetails')
                 : t('travelPay.travelClaimFiledDetails.goToVAGov')
             }
             a11yLabel={
-              featureEnabled('travelPayClaimDetails')
+              showTravelPayClaimDetails
                 ? a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))
                 : a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))
             }
-            testID={featureEnabled('travelPayClaimDetails') ? `goToClaimDetails-${claimId}` : `goToVAGovID-${claimId}`}
+            testID={showTravelPayClaimDetails ? `goToClaimDetails-${claimId}` : `goToVAGovID-${claimId}`}
           />
           <TravelPayHelp />
         </>
