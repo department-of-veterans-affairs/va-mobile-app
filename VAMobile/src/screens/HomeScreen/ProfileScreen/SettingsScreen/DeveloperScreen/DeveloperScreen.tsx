@@ -256,11 +256,6 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       </TextView>
       <Box>
         <TextArea>
-          <Button onPress={onRemoteConfigTest} label={'Remote Config Test'} />
-        </TextArea>
-      </Box>
-      <Box>
-        <TextArea>
           <Button onPress={onResetFirstTimeLogin} label={'Reset first time login'} />
         </TextArea>
       </Box>
@@ -304,6 +299,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
           <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
+        </TextArea>
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={onRemoteConfigTest} label={'Remote Config Test'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>

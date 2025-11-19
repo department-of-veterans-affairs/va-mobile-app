@@ -44,6 +44,7 @@ const mockOverrides = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   overpayCopay: false,
+  remoteConfigRefreshTest: false,
 }
 
 describe('activate', () => {

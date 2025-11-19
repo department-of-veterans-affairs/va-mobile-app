@@ -258,6 +258,12 @@ export function AuthGuard() {
       setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
     }, REMOTE_CONFIG_REFRESH * 60000)
 
+    /*
+      The return value of setTimeout is a number, but because we have NodeJS types imported for unit tests,
+      the tests expect this to be a NodeJS.Timeout while the standard build thinks it's a number, and they can't
+      be cast between without converting to an unknown first.
+     */
+    //@ts-ignore
     setRemoteConfigTimeoutId(refetchTimeout)
 
     return () => {

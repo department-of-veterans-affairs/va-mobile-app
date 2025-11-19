@@ -15,7 +15,6 @@ type RemoteConfigTestScreenSettingsScreenProps = StackScreenProps<HomeStackParam
 function RemoteConfigTestScreen({ navigation }: RemoteConfigTestScreenSettingsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { gutter, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const configTest = () => {
     const testEnabled = featureEnabled('remoteConfigRefreshTest')
@@ -23,13 +22,13 @@ function RemoteConfigTestScreen({ navigation }: RemoteConfigTestScreenSettingsSc
     if (testEnabled) {
       return (
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
-          My potentially scary feature is ENABLED
+          My remotely configured feature is ENABLED
         </TextView>
       )
     } else {
       return (
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
-          Feature is DISABLED
+          My remotely configured is DISABLED
         </TextView>
       )
     }
@@ -40,7 +39,7 @@ function RemoteConfigTestScreen({ navigation }: RemoteConfigTestScreenSettingsSc
       backLabel={t('debug.title')}
       backLabelOnPress={navigation.goBack}
       title={t('Remote Config Refresh Test')}>
-      <Box mb={contentMarginBottom}>
+      <Box mb={theme.dimensions.contentMarginBottom}>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>{configTest()}</TextArea>
         </Box>

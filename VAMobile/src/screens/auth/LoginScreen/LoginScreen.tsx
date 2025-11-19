@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, StatusBar, StyleProp, ViewStyle } from 'react-native'
+import { StatusBar, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -32,7 +32,6 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useAppDispatch, useOrientation, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useStartAuth } from 'utils/hooks/auth'
-import { featureEnabled } from 'utils/remoteConfig'
 
 function LoginScreen() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -47,8 +46,6 @@ function LoginScreen() {
   const [demoPromptVisible, setDemoPromptVisible] = useState(false)
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
-
-  const [remoteTestSwitchEnabled, setRemoteTestSwitchEnabled] = useState<boolean>()
 
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
@@ -66,22 +63,12 @@ function LoginScreen() {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = () => {
-    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
-
-    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
-      {
-        text: 'cancel',
-        style: 'cancel',
-      },
-    ])
-
-    setRemoteTestSwitchEnabled(refreshTestEnabled)
-    // logAnalyticsEvent(Events.vama_find_location())
-    // navigateTo('Webview', {
-    //   url: WEBVIEW_URL_FACILITY_LOCATOR,
-    //   displayTitle: t('webview.vagov'),
-    //   loadingMessage: t('webview.valocation.loading'),
-    // })
+    logAnalyticsEvent(Events.vama_find_location())
+    navigateTo('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('webview.vagov'),
+      loadingMessage: t('webview.valocation.loading'),
+    })
   }
 
   const handleUpdateDemoMode = async () => {
@@ -94,16 +81,6 @@ function LoginScreen() {
     if (demoTaps >= TAPS_FOR_DEMO) {
       demoTaps = 0
       setDemoPromptVisible(true)
-    }
-  }
-
-  const remoteConfigTest = () => {
-    if (remoteTestSwitchEnabled) {
-      return (
-        <TextView variant={'VAHeader'} color={'green'}>
-          Remote config test flag enabled
-        </TextView>
-      )
     }
   }
 
@@ -159,7 +136,6 @@ function LoginScreen() {
           accessibilityRole="image"
           accessibilityLabel={t('demoMode.imageDescription')}>
           <VALogo testID="VALogo" />
-          {remoteConfigTest()}
           {loadingRefreshToken && (
             <Box alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter} mt={70}>
               <LoadingComponent
