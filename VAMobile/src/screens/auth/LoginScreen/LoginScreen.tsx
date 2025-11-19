@@ -48,6 +48,8 @@ function LoginScreen() {
   const TAPS_FOR_DEMO = 7
   let demoTaps = 0
 
+  const [remoteTestSwitchEnabled, setRemoteTestSwitchEnabled] = useState<boolean>()
+
   useEffect(() => {
     if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
       dispatch(setPKCEParams())
@@ -72,6 +74,8 @@ function LoginScreen() {
         style: 'cancel',
       },
     ])
+
+    setRemoteTestSwitchEnabled(refreshTestEnabled)
     // logAnalyticsEvent(Events.vama_find_location())
     // navigateTo('Webview', {
     //   url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -94,7 +98,7 @@ function LoginScreen() {
   }
 
   const remoteConfigTest = () => {
-    if (featureEnabled('remoteConfigRefreshTest')) {
+    if (remoteTestSwitchEnabled) {
       return (
         <TextView variant={'VAHeader'} color={'green'}>
           Remote config test flag enabled
