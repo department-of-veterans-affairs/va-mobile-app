@@ -39,6 +39,7 @@ export type FeatureToggleType =
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
   | 'showEmailConfirmationAlert'
+  | 'showTimezoneMessage'
   | 'overpayCopay'
 
 type FeatureToggleValues = {
@@ -66,6 +67,7 @@ type FeatureToggleValues = {
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
   showEmailConfirmationAlert: boolean
+  showTimezoneMessage: boolean
   overpayCopay: boolean
 }
 
@@ -94,6 +96,7 @@ export const defaults: FeatureToggleValues = {
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
+  showTimezoneMessage: true,
   overpayCopay: false,
 }
 

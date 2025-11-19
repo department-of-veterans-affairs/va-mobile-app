@@ -42,6 +42,7 @@ const mockOverrides = {
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
+  showTimezoneMessage: true,
   overpayCopay: false,
 }
 

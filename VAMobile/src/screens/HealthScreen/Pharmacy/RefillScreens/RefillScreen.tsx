@@ -20,6 +20,7 @@ import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/Prescription
 import NoRefills from 'screens/HealthScreen/Pharmacy/RefillScreens/NoRefills'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { HiddenA11yElement } from 'styles/common'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useDowntime, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -54,7 +55,12 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
     return prescription.attributes.isRefillable
   })
 
-  const { mutate: requestRefill, isPending: showLoadingScreenRequestRefills } = useRequestRefills()
+  const {
+    mutate: requestRefill,
+    isPending: showLoadingScreenRequestRefills,
+    isError: refillRequestHasError,
+    reset: resetRefillRequest,
+  } = useRequestRefills()
 
   const refillable = refillablePrescriptions || []
 
@@ -201,6 +207,23 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
                 variant="error"
                 description={t('prescriptions.refill.pleaseSelect')}
                 scrollViewRef={scrollViewRef}
+              />
+            </Box>
+          )}
+          {refillRequestHasError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="error"
+                header={t('prescriptions.refill.error.title')}
+                description={t('prescriptions.refill.error.description')}
+                descriptionA11yLabel={a11yLabelVA(t('prescriptions.refill.error.description'))}
+                scrollViewRef={scrollViewRef}
+                primaryButton={{
+                  label: t('dismiss'),
+                  onPress: () => {
+                    resetRefillRequest()
+                  },
+                }}
               />
             </Box>
           )}
