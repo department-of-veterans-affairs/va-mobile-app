@@ -8,11 +8,10 @@ import { DateTime } from 'luxon'
 import { Box, LargePanel, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useBeforeNavBackListener, useTheme } from 'utils/hooks'
 import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
-
-import { HealthStackParamList } from '../../HealthStackScreens'
 
 type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
 

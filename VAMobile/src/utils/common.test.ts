@@ -1,4 +1,4 @@
-import { checkStringForPII } from './common'
+import { checkStringForPII } from 'utils/common'
 
 describe('tests for checkStringForPII', () => {
   it('returns unchanged text and found=false when no PII is present', () => {

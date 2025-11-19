@@ -4,9 +4,8 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { militaryServiceHistoryKeys } from 'api/militaryService'
 import { BranchesOfServiceConstants, ServiceHistoryAttributes } from 'api/types'
+import Nametag from 'components/Nametag/Nametag'
 import { QueriesData, context, render } from 'testUtils'
-
-import Nametag from './Nametag'
 
 const BRANCH_REGEX =
   /United States (Air Force|Army|Coast Guard|Marine Corps|Navy|DoD|Public Health Service|NOAA|Space Force)/i

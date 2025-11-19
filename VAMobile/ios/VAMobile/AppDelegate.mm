@@ -8,6 +8,7 @@
 
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
+const int blurryScreenTag = 221122;
 
 @implementation AppDelegate
 
@@ -16,6 +17,14 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   return [RCTLinkingManager application:application openURL:url options:options];
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
+ restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+ return [RCTLinkingManager application:application
+                  continueUserActivity:userActivity
+                    restorationHandler:restorationHandler];
 }
 
 
@@ -35,6 +44,21 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   [RNNotifications startMonitorNotifications];
   
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+   UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle: UIBlurEffectStyleDark];
+   UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+   blurEffectView.frame = [self.window frame];
+   blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+   blurEffectView.tag = blurryScreenTag;
+  [self.window addSubview: blurEffectView];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+  [[self.window viewWithTag: blurryScreenTag] removeFromSuperview];
 }
 
 - (NSDictionary *)prepareInitialProps
