@@ -41,6 +41,7 @@ context('Inbox', () => {
             recipientId: 3,
             recipientName: 'mock recipient name',
             readReceipt: 'mock read receipt',
+            isOhMessage: false,
           },
         },
       ],

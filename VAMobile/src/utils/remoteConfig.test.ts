@@ -27,7 +27,7 @@ const mockOverrides = {
   inAppFeedback: false,
   inAppRecruitment: false,
   inAppReview: true,
-  labsAndTests: false,
+  labsAndTests: true,
   nonVAMedsLink: true,
   rescheduleLink: true,
   shareMyHealthDataLink: true,
@@ -43,6 +43,7 @@ const mockOverrides = {
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
+  showTimezoneMessage: true,
   overpayCopay: false,
 }
 
