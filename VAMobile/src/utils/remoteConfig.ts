@@ -121,12 +121,12 @@ export const fetchAndActivate = async () => {
 
     const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
 
-    // Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
-    //   {
-    //     text: 'cancel',
-    //     style: 'cancel',
-    //   },
-    // ])
+    Alert.alert('remote config refreshed', `refresh remote config refreshed`, [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+    ])
 
     console.debug('Remote Config: Activated config')
   }
