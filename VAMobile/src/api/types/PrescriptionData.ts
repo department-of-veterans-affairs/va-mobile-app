@@ -66,7 +66,22 @@ export type RefillStatus =
   | 'submitted'
   | 'dateOfDeathEntered'
 
-export type PrescriptionAttributeData = {
+export const DELIVERY_SERVICE_TYPES: {
+  USPS: string
+  UPS: string
+  FEDEX: string
+  DHL: string
+} = {
+  USPS: 'USPS',
+  UPS: 'UPS',
+  FEDEX: 'FEDEX',
+  DHL: 'DHL',
+}
+
+// API Responses Types
+
+// Shared Types GET ALL
+export type PrescriptionAttributeDataBase = {
   refillStatus: RefillStatus
   refillSubmitDate: string | null
   refillDate: string | null
@@ -85,31 +100,25 @@ export type PrescriptionAttributeData = {
   stationNumber: string
 }
 
-export type PrescriptionsList = Array<PrescriptionData>
-
-export type PrescriptionData = {
-  type: string
-  id: string
-  attributes: PrescriptionAttributeData
-}
-
+// request meta data
 export type PrescriptionsGetData = {
   data: PrescriptionsList
   links: PrescriptionsPaginationLinks
   meta: PrescriptionsGetMeta
 }
 
+export type PrescriptionsPaginationLinks = {
+  self: string
+  first: string
+  prev: string | null
+  next: string | null
+  last: string
+}
+
 export type PrescriptionsGetMeta = {
   pagination: PrescriptionsPaginationData
   prescriptionStatusCount: PrescriptionStatusCountData
   hasNonVaMeds: boolean
-}
-
-export type PrescriptionsPaginationData = {
-  currentPage: number
-  perPage: number
-  totalPages: number
-  totalEntries: number
 }
 
 export type PrescriptionStatusCountData = {
@@ -126,70 +135,138 @@ export type PrescriptionStatusCountData = {
   total: number
 }
 
-export type PrescriptionsPaginationLinks = {
-  self: string
-  first: string
-  prev: string | null
-  next: string | null
-  last: string
+export type PrescriptionsPaginationData = {
+  currentPage: number
+  perPage: number
+  totalPages: number
+  totalEntries: number
 }
 
-export type PrescriptionsMap = {
-  [key: string]: PrescriptionData
+export type PrescriptionsList = Array<PrescriptionData>
+
+export type PrescriptionData = {
+  type: string
+  id: string
+  attributes: PrescriptionAttributeData | PrescriptionsAttributeDataV1
+}
+// Tracking Status
+
+export type PrescriptionTrackingItemV0 = {
+  prescriptionName: string
+  prescriptionNumber: string
+  ndcNumber: string
+  prescriptionId: number
+  trackingNumber: string
+  shippedDate: string
+  deliveryService?: string
+  otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
 }
 
-export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>
+export type PrescriptionTrackingItemV1 = {
+  prescriptionName: string
+  prescriptionNumber: string
+  ndcNumber: string
+  prescriptionId: number
+  trackingNumber: string
+  shippedDate: string
+  carrier?: string
+  otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
+}
 
 export type PrescriptionTrackingInfoOtherItem = {
   prescriptionName: string
   prescriptionNumber: string
+  ndcNumber?: string
+  stationNumber?: string
 }
 
-export const DELIVERY_SERVICE_TYPES: {
-  USPS: string
-  UPS: string
-  FEDEX: string
-  DHL: string
-} = {
-  USPS: 'USPS',
-  UPS: 'UPS',
-  FEDEX: 'FEDEX',
-  DHL: 'DHL',
+export type PrescriptionTrackingItem = PrescriptionTrackingItemV0 & PrescriptionTrackingItemV1
+
+// GET all Rx
+
+// v0 response api structure
+export type PrescriptionAttributeData = PrescriptionAttributeDataBase
+
+// v1 response api structure
+export type PrescriptionsAttributeDataV1 = PrescriptionAttributeDataBase & {
+  tracking?: Array<PrescriptionTrackingItem> | null
 }
 
-export type PrescriptionTrackingInfoAttributeData = {
-  prescriptionName: string
-  prescriptionNumber: string
-  prescriptionId: number
-  trackingNumber: string
-  ndcNumber: string
-  shippedDate: string
-  deliveryService: string
-  otherPrescriptions: Array<PrescriptionTrackingInfoOtherItem>
+// v0 refill request api structure
+
+export type RefillRequestDataV0 = {
+  ids: string[]
 }
 
-export type PrescriptionTrackingInfo = {
-  type: string
+// v1 refill request api structure
+
+export type SingleRefillRequest = {
+  stationNumber: string
   id: string
-  attributes: PrescriptionTrackingInfoAttributeData
 }
 
-export type PrescriptionTrackingInfoGetData = {
-  data: Array<PrescriptionTrackingInfo>
+export type RefillRequestDataV1 = Array<SingleRefillRequest>
+
+export type RefillRequestData = RefillRequestDataV0 | RefillRequestDataV1
+
+// v0&v1 refill response api structure
+export type RefillResponsePrescriptionListItem = {
+  id: string
+  stationNumber: string
+  status: string
 }
 
-export type PrescriptionRefillAttributeData = {
-  failedStationList: string | null
-  successfulStationList: string | null
-  lastUpdatedTime: string | null
-  prescriptionList: string | null
-  failedPrescriptionIds: Array<string>
+export type PrescriptionRefillError = {
+  developerMessage: string
+  prescriptionId: string
+  stationNumber: string
+}
+
+export type PrescriptionRefillInfoMessage = {
+  prescriptionId: string
+  message: string
+  stationNumber: string
 }
 
 export type PrescriptionRefillData = {
   data: {
     id: string
     type: string
-    attributes: PrescriptionRefillAttributeData
+    attributes: PrescriptionRefillAttributeDataV0 | PrescriptionRefillAttributeDataV1
   }
+}
+
+export type PrescriptionRefillAttributeDataV0 = {
+  failedStationList: string | string[] | null
+  successfulStationList: string | string[] | null
+  lastUpdatedTime: string | null
+  prescriptionList: string | RefillResponsePrescriptionListItem[] | null
+  failedPrescriptionIds: Array<string>
+  errors: PrescriptionRefillError[]
+  infoMessages: PrescriptionRefillInfoMessage[]
+}
+
+export type PrescriptionRefillAttributeDataV1 = {
+  failedStationList: string | string[] | null
+  successfulStationList: string | string[] | null
+  lastUpdatedTime: string | null
+  prescriptionList: string | RefillResponsePrescriptionListItem[] | null
+  failedPrescriptionIds: Array<{ id: string; stationNumber: string }>
+  errors: PrescriptionRefillError[]
+  infoMessages: PrescriptionRefillInfoMessage[]
+}
+
+export type PrescriptionRefillAttributeData = PrescriptionRefillAttributeDataV0 | PrescriptionRefillAttributeDataV1
+
+export type RefillRequestSummaryItems = Array<{ submitted: boolean; data: PrescriptionData }>
+
+// v0 tracking api, no v1 API
+export type PrescriptionTrackingInfo = {
+  type: string
+  id: string
+  attributes: PrescriptionTrackingItem
+}
+
+export type PrescriptionTrackingInfoGetData = {
+  data: Array<PrescriptionTrackingInfo>
 }
