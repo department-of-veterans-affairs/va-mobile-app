@@ -25,7 +25,7 @@ export const HomeE2eIdConstants = {
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
   CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT: '5 active with 1 evidence request',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
-  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
+  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '55 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
