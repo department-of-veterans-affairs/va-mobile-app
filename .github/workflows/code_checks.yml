@@ -20,7 +20,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -34,13 +42,20 @@ jobs:
   super-linter:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Run Super-Linter
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
           LINTER_RULES_PATH: '.github/linters/'
           VALIDATE_ALL_CODEBASE: false
@@ -89,7 +104,15 @@ jobs:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
       fail-fast: false
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -107,7 +130,15 @@ jobs:
   bundle_android:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -121,7 +152,15 @@ jobs:
   bundle_ios:
     runs-on: macos-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
