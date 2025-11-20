@@ -47,7 +47,6 @@ export const useMedicalCopays = (options?: { enabled?: boolean }) => {
   // Extract HTTP status code from response data (success) or error (failure)
   const errorStatus = (query.error as RuntimeError | null)?.status
   const httpStatus = query.data?.status ?? errorStatus
-  console.log('httpStatus', httpStatus)
 
   return { ...query, summary, httpStatus }
 }
