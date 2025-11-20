@@ -19,6 +19,8 @@ export const claim: ClaimData = {
     requestedDecision: false,
     claimType: 'Compensation',
     claimTypeCode: '010LCOMP',
+    displayTitle: 'Claim for disability compensation',
+    claimTypeBase: 'disability compensation claim',
     updatedAt: '2020-12-07T20:37:12.041Z',
     contentionList: [
       'Hearing Loss (Increase)',

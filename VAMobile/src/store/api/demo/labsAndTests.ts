@@ -1,4 +1,6 @@
-import { LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
+import { DateTime, Interval } from 'luxon'
+
+import { LabsAndTests, LabsAndTestsListPayload } from 'api/types/LabsAndTestsData'
 import { DemoStore } from 'store/api/demo/store'
 import { Params } from 'store/api/index'
 
@@ -27,19 +29,33 @@ export type LabsAndTestsDemoStore = LabsAndTestsList
 export type LabsAndTestsDemoReturnTypes = undefined | LabsAndTestsListPayload
 
 export const getLabsAndTestsList = (store: DemoStore, params: Params): LabsAndTestsListPayload => {
-  const endDate = new Date(params.endDate.toString())
-  const month = endDate.getMonth() + 1
-  const year = endDate.getFullYear()
+  const startDate = params.startDate as string
+  const endDate = params.endDate as string
 
-  if (month === 1 && year === 2024) {
-    return store['/v1/health/labs-and-tests']['2024']['1']
-  } else if (month === 12 && year === 2024) {
-    return store['/v1/health/labs-and-tests']['2024']['12']
-  } else if (month === 2 && year === 2023) {
-    return store['/v1/health/labs-and-tests']['2023']['2']
-  } else if (month === 10 && year === 2023) {
-    return store['/v1/health/labs-and-tests']['2023']['10']
-  } else {
-    return store['/v1/health/labs-and-tests'].DEFAULT
+  if (startDate && endDate) {
+    // Get all records from the DEFAULT dataset
+    const defaultRecords = store['/v1/health/labs-and-tests'].DEFAULT
+
+    // Create a date interval for filtering
+    const interval = Interval.fromDateTimes(DateTime.fromISO(startDate), DateTime.fromISO(endDate))
+
+    // Filter records that fall within the date range
+    const filteredData = defaultRecords.data.filter((record: LabsAndTests) => {
+      const dateCompleted = record.attributes?.dateCompleted
+      if (!dateCompleted) {
+        return false
+      }
+      const recordDate = DateTime.fromISO(dateCompleted)
+      return interval.contains(recordDate)
+    })
+
+    // Return the filtered results
+    return {
+      ...defaultRecords,
+      data: filteredData,
+    }
   }
+
+  // Fallback to DEFAULT if no date range provided
+  return store['/v1/health/labs-and-tests'].DEFAULT
 }
