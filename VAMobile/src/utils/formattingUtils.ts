@@ -6,6 +6,8 @@ import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
 
+export const EN_DASH = '\u2013'
+
 /**
  * Returns the formatted phone number
  *
@@ -511,5 +513,5 @@ export const formatDateMMMMyyyy = (date: DateTime): string => {
  * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
  */
 export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
-  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
+  return `${formatDateMMMyyyy(startDate)} ${EN_DASH} ${formatDateMMMyyyy(endDate)}`
 }
