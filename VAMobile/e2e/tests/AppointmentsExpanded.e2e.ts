@@ -365,22 +365,21 @@ const checkUpcomingApptDetails = async (
     daysSinceAppointmentStart,
   )
 
-  const isAllowed =
-    appointmentType === 'ATLAS' ||
-    appointmentType === 'Onsite' ||
-    appointmentType === 'Claim' ||
-    appointmentType === 'VA' ||
-    appointmentType === 'CC'
+  // If we have a claim
+  // Also check if the appointment was in the past (to work with how the tests are constructed)
+  if (travelClaimId && pastAppointment) {
+    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+    await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    await expect(element(by.id('travelPayHelp'))).toExist()
+  } else {
+    const isAllowed =
+      appointmentType === 'ATLAS' ||
+      appointmentType === 'Onsite' ||
+      appointmentType === 'Claim' ||
+      appointmentType === 'VA'
 
-  // We can only check if we know the days since the appointment started
-  if (pastAppointment && appointmentStatus === 'Confirmed' && daysSinceAppointmentStart && isAllowed) {
-    if (travelClaimId) {
-      // If we have a claim
-      // await expect(element(by.text(/^Claim number: /))).toExist()
-      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-      await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
-      await expect(element(by.id('travelPayHelp'))).toExist()
-    } else {
+    // We can only check if we know the days since the appointment started
+    if (pastAppointment && appointmentStatus === 'Confirmed' && daysSinceAppointmentStart && isAllowed) {
       if (daysSinceAppointmentStart < 30) {
         // If we have no claim and are within 30 days, show nothing here
         await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
@@ -397,9 +396,9 @@ const checkUpcomingApptDetails = async (
           ),
         ).toExist()
       }
+    } else {
+      await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
     }
-  } else {
-    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
   }
 
   await element(by.text('Appointments')).tap()
@@ -1181,7 +1180,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  // await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
