@@ -12,6 +12,7 @@ export type AuthorizedServicesPayload = {
         directDepositBenefits: boolean
         directDepositBenefitsUpdate: boolean
         disabilityRating: boolean
+        labsAndTestsEnabled: boolean
         lettersAndDocuments: boolean
         medicationsOracleHealthEnabled: boolean
         militaryServiceHistory: boolean
@@ -36,6 +37,7 @@ export type UserAuthorizedServicesData = {
   directDepositBenefits: boolean
   directDepositBenefitsUpdate: boolean
   disabilityRating: boolean
+  labsAndTestsEnabled: boolean
   lettersAndDocuments: boolean
   medicationsOracleHealthEnabled: boolean
   militaryServiceHistory: boolean
