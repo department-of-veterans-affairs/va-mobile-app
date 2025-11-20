@@ -109,7 +109,6 @@ export const defaults: FeatureToggleValues = {
 export let devConfig: FeatureToggleValues = defaults
 
 export const fetchAndActivate = async () => {
-  console.log('fetchAndActivate called')
   /**
    * If in staging or production, fetch and activate remote settings.  Otherwise,
    * we'll use the devConfig for local development.
@@ -118,17 +117,6 @@ export const fetchAndActivate = async () => {
     console.debug('Remote Config: Fetching and activating')
     await remoteConfig().fetch(RC_CACHE_TIME)
     await remoteConfig().activate()
-
-    const refreshTestEnabled = featureEnabled('remoteConfigRefreshTest')
-
-    Alert.alert('remote config refreshed', `refresh remote config value is ${refreshTestEnabled}`, [
-      {
-        text: 'cancel',
-        style: 'cancel',
-      },
-    ])
-
-    console.debug('Remote Config: Activated config')
   }
 
   await loadOverrides()
