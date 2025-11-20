@@ -86,6 +86,7 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 
+  // TODO: once all calls are transitioned to v1 api only, we can remove the type checks
   const allergyButtons: Array<DefaultListItemObj> = map(allergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
       {
