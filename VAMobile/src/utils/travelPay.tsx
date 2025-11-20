@@ -158,7 +158,8 @@ export const getDocumentType = (filename: string): string => {
 
 /**
  * Helper function to create a document list item
- * @param isDecisionLetter - If true, uses bold font and shows icon (for decision letters). If false, uses normal font and no icon (for user-submitted documents)
+ * @param isDecisionLetter - If true, uses bold font and shows icon (for decision letters).
+ *                           If false, uses normal font and no icon (for user-submitted documents)
  */
 export const createTravelPayDocumentListItem = (
   document: TravelPayClaimDocument,
