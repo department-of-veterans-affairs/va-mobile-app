@@ -177,7 +177,7 @@ context('TravelPayClaimDetailsScreen', () => {
       initializeTestInstance()
 
       expect(screen.getByText(t('travelPay.claimDetails.loading'))).toBeTruthy()
-      expect(screen.getByText(t('travelPay.title'))).toBeTruthy() // Back button
+      expect(screen.getByText(t('travelPay.claims.title'))).toBeTruthy() // Back button
     })
 
     it('should show help button in loading state', () => {
@@ -267,7 +267,7 @@ context('TravelPayClaimDetailsScreen', () => {
 
       initializeTestInstance()
 
-      const backButton = screen.getByText(t('travelPay.title'))
+      const backButton = screen.getByText(t('travelPay.claims.title'))
       fireEvent.press(backButton)
       expect(mockGoBack).toHaveBeenCalled()
     })
@@ -663,7 +663,7 @@ context('TravelPayClaimDetailsScreen', () => {
 
       initializeTestInstance()
 
-      let backButton = screen.getByText(t('travelPay.title'))
+      let backButton = screen.getByText(t('travelPay.claims.title'))
       fireEvent.press(backButton)
       expect(mockGoBack).toHaveBeenCalledTimes(1)
 
@@ -678,7 +678,7 @@ context('TravelPayClaimDetailsScreen', () => {
 
       initializeTestInstance()
 
-      backButton = screen.getByText(t('travelPay.title'))
+      backButton = screen.getByText(t('travelPay.claims.title'))
       fireEvent.press(backButton)
       expect(mockGoBack).toHaveBeenCalledTimes(1)
     })
