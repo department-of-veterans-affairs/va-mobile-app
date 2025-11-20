@@ -51,7 +51,7 @@ function TravelPayClaimDocuments({ documents, claimId, claimStatus, onDocumentPr
     <Box mx={-theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
       <DefaultList
         items={userSubmittedDocuments.map((doc) =>
-          createTravelPayDocumentListItem(doc, claimId, claimStatus, handleDownload, theme, t),
+          createTravelPayDocumentListItem(doc, claimId, claimStatus, handleDownload, theme, t, undefined, false),
         )}
       />
     </Box>

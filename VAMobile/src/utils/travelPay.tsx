@@ -158,6 +158,7 @@ export const getDocumentType = (filename: string): string => {
 
 /**
  * Helper function to create a document list item
+ * @param isDecisionLetter - If true, uses bold font and shows icon (for decision letters). If false, uses normal font and no icon (for user-submitted documents)
  */
 export const createTravelPayDocumentListItem = (
   document: TravelPayClaimDocument,
@@ -167,6 +168,7 @@ export const createTravelPayDocumentListItem = (
   theme: VATheme,
   t: TFunction,
   linkText?: string,
+  isDecisionLetter?: boolean,
 ): DefaultListItemObj => {
   const handlePress = () => {
     // Log analytics before triggering download
@@ -175,17 +177,24 @@ export const createTravelPayDocumentListItem = (
     onDocumentPress(document.documentId, document.filename)
   }
 
-  const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
+  // Decision letters are bold with icon, user-submitted docs are normal with no icon
+  const variant = isDecisionLetter
+    ? ('MobileBodyBold' as keyof VATypographyThemeVariants)
+    : ('MobileBody' as keyof VATypographyThemeVariants)
+  const iconProps = isDecisionLetter
+    ? {
+        name: 'Description' as const,
+        width: 24,
+        height: 24,
+        fill: theme.colors.text.primary,
+      }
+    : undefined
+
   const textLines: Array<TextLineWithIconProps> = [
     {
       text: linkText || document.filename,
       variant,
-      iconProps: {
-        name: 'Description',
-        width: 24,
-        height: 24,
-        fill: theme.colors.text.primary,
-      },
+      iconProps,
     },
   ]
 
@@ -195,4 +204,19 @@ export const createTravelPayDocumentListItem = (
     testId: getA11yLabelText(textLines),
     a11yHintText: t('travelPay.claimDetails.document.decisionLetter'),
   }
+}
+
+/**
+ * Converts a string to PascalCase format
+ * @param str - The string to convert
+ * @returns The string in PascalCase format
+ * @example
+ * toPascalCase('in manual review') // Returns: 'InManualReview'
+ * toPascalCase('denied') // Returns: 'Denied'
+ */
+export function toPascalCase(str: string): string {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('')
 }

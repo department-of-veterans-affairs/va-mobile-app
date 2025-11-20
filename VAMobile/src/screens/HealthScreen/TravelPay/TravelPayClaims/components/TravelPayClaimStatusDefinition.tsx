@@ -5,6 +5,7 @@ import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TravelPayClaimStatuses } from 'constants/travelPay'
 import { useTheme } from 'utils/hooks'
+import { toPascalCase } from 'utils/travelPay'
 
 type TravelPayClaimStatusDefinitionProps = {
   /** The current claim status */
@@ -18,15 +19,6 @@ type TravelPayClaimStatusDefinitionProps = {
 function TravelPayClaimStatusDefinition({ claimStatus }: TravelPayClaimStatusDefinitionProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-
-  // Convert status to match the key format in TravelPayClaimStatuses
-  // e.g., "In manual review" -> "InManualReview", "Denied" -> "Denied"
-  const toPascalCase = (str: string) => {
-    return str
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join('')
-  }
 
   // Handle null, undefined, or empty status
   if (!claimStatus || typeof claimStatus !== 'string') {

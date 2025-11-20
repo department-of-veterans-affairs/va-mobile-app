@@ -287,7 +287,7 @@ describe('Travel Pay Claim Details Screen', () => {
 
   describe('Document Downloads', () => {
     it('should show decision letter download for denied/partial payments claims', async () => {
-      await waitFor(element(by.text('Download decision letter'))).toExist()
+      await waitFor(element(by.text('Review your decision letter'))).toExist()
     })
 
     it('should show documents submitted section', async () => {
@@ -313,7 +313,7 @@ describe('Travel Pay Claim Details Screen', () => {
   describe('Back Navigation', () => {
     it('should navigate back to claims list when back button is tapped', async () => {
       // Tap back button
-      await element(by.text('Travel')).tap()
+      await element(by.text('Travel claims')).tap()
 
       // Should be back on claims list
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
@@ -328,7 +328,7 @@ describe('Travel Pay Claim Details Screen', () => {
         .toExist()
         .withTimeout(2000)
 
-      await waitFor(element(by.text('Download decision letter'))).not.toExist()
+      await waitFor(element(by.text('Review your decision letter'))).not.toExist()
 
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_TEST_ID))).not.toExist()
     })

@@ -88,7 +88,5 @@ export const getTravelPayClaims = (store: DemoStore, params: Params): GetTravelP
 }
 
 export const getTravelPayClaimDetails = (store: DemoStore): GetTravelPayClaimDetailsResponse | undefined => {
-  const result = store['/v0/travel-pay/claims/:id']
-  console.log('DEBUG getTravelPayClaimDetails:', result ? 'Found data' : 'No data found', result)
-  return result
+  return store['/v0/travel-pay/claims/:id']
 }

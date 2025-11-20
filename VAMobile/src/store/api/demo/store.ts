@@ -227,10 +227,8 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
 
   // Handle dynamic travel pay claims details endpoint
   if (endpoint.startsWith('/v0/travel-pay/claims/')) {
-    console.log('DEBUG: Matched dynamic travel pay endpoint:', endpoint)
     // Check if it's a specific claim ID that has its own endpoint
     if (store[endpoint as keyof DemoStore]) {
-      console.log('DEBUG: Found specific endpoint for:', endpoint)
       return store[endpoint as keyof DemoStore] as DemoApiReturns
     }
     // Fall back to generic claim details

@@ -99,7 +99,7 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(6000) // Increased timeout for CI/CD
 
     // Navigate back using the back button
-    await element(by.text('Travel')).tap()
+    await element(by.text('Travel claims')).tap()
 
     // Verify we're back on the claims list screen
     await waitFor(element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)))

@@ -183,6 +183,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
                               theme,
                               t,
                               t('travelPay.claimDetails.document.decisionLetter'),
+                              true, // isDecisionLetter - bold font + icon
                             ),
                           )}
                         />
