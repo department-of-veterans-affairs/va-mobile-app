@@ -1,5 +1,3 @@
-import { Alert } from 'react-native'
-
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import remoteConfig from '@react-native-firebase/remote-config'
 
@@ -11,8 +9,7 @@ const { IS_TEST } = getEnv()
 
 const fetchRemote = !__DEV__ && !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
-// const RC_CACHE_TIME = 1800 // 30 min
-const RC_CACHE_TIME = 50 // 50 seconds
+const RC_CACHE_TIME = 1740 // 29 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 export let overrideRemote = false
 

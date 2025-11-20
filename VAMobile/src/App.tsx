@@ -83,7 +83,7 @@ import { isIOS } from 'utils/platform'
 import { fetchAndActivate } from 'utils/remoteConfig'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
-const REMOTE_CONFIG_REFRESH = 1 // minutes
+const REMOTE_CONFIG_REFRESH = 30 // minutes
 
 enableScreens(true)
 injectStore(store)
@@ -250,10 +250,7 @@ export function AuthGuard() {
 
   // Refetch remote config
   useEffect(() => {
-    console.log('Starting remote config timer')
-
     const refetchTimeout = setTimeout(async () => {
-      console.log('Timer reached')
       await fetchAndActivate()
       setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
     }, REMOTE_CONFIG_REFRESH * 60000)
@@ -273,11 +270,8 @@ export function AuthGuard() {
   }, [remoteConfigUpdateTime])
 
   useOnResumeForeground(() => {
-    console.log('resume from foreground')
     const now = DateTime.now()
-    console.log('timer: ' + remoteConfigUpdateTime + ' now: ' + now)
     if (now > remoteConfigUpdateTime) {
-      console.log('calling refetch from resume')
       clearTimeout(remoteConfigTimeoutId)
       fetchAndActivate()
       setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
