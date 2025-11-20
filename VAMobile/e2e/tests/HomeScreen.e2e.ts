@@ -24,7 +24,7 @@ export const HomeE2eIdConstants = {
   PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '5 eligible for travel reimbursement',
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
-  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
+  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '55 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
