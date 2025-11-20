@@ -26,7 +26,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { data: copaysData, isFetching: loadingCopays, error: copaysError } = useMedicalCopays()
+  const { data: copaysData, isFetching: loadingCopays, error: copaysError, httpStatus } = useMedicalCopays()
 
   const copays = useMemo(() => copaysData?.data ?? [], [copaysData])
   const isEmpty = copays.length === 0
@@ -115,7 +115,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       {loadingCopays ? (
         <LoadingComponent text={t('copays.loading')} />
       ) : copaysError ? (
-        <CopayErrorStates copaysError={copaysError} />
+        <CopayErrorStates httpStatus={httpStatus} />
       ) : isEmpty ? (
         <EmptyStateMessage title={t('copays.none.header')} body={t('copays.none.message')} phone={t('8664001238')} />
       ) : (

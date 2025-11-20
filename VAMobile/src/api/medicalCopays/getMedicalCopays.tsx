@@ -5,9 +5,13 @@ import { useQuery } from '@tanstack/react-query'
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
 import { MedicalCopaysPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
-import { APIError, get } from 'store/api'
+import { get } from 'store/api'
 
 type CopaySummary = { amountDue: number; count: number }
+
+type RuntimeError = {
+  status?: number
+}
 
 /**
  * Compute the copay summary from the payload
@@ -24,11 +28,11 @@ const summarize = (payload?: MedicalCopaysPayload): CopaySummary => {
  */
 export const getMedicalCopays = async (): Promise<MedicalCopaysPayload | undefined> => {
   const res = await get<MedicalCopaysPayload>(`/v0/medical_copays`)
-  if (res) return res
+  return res
 }
 
 export const useMedicalCopays = (options?: { enabled?: boolean }) => {
-  const query = useQuery<MedicalCopaysPayload | undefined, APIError>({
+  const query = useQuery<MedicalCopaysPayload | undefined>({
     ...options,
     queryKey: medicalCopayKeys.medicalCopays,
     queryFn: getMedicalCopays,
@@ -39,5 +43,11 @@ export const useMedicalCopays = (options?: { enabled?: boolean }) => {
   })
 
   const summary = useMemo(() => summarize(query.data), [query.data])
-  return { ...query, summary }
+
+  // Extract HTTP status code from response data (success) or error (failure)
+  const errorStatus = (query.error as RuntimeError | null)?.status
+  const httpStatus = query.data?.status ?? errorStatus
+  console.log('httpStatus', httpStatus)
+
+  return { ...query, summary, httpStatus }
 }
