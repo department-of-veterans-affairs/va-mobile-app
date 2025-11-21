@@ -1,4 +1,5 @@
 import { TravelPayClaimSummary } from 'api/types/TravelPayClaimData'
+import { SummaryObject } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentAfterVisitSummary'
 
 export const AppointmentTimeZoneConstants: {
   PacificHonolulu: AppointmentTimeZone
@@ -188,6 +189,8 @@ export type AppointmentAttributes = {
   travelPayClaim?: AppointmentTravelPayClaim
   showScheduleLink?: boolean
   isCerner?: boolean
+  avsPdf?: Array<SummaryObject>
+  avsError?: string
 }
 
 export type AppointmentData = {

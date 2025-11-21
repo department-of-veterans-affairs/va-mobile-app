@@ -28,3 +28,16 @@ export const TimeFrameTypeConstants: { [key: string]: TimeFrameType } = {
 }
 
 export const DEFAULT_UPCOMING_DAYS_LIMIT = 30
+
+/*
+ Matching value MUST be found in `appointments.afterVisitSummary.review.${value}` in common.json
+ e.g., `appointments.afterVisitSummary.review.afterVisitSummary`
+*/
+
+// Oracle Health appointment summary types to include as after visit summaries
+export const AfterVisitSummaryToIncludeOH: Record<string, string> = {
+  ambulatory_patient_summary: 'afterVisitSummary',
+}
+
+// VistA does not have PDFs for after visit summaries yet
+export const AfterVisitSummaryToIncludeVistA: Record<string, string> = {} // will likely have a type that matches to afterVisitSummary in the future

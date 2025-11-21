@@ -220,7 +220,7 @@ function AppointmentLocation({ attributes, subType, type }: AppointmentLocationP
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const heading = locationHeading(subType, type, t)
-
+  console.log('heading', heading)
   if (heading) {
     return (
       <Box>

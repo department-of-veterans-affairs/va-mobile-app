@@ -1,5 +1,8 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
+import { fireEvent } from 'testUtils'
+import { todaysDate } from 'utils/dateUtils'
+
 import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
 
 export const AppointmentsExpandede2eConstants = {
@@ -446,6 +449,17 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
     }
   }
   await element(by.text(text)).tap()
+}
+
+export const checkOHAVS = async () => {
+  await element(by.text('Health')).atIndex(0).tap()
+  await openAppointments()
+  await waitFor(element(by.text('Upcoming')))
+    .toExist()
+    .withTimeout(10000)
+  await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
+  await element(by.text('Past')).tap()
+  await element(by.id('datePickerFromFieldTestId')).tap()
 }
 
 export async function apppointmentVerification(pastAppointment = false) {
@@ -1174,6 +1188,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 }
 
 beforeAll(async () => {
+  // await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await loginToDemoMode()
@@ -1187,4 +1202,10 @@ beforeAll(async () => {
 describe(':ios: Appointments Screen Expansion', () => {
   apppointmentVerification()
   apppointmentVerification(true)
+
+  it('should check avs pdf', async () => {
+    await checkOHAVS()
+    await device.takeScreenshot('xyz')
+    expect(element(by.id('datePickerFromFieldTestId'))).toBeVisible()
+  })
 })
