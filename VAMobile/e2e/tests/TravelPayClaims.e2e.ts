@@ -26,7 +26,7 @@ const TravePayClaimsE2eIds = {
 }
 
 beforeAll(async () => {
-  // await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
@@ -74,8 +74,6 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(4000)
 
     await expect(element(by.text('11 to 20 of 32'))).toExist()
-    // await expect(element(by.id(TRAVEL_PAY_CLAIM_1_ID))).not.toExist()
-    // await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).toExist()
     await expect(element(by.id(MOST_RECENT_CLAIM_1_ID))).not.toExist()
     await expect(element(by.id(MOST_RECENT_CLAIM_11_ID))).toExist()
 

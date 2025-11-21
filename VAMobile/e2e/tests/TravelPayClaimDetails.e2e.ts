@@ -28,7 +28,7 @@ const TravelPayClaimDetailsE2eIds = {
   // Claim IDs from mock data
   CLAIM_1_IN_MANUAL_REVIEW_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
   CLAIM_2_DENIED_ID: 'claim_summary_7519378a-e9ef-4a84-8673-591776c8f06b', // Denied claim
-  CLAIM_3_PARTIAL_ID: 'claim_summary_a3e6fb0d-5d30-48d7-9b4b-129b44d46088', // Partial payment
+  CLAIM_3_PARTIAL_ID: 'claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757', // Partial payment
 }
 
 beforeAll(async () => {
@@ -51,10 +51,10 @@ const ensureOnClaimsList = async () => {
   } catch {
     // Not on claims list, try to navigate back
     try {
-      await waitFor(element(by.text('Travel')))
+      await waitFor(element(by.text('Travel claims')))
         .toExist()
         .withTimeout(2000)
-      await element(by.text('Travel')).tap()
+      await element(by.text('Travel claims')).atIndex(0).tap()
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
         .toExist()
         .withTimeout(3000)
@@ -65,10 +65,10 @@ const ensureOnClaimsList = async () => {
           .toExist()
           .withTimeout(3000)
         await element(by.text('Health')).tap()
-        await waitFor(element(by.text('Travel')))
+        await waitFor(element(by.text('Travel claims')))
           .toExist()
           .withTimeout(3000)
-        await element(by.text('Travel')).tap()
+        await element(by.text('Travel claims')).atIndex(0).tap()
         await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
           .toExist()
           .withTimeout(3000)
@@ -126,7 +126,7 @@ const safeTap = async (elementId: string, scrollToFind = false) => {
     if (elementId === TravelPayClaimDetailsE2eIds.CLAIM_3_PARTIAL_ID) {
       // Scroll to bottom first to ensure we can find the partial payment claim
       try {
-        await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('bottom')
+        await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)).scroll(300, 'down')
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
         // Try to find it now
@@ -312,7 +312,6 @@ describe('Travel Pay Claim Details Screen', () => {
 
   describe('Back Navigation', () => {
     it('should navigate back to claims list when back button is tapped', async () => {
-      // Tap back button
       await element(by.text('Travel claims')).tap()
 
       // Should be back on claims list

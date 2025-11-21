@@ -28,7 +28,7 @@
           "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
           "claimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
           "claimStatus": "Denied",
-          "appointmentDateTime": "{{now - 4 days}}",
+          "appointmentDateTime": "{{now - 2 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 1 day}}",
@@ -373,7 +373,7 @@
           "id": "7eef3e51-ef2d-4913-92e5-02e9981563e2",
           "claimNumber": "25659591-36bf-4b1c-8faa-19e3855173eb",
           "claimStatus": "Closed",
-          "appointmentDateTime": "{{now - 3 days}}",
+          "appointmentDateTime": "{{now - 4 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 30 minutes}}",
           "modifiedOn": "{{now - 30 minutes}}",
@@ -478,7 +478,7 @@
           "id": "63bd7bc9-5ac4-41af-9f2d-4c1a7ce33b1d",
           "claimNumber": "d962acf5-c1df-47be-a2a9-9958b693d9b2",
           "claimStatus": "Closed",
-          "appointmentDateTime": "{{now - 3 days}}",
+          "appointmentDateTime": "{{now - 4 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 45 minutes}}",
           "modifiedOn": "{{now - 45 minutes}}",
@@ -689,7 +689,7 @@
       }
     }
   },
-  "/v0/travel-pay/claims/a3e6fb0d-5d30-48d7-9b4b-129b44d46088": {
+  "/v0/travel-pay/claims/352b37f2-3566-4642-98b2-6a2bc0e63757": {
     "data": {
       "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
       "type": "travelPayClaimDetails",
@@ -701,7 +701,7 @@
         "claimantMiddleName": "Michelle",
         "claimantLastName": "Doe",
         "claimStatus": "Claim paid",
-        "appointmentDate": "{{now - 3 days}}",
+        "appointmentDate": "{{now - 2 days}}",
         "facilityName": "Tomah VA Medical Center",
         "totalCostRequested": 250.0,
         "reimbursementAmount": 180.0,
