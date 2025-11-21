@@ -176,7 +176,7 @@ function MainApp() {
     // Save the current route name for later comparison
     routeNameRef.current = currentRouteName || ''
   }
-
+  // Comment to trigger e2e tests
   return (
     <>
       <QueryClientProvider client={queryClient}>
