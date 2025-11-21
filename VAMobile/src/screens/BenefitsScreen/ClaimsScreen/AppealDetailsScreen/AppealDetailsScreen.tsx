@@ -89,6 +89,7 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
     return event?.date || ''
   }
 
+  // Formats dates to correct type
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
   const formattedUpdatedTime = getFormattedTimeForTimeZone(updated || '')
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
