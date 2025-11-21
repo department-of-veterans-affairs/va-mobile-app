@@ -19,7 +19,7 @@ export const AppealsIdConstants = {
   APPEAL_SUBMITTED_TEXT: 'Received June 12, 2008',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
   VA_GOV: 'va.gov',
-  WEBVIEW_BACK_BUTTON_ID: 'webviewBack'
+  WEBVIEW_BACK_BUTTON_ID: 'webviewBack',
 }
 
 beforeAll(async () => {
