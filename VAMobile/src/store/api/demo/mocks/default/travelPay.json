@@ -42,13 +42,13 @@
         "attributes": {
           "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
           "claimNumber": "93b5fff2-a71d-4b97-9e98-3298ae0564db",
-          "claimStatus": "Saved",
+          "claimStatus": "Claim paid",
           "appointmentDateTime": "{{now - 3 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 25.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 180.0
         }
       },
       {
@@ -87,9 +87,9 @@
         "attributes": {
           "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
           "claimNumber": "96b54742-b5e4-46a3-b37a-a3c47453d875",
-          "claimStatus": "Claim paid",
-          "appointmentDateTime": "{{now - 6 days}}",
-          "facilityName": "Tomah VA Medical Center",
+          "claimStatus": "Appealed",
+          "appointmentDateTime": "{{now - 150 hours}}",
+          "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 5 days}}",
           "modifiedOn": "{{now - 5 days}}",
           "totalCostRequested": 250.0,
@@ -328,7 +328,7 @@
           "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
           "claimNumber": "eeef2e5a-1990-45f0-a469-43096739289c",
           "claimStatus": "Claim submitted",
-          "appointmentDateTime": "{{now - 6 days}}",
+          "appointmentDateTime": "{{now - 7 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 3 days}}",
           "modifiedOn": "{{now - 2 days}}",
@@ -463,7 +463,7 @@
           "id": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd",
           "claimNumber": "ec8b6f84-7a29-4e30-9800-d6ff2dd6cc7e",
           "claimStatus": "In manual review",
-          "appointmentDateTime": "{{now - 2 days}}",
+          "appointmentDateTime": "{{now - 1 day}}",
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
@@ -691,17 +691,17 @@
   },
   "/v0/travel-pay/claims/a3e6fb0d-5d30-48d7-9b4b-129b44d46088": {
     "data": {
-      "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
+      "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
       "type": "travelPayClaimDetails",
       "attributes": {
-        "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
-        "claimNumber": "96b54742-b5e4-46a3-b37a-a3c47453d875",
+        "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
+        "claimNumber": "93b5fff2-a71d-4b97-9e98-3298ae0564db",
         "claimName": "Travel reimbursement",
         "claimantFirstName": "Samantha",
         "claimantMiddleName": "Michelle",
         "claimantLastName": "Doe",
         "claimStatus": "Claim paid",
-        "appointmentDate": "{{now - 4 days}}",
+        "appointmentDate": "{{now - 3 days}}",
         "facilityName": "Tomah VA Medical Center",
         "totalCostRequested": 250.0,
         "reimbursementAmount": 180.0,
@@ -710,7 +710,7 @@
         "appointment": {
           "id": "7519378a-appointment-id",
           "appointmentSource": "VAOS",
-          "appointmentDateTime": "{{now - 4 days}}",
+          "appointmentDateTime": "{{now - 3 days}}",
           "appointmentName": "Mental Health Appointment",
           "appointmentType": "Mental Health",
           "facilityId": "618",

@@ -160,7 +160,7 @@ export function HealthScreen({}: HealthScreenProps) {
         />
         {featureEnabled('travelPayStatusList') && (
           <LargeNavButton
-            title={t('travelPay.title')}
+            title={t('travelPay.claims.title')}
             onPress={() => navigateTo('TravelPayClaims')}
             testID="toTravelPayClaimsID"
           />

@@ -1,17 +1,37 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
+import { sortBy } from 'underscore'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimDocument, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimData, TravelPayClaimDocument, TravelPayClaimSummary } from 'api/types'
 import { DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { Events } from 'constants/analytics'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getA11yLabelText } from 'utils/common'
 import { RouteNavigationFunction } from 'utils/hooks'
+
+export const FILTER_KEY_ALL = 'all'
+
+export type SortOptionType = 'recent' | 'oldest'
+
+export const SortOption: {
+  Recent: SortOptionType
+  Oldest: SortOptionType
+} = {
+  Recent: 'recent',
+  Oldest: 'oldest',
+}
+
+export type CheckboxOption = {
+  optionLabelKey: string
+  value: string
+}
 
 /**
  * Strips the timezone offset from a datetime string
@@ -220,4 +240,97 @@ export function toPascalCase(str: string): string {
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join('')
+}
+
+/** Filters the claims based on the provided filter options
+ * @param claims - The list of claims
+ * @param filter - The filter options to apply
+ * @returns The filtered claims
+ */
+export const filteredClaims = (claims: Array<TravelPayClaimData>, filter: Set<string>) =>
+  filter.size === 0 ? claims : claims.filter((claim) => filter.has(claim.attributes.claimStatus))
+
+/**
+ * Sorts the claims based on the provided sort option
+ * @param claims - The list of claims
+ * @param sortBy - The sort option to apply
+ * @returns The list of claims sorted according to the sort option
+ */
+export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: SortOptionType) =>
+  sortBy(claims, (claim) => {
+    const dateTime = new Date(claim.attributes.appointmentDateTime).getTime()
+    switch (sortOption) {
+      case SortOption.Recent:
+        return -dateTime
+      case SortOption.Oldest:
+        return dateTime
+      default:
+        return 0
+    }
+  })
+
+/**
+ * Hook to manage toggling a set of filters and tracking the state of which ones are active
+ *
+ * @param options - Set of all available filter options
+ * @param initialFilter - Set of initially selected filter options
+ * @returns A tuple containing:
+ *   - `selectedFilter` - Set of currently selected filter keys
+ *   - `setSelectedFilter` - Setter to update the selected filters
+ *   - `toggleFilter` - Toggles a specific filter on/off. When toggling FILTER_KEY_ALL,
+ *     it will select everything if none/some are selected, or deselect everything if all are selected
+ */
+export const useFilterToggle = (
+  options: Set<string>,
+  initialFilter: Set<string>,
+): [Set<string>, Dispatch<SetStateAction<Set<string>>>, (filterKey: string) => void] => {
+  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(initialFilter)
+
+  const toggleFilter = (filterKey: string) => {
+    setSelectedFilter((prevFilter) => {
+      // Select or deselect everything when pressing "All"
+      if (filterKey === FILTER_KEY_ALL) {
+        return prevFilter.size === options.size ? new Set() : new Set([...options])
+      }
+
+      // Toggle the filter
+      return prevFilter.has(filterKey)
+        ? new Set([...prevFilter].filter((key) => key !== filterKey))
+        : new Set([...prevFilter, filterKey])
+    })
+  }
+
+  return [selectedFilter, setSelectedFilter, toggleFilter]
+}
+
+/**
+ * Determine if a checkbox is checked based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the value is selected, false otherwise
+ */
+export const isChecked = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size === allOptions.size
+  }
+
+  return selectedValues.has(value)
+}
+
+/**
+ * Determine if a checkbox is in an indeterminate state based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the checkbox is indeterminate, false otherwise
+ */
+export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size > 0 && selectedValues.size < allOptions.size
+  }
+
+  return false
 }
