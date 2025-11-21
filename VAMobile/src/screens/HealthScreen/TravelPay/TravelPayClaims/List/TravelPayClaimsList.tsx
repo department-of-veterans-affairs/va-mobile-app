@@ -1,86 +1,48 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { TFunction } from 'i18next'
-import { DateTime } from 'luxon'
-
 import { TravelPayClaimData } from 'api/types'
 import {
   Box,
   DefaultList,
   DefaultListItemObj,
-  LoadingComponent,
+  LabelTagTypeConstants,
   Pagination,
   PaginationProps,
   TextLine,
-  TextView,
-  VAModalPicker,
 } from 'components'
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameType } from 'constants/timeframes'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getPickerOptions } from 'utils/dateUtils'
 import getEnv from 'utils/env'
-import { getFormattedDateOrTimeWithFormatOption, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
-const getResultsText = (t: TFunction, numResults: number, pageStart: number, pageEnd: number) => {
-  if (numResults === 0) {
-    return t('travelPay.statusList.emptyResults', { numResults })
-  }
-  return t('travelPay.statusList.resultsText', { numResults, pageStart, pageEnd })
-}
-
 type TravelPayClaimsListProps = {
   claims: Array<TravelPayClaimData>
-  isLoading: boolean
-  setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
+  currentPage: number
   onNext?: (page: number) => void
   onPrev?: (page: number) => void
-  totalRecordCount: number
 }
 
-function TravelPayClaimsList({
-  claims,
-  isLoading,
-  setTimeFrame,
-  totalRecordCount,
-  onNext,
-  onPrev,
-}: TravelPayClaimsListProps) {
+function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayClaimsListProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const pickerOptions = getPickerOptions(t, {
-    dateRangeA11yLabelTKey: 'travelPay.statusList.dateRangeA11yLabel',
-    allOfTKey: 'travelPay.statusList.allOf',
-    pastThreeMonthsTKey: 'travelPay.statusList.dateRange.pastThreeMonths',
-  }).map((option) => ({
-    ...option,
-    testID: option.a11yLabel, // testID is used as both test id and accessibility label
-  }))
-
-  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
 
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
-  const [page, setPage] = useState(1)
 
-  const { perPage, totalEntries } = {
-    perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: totalRecordCount,
-  }
-  const pageStart = (page - 1) * DEFAULT_PAGE_SIZE + 1
-  const pageEnd = Math.min(page * DEFAULT_PAGE_SIZE, totalEntries)
+  const perPage = DEFAULT_PAGE_SIZE
+  const totalEntries = claims.length
 
   useEffect(() => {
-    const summaryList = claims?.slice((page - 1) * perPage, page * perPage)
+    const summaryList = claims?.slice((currentPage - 1) * perPage, currentPage * perPage)
     setClaimsToShow(summaryList || [])
-  }, [claims, page, perPage])
+  }, [claims, currentPage, perPage])
 
   const goToClaimDetails = (claimId: string) => {
     logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
@@ -101,9 +63,7 @@ function TravelPayClaimsList({
 
       const textLines: Array<TextLine> = []
 
-      const dateString = getFormattedDateOrTimeWithFormatOption(appointmentDateTime, DateTime.DATE_FULL, undefined, {
-        weekday: 'long',
-      })
+      const dateString = formatDateMMMMDDYYYY(appointmentDateTime)
 
       const timeString = getFormattedTimeForTimeZone(appointmentDateTime)
       textLines.push({
@@ -115,7 +75,13 @@ function TravelPayClaimsList({
         variant: 'MobileBodyBold',
       })
 
-      textLines.push({ text: t('travelPay.statusList.claimStatus', { status: claimStatus }) })
+      const margin = theme.dimensions.condensedMarginBetween
+      textLines.push({
+        text: t('travelPay.statusList.claimStatus', { status: claimStatus }),
+        textTag: { labelType: LabelTagTypeConstants.tagBlue },
+        mt: margin,
+        mb: margin,
+      })
 
       const a11yValue = t('listPosition', { position: index + 1, total: totalEntries })
 
@@ -136,58 +102,31 @@ function TravelPayClaimsList({
     return listItems
   }
 
-  if (isLoading) {
-    return <LoadingComponent text={t('travelPay.statusList.loading')} />
-  }
-
   const paginationProps: PaginationProps = {
     onNext: () => {
-      const nextPage = page + 1
+      const nextPage = currentPage + 1
       onNext?.(nextPage)
-      setPage(nextPage)
     },
     onPrev: () => {
-      const prevPage = page - 1
+      const prevPage = currentPage - 1
       onPrev?.(prevPage)
-      setPage(prevPage)
     },
-    totalEntries: totalEntries,
+    totalEntries,
     pageSize: perPage,
-    page,
+    page: currentPage,
   }
 
   return (
-    <>
-      <Box mx={theme.dimensions.gutter} testID="travelPayClaimsListTestId">
-        <VAModalPicker
-          selectedValue={datePickerOption.value}
-          onSelectionChange={(value) => {
-            const found = pickerOptions.find((option) => option.value === value)
-            if (found) {
-              setDatePickerOption(found)
-              setTimeFrame(found.value)
-              setPage(1)
-            }
-          }}
-          pickerOptions={pickerOptions}
-          labelKey={'travelPay.statusList.selectADateRange'}
-          testID="getDateRangeTestID"
-        />
-      </Box>
-      <Box mx={theme.dimensions.gutter}>
-        <TextView my={theme.dimensions.lineItemSpacing} variant="MobileBodyBold">
-          {getResultsText(t, totalEntries, pageStart, pageEnd)}
-        </TextView>
-      </Box>
+    <Box testID="travelPayClaimsListTestId">
       <DefaultList items={getListItemVals()} />
       <Box
         flex={1}
         mt={theme.dimensions.paginationTopPadding}
         mb={theme.dimensions.contentMarginBottom}
         mx={theme.dimensions.gutter}>
-        {!isLoading && <Pagination {...paginationProps} />}
+        <Pagination {...paginationProps} />
       </Box>
-    </>
+    </Box>
   )
 }
 

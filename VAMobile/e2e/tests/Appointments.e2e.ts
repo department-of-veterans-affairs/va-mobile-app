@@ -1,7 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 const todaysDate = DateTime.local()
 const dateFieldFormat = 'MMMM dd, yyyy'
