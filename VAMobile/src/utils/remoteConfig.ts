@@ -19,6 +19,7 @@ export type FeatureToggleType =
   | 'cernerTrueForDemo'
   | 'COEAvailable'
   | 'appointmentsTestTime'
+  | 'datePickerUpdate'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'hsScrollAnalytics'
@@ -46,6 +47,7 @@ type FeatureToggleValues = {
   appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
+  datePickerUpdate: boolean
   COEAvailable: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
@@ -75,6 +77,7 @@ export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
+  datePickerUpdate: true,
   COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,

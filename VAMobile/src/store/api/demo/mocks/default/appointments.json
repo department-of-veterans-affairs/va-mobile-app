@@ -3963,7 +3963,6 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "Mock Cerner appointment - New Issue",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": [
@@ -4017,8 +4016,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 48 days}}",
-            "startDateUtc": "{{now + 48 days utc}}",
+            "startDateLocal": "{{now + 49 days}}",
+            "startDateUtc": "{{now + 49 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4028,15 +4027,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "AM"
               }
             ],

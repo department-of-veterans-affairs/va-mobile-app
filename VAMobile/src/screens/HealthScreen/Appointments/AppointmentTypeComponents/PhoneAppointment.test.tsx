@@ -808,4 +808,26 @@ context('PhoneAppointment', () => {
       expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
     })
   })
+
+  describe('PhoneAppointment cerner appointments without reason and comment details', () => {
+    it('does not render details section', () => {
+      const attributes: AppointmentAttributes = {
+        ...defaultAppointmentAttributes,
+        isCerner: true,
+      }
+      initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
+
+      expect(screen.queryByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeFalsy()
+      expect(
+        screen.queryByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeFalsy()
+      expect(
+        screen.queryByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
+        ),
+      ).toBeFalsy()
+    })
+  })
 })

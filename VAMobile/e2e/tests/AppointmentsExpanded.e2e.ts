@@ -585,12 +585,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await openAppointments()
     if (pastAppointment) {
       await element(by.text('Past')).tap()
-      if (device.getPlatform() === 'android') {
-        await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(1).tap()
-      } else {
-        await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
-      }
-      await element(by.text('Done')).tap()
     }
     await scrollToThenTap('Sami Alsahhar - Onsite - Pending', pastAppointmentString)
     await expect(element(by.text('How you prefer to attend'))).toExist()
