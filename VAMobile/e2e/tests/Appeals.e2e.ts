@@ -94,18 +94,23 @@ describe('Appeals', () => {
   })
 
   it('should tap on the links in the need help section', async () => {
-    await device.disableSynchronization()
     if (device.getPlatform() === 'android') {
+      await device.disableSynchronization()
       await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
       await setTimeout(5000)
       await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
-      await device.launchApp({ newInstance: false })
+      await device.enableSynchronization()
     }
 
+    await device.launchApp({ newInstance: false })
+    await device.disableSynchronization()
+    await waitFor(element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID))
+      .scroll(300, 'down')
     await element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)).tap()
-    await device.enableSynchronization()
-
     await setTimeout(2000)
     await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
+    await device.enableSynchronization()
   })
 })
