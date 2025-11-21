@@ -65,6 +65,9 @@ export type SecureMessagingMessageData = {
   type: string
   id: number
   attributes: SecureMessagingMessageAttributes
+  meta: {
+    userInTriageTeam: boolean
+  }
 }
 
 export type SecureMessagingSaveDraftData = {

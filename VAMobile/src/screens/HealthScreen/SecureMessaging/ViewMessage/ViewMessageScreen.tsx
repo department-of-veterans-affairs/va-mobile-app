@@ -410,7 +410,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               />
             </Box>
           )}
-          <MessageCard message={message} folderId={currentFolderIdParam} />
+          <MessageCard
+            message={message}
+            folderId={currentFolderIdParam}
+            userInTriageTeam={messageData?.data?.meta?.userInTriageTeam}
+          />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <Box accessible={true} accessibilityRole={'header'}>
