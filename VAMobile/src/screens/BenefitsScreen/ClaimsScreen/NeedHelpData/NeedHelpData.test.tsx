@@ -49,7 +49,6 @@ context('NeedHelpData', () => {
       initializeTestInstance('A1113')
       fireEvent.press(screen.getByRole('link', { name: t('goToVAGov') }))
       const expectNavArgs = {
-        backButtonTestID: 'webviewBack',
         url: 'https://va.gov/track-claims/appeals/' + 'A1113',
         displayTitle: t('webview.vagov'),
         loadingMessage: t('webview.claims.loading'),
