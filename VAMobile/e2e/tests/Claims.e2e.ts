@@ -14,8 +14,10 @@ import {
 export const ClaimsE2eIdConstants = {
   CLAIM_1_ID:
     'Claim for compensation Received December 05, 2021 Step 1 of 5: Claim received Moved to this step on December 05, 2021',
-  CLAIM_2_ID: 'Claim for compensation Received December 04, 2021 Step 5 of 5: Complete Moved to this step on December 04, 2021',
-  CLAIM_3_ID: 'Claim for compensation Received July 20, 2021 Step 2 of 5: Initial review Moved to this step on July 20, 2021',
+  CLAIM_2_ID:
+    'Claim for compensation Received December 04, 2021 Step 5 of 5: Complete Moved to this step on December 04, 2021',
+  CLAIM_3_ID:
+    'Claim for compensation Received July 20, 2021 Step 2 of 5: Initial review Moved to this step on July 20, 2021',
   CLAIM_4_ID:
     'Claim for disability compensation More information needed Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
   CLAIM_5_ID:
