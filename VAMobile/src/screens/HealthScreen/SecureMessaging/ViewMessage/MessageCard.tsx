@@ -24,8 +24,6 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
-import { RootState } from 'store'
-import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -38,9 +36,10 @@ export type MessageCardProps = {
   message: SecureMessagingMessageAttributes
   folderId: number
   userInTriageTeam?: boolean
+  replyExpired?: boolean
 }
 
-function MessageCard({ message, folderId, userInTriageTeam }: MessageCardProps) {
+function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
   console.log('MessageCard userInTriageTeam:', userInTriageTeam)
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
@@ -55,12 +54,6 @@ function MessageCard({ message, folderId, userInTriageTeam }: MessageCardProps) 
     enabled: false,
   })
   const showReadReceipt = folderId === SecureMessagingSystemFolderIdConstants.SENT && readReceipt === READ
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const replyExpired =
-    demoMode && message.messageId === 2092809
-      ? false
-      : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
-
   const onPressAttachment = (file: SecureMessagingAttachment) => {
     fileToGet.filename = file.filename
     fileToGet.id = file.id
@@ -171,7 +164,7 @@ function MessageCard({ message, folderId, userInTriageTeam }: MessageCardProps) 
     console.log('Second userInTriageTeam:', userInTriageTeam)
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired && !!userInTriageTeam ? (
+        {!replyExpired && userInTriageTeam ? (
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
           <Button

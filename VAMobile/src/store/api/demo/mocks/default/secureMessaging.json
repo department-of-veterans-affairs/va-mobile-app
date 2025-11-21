@@ -434,7 +434,7 @@
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
       },
       "meta": {
-        "userInTriageTeam": false
+        "userInTriageTeam": true
       }
     }
   },
@@ -541,6 +541,9 @@
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
+      },
+      "meta": {
+        "userInTriageTeam": false
       }
     },
     "included": [

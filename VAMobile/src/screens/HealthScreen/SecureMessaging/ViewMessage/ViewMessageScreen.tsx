@@ -167,6 +167,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched, registerReviewEvent])
 
   useEffect(() => {
+    // THIS RE-WRITES MESSAGE AND FOLDER QUERY RESULTS!!!!!!
     if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
       let updateQueries = false
       const newInboxMessages = inboxMessagesData?.data.map((m) => {
@@ -179,6 +180,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             attributes: oldMessageAttributes,
             type: messageData?.data.type,
             id: messageData?.data.id,
+            meta: messageData?.data.meta,
           } as SecureMessagingMessageData
           const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
           queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
@@ -256,7 +258,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   const replyExpired =
-    demoMode && message?.messageId === 2092809
+    demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
       : DateTime.fromISO(message?.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
@@ -414,6 +416,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             message={message}
             folderId={currentFolderIdParam}
             userInTriageTeam={messageData?.data?.meta?.userInTriageTeam}
+            replyExpired={replyExpired}
           />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
