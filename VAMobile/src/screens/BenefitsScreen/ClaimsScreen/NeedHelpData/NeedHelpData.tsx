@@ -42,6 +42,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
                 displayTitle: t('webview.vagov'),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
+                backButtonTestID: `webviewBack`,
               })
             }}
             text={t('goToVAGov')}

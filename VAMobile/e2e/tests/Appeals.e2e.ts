@@ -18,6 +18,8 @@ export const AppealsIdConstants = {
   APPEAL_TYPE_TEXT: 'Appeal for compensation',
   APPEAL_SUBMITTED_TEXT: 'Received June 12, 2008',
   APPEAL_UP_TO_DATE_ID: 'appealsUpToDateTestID',
+  VA_GOV: 'va.gov',
+  WEBVIEW_BACK_BUTTON_ID: 'webviewBack'
 }
 
 beforeAll(async () => {
@@ -93,7 +95,14 @@ describe('Appeals', () => {
     await element(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
   })
 
-  it('should tap on the links in the need help section', async () => {
+  it('should tap on the va.gov link in the need help section', async () => {
+    await expect(element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID))).toExist()
+    await element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)).tap()
+    await expect(element(by.text(AppealsIdConstants.VA_GOV))).toExist()
+    await element(by.id(AppealsIdConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
+  })
+
+  it('should tap on the phone link in the need help section', async () => {
     if (device.getPlatform() === 'android') {
       await device.disableSynchronization()
       await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
@@ -101,16 +110,5 @@ describe('Appeals', () => {
       await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
       await device.enableSynchronization()
     }
-
-    await device.launchApp({ newInstance: false })
-    await device.disableSynchronization()
-    await waitFor(element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID))
-      .scroll(300, 'down')
-    await element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)).tap()
-    await setTimeout(2000)
-    await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
-    await device.enableSynchronization()
   })
 })
