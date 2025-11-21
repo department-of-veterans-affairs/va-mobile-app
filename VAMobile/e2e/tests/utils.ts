@@ -433,9 +433,9 @@ export async function openAppointments() {
 export async function openTravelPayClaims({ useNativeLink = false }) {
   if (useNativeLink) {
     await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID)).tap()
-    return
+  } else {
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
   }
-  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
 }
 
 export async function openPayments() {
