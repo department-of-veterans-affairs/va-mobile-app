@@ -1,12 +1,12 @@
 import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { DateTime } from 'luxon'
 
 import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
-import { MONTHS } from 'utils/dateUtils'
 
 context('LabsAndTestsListScreen', () => {
   afterEach(() => {
@@ -52,21 +52,38 @@ context('LabsAndTestsListScreen', () => {
     expect(mockApiGet).toHaveBeenCalledWith('/v1/health/labs-and-tests', expect.anything())
   })
 
-  it('defaults to current month and year in pickers', async () => {
+  it('defaults to "Past 3 months" in date range picker', async () => {
     initializeTestInstance()
-    const currentTime = new Date()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeYearTestID').children[0]).toEqual(
-      currentTime.getFullYear().toString(),
-    )
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID')).toBeTruthy()
-    expect(screen.getByTestId('labsAndTestDataRangeMonthTestID').children[0]).toEqual(MONTHS[currentTime.getMonth()])
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID')).toBeTruthy()
+    // The first option (index 0) should be "Past 3 months"
+    expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Past 3 months')
   })
 
   it('renders the correct availability timing', async () => {
     initializeTestInstance()
     await waitFor(() =>
       expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
+    )
+  })
+
+  it('calls API with correct date range for "past 3 months"', async () => {
+    const mockApiGet = jest.spyOn(api, 'get').mockImplementation(() => Promise.resolve({ data: defaultLabsAndTests }))
+    const today = DateTime.now().toFormat('yyyy-MM-dd')
+    const threeMonthsAgoStr = DateTime.now().minus({ months: 3 }).toFormat('yyyy-MM-dd')
+
+    initializeTestInstance()
+
+    await waitFor(() => expect(screen.getByText('Surgical Pathology')).toBeTruthy())
+
+    // Verify the API was called with the correct date range parameters
+    expect(mockApiGet).toHaveBeenCalledWith(
+      '/v1/health/labs-and-tests',
+      expect.objectContaining({
+        endDate: today,
+        startDate: threeMonthsAgoStr,
+        page: '1',
+        useCache: 'false',
+      }),
     )
   })
 
