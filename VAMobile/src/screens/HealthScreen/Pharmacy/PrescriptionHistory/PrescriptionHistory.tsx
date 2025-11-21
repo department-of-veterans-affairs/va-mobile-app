@@ -71,6 +71,7 @@ const sortByOptions = [
 type PrescriptionHistoryProps = StackScreenProps<HealthStackParamList, 'PrescriptionHistory'>
 
 function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
+  // Comment to trigger e2e tests
   const prescriptionInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const {
     data: userAuthorizedServices,
