@@ -41,6 +41,8 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
   const [selectedFilter, setSelectedFilter, toggleFilter] = useFilterToggle(uniqueOptions, currentFilter)
   const [selectedSortBy, setSelectedSortBy] = useState(currentSortBy)
 
+  useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
+
   const sortOptions = useMemo(
     (): Array<radioOption<SortOptionType>> => [
       {
@@ -56,8 +58,6 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
     ],
     [t, selectedSortBy],
   )
-
-  useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822

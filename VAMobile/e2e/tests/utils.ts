@@ -121,7 +121,7 @@ export const CommonE2eIdConstants = {
   CLAIMS_LANDING_BUTTON_ID: 'toClaimsLandingID',
   APPEALS_DETAILS_ID: 'appealsDetailsTestID',
   CLOSED_CLAIM_DECISION_LETTER_ID:
-    'Compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
+    'Claim for compensation Decision letter ready Received January 01, 2021 Step 5 of 5: Complete Moved to this step on April 09, 2021',
   LETTERS_LANDING_BUTTON_ID: 'toLettersLandingID',
   DISABILITY_RATING_BUTTON_ID: 'toDisabilityRatingID',
   //payments

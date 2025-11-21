@@ -3,11 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 function NoTravelClaims() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   return (
     <Box
@@ -24,8 +25,8 @@ function NoTravelClaims() {
       </TextView>
       <LinkWithAnalytics
         type="custom"
-        onPress={() => {}} // Go to past appointments list
-        text={t('travelPay.statusList.noClaims.startNewClaim')}
+        onPress={() => navigateTo('Appointments', { tab: 1 })}
+        text={t('travelPay.statusList.noClaims.goToPastAppointments')}
         testID={`goToVAGovTravelClaimStatus`}
       />
     </Box>

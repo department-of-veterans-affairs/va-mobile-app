@@ -45,7 +45,6 @@ export type PaymentsStackParamList = {
   PayDebt: {
     debt: DebtRecord
   }
-  TransactionDetails: undefined // TODO: add param when available
 }
 
 const PaymentsStack = createStackNavigator<PaymentsStackParamList>()

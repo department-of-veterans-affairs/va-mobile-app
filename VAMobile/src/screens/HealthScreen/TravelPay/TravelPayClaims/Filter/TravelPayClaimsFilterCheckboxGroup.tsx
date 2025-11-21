@@ -17,7 +17,6 @@ type TravelPayClaimsFilterCheckboxGroupProps = {
 const getA11yLabel = (option: CheckboxOption): string =>
   option.value === FILTER_KEY_ALL ? 'Select all' : `${option.optionLabelKey}`
 
-/**A common component to display radio button selectors for a list of selectable items*/
 const TravelPayClaimsFilterCheckboxGroup = ({
   options,
   onChange,

@@ -7,6 +7,9 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:vamobileapp.page.link</string>
+		<string>applinks:www.va.gov</string>
+		<string>applinks:staging.va.gov</string>
+		<string>applinks:va.gov</string>
 	</array>
 </dict>
 </plist>
