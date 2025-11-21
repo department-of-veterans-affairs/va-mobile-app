@@ -2,6 +2,8 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
+import { EN_DASH } from 'utils/formattingUtils'
+
 import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 const todaysDate = DateTime.local()
@@ -120,7 +122,9 @@ describe('Appointments Screen', () => {
         fiveMonthsEarlier.monthShort +
           ' ' +
           fiveMonthsEarlier.year +
-          ' - ' +
+          ' ' +
+          EN_DASH +
+          ' ' +
           threeMonthsEarlier.monthShort +
           ' ' +
           threeMonthsEarlier.year,
@@ -136,7 +140,9 @@ describe('Appointments Screen', () => {
         eightMonthsEarlier.monthShort +
           ' ' +
           eightMonthsEarlier.year +
-          ' - ' +
+          ' ' +
+          EN_DASH +
+          ' ' +
           sixMonthsEarlier.monthShort +
           ' ' +
           sixMonthsEarlier.year,
@@ -152,7 +158,9 @@ describe('Appointments Screen', () => {
         elevenMonthsEarlier.monthShort +
           ' ' +
           elevenMonthsEarlier.year +
-          ' - ' +
+          ' ' +
+          EN_DASH +
+          ' ' +
           nineMonthsEarlier.monthShort +
           ' ' +
           nineMonthsEarlier.year,

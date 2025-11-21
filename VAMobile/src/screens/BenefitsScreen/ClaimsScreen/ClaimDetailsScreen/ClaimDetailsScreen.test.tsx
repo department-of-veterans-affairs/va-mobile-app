@@ -84,6 +84,44 @@ context('ClaimDetailsScreen', () => {
     })
   })
 
+  describe('header section', () => {
+    beforeEach(() => {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+        ...claimData,
+      })
+    })
+
+    it('should display the page title', async () => {
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
+    })
+
+    it('should display the claim header', async () => {
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'Claim for disability compensation' })).toBeTruthy(),
+      )
+    })
+
+    it('should display the claim received on date', async () => {
+      await waitFor(() => expect(screen.getByText('Received June 06, 2019')).toBeTruthy())
+    })
+  })
+
+  describe('header section - fallback', () => {
+    it('should display the claim header fallback if no displayTitle is available', async () => {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: '',
+        },
+      })
+
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'Claim for disability compensation' })).toBeTruthy(),
+      )
+    })
+  })
+
   describe('submit evidence ', () => {
     it('submit evidence button should exist', async () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
