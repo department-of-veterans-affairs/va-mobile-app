@@ -119,6 +119,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     <FeatureLandingTemplate
       backLabel={backLabel || t('travelPay.claims.title')}
       backLabelOnPress={navigation.goBack}
+      backLabelTestID="travelClaimDetailBackButtonID"
       title={t('travelPay.claimDetails.title')}
       testID="TravelPayClaimDetailsScreen"
       headerButton={headerButton}>

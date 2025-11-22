@@ -4,12 +4,10 @@ import { CommonE2eIdConstants, loginToDemoMode, openHealth, openTravelPayClaims,
 
 const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
-  TRAVEL_PAY_CLAIM_1_ID: 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178',
-  TRAVEL_PAY_CLAIM_11_ID: 'claim_summary_4b99039f-208f-4c07-90b8-498f8466233e',
   TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID: 'TravelPayClaimDetailsScreen',
   TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID: 'travelPayClaimHeaderTitle',
   MOST_RECENT_CLAIM_1_ID: 'claim_summary_6a5302bb-f6ee-4cf9-89b7-7b2775f056bd',
-  MOST_RECENT_CLAIM_11_ID: 'claim_summary_a3e6fb0d-5d30-48d7-9b4b-129b44d46088',
+  MOST_RECENT_CLAIM_11_ID: 'claim_summary_a54d75aa-82c2-4896-964b-59cbd8f2e7ea',
 
   SHOW_FILTERS_BUTTON_ID: 'travelClaimsFilterModalButtonTestId',
   ALL_RESULTS_TEXT: /All travel claims \(\d+\), sorted by most recent/,
@@ -40,13 +38,7 @@ describe('Travel Pay Claims Screen', () => {
   })
 
   it('shows the list of claims and can change pages', async () => {
-    const {
-      MOST_RECENT_CLAIM_1_ID,
-      MOST_RECENT_CLAIM_11_ID,
-      TRAVEL_PAY_CLAIMS_TEST_ID,
-      TRAVEL_PAY_CLAIM_1_ID,
-      TRAVEL_PAY_CLAIM_11_ID,
-    } = TravePayClaimsE2eIds
+    const { MOST_RECENT_CLAIM_1_ID, MOST_RECENT_CLAIM_11_ID, TRAVEL_PAY_CLAIMS_TEST_ID } = TravePayClaimsE2eIds
 
     // Check first claim
     await expect(element(by.id(MOST_RECENT_CLAIM_1_ID))).toExist()
@@ -85,13 +77,12 @@ describe('Travel Pay Claims Screen', () => {
       .withTimeout(4000)
 
     await expect(element(by.text('1 to 10 of 32'))).toExist()
-    await expect(element(by.id(TRAVEL_PAY_CLAIM_1_ID))).toExist()
-    await expect(element(by.id(TRAVEL_PAY_CLAIM_11_ID))).not.toExist()
+    await expect(element(by.id(MOST_RECENT_CLAIM_1_ID))).toExist()
+    await expect(element(by.id(MOST_RECENT_CLAIM_11_ID))).not.toExist()
   })
 
   it('opens claim details screen', async () => {
     const {
-      TRAVEL_PAY_CLAIM_1_ID,
       TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID,
       TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID,
       MOST_RECENT_CLAIM_1_ID,
@@ -107,7 +98,7 @@ describe('Travel Pay Claims Screen', () => {
       .toBeVisible()
       .withTimeout(4000)
 
-    await element(by.id(TRAVEL_PAY_CLAIM_1_ID)).tap()
+    await element(by.id(MOST_RECENT_CLAIM_1_ID)).tap()
 
     // Wait for the native claim details screen to appear
     await waitFor(element(by.id(TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
