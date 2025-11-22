@@ -315,7 +315,9 @@ describe('Travel Pay Claim Details Screen', () => {
       await element(by.text('Travel claims')).tap()
 
       // Should be back on claims list
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
+      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
+        .toExist()
+        .withTimeout(4000)
     })
   })
 
