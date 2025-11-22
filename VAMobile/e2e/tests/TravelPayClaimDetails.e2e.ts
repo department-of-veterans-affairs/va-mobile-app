@@ -312,10 +312,12 @@ describe('Travel Pay Claim Details Screen', () => {
 
   describe('Back Navigation', () => {
     it('should navigate back to claims list when back button is tapped', async () => {
-      await element(by.text('Travel claims')).tap()
+      await element(by.text('Travel claims')).atIndex(0).tap()
 
       // Should be back on claims list
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
+      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
+        .toExist()
+        .withTimeout(4000)
     })
   })
 

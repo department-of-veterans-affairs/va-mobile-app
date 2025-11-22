@@ -17,8 +17,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 47.5,
+          "reimbursementAmount": 47.5
         }
       },
       {
@@ -467,8 +467,8 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 47.5,
+          "reimbursementAmount": 47.5
         }
       },
       {
