@@ -12,14 +12,40 @@ import { useDowntime } from 'utils/hooks'
 /**
  * Fetch user prescriptions
  */
-const getPrescriptions = ({ useV1 }: { useV1: boolean | undefined }): Promise<PrescriptionsGetData | undefined> => {
+const getPrescriptions = async ({
+  useV1,
+}: {
+  useV1: boolean | undefined
+}): Promise<PrescriptionsGetData | undefined> => {
   const params = {
     'page[number]': '1',
     'page[size]': LARGE_PAGE_SIZE.toString(),
     sort: 'refill_status', // Parameters are snake case for the back end
   }
   const API_VERSION = useV1 ? 'v1' : 'v0'
-  return get<PrescriptionsGetData>(`/${API_VERSION}/health/rx/prescriptions`, params)
+  const response = await get<PrescriptionsGetData>(`/${API_VERSION}/health/rx/prescriptions`, params)
+
+  // Diagnostic logging for v1 API to help identify isRefillable field issues
+  if (__DEV__ && useV1 && response?.data) {
+    console.debug(`[Prescriptions v1] Fetched ${response.data.length} prescriptions`)
+    const refillableCount = response.data.filter((p) => p.attributes.isRefillable === true).length
+    console.debug(`[Prescriptions v1] Refillable count: ${refillableCount}`)
+
+    // Log first prescription structure for debugging
+    if (response.data.length > 0) {
+      const firstPrescription = response.data[0]
+      console.debug('[Prescriptions v1] Sample prescription attributes:', {
+        id: firstPrescription.id,
+        hasIsRefillable: 'isRefillable' in firstPrescription.attributes,
+        isRefillableValue: firstPrescription.attributes.isRefillable,
+        isRefillableType: typeof firstPrescription.attributes.isRefillable,
+        refillStatus: firstPrescription.attributes.refillStatus,
+        refillRemaining: firstPrescription.attributes.refillRemaining,
+      })
+    }
+  }
+
+  return response
 }
 
 /**

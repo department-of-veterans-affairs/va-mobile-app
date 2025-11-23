@@ -71,8 +71,21 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
   const getRefillVAHealthButton = () => {
     if (refillStatus === RefillStatusConstants.TRANSFERRED) {
       return getGoToMyVAHealthButton()
-    } else if (isRefillable) {
+    } else if (isRefillable === true) {
+      // Explicit boolean check to handle undefined/null/string values
       return getRequestRefillButton()
+    }
+
+    // Diagnostic logging for missing refill button
+    if (__DEV__ && isRefillable !== false && refillStatus !== RefillStatusConstants.TRANSFERRED) {
+      console.debug('[PrescriptionDetails] Refill button not shown:', {
+        id: prescription.id,
+        name: prescriptionName,
+        isRefillable,
+        isRefillableType: typeof isRefillable,
+        refillStatus,
+        refillRemaining,
+      })
     }
 
     return <></>

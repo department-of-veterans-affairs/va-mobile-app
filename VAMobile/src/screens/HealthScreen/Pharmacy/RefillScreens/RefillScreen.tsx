@@ -52,7 +52,18 @@ export function RefillScreen({ navigation, route }: RefillScreenProps) {
   } = usePrescriptions({ enabled: screenContentAllowed('WG_RefillScreenModal') })
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const refillablePrescriptions = filter(allPrescriptions, (prescription) => {
-    return prescription.attributes.isRefillable
+    // Explicit boolean check to handle undefined/null/string values
+    // Issue: v1 API (medicationsOracleHealthEnabled) may not return isRefillable correctly
+    const isRefillable = prescription.attributes.isRefillable
+    if (__DEV__ && isRefillable !== true && isRefillable !== false) {
+      console.debug('[RefillScreen] Prescription with unexpected isRefillable value:', {
+        id: prescription.id,
+        name: prescription.attributes.prescriptionName,
+        isRefillable,
+        type: typeof isRefillable,
+      })
+    }
+    return isRefillable === true
   })
 
   const {
