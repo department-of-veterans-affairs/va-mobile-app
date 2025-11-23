@@ -40,5 +40,6 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
       errorName: 'getPrescriptions: Service error',
     },
     staleTime: ACTIVITY_STALE_TIME,
+    gcTime: Infinity,
   })
 }
