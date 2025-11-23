@@ -34,6 +34,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
+  Copays: undefined
   MedicalRecordsList: undefined
   Appointments: {
     tab?: number
