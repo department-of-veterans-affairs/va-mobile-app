@@ -300,9 +300,71 @@ Query Fetched → Fresh (0-300s based on staleTime) → Stale → Inactive → G
 
 The most likely cause of medication data loss is **React Query's default garbage collection behavior**. With `gcTime` defaulting to 5 minutes and no explicit configuration, cached prescription data is removed when queries become inactive for extended periods. When users return to the prescriptions list, the component's local state management pattern doesn't properly handle the missing cache scenario, resulting in an empty list display.
 
+### Root Cause Breakdown
+
+**1. Cache Garbage Collection (Primary Issue)**
+- React Query v5 defaults: `gcTime = 300,000ms` (5 minutes)
+- When all prescription screens are inactive for 5+ minutes, cache is cleared
+- Query state resets, but component local state persists
+- `useEffect` condition `if (prescriptionsFetched && prescriptionData?.data)` fails
+- Empty `allPrescriptions` array never updates
+- Screen shows `PrescriptionHistoryNoPrescriptions` component (line 662-663)
+
+**2. Local State Management Anti-Pattern**
+- Components copy React Query data to local state
+- No logic to handle cache invalidation/loss
+- No automatic refetch when cache is missing
+- State becomes stale and persists across navigation
+
+**3. Inconsistent Enablement Logic**
+- Different `enabled` conditions create race conditions
+- Home Screen: `enabled: isFocused` (dynamic)
+- Other screens: `enabled: screenContentAllowed(waygate)` (configuration-based)
+- If waygate checks fail, queries never enable and fetch
+
+### Affected Screens
+
+All three prescription screens are vulnerable to this issue:
+1. `PrescriptionHistory.tsx` - Main prescription list (lines 87-89, 128-132)
+2. `RefillScreen.tsx` - Refill selection screen (lines 52, 67-71)  
+3. Home Screen indirectly affected (shows activity button)
+
+### Observed Symptom
+
+User sees `PrescriptionHistoryNoPrescriptions` component showing:
+- "We didn't find any VA prescriptions in your records"
+- Informational alert about what medications aren't included
+- Phone number to call for help
+
+This is misleading because user previously HAD prescriptions in their record, but the cache was lost.
+
+### Why This Wasn't Caught Earlier
+
+1. **Testing doesn't simulate long inactive periods** - Tests don't wait 5+ minutes
+2. **Manual testing is typically continuous** - Testers don't background app for extended periods
+3. **Happens during real-world usage patterns** - Users checking morning, then again in evening
+4. **No monitoring for cache state** - No telemetry tracking cache garbage collection
+
 Secondary factors that may contribute:
 - Different `enabled` conditions across screens (focus vs waygate)
 - Local state not resetting when cached data is lost
 - Lack of explicit refetch logic when navigating back to screens
 
-**Primary Recommendation:** Configure an explicit `gcTime` value for prescriptions query (e.g., `gcTime: Infinity` or a much longer duration) to prevent cache garbage collection during typical user sessions.
+### Recommended Solutions
+
+**Primary (Immediate Fix):**
+Configure an explicit `gcTime` value for prescriptions query to prevent premature cache garbage collection:
+```typescript
+// Option 1: Never garbage collect (recommended for critical data)
+gcTime: Infinity
+
+// Option 2: Much longer GC time (e.g., 30 minutes)
+gcTime: 1800000  // 30 minutes
+```
+
+**Secondary (Better Architecture):**
+1. Remove local state management - use React Query state directly
+2. Add explicit refetch logic when screens focus
+3. Add error boundaries to handle missing data gracefully
+4. Unify enablement logic across all prescription screens
+5. Add telemetry to monitor cache state and data fetching patterns
