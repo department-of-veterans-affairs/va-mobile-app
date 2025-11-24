@@ -65,7 +65,6 @@ const MaintenanceWindowOverrideInput = ({
             value={minutesStartsIn}
             onChange={(val) => onChange(text, val, 'minutesStartsIn')}
           />
-          <TextView>{t('overrideMaintenanceWindows.minutes')}</TextView>
         </Box>
         <Box>
           <TextView>{t('overrideMaintenanceWindows.for')}</TextView>
@@ -75,7 +74,6 @@ const MaintenanceWindowOverrideInput = ({
             value={lengthInMinutes}
             onChange={(val) => onChange(text, val, 'lengthInMinutes')}
           />
-          <TextView>{t('overrideMaintenanceWindows.minutes')}</TextView>
         </Box>
       </Box>
     </Box>

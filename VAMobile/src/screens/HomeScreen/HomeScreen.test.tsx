@@ -3,9 +3,9 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 
 import { useDebts } from 'api/debts'
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useMedicalCopays } from 'api/medicalCopays'
 import {
   DisabilityRatingData,
@@ -16,11 +16,12 @@ import {
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { HomeScreen } from 'screens/HomeScreen/HomeScreen'
-import { get } from 'store/api'
-import { AuthState, ErrorsState } from 'store/slices'
+import { DowntimeFeatureType, get } from 'store/api'
+import { AuthState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -37,6 +38,21 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
+const allMaintenanceWindowServices: Array<DowntimeFeatureType> = [
+  'rx_refill',
+  'appointments',
+  'appeals',
+  'claims',
+  'secure_messaging',
+  'payment_history',
+]
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
   }
 })
 
@@ -115,61 +131,11 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
 
 context('HomeScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
-  const initializeTestInstance = (options?: RenderParams) => {
-    const startTime = DateTime.now()
-    const endTime = DateTime.now().plus({ minutes: 1 })
 
-    when(get as jest.Mock)
-      .calledWith('/v0/maintenance_windows')
-      .mockResolvedValue({
-        data: [
-          {
-            attributes: {
-              service: 'rx_refill',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'appointments',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'appeals',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'claims',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'secure_messaging',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'payment_history',
-              startTime,
-              endTime,
-            },
-          },
-        ],
-      })
-
+  const initializeTestInstance = (options?: RenderParams, maintenanceWindows?: Array<DowntimeFeatureType>) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />, { ...options })
+    useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(maintenanceWindows || []))
+    return render(<HomeScreen {...props} />, { ...options })
   }
 
   describe('Activity section', () => {
@@ -199,22 +165,22 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
 
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
+
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
 
     it('displays error message when all the features are in downtime', async () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ minutes: 1 }),
-      }
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(3, 5))
@@ -225,13 +191,16 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
 
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
@@ -320,13 +289,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(3, 0))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('upcomingAppointments') })).toBeFalsy())
     })
@@ -383,13 +355,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 3))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('pastAppointments') })).toBeFalsy())
     })
@@ -458,21 +433,19 @@ context('HomeScreen', () => {
     })
 
     it('is not displayed when claims is in downtime', async () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ minutes: 1 }),
-      }
-
       when(get as jest.Mock)
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
@@ -526,13 +499,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(getFoldersPayload(3))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
     })
@@ -651,13 +627,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
@@ -767,13 +746,16 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPaymentHistoryPayload('$3000', '2025-03-21T00:00:00.000-06:00'))
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
-      initializeTestInstance({
-        preloadedState: {
-          auth: {
-            loggedIn: true,
-          } as AuthState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })

@@ -10,7 +10,8 @@ import { each, reduce } from 'underscore'
 
 import { maintenanceWindowsKeys } from 'api/maintenanceWindows/queryKeys'
 import { RootState } from 'store'
-import { DowntimeFeatureType, DowntimeFeatureTypeConstants, MaintenanceWindowsGetData, get } from 'store/api'
+import { DowntimeFeatureType, MaintenanceWindowsGetData, get } from 'store/api'
+import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AuthState, DowntimeWindowsByFeatureType } from 'store/slices'
 
 export type MaintenanceWindowOverrideStorage = Record<string, { startTime: string; endTime: string } | undefined>
@@ -96,10 +97,7 @@ export const useMaintenanceWindows = () => {
       if (data) {
         setMaintenanceWindows(data)
       }
-
-      // This should only run on the initial focus
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []),
+    }, [data]),
   )
 
   return { maintenanceWindows, isFetched }

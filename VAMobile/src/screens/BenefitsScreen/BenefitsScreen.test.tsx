@@ -2,16 +2,17 @@ import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { ClaimsAndAppealsGetDataMetaError } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
 import { BenefitsScreen } from 'screens'
 import { RootState } from 'store'
-import { MaintenanceWindowsGetData, get } from 'store/api'
-import { AuthState, ErrorsState } from 'store/slices'
+import { DowntimeFeatureType, get } from 'store/api'
+import { AuthState } from 'store/slices'
 import { context, mockNavProps, render, when } from 'testUtils'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 import { getClaimsAndAppealsPayload } from 'utils/tests/personalization'
 
 const mockNavigationSpy = jest.fn()
@@ -24,12 +25,21 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
+  }
+})
+
 context('BenefitsScreen', () => {
   const initializeTestInstance = (
     activeClaimsCount?: number,
     serviceErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
     preloadedState?: Partial<RootState>,
+    maintenanceWindowServices?: Array<DowntimeFeatureType>,
   ) => {
+    useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(maintenanceWindowServices || []))
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
     const queriesData = activeClaimsCount
       ? [
@@ -94,29 +104,6 @@ context('BenefitsScreen', () => {
   })
 
   it('displays downtime message when claims or appeals is in downtime', () => {
-    const startTime = DateTime.now()
-    const endTime = DateTime.now().plus({ minutes: 1 })
-    when(get as jest.Mock)
-      .calledWith('/v0/maintenance_windows')
-      .mockResolvedValueOnce({
-        data: [
-          {
-            attributes: {
-              service: 'appeals',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'claims',
-              startTime,
-              endTime,
-            },
-          },
-        ],
-      })
-
     const activeClaimsCount = 3
 
     const preloadedState = {
@@ -125,34 +112,11 @@ context('BenefitsScreen', () => {
       } as AuthState,
     }
 
-    initializeTestInstance(activeClaimsCount, undefined, preloadedState)
+    initializeTestInstance(activeClaimsCount, undefined, preloadedState, ['appeals', 'claims'])
     expect(screen.getByText(t('benefits.activity.warning.downtime'))).toBeTruthy()
   })
 
   it('does not display active claims when claims or appeals is in downtime', async () => {
-    const startTime = DateTime.now()
-    const endTime = DateTime.now().plus({ minutes: 1 })
-    when(get as jest.Mock)
-      .calledWith('/v0/maintenance_windows')
-      .mockResolvedValueOnce({
-        data: [
-          {
-            attributes: {
-              service: 'appeals',
-              startTime,
-              endTime,
-            },
-          },
-          {
-            attributes: {
-              service: 'claims',
-              startTime,
-              endTime,
-            },
-          },
-        ],
-      })
-
     const activeClaimsCount = 3
     const preloadedState = {
       auth: {
@@ -160,7 +124,7 @@ context('BenefitsScreen', () => {
       } as AuthState,
     }
 
-    initializeTestInstance(activeClaimsCount, undefined, preloadedState)
+    initializeTestInstance(activeClaimsCount, undefined, preloadedState, ['appeals', 'claims'])
     await waitFor(() => {
       expect(
         screen.queryByRole('link', { name: t('claims.activityButton.subText', { count: activeClaimsCount }) }),
