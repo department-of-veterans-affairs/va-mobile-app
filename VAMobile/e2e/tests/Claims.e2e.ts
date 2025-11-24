@@ -174,11 +174,11 @@ describe('Claims Screen', () => {
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
     await expect(element(by.text('You have 3 file requests from VA'))).toExist()
-    await expect(element(by.text('Dental disability - Evidence requested'))).toExist()
+    await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
   it('verify that the user is sent to the file upload page', async () => {
-    await element(by.text('Dental disability - Evidence requested')).tap()
+    await element(by.text('Dental disability - More information needed')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
