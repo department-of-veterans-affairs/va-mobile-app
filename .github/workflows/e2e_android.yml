@@ -50,6 +50,10 @@ on:
       TEST_RAIL_KEY:
         description: 'TestRail api key'
         required: true
+      FLAGSHIP_MOBILE_APP_ID:
+        required: true
+      FLAGSHIP_MOBILE_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: android-detox-${{ github.ref }}
@@ -89,6 +93,7 @@ jobs:
 
   find_detox_tests_to_run:
     uses: ./.github/workflows/e2e_detox_mapping.yml
+    secrets: inherit
 
   output_detox_tests_to_run:
     runs-on: ubuntu-latest
@@ -202,7 +207,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.3'
           working-directory: VAMobile/android
 
       - name: Install bundle

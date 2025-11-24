@@ -1,0 +1,128 @@
+name: Lookup Slack Username
+
+on:
+  workflow_dispatch:
+    inputs:
+      va_email:
+        description: 'VA Email address to lookup Slack ID for'
+        required: false
+        type: string
+      git_handle:
+        description: 'Git handle to lookup email and then Slack ID for'
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      va_email:
+        description: 'VA Email address to lookup Slack ID for'
+        required: false
+        type: string
+      git_handle:
+        description: 'Git handle to lookup email and then Slack ID for'
+        required: false
+        type: string
+    outputs:
+      slackId:
+        description: 'The Slack user ID found for the given input.'
+        value: ${{ jobs.get-slack-name.outputs.slackId }}
+
+jobs:
+  get-slack-name:
+    runs-on: ubuntu-latest
+    outputs:
+      slackId: ${{ steps.output-slack-id.outputs.slackId }}
+    steps:
+      - name: Determine and Validate Target Email
+        id: determine_and_validate_email
+        env:
+          EMAIL_MAP_ACT: ${{ vars.EMAIL_MAP }} # This will be empty in act unless explicitly passed via --env
+        run: |
+          GIT_HANDLE="${{ github.event.inputs.git_handle }}"
+          EMAIL_INPUT="${{ github.event.inputs.va_email }}"
+          TARGET_EMAIL=""
+
+          if [[ -z "$GIT_HANDLE" && -z "$EMAIL_INPUT" ]]; then
+            echo "Error: You must provide either a 'git_handle' or a 'va_email'."
+            exit 1
+          fi
+
+          MAP_SOURCE=""
+          if [[ -n "${{ vars.EMAIL_MAP }}" ]]; then
+            MAP_SOURCE="${{ vars.EMAIL_MAP }}"
+            echo "Using vars.EMAIL_MAP from GitHub context."
+          elif [[ -n "${{ env.EMAIL_MAP_ACT }}" ]]; then
+            MAP_SOURCE="${{ env.EMAIL_MAP_ACT }}"
+            echo "Using env.EMAIL_MAP_ACT from environment variable (for act)."
+          else
+            echo "Warning: Neither vars.EMAIL_MAP nor env.EMAIL_MAP_ACT is populated. Git handle lookup will not work."
+          fi
+
+          # Attempt to get email from git_handle using the determined map source
+          if [[ -n "$GIT_HANDLE" && -n "$MAP_SOURCE" ]]; then
+            echo "Git handle provided: $GIT_HANDLE"
+            MAPPED_DATA=$(echo "$MAP_SOURCE" | jq -r --arg gh "$GIT_HANDLE" '.[$gh]')
+
+            if [[ "$MAPPED_DATA" != "null" && -n "$MAPPED_DATA" ]]; then
+              TARGET_EMAIL=$(echo "$MAPPED_DATA" | jq -r '.email')
+              echo "Mapped Git handle '$GIT_HANDLE' to email '$TARGET_EMAIL' using map variable."
+            else
+              echo "Warning: Git handle '$GIT_HANDLE' not found in map variable. Attempting to use va_email input."
+            fi
+          fi
+
+          # If email not found via git_handle, use direct va_email input
+          if [[ -z "$TARGET_EMAIL" && -n "$EMAIL_INPUT" ]]; then
+            TARGET_EMAIL=$(echo "$EMAIL_INPUT" | xargs) # Trim whitespace
+            echo "Using provided va_email input: $TARGET_EMAIL"
+          fi
+
+          # Check if an email was successfully determined
+          if [[ -z "$TARGET_EMAIL" ]]; then
+            echo "Error: No va_email or valid git_handle was provided, and no email could be determined. Cannot proceed."
+            exit 1
+          fi
+
+          # Validate Email Domain
+          EMAIL_DOMAIN=$(echo "$TARGET_EMAIL" | awk -F'@' '{print tolower($2)}')
+
+          if [[ "$EMAIL_DOMAIN" == "va.gov" ]]; then
+            echo "Email domain is valid: $TARGET_EMAIL"
+            echo "target_email=$TARGET_EMAIL" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error: VA email is required. The provided email '$TARGET_EMAIL' does not end with @va.gov (case-insensitive)."
+            exit 1 # Fail the job
+          fi
+
+      - name: Lookup Slack User ID by Email
+        id: lookup_slack_id_by_email
+        if: steps.determine_and_validate_email.outputs.target_email != ''
+        run: |
+          TARGET_EMAIL="${{ steps.determine_and_validate_email.outputs.target_email }}"
+          echo "Attempting to find Slack ID for email: $TARGET_EMAIL"
+          SLACK_USER_DATA=$(curl -s -X GET -H "Authorization: Bearer ${{ secrets.SLACK_API_TOKEN }}" \
+                                  "https://slack.com/api/users.lookupByEmail?email=$TARGET_EMAIL")
+
+          SLACK_USER_ID=$(echo "$SLACK_USER_DATA" | jq -r '.user.id')
+
+          if [ "$SLACK_USER_ID" == "null" ] || [ -z "$SLACK_USER_ID" ]; then
+            echo "Warning: Could not find Slack user for email $TARGET_EMAIL via API."
+            echo "slack_user_id=" >> "$GITHUB_OUTPUT" # Set empty if not found
+          else
+            echo "slack_user_id=$SLACK_USER_ID" >> "$GITHUB_OUTPUT"
+            echo "Found Slack ID for $TARGET_EMAIL: $SLACK_USER_ID"
+          fi
+        env:
+          SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+
+      - name: Output Slack ID
+        id: output-slack-id
+        run: |
+          FINAL_SLACK_ID="${{ steps.lookup_slack_id_by_email.outputs.slack_user_id }}"
+
+          if [ -n "$FINAL_SLACK_ID" ]; then
+            echo "Final Slack ID is: $FINAL_SLACK_ID"
+            echo "slackId=$FINAL_SLACK_ID" >> "$GITHUB_OUTPUT" 
+          else
+            echo "Could not determine Slack ID for the provided email."
+            echo "slackId=unknown" >> "$GITHUB_OUTPUT"
+          fi

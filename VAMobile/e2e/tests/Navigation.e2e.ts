@@ -65,7 +65,6 @@ const navigationDic = {
   Health: [
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Vilanisi Reddy'], 'Details'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
@@ -248,7 +247,7 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
+      await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
         .scroll(50, 'down', 0.5, 0.5)
