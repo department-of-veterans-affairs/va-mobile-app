@@ -1,7 +1,6 @@
+import { contentTypes, get, post } from 'store/api/api'
+import * as Types from 'store/api/types'
 import { context, fetch } from 'testUtils'
-
-import { contentTypes, get, post } from './api'
-import * as Types from './types'
 
 jest.mock('store/slices', () => {
   return {

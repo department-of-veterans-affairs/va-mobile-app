@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { has } from 'underscore'
 
+import { appointmentsKeys } from 'api/appointments/queryKeys'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AppointmentsGetData } from 'api/types'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
@@ -10,8 +11,6 @@ import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { appointmentsKeys } from './queryKeys'
 
 /**
  * Fetch user appointments
@@ -56,6 +55,26 @@ export const useAppointments = (
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const pastAppointmentsQueryKey = [appointmentsKeys.appointments, TimeFrameTypeConstants.PAST_THREE_MONTHS]
 
+  const getCachedPastAppointments = (): AppointmentsGetData | undefined => {
+    const timeFrameMap = {
+      [TimeFrameTypeConstants.PAST_THREE_MONTHS]: 3,
+      [TimeFrameTypeConstants.PAST_SIX_MONTHS]: 6,
+      [TimeFrameTypeConstants.PAST_NINE_MONTHS]: 9,
+      [TimeFrameTypeConstants.PAST_ONE_YEAR]: 12,
+      [TimeFrameTypeConstants.PAST_TWO_YEARS]: 24,
+    }
+
+    // Check the cache for past appointments data stored for larger timeFrames to save on calls to backend
+    // PastAppointments will filter down the list accordingly
+    for (const key in timeFrameMap) {
+      if (timeFrameMap[key] > timeFrameMap[timeFrame]) {
+        const cachedAppointments = queryClient.getQueryData([appointmentsKeys.appointments, key])
+        if (cachedAppointments) return cachedAppointments as AppointmentsGetData
+      }
+    }
+    return undefined
+  }
+
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.appointments && !appointmentsInDowntime && queryEnabled),
@@ -78,6 +97,11 @@ export const useAppointments = (
             ),
           staleTime: ACTIVITY_STALE_TIME,
         })
+      }
+
+      if (featureEnabled('datePickerUpdate') && timeFrame !== TimeFrameTypeConstants.UPCOMING) {
+        const cachedPastAppointments = getCachedPastAppointments()
+        if (cachedPastAppointments) return cachedPastAppointments
       }
 
       return getAppointments(startDate, endDate, timeFrame, includeTravelClaims)

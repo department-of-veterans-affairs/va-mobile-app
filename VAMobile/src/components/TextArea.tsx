@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 
+import { Box, BoxProps } from 'components'
 import { useTheme } from 'utils/hooks'
-
-import Box, { BoxProps } from './Box'
 
 /**
  *  Signifies the props that need to be passed in to {@link TextArea}
