@@ -46,32 +46,32 @@ const ensureOnClaimsList = async () => {
     // Try to find claims list directly
     await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
       .toExist()
-      .withTimeout(3000)
+      .withTimeout(4000)
     return // Already on claims list
   } catch {
     // Not on claims list, try to navigate back
     try {
       await waitFor(element(by.text('Travel claims')))
         .toExist()
-        .withTimeout(2000)
+        .withTimeout(4000)
       await element(by.text('Travel claims')).atIndex(0).tap()
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
         .toExist()
-        .withTimeout(3000)
+        .withTimeout(4000)
     } catch {
       // If we can't find Travel button, try navigating from root
       try {
         await waitFor(element(by.text('Health')))
           .toExist()
-          .withTimeout(3000)
+          .withTimeout(4000)
         await element(by.text('Health')).tap()
         await waitFor(element(by.text('Travel claims')))
           .toExist()
-          .withTimeout(3000)
+          .withTimeout(4000)
         await element(by.text('Travel claims')).atIndex(0).tap()
         await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
           .toExist()
-          .withTimeout(3000)
+          .withTimeout(4000)
       } catch (error) {
         console.log('Failed to navigate to claims list:', error)
         throw error
@@ -93,7 +93,7 @@ const scrollToFindElement = async (elementId: string, maxScrollAttempts = 5) => 
     try {
       await waitFor(element(by.id(elementId)))
         .toBeVisible()
-        .withTimeout(2000)
+        .withTimeout(4000)
       return true // Found it!
     } catch {
       // Element not visible, scroll down and try again
@@ -112,7 +112,7 @@ const safeTap = async (elementId: string, scrollToFind = false) => {
   try {
     await waitFor(element(by.id(elementId)))
       .toBeVisible()
-      .withTimeout(3000)
+      .withTimeout(4000)
     elementFound = true
   } catch {
     elementFound = false
@@ -188,30 +188,26 @@ describe('Travel Pay Claim Details Screen', () => {
       // Wait for claim details screen to appear
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
         .toExist()
-        .withTimeout(8000)
+        .withTimeout(4000)
 
       // Verify screen title with more flexible matching
       await waitFor(element(by.text('Details')))
         .toExist()
-        .withTimeout(6000)
+        .withTimeout(4000)
     })
   })
 
   describe('Claim Details Content', () => {
     it('should display claim header information', async () => {
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID))).toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_TITLE_TEST_ID))).toExist()
 
-      await waitFor(
-        element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_NUMBER_TEST_ID)),
-      ).toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_NUMBER_TEST_ID))).toExist()
 
-      await waitFor(
-        element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_STATUS_TEST_ID)),
-      ).toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_HEADER_STATUS_TEST_ID))).toExist()
     })
 
     it('should display status definition', async () => {
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_STATUS_DEFINITION_TEST_ID)),
       ).toExist()
     })
@@ -221,29 +217,29 @@ describe('Travel Pay Claim Details Screen', () => {
       await expect(element(by.text('Amount'))).toExist()
 
       // Should show submitted amount
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_AMOUNT_SUBMITTED_TEST_ID)),
       ).toExist()
 
       // Should show reimbursement amount
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_AMOUNT_REIMBURSEMENT_TEST_ID)),
       ).toExist()
     })
 
     it('should display claim information section', async () => {
       // Should show "Submission timeline" section
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMISSION_TIMELINE_TITLE_TEST_ID)),
       ).toExist()
 
       // Should show submitted and updated dates
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID))).toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID))).toExist()
 
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_UPDATED_ON_TEST_ID))).toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_UPDATED_ON_TEST_ID))).toExist()
 
       // Should show "Appointment information" section
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_APPOINTMENT_DATE_TEST_ID)),
       ).toExist()
     })
@@ -254,7 +250,7 @@ describe('Travel Pay Claim Details Screen', () => {
       // Should show the accordion
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_TEST_ID)))
         .toExist()
-        .withTimeout(6000)
+        .withTimeout(4000)
 
       // Should show the accordion title
       await expect(element(by.text('Why are my amounts different'))).toExist()
@@ -265,7 +261,7 @@ describe('Travel Pay Claim Details Screen', () => {
       await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_TEST_ID)).tap()
 
       // Should show expanded content
-      await waitFor(
+      await expect(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_DESCRIPTION_PART1_TEST_ID)),
       ).toExist()
 
@@ -276,7 +272,7 @@ describe('Travel Pay Claim Details Screen', () => {
       // Wait for the link to be visible
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_DEDUCTIBLE_INFO_LINK_TEST_ID)))
         .toBeVisible()
-        .withTimeout(3000)
+        .withTimeout(4000)
 
       await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_DEDUCTIBLE_INFO_LINK_TEST_ID)).tap()
 
@@ -287,7 +283,7 @@ describe('Travel Pay Claim Details Screen', () => {
 
   describe('Document Downloads', () => {
     it('should show decision letter download for denied/partial payments claims', async () => {
-      await waitFor(element(by.text('Review your decision letter'))).toExist()
+      await expect(element(by.text('Review your decision letter'))).toExist()
     })
 
     it('should show documents submitted section', async () => {
@@ -327,11 +323,11 @@ describe('Travel Pay Claim Details Screen', () => {
 
       await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)))
         .toExist()
-        .withTimeout(2000)
+        .withTimeout(4000)
 
-      await waitFor(element(by.text('Review your decision letter'))).not.toExist()
+      await expect(element(by.text('Review your decision letter'))).not.toExist()
 
-      await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_TEST_ID))).not.toExist()
+      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_AMOUNT_DIFFERENCE_TEST_ID))).not.toExist()
     })
   })
 })
