@@ -228,14 +228,23 @@ describe('Travel Pay Claim Details Screen', () => {
     })
 
     it('should display claim information section', async () => {
+      // Scroll down a bit
+      await element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID)).scroll(250, 'down')
+      await new Promise((resolve) => setTimeout(resolve, 500))
+
       // Should show "Submission timeline" section
-      await expect(
+      await waitFor(
         element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMISSION_TIMELINE_TITLE_TEST_ID)),
-      ).toExist()
+      )
+        .toBeVisible()
+        .withTimeout(4000)
 
-      // Should show submitted and updated dates
-      await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID))).toExist()
+      // Should not show submitted date for this type of appointment
+      await expect(
+        element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_SUBMITTED_ON_TEST_ID)),
+      ).not.toExist()
 
+      // Should show update date for this type of appointment
       await expect(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIM_DETAILS_UPDATED_ON_TEST_ID))).toExist()
 
       // Should show "Appointment information" section
