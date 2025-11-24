@@ -12,6 +12,7 @@
           "directDepositBenefits": false,
           "directDepositBenefitsUpdate": false,
           "disabilityRating": false,
+          "labsAndTestsEnabled": false,
           "lettersAndDocuments": false,
           "militaryServiceHistory": false,
           "paymentHistory": false,
