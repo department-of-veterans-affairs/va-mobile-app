@@ -3,6 +3,7 @@ import { DateTime, Settings } from 'luxon'
 
 import commonTranslations from 'translations/en/common.json'
 import {
+  EN_DASH,
   formatDateMMMyyyy,
   formatDateRangeMMMyyyy,
   getFileUploadTimezoneMessage,
@@ -167,12 +168,12 @@ describe('formatting utils: formatDateRangeMMMyyyy', () => {
   it('formats a Jan 2025 to Feb 2025 range', () => {
     const start = DateTime.fromISO('2025-01-15T12:00:00Z')
     const end = DateTime.fromISO('2025-02-20T12:00:00Z')
-    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Feb 2025')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe(`Jan 2025 ${EN_DASH} Feb 2025`)
   })
 
   it('formats a range within the same month', () => {
     const start = DateTime.fromISO('2025-01-01T12:00:00Z')
     const end = DateTime.fromISO('2025-01-31T12:00:00Z')
-    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Jan 2025')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe(`Jan 2025 ${EN_DASH} Jan 2025`)
   })
 })
