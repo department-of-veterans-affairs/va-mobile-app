@@ -22,9 +22,11 @@ const getAllergies = ({ isV1Api = false }: { isV1Api?: boolean }): Promise<Aller
  * Returns a query for user Allergies
  */
 export const useAllergies = (options?: { enabled?: boolean; isV1Api?: boolean }) => {
+  const apiVersion = options?.isV1Api ? 'v1' : 'v0'
+
   return useQuery({
     ...options,
-    queryKey: [allergyKeys.allergies],
+    queryKey: allergyKeys.allergiesWithVersion(apiVersion),
     queryFn: () => getAllergies({ isV1Api: options?.isV1Api }),
     meta: {
       errorName: 'getAllergies: Service error',

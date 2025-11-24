@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAllergies } from 'api/allergies/getAllergies'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { AllergyAttributesV0, AllergyAttributesV1, NoteText, Reaction } from 'api/types'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
@@ -23,7 +24,21 @@ type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Allergy
 function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
   const { allergy } = route.params
 
-  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_AllergyDetails') })
+  const {
+    data: authorizedServices,
+    isFetching: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+  } = useAuthorizedServices()
+
+  const isAccelerating =
+    authorizedServices?.allergiesOracleHealthEnabled &&
+    !loadingUserAuthorizedServices &&
+    !getUserAuthorizedServicesError
+
+  const { isLoading: detailsLoading } = useAllergies({
+    enabled: screenContentAllowed('WG_AllergyDetails'),
+    isV1Api: isAccelerating,
+  })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
