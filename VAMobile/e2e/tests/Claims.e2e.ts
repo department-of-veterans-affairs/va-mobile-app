@@ -19,7 +19,7 @@ export const ClaimsE2eIdConstants = {
   CLAIM_3_ID:
     'Claim for compensation Received July 20, 2021 Step 2 of 5: Initial review Moved to this step on July 20, 2021',
   CLAIM_4_ID:
-    'Claim for disability compensation More information needed Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
+    'Claim for disability compensation Evidence requested Received January 01, 2021 Step 3 of 8: Evidence gathering Moved to this step on May 05, 2021',
   CLAIM_5_ID:
     'Claim for compensation Received March 22, 2019 Step 3 of 5: Evidence gathering, review, and decision Moved to this step on July 18, 2019',
   CLAIM_6_ID:
@@ -174,11 +174,11 @@ describe('Claims Screen', () => {
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
     await expect(element(by.text('You have 3 file requests from VA'))).toExist()
-    await expect(element(by.text('Dental disability - More information needed'))).toExist()
+    await expect(element(by.text('Dental disability - Evidence requested'))).toExist()
   })
 
   it('verify that the user is sent to the file upload page', async () => {
-    await element(by.text('Dental disability - More information needed')).tap()
+    await element(by.text('Dental disability - Evidence requested')).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
   })
