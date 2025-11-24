@@ -10,7 +10,8 @@
             "completed": false,
             "dateFiled": "2021-07-20",
             "updatedAt": "2021-07-20",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for compensation",
+            "claimTypeBase": "compensation claim",
             "phase": 2,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -25,7 +26,8 @@
             "completed": false,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-05-05",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for disability compensation",
+            "claimTypeBase": "disability compensation claim",
             "phase": 3,
             "claimTypeCode": "010LCOMP",
             "documentsNeeded": true,
@@ -40,7 +42,8 @@
             "completed": false,
             "dateFiled": "2019-03-22",
             "updatedAt": "2019-07-18",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for compensation",
+            "claimTypeBase": "compensation claim",
             "phase": 3,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -55,7 +58,8 @@
             "completed": false,
             "dateFiled": "2016-01-01",
             "updatedAt": "2016-07-30",
-            "displayTitle": "Dependency",
+            "displayTitle": "Request to add or remove a dependent",
+            "claimTypeBase": "request to add or remove a dependent",
             "phase": 7,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -70,7 +74,8 @@
             "completed": false,
             "dateFiled": "2021-12-04",
             "updatedAt": "2021-12-04",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for compensation",
+            "claimTypeBase": "compensation claim",
             "phase": 8,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -85,7 +90,8 @@
             "completed": false,
             "dateFiled": "2021-12-05",
             "updatedAt": "2021-12-05",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for compensation",
+            "claimTypeBase": "compensation claim",
             "phase": 1,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -518,7 +524,8 @@
             "decisionLetterSent": true,
             "dateFiled": "2021-01-01",
             "updatedAt": "2021-04-09",
-            "displayTitle": "Compensation",
+            "displayTitle": "Claim for compensation",
+            "claimTypeBase": "compensation claim",
             "phase": 8,
             "claimTypeCode": "",
             "documentsNeeded": false,
@@ -565,6 +572,8 @@
         "requestedDecision": false,
         "claimType": "Compensation",
         "claimTypeCode": "010LCOMP",
+        "displayTitle": "Claim for disability compensation",
+        "claimTypeBase": "disability compensation claim",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -931,6 +940,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "displayTitle": "Claim for compensation",
+        "claimTypeBase": "compensation claim",
         "contentionList": ["Low back strain (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -1297,6 +1308,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "displayTitle": "Claim for compensation",
+        "claimTypeBase": "compensation claim",
         "contentionList": ["Hearing loss (New)", " ringing in ears (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -1514,6 +1527,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "displayTitle": "Claim for compensation",
+        "claimTypeBase": "compensation claim",
         "contentionList": ["hearing loss (Increase)", " kidney removal of (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -2638,6 +2653,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Dependency",
+        "displayTitle": "Request to add or remove a dependent",
+        "claimTypeBase": "request to add or remove a dependent",
         "contentionList": [],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -3762,6 +3779,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "displayTitle": "Claim for compensation",
+        "claimTypeBase": "compensation claim",
         "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -3806,6 +3825,8 @@
         "currentPhaseBack": false,
         "requestedDecision": false,
         "claimType": "Compensation",
+        "displayTitle": "Claim for compensation",
+        "claimTypeBase": "compensation claim",
         "contentionList": ["Asthma, bronchial (Increase)", "hypertension (New)"],
         "vaRepresentative": null,
         "eventsTimeline": [
@@ -3955,6 +3976,62 @@
             "active": false,
             "lastAction": null,
             "date": "02-04-11"
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": "Service connection, neck strain",
+            "diagnosticCode": "8518",
+            "active": true,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": null,
+            "date": "02-04-11"
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "denied",
+            "date": "03-04-11"
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "field_grant",
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": "remand",
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "field_grant",
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on appeal",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": "withdrawn",
+            "date": null
           }
         ],
         "location": "bva",
@@ -5150,6 +5227,20 @@
             "active": true,
             "lastAction": null,
             "date": null
+          },
+          {
+            "description": "We're unable to show this issue on your Supplemental Claim",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": "02-04-11"
+          },
+          {
+            "description": "We're unable to show this issue on your Supplemental Claim",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": "2008-04-10"
           }
         ],
         "location": "bva",
@@ -5193,6 +5284,20 @@
             "diagnosticCode": "7518",
             "active": true,
             "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on your Higher-Level Review",
+            "diagnosticCode": null,
+            "active": true,
+            "lastAction": null,
+            "date": null
+          },
+          {
+            "description": "We're unable to show this issue on your Higher-Level Review",
+            "diagnosticCode": null,
+            "active": false,
+            "lastAction": "denied",
             "date": null
           }
         ],

@@ -6,12 +6,11 @@ import { deviceKeys } from 'api/device/queryKeys'
 import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
+import { transform } from 'store/api/demo/store'
+import { APIError } from 'store/api/types'
 import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-
-import { transform } from './demo/store'
-import { APIError } from './types'
 
 const { API_ROOT } = getEnv()
 
@@ -177,7 +176,15 @@ const call = async function <T>(
     if (response.status > 399) {
       let json
       let text
-      if (response.headers.get('Content-Type')?.startsWith('application/json')) {
+      // Fix for "Already read" error on 403 responses:
+      // 1. For 403, we read the body earlier (line 141) to check for token expiration
+      // 2. If it's NOT a token expiration error, we skip the refresh (line 146-172)
+      // 3. Then we reach here and try to read the body again (line 185) → ERROR
+      // Solution: Reuse the already-read responseBody for 403 errors instead of reading again
+      if (response.status === 403 && responseBody) {
+        json = responseBody
+        text = JSON.stringify(json)
+      } else if (response.headers.get('Content-Type')?.startsWith('application/json')) {
         logAnalyticsEvent(Events.vama_error_json_resp(endpoint, response.status))
         json = await response.json()
         const vamfBody = json?.errors?.[0].source?.vamfBody

@@ -7,13 +7,12 @@ import { t } from 'i18next'
 import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimData } from 'api/types'
 import { ClaimTypeConstants } from 'constants/claims'
+import ClaimDetailsScreen from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimDetailsScreen'
+import { claim as claimData } from 'screens/BenefitsScreen/ClaimsScreen/claimData'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, waitFor, when } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
-
-import { claim as claimData } from '../claimData'
-import ClaimDetailsScreen from './ClaimDetailsScreen'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -85,6 +84,44 @@ context('ClaimDetailsScreen', () => {
     })
   })
 
+  describe('header section', () => {
+    beforeEach(() => {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+        ...claimData,
+      })
+    })
+
+    it('should display the page title', async () => {
+      await waitFor(() => expect(screen.getByRole('header', { name: t('claimDetails.title') })).toBeTruthy())
+    })
+
+    it('should display the claim header', async () => {
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'Claim for disability compensation' })).toBeTruthy(),
+      )
+    })
+
+    it('should display the claim received on date', async () => {
+      await waitFor(() => expect(screen.getByText('Received June 06, 2019')).toBeTruthy())
+    })
+  })
+
+  describe('header section - fallback', () => {
+    it('should display the claim header fallback if no displayTitle is available', async () => {
+      renderWithData(ClaimTypeConstants.ACTIVE, false, {
+        ...claimData,
+        attributes: {
+          ...claimData.attributes,
+          displayTitle: '',
+        },
+      })
+
+      await waitFor(() =>
+        expect(screen.getByRole('header', { name: 'Claim for disability compensation' })).toBeTruthy(),
+      )
+    })
+  })
+
   describe('submit evidence ', () => {
     it('submit evidence button should exist', async () => {
       renderWithData(ClaimTypeConstants.ACTIVE, true, {
@@ -117,6 +154,7 @@ context('ClaimDetailsScreen', () => {
         ...claimData,
       })
       await waitFor(() => fireEvent.press(screen.getByText(t('files'))))
+      fireEvent.press(screen.getByText(t('files')))
       await waitFor(() => expect(screen.getByText('Mark_Webb_600156928_526.pdf')).toBeTruthy())
     })
   })
