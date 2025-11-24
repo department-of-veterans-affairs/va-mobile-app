@@ -10,11 +10,19 @@ jobs:
   send_pr_reminder:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Get count of PRs needing review
         id: get_count
-        run: echo "pr_count=$(GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT" 
+        run: echo "pr_count=$(GH_TOKEN=${{ steps.generate_token.outputs.token }} gh pr list -l 'FE-Needs Review' --json id | jq length)" >> "$GITHUB_OUTPUT"
       - name: Post message to Slack
         id: post_message
         run: |
