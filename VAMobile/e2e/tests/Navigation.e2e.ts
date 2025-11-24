@@ -251,7 +251,7 @@ const navigateToPage = async (key, navigationDicValue) => {
       await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
         .toBeVisible()
         .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(100, 'down', 0.5, 0.5)
+        .scroll(150, 'down', 0.5, 0.5)
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
