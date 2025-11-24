@@ -50,6 +50,10 @@ on:
       TEST_RAIL_KEY:
         description: 'TestRail api key'
         required: true
+      FLAGSHIP_MOBILE_APP_ID:
+        required: true
+      FLAGSHIP_MOBILE_APP_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: ios-detox-${{ github.ref }}
@@ -79,6 +83,7 @@ jobs:
 
   find_detox_tests_to_run:
     uses: ./.github/workflows/e2e_detox_mapping.yml
+    secrets: inherit
 
   output_detox_tests_to_run:
     runs-on: ubuntu-latest

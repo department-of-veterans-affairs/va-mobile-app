@@ -122,7 +122,10 @@ const ComboBoxInput: FC<ComboBoxInputProps> = ({
                 {selectedValue?.label}
               </TextView>
               {selectedValue && !hideRemoveButton && (
-                <Pressable accessibilityRole="button" onPress={() => onSelectionChange(undefined)}>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => onSelectionChange(undefined)}
+                  testID="comboBoxRemoveID">
                   <Box
                     ml={16}
                     my={12}
