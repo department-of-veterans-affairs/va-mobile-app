@@ -91,7 +91,7 @@ function ClaimsAndAppealsListView({ claimType, scrollViewRef }: ClaimsAndAppeals
       } else if (attributes.documentsNeeded) {
         const margin = theme.dimensions.condensedMarginBetween
         textLines.push({
-          text: t('claims.moreInfoNeeded'),
+          text: t('claims.evidenceRequested'),
           textTag: { labelType: LabelTagTypeConstants.tagYellow },
           mt: margin,
           mb: margin,
