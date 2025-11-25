@@ -1,13 +1,14 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, TextView } from 'components'
+import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 function NoTravelClaims() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   return (
     <Box
@@ -17,11 +18,17 @@ function NoTravelClaims() {
       alignItems="center"
       mt={theme.dimensions.textAndButtonLargeMargin}>
       <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" accessible={true}>
-        {t('travelPay.statusList.youDontHave')}
+        {t('travelPay.statusList.noClaims.youDontHave')}
       </TextView>
       <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween} accessible={true}>
-        {t('travelPay.statusList.youDontHaveForDates')}
+        {t('travelPay.statusList.noClaims.youCanFile')}
       </TextView>
+      <LinkWithAnalytics
+        type="custom"
+        onPress={() => navigateTo('Appointments', { tab: 1 })}
+        text={t('travelPay.statusList.noClaims.goToPastAppointments')}
+        testID={`goToVAGovTravelClaimStatus`}
+      />
     </Box>
   )
 }

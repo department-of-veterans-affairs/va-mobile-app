@@ -8,7 +8,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
-import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
+import { Box, CategoryLanding, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import CopaysScreen from 'screens/PaymentsScreen/Copays'
@@ -31,6 +31,7 @@ import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScre
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
@@ -84,7 +85,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           {t('payments.toYou')}
         </TextView>
       )}
-      <Box mb={theme.dimensions.standardMarginBetween}>
+      <Box>
         <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
         {userAuthorizedServices?.directDepositBenefits && (
           <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
@@ -93,6 +94,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
       {featureEnabled('overpayCopay') && (
         <>
           <TextView
+            mt={theme.dimensions.standardMarginBetween}
             mx={theme.dimensions.condensedMarginBetween}
             mb={theme.dimensions.standardMarginBetween}
             variant={'MobileBodyBold'}
@@ -112,6 +114,16 @@ function PaymentsScreen({}: PaymentsScreenProps) {
             showLoading={copaysLoading}
           />
         </>
+      )}
+      {featureEnabled('travelPayStatusList') && (
+        <Box ml={theme.dimensions.gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('travelPay.claims.viewYourClaims')}
+            testID="toTravelPayClaimsLinkID"
+            onPress={() => navigateToTravelClaims(navigateTo)}
+          />
+        </Box>
       )}
     </CategoryLanding>
   )

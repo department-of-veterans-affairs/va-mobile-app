@@ -9,6 +9,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 
 type ClaimsScreenProps = StackScreenProps<BenefitsStackParamList, 'Claims'>
 
@@ -26,6 +28,10 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
     navigateTo('ClaimLettersScreen')
   }
 
+  const onTravelClaimsPress = () => {
+    navigateToTravelClaims(navigateTo)
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={t('benefits.title')}
@@ -34,6 +40,13 @@ const ClaimsScreen = ({ navigation }: ClaimsScreenProps) => {
       <Box mb={theme.dimensions.standardMarginBetween}>
         <LargeNavButton title={t('claimsHistory.title')} onPress={onClaimsHistory} testID="toClaimsHistoryID" />
         <LargeNavButton title={t('claimLetters.title')} onPress={onClaimLettersPress} testID="toClaimLettersID" />
+        {featureEnabled('travelPayStatusList') && (
+          <LargeNavButton
+            title={t('travelPay.claims.title')}
+            onPress={onTravelClaimsPress}
+            testID="toTravelPayClaimsButtonID"
+          />
+        )}
       </Box>
     </FeatureLandingTemplate>
   )

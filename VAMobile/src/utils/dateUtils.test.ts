@@ -389,7 +389,6 @@ describe('dateUtils', () => {
         expect(option).toHaveProperty('label')
         expect(option).toHaveProperty('value')
         expect(option).toHaveProperty('a11yLabel')
-        expect(option).toHaveProperty('testID')
         expect(option).toHaveProperty('dates')
         expect(option.dates).toHaveProperty('startDate')
         expect(option.dates).toHaveProperty('endDate')
@@ -398,7 +397,6 @@ describe('dateUtils', () => {
         expect(typeof option.label).toBe('string')
         expect(typeof option.value).toBe('string')
         expect(typeof option.a11yLabel).toBe('string')
-        expect(typeof option.testID).toBe('string')
         expect(option.dates.startDate).toBeInstanceOf(DateTime)
         expect(option.dates.endDate).toBeInstanceOf(DateTime)
       })
@@ -463,17 +461,17 @@ describe('dateUtils', () => {
     it('should have correct testID values for each option', () => {
       const options = getPickerOptions(mockT)
 
-      const expectedTestIDs = [
-        'pastThreeMonthsTestID',
-        'pastFiveToThreeMonthsTestID',
-        'pastEightToSixMonthsTestID',
-        'pastElevenToNineMonthsTestID',
-        'pastAllCurrentYearTestID',
-        'pastAllLastYearTestID',
+      const expectedValues = [
+        TimeFrameTypeConstants.PAST_THREE_MONTHS,
+        TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS,
+        TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS,
+        TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
+        TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
+        TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
       ]
 
-      expectedTestIDs.forEach((expectedTestID, index) => {
-        expect(options[index].testID).toBe(expectedTestID)
+      expectedValues.forEach((expectedValue, index) => {
+        expect(options[index].value).toBe(expectedValue)
       })
     })
 
