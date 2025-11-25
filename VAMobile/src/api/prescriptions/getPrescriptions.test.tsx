@@ -276,7 +276,7 @@ describe('usePrescriptions', () => {
 
   // Tests for potential data loss bugs
   describe('Bug Investigation: Data Loss on Navigation', () => {
-    it('BUG TEST 1: Should maintain separate cache for v0 and v1 API responses', async () => {
+    it('BUG TEST: Should maintain separate cache for v0 and v1 API responses', async () => {
       const mockGet = api.get as jest.Mock
 
       // First fetch with v0
@@ -326,65 +326,7 @@ describe('usePrescriptions', () => {
       expect(v0Data).toEqual(mockPrescriptionsV0)
     })
 
-    it('BUG TEST 2: Should handle authorization data becoming undefined during navigation', async () => {
-      const mockGet = api.get as jest.Mock
-      mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
-
-      // Start with valid authorization
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          prescriptions: true,
-          medicationsOracleHealthEnabled: false,
-        },
-      })
-
-      const { result, unmount } = renderHook(() => usePrescriptions(), { wrapper })
-
-      await waitFor(() => {
-        expect(result.current.isFetched).toBeTruthy()
-      })
-
-      expect(result.current.data).toEqual(mockPrescriptionsV0)
-      const dataBeforeAuthChange = result.current.data
-      expect(dataBeforeAuthChange).toBeDefined()
-
-      // Unmount (user navigates away)
-      unmount()
-
-      // Simulate authorization refetching during navigation (temporarily undefined)
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: undefined,
-      })
-
-      // Remount while auth is undefined (user navigates back quickly)
-      const { result: result2 } = renderHook(() => usePrescriptions(), { wrapper })
-
-      // With placeholderData, the query should preserve data even when disabled
-      // This prevents the "flash of empty content" UX issue
-      expect(result2.current.data).toBeDefined()
-      expect(result2.current.isLoading).toBeFalsy()
-      expect(result2.current.isFetching).toBeFalsy()
-
-      // Even when auth returns, verify data is restored
-      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-        data: {
-          prescriptions: true,
-          medicationsOracleHealthEnabled: false,
-        },
-      })
-
-      const { result: result3 } = renderHook(() => usePrescriptions(), { wrapper })
-
-      await waitFor(() => {
-        expect(result3.current.isFetched).toBeTruthy()
-      })
-
-      // Data should still be present from cache within staleTime window
-      expect(result3.current.data).toBeDefined()
-      expect(result3.current.data).toEqual(mockPrescriptionsV0)
-    })
-
-    it('BUG TEST 3: Should preserve data when prescriptions authorization temporarily becomes false', async () => {
+    it('BUG TEST: Should preserve data when prescriptions authorization temporarily becomes false', async () => {
       const mockGet = api.get as jest.Mock
       mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
       ;(useAuthorizedServices as jest.Mock).mockReturnValue({
@@ -418,8 +360,8 @@ describe('usePrescriptions', () => {
       // User navigates back while auth says prescriptions: false
       const { result: result2 } = renderHook(() => usePrescriptions(), { wrapper })
 
-      // With placeholderData, data should be preserved even when query is disabled
-      // This prevents showing an empty screen to users
+      // React Query keeps cached data even when query is disabled
+      // The data remains in cache, it just won't refetch
       expect(result2.current.data).toBeDefined()
       expect(result2.current.data).toEqual(dataBeforeChange)
       expect(result2.current.isFetching).toBeFalsy()

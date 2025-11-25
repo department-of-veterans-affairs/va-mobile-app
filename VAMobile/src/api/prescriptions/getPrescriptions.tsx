@@ -37,7 +37,6 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
     enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
     queryKey: [...prescriptionKeys.prescriptions, API_VERSION],
     queryFn: () => getPrescriptions({ useV1: medicationsOracleHealthEnabled }),
-    placeholderData: (previousData) => previousData,
     meta: {
       errorName: 'getPrescriptions: Service error',
     },
