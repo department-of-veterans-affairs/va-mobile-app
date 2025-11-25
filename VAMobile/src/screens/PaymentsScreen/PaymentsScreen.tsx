@@ -24,6 +24,7 @@ import PayDebt from 'screens/PaymentsScreen/Debts/PayDebt/PayDebtScreen'
 import DebtRequestHelp from 'screens/PaymentsScreen/Debts/RequestHelp/DebtRequestHelpScreen'
 import DirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen'
 import HowToUpdateDirectDepositScreen from 'screens/PaymentsScreen/DirectDepositScreen/HowToUpdateDirectDepositScreen'
+import NoticeOfRights from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsScreen'
 import PaymentDetailsScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentDetailsScreen/PaymentDetailsScreen'
 import PaymentHistoryScreen from 'screens/PaymentsScreen/PaymentHistory/PaymentHistoryScreen'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
@@ -229,6 +230,12 @@ function PaymentsStackScreen({}: PaymentsStackScreenProps) {
         key={'PayDebt'}
         name="PayDebt"
         component={PayDebt}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <PaymentsScreenStack.Screen
+        key={'NoticeOfRights'}
+        name="NoticeOfRights"
+        component={NoticeOfRights}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </PaymentsScreenStack.Navigator>
