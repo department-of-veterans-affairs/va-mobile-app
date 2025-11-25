@@ -19,7 +19,7 @@
           "debtHistory": [
             {
               "date": "09/18/2012",
-              "letterCode": 100,
+              "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
             }
           ]
@@ -43,7 +43,7 @@
           "debtHistory": [
             {
               "date": "09/18/2012",
-              "letterCode": 100,
+              "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
             }
           ]
