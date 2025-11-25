@@ -7,14 +7,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useContactInformation } from 'api/contactInformation'
+import { useContactInformation, useSaveEmail } from 'api/contactInformation'
+import { SaveEmailData } from 'api/types'
 import { AlertWithHaptics, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import { SettingsState, updateDisplayEmailConfirmationAlert } from 'store/slices'
+import { isErrorObject } from 'utils/common'
 import { useAppDispatch, useRouteNavigation, useTheme } from 'utils/hooks'
 
 export const CONFIRM_EMAIL_ALERT_DISMISSED = '@confirm_email_alert_dismissed'
+
+// Only render alert to users who HAVE NOT confirmed, edited, or updated their email since March 1, 2025
+export const EMAIL_UPDATED_AT_THRESHOLD = '2025-03-01T00:00:00.000Z'
 
 export type EmailConfirmationAlertProps = {
   /** A different variation of the alert is shown within the contact information screen */
@@ -27,9 +32,18 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
   const navigateTo = useRouteNavigation()
   const snackbar = useSnackbar()
   const { data: contactInformation, isFetching: loadingContactInformation } = useContactInformation()
+  const { mutate: saveEmail } = useSaveEmail()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { displayEmailConfirmationAlert } = useSelector<RootState, SettingsState>((state) => state.settings)
   const { t } = useTranslation(NAMESPACE.COMMON)
+
+  const updatedAtTimeStale =
+    !contactInformation?.contactEmail?.updatedAt ||
+    new Date(contactInformation.contactEmail.updatedAt) < new Date(EMAIL_UPDATED_AT_THRESHOLD)
+
+  const confirmationDateStale =
+    !contactInformation?.contactEmail?.confirmationDate ||
+    new Date(contactInformation.contactEmail.confirmationDate) < new Date(EMAIL_UPDATED_AT_THRESHOLD)
 
   useEffect(() => {
     const checkEmailConfirmAlertDismissed = async () => {
@@ -44,6 +58,37 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
   const handleDismiss = (): void => {
     AsyncStorage.setItem(CONFIRM_EMAIL_ALERT_DISMISSED, 'true')
     dispatch(updateDisplayEmailConfirmationAlert(false))
+  }
+
+  const handleConfirm = (): void => {
+    const email = contactInformation?.contactEmail?.emailAddress || ''
+    const emailId = contactInformation?.contactEmail?.id
+    const confirmedDate = new Date().toISOString()
+    const emailData: SaveEmailData = { emailAddress: email, id: emailId, confirmationDate: confirmedDate }
+    const mutateOptions = {
+      onSuccess: () => {
+        AsyncStorage.setItem(CONFIRM_EMAIL_ALERT_DISMISSED, 'true')
+      },
+      onError: (error: unknown) => {
+        if (isErrorObject(error)) {
+          if (error.status === 400) {
+            snackbar.show(t('contactInformation.emailAddress.not.saved'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+            })
+          } else {
+            snackbar.show(t('contactInformation.emailAddress.not.saved'), {
+              isError: true,
+              offset: theme.dimensions.snackBarBottomOffset,
+              onActionPressed: () => saveEmail(emailData, mutateOptions),
+            })
+          }
+        }
+      },
+    }
+
+    dispatch(updateDisplayEmailConfirmationAlert(false))
+    saveEmail(emailData, mutateOptions)
   }
 
   const enrolledInVAHealthCare =
@@ -62,7 +107,7 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   const onPrimaryAction = () => {
     if (emailOnFile) {
-      handleDismiss()
+      handleConfirm()
       snackbar.show(t('email.alert.confirm.primary.action.snackbar'))
     } else {
       navigateTo('EditEmail')
@@ -80,11 +125,16 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
 
   // Display email alert in contact screen if no email associated
   const contactScreenNoEmail = inContactInfoScreen && !emailOnFile
-  if (
-    !enrolledInVAHealthCare ||
-    loadingContactInformation ||
-    (!displayEmailConfirmationAlert && !contactScreenNoEmail)
-  ) {
+
+  // Don't display alert if not enrolled in healthcare, loading, user already dismissed, or email has been updated/confirmed recently
+  const showAlert =
+    enrolledInVAHealthCare &&
+    !loadingContactInformation &&
+    (displayEmailConfirmationAlert || contactScreenNoEmail) &&
+    updatedAtTimeStale &&
+    confirmationDateStale
+
+  if (!showAlert) {
     return <></>
   }
 
@@ -95,7 +145,7 @@ const EmailConfirmationAlert: FC<EmailConfirmationAlertProps> = ({ inContactInfo
       <AlertWithHaptics
         variant="warning"
         header={alertHeader}
-        primaryButton={emailOnFile ? { label: primaryButtonText, onPress: handleDismiss } : undefined}
+        primaryButton={emailOnFile ? { label: primaryButtonText, onPress: handleConfirm } : undefined}
       />
     )
   }
