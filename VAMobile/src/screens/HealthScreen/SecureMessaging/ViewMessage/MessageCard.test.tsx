@@ -44,6 +44,7 @@ const messageAttributes: SecureMessagingMessageAttributes = {
   recipientId: 2,
   recipientName: 'Jane Smith',
   readReceipt: READ,
+  isOhMessage: false,
 }
 
 context('MessageCard', () => {
