@@ -1,8 +1,11 @@
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Checkbox } from '@department-of-veterans-affairs/mobile-component-library'
+import { TFunction } from 'i18next'
 
 import { Box, ButtonDecoratorType, List, ListItemObj, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
 import { CheckboxOption, FILTER_KEY_ALL, isChecked, isIndeterminate } from 'utils/travelPay'
 
@@ -14,8 +17,8 @@ type TravelPayClaimsFilterCheckboxGroupProps = {
   allLabelText: string
 }
 
-const getA11yLabel = (option: CheckboxOption): string =>
-  option.value === FILTER_KEY_ALL ? 'Select all' : option.optionLabelKey
+const getA11yLabel = (t: TFunction, option: CheckboxOption): string =>
+  option.value === FILTER_KEY_ALL ? t('travelPay.statusList.filter.selectAll') : option.optionLabelKey
 
 const TravelPayClaimsFilterCheckboxGroup = ({
   options,
@@ -25,6 +28,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
   allLabelText,
 }: TravelPayClaimsFilterCheckboxGroupProps): ReactElement => {
   const theme = useTheme()
+  const { t } = useTranslation(NAMESPACE.COMMON)
 
   // Always add "All" option
   const optionsWithAll = [
@@ -64,7 +68,7 @@ const TravelPayClaimsFilterCheckboxGroup = ({
       backgroundColor: isChecked(option.value, options, selectedValues) ? 'listActive' : undefined,
       onPress: () => onChange(option.value),
       decorator: ButtonDecoratorType.None,
-      testId: getA11yLabel(option),
+      testId: getA11yLabel(t, option),
       a11yState: { checked: checked },
       a11yRole: 'checkbox',
     }
