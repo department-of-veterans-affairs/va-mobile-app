@@ -71,8 +71,12 @@ const navigationDic = {
     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines'], 'Vaccines'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines', 'January 14, 2021'], 'COVID-19 vaccine'],
-    ['Allergies.e2e', ['Medical records', 'Allergies'], 'Allergies'],
-    ['Allergies.e2e', ['Medical records', 'Allergies', 'January 10, 2023'], 'Penicillins allergy'],
+    [['Allergies.e2e', 'AllergiesAccelerated.e2e'], ['Medical records', 'Allergies'], 'Allergies'],
+    [
+      ['Allergies.e2e', 'AllergiesAccelerated.e2e'],
+      ['Medical records', 'Allergies', 'January 10, 2023'],
+      'Penicillins allergy',
+    ],
   ],
   Payments: [
     ['Payments.e2e', 'VA payment history', 'History'],

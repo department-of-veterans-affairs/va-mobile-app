@@ -4,6 +4,7 @@ export type AuthorizedServicesPayload = {
     type: string
     attributes: {
       authorizedServices: {
+        allergiesOracleHealthEnabled: boolean
         appeals: boolean
         appointments: boolean
         claims: boolean
@@ -28,6 +29,7 @@ export type AuthorizedServicesPayload = {
 }
 
 export type UserAuthorizedServicesData = {
+  allergiesOracleHealthEnabled: boolean
   appeals: boolean
   appointments: boolean
   claims: boolean

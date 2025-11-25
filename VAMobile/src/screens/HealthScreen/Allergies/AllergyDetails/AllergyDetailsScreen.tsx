@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useAllergies } from 'api/allergies/getAllergies'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { AllergyAttributesV0, AllergyAttributesV1, NoteText, Reaction } from 'api/types'
 import { Box, FeatureLandingTemplate, LoadingComponent, TextArea, TextView, VABulletList } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -22,7 +24,21 @@ type AllergyDetailsScreenProps = StackScreenProps<HealthStackParamList, 'Allergy
 function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) {
   const { allergy } = route.params
 
-  const { isLoading: detailsLoading } = useAllergies({ enabled: screenContentAllowed('WG_AllergyDetails') })
+  const {
+    data: authorizedServices,
+    isFetching: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+  } = useAuthorizedServices()
+
+  const isAccelerating =
+    authorizedServices?.allergiesOracleHealthEnabled &&
+    !loadingUserAuthorizedServices &&
+    !getUserAuthorizedServicesError
+
+  const { isLoading: detailsLoading } = useAllergies({
+    enabled: screenContentAllowed('WG_AllergyDetails'),
+    isV1Api: isAccelerating,
+  })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -40,13 +56,57 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
     return <></>
   }
 
-  const displayDate = allergy.attributes?.recordedDate
-    ? formatDateMMMMDDYYYY(allergy.attributes.recordedDate)
-    : placeHolder
+  const displayDate = (allergy.attributes as AllergyAttributesV1)?.date
+    ? formatDateMMMMDDYYYY((allergy.attributes as AllergyAttributesV1).date || placeHolder)
+    : (allergy.attributes as AllergyAttributesV0)?.recordedDate
+      ? formatDateMMMMDDYYYY((allergy.attributes as AllergyAttributesV0).recordedDate || placeHolder)
+      : placeHolder
 
-  const displayName = allergy.attributes?.code?.text
-    ? t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) })
-    : placeHolder
+  const displayName = (allergy.attributes as AllergyAttributesV0)?.code?.text
+    ? t('allergies.allergyName', {
+        name: capitalizeFirstLetter((allergy.attributes as AllergyAttributesV0)?.code?.text || placeHolder),
+      })
+    : (allergy.attributes as AllergyAttributesV1)?.name
+      ? t('allergies.allergyName', {
+          name: capitalizeFirstLetter((allergy.attributes as AllergyAttributesV1)?.name || placeHolder),
+        })
+      : t('allergies.allergyName', {
+          name: capitalizeFirstLetter(placeHolder),
+        })
+
+  const listOfCategories = (allergy.attributes as AllergyAttributesV0)?.category
+    ? (allergy.attributes as AllergyAttributesV0)?.category?.map((category: string) => {
+        return capitalizeFirstLetter(category || placeHolder)
+      })
+    : (allergy.attributes as AllergyAttributesV1)?.categories
+      ? (allergy.attributes as AllergyAttributesV1)?.categories?.map((category: string) => {
+          return capitalizeFirstLetter(category || placeHolder)
+        })
+      : [placeHolder]
+
+  const listOfReactions = allergy.attributes?.reactions
+    ? allergy.attributes?.reactions?.flatMap((reaction) => {
+        return (reaction as Reaction).manifestation
+          ? (reaction as Reaction).manifestation?.map((manifestation) => {
+              return capitalizeFirstLetter(manifestation.text || placeHolder)
+            })
+          : capitalizeFirstLetter((reaction as unknown as string) || placeHolder)
+      })
+    : [placeHolder]
+
+  const listOfNotes = allergy.attributes?.notes
+    ? allergy.attributes?.notes?.map((note) => {
+        return (note as NoteText).text
+          ? capitalizeFirstLetter((note as NoteText).text || placeHolder)
+          : capitalizeFirstLetter((note as unknown as string) || placeHolder)
+      })
+    : [placeHolder]
+
+  const providerName = (allergy.attributes as AllergyAttributesV0)?.recorder?.display
+    ? capitalizeFirstLetter((allergy.attributes as AllergyAttributesV0)?.recorder?.display || placeHolder)
+    : (allergy.attributes as AllergyAttributesV1)?.provider
+      ? capitalizeFirstLetter((allergy.attributes as AllergyAttributesV1)?.provider || placeHolder)
+      : placeHolder
 
   return (
     <FeatureLandingTemplate
@@ -71,15 +131,10 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
               <TextView variant="MobileBodyBold" selectable={true}>
                 {t('health.details.types.header')}
               </TextView>
-              {allergy.attributes?.category?.length ? (
+              {(allergy.attributes as AllergyAttributesV0)?.category?.length ||
+              (allergy.attributes as AllergyAttributesV1)?.categories?.length ? (
                 <Box ml={theme.dimensions.standardMarginBetween}>
-                  <VABulletList
-                    listOfText={
-                      allergy.attributes?.category?.map((category) => {
-                        return capitalizeFirstLetter(category || placeHolder)
-                      }) as string[]
-                    }
-                  />
+                  <VABulletList listOfText={listOfCategories as string[]} />
                 </Box>
               ) : (
                 <TextView variant="MobileBody" selectable={true} testID={'Category ' + placeHolder}>
@@ -90,11 +145,8 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
 
             <Box mt={theme.dimensions.standardMarginBetween}>
               <TextView variant="MobileBodyBold">{t('health.details.provider')}</TextView>
-              <TextView
-                variant="MobileBody"
-                selectable={true}
-                testID={'Provider ' + allergy.attributes?.recorder?.display || placeHolder}>
-                {capitalizeFirstLetter(allergy.attributes?.recorder?.display as string) || placeHolder}
+              <TextView variant="MobileBody" selectable={true} testID={'Provider ' + providerName}>
+                {providerName}
               </TextView>
             </Box>
 
@@ -103,15 +155,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 <TextView variant="MobileBodyBold">{t('health.details.reaction.header')}</TextView>
                 {allergy?.attributes?.reactions?.length ? (
                   <Box ml={theme.dimensions.standardMarginBetween}>
-                    <VABulletList
-                      listOfText={
-                        allergy.attributes?.reactions?.flatMap((reaction) => {
-                          return reaction.manifestation?.map((manifestation) => {
-                            return capitalizeFirstLetter(manifestation.text || placeHolder)
-                          })
-                        }) as string[]
-                      }
-                    />
+                    <VABulletList listOfText={listOfReactions as string[]} />
                   </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Reaction ' + placeHolder}>
@@ -123,13 +167,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
                 <TextView variant="MobileBodyBold">{t('health.details.notes')}</TextView>
                 {allergy?.attributes?.notes?.length ? (
                   <Box ml={theme.dimensions.standardMarginBetween}>
-                    <VABulletList
-                      listOfText={
-                        allergy.attributes?.notes?.map((note) => {
-                          return capitalizeFirstLetter(note.text || placeHolder)
-                        }) as string[]
-                      }
-                    />
+                    <VABulletList listOfText={listOfNotes as string[]} />
                   </Box>
                 ) : (
                   <TextView variant="MobileBody" selectable={true} testID={'Note ' + placeHolder}>

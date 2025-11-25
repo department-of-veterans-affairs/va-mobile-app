@@ -1,6 +1,6 @@
 export type AllergyListPayload = {
-  data: Array<Allergy>
-  links: {
+  data: Array<AllergyData>
+  links?: {
     self: string
     first: string
     prev: string
@@ -14,25 +14,37 @@ export type AllergyListPayload = {
       totalPages: number
       totalEntries: number
     }
-    dataFromStore: boolean
+    dataFromStore?: boolean
   }
 }
 
-export type Allergy = {
+export type AllergyData = {
   id?: string | null
   type?: string | null
-  attributes?: {
-    code?: {
-      text?: string | null
-    } | null
-    category?: Array<string> | null
-    recordedDate?: string | null
-    notes?: Array<NoteText> | null
-    recorder?: {
-      display?: string | null
-    } | null
-    reactions?: Array<Reaction> | null
-  }
+  attributes?: AllergyAttributesV0 | AllergyAttributesV1 | null
+}
+
+export type AllergyAttributesV0 = {
+  code?: {
+    text?: string | null
+  } | null
+  category?: Array<string> | null
+  recordedDate?: string | null
+  notes?: Array<NoteText> | null
+  recorder?: Reference | null
+  reactions?: Array<Reaction> | null
+}
+
+export type AllergyAttributesV1 = {
+  id: string
+  name?: string | null
+  date?: string | null
+  categories?: Array<string> | null
+  reactions?: Array<string> | null
+  location?: string | null
+  observedHistoric?: string | null
+  notes?: Array<string> | null
+  provider?: string | null
 }
 
 export type Reaction = {
@@ -43,5 +55,12 @@ export type ManifestationText = {
 }
 
 export type NoteText = {
+  authorReference?: Reference | null
+  time: string
   text: string
+}
+
+export type Reference = {
+  reference?: string
+  display?: string
 }
