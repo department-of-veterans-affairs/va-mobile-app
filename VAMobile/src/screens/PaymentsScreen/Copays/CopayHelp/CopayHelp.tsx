@@ -45,7 +45,7 @@ function CopayHelp({}: CopayHelpProps) {
             logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
             navigateTo('Webview', {
               url: LINK_URL_ASK_VA_GOV,
-              displayTitle: t('copays.help.askVA'),
+              displayTitle: t('webview.vagov'),
               loadingMessage: t('loading.vaWebsite'),
               useSSO: true,
             })
