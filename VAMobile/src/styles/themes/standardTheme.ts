@@ -303,7 +303,6 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       scheme.text.primary,
     ),
     // TODO: update to pull in the full mobile design token typography
-    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
     vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
     vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
   }
