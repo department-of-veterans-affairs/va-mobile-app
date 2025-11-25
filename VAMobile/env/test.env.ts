@@ -42,6 +42,9 @@ export const LINK_URL_HELP_FROM_VA_ACCREDITED_REPRESENTATIVE =
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
 export const LINK_URL_MY_MONEY_GOV = 'https://www.mymoney.gov/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_REQUEST_HELP_FORM_5655 =
+  'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction/'
+export const LINK_URL_REQUEST_HELP_VA_DEBT = 'https://www.va.gov/resources/options-to-request-help-with-va-debt/'
 export const LINK_URL_VA_FORM_5655 = 'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction'
 export const LINK_URL_VA_MENTAL_HEALTH_SERVICES =
   'https://www.va.gov/health-care/health-needs-conditions/mental-health/'
