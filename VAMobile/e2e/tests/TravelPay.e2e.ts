@@ -184,15 +184,15 @@ const expectTravelPayFileOnlineComponent = async (checkExternalLink: boolean = f
 }
 
 const expectTravelPayHelpComponent = async () => {
-  await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_PAY_HELP_COMPONENT_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.HELP_TITLE_ID))).toExist()
-  await expect(element(by.id(TravelPayE2eIdConstants.HELP_TEXT_ID))).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.TRAVEL_PAY_HELP_COMPONENT_ID)).atIndex(0)).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.HELP_TITLE_ID)).atIndex(0)).toExist()
+  await expect(element(by.id(TravelPayE2eIdConstants.HELP_TEXT_ID)).atIndex(0)).toExist()
   if (device.getPlatform() === 'android') {
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
   } else {
-    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
   }
 }
 
