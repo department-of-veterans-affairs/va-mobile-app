@@ -247,10 +247,8 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      await waitFor(element(by.label('AMLODIPINE BESYLATE 10MG TAB')))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(50, 'down', 0.5, 0.5)
+      // Scroll so that 'Get prescription details' is visible but not under the 'Start refill request' button
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(100, 'down', 0.5, 0.5)
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()
