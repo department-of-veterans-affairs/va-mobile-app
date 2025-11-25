@@ -31,7 +31,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
 
   if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
     return (
-      <Box mx={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
         <ContentUnavailableCard textId="contentUnavailable" />
       </Box>
     )

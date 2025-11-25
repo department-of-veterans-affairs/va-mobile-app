@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-import { TFunction } from 'i18next'
-import { DateTime } from 'luxon'
 
 import { TravelPayClaimData } from 'api/types'
 import {

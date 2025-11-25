@@ -1,1 +1,1 @@
-export { default as LastUpdateTimestamp } from './LastUpdatedTimestamp'
+export { default } from './LastUpdatedTimestamp'

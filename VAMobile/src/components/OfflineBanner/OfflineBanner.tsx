@@ -54,7 +54,7 @@ export const OfflineBanner: FC = () => {
     <Box
       backgroundColor="offlineBanner"
       px={theme.dimensions.gutter}
-      pt={5}
+      pt={theme.dimensions.tinyMarginBetween}
       mb={theme.dimensions.condensedMarginBetween}>
       <Pressable
         accessibilityState={{ expanded: bannerExpanded }}

@@ -51,7 +51,6 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const { lastUpdatedDate } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
-  console.log('last updated', lastUpdatedDate)
   const travelPayEnabled =
     !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
 

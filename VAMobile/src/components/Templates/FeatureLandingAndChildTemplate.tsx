@@ -10,12 +10,12 @@ import {
   HeaderBanner,
   HeaderBannerProps,
   HeaderButton,
+  LastUpdatedTimestamp,
   OfflineBanner,
   TextView,
   TextViewProps,
   WaygateWrapper,
 } from 'components'
-import LastUpdatedTimestamp from 'components/LastUpdatedTimestamp/LastUpdatedTimestamp'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'

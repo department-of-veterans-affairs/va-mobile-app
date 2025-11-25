@@ -24,6 +24,11 @@ import {
 import { useAppDispatch } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
+/**
+ * Tracks the use of a screen while in offline mode. When the provided screen is focused for the first time while
+ * offline an event will be queued in the store to be logged once the device comes back online.
+ * @param screen - ID of the screen tracked for offline usage
+ */
 export const useOfflineEventQueue = (screen: string) => {
   const dispatch = useAppDispatch()
   const { forceOffline } = useSelector<RootState, OfflineState>((state) => state.offline)
@@ -88,6 +93,9 @@ export function useAppIsOnline(): string {
   return isConnected ? CONNECTION_STATUS.CONNECTED : CONNECTION_STATUS.DISCONNECTED
 }
 
+/**
+ * Enables the listeners for react query to listen for any network status changes from net info.
+ */
 export const useNetworkConnectionListener = () => {
   const forceOffline = useSelector<RootState>((state) => state.offline.forceOffline)
   const remoteConfigActivated = useSelector<RootState>((state) => state.settings.remoteConfigActivated)
@@ -103,6 +111,9 @@ export const useNetworkConnectionListener = () => {
   }, [remoteConfigActivated, forceOffline])
 }
 
+/**
+ * Used to announce the connection and disconnection status while a screen reader is enabled.
+ */
 export const useOfflineAnnounce = () => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -137,6 +148,9 @@ export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false
   }
 }
 
+/**
+ * Returns true if the user is currently focusing on a modal
+ */
 export function useIsWithinModal(): boolean {
   const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
   return !!viewingModal

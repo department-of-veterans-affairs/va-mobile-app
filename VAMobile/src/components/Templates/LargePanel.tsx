@@ -84,10 +84,8 @@ export const LargePanel: FC<LargePanelProps> = ({
     }
   }, [hideModal])
 
+  // Used for offline app state to determine whether to show toast notifications
   useEffect(() => {
-    /**
-     * Used for offline app state to determine whether to show toast notifications
-     */
     dispatch(setViewingModal(true))
   })
 

@@ -16,7 +16,7 @@ const ContentUnavailableCard: FC<ContentUnavailableCardProps> = ({ textId }) => 
     borderStyle: 'solid',
     borderWidth: 'default',
     borderColor: 'primary',
-    borderRadius: 8,
+    borderRadius: theme.dimensions.alertBorderWidth,
     justifyContent: 'center',
     alignItems: 'center',
     p: theme.dimensions.standardMarginBetween * 2,

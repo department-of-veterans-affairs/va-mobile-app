@@ -21,7 +21,7 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 /**
   By default, the query client caches for 5 minutes with a max expiration of 24 days.
- To support offline we want to allow cached
+ To support offline we want to allow cached by setting the garbage collection time to Infinity.
  */
 const GARBAGE_COLLECT_TIME = Infinity
 
