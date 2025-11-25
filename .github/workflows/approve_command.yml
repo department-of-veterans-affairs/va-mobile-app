@@ -1,4 +1,4 @@
-name: "[Release] Approve Slash Command"
+name: '[Release] Approve Slash Command'
 
 on:
   repository_dispatch:
@@ -8,16 +8,22 @@ jobs:
   indicate_start:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Adding release approved comment
         env:
           PAYLOAD_CONTEXT: ${{ toJson(github.event.client_payload) }}
         run: |
           echo "$PAYLOAD_CONTEXT"
           echo ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-      - name: "Add reaction to approve command"
+      - name: 'Add reaction to approve command'
         uses: peter-evans/create-or-update-comment@v1
         with:
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
@@ -26,24 +32,31 @@ jobs:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
     with:
       version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-    secrets:
-      GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }}
+    secrets: inherit
   comment_complete:
     needs: [indicate_start, run_prs]
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout repo"
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: 'Checkout repo'
         uses: actions/checkout@v3
-      - name: "Set up GH CLI secret"
-        run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - name: "Log into GH CLI"
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ steps.generate_token.outputs.token }}" >> token.txt
+      - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
-      - name: "Comment on original issue with PR info"
+      - name: 'Comment on original issue with PR info'
         run: |
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
           [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
           Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
-      - name: "Close original issue"
+      - name: 'Close original issue'
         run: |
           gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
           gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
@@ -55,4 +68,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results."
+      message: 'The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'

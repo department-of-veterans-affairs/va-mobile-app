@@ -506,7 +506,7 @@ describe('dateUtils', () => {
         expect(typeof option.label).toBe('string')
         expect(option.label.length).toBeGreaterThan(0)
         // Should contain a hyphen for date ranges
-        expect(option.label).toMatch(/-/)
+        expect(option.label).toMatch(/\u2013/)
       })
     })
 
