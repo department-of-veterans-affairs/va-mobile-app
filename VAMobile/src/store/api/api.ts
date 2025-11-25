@@ -192,6 +192,7 @@ const call = async function <T>(
         if (vamfBody) {
           // Handle vamfBody separately since JSON.stringify chokes on it
           json.errors[0].source.vamfBody = ''
+          // Adding newlines to stringified text to prevent an issue that causes the main thread to hang without them
           text = JSON.stringify(json, null, 2)
           const escaped = vamfBody.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
           text = text.replace('"vamfBody":""', `"vamfBody":"${escaped}"`)
