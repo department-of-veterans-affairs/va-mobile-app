@@ -7,10 +7,6 @@ on:
         description: "Version Number (eg. v1.1.0)"
         type: string
         required: true
-    secrets:
-      GH_ACTIONS_PAT:
-        description: "PAT token from composite parent workflow"
-        required: true
     outputs:
       devPrUrl:
         value: ${{jobs.create_prs.outputs.devPrUrl}}
@@ -30,13 +26,19 @@ jobs:
       devPrUrl: ${{steps.urls.outputs.dev}}
       releaseHash: ${{steps.urls.outputs.release}}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: "Checkout repo"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: "Set up GH CLI secret"
-        run: echo "${{secrets.GH_ACTIONS_PAT}}" >> token.txt
+        run: echo "${{steps.generate_token.outputs.token}}" >> token.txt
       - name: "Log into GH CLI"
         run: gh auth login --with-token < token.txt
       - name: "Create PR to merge changes back to develop"
