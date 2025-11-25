@@ -118,7 +118,6 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
-  vadsFontHeadingMedium: string
   vadsFontHeadingXsmall: string
   vadsFontHeadingMedium: string
 }
