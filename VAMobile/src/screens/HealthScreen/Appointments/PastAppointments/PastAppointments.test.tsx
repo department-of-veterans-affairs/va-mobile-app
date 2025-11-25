@@ -8,6 +8,8 @@ import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, App
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import { ErrorsState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
+import { getPastAppointmentDateRange } from 'utils/appointments'
+import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
@@ -50,11 +52,19 @@ jest.mock('utils/hooks/offline', () => {
 jest.mock('utils/remoteConfig')
 
 context('PastAppointments', () => {
+  const mockStartDateUTC = DateTime.utc().minus({ days: 7 }).toISO()
+  const mockDateAndTime =
+    getFormattedDateWithWeekdayForTimeZone(mockStartDateUTC, 'America/Los_Angeles') +
+    ' ' +
+    getFormattedTimeForTimeZone(mockStartDateUTC, 'America/Los_Angeles')
+
   const appointmentData = (
     status: AppointmentStatus = AppointmentStatusConstants.BOOKED,
     isPending = false,
-    startDateUtc?: string,
+    startDateUtc: string = mockStartDateUTC,
   ): AppointmentsList => {
+    const startDateLocal = DateTime.fromISO(startDateUtc).toLocal().toISO() || ''
+
     return [
       {
         ...defaultAppointment,
@@ -63,7 +73,8 @@ context('PastAppointments', () => {
           healthcareService: undefined,
           status,
           isPending,
-          startDateUtc: startDateUtc || defaultAppointmentAttributes.startDateUtc,
+          startDateUtc: startDateUtc,
+          startDateLocal: startDateLocal,
           travelPayClaim: {
             metadata: {
               status: 200,
@@ -92,6 +103,7 @@ context('PastAppointments', () => {
       <PastAppointments
         {...props}
         appointmentsData={appointmentsData}
+        dateRange={getPastAppointmentDateRange()}
         page={1}
         setPage={jest.fn()}
         loading={loading}
@@ -102,11 +114,13 @@ context('PastAppointments', () => {
 
   it('initializes correctly', () => {
     initializeTestInstance({ data: appointmentData() })
-    expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
-    expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
-    expect(
-      screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
-    ).toBeTruthy()
+
+    expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
+    expect(screen.getByText(t('reset'))).toBeTruthy()
+    expect(screen.getByText(t('datePicker.from'))).toBeTruthy()
+    expect(screen.getByText(t('datePicker.to'))).toBeTruthy()
+    expect(screen.getByRole('button', { name: t('apply') })).toBeTruthy()
+    expect(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`)).toBeTruthy()
   })
 
   describe('when loading is set to true', () => {
@@ -119,9 +133,7 @@ context('PastAppointments', () => {
   describe('when a appointment is clicked', () => {
     it('calls useRouteNavigation', () => {
       initializeTestInstance({ data: appointmentData() })
-      fireEvent.press(
-        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
-      )
+      fireEvent.press(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`))
       expect(mockNavigationSpy).toHaveBeenCalledWith('PastAppointmentDetails', {
         appointment: appointmentData()[0],
       })
@@ -172,11 +184,11 @@ context('PastAppointments', () => {
       })
       expect(screen.getByText(t('travelPay.downtime.apptsTitle'))).toBeTruthy()
       // Verify that the rest of the component is still rendered
-      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
-      expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
-      expect(
-        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
-      ).toBeTruthy()
+      expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
+      expect(screen.getByText(t('reset'))).toBeTruthy()
+      expect(screen.getByText(t('datePicker.from'))).toBeTruthy()
+      expect(screen.getByText(t('datePicker.to'))).toBeTruthy()
+      expect(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`)).toBeTruthy()
     })
 
     it('does not show downtime alert when feature flag is not enabled', () => {
@@ -194,11 +206,11 @@ context('PastAppointments', () => {
       })
       expect(screen.queryByText(t('travelPay.downtime.apptsTitle'))).toBeNull()
       // Verify that the rest of the component is still rendered
-      expect(screen.getByText(t('pastAppointments.selectADateRange'))).toBeTruthy()
-      expect(screen.getAllByText(t('pastAppointments.pastThreeMonths'))).toBeTruthy()
-      expect(
-        screen.getByTestId('Saturday, February 6, 2021 11:53 AM PST Confirmed At VA Long Beach Healthcare System'),
-      ).toBeTruthy()
+      expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
+      expect(screen.getByText(t('reset'))).toBeTruthy()
+      expect(screen.getByText(t('datePicker.from'))).toBeTruthy()
+      expect(screen.getByText(t('datePicker.to'))).toBeTruthy()
+      expect(screen.getByTestId(`${mockDateAndTime} Confirmed At VA Long Beach Healthcare System`)).toBeTruthy()
     })
   })
 
@@ -219,7 +231,7 @@ context('PastAppointments', () => {
     })
 
     it('should show confirmed tag when travel pay is not eligible due to old date', () => {
-      const oldDate = '2023-12-01T00:00:00Z' // Date more than 30 days ago to make travel pay ineligible
+      const oldDate = DateTime.utc().minus({ days: 31 }).toISO() // Date more than 30 days ago to make travel pay ineligible
 
       initializeTestInstance({ data: appointmentData(AppointmentStatusConstants.BOOKED, false, oldDate) }, false, true)
 
@@ -228,9 +240,9 @@ context('PastAppointments', () => {
     })
 
     it('should show confirmed tag when travel pay metadata is missing', () => {
-      const threeDaysAgo = new Date()
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-      const isoString = threeDaysAgo.toISOString()
+      const threeDaysAgo = DateTime.utc().minus({ days: 3 })
+      const isoString = threeDaysAgo.toISO()
+      const localIsoString = threeDaysAgo.toLocal().toISO()
 
       const appointmentWithNoMetadata = [
         {
@@ -241,6 +253,7 @@ context('PastAppointments', () => {
             status: AppointmentStatusConstants.BOOKED,
             isPending: false,
             startDateUtc: isoString,
+            startDateLocal: localIsoString,
             travelPayClaim: undefined, // No metadata
             travelPayEligible: false,
           },
@@ -257,9 +270,9 @@ context('PastAppointments', () => {
       { status: 400, message: 'Bad request' },
       { status: 500, message: 'Internal server error' },
     ])('should show confirmed tag when travel pay metadata status is $status', ({ status, message }) => {
-      const threeDaysAgo = new Date()
-      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
-      const isoString = threeDaysAgo.toISOString()
+      const threeDaysAgo = DateTime.utc().minus({ days: 3 })
+      const isoString = threeDaysAgo.toISO()
+      const localIsoString = threeDaysAgo.toLocal().toISO()
 
       const appointmentWithErrorMetadata = [
         {
@@ -270,6 +283,7 @@ context('PastAppointments', () => {
             status: AppointmentStatusConstants.BOOKED,
             isPending: false,
             startDateUtc: isoString,
+            startDateLocal: localIsoString,
             travelPayClaim: {
               metadata: {
                 status,

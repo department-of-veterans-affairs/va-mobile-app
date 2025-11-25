@@ -1,29 +1,37 @@
-import React, { RefObject, useMemo, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 
+import { DateTime } from 'luxon'
+
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
-import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
+import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
+import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
+import { Events } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameDropDatePickerValue } from 'constants/timeframes'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ErrorsState } from 'store/slices'
-import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
-import { getPickerOptions } from 'utils/dateUtils'
+import { logAnalyticsEvent } from 'utils/analytics'
+import {
+  filterAppointments,
+  getDatePickerRange,
+  getGroupedAppointments,
+  getPastAppointmentDateRange,
+  getPastTimeFrame,
+} from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
+  dateRange: AppointmentsDateRange
   loading: boolean
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
   setDateRange: React.Dispatch<React.SetStateAction<AppointmentsDateRange>>
   setTimeFrame: React.Dispatch<React.SetStateAction<TimeFrameType>>
   scrollViewRef: RefObject<ScrollView>
@@ -31,9 +39,8 @@ type PastAppointmentsProps = {
 
 function PastAppointments({
   appointmentsData,
+  dateRange,
   loading,
-  page,
-  setPage,
   setDateRange,
   setTimeFrame,
   scrollViewRef,
@@ -42,6 +49,11 @@ function PastAppointments({
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
+  const [page, setPage] = useState(1)
+  const [onApplyClicked, setOnApplyClicked] = useState(false)
+  const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()
+
+  const datePickerRange = getDatePickerRange(dateRange)
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -49,90 +61,58 @@ function PastAppointments({
     downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
+  const filteredAppointments = useMemo(
+    () => filterAppointments(appointmentsData?.data || [], true, datePickerRange),
+    [appointmentsData?.data, datePickerRange],
+  )
+
   const pagination = {
     currentPage: page,
     perPage: DEFAULT_PAGE_SIZE,
-    totalEntries: appointmentsData?.meta?.pagination?.totalEntries || 0,
+    totalEntries: filteredAppointments?.length || 0,
   }
   const { perPage, totalEntries } = pagination
-
-  type PastAppointmentsDatePickerOption = {
-    label: string
-    value: string
-    a11yLabel: string
-    dates: TimeFrameDropDatePickerValue
-    timeFrame: TimeFrameType
-  }
-
-  const getPastAppointmentsPickerOptions = (): Array<PastAppointmentsDatePickerOption> => {
-    const pickerOptions = getPickerOptions(t, {
-      dateRangeA11yLabelTKey: 'pastAppointments.dateRangeA11yLabel',
-      allOfTKey: 'pastAppointments.allOf',
-      pastThreeMonthsTKey: 'pastAppointments.pastThreeMonths',
-    })
-      // Filter out the fourteen to twelve months option because it is not part of the past appointments time frames
-      .filter((option) => option.value !== TimeFrameTypeConstants.PAST_FOURTEEN_TO_TWELVE_MONTHS)
-      .map((option) => ({
-        ...option,
-        value: option.label,
-        timeFrame: option.value as TimeFrameType, // We know the value is a TimeFrameType because we filtered out the fourteen to twelve months option
-        testID: undefined, // We must pass undefined here to prevent the testID from being set to the a11y value and confusing screen readers
-      }))
-    return pickerOptions
-  }
-
-  const pickerOptions = getPastAppointmentsPickerOptions()
-  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
-
-  const filteredAppointments = useMemo(
-    () =>
-      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS ||
-      datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR
-        ? filterAppointments(appointmentsData?.data || [], true)
-        : appointmentsData?.data,
-    [appointmentsData?.data, datePickerOption],
-  )
 
   const appointmentsToShow = useMemo(
     () => filteredAppointments?.slice((page - 1) * perPage, page * perPage) || [],
     [filteredAppointments, page, perPage],
   )
 
-  if (loading) {
-    return <LoadingComponent text={t('appointments.loadingAppointments')} />
-  }
+  useEffect(() => {
+    if (onApplyClicked) {
+      setOnApplyClicked(false)
+    }
+  }, [onApplyClicked])
 
-  const setValuesOnPickerSelect = (selectValue: string): void => {
-    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
-    if (curSelectedRange) {
-      const startDate = curSelectedRange.dates.startDate.startOf('day').toISO()
-      const endDate = curSelectedRange.dates.endDate.endOf('day').toISO()
+  const handleDatePickerApply = (selectedDateRange: DatePickerRange, isValid: boolean) => {
+    if (isValid) {
+      const startDate = selectedDateRange.startDate.toISO()
+      const endDate = selectedDateRange.endDate.toISO()
       if (startDate && endDate) {
-        setTimeFrame(curSelectedRange.timeFrame)
-        setDateRange({ startDate: startDate, endDate: endDate })
+        const calculatedTimeFrame = getPastTimeFrame(selectedDateRange)
+        logAnalyticsEvent(Events.vama_appt_time_frame(calculatedTimeFrame))
+
+        const timeFrameToQuery =
+          calculatedTimeFrame === TimeFrameTypeConstants.PAST_ONE_MONTH
+            ? TimeFrameTypeConstants.PAST_THREE_MONTHS
+            : calculatedTimeFrame
+
+        setTimeFrame(timeFrameToQuery)
+        setDateRange({ startDate, endDate })
+        setInvalidDateRange(undefined)
         setPage(1)
       }
-      setDatePickerOption(curSelectedRange)
+    } else {
+      setInvalidDateRange(selectedDateRange)
     }
+    setOnApplyClicked(true)
   }
 
-  if (!appointmentsData || appointmentsData.data?.length < 1) {
-    return (
-      <Box>
-        <Box mx={theme.dimensions.gutter} accessible={true}>
-          <VAModalPicker
-            selectedValue={datePickerOption.value}
-            onSelectionChange={setValuesOnPickerSelect}
-            pickerOptions={pickerOptions}
-            labelKey={'pastAppointments.selectADateRange'}
-            testID="getDateRangeTestID"
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
-        </Box>
-      </Box>
-    )
+  const handleDatePickerReset = () => {
+    setInvalidDateRange(undefined)
+    setTimeFrame(TimeFrameTypeConstants.PAST_THREE_MONTHS)
+    setDateRange(getPastAppointmentDateRange())
+    setPage(1)
   }
 
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
@@ -154,19 +134,36 @@ function PastAppointments({
     tab: 'past appointments',
   }
 
+  const renderNoAppointments = () => {
+    logAnalyticsEvent(Events.vama_appt_empty_range)
+    return <NoAppointments subText={t('noAppointments.youDontHaveForDates')} showVAGovLink={false} />
+  }
+
+  if (loading) {
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
+  }
+
   return (
     <Box>
-      <Box mx={theme.dimensions.gutter} accessible={true}>
-        <VAModalPicker
-          selectedValue={datePickerOption.value}
-          onSelectionChange={setValuesOnPickerSelect}
-          pickerOptions={pickerOptions}
-          labelKey={'pastAppointments.selectADateRange'}
-          testID="getDateRangeTestID"
-          confirmTestID="pastApptsDateRangeConfirmID"
-          cancelTestID="pastApptsDateRangeCancelID"
-        />
-      </Box>
+      {invalidDateRange && (
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <AlertWithHaptics
+            variant="error"
+            header={t('datePicker.error.header')}
+            description={t('datePicker.error.message')}
+            focusOnError={onApplyClicked}
+            scrollViewRef={scrollViewRef}
+          />
+        </Box>
+      )}
+      <DatePicker
+        labelKey={'pastAppointments.selectAPastDateRange'}
+        initialDateRange={invalidDateRange || datePickerRange}
+        minimumDate={DateTime.local().minus({ years: 2 })}
+        maximumDate={DateTime.local()}
+        onApply={handleDatePickerApply}
+        onReset={handleDatePickerReset}
+      />
       {travelPayInDowntime && featureEnabled('travelPaySMOC') && (
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertWithHaptics
@@ -177,18 +174,24 @@ function PastAppointments({
           />
         </Box>
       )}
-      {getGroupedAppointments(
-        appointmentsToShow,
-        theme,
-        { t },
-        onPastAppointmentPress,
-        true,
-        pagination,
-        includeTravelClaims,
+      {!filteredAppointments || filteredAppointments.length < 1 ? (
+        renderNoAppointments()
+      ) : (
+        <>
+          {getGroupedAppointments(
+            appointmentsToShow,
+            theme,
+            { t },
+            onPastAppointmentPress,
+            true,
+            pagination,
+            includeTravelClaims,
+          )}
+          <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+            <Pagination {...paginationProps} />
+          </Box>
+        </>
       )}
-      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
-        <Pagination {...paginationProps} />
-      </Box>
     </Box>
   )
 }

@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -29,13 +30,15 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
+  const { data: authorizedServices } = useAuthorizedServices()
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {featureEnabled('labsAndTests') && (
+        {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
             title={t('labsAndTests.buttonTitle')}
             onPress={() => navigateTo('LabsAndTestsList')}
