@@ -2,16 +2,17 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
-import { ErrorsState } from 'store/slices'
+import { DowntimeWindowsByFeatureType } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { getPastAppointmentDateRange } from 'utils/appointments'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment, defaultAppointmentAttributes } from 'utils/tests/appointments'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -29,6 +30,13 @@ jest.mock('../../../../utils/platform', () => {
     isAndroid: jest.fn(() => {
       return true
     }),
+  }
+})
+
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
   }
 })
 
@@ -78,9 +86,13 @@ context('PastAppointments', () => {
     loading = false,
     travelPaySMOCEnabled = false,
     options?: RenderParams,
+    maintenanceWindows?: { maintenanceWindows: DowntimeWindowsByFeatureType },
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     const props = mockNavProps()
+    useMaintenanceWindowsMock.mockReturnValue(
+      maintenanceWindows || getMaintenanceWindowsPayload(['travel_pay_features']),
+    )
 
     render(
       <PastAppointments
@@ -153,18 +165,7 @@ context('PastAppointments', () => {
 
   describe('when travel pay is in downtime', () => {
     it('shows downtime alert when feature flag is enabled', () => {
-      initializeTestInstance({ data: appointmentData() }, false, true, {
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              travel_pay_features: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ hours: 1 }),
-              },
-            },
-          } as ErrorsState,
-        },
-      })
+      initializeTestInstance({ data: appointmentData() }, false, true)
       expect(screen.getByText(t('travelPay.downtime.apptsTitle'))).toBeTruthy()
       // Verify that the rest of the component is still rendered
       expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
@@ -175,18 +176,7 @@ context('PastAppointments', () => {
     })
 
     it('does not show downtime alert when feature flag is not enabled', () => {
-      initializeTestInstance({ data: appointmentData() }, false, false, {
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              travel_pay_features: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ hours: 1 }),
-              },
-            },
-          } as ErrorsState,
-        },
-      })
+      initializeTestInstance({ data: appointmentData() }, false, false)
       expect(screen.queryByText(t('travelPay.downtime.apptsTitle'))).toBeNull()
       // Verify that the rest of the component is still rendered
       expect(screen.getByText(t('pastAppointments.selectAPastDateRange'))).toBeTruthy()
@@ -207,6 +197,8 @@ context('PastAppointments', () => {
         { data: appointmentData(AppointmentStatusConstants.BOOKED, false, isoString) },
         false,
         true,
+        undefined,
+        { maintenanceWindows: { travel_pay_features: undefined } },
       )
 
       expect(screen.queryByText(t('appointments.confirmed'))).toBeFalsy() // Confirmed tag should not be present

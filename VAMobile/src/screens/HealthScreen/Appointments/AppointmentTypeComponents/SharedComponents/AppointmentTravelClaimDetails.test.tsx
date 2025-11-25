@@ -3,6 +3,7 @@ import React from 'react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import {
   AppointmentAttributes,
   AppointmentStatusConstants,
@@ -11,11 +12,12 @@ import {
   AppointmentTypeConstants,
 } from 'api/types'
 import { AppointmentTravelClaimDetails } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
-import { ErrorsState } from 'store/slices'
+import { DowntimeWindowsByFeatureType } from 'store/slices'
 import { RenderParams, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
 jest.mock('utils/remoteConfig')
 
@@ -88,6 +90,13 @@ const travelPayClaimData: AppointmentTravelPayClaim = {
 }
 
 const mockStartDateUtc = DateTime.utc().toISO()
+
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
+  }
+})
 
 type createProps = {
   startDateUtc?: AppointmentAttributes['startDateUtc']
@@ -171,9 +180,12 @@ describe('AppointmentTravelClaimDetails', () => {
     travelPaySMOCEnabled = true,
     options?: RenderParams,
     travelPayClaimsFullHistoryEnabled = false,
+    maintenanceWindows?: { maintenanceWindows: DowntimeWindowsByFeatureType },
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     when(mockFeatureEnabled).calledWith('travelPayClaimsFullHistory').mockReturnValue(travelPayClaimsFullHistoryEnabled)
+    useMaintenanceWindowsMock.mockReturnValue(maintenanceWindows || getMaintenanceWindowsPayload([]))
+
     render(
       <AppointmentTravelClaimDetails
         appointmentID="appointmentID-123"
@@ -192,22 +204,14 @@ describe('AppointmentTravelClaimDetails', () => {
     })
 
     it('should not display a downtime alert when travel pay is in downtime', () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ hours: 1 }),
-      }
-
-      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, {
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              travel_pay_features: {
-                ...downtimeWindow,
-              },
-            },
-          } as ErrorsState,
-        },
-      })
+      initializeTestInstance(
+        'Past',
+        { travelPayClaim: travelPayClaimData },
+        false,
+        undefined,
+        false,
+        getMaintenanceWindowsPayload(['travel_pay_features']),
+      )
 
       // Check that the downtime alert is not displayed
       expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
@@ -223,22 +227,8 @@ describe('AppointmentTravelClaimDetails', () => {
       })
 
       it('should not display a downtime alert when travel pay is in downtime', () => {
-        const downtimeWindow = {
-          startTime: DateTime.now(),
-          endTime: DateTime.now().plus({ hours: 1 }),
-        }
-
-        initializeTestInstance('Upcoming', {}, true, {
-          preloadedState: {
-            errors: {
-              downtimeWindowsByFeature: {
-                travel_pay_features: {
-                  ...downtimeWindow,
-                },
-              },
-            } as ErrorsState,
-          },
-        })
+        useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(['travel_pay_features']))
+        initializeTestInstance('Upcoming', {}, true, undefined, false)
 
         // Check that the downtime alert is not displayed
         expect(screen.queryByText(t('travelPay.downtime.title'))).toBeNull()
@@ -394,16 +384,8 @@ describe('AppointmentTravelClaimDetails', () => {
 
         tests.forEach((test) => {
           it(`initializes correctly when ${test.testName}`, () => {
-            initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, {
-              preloadedState: {
-                errors: {
-                  downtimeWindowsByFeature: {
-                    travel_pay_features: {
-                      ...downtimeWindow,
-                    },
-                  },
-                } as ErrorsState,
-              },
+            initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, undefined, false, {
+              maintenanceWindows: { travel_pay_features: downtimeWindow },
             })
             expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
             expect(screen.getByText(t('travelPay.downtime.title'))).toBeTruthy()
