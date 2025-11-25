@@ -28,6 +28,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
   const commentText = t('upcomingAppointmentDetails.reasonComment', {
     comment: comment || t('appointments.notAvailable'),
   })
+  const noReasonComment = isClaimExam || attributes.isCerner
 
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.CanceledAndPending:
@@ -44,7 +45,7 @@ function AppointmentReasonAndComment({ attributes, subType, type }: AppointmentR
         </Box>
       )
     default:
-      return isClaimExam ? null : (
+      return noReasonComment ? null : (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.sharedProvider')}

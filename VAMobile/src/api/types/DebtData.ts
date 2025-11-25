@@ -1,7 +1,7 @@
 export type DebtHistory = {
-  date?: string
-  letterCode?: string
-  description?: string
+  date: string
+  letterCode: string
+  description: string
 }
 
 export type DebtRecord = {
@@ -18,7 +18,7 @@ export type DebtRecord = {
 
     amountOverpaid?: number
     amountWithheld?: number
-    originalAr?: number
+    originalAr: number
     currentAr: number
 
     debtHistory?: DebtHistory[]
