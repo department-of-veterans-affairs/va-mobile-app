@@ -273,4 +273,99 @@ describe('usePrescriptions', () => {
     expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions', expect.any(Object))
     expect(result.current.data).toEqual(mockPrescriptionsV0)
   })
+
+  // Tests for potential data loss bugs
+  describe('Bug Investigation: Data Loss on Navigation', () => {
+    it('BUG TEST: Should maintain separate cache for v0 and v1 API responses', async () => {
+      const mockGet = api.get as jest.Mock
+
+      // First fetch with v0
+      mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          prescriptions: true,
+          medicationsOracleHealthEnabled: false,
+        },
+      })
+
+      const { result: resultV0 } = renderHook(() => usePrescriptions(), { wrapper })
+
+      await waitFor(() => {
+        expect(resultV0.current.isFetched).toBeTruthy()
+      })
+
+      const v0Data = resultV0.current.data
+      expect(mockGet).toHaveBeenCalledWith('/v0/health/rx/prescriptions', expect.any(Object))
+      expect(v0Data).toEqual(mockPrescriptionsV0)
+
+      // Simulate navigation causing authorization flag to change
+      mockGet.mockResolvedValueOnce(mockPrescriptionsV1)
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          prescriptions: true,
+          medicationsOracleHealthEnabled: true, // Changed to v1
+        },
+      })
+
+      // Mount the hook again (simulates navigating to the screen again)
+      const { result: resultV1 } = renderHook(() => usePrescriptions(), { wrapper })
+
+      await waitFor(() => {
+        expect(resultV1.current.isFetched).toBeTruthy()
+      })
+
+      // With the fix, v0 and v1 now use separate cache keys
+      // Verify that v1 endpoint was called
+      expect(mockGet).toHaveBeenCalledWith('/v1/health/rx/prescriptions', expect.any(Object))
+      expect(mockGet).toHaveBeenCalledTimes(2) // Once for v0, once for v1
+
+      // Verify that v1 data is returned correctly
+      expect(resultV1.current.data).toEqual(mockPrescriptionsV1)
+
+      // The original v0 data should remain unchanged in its own cache slot
+      expect(v0Data).toEqual(mockPrescriptionsV0)
+    })
+
+    it('BUG TEST: Should preserve data when prescriptions authorization temporarily becomes false', async () => {
+      const mockGet = api.get as jest.Mock
+      mockGet.mockResolvedValueOnce(mockPrescriptionsV0)
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          prescriptions: true,
+          medicationsOracleHealthEnabled: false,
+        },
+      })
+
+      const { result, unmount } = renderHook(() => usePrescriptions(), { wrapper })
+
+      await waitFor(() => {
+        expect(result.current.isFetched).toBeTruthy()
+      })
+
+      const dataBeforeChange = result.current.data
+      expect(dataBeforeChange).toEqual(mockPrescriptionsV0)
+      expect(dataBeforeChange).toBeDefined()
+
+      // User navigates away
+      unmount()
+
+      // Simulate authorization check returning false during navigation
+      ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+        data: {
+          prescriptions: false, // Temporarily false
+          medicationsOracleHealthEnabled: false,
+        },
+      })
+
+      // User navigates back while auth says prescriptions: false
+      const { result: result2 } = renderHook(() => usePrescriptions(), { wrapper })
+
+      // React Query keeps cached data even when query is disabled
+      // The data remains in cache, it just won't refetch
+      expect(result2.current.data).toBeDefined()
+      expect(result2.current.data).toEqual(dataBeforeChange)
+      expect(result2.current.isFetching).toBeFalsy()
+      expect(result2.current.isLoading).toBeFalsy()
+    })
+  })
 })

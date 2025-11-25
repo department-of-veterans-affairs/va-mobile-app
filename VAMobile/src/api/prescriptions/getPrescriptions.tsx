@@ -30,11 +30,12 @@ export const usePrescriptions = (options?: { enabled?: boolean }) => {
   const rxInDowntime = useDowntime(DowntimeFeatureTypeConstants.rx)
   const queryEnabled = options && has(options, 'enabled') ? options.enabled : true
   const { medicationsOracleHealthEnabled = false } = authorizedServices || {}
+  const API_VERSION = medicationsOracleHealthEnabled ? 'v1' : 'v0'
 
   return useQuery({
     ...options,
     enabled: !!(authorizedServices?.prescriptions && !rxInDowntime && queryEnabled),
-    queryKey: prescriptionKeys.prescriptions,
+    queryKey: [...prescriptionKeys.prescriptions, API_VERSION],
     queryFn: () => getPrescriptions({ useV1: medicationsOracleHealthEnabled }),
     meta: {
       errorName: 'getPrescriptions: Service error',
