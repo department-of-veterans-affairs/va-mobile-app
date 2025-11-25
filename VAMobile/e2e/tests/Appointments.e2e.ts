@@ -60,11 +60,11 @@ describe('Appointments Screen', () => {
 
   it('should cancel an appointment and dismiss the dialog', async () => {
     await element(by.id('apptDetailsBackID')).tap()
-    await waitFor(element(by.text('GUARINO, ANTHONY')))
+    await waitFor(element(by.text('Guarino, Anthony')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
-    await element(by.text('GUARINO, ANTHONY')).tap()
+    await element(by.text('Guarino, Anthony')).tap()
     await element(by.id('UpcomingApptDetailsTestID')).scrollTo('bottom')
     await element(by.id('Cancel request')).tap()
     await element(by.text(Appointmentse2eConstants.APPOINTMENT_CANCEL_REQUEST_TEXT)).tap()
@@ -73,11 +73,11 @@ describe('Appointments Screen', () => {
   })
 
   it('verify the appointment details after cancel', async () => {
-    await waitFor(element(by.text('GUARINO, ANTHONY')))
+    await waitFor(element(by.text('Guarino, Anthony')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
       .scroll(200, 'down')
-    await element(by.text('GUARINO, ANTHONY')).tap()
+    await element(by.text('Guarino, Anthony')).tap()
     await expect(element(by.text('Canceled request for community care'))).toExist()
     await element(by.id('apptDetailsBackID')).tap()
   })

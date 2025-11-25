@@ -477,8 +477,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Vilanisi Reddy',
       undefined,
       undefined,
-      'Test',
-      'instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123',
+      'New issue',
+      'Please arrive ten minutes early.',
       undefined,
       '2341 North Ave',
       '16cbc3d0-56de-4d86-ebf3-ed0f6908ee53',
@@ -500,7 +500,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
-      'Smoke test 5/21 - 1',
+      undefined,
       undefined,
       '2341 North Ave',
       undefined,
@@ -509,13 +509,13 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 
   it(pastAppointmentString + 'verify pending CC appt', async () => {
-    await scrollToThenTap('GUARINO, ANTHONY', pastAppointmentString)
+    await scrollToThenTap('Guarino, Anthony', pastAppointmentString)
     await checkUpcomingApptDetails(
       'CC',
       'Pending',
       pastAppointment,
       'Podiatry',
-      'GUARINO, ANTHONY',
+      'Guarino, Anthony',
       undefined,
       undefined,
       undefined,
@@ -596,7 +596,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       undefined,
       undefined,
       undefined,
-      'Test',
+      'Standard checkup',
       undefined,
       'Middletown VA Clinic',
       '4337 North Union Road',
@@ -623,8 +623,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Sami Alsahhar - ATLAS - Confirmed',
       undefined,
       undefined,
-      'Reason test',
-      'Other details test',
+      'Standard checkup',
+      'Connecting to wifi is recommended',
       'Middletown VA Clinic',
       '4337 North Union Road',
       undefined,
@@ -652,8 +652,8 @@ export async function apppointmentVerification(pastAppointment = false) {
       'Sami Alsahhar - ATLAS - Canceled',
       undefined,
       undefined,
-      'Reason test',
-      'Other details test',
+      'Standard checkup',
+      'Connecting to wifi is recommended',
       'Middletown VA Clinic',
       '4337 North Union Road',
     )
@@ -851,7 +851,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       pastAppointment,
       'Primary Care',
       'Jane Smith',
-      'DAYTSHR - Dayton VA Medical Center',
+      'San Francisco VA Health Care System',
       undefined,
       'New Issue',
       undefined,
@@ -891,7 +891,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       pastAppointment,
       'Primary Care',
       'John Smith',
-      'DAYTSHR - Dayton VA Medical Center',
+      'Fresno VA Medical Center',
       undefined,
       'New Issue',
       undefined,
@@ -1134,7 +1134,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'John Smith',
       undefined,
       undefined,
-      'routine-follow-up',
+      'routine follow-up',
       undefined,
       undefined,
       undefined,
@@ -1154,7 +1154,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       'John Smith',
       undefined,
       undefined,
-      'routine-follow-up',
+      'routine follow-up',
       undefined,
       undefined,
       undefined,
@@ -1166,7 +1166,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await expect(element(by.text('How you prefer to attend'))).toExist()
     await expect(element(by.text('Phone'))).toExist()
     await expect(element(by.text('Facility'))).toExist()
-    await expect(element(by.text('Test clinic 2'))).toExist()
+    await expect(element(by.text('Cheyenne VA Medical Center'))).toExist()
     await element(by.text('Appointments')).tap()
   })
 }
