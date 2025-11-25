@@ -1,13 +1,14 @@
 name: '[Admin] Team Membership Alert'
 
 on:
-  membership:
-    types:
-      - added
+  schedule:
+    - cron: '0 14 * * *' # Run daily at 9 AM ET
+  workflow_dispatch: # Allows manual triggering
 jobs:
   generate_token_job:
     runs-on: ubuntu-latest
-    if: github.event.team.slug == 'flagship-mobile-team'
+    outputs:
+      token: ${{ steps.generate_token.outputs.token }}
     steps:
       - name: Generate token
         id: generate_token
@@ -15,6 +16,10 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Map GitHub usernames to Slack IDs
         id: map_slack_ids
         run: |
@@ -25,11 +30,71 @@ jobs:
             echo "${key}=${GITHUB_TO_SLACK_MAP[$key]}" >> $GITHUB_ENV
           done
 
-  notify_slack:
+  check_and_notify_team_members:
     needs: generate_token_job
-    uses: ./.github/workflows/start_slack_thread.yml
-    with:
-      channel_name: va-mobile-app
-      message: ':rotating_light: <@U01AWJEH5UJ> <@U08AWC7DQA2> User  @${{ github.event.member.login }} has been added to the ${{ github.event.team.name }}. Please update the slack mapping data and open an on boarding ticket.'
-    secrets: inherit
+    runs-on: ubuntu-latest
+    env:
+      ORG_NAME: 'department-of-veterans-affairs' # Assuming this is the organization name
+      TEAM_SLUG: 'flagship-mobile-team'
+      REPO_NAME: 'va-mobile-app' # Assuming this is the repository name
+      VARIABLE_NAME: 'TEAM_MEMBERS_JSON'
+    steps:
+      - name: Set GITHUB_TOKEN
+        run: echo "GITHUB_TOKEN=${{ needs.generate_token_job.outputs.token }}" >> $GITHUB_ENV
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ env.GITHUB_TOKEN }}
+
+      - name: Fetch current team members
+        id: fetch_current_members
+        run: |
+          CURRENT_MEMBERS=$(gh api orgs/${{ env.ORG_NAME }}/teams/${{ env.TEAM_SLUG }}/members --jq 'map(.login)')
+          echo "current_members=${CURRENT_MEMBERS}" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch old team members from variable
+        id: fetch_old_members
+        run: |
+          OLD_MEMBERS_VAR=$(gh api repos/${{ github.repository_owner }}/${{ env.REPO_NAME }}/actions/variables/${{ env.VARIABLE_NAME }} --jq '.value')
+          echo "old_members=${OLD_MEMBERS_VAR}" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+
+      - name: Compare members and identify new ones
+        id: compare_members
+        run: |
+          CURRENT_MEMBERS_JSON='${{ steps.fetch_current_members.outputs.current_members }}'
+          OLD_MEMBERS_JSON='${{ steps.fetch_old_members.outputs.old_members }}'
+
+          # Initialize OLD_MEMBERS_JSON to an empty array if it's null or empty
+          if [ "$OLD_MEMBERS_JSON" == "null" ] || [ -z "$OLD_MEMBERS_JSON" ]; then
+            OLD_MEMBERS_JSON="[]"
+          fi
+
+          # Use jq to compare the two JSON arrays and find new members
+          NEW_MEMBERS=$(echo "$CURRENT_MEMBERS_JSON" | jq -c --argjson old_members "$OLD_MEMBERS_JSON" '. - $old_members')
+
+          echo "new_members=${NEW_MEMBERS}" >> "$GITHUB_OUTPUT"
+          echo "current_members_for_update=${CURRENT_MEMBERS_JSON}" >> "$GITHUB_OUTPUT" # Pass current members for later update
+
+      - name: Notify Slack for new members
+        if: ${{ steps.compare_members.outputs.new_members != '[]' }}
+        uses: ./.github/workflows/start_slack_thread.yml
+        with:
+          channel_name: va-mobile-app
+          message: |
+            :rotating_light: New member(s) added to ${{ env.TEAM_SLUG }} team:
+            ${{ steps.compare_members.outputs.new_members }}
+            Please update the slack mapping data and open an on boarding ticket.
+        secrets: inherit
+
+      - name: Update TEAM_MEMBERS_JSON variable
+        if: ${{ steps.compare_members.outputs.new_members != '[]' }}
+        run: |
+          gh api -X PATCH repos/${{ github.repository_owner }}/${{ env.REPO_NAME }}/actions/variables/${{ env.VARIABLE_NAME }} \
+            -f name='${{ env.VARIABLE_NAME }}' \
+            -f value='${{ steps.compare_members.outputs.current_members_for_update }}'
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
