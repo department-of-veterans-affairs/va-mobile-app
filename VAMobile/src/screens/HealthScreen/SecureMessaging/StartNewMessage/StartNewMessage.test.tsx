@@ -66,6 +66,7 @@ context('StartNewMessage', () => {
           recipientId: 3,
           recipientName: 'mock recipient name',
           readReceipt: 'mock read receipt',
+          isOhMessage: false,
         },
       },
     ],
@@ -120,6 +121,7 @@ context('StartNewMessage', () => {
           locationName: 'test_location',
           suggestedNameDisplay: 'test_suggested_name',
           healthCareSystemName: 'test_healthcare_system_name',
+          ohTriageGroup: false,
         },
       },
       {
@@ -134,6 +136,7 @@ context('StartNewMessage', () => {
           locationName: 'test_location',
           suggestedNameDisplay: 'test_suggested_name',
           healthCareSystemName: 'test_healthcare_system_name',
+          ohTriageGroup: false,
         },
       },
     ],
