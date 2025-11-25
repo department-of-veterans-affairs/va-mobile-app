@@ -433,7 +433,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 <LinkWithAnalytics
                   type="custom"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL('https://www.va.gov')}
+                  onPress={() => Linking.openURL('https://www.va.gov/find-locations')}
                 />
               </AlertWithHaptics>
             </Box>
