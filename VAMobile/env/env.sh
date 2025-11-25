@@ -92,9 +92,9 @@ fi
 echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 
 # set website URLs - use staging prefix for local by default
-if [[ -z "$WEBSITE_PREFIX" ]]; then
-  WEBSITE_PREFIX="staging."
-fi
+#if [[ -z "$WEBSITE_PREFIX" ]]; then
+#  WEBSITE_PREFIX="staging."
+#fi
 
 echo "LINK_URL_VA_NOTIFICATIONS=https://${WEBSITE_PREFIX}va.gov/profile/notifications/" >> .env
 echo "LINK_URL_CLAIM_APPEAL_STATUS=https://${WEBSITE_PREFIX}va.gov/track-claims/appeals/" >> .env
