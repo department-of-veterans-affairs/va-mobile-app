@@ -629,7 +629,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
-          header={t('secureMessaging.reply.youCanNoLonger')}
+          header={t('secureMessaging.reply.tooOldforReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
         />
       </Box>

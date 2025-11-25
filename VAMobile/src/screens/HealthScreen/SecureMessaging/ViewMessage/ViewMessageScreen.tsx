@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -35,6 +36,7 @@ import {
   Box,
   ChildTemplate,
   ErrorComponent,
+  LinkWithAnalytics,
   LoadingComponent,
   PickerItem,
   TextView,
@@ -158,6 +160,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     message.attachments = attachments
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
+  const userInTriageTeam = messageData?.meta?.userInTriageTeam
 
   useEffect(() => {
     if (threadFetched) {
@@ -180,7 +183,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             attributes: oldMessageAttributes,
             type: messageData?.data.type,
             id: messageData?.data.id,
-            meta: messageData?.data.meta,
+            meta: messageData?.meta,
           } as SecureMessagingMessageData
           const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
           queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
@@ -402,20 +405,43 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && (
+          {replyExpired && userInTriageTeam && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
-                header={t('secureMessaging.reply.youCanNoLonger')}
+                header={t('secureMessaging.reply.tooOldforReplies')}
                 description={t('secureMessaging.reply.olderThan45Days')}
                 testID="secureMessagingOlderThan45DaysAlertID"
               />
             </Box>
           )}
+          {!userInTriageTeam && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.youCanNoLonger')}
+                description={t('secureMessaging.reply.youCanNoLonger.description')}
+                testID="secureMessagingYouCanNoLongerAlertID">
+                {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+                <TextView
+                  variant="MobileBody"
+                  paragraphSpacing={true}
+                  accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+                  {t('secureMessaging.reply.error.ifYouThink')}
+                </TextView>
+                {/* below text and navigation are placeholders */}
+                <LinkWithAnalytics
+                  type="custom"
+                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  onPress={() => Linking.openURL('https://www.va.gov')}
+                />
+              </AlertWithHaptics>
+            </Box>
+          )}
           <MessageCard
             message={message}
             folderId={currentFolderIdParam}
-            userInTriageTeam={messageData?.data?.meta?.userInTriageTeam}
+            userInTriageTeam={userInTriageTeam}
             replyExpired={replyExpired}
           />
           {thread.length > 0 && (

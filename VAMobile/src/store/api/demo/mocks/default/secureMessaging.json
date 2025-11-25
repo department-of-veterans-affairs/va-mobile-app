@@ -432,10 +432,10 @@
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
-      },
-      "meta": {
-        "userInTriageTeam": true
       }
+    },
+    "meta": {
+      "userInTriageTeam": false
     }
   },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {
@@ -541,10 +541,10 @@
       },
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
-      },
-      "meta": {
-        "userInTriageTeam": false
       }
+    },
+    "meta": {
+      "userInTriageTeam": false
     },
     "included": [
       {

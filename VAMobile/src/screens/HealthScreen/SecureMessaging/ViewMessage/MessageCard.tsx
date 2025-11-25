@@ -1,10 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
 import {
@@ -23,7 +21,7 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
+import { READ } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
