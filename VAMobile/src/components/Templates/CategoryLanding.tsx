@@ -17,6 +17,7 @@ import {
   HeaderBanner,
   HeaderBannerProps,
   HeaderButton,
+  OfflineBanner,
   TextView,
   TextViewProps,
   WaygateWrapper,
@@ -128,6 +129,7 @@ export const CategoryLanding: FC<CategoryLandingProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView testID={testID} scrollEventThrottle={title ? 1 : 0} onScroll={onScroll} {...scrollViewProps}>
         <View onLayout={getTransitionHeaderHeight}>
           <CrisisLineButton />

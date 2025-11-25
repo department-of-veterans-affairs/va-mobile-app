@@ -5,7 +5,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  Box,
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  LastUpdatedTimestamp,
+  OfflineBanner,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme } from 'utils/hooks'
@@ -38,6 +48,8 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Optional timestamp that the data on this screen last updated */
+  dataUpdatedAt?: number
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -54,6 +66,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -133,6 +146,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}
@@ -146,7 +160,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>{children}</WaygateWrapper>
+        <WaygateWrapper>
+          <Box display="flex" justifyContent="space-between" flex={1}>
+            <Box>{children}</Box>
+            <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+          </Box>
+        </WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>

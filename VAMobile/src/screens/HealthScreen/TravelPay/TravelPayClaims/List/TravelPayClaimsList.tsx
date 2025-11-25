@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+
 import { TravelPayClaimData } from 'api/types'
 import {
   Box,
@@ -19,6 +21,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -33,7 +36,8 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
+  const connectionStatus = useAppIsOnline()
+  const snackbar = useSnackbar()
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
 
   const perPage = DEFAULT_PAGE_SIZE
@@ -45,6 +49,11 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
   }, [claims, currentPage, perPage])
 
   const goToClaimDetails = (claimId: string) => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
     logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
     navigateTo('Webview', {
       url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,

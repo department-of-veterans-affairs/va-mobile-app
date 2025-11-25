@@ -43,6 +43,7 @@ export type FeatureToggleType =
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
   | 'overpayCopay'
+  | 'offlineMode'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
@@ -73,6 +74,7 @@ type FeatureToggleValues = {
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
   overpayCopay: boolean
+  offlineMode: boolean
 }
 
 export const defaults: FeatureToggleValues = {
@@ -104,6 +106,10 @@ export const defaults: FeatureToggleValues = {
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayCopay: false,
+  offlineMode: false,
+}
+export const FeatureToggleDescriptions: Record<string, string> = {
+  offlineMode: '(Restart required)',
 }
 
 export let devConfig: FeatureToggleValues = defaults

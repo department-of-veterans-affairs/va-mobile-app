@@ -8,7 +8,7 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
-import { Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
+import { Box, CrisisLineButton, OfflineBanner, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
@@ -184,6 +184,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
         {showCrisisLineButton && <CrisisLineButton />}
         {title && <SubtaskTitle title={title} a11yLabel={titleA11yLabel} mt={titleMarginTop} />}

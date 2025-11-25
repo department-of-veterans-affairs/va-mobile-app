@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { I18nextProvider } from 'react-i18next'
-import { useTranslation } from 'react-i18next'
+import { I18nextProvider, useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
@@ -61,8 +60,7 @@ import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { SettingsState } from 'store/slices'
+import { AnalyticsState, AuthState, SettingsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import {
   AccessibilityState,
   sendUsesLargeTextAnalytics,
@@ -77,6 +75,7 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
+import { useNetworkConnectionListener, useOfflineAnnounce } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
 
@@ -178,35 +177,33 @@ function MainApp() {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ActionSheetProvider>
           <ThemeProvider theme={currentTheme}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18n}>
-                <NavigationContainer
-                  ref={navigationRef}
-                  linking={linking}
-                  onReady={navOnReady}
-                  onStateChange={onNavStateChange}>
-                  <NotificationManager>
-                    <SafeAreaProvider>
-                      <StatusBar
-                        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
-                        backgroundColor={currentTheme.colors.background.main}
-                      />
-                      <SnackbarProvider>
-                        <AuthGuard />
-                      </SnackbarProvider>
-                    </SafeAreaProvider>
-                  </NotificationManager>
-                </NavigationContainer>
-              </I18nextProvider>
-            </Provider>
+            <I18nextProvider i18n={i18n}>
+              <NavigationContainer
+                ref={navigationRef}
+                linking={linking}
+                onReady={navOnReady}
+                onStateChange={onNavStateChange}>
+                <NotificationManager>
+                  <SafeAreaProvider>
+                    <StatusBar
+                      barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+                      backgroundColor={currentTheme.colors.background.main}
+                    />
+                    <SnackbarProvider>
+                      <AuthGuard />
+                    </SnackbarProvider>
+                  </SafeAreaProvider>
+                </NotificationManager>
+              </NavigationContainer>
+            </I18nextProvider>
           </ThemeProvider>
         </ActionSheetProvider>
       </QueryClientProvider>
-    </>
+    </Provider>
   )
 }
 
@@ -239,6 +236,8 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  useNetworkConnectionListener()
+  useOfflineAnnounce()
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed

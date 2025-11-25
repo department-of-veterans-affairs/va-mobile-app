@@ -9,9 +9,11 @@ import { Box, LoadingComponent, Pagination, PaginationProps, TextView } from 'co
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 
 type UpcomingAppointmentsProps = {
   appointmentsData?: AppointmentsGetData
@@ -26,6 +28,7 @@ function UpcomingAppointments({ appointmentsData, loading, page, setPage, scroll
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
+  useOfflineEventQueue(ScreenIDTypesConstants.APPOINTMENT_DETAILS_SCREEN_ID)
 
   const pagination = {
     currentPage: page,
