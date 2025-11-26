@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { medicalCopayKeys } from 'api/medicalCopays/queryKeys'
 import { MedicalCopaysPayload } from 'api/types'
 import { ACTIVITY_STALE_TIME } from 'constants/common'
-import { APIError, get } from 'store/api'
+import { get } from 'store/api'
 
 type CopaySummary = { amountDue: number; count: number }
 
