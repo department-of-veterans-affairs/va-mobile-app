@@ -62,10 +62,7 @@ function TravelPayClaimAmount({ claimDetails }: TravelPayClaimAmountProps) {
               </TextView>
             }
             expandedContent={
-              <Box
-                backgroundColor="contentBox"
-                // px={theme.dimensions.standardMarginBetween}
-                py={theme.dimensions.condensedMarginBetween}>
+              <Box backgroundColor="contentBox" py={theme.dimensions.condensedMarginBetween}>
                 <Box flexDirection="row" flexWrap="wrap">
                   <TextView variant="MobileBody" testID="travelPayAmountDifferenceDescriptionPart1TestID">
                     {t('travelPay.claimDetails.amount.reimbursement.difference.description.part1')}

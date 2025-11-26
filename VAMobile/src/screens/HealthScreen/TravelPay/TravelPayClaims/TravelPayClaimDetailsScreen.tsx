@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDownloadTravelPayDocument, useTravelPayClaimDetails } from 'api/travelPay'
+import { TravelPayClaimDocument } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -115,6 +116,34 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
     }
   }
 
+  // Renders the decision document section if applicable
+  const renderDecisionDocuments = (documents: TravelPayClaimDocument[]) => {
+    const decisionLetterDocs = documents.filter(
+      (doc) => doc.filename.includes('Rejection Letter') || doc.filename.includes('Decision Letter'),
+    )
+
+    if (decisionLetterDocs.length === 0) return null
+
+    return (
+      <Box mx={-theme.dimensions.gutter}>
+        <DefaultList
+          items={decisionLetterDocs.map((doc) =>
+            createTravelPayDocumentListItem(
+              doc,
+              id!,
+              claimStatus!,
+              (docId, filename) => handleDocumentDownload(docId, filename, true),
+              theme,
+              t,
+              t('travelPay.claimDetails.document.decisionLetter'),
+              true, // isDecisionLetter - bold font + icon
+            ),
+          )}
+        />
+      </Box>
+    )
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={backLabel || t('travelPay.claims.title')}
@@ -163,34 +192,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
                 )}
 
                 {/* Decision Letter Download (for denied/partial payment claims) */}
-                {documents &&
-                  documents.length > 0 &&
-                  (() => {
-                    const decisionLetterDocs = documents.filter(
-                      (doc) => doc.filename.includes('Rejection Letter') || doc.filename.includes('Decision Letter'),
-                    )
-
-                    if (decisionLetterDocs.length === 0) return null
-
-                    return (
-                      <Box mx={-theme.dimensions.gutter}>
-                        <DefaultList
-                          items={decisionLetterDocs.map((doc) =>
-                            createTravelPayDocumentListItem(
-                              doc,
-                              id!,
-                              claimStatus!,
-                              (docId, filename) => handleDocumentDownload(docId, filename, true),
-                              theme,
-                              t,
-                              t('travelPay.claimDetails.document.decisionLetter'),
-                              true, // isDecisionLetter - bold font + icon
-                            ),
-                          )}
-                        />
-                      </Box>
-                    )
-                  })()}
+                {documents && documents.length > 0 && renderDecisionDocuments(documents)}
 
                 {/* Amount Section */}
                 <TravelPayClaimAmount claimDetails={claimDetails} />
