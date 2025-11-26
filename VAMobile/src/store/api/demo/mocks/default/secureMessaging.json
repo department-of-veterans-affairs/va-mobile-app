@@ -435,7 +435,7 @@
       }
     },
     "meta": {
-      "userInTriageTeam": false
+      "userInTriageTeam": true
     }
   },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {

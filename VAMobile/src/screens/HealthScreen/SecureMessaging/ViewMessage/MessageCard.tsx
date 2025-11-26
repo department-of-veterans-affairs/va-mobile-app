@@ -38,7 +38,6 @@ export type MessageCardProps = {
 }
 
 function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
-  console.log('MessageCard userInTriageTeam:', userInTriageTeam)
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -82,7 +81,7 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
       </Box>
     )
   }
-  // console.log('messageId:', message.messageId)
+
   function getContent() {
     /** this does preserve newline characters just not spaces
      * TODO: change the mobile body link text views to be clickable and launch the right things */
@@ -159,7 +158,6 @@ function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: Mess
     navigateTo('ReplyMessage', { messageID: message.messageId, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   function getReplyOrStartNewMessageButton() {
-    console.log('Second userInTriageTeam:', userInTriageTeam)
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         {!replyExpired && userInTriageTeam ? (

@@ -185,7 +185,11 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             id: messageData?.data.id,
             meta: messageData?.meta,
           } as SecureMessagingMessageData
-          const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
+          const newMessageData = {
+            data: newMessage,
+            included: messageData?.included,
+            meta: messageData?.meta,
+          } as SecureMessagingMessageGetData
           queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
         }
         return m
