@@ -19,6 +19,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
+      - name: Find and display Contents.json
+        run: find . -name "Contents.json" | head -n 5 | xargs head -n 10
       - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
         with:
           fail-on-critical: false
