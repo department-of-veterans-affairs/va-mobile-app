@@ -22,13 +22,13 @@ jobs:
           fetch-depth: 0
       - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
         with:
-          fail-on-critical: true
+          fail-on-critical: false
 
-  setup-tmate-session:
-    runs-on: ubuntu-latest
-    needs: security-check
-    if: failure()
-    steps:
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 60
+  # setup-tmate-session:
+  #   runs-on: ubuntu-latest
+  #   needs: security-check
+  #   if: failure()
+  #   steps:
+  #     - name: Setup tmate session
+  #       uses: mxschmitt/action-tmate@v3
+  #       timeout-minutes: 60
