@@ -108,7 +108,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('travelPay.title')}
+      title={t('travelPay.claims.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
       {error ? (

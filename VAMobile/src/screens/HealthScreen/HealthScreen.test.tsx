@@ -102,7 +102,7 @@ context('HealthScreen', () => {
         .calledWith('travelPayStatusList')
         .mockReturnValue(false)
       initializeTestInstance()
-      expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
+      expect(screen.queryByText(t('travelPay.claims.title'))).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
@@ -110,7 +110,7 @@ context('HealthScreen', () => {
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
       initializeTestInstance()
-      expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
+      expect(screen.getByText(t('travelPay.claims.title'))).toBeTruthy()
     })
 
     it('navigates to Travel Reimbursement screen when pressed', () => {
@@ -118,7 +118,7 @@ context('HealthScreen', () => {
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
       initializeTestInstance()
-      fireEvent.press(screen.getByText(t('travelPay.title')))
+      fireEvent.press(screen.getByText(t('travelPay.claims.title')))
       expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
     })
   })

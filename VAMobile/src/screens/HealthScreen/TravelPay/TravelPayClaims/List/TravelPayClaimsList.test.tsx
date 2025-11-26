@@ -30,6 +30,16 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+let mockFeatureEnabled: jest.Mock
+jest.mock('utils/remoteConfig', () => {
+  mockFeatureEnabled = jest.fn()
+  const original = jest.requireActual('utils/remoteConfig')
+  return {
+    ...original,
+    featureEnabled: mockFeatureEnabled,
+  }
+})
+
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: GetTravelPayClaimsResponse = {
   meta: {
     status: 200,
@@ -128,6 +138,7 @@ describe('TravelPayClaimsList', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    mockFeatureEnabled.mockReturnValue(true)
   })
 
   it('renders list and items', () => {
@@ -171,7 +182,22 @@ describe('TravelPayClaimsList', () => {
     expect(onPrev).toHaveBeenCalledWith(1)
   })
 
-  it('navigates to Webview and logs analytics when an item is pressed', () => {
+  it('navigates to TravelPayClaimDetailsScreen when an item is pressed', () => {
+    mockFeatureEnabled.mockImplementation((flag) => flag === 'travelPayClaimDetails')
+
+    initializeTestInstance()
+    const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
+    fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))
+
+    expect(mockNavigateTo).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
+      claimId: firstId,
+      backLabel: t('travelPay.claims.title'),
+    })
+  })
+
+  it('navigates to webview when travelPayClaimDetails feature is disabled', () => {
+    mockFeatureEnabled.mockReturnValue(false)
+
     initializeTestInstance()
     const firstId = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data[0].id
     fireEvent.press(screen.getByTestId(`claim_summary_${firstId}`))

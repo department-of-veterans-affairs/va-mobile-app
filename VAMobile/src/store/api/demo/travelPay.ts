@@ -1,6 +1,7 @@
 import { DateTime, Interval } from 'luxon'
 
 import {
+  GetTravelPayClaimDetailsResponse,
   GetTravelPayClaimsResponse,
   SubmitSMOCTravelPayClaimParameters,
   SubmitTravelPayClaimResponse,
@@ -11,9 +12,13 @@ import { DemoStore } from 'store/api/demo/store'
 
 type TravelPayClaimsData = {
   '/v0/travel-pay/claims': GetTravelPayClaimsResponse
+  '/v0/travel-pay/claims/:id': GetTravelPayClaimDetailsResponse
 }
 export type TravelPayDemoStore = TravelPayClaimsData
-export type TravelPayDemoReturnTypes = SubmitTravelPayClaimResponse | GetTravelPayClaimsResponse
+export type TravelPayDemoReturnTypes =
+  | SubmitTravelPayClaimResponse
+  | GetTravelPayClaimsResponse
+  | GetTravelPayClaimDetailsResponse
 
 const MOCK_TRAVEL_PAY_CLAIM_RESPONSE: SubmitTravelPayClaimResponse = {
   data: {
@@ -85,4 +90,8 @@ export const getTravelPayClaims = (store: DemoStore, params: Params): GetTravelP
   } else {
     return undefined
   }
+}
+
+export const getTravelPayClaimDetails = (store: DemoStore): GetTravelPayClaimDetailsResponse | undefined => {
+  return store['/v0/travel-pay/claims/:id']
 }
