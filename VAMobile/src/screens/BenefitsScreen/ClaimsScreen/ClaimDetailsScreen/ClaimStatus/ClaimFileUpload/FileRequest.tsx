@@ -100,6 +100,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     })
   }
 
+  // Test
   const viewEvaluationDetailsPress = () => {
     if (claim) {
       logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
