@@ -22,3 +22,8 @@ jobs:
       - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
         with:
           fail-on-critical: true
+
+  setup-tmate-session:
+    if: ${{ failure() }}
+    uses: mxschmitt/action-tmate@v3
+    timeout-minutes: 60
