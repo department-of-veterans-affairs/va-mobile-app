@@ -24,6 +24,10 @@ jobs:
           fail-on-critical: true
 
   setup-tmate-session:
-    if: ${{ failure() }}
-    uses: mxschmitt/action-tmate@v3
-    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: security-check
+    if: failure()
+    steps:
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 60
