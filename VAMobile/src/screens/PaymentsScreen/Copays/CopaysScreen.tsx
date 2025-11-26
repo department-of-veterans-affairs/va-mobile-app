@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
@@ -25,13 +26,14 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { data: copaysData, isFetching: loadingCopays, error: copaysError } = useMedicalCopays()
+  const { data: copaysData, isFetching: loadingCopays, error: copaysError, httpStatus } = useMedicalCopays()
 
-  const copays = useMemo(() => copaysData?.data ?? [], [copaysData?.data])
+  const copays = useMemo(() => copaysData?.data ?? [], [copaysData])
   const isEmpty = copays.length === 0
   const sorted = useMemo(() => sortStatementsByDate(copays), [copays])
   const copaysByUniqueFacility = useMemo(() => uniqBy(sorted, (c) => c.pSFacilityNum), [sorted])
-
+  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
+  const backLabel = prevScreen === 'Health' ? t('health.title') : t('payments.title')
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,
@@ -104,7 +106,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={t('payments.title')}
+      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('copays.title')}
@@ -113,7 +115,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
       {loadingCopays ? (
         <LoadingComponent text={t('copays.loading')} />
       ) : copaysError ? (
-        <CopayErrorStates copaysError={copaysError} />
+        <CopayErrorStates httpStatus={httpStatus} />
       ) : isEmpty ? (
         <EmptyStateMessage title={t('copays.none.header')} body={t('copays.none.message')} phone={t('8664001238')} />
       ) : (
