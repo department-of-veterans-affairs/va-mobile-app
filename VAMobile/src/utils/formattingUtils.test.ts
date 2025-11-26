@@ -1,6 +1,14 @@
-import { DateTime } from 'luxon'
+import { TFunction } from 'i18next'
+import { DateTime, Settings } from 'luxon'
 
-import { formatDateMMMyyyy, formatDateRangeMMMyyyy, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import commonTranslations from 'translations/en/common.json'
+import {
+  EN_DASH,
+  formatDateMMMyyyy,
+  formatDateRangeMMMyyyy,
+  getFileUploadTimezoneMessage,
+  getFormattedTimeForTimeZone,
+} from 'utils/formattingUtils'
 
 describe('formatting utils: getFormattedTimeForTimeZone', () => {
   const originalDate = '2025-05-28T12:00:00.000Z'
@@ -24,6 +32,126 @@ describe('formatting utils: getFormattedTimeForTimeZone', () => {
   }
 })
 
+describe('formatting utils: getFileUploadTimezoneMessage', () => {
+  const originalDefaultZone = Settings.defaultZone
+  const originalNow = Settings.now
+
+  // Mock translation function using actual translation from common.json
+  const mockT = ((key: string, options?: { [key: string]: string }) => {
+    if (key === 'fileUpload.timezoneMessage' && options) {
+      const template = commonTranslations['fileUpload.timezoneMessage']
+      return Object.entries(options).reduce(
+        (result, [varName, value]) => result.replace(`{{${varName}}}`, value),
+        template,
+      )
+    }
+    return key
+  }) as TFunction
+
+  afterEach(() => {
+    Settings.defaultZone = originalDefaultZone
+    Settings.now = originalNow
+  })
+
+  describe('Daylight Saving Time', () => {
+    beforeEach(() => {
+      // Set fixed date during DST (July 15, 2025 at noon UTC)
+      const fixedDate = DateTime.utc(2025, 7, 15, 12)
+      Settings.now = () => fixedDate.toMillis()
+    })
+
+    describe('west of UTC', () => {
+      it('should return complete message for EDT', () => {
+        Settings.defaultZone = 'America/New_York'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 8 PM EDT, we'll show them as received on the next day")
+      })
+
+      it('should return complete message for PDT', () => {
+        Settings.defaultZone = 'America/Los_Angeles'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 5 PM PDT, we'll show them as received on the next day")
+      })
+    })
+
+    describe('at UTC', () => {
+      it('should return empty string for UTC', () => {
+        Settings.defaultZone = 'UTC'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe('')
+      })
+    })
+
+    describe('east of UTC', () => {
+      it('should return complete message for JST', () => {
+        Settings.defaultZone = 'Asia/Tokyo'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day")
+      })
+
+      it('should return complete message for PHT', () => {
+        Settings.defaultZone = 'Asia/Manila'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 8 AM PHT, we'll show them as received on the previous day")
+      })
+    })
+  })
+
+  describe('Standard Time', () => {
+    beforeEach(() => {
+      // Set fixed date during standard time (January 15, 2025 at noon UTC)
+      const fixedDate = DateTime.utc(2025, 1, 15, 12)
+      Settings.now = () => fixedDate.toMillis()
+    })
+
+    describe('west of UTC', () => {
+      it('should return complete message for EST', () => {
+        Settings.defaultZone = 'America/New_York'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 7 PM EST, we'll show them as received on the next day")
+      })
+
+      it('should return complete message for PST', () => {
+        Settings.defaultZone = 'America/Los_Angeles'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files after 4 PM PST, we'll show them as received on the next day")
+      })
+    })
+
+    describe('at UTC', () => {
+      it('should return empty string for UTC', () => {
+        Settings.defaultZone = 'UTC'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe('')
+      })
+    })
+
+    describe('east of UTC', () => {
+      it('should return complete message for JST', () => {
+        Settings.defaultZone = 'Asia/Tokyo'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day")
+      })
+
+      it('should return complete message for PHT', () => {
+        Settings.defaultZone = 'Asia/Manila'
+        const message = getFileUploadTimezoneMessage(mockT)
+
+        expect(message).toBe("If you uploaded files before 8 AM PHT, we'll show them as received on the previous day")
+      })
+    })
+  })
+})
+
 describe('formatting utils: formatDateMMMyyyy', () => {
   it('formats January 15, 2025 as Jan 2025', () => {
     const date = DateTime.fromISO('2025-01-15T12:00:00Z')
@@ -40,12 +168,12 @@ describe('formatting utils: formatDateRangeMMMyyyy', () => {
   it('formats a Jan 2025 to Feb 2025 range', () => {
     const start = DateTime.fromISO('2025-01-15T12:00:00Z')
     const end = DateTime.fromISO('2025-02-20T12:00:00Z')
-    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Feb 2025')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe(`Jan 2025 ${EN_DASH} Feb 2025`)
   })
 
   it('formats a range within the same month', () => {
     const start = DateTime.fromISO('2025-01-01T12:00:00Z')
     const end = DateTime.fromISO('2025-01-31T12:00:00Z')
-    expect(formatDateRangeMMMyyyy(start, end)).toBe('Jan 2025 - Jan 2025')
+    expect(formatDateRangeMMMyyyy(start, end)).toBe(`Jan 2025 ${EN_DASH} Jan 2025`)
   })
 })

@@ -4,7 +4,6 @@ import { Trans, useTranslation } from 'react-i18next'
 import { AlertWithHaptics, Box, ClickToCallPhoneNumber, LinkWithAnalytics, TextArea, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { APIError } from 'store/api'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -14,10 +13,10 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 const { LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE } = getEnv()
 
 interface CopayErrorStatesProps {
-  copaysError: APIError
+  httpStatus: number | undefined
 }
 
-function CopayErrorStates({ copaysError }: CopayErrorStatesProps) {
+function CopayErrorStates({ httpStatus }: CopayErrorStatesProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -70,7 +69,7 @@ function CopayErrorStates({ copaysError }: CopayErrorStatesProps) {
   )
 
   const serviceErrorAlert = () => {
-    const isEnrolledInHealthCare = copaysError?.status !== 403
+    const isEnrolledInHealthCare = httpStatus !== 403
     return isEnrolledInHealthCare ? renderEnrolledError() : renderNotEnrolledError()
   }
 

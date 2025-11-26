@@ -4,7 +4,6 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import CopayErrorStates from 'screens/PaymentsScreen/Copays/CopayErrorStates/CopayErrorStates'
-import { APIError } from 'store/api'
 import { context, render } from 'testUtils'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
@@ -22,47 +21,41 @@ jest.mock('utils/analytics', () => ({
 }))
 
 context('CopayErrorStates', () => {
-  const initializeTestInstance = (copaysError: APIError) => {
-    render(<CopayErrorStates copaysError={copaysError} />)
+  const initializeTestInstance = (httpStatus: number | undefined) => {
+    render(<CopayErrorStates httpStatus={httpStatus} />)
   }
 
   describe('when user is enrolled in health care (status !== 403)', () => {
     it('should display enrolled error message', () => {
-      const error = { status: 500 }
-      initializeTestInstance(error)
+      initializeTestInstance(500)
       expect(screen.getByText(t('copays.error.header'))).toBeTruthy()
       expect(screen.getByText(t('copays.error.description'))).toBeTruthy()
     })
 
     it('should display phone number for enrolled users', () => {
-      const error = { status: 500 }
-      initializeTestInstance(error)
+      initializeTestInstance(500)
       expect(screen.getByText(displayedTextPhoneNumber(t('8664001238')))).toBeTruthy()
     })
   })
 
   describe('when user is not enrolled in health care (status === 403)', () => {
     it('should display not enrolled error message', () => {
-      const error = { status: 403 }
-      initializeTestInstance(error)
+      initializeTestInstance(403)
       expect(screen.getByText(t('copays.noHealthCare.header'))).toBeTruthy()
     })
 
     it('should display health care application link', () => {
-      const error = { status: 403 }
-      initializeTestInstance(error)
+      initializeTestInstance(403)
       expect(screen.getByTestId('healthCareApplicationLinkID')).toBeTruthy()
     })
 
     it('should display phone number for non-enrolled users', () => {
-      const error = { status: 403 }
-      initializeTestInstance(error)
+      initializeTestInstance(403)
       expect(screen.getByText(displayedTextPhoneNumber(t('8772228387')))).toBeTruthy()
     })
 
     it('should navigate to webview when health care link is pressed', () => {
-      const error = { status: 403 }
-      initializeTestInstance(error)
+      initializeTestInstance(403)
       fireEvent.press(screen.getByTestId('healthCareApplicationLinkID'))
       expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
         url: expect.any(String),
@@ -75,8 +68,7 @@ context('CopayErrorStates', () => {
 
   describe('when error has no status', () => {
     it('should treat as enrolled user', () => {
-      const error = { networkError: true }
-      initializeTestInstance(error)
+      initializeTestInstance(undefined)
       expect(screen.getByText(t('copays.error.header'))).toBeTruthy()
     })
   })
