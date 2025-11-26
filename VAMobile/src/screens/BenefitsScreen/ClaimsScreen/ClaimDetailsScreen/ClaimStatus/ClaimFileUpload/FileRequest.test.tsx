@@ -108,8 +108,8 @@ context('FileRequest', () => {
       renderWithData(request)
       await waitFor(() => expect(screen.getByText(t('claimPhase.youHaveFileRequestVA', { count: 1 }))).toBeTruthy())
       await waitFor(() => expect(screen.getByText(t('fileRequest.weSentYouALaterText'))).toBeTruthy())
-      await waitFor(() => expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy())
-      await waitFor(() => expect(screen.getByText(t('fileRequest.askForYourClaimEvaluationBody'))).toBeTruthy())
+      // await waitFor(() => expect(screen.getByText('Ask for your claim evaluation')).toBeTruthy())
+      // await waitFor(() => expect(screen.getByText(t('fileRequest.askForYourClaimEvaluationBody'))).toBeTruthy())
       await waitFor(() => fireEvent.press(screen.getByRole('link', { name: 'Request 1' })))
       await waitFor(() =>
         expect(mockNavigationSpy).toHaveBeenCalledWith('FileRequestDetails', {

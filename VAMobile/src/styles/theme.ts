@@ -85,6 +85,7 @@ export type VATypographyThemeVariants = {
   BitterHeading: string
   CategoryLandingError: string
   CategoryLandingWarning: string
+  ClaimHeader: string
   ClaimPhase: string
   CrisisLineButton: string
   DescriptiveBackButton: string
@@ -251,6 +252,7 @@ export type VATheme = {
     BitterHeading: VAFontSizes
     BitterBoldHeading: VAFontSizes
     CategoryLandingAlert: VAFontSizes
+    ClaimHeader: VAFontSizes
     ClaimPhase: VAFontSizes
     CrisisLineButton: VAFontSizes
     HelperText: VAFontSizes

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
 import { useClaim } from 'api/claimsAndAppeals'
@@ -14,7 +13,6 @@ import {
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
-  TextArea,
   TextView,
   VAScrollView,
 } from 'components'
@@ -26,10 +24,36 @@ import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/Clai
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import {
+  currentRequestsForVet,
+  hasUploadedOrReceived,
+  is5103Notice,
+  numberOfItemsNeedingAttentionFromVet,
+} from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
+
+const mock5103 = {
+  type: 'still_need_from_you_list',
+  trackedItemId: 651827,
+  description: 'Automated 5103 Notice Response',
+  displayName: 'Automated 5103 Notice Response',
+  overdue: false,
+  status: 'NEEDED',
+  uploaded: false,
+  uploadsAllowed: true,
+  openedDate: '2025-11-24',
+  requestedDate: '2025-11-24',
+  receivedDate: null,
+  closedDate: null,
+  suspenseDate: '2025-12-24',
+  documents: [],
+  uploadDate: null,
+  date: '2025-11-24',
+  documentType: null,
+  filename: null,
+}
 
 function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
@@ -45,7 +69,11 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
-  const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
+
+  console.log('claimID: ', claimID)
+  requests.unshift(mock5103)
+
+  const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -62,7 +90,12 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      navigateTo('FileRequestDetails', { claimID, request })
+
+      if (is5103Notice(request.displayName || '')) {
+        navigateTo('File5103RequestDetails', { claimID, request })
+      } else {
+        navigateTo('FileRequestDetails', { claimID, request })
+      }
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -100,22 +133,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     })
   }
 
-  const viewEvaluationDetailsPress = () => {
-    if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
-    } else if (claimFallBack) {
-      logAnalyticsEvent(
-        Events.vama_claim_eval(
-          claimFallBack.id,
-          claimFallBack.attributes.claimType,
-          claimFallBack.attributes.phase,
-          count,
-        ),
-      )
-    }
-    navigateTo('AskForClaimDecision', { claimID })
-  }
-
   return (
     <VAScrollView testID="fileRequestPageTestID">
       <SubtaskTitle title={t('fileRequest.title')} />
@@ -150,22 +167,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             accessibilityRole="header">
             {t('fileRequest.weSentYouALaterText')}
           </TextView>
-          <Box mt={standardMarginBetween}>
-            <TextArea>
-              <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-                {t('fileRequest.askForYourClaimEvaluationTitle')}
-              </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('fileRequest.askForYourClaimEvaluationBody')}
-              </TextView>
-              <Button
-                onPress={viewEvaluationDetailsPress}
-                label={t('fileRequest.viewEvaluationDetails')}
-                testID={t('fileRequest.viewEvaluationDetails')}
-                a11yHint={t('fileRequest.viewEvaluationDetails')}
-              />
-            </TextArea>
-          </Box>
         </Box>
       )}
     </VAScrollView>
