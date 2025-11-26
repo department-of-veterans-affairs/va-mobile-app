@@ -160,7 +160,7 @@ platform :android do
         highest = builds.max
       end
     end
-    highest
+    highest + 1
   end
 
 # method to get the highest version number from all tracks in the Play Store
