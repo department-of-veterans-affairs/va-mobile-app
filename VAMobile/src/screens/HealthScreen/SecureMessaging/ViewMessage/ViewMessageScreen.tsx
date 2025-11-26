@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Linking } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -35,6 +36,7 @@ import {
   Box,
   ChildTemplate,
   ErrorComponent,
+  LinkWithAnalytics,
   LoadingComponent,
   PickerItem,
   TextView,
@@ -158,6 +160,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
     message.attachments = attachments
   }
   const thread = threadData?.data || ([] as SecureMessagingMessageList)
+  const userInTriageTeam = messageData?.meta?.userInTriageTeam
 
   useEffect(() => {
     if (threadFetched) {
@@ -167,6 +170,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
   }, [threadFetched, registerReviewEvent])
 
   useEffect(() => {
+    // THIS RE-WRITES MESSAGE AND FOLDER QUERY RESULTS!!!!!!
     if (messageFetched && currentFolderIdParam === SecureMessagingSystemFolderIdConstants.INBOX && currentPage) {
       let updateQueries = false
       const newInboxMessages = inboxMessagesData?.data.map((m) => {
@@ -179,8 +183,13 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             attributes: oldMessageAttributes,
             type: messageData?.data.type,
             id: messageData?.data.id,
+            meta: messageData?.meta,
           } as SecureMessagingMessageData
-          const newMessageData = { data: newMessage, included: messageData?.included } as SecureMessagingMessageGetData
+          const newMessageData = {
+            data: newMessage,
+            included: messageData?.included,
+            meta: messageData?.meta,
+          } as SecureMessagingMessageGetData
           queryClient.setQueryData([secureMessagingKeys.message, message.messageId], newMessageData)
         }
         return m
@@ -256,7 +265,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       : t('text.raw', { text: getfolderName(folderWhereMessagePreviousewas.current, folders) })
 
   const replyExpired =
-    demoMode && message?.messageId === 2092809
+    demoMode && (message?.messageId === 2092809 || message?.messageId === 2092803)
       ? false
       : DateTime.fromISO(message?.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
@@ -400,17 +409,45 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
               confirmTestID="pickerMoveMessageConfirmID"
             />
           )}
-          {replyExpired && (
+          {replyExpired && userInTriageTeam && (
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
-                header={t('secureMessaging.reply.youCanNoLonger')}
+                header={t('secureMessaging.reply.tooOldforReplies')}
                 description={t('secureMessaging.reply.olderThan45Days')}
                 testID="secureMessagingOlderThan45DaysAlertID"
               />
             </Box>
           )}
-          <MessageCard message={message} folderId={currentFolderIdParam} />
+          {!userInTriageTeam && (
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <AlertWithHaptics
+                variant="warning"
+                header={t('secureMessaging.reply.youCanNoLonger')}
+                description={t('secureMessaging.reply.youCanNoLonger.description')}
+                testID="secureMessagingYouCanNoLongerAlertID">
+                {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+                <TextView
+                  variant="MobileBody"
+                  paragraphSpacing={true}
+                  accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
+                  {t('secureMessaging.reply.error.ifYouThink')}
+                </TextView>
+                {/* below text and navigation are placeholders */}
+                <LinkWithAnalytics
+                  type="custom"
+                  text={t('upcomingAppointmentDetails.findYourVAFacility')}
+                  onPress={() => Linking.openURL('https://www.va.gov/find-locations')}
+                />
+              </AlertWithHaptics>
+            </Box>
+          )}
+          <MessageCard
+            message={message}
+            folderId={currentFolderIdParam}
+            userInTriageTeam={userInTriageTeam}
+            replyExpired={replyExpired}
+          />
           {thread.length > 0 && (
             <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
               <Box accessible={true} accessibilityRole={'header'}>
