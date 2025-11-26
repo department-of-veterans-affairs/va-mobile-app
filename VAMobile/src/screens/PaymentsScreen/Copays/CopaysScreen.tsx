@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
+import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
@@ -104,7 +105,7 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={t('payments.title')}
+      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('copays.title')}

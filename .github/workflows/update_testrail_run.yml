@@ -15,9 +15,16 @@ jobs:
           - 'latest'
     steps:
       - run: echo "Received web hook"
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - run: gh auth login --with-token < token.txt
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - run: echo "${{ steps.generate_token.outputs.token }}" | gh auth login --with-token
       - name: 'Update Ticket with Testrail data'
         env:
           NAME: ${{ github.event.client_payload.name }}
