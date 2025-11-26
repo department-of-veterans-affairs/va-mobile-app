@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { IconProps, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDownloadTravelPayDocument, useTravelPayClaimDetails } from 'api/travelPay'
-import { TravelPayClaimDocument } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -119,7 +118,9 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
   }
 
   // Renders the decision document section if applicable
-  const renderDecisionDocuments = (documents: TravelPayClaimDocument[]) => {
+  const renderDecisionDocuments = () => {
+    if (!documents || documents.length === 0) return null
+
     const decisionLetterDocs = documents.filter(
       (doc) => doc.filename.includes('Rejection Letter') || doc.filename.includes('Decision Letter'),
     )
@@ -194,7 +195,7 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
                 )}
 
                 {/* Decision Letter Download (for denied/partial payment claims) */}
-                {documents && documents.length > 0 && renderDecisionDocuments(documents)}
+                {renderDecisionDocuments()}
 
                 {/* Amount Section */}
                 <TravelPayClaimAmount claimDetails={claimDetails} />
