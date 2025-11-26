@@ -20,6 +20,7 @@ export const LINK_URL_VETERANS_CRISIS_LINE = 'https://www.veteranscrisisline.net
 export const LINK_URL_VETERANS_CRISIS_LINE_GET_HELP = 'https://www.veteranscrisisline.net/get-help/chat'
 export const LINK_URL_PRIVACY_POLICY = 'https://www.va.gov/privacy-policy/'
 export const LINK_URL_DECISION_REVIEWS = 'https://www.va.gov/decision-reviews/'
+export const LINK_URL_COPAY_HARDSHIP_INFO = 'https://www.va.gov/health-care/pay-copay-bill/financial-hardship/'
 export const LINK_URL_COMPENSATION_CLAIM_EXAM = 'https://benefits.va.gov/compensation/claimexam.asp'
 export const LINK_URL_CONSUMER_GOV = 'https://consumer.gov/'
 export const LINK_URL_YOUR_CLAIMS = 'https://www.va.gov/your-claims'
@@ -42,6 +43,8 @@ export const LINK_URL_HELP_FROM_VA_ACCREDITED_REPRESENTATIVE =
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
 export const LINK_URL_MY_MONEY_GOV = 'https://www.mymoney.gov/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_REQUEST_HELP_FORM_5655 =
+  'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction/'
 export const LINK_URL_VA_FORM_5655 = 'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction'
 export const LINK_URL_VA_MENTAL_HEALTH_SERVICES =
   'https://www.va.gov/health-care/health-needs-conditions/mental-health/'
