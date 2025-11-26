@@ -78,6 +78,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     error: getUserAuthorizedServicesError,
     refetch: refetchAuthServices,
   } = useAuthorizedServices()
+  const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
   const {
     data: prescriptionData,
     isFetching: loadingHistory,
@@ -100,6 +101,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const shippedPrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.isTrackable
   })
+  const inactivePrescriptions =
+    (prescriptionData?.meta?.prescriptionStatusCount?.discontinued ?? 0) +
+    (prescriptionData?.meta?.prescriptionStatusCount?.expired ?? 0)
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -165,7 +169,14 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   useEffect(() => {
     const filters = getFilterArgsForFilter(filterToUse)
     setFilteredPrescriptions(
-      filterAndSortPrescriptions(allPrescriptions, filters, sortByToUse, sortOnToUse === ASCENDING, t),
+      filterAndSortPrescriptions(
+        allPrescriptions,
+        filters,
+        sortByToUse,
+        sortOnToUse === ASCENDING,
+        t,
+        medicationsOracleHealthEnabled,
+      ),
     )
   }, [filterToUse, sortByToUse, sortOnToUse, allPrescriptions, t])
 
@@ -174,51 +185,99 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     setCurrentPrescriptions(newPrescriptions || [])
   }, [page, filteredPrescriptions])
 
-  const filterOptions = [
-    {
-      display: 'prescription.filter.all',
-      value: '',
-      count: allPrescriptions?.length || 0,
-    },
-    {
-      display: 'prescription.history.tag.active',
-      value: RefillStatusConstants.ACTIVE,
-      count: prescriptionData?.meta.prescriptionStatusCount.active || 0,
-      additionalLabelText: [t('prescription.history.tag.active.helpText')],
-    },
-    {
-      display: 'prescription.history.tag.discontinued',
-      value: RefillStatusConstants.DISCONTINUED,
-      count: prescriptionData?.meta.prescriptionStatusCount.discontinued || 0,
-    },
-    {
-      display: 'prescription.history.tag.expired',
-      value: RefillStatusConstants.EXPIRED,
-      count: prescriptionData?.meta.prescriptionStatusCount.expired || 0,
-    },
-    {
-      display: 'prescription.history.tag.pending',
-      value: RefillStatusConstants.PENDING,
-      count: pendingPrescriptions?.length || 0,
-      additionalLabelText: [t('prescription.history.tag.pending.helpText')],
-    },
-    {
-      display: 'prescription.history.tag.tracking',
-      value: RefillStatusConstants.TRACKING,
-      count: shippedPrescriptions?.length || 0,
-      additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
-    },
-    {
-      display: 'prescription.history.tag.transferred',
-      value: RefillStatusConstants.TRANSFERRED,
-      count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
-    },
-    {
-      display: 'prescription.history.tag.statusNotAvailable',
-      value: RefillStatusConstants.UNKNOWN,
-      count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
-    },
-  ]
+  const getFilterOptions = () => {
+    if (!medicationsOracleHealthEnabled) {
+      return [
+        {
+          display: 'prescription.filter.all',
+          value: '',
+          count: allPrescriptions?.length || 0,
+        },
+        {
+          display: 'prescription.history.tag.active',
+          value: RefillStatusConstants.ACTIVE,
+          count: prescriptionData?.meta.prescriptionStatusCount.active || 0,
+          additionalLabelText: [t('prescription.history.tag.active.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.discontinued',
+          value: RefillStatusConstants.DISCONTINUED,
+          count: prescriptionData?.meta.prescriptionStatusCount.discontinued || 0,
+        },
+        {
+          display: 'prescription.history.tag.expired',
+          value: RefillStatusConstants.EXPIRED,
+          count: prescriptionData?.meta.prescriptionStatusCount.expired || 0,
+        },
+        {
+          display: 'prescription.history.tag.pending',
+          value: RefillStatusConstants.PENDING,
+          count: pendingPrescriptions?.length || 0,
+          additionalLabelText: [t('prescription.history.tag.pending.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.tracking',
+          value: RefillStatusConstants.TRACKING,
+          count: shippedPrescriptions?.length || 0,
+          additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.transferred',
+          value: RefillStatusConstants.TRANSFERRED,
+          count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
+        },
+        {
+          display: 'prescription.history.tag.statusNotAvailable',
+          value: RefillStatusConstants.UNKNOWN,
+          count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
+        },
+      ]
+    } else {
+      return [
+        {
+          display: 'prescription.filter.all',
+          value: '',
+          count: allPrescriptions?.length || 0,
+        },
+        {
+          display: 'prescription.history.tag.active',
+          value: RefillStatusConstants.ACTIVE,
+          count: prescriptionData?.meta.prescriptionStatusCount.active || 0,
+          additionalLabelText: [t('prescription.history.tag.active.helpTextv2')],
+        },
+
+        {
+          display: 'prescription.history.tag.active.inProgressv2',
+          value: RefillStatusConstants.PENDING,
+          count: pendingPrescriptions?.length || 0,
+          additionalLabelText: [t('prescription.history.tag.active.inProgress.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.shipped',
+          value: RefillStatusConstants.TRACKING,
+          count: shippedPrescriptions?.length || 0,
+          additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.inactive',
+          value: RefillStatusConstants.INACTIVE,
+          count: inactivePrescriptions || 0,
+        },
+        {
+          display: 'prescription.history.tag.transferred',
+          value: RefillStatusConstants.TRANSFERRED,
+          count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
+        },
+        {
+          display: 'prescription.history.tag.statusNotAvailable',
+          value: RefillStatusConstants.UNKNOWN,
+          count: prescriptionData?.meta.prescriptionStatusCount.unknown || 0,
+        },
+      ]
+    }
+  }
+
+  const filterOptions = getFilterOptions()
 
   const prescriptionDetailsClicked = (prescription: PrescriptionData) => {
     logAnalyticsEvent(Events.vama_rx_details(prescription.id))
@@ -465,7 +524,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       testID: 'goToMyVAHealthPrescriptionHistoryID',
     }
 
-    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
+    if (medicationsOracleHealthEnabled) {
       logAnalyticsEvent(Events.vama_blue_alert_rx())
       return (
         <Box mx={theme.dimensions.gutter}>

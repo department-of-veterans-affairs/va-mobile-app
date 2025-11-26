@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { DateTime } from 'luxon'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, LargePanel, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -19,8 +20,10 @@ function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
   const { display, value } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
-  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t, medicationsOracleHealthEnabled)
   const timeOpened = DateTime.now().toMillis()
 
   useBeforeNavBackListener(navigation, () => {

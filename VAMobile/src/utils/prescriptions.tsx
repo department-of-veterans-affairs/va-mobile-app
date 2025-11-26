@@ -6,30 +6,54 @@ import { LabelTagTypeConstants } from 'components/LabelTag'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
 
-export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
-  switch (status) {
-    case RefillStatusConstants.ACTIVE:
-      return t('prescription.history.tag.active')
-    case RefillStatusConstants.DISCONTINUED:
-    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-    case RefillStatusConstants.DISCONTINUED_EDIT:
-      return t('prescription.history.tag.discontinued')
-    case RefillStatusConstants.EXPIRED:
-      return t('prescription.history.tag.expired')
-    case RefillStatusConstants.HOLD:
-    case RefillStatusConstants.PROVIDER_HOLD:
-      return t('prescription.history.tag.active.hold')
-    case RefillStatusConstants.ACTIVE_PARKED:
-      return t('prescription.history.tag.active.parked')
-    case RefillStatusConstants.REFILL_IN_PROCESS:
-      return t('prescription.history.tag.active.inProgress')
-    case RefillStatusConstants.TRANSFERRED:
-      return t('prescription.history.tag.transferred')
-    case RefillStatusConstants.SUBMITTED:
-      return t('prescription.history.tag.submitted')
-    case RefillStatusConstants.DELETED:
-    case RefillStatusConstants.UNKNOWN:
-      return t('prescription.history.tag.statusNotAvailable')
+export const getTextForRefillStatus = (status: RefillStatus, t: TFunction, medicationsOracleHealthEnabled: boolean) => {
+  if (!medicationsOracleHealthEnabled) {
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+        return t('prescription.history.tag.active')
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+        return t('prescription.history.tag.discontinued')
+      case RefillStatusConstants.EXPIRED:
+        return t('prescription.history.tag.expired')
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+        return t('prescription.history.tag.active.hold')
+      case RefillStatusConstants.ACTIVE_PARKED:
+        return t('prescription.history.tag.active.parked')
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+        return t('prescription.history.tag.active.inProgress')
+      case RefillStatusConstants.TRANSFERRED:
+        return t('prescription.history.tag.transferred')
+      case RefillStatusConstants.SUBMITTED:
+        return t('prescription.history.tag.submitted')
+      case RefillStatusConstants.DELETED:
+      case RefillStatusConstants.UNKNOWN:
+        return t('prescription.history.tag.statusNotAvailable')
+    }
+  } else {
+    //v2
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+      case RefillStatusConstants.ACTIVE_PARKED:
+        return t('prescription.history.tag.active')
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+      case RefillStatusConstants.EXPIRED:
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+        return t('prescription.history.tag.inactive')
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+      case RefillStatusConstants.SUBMITTED:
+        return t('prescription.history.tag.active.inProgressv2')
+      case RefillStatusConstants.TRANSFERRED:
+        return t('prescription.history.tag.transferred')
+      case RefillStatusConstants.DELETED:
+      case RefillStatusConstants.UNKNOWN:
+        return t('prescription.history.tag.statusNotAvailable')
+    }
   }
 }
 
@@ -49,27 +73,50 @@ export const getFilterArgsForFilter = (filter: string) => {
   return [filter]
 }
 
-export const getTagTypeForStatus = (status: string) => {
-  switch (status) {
-    case RefillStatusConstants.ACTIVE:
-      return LabelTagTypeConstants.tagBlue
-    case RefillStatusConstants.DELETED:
-    case RefillStatusConstants.DISCONTINUED:
-    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-    case RefillStatusConstants.DISCONTINUED_EDIT:
-    case RefillStatusConstants.EXPIRED:
-    case RefillStatusConstants.UNKNOWN:
-    case RefillStatusConstants.TRANSFERRED:
-      return LabelTagTypeConstants.tagInactive
-    case RefillStatusConstants.HOLD:
-    case RefillStatusConstants.PROVIDER_HOLD:
-    case RefillStatusConstants.ACTIVE_PARKED:
-    case RefillStatusConstants.SUBMITTED:
-      return LabelTagTypeConstants.tagYellow
-    case RefillStatusConstants.REFILL_IN_PROCESS:
-      return LabelTagTypeConstants.tagGreen
-    default:
-      return LabelTagTypeConstants.tagInactive
+export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabled: boolean) => {
+  if (!medicationsOracleHealthEnabled) {
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+        return LabelTagTypeConstants.tagBlue
+      case RefillStatusConstants.DELETED:
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+      case RefillStatusConstants.EXPIRED:
+      case RefillStatusConstants.UNKNOWN:
+      case RefillStatusConstants.TRANSFERRED:
+        return LabelTagTypeConstants.tagInactive
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+      case RefillStatusConstants.ACTIVE_PARKED:
+      case RefillStatusConstants.SUBMITTED:
+        return LabelTagTypeConstants.tagYellow
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+        return LabelTagTypeConstants.tagGreen
+      default:
+        return LabelTagTypeConstants.tagInactive
+    }
+  } else {
+    // v2
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+      case RefillStatusConstants.ACTIVE_PARKED:
+        return LabelTagTypeConstants.tagBlue
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+      case RefillStatusConstants.EXPIRED:
+      case RefillStatusConstants.UNKNOWN:
+      case RefillStatusConstants.TRANSFERRED:
+        return LabelTagTypeConstants.tagInactive
+      case RefillStatusConstants.SUBMITTED:
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+        return LabelTagTypeConstants.tagGreen
+      default:
+        return LabelTagTypeConstants.tagInactive
+    }
   }
 }
 
@@ -81,62 +128,107 @@ export const getTagTypeForStatus = (status: string) => {
 export const getStatusDefinitionTextForRefillStatus = (
   status: RefillStatus,
   t: TFunction,
+  medicationsOracleHealthEnabled: boolean,
 ): { text: string; a11yLabel: string } => {
-  switch (status) {
-    case RefillStatusConstants.ACTIVE:
-      return {
-        text: t('statusDefinition.active'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active')),
-      }
-    case RefillStatusConstants.REFILL_IN_PROCESS:
-      return {
-        text: t('statusDefinition.active.inProgress'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgress')),
-      }
-    case RefillStatusConstants.HOLD:
-    case RefillStatusConstants.PROVIDER_HOLD:
-      return {
-        text: t('statusDefinition.active.hold'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active.hold')),
-      }
-    case RefillStatusConstants.ACTIVE_PARKED:
-      return {
-        text: t('statusDefinition.active.parked'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active.parked')),
-      }
-    case RefillStatusConstants.SUBMITTED:
-      return {
-        text: t('statusDefinition.active.submitted'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.active.submitted')),
-      }
-    case RefillStatusConstants.TRANSFERRED:
-      return {
-        text: t('statusDefinition.transferred'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
-      }
-    case RefillStatusConstants.DISCONTINUED:
-    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-    case RefillStatusConstants.DISCONTINUED_EDIT:
-      return {
-        text: t('statusDefinition.discontinued'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.discontinued')),
-      }
-    case RefillStatusConstants.EXPIRED:
-      return {
-        text: t('statusDefinition.expired'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.expired')),
-      }
-    case RefillStatusConstants.DELETED:
-    case RefillStatusConstants.UNKNOWN:
-      return {
-        text: t('statusDefinition.statusNotAvailable'),
-        a11yLabel: a11yLabelVA(t('statusDefinition.statusNotAvailable')),
-      }
-    default:
-      return {
-        text: '',
-        a11yLabel: '',
-      }
+  if (!medicationsOracleHealthEnabled) {
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+        return {
+          text: t('statusDefinition.active'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active')),
+        }
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+        return {
+          text: t('statusDefinition.active.inProgress'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgress')),
+        }
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+        return {
+          text: t('statusDefinition.active.hold'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.hold')),
+        }
+      case RefillStatusConstants.ACTIVE_PARKED:
+        return {
+          text: t('statusDefinition.active.parked'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.parked')),
+        }
+      case RefillStatusConstants.SUBMITTED:
+        return {
+          text: t('statusDefinition.active.submitted'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.submitted')),
+        }
+      case RefillStatusConstants.TRANSFERRED:
+        return {
+          text: t('statusDefinition.transferred'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
+        }
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+        return {
+          text: t('statusDefinition.discontinued'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.discontinued')),
+        }
+      case RefillStatusConstants.EXPIRED:
+        return {
+          text: t('statusDefinition.expired'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.expired')),
+        }
+      case RefillStatusConstants.DELETED:
+      case RefillStatusConstants.UNKNOWN:
+        return {
+          text: t('statusDefinition.statusNotAvailable'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.statusNotAvailable')),
+        }
+      default:
+        return {
+          text: '',
+          a11yLabel: '',
+        }
+    }
+  } else {
+    // v2
+    switch (status) {
+      case RefillStatusConstants.ACTIVE:
+      case RefillStatusConstants.ACTIVE_PARKED:
+        return {
+          text: t('statusDefinition.activev2'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.activev2')),
+        }
+      case RefillStatusConstants.SUBMITTED:
+      case RefillStatusConstants.REFILL_IN_PROCESS:
+        return {
+          text: t('statusDefinition.active.inProgressv2'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgressv2')),
+        }
+      case RefillStatusConstants.HOLD:
+      case RefillStatusConstants.PROVIDER_HOLD:
+      case RefillStatusConstants.DISCONTINUED:
+      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+      case RefillStatusConstants.DISCONTINUED_EDIT:
+      case RefillStatusConstants.EXPIRED:
+        return {
+          text: t('statusDefinition.inactive'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.inactive')),
+        }
+      case RefillStatusConstants.TRANSFERRED:
+        return {
+          text: t('statusDefinition.transferred'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
+        }
+      case RefillStatusConstants.DELETED:
+      case RefillStatusConstants.UNKNOWN:
+        return {
+          text: t('statusDefinition.statusNotAvailable'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.statusNotAvailable')),
+        }
+      default:
+        return {
+          text: '',
+          a11yLabel: '',
+        }
+    }
   }
 }
 
@@ -146,6 +238,7 @@ export const filterAndSortPrescriptions = (
   sort: string,
   ascending: boolean,
   t: TFunction,
+  medicationsOracleHealthEnabled: boolean,
 ): PrescriptionsList => {
   let filteredList: PrescriptionsList = []
   // If there are no filters, don't filter the list
@@ -186,7 +279,7 @@ export const filterAndSortPrescriptions = (
       break
     case PrescriptionSortOptionConstants.REFILL_STATUS:
       sortedList = sortBy(filteredList, (a) => {
-        return getTextForRefillStatus(a.attributes[sort] as RefillStatus, t)
+        return getTextForRefillStatus(a.attributes[sort] as RefillStatus, t, medicationsOracleHealthEnabled)
       })
       break
   }

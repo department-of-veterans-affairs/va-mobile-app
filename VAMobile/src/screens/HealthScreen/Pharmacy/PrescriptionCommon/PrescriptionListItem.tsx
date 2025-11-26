@@ -44,7 +44,12 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       return <></>
     }
 
-    const instructionsText = instructions || t('prescription.details.instructionsNotAvailable')
+    // OH Data includes the refills in the instructions text, so we need to remove it
+    const removeTrailingRefills = (text: string | null): string => {
+      return text?.replace(/\s*Refills?:\s*\d*\.?\s*$/i, '').trim() || ''
+    }
+    const instructionsText = removeTrailingRefills(instructions) || t('prescription.details.instructionsNotAvailable')
+
     return (
       <Box mt={condensedMarginBetween}>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
