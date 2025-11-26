@@ -16,6 +16,7 @@ export const PrescriptionSortOptionConstants: {
 
 export const RefillStatusConstants: {
   ACTIVE: RefillStatus
+  INACTIVE: RefillStatus
   DELETED: RefillStatus
   DISCONTINUED: RefillStatus
   DISCONTINUED_BY_PROVIDER: RefillStatus
@@ -32,6 +33,7 @@ export const RefillStatusConstants: {
   SUBMITTED: RefillStatus
 } = {
   ACTIVE: 'active',
+  INACTIVE: 'inactive',
   DELETED: 'deleted',
   DISCONTINUED: 'discontinued',
   DISCONTINUED_BY_PROVIDER: 'discontinuedByProvider',
@@ -50,6 +52,7 @@ export const RefillStatusConstants: {
 
 export type RefillStatus =
   | 'active'
+  | 'inactive'
   | 'deleted'
   | 'discontinued'
   | 'discontinuedByProvider'

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { RefillStatus } from 'api/types'
 import Box, { BoxProps } from 'components/Box'
 import LabelTag, { LabelTagProps } from 'components/LabelTag'
@@ -15,8 +16,10 @@ export type RefillTagProps = {
 function RefillTag({ status }: RefillTagProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
+  const { data: userAuthorizedServices } = useAuthorizedServices()
+  const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
-  const statusText = getTextForRefillStatus(status, t) || ''
+  const statusText = getTextForRefillStatus(status, t, medicationsOracleHealthEnabled) || ''
 
   const wrapperProps: BoxProps = {
     alignSelf: 'flex-start',
@@ -25,7 +28,7 @@ function RefillTag({ status }: RefillTagProps) {
   const labelTagProps: LabelTagProps = {
     text: statusText,
     a11yLabel: statusText,
-    labelType: getTagTypeForStatus(status),
+    labelType: getTagTypeForStatus(status, medicationsOracleHealthEnabled),
     onPress: () => navigateTo('StatusDefinition', { display: statusText, value: status }),
     a11yHint: t('prescription.history.a11yHint.status'),
     a11yRole: 'link',
