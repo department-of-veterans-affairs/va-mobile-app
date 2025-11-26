@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { TravelPayClaimDetails } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import TravelPayClaimDocuments from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDocuments'
+import TravelPayClaimDocuments from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimDocuments'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 

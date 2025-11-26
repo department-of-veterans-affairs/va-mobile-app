@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { TravelPayClaimStatuses } from 'constants/travelPay'
-import TravelPayClaimStatusDefinition from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimStatusDefinition'
+import TravelPayClaimStatusDefinition from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimStatusDefinition'
 import { context, render } from 'testUtils'
 
 context('TravelPayClaimStatusDefinition', () => {

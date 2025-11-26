@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import TravelPayClaimHeader from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimHeader'
+import TravelPayClaimHeader from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimHeader'
 import { context, render } from 'testUtils'
 import { getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 

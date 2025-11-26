@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { TravelPayClaimDetails } from 'api/types'
-import TravelPayClaimAmount from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimAmount'
+import TravelPayClaimAmount from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimAmount'
 import { context, render } from 'testUtils'
 
 // Mock analytics

@@ -19,11 +19,13 @@ import {
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import TravelPayClaimAmount from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimAmount'
-import TravelPayClaimDecisionReason from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDecisionReason'
-import TravelPayClaimHeader from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimHeader'
-import TravelPayClaimInformation from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimInformation'
-import TravelPayClaimStatusDefinition from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimStatusDefinition'
+import {
+  TravelPayClaimAmount,
+  TravelPayClaimDecisionReason,
+  TravelPayClaimHeader,
+  TravelPayClaimInformation,
+  TravelPayClaimStatusDefinition,
+} from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { isErrorObject } from 'utils/common'

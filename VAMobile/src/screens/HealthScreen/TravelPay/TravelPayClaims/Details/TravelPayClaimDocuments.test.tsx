@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { TravelPayClaimDocument } from 'api/types'
-import TravelPayClaimDocuments from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDocuments'
+import TravelPayClaimDocuments from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimDocuments'
 import { context, render } from 'testUtils'
 
 // Mock the onDocumentPress callback

@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { TravelPayClaimDetails, TravelPayClaimDocument } from 'api/types'
-import TravelPayClaimInformation from 'screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimInformation'
+import TravelPayClaimInformation from 'screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimInformation'
 import { context, render } from 'testUtils'
 import { getFormattedDate } from 'utils/formattingUtils'
 
@@ -14,7 +14,7 @@ jest.mock('utils/formattingUtils', () => ({
 }))
 
 // Mock the child component
-jest.mock('screens/HealthScreen/TravelPay/TravelPayClaims/components/TravelPayClaimDocuments', () => {
+jest.mock('screens/HealthScreen/TravelPay/TravelPayClaims/Details/TravelPayClaimDocuments', () => {
   return function MockTravelPayClaimDocuments({
     documents,
     claimId,
