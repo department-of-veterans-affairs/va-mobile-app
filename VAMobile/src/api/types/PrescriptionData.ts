@@ -103,6 +103,31 @@ export type PrescriptionAttributeDataBase = {
   stationNumber: string
 }
 
+export type PrescriptionAttributeDataBasev1 = {
+  refillStatus: RefillStatus
+  refillSubmitDate: string | null
+  refillDate: string | null
+  refillRemaining: number
+  facilityName: string | null
+  facilityPhoneNumber: string | AppointmentPhone | undefined | null
+  isRefillable: boolean
+  isTrackable: boolean
+  orderedDate: string | null
+  quantity: number
+  expirationDate: string | null
+  prescriptionNumber: string
+  prescriptionName: string
+  instructions: string | null
+  dispensedDate: string | null
+  stationNumber: string | null
+  type: string | null
+  prescriptionSource: string | null
+  cmopDivisionPhone: string | null
+  cmopNdcNumber: string | null
+  remarks: string | null
+  dispStatus: string | null
+}
+
 // request meta data
 export type PrescriptionsGetData = {
   data: PrescriptionsList
@@ -126,6 +151,7 @@ export type PrescriptionsGetMeta = {
 
 export type PrescriptionStatusCountData = {
   active: number
+  inactive: number
   isRefillable: number
   discontinued: number
   expired: number
@@ -191,7 +217,7 @@ export type PrescriptionTrackingItem = PrescriptionTrackingItemV0 & Prescription
 export type PrescriptionAttributeData = PrescriptionAttributeDataBase
 
 // v1 response api structure
-export type PrescriptionsAttributeDataV1 = PrescriptionAttributeDataBase & {
+export type PrescriptionsAttributeDataV1 = PrescriptionAttributeDataBasev1 & {
   tracking?: Array<PrescriptionTrackingItem> | null
 }
 
