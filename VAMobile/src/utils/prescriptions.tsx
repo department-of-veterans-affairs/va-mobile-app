@@ -37,7 +37,7 @@ export const getTextForRefillStatus = (
         return t('prescription.history.tag.statusNotAvailable')
     }
   } else {
-    //v2
+    // v1
     switch (status) {
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.ACTIVE_PARKED:
