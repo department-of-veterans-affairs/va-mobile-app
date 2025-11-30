@@ -185,7 +185,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     setCurrentPrescriptions(newPrescriptions || [])
   }, [page, filteredPrescriptions])
 
-  const getFilterOptions = () => {
+  const getFilterOptions = (medicationsOracleHealthEnabled: boolean = false) => {
     if (!medicationsOracleHealthEnabled) {
       return [
         {
@@ -243,11 +243,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           display: 'prescription.history.tag.active',
           value: RefillStatusConstants.ACTIVE,
           count: prescriptionData?.meta.prescriptionStatusCount.active || 0,
-          additionalLabelText: [t('prescription.history.tag.active.helpTextv2')],
+          additionalLabelText: [t('prescription.history.tag.active.helpTextv1')],
         },
 
         {
-          display: 'prescription.history.tag.active.inProgressv2',
+          display: 'prescription.history.tag.active.inProgressv1',
           value: RefillStatusConstants.PENDING,
           count: pendingPrescriptions?.length || 0,
           additionalLabelText: [t('prescription.history.tag.active.inProgress.helpText')],
@@ -262,11 +262,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           display: 'prescription.history.tag.inactive',
           value: RefillStatusConstants.INACTIVE,
           count: inactivePrescriptions || 0,
+          additionalLabelText: [t('prescription.history.tag.inactive.helpText')],
         },
         {
           display: 'prescription.history.tag.transferred',
           value: RefillStatusConstants.TRANSFERRED,
           count: prescriptionData?.meta.prescriptionStatusCount.transferred || 0,
+          additionalLabelText: [t('prescription.history.tag.transferred.helpText')],
         },
         {
           display: 'prescription.history.tag.statusNotAvailable',
@@ -277,7 +279,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
     }
   }
 
-  const filterOptions = getFilterOptions()
+  const filterOptions = getFilterOptions(medicationsOracleHealthEnabled)
 
   const prescriptionDetailsClicked = (prescription: PrescriptionData) => {
     logAnalyticsEvent(Events.vama_rx_details(prescription.id))

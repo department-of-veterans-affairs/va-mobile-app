@@ -6,7 +6,11 @@ import { LabelTagTypeConstants } from 'components/LabelTag'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
 
-export const getTextForRefillStatus = (status: RefillStatus, t: TFunction, medicationsOracleHealthEnabled: boolean) => {
+export const getTextForRefillStatus = (
+  status: RefillStatus,
+  t: TFunction,
+  medicationsOracleHealthEnabled: boolean = false,
+) => {
   if (!medicationsOracleHealthEnabled) {
     switch (status) {
       case RefillStatusConstants.ACTIVE:
@@ -73,7 +77,7 @@ export const getFilterArgsForFilter = (filter: string) => {
   return [filter]
 }
 
-export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabled: boolean) => {
+export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabled: boolean = false) => {
   if (!medicationsOracleHealthEnabled) {
     switch (status) {
       case RefillStatusConstants.ACTIVE:
@@ -97,7 +101,7 @@ export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabl
         return LabelTagTypeConstants.tagInactive
     }
   } else {
-    // v2
+    // v1
     switch (status) {
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.ACTIVE_PARKED:
@@ -128,7 +132,7 @@ export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabl
 export const getStatusDefinitionTextForRefillStatus = (
   status: RefillStatus,
   t: TFunction,
-  medicationsOracleHealthEnabled: boolean,
+  medicationsOracleHealthEnabled: boolean = false,
 ): { text: string; a11yLabel: string } => {
   if (!medicationsOracleHealthEnabled) {
     switch (status) {
@@ -188,7 +192,7 @@ export const getStatusDefinitionTextForRefillStatus = (
         }
     }
   } else {
-    // v2
+    // v1
     switch (status) {
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.ACTIVE_PARKED:
@@ -238,7 +242,7 @@ export const filterAndSortPrescriptions = (
   sort: string,
   ascending: boolean,
   t: TFunction,
-  medicationsOracleHealthEnabled: boolean,
+  medicationsOracleHealthEnabled: boolean = false,
 ): PrescriptionsList => {
   let filteredList: PrescriptionsList = []
   // If there are no filters, don't filter the list
@@ -254,6 +258,20 @@ export const filterAndSortPrescriptions = (
   } else if (filters[0] === RefillStatusConstants.TRACKING) {
     filteredList = filterFunction(prescrptions, (prescription) => {
       return prescription.attributes.isTrackable
+    })
+  } else if (filters[0] === RefillStatusConstants.INACTIVE) {
+    filteredList = filterFunction(prescrptions, (prescriptions) => {
+      return contains(
+        [
+          RefillStatusConstants.DISCONTINUED,
+          RefillStatusConstants.EXPIRED,
+          RefillStatusConstants.HOLD,
+          RefillStatusConstants.PROVIDER_HOLD,
+          RefillStatusConstants.DISCONTINUED_BY_PROVIDER,
+          RefillStatusConstants.DISCONTINUED_EDIT,
+        ],
+        prescriptions.attributes.refillStatus,
+      )
     })
   } else {
     // Apply the custom filter by
