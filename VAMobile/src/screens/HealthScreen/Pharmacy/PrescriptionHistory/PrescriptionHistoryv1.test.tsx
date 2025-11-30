@@ -27,7 +27,7 @@ jest.mock('api/authorizedServices/getAuthorizedServices', () => ({
   useAuthorizedServices: jest.fn(),
 }))
 
-const prescriptionDatav2: PrescriptionsGetData = {
+const prescriptionDatav1: PrescriptionsGetData = {
   data: [
     {
       id: '20848812135',
@@ -509,7 +509,7 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
       }
       when(api.get as jest.Mock)
         .calledWith('/v1/health/rx/prescriptions', params)
-        .mockResolvedValue(prescriptionDatav2)
+        .mockResolvedValue(prescriptionDatav1)
 
       initializeTestInstance()
 
@@ -558,9 +558,9 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
       when(api.get as jest.Mock)
         .calledWith('/v1/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionDatav2,
+          ...prescriptionDatav1,
           meta: {
-            ...prescriptionDatav2.meta,
+            ...prescriptionDatav1.meta,
             hasNonVaMeds: true,
           },
         })
@@ -590,9 +590,9 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
       when(api.get as jest.Mock)
         .calledWith('/v1/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionDatav2,
+          ...prescriptionDatav1,
           meta: {
-            ...prescriptionDatav2.meta,
+            ...prescriptionDatav1.meta,
             hasNonVaMeds: true,
           },
         })
@@ -619,9 +619,9 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
       when(api.get as jest.Mock)
         .calledWith('/v1/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionDatav2,
+          ...prescriptionDatav1,
           meta: {
-            ...prescriptionDatav2.meta,
+            ...prescriptionDatav1.meta,
             hasNonVaMeds: true,
           },
         })
@@ -647,9 +647,9 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
       when(api.get as jest.Mock)
         .calledWith('/v1/health/rx/prescriptions', params)
         .mockResolvedValue({
-          ...prescriptionDatav2,
+          ...prescriptionDatav1,
           meta: {
-            ...prescriptionDatav2.meta,
+            ...prescriptionDatav1.meta,
             hasNonVaMeds: false,
           },
         })

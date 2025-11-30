@@ -193,14 +193,14 @@ export const getStatusDefinitionTextForRefillStatus = (
       case RefillStatusConstants.ACTIVE:
       case RefillStatusConstants.ACTIVE_PARKED:
         return {
-          text: t('statusDefinition.activev2'),
-          a11yLabel: a11yLabelVA(t('statusDefinition.activev2')),
+          text: t('statusDefinition.activev1'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.activev1')),
         }
       case RefillStatusConstants.SUBMITTED:
       case RefillStatusConstants.REFILL_IN_PROCESS:
         return {
-          text: t('statusDefinition.active.inProgressv2'),
-          a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgressv2')),
+          text: t('statusDefinition.active.inProgressv1'),
+          a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgressv1')),
         }
       case RefillStatusConstants.HOLD:
       case RefillStatusConstants.PROVIDER_HOLD:
