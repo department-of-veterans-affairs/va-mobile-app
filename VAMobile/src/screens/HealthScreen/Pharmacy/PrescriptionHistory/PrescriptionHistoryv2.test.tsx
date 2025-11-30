@@ -441,6 +441,41 @@ const prescriptionDatav2: PrescriptionsGetData = {
     last: 'https://staging-api.va.gov/mobile/v1/health/rx/prescriptions?page[size]=10&page[number]=7',
   },
 }
+
+const emptyMock: PrescriptionsGetData = {
+  data: [],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalPages: 1,
+      totalEntries: 0,
+    },
+    prescriptionStatusCount: {
+      active: 0,
+      isRefillable: 0,
+      discontinued: 0,
+      inactive: 0,
+      expired: 0,
+      historical: 0,
+      pending: 0,
+      transferred: 0,
+      submitted: 0,
+      hold: 0,
+      unknown: 0,
+      total: 0,
+    },
+    hasNonVaMeds: false,
+  },
+  links: {
+    self: '',
+    first: '',
+    prev: '',
+    next: '',
+    last: '',
+  },
+}
+
 context('PrescriptionHistory with Oracle Health (v2)', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
   const { useAuthorizedServices } = require('api/authorizedServices/getAuthorizedServices')
@@ -491,6 +526,136 @@ context('PrescriptionHistory with Oracle Health (v2)', () => {
 
       await waitFor(() =>
         expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
+      )
+    })
+  })
+
+  describe('When there are no prescriptions', () => {
+    it('should not display the refill request button', async () => {
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue(emptyMock)
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeFalsy(),
+      )
+    })
+  })
+
+  describe('When nonVAMedsLink feature toggle is true and user has non-VA meds', () => {
+    it('should display the alert for non-VA medications', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue({
+          ...prescriptionDatav2,
+          meta: {
+            ...prescriptionDatav2.meta,
+            hasNonVaMeds: true,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      expect(screen.getByLabelText(a11yLabelVA(t('prescription.history.nonVAMeds.header')))).toBeTruthy()
+      expect(
+        screen.getByText(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+      ).toBeTruthy()
+      expect(
+        screen.getByLabelText(
+          a11yLabelVA(t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text')),
+        ),
+      ).toBeTruthy()
+      expect(screen.getByRole('button', { name: t('dismiss') })).toBeTruthy()
+    })
+
+    it('should open a webview that navigates to va.gov when link is clicked', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue({
+          ...prescriptionDatav2,
+          meta: {
+            ...prescriptionDatav2.meta,
+            hasNonVaMeds: true,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      fireEvent.press(screen.getByRole('link', { name: t('prescription.history.nonVAMeds.link.text') }))
+      expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+        url: 'https://www.va.gov/my-health/medications',
+        displayTitle: t('webview.vagov'),
+        loadingMessage: t('loading.vaWebsite'),
+        useSSO: true,
+      })
+    })
+
+    it('should hide the alert when the dismiss button is clicked', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue({
+          ...prescriptionDatav2,
+          meta: {
+            ...prescriptionDatav2.meta,
+            hasNonVaMeds: true,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() =>
+        fireEvent.press(screen.getByRole('tab', { name: t('prescription.history.nonVAMeds.header') })),
+      )
+      fireEvent.press(screen.getByRole('button', { name: t('dismiss') }))
+      await waitFor(() =>
+        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeFalsy(),
+      )
+    })
+  })
+
+  describe('When nonVAMedsLink feature toggle is true and user does not have non-VA meds', () => {
+    it('should not display the alert for non-VA medications', async () => {
+      when(mockFeatureEnabled).calledWith('nonVAMedsLink').mockReturnValue(true)
+      const params = {
+        'page[number]': '1',
+        'page[size]': LARGE_PAGE_SIZE.toString(),
+        sort: 'refill_status', // Parameters are snake case for the back end
+      }
+      when(api.get as jest.Mock)
+        .calledWith('/v1/health/rx/prescriptions', params)
+        .mockResolvedValue({
+          ...prescriptionDatav2,
+          meta: {
+            ...prescriptionDatav2.meta,
+            hasNonVaMeds: false,
+          },
+        })
+      initializeTestInstance()
+      await waitFor(() =>
+        expect(screen.queryByRole('tab', { name: t('prescription.history.nonVAMeds.header') })).toBeFalsy(),
       )
     })
   })

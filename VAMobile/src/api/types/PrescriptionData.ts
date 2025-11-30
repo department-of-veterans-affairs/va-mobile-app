@@ -89,8 +89,8 @@ export type PrescriptionAttributeDataBase = {
   refillSubmitDate: string | null
   refillDate: string | null
   refillRemaining: number
-  facilityName: string
-  facilityPhoneNumber: string | AppointmentPhone | undefined
+  facilityName: string | null
+  facilityPhoneNumber: string | AppointmentPhone | null
   isRefillable: boolean
   isTrackable: boolean
   orderedDate: string | null
@@ -100,7 +100,7 @@ export type PrescriptionAttributeDataBase = {
   prescriptionName: string
   instructions: string | null
   dispensedDate: string | null
-  stationNumber: string
+  stationNumber: string | null
 }
 
 export type PrescriptionAttributeDataBasev1 = {
@@ -109,7 +109,7 @@ export type PrescriptionAttributeDataBasev1 = {
   refillDate: string | null
   refillRemaining: number
   facilityName: string | null
-  facilityPhoneNumber: string | AppointmentPhone | undefined | null
+  facilityPhoneNumber: string | AppointmentPhone | null
   isRefillable: boolean
   isTrackable: boolean
   orderedDate: string | null
