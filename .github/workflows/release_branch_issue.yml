@@ -14,14 +14,20 @@ jobs:
       prodDueDate: ${{env.PROD_DUE_DATE}}
       vaDueDate: ${{env.VA_DUE_DATE}}
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
       - run: echo "QA_DUE_DATE=$(date -d "+2 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "PROD_DUE_DATE=$(date -d "+5 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "VA_DUE_DATE=$(date -d "+6 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - run: echo "RELEASE_DATE=$(date -d "+13 days" '+%A %b %d, %Y')" >> $GITHUB_ENV
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GH_ACTIONS_PAT }}" > token.txt
-      - run: gh auth login --with-token < token.txt
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - run: |
           sev1=$(gh issue list -l "sev-1" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
           sev2=$(gh issue list -l "sev-2" --jq 'map("|#\(.number)|\(.title)|") | join("\n") ' --json number,title)
@@ -32,6 +38,8 @@ jobs:
           echo 'TABLE<<EOF' >> $GITHUB_ENV
           echo "${table}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
       - name: Create Release Ticket
         uses: JasonEtco/create-an-issue@v2
         with:
@@ -43,7 +51,7 @@ jobs:
           vaDueDate: ${{env.VA_DUE_DATE}}
           releaseDate: ${{ env.RELEASE_DATE }}
           issues: ${{ env.TABLE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         id: create_issue
       - name: Assign Users to Release Ticket
         if: ${{ success() }}
@@ -54,7 +62,7 @@ jobs:
           ISSUE_NUMBER=${{ steps.create_issue.outputs.number }}
           gh issue edit $ISSUE_NUMBER --add-assignee $ASSIGNEES
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
   create_testrail_milestone:
     uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/create_testrail_milestone.yml@develop
     needs: release_ticket
@@ -77,9 +85,15 @@ jobs:
   #   runs-on: ubuntu-latest
   #   needs: [release_ticket, create_testrail_milestone, start_testrail_run]
   #   steps:
+  #     - name: Generate token
+  #       id: generate_token
+  #       uses: actions/create-github-app-token@v1
+  #       with:
+  #         app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+  #         private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
   #     - uses: actions/checkout@v3
-  #     - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-  #     - run: gh auth login --with-token < token.txt
+  #       with:
+  #         token: ${{ steps.generate_token.outputs.token }}
   #     - run: echo ${{needs.start_testrail_run.outputs.testrailUrl}}
   #     - run: |
   #         TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
@@ -87,13 +101,21 @@ jobs:
   #         OLD_BODY=$(echo $(gh issue view $TICKET_NUM --json body | jq -r '.body'))
   #         NEW_BODY=$(echo "$OLD_BODY" | sed -e "s#\^\^\^Testrail-url\^\^\^#$RUN_URL#g")
   #         gh issue edit $TICKET_NUM -b $NEW_BODY
+  #       env:
+  #         GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
   close_milestone:
     runs-on: ubuntu-latest
     needs: [release_ticket]
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
-      - run: echo "${{ secrets.GITHUB_TOKEN }}" >> token.txt
-      - run: gh auth login --with-token < token.txt
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - run: |
           VERSION_NUMBER=${{ needs.release_ticket.outputs.versionNumber }}
           TICKET_NUM=${{ needs.release_ticket.outputs.ticketNumber }}
@@ -105,6 +127,8 @@ jobs:
             --method PATCH \
             "repos/${{ github.repository }}/milestones/$MILESTONE_ID" \
             -F state=closed
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
   start_slack_thread:
     if: ${{ success() || failure() }}
     name: Start Slack thread
@@ -168,13 +192,16 @@ jobs:
     environment:
       name: release
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: "Checkout repo"
         uses: actions/checkout@v3
-      - name: "Set up GH CLI secret"
-        run: echo "${{ secrets.GH_ACTIONS_PAT }}" >> token.txt
-      - name: "Log into GH CLI"
-        run: gh auth login --with-token < token.txt
-
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: get_approver
         id: approver-id
         run: |
@@ -184,3 +211,5 @@ jobs:
           echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
           gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "/approve ${{ needs.release_ticket.outputs.versionNumber }} 
           Approved by: @$APPROVER_NAME"
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
