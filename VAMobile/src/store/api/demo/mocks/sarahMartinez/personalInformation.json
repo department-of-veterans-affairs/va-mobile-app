@@ -1,0 +1,18 @@
+{
+  "/v2/user": {
+    "data": {
+      "id": "f8d3e4b2-9a7c-4e1d-b6f5-3c8d2a1e9b4f",
+      "type": "user",
+      "attributes": {
+        "firstName": "SARAH",
+        "middleName": "ELENA",
+        "lastName": "MARTINEZ",
+        "signinEmail": "sarah.martinez.demo@va.gov",
+        "signinService": "IDME",
+        "birthDate": "1985-03-15",
+        "hasFacilityTransitioningToCerner": false,
+        "edipi": "9876543210"
+      }
+    }
+  }
+}

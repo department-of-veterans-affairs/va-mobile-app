@@ -1,0 +1,30 @@
+{
+  "/v0/user/authorized-services": {
+    "data": {
+      "type": "user",
+      "id": "f8d3e4b2-9a7c-4e1d-b6f5-3c8d2a1e9b4f",
+      "attributes": {
+        "authorizedServices": {
+          "appeals": true,
+          "appointments": true,
+          "claims": true,
+          "decisionLetters": true,
+          "directDepositBenefits": true,
+          "directDepositBenefitsUpdate": true,
+          "disabilityRating": true,
+          "labsAndTestsEnabled": true,
+          "lettersAndDocuments": true,
+          "medicationsOracleHealthEnabled": true,
+          "militaryServiceHistory": true,
+          "paymentHistory": true,
+          "preferredName": true,
+          "prescriptions": true,
+          "scheduleAppointments": true,
+          "secureMessaging": true,
+          "secureMessagingOracleHealthEnabled": true,
+          "userProfileUpdate": true
+        }
+      }
+    }
+  }
+}

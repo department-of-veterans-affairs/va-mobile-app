@@ -1,0 +1,308 @@
+{
+  "/v0/health/rx/prescriptions": {
+    "data": [],
+    "meta": {
+      "updatedAt": "2024-11-30T10:30:00.000Z",
+      "failedStationList": null,
+      "sort": {
+        "refillStatus": "ASC",
+        "prescriptionName": "ASC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 100,
+        "totalPages": 1,
+        "totalEntries": 0
+      },
+      "prescriptionStatusCount": {
+        "active": 0,
+        "discontinued": 0,
+        "expired": 0,
+        "transferred": 1,
+        "unknown": 1,
+        "total": 12
+      },
+      "hasNonVaMeds": false
+    }
+  },
+  "/v1/health/rx/prescriptions": {
+    "data": [
+      {
+        "id": "31234501",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-11-15T05:00:00.000Z",
+          "refillRemaining": 3,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-02-10T05:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2025-02-10T05:00:00.000Z",
+          "prescriptionNumber": "PX9871234",
+          "prescriptionName": "LEVOTHYROXINE 100MCG TAB",
+          "dispensedDate": "2024-11-15T05:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH EVERY MORNING ON EMPTY STOMACH"
+        }
+      },
+      {
+        "id": "31234502",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-10-20T04:00:00.000Z",
+          "refillRemaining": 5,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-01-05T05:00:00.000Z",
+          "quantity": 90,
+          "expirationDate": "2025-01-05T05:00:00.000Z",
+          "prescriptionNumber": "PX9871235",
+          "prescriptionName": "METFORMIN HCL 500MG TAB",
+          "dispensedDate": "2024-10-20T04:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH TWICE DAILY WITH MEALS"
+        }
+      },
+      {
+        "id": "31234503",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "refillinprocess",
+          "refillSubmitDate": "2024-11-28T05:00:00.000Z",
+          "refillDate": "2024-09-10T04:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-03-01T05:00:00.000Z",
+          "quantity": 60,
+          "expirationDate": "2025-03-01T05:00:00.000Z",
+          "prescriptionNumber": "PX9871236",
+          "prescriptionName": "ATORVASTATIN CALCIUM 20MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH DAILY AT BEDTIME"
+        }
+      },
+      {
+        "id": "31234504",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "submitted",
+          "refillSubmitDate": "2024-11-30T05:00:00.000Z",
+          "refillDate": "2024-08-15T04:00:00.000Z",
+          "refillRemaining": 1,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-05-10T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2025-05-10T04:00:00.000Z",
+          "prescriptionNumber": "PX9871237",
+          "prescriptionName": "LISINOPRIL 10MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH ONCE DAILY"
+        }
+      },
+      {
+        "id": "31234505",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-11-01T04:00:00.000Z",
+          "refillRemaining": 4,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-04-20T04:00:00.000Z",
+          "quantity": 90,
+          "expirationDate": "2025-04-20T04:00:00.000Z",
+          "prescriptionNumber": "PX9871238",
+          "prescriptionName": "OMEPRAZOLE 20MG CAP",
+          "dispensedDate": "2024-11-01T04:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE CAPSULE BY MOUTH DAILY BEFORE BREAKFAST"
+        }
+      },
+      {
+        "id": "31234506",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-11-25T05:00:00.000Z",
+          "refillRemaining": 11,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2023-12-01T05:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2024-12-01T05:00:00.000Z",
+          "prescriptionNumber": "PX9871239",
+          "prescriptionName": "SERTRALINE HCL 50MG TAB",
+          "dispensedDate": "2024-11-25T05:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH ONCE DAILY"
+        }
+      },
+      {
+        "id": "31234507",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-11-20T05:00:00.000Z",
+          "refillRemaining": 6,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-02-15T05:00:00.000Z",
+          "quantity": 120,
+          "expirationDate": "2025-02-15T05:00:00.000Z",
+          "prescriptionNumber": "PX9871240",
+          "prescriptionName": "GABAPENTIN 300MG CAP",
+          "dispensedDate": "2024-11-20T05:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": false,
+          "instructions": "TAKE ONE CAPSULE BY MOUTH THREE TIMES DAILY"
+        }
+      },
+      {
+        "id": "31234508",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "active",
+          "refillSubmitDate": null,
+          "refillDate": "2024-11-18T05:00:00.000Z",
+          "refillRemaining": 2,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-06-01T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2025-06-01T04:00:00.000Z",
+          "prescriptionNumber": "PX9871241",
+          "prescriptionName": "CYCLOBENZAPRINE HCL 10MG TAB",
+          "dispensedDate": "2024-11-18T05:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": true,
+          "isTrackable": true,
+          "carrier": "USPS",
+          "trackingNumber": "9400111899561234567890"
+        }
+      },
+      {
+        "id": "31234509",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "discontinued",
+          "refillSubmitDate": null,
+          "refillDate": "2023-08-10T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2023-01-20T05:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2024-01-20T05:00:00.000Z",
+          "prescriptionNumber": "PX9871242",
+          "prescriptionName": "PREDNISONE 10MG TAB",
+          "dispensedDate": "2023-08-10T04:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE AS DIRECTED BY PHYSICIAN"
+        }
+      },
+      {
+        "id": "31234510",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "discontinued",
+          "refillSubmitDate": null,
+          "refillDate": "2023-05-15T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2022-11-01T04:00:00.000Z",
+          "quantity": 60,
+          "expirationDate": "2023-11-01T04:00:00.000Z",
+          "prescriptionNumber": "PX9871243",
+          "prescriptionName": "TRAMADOL HCL 50MG TAB",
+          "dispensedDate": "2023-05-15T04:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TO TWO TABLETS BY MOUTH EVERY 6 HOURS AS NEEDED FOR PAIN"
+        }
+      },
+      {
+        "id": "31234511",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "transferred",
+          "refillSubmitDate": null,
+          "refillDate": "2024-07-01T04:00:00.000Z",
+          "refillRemaining": 0,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2023-07-01T04:00:00.000Z",
+          "quantity": 90,
+          "expirationDate": "2024-07-01T04:00:00.000Z",
+          "prescriptionNumber": "PX9871244",
+          "prescriptionName": "VITAMIN D3 1000IU TAB",
+          "dispensedDate": "2024-07-01T04:00:00.000Z",
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH DAILY"
+        }
+      },
+      {
+        "id": "31234512",
+        "type": "Prescription",
+        "attributes": {
+          "refillStatus": "unknown",
+          "refillSubmitDate": null,
+          "refillDate": null,
+          "refillRemaining": 0,
+          "facilityName": "PORTLAND VA MEDICAL CENTER",
+          "orderedDate": "2024-10-01T04:00:00.000Z",
+          "quantity": 30,
+          "expirationDate": "2025-10-01T04:00:00.000Z",
+          "prescriptionNumber": "PX9871245",
+          "prescriptionName": "IBUPROFEN 600MG TAB",
+          "dispensedDate": null,
+          "stationNumber": "648",
+          "isRefillable": false,
+          "isTrackable": false,
+          "instructions": "TAKE ONE TABLET BY MOUTH EVERY 8 HOURS AS NEEDED FOR PAIN"
+        }
+      }
+    ],
+    "meta": {
+      "updatedAt": "2024-11-30T10:30:00.000Z",
+      "failedStationList": null,
+      "sort": {
+        "refillStatus": "ASC",
+        "prescriptionName": "ASC"
+      },
+      "pagination": {
+        "currentPage": 1,
+        "perPage": 100,
+        "totalPages": 1,
+        "totalEntries": 12
+      },
+      "prescriptionStatusCount": {
+        "active": 7,
+        "discontinued": 2,
+        "expired": 0,
+        "transferred": 1,
+        "unknown": 1,
+        "total": 12
+      },
+      "hasNonVaMeds": false
+    }
+  }
+}
