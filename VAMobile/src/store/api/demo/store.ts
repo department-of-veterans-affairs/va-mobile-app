@@ -22,6 +22,7 @@ import importBenjaminAdamsData from 'store/api/demo/mocks/benjaminAdams'
 import importClaraJeffersonData from 'store/api/demo/mocks/claraJefferson'
 import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
+import importSarahMartinezData from 'store/api/demo/mocks/sarahMartinez'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
 import {
@@ -167,6 +168,9 @@ export const initDemoStore = async (demoUser: string | null = 'kimberlyWashingto
       break
     case 'dennisMadison':
       userData = importDennisMadisonData()
+      break
+    case 'sarahMartinez':
+      userData = importSarahMartinezData()
       break
     case 'kimberlyWashington':
     default:

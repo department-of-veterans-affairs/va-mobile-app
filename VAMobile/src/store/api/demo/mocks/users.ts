@@ -1,4 +1,4 @@
-export type DemoUserIds = 'kimberlyWashington' | 'benjaminAdams' | 'claraJefferson' | 'dennisMadison'
+export type DemoUserIds = 'kimberlyWashington' | 'benjaminAdams' | 'claraJefferson' | 'dennisMadison' | 'sarahMartinez'
 type DemoUsersT = Record<
   DemoUserIds,
   {
@@ -23,6 +23,10 @@ const DemoUsers: DemoUsersT = {
   dennisMadison: {
     name: 'Dennis Madison',
     notes: 'United States Marine Corps. Appointments in timezones GMT+10, GMT+8 and GMT-11 ',
+  },
+  sarahMartinez: {
+    name: 'Sarah Martinez',
+    notes: 'US Navy. Oracle Health enabled. Unique prescription data for testing v1 API.',
   },
 }
 
