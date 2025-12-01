@@ -86,6 +86,18 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
+  DebtLabel: {
+    fontSize: 18,
+    lineHeight: 30,
+  },
+  DebtValue: {
+    fontSize: 22,
+    lineHeight: 28,
+  },
+  DebtValueLarge: {
+    fontSize: 26,
+    lineHeight: 28,
+  },
   DescriptiveBackButton: {
     fontSize: 16,
     lineHeight: 22,
@@ -294,6 +306,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       scheme.text.primary,
     ),
     // TODO: update to pull in the full mobile design token typography
+    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
     vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
   }
 }
