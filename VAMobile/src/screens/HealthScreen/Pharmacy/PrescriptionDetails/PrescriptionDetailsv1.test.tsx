@@ -33,7 +33,7 @@ context('PrescriptionDetails', () => {
             tracking: [],
             prescriptionSource: 'VA',
             instructions:
-              '2 Inhalation Inhalation (breathe in) every 4 hours as needed shortness of breath or wheezing.',
+              '2 Inhalation Inhalation (breathe in) every 4 hours as needed shortness of breath or wheezing. Refills: 0',
             facilityPhoneNumber: '(217) 636-6712',
             cmopDivisionPhone: null,
             cmopNdcNumber: null,

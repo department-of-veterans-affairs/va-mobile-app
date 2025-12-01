@@ -50,7 +50,8 @@ const prescriptionDatav1: PrescriptionsGetData = {
         isTrackable: false,
         tracking: [],
         prescriptionSource: 'VA',
-        instructions: '2 Inhalation Inhalation (breathe in) every 4 hours as needed shortness of breath or wheezing.',
+        instructions:
+          '2 Inhalation Inhalation (breathe in) every 4 hours as needed shortness of breath or wheezing. Refills: 0',
         facilityPhoneNumber: null,
         cmopDivisionPhone: null,
         cmopNdcNumber: null,
