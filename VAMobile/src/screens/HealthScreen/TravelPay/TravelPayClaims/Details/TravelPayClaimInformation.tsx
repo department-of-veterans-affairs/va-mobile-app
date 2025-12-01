@@ -25,7 +25,7 @@ function TravelPayClaimInformation({ claimDetails, onDocumentPress }: TravelPayC
   const theme = useTheme()
 
   // Statuses that should show "Created on" line
-  const showCreatedOn = ['Incomplete', 'Saved', 'Closed with no payment'].includes(claimStatus)
+  const showCreatedOn = ['Incomplete', 'Saved'].includes(claimStatus)
 
   return (
     <Box mt={theme.dimensions.standardMarginBetween}>
