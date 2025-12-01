@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import RefillTag from 'screens/HealthScreen/Pharmacy/PrescriptionCommon/RefillTag'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { useTheme } from 'utils/hooks'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { getDateTextAndLabel, getRxNumberTextAndLabel, removeTrailingRefills } from 'utils/prescriptions'
 
 export type PrescriptionListItemProps = {
   /** the prescription info to present */
@@ -44,10 +44,6 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       return <></>
     }
 
-    // OH Data includes the refills in the instructions text, so we need to remove it
-    const removeTrailingRefills = (text: string | null): string => {
-      return text?.replace(/\s*Refills?:\s*\d*\.?\s*$/i, '').trim() || ''
-    }
     const instructionsText = removeTrailingRefills(instructions) || t('prescription.details.instructionsNotAvailable')
 
     return (

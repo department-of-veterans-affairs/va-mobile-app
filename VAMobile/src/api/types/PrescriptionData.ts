@@ -230,7 +230,7 @@ export type RefillRequestDataV0 = {
 // v1 refill request api structure
 
 export type SingleRefillRequest = {
-  stationNumber: string
+  stationNumber: string | null
   id: string
 }
 

@@ -343,3 +343,8 @@ export const getDateTextAndLabel = (t: TFunction, date: string | null, missingVa
   const dateA11yLabel = date ? formatDateUtc(date, 'MMMM dd, yyyy') : noneNoted
   return [dateMMddyyyy, dateA11yLabel]
 }
+
+// OH Data includes the refills in the instructions text, so we need to remove it
+export const removeTrailingRefills = (text: string | null): string => {
+  return text?.replace(/\s*Refills?:\s*\d*\.?\s*$/i, '').trim() || ''
+}

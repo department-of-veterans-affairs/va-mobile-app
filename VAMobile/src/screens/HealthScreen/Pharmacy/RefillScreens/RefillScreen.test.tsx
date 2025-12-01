@@ -23,6 +23,7 @@ context('RefillScreen', () => {
       },
       prescriptionStatusCount: {
         active: 2,
+        inactive: 0,
         isRefillable: 2,
         discontinued: 0,
         expired: 0,
@@ -55,6 +56,7 @@ context('RefillScreen', () => {
       },
       prescriptionStatusCount: {
         active: 0,
+        inactive: 0,
         isRefillable: 0,
         discontinued: 0,
         expired: 0,

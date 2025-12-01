@@ -22,7 +22,7 @@ import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useDowntime, useExternalLink, useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
-import { getDateTextAndLabel, getRxNumberTextAndLabel } from 'utils/prescriptions'
+import { getDateTextAndLabel, getRxNumberTextAndLabel, removeTrailingRefills } from 'utils/prescriptions'
 
 type PrescriptionDetailsProps = StackScreenProps<HealthStackParamList, 'PrescriptionDetails'>
 
@@ -156,7 +156,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     refillRemaining >= 0 && refillRemaining !== null
       ? refillRemaining
       : t('prescription.details.refillRemainingNotAvailable')
-  const instructionsText = instructions || t('prescription.details.instructionsNotAvailable')
+  const instructionsText = removeTrailingRefills(instructions) || t('prescription.details.instructionsNotAvailable')
   const facilityNameText = facilityName || t('prescription.details.facilityNameNotAvailable')
   const quantityText = quantity || t('prescription.details.quantityNotAvailable')
 
@@ -213,7 +213,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
                 leftSectionTitle={t('prescription.details.vaFacilityHeader')}
                 leftSectionValue={facilityNameText}
                 leftSectionTitleLabel={a11yLabelVA(t('prescription.details.vaFacilityHeader'))}>
-                <ClickToCallPhoneNumber phone={facilityPhoneNumber} />
+                <ClickToCallPhoneNumber phone={facilityPhoneNumber ?? undefined} />
               </DetailsTextSections>
             </TextArea>
           </Box>
