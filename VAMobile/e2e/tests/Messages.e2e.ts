@@ -116,7 +116,7 @@ describe('Messages Screen', () => {
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
 
   it('verify message NEWER than 45 days information', async () => {
@@ -125,6 +125,8 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
+    await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+    await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
   })
@@ -532,5 +534,58 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
+  })
+
+  describe('Triage Team Message Access', () => {
+    //happy path: recent message from triage team - should show Reply button
+    it('should show Reply button for recent messages from triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
+
+    it('should show expired alert for old messages from triage team', async () => {
+      await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID))).toBeVisible()
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_3_READ_ID)).tap()
+
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
+      await expect(element(by.text('This conversation is too old for new replies'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
+
+    it('should show Start new message and alert when user is NOT in triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
+
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
+      await expect(element(by.text('You can no longer send messages to this care team.'))).toExist()
+
+      await expect(element(by.text('Find your VA facility'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
   })
 })
