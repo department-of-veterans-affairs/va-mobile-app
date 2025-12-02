@@ -4,7 +4,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import {
-  Allergy,
+  AllergyData,
   AppointmentData,
   LabsAndTests,
   PrescriptionData,
@@ -32,6 +32,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
 export type HealthStackParamList = WebviewStackParams & {
   Health: undefined
+  Copays: undefined
   MedicalRecordsList: undefined
   Appointments: {
     tab?: number
@@ -115,7 +116,7 @@ export type HealthStackParamList = WebviewStackParams & {
   }
   AllergyList: undefined
   AllergyDetails: {
-    allergy: Allergy
+    allergy: AllergyData
   }
   LabsAndTestsList: undefined
   LabsAndTestsDetailsScreen: {
