@@ -207,6 +207,10 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
     }
   }
 
+  const onRemoteConfigTest = () => {
+    navigateTo('RemoteConfigTestScreen')
+  }
+
   const firebaseList: Array<SimpleListItemObj> = [
     {
       text: 'Firebase debug mode',
@@ -331,6 +335,11 @@ function DeveloperScreen({ navigation }: DeveloperScreenSettingsScreenProps) {
       <Box mt={theme.dimensions.standardMarginBetween}>
         <TextArea>
           <Button onPress={() => navigateTo('OverrideAPI')} label={'Override Api Calls'} />
+        </TextArea>
+      </Box>
+      <Box mt={theme.dimensions.standardMarginBetween}>
+        <TextArea>
+          <Button onPress={onRemoteConfigTest} label={'Remote Config Test'} />
         </TextArea>
       </Box>
       <Box mt={theme.dimensions.condensedMarginBetween}>
