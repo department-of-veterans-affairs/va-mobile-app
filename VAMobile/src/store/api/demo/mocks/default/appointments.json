@@ -8,7 +8,7 @@
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
-            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "comment": "Please arrive ten minutes early.",
             "healthcareProvider": "Vilanisi Reddy",
             "healthcareService": "Outpatient Clinic",
             "location": {
@@ -38,7 +38,7 @@
             "statusDetail": null,
             "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "New issue",
             "isCovidVaccine": false,
             "typeOfCare": "Podiatry",
             "travelPayEligible": false,
@@ -70,7 +70,7 @@
             "appointmentIen": null,
             "cancelId": "123",
             "comment": null,
-            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareProvider": "Guarino, Anthony",
             "healthcareService": null,
             "location": {
               "id": null,
@@ -131,7 +131,7 @@
             "appointmentType": "COMMUNITY_CARE",
             "appointmentIen": null,
             "cancelId": null,
-            "comment": "Smoke test 5/21 - 1",
+            "comment": null,
             "healthcareProvider": "Jim Smith",
             "healthcareService": null,
             "location": {
@@ -160,7 +160,7 @@
             "startDateUtc": "{{now - 1 day utc}}",
             "status": "CANCELLED",
             "statusDetail": "CANCELLED BY PATIENT",
-            "timeZone": "America/New_York",
+            "timeZone": "America/Los_Angeles",
             "vetextId": "552;3240527.12",
             "reason": null,
             "isCovidVaccine": false,
@@ -317,7 +317,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "New issue",
             "isCovidVaccine": false,
             "proposedTimes": [
               {
@@ -344,7 +344,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": "Other details test",
+            "comment": "Please arrive early",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "travelPayEligible": true,
@@ -375,7 +375,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Reason test",
+            "reason": "Initial evaluation",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health",
@@ -394,7 +394,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": "Other details test",
+            "comment": "Please arrive early",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -424,7 +424,7 @@
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Reason test",
+            "reason": "Initial evaluation",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health",
@@ -473,7 +473,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "Evaluation",
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
@@ -928,8 +928,8 @@
               "name": "San Francisco VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "San Francisco",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -971,14 +971,14 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "San Francisco VA Health Care System",
             "travelPayClaim": {
               "claim": {
                 "claimNumber": "TC0928098230498",
                 "claimStatus": "Closed",
                 "appointmentDateTime": "{{now - 31 days}}",
                 "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
-                "facilityName": "DAYTSHR - Dayton VA Medical Center",
+                "facilityName": "San Francisco VA Health Care System",
                 "createdOn": "{{now - 25 days}}",
                 "modifiedOn": "{{now - 28 days}}"
               },
@@ -1004,8 +1004,8 @@
               "name": "LA VA Medical Center",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "Los Angeles",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -1024,7 +1024,7 @@
             "startDateUtc": "{{now - 27 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": null,
@@ -1047,7 +1047,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Cheyenne VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1072,9 +1072,9 @@
               "name": "Central California VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
+                "city": "Fresno",
+                "state": "CA",
+                "zipCode": "93703-2223"
               },
               "lat": 41.148027,
               "long": -104.7862575,
@@ -1092,7 +1092,7 @@
             "startDateUtc": "{{now - 28 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1115,7 +1115,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Fresno VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1138,10 +1138,10 @@
               "id": "442",
               "name": "VA Palo Alto Health Care System",
               "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
+                "street": "2615 East Clinton Avenue",
+                "city": "Palo Alto",
+                "state": "CA",
+                "zipCode": "93703-2223"
               },
               "lat": 41.148027,
               "long": -104.7862575,
@@ -1159,7 +1159,7 @@
             "startDateUtc": "{{now - 29 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1169,7 +1169,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Palo Alto VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1213,7 +1213,7 @@
             "startDateUtc": "{{now - 30 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1223,7 +1223,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Albany VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1277,7 +1277,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Bath VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1331,7 +1331,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Northport VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1375,7 +1375,7 @@
             "startDateUtc": "{{now - 33 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1385,7 +1385,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Syracuse VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1505,7 +1505,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Tomah VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1571,7 +1571,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Houston VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1636,7 +1636,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Dallas VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1680,7 +1680,7 @@
             "startDateUtc": "{{now - 38 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1690,7 +1690,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Salem VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1734,7 +1734,7 @@
             "startDateUtc": "{{now - 39 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -1744,7 +1744,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "friendlyLocationName": "Hampton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1885,7 +1885,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -1910,7 +1910,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": null,
@@ -1939,7 +1939,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -1964,7 +1964,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": null,
@@ -1993,7 +1993,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -2018,7 +2018,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": true,
             "proposedTimes": [
@@ -2068,7 +2068,7 @@
           "attributes": {
             "appointmentType": "COMMUNITY_CARE",
             "cancelId": null,
-            "comment": "instructions to veteran.  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx123",
+            "comment": "Please arrive ten minutes early.",
             "healthcareProvider": "Vilanisi Reddy",
             "healthcareService": "Outpatient Clinic",
             "location": {
@@ -2098,7 +2098,7 @@
             "statusDetail": null,
             "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "New issue",
             "isCovidVaccine": false,
             "typeOfCare": "Podiatry",
             "showScheduleLink": true
@@ -2112,7 +2112,7 @@
             "appointmentIen": null,
             "cancelId": "123",
             "comment": null,
-            "healthcareProvider": "GUARINO, ANTHONY",
+            "healthcareProvider": "Guarino, Anthony",
             "healthcareService": null,
             "location": {
               "id": null,
@@ -2166,7 +2166,7 @@
             "appointmentType": "COMMUNITY_CARE",
             "appointmentIen": null,
             "cancelId": null,
-            "comment": "Smoke test 5/21 - 1",
+            "comment": "Please arrive ten minutes early.",
             "healthcareProvider": "Jim Smith",
             "healthcareService": null,
             "location": {
@@ -2330,7 +2330,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "Standard checkup",
             "isCovidVaccine": false,
             "proposedTimes": [
               {
@@ -2350,7 +2350,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": "Other details test",
+            "comment": "Connecting to wifi is recommended",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Confirmed",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -2380,7 +2380,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Reason test",
+            "reason": "Standard checkup",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -2392,7 +2392,7 @@
           "attributes": {
             "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
             "cancelId": "190305",
-            "comment": "Other details test",
+            "comment": "Connecting to wifi is recommended",
             "healthcareProvider": "Sami Alsahhar - ATLAS - Canceled",
             "healthcareService": "MID-V10 CRH MH PSY MD PT",
             "location": {
@@ -2422,7 +2422,7 @@
             "statusDetail": "CANCELLED BY PATIENT",
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Reason test",
+            "reason": "Standard checkup",
             "isCovidVaccine": false,
             "serviceCategoryName": null,
             "typeOfCare": "Mental Health"
@@ -2464,7 +2464,7 @@
             "statusDetail": null,
             "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "Test",
+            "reason": "New issue",
             "isCovidVaccine": false,
             "isPending": true,
             "serviceCategoryName": null,
@@ -2855,8 +2855,8 @@
               "name": "San Francisco VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "San Francisco",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -2875,7 +2875,7 @@
             "startDateUtc": "{{now + 26 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -2898,7 +2898,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "San Francisco VA Health Care System"
           }
         },
         {
@@ -2914,9 +2914,9 @@
               "id": "442",
               "name": "LA VA Medical Center",
               "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "street": "123 Fourth St",
+                "city": "Los Angeles",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -2935,7 +2935,7 @@
             "startDateUtc": "{{now + 27 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": null,
             "isCovidVaccine": null,
@@ -2958,7 +2958,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Los Angeles VA Medical Center"
           }
         },
         {
@@ -2975,8 +2975,8 @@
               "name": "Central California VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "Fresno",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -2995,7 +2995,7 @@
             "startDateUtc": "{{now + 28 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -3018,7 +3018,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Fresno VA Medical Center"
           }
         },
         {
@@ -3035,8 +3035,8 @@
               "name": "VA Palo Alto Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "Palo Alto",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -3055,7 +3055,7 @@
             "startDateUtc": "{{now + 29 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -3065,7 +3065,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Palo Alto VA Medical Center"
           }
         },
         {
@@ -3102,7 +3102,7 @@
             "startDateUtc": "{{now + 30 days utc}}",
             "status": "CANCELLED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -3112,7 +3112,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Albany VA Medical Center"
           }
         },
         {
@@ -3159,7 +3159,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Bath VA Medical Center"
           }
         },
         {
@@ -3206,7 +3206,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Northport VA Medical Center"
           }
         },
         {
@@ -3243,7 +3243,7 @@
             "startDateUtc": "{{now + 33 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
             "reason": "New Issue",
             "isCovidVaccine": null,
@@ -3253,7 +3253,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Syracuse VA Medical Center"
           }
         },
         {
@@ -3394,7 +3394,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Houston VA Medical Center"
           }
         },
         {
@@ -3441,7 +3441,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Dallas VA Medical Center"
           }
         },
         {
@@ -3488,7 +3488,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Salem VA Medical Center"
           }
         },
         {
@@ -3535,7 +3535,7 @@
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
-            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
+            "friendlyLocationName": "Hampton VA Medical Center"
           }
         },
         {
@@ -3784,7 +3784,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -3807,9 +3807,9 @@
             "startDateUtc": "{{now + 45 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/New_York",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": null,
@@ -3831,7 +3831,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -3856,7 +3856,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": null,
@@ -3878,7 +3878,7 @@
             "healthcareService": "Phone consultation",
             "location": {
               "id": null,
-              "name": "Test clinic 2",
+              "name": "Cheyenne VA Medical Center",
               "address": {
                 "street": "123 Sesame St.",
                 "city": "Cheyenne",
@@ -3903,7 +3903,7 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "routine-follow-up",
+            "reason": "routine follow-up",
             "isCovidVaccine": null,
             "isPending": true,
             "proposedTimes": [
@@ -3933,8 +3933,8 @@
               "name": "San Francisco VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "San Francisco",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -3992,8 +3992,8 @@
               "name": "San Francisco VA Health Care System",
               "address": {
                 "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
+                "city": "San Francisco",
+                "state": "CA",
                 "zipCode": "82001-5356"
               },
               "lat": 41.148027,
@@ -4012,9 +4012,9 @@
             "startDateUtc": "{{now + 49 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
-            "timeZone": "America/Denver",
+            "timeZone": "America/Los_Angeles",
             "vetextId": null,
-            "reason": "Mock Non-Cerner appointment - New Issue",
+            "reason": "New issue",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": [
