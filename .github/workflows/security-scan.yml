@@ -2,9 +2,13 @@ name: Shai-Hulud 2.0 Security Check
 
 on:
   push:
-    # branches: [main, develop]
-  # pull_request:
-  #   branches: [main, develop]
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+      - main
 
 jobs:
   security-check:
@@ -25,11 +29,40 @@ jobs:
         with:
           fail-on-critical: false
 
-  # setup-tmate-session:
-  #   runs-on: ubuntu-latest
-  #   needs: security-check
-  #   if: failure()
-  #   steps:
-  #     - name: Setup tmate session
-  #       uses: mxschmitt/action-tmate@v3
-  #       timeout-minutes: 60
+  restrict-package-json-updates:
+    name: Restrict package.json updates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: VAMobile/package.json
+      - name: Fail if package.json was changed
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "Error: Direct updates to package.json are not allowed. Please use 'npm install' or 'npm update' and commit the package-lock.json file instead."
+          exit 1
+
+  start_slack_thread_failure:
+    name: Start Slack thread for failure
+    needs: security-check
+    if: ${{ failure() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: ":alert:Shai-Hulud 2.0 Security Check failed! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.:alert:"
+
+  slack_notification_package_json_failure:
+    name: Slack notification for package.json failure
+    needs: restrict-package-json-updates
+    if: ${{ failure() }}
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: va-mobile-build-alerts
+      message: "Direct updates to package.json are not allowed. \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details."
