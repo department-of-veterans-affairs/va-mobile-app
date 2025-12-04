@@ -210,6 +210,10 @@ jobs:
       - name: Set app environment variables
         run: yarn env:staging
 
+      - name: Install pods
+        working-directory: VAMobile/ios
+        run: pod install
+
       - name: Install Ruby gems
         working-directory: VAMobile/ios
         run: bundle install
