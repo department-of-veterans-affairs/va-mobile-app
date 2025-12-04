@@ -2042,6 +2042,13 @@
   "whatsNew.bodyCopy.2.56.bullet.1.a11yLabel": "Submit simple mileage-only claims for past in-person V-A appointments.",
   "whatsNew.bodyCopy.2.56.bullet.2": "View submitted travel claim status and history from your past appointment.",
   "whatsNew.bodyCopy.2.56.bullet.3": "No paperwork or waiting—just a few taps.",
+  "whatsNew.bodyCopy.testFeature": "This is the description copy for the test feature.",
+  "whatsNew.bodyCopy.testFeature.bullet.1": "test feature bullet 1",
+  "whatsNew.bodyCopy.testFeature.bullet.1.a11yLabel": "accessibility label to pronounce V-A",
+  "whatsNew.bodyCopy.testFeature.bullet.2": "test feature bullet 2",
+  "whatsNew.bodyCopy.testFeature.bullet.3": "test feature bullet 3",
+  "whatsNew.bodyCopy.testFeatureNoFlag": "Body text for a feature that is not tied to a flag",
+  "whatsNew.bodyCopy.testFeatureNoFlag.bullet.1": "explanation of the feature",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.title": "What's new",
   "yes": "Yes"

@@ -28,6 +28,7 @@ export const EncourageUpdateAlert = () => {
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
   const openAppStore = useOpenAppStore()
 
+  // TODO: figure this out, what is this for?
   const displayEU =
     storeVersion &&
     localVersionName &&
@@ -93,7 +94,7 @@ export const EncourageUpdateAlert = () => {
         />
       </Box>
     )
-  } else if (localVersionName && storeVersion && localVersionName >= storeVersion) {
+  } else if (localVersionName) {
     return <WhatsNew />
   } else {
     return null
