@@ -230,6 +230,9 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
+      - name: Run Android Setup Script
+        run: ../.github/scripts/run-manual-setup.sh android
+
       - name: Set app environment variables
         run: yarn env:staging
 

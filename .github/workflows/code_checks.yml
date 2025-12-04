@@ -170,4 +170,4 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
-      - run: yarn pods && yarn bundle:ios
+      - run: ../.github/scripts/run-manual-setup.sh ios && yarn bundle:ios
