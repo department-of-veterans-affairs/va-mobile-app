@@ -73,6 +73,7 @@ export const WhatsNew = () => {
   const whatsNewDisplay: React.ReactNode[] = []
   const featuresDisplayed: string[] = []
 
+  // TODO: memoize this
   if (whatsNewItems.length) {
     ;(whatsNewItems as WhatsNewConfigItem[]).forEach((newFeature) => {
       // Do not show features that do not have their flag enabled
