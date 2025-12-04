@@ -204,11 +204,11 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
+      - name: Build Detox framework
+        run: detox clean-framework-cache && detox build-framework-cache
+
       - name: Set app environment variables
         run: yarn env:staging
-
-      - name: Run iOS Setup Script
-        run: ../.github/scripts/run-manual-setup.sh ios
 
       - name: Install Ruby gems
         working-directory: VAMobile/ios

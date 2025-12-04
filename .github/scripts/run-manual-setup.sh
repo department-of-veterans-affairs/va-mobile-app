@@ -26,8 +26,6 @@ if [ "$PLATFORM" == "android" ]; then
   (cd VAMobile && yarn patch-package)
 elif [ "$PLATFORM" == "ios" ]; then
   echo "--- Running iOS specific setup ---"
-  echo "Installing pods..."
-  (cd VAMobile/ios && pod install)
 else
   echo "Invalid platform: $PLATFORM"
   exit 1
