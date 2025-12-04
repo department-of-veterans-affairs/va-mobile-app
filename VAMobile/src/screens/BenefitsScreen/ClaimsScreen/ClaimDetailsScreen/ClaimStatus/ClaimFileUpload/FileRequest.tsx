@@ -70,7 +70,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
 
-  console.log('claimID: ', claimID)
   requests.unshift(mock5103)
 
   const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
