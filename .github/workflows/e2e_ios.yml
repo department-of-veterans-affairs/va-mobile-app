@@ -202,7 +202,7 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
 
       - name: Set app environment variables
         run: yarn env:staging

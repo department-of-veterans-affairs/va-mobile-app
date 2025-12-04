@@ -37,7 +37,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   super-linter:
     runs-on: ubuntu-latest
@@ -121,7 +121,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: yarn test
         # GHA does not have test splitting built in, so we run this script to split our tests into chunks and run
         # jest with the specified files.  The number at the end is the # of chunks we're splitting the tests into.
@@ -147,7 +147,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - run: yarn bundle:android
   bundle_ios:
     runs-on: macos-latest
@@ -169,5 +169,5 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - run: yarn pods && yarn bundle:ios

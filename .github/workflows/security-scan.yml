@@ -40,11 +40,11 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: VAMobile/package.json
+          files: VAMobile/package.json,VAMobile/yarn.lock,VAMobile/Gemfile.lock
       - name: Fail if package.json was changed
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          echo "Error: Direct updates to package.json are not allowed. Please use 'npm install' or 'npm update' and commit the package-lock.json file instead."
+          echo "Error: Direct updates to package.json, yarn.lock, or Gemfile.lock are not allowed currently."
           exit 1
 
   start_slack_thread_failure:
@@ -65,4 +65,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: "Direct updates to package.json are not allowed. \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details."
+      message: "Direct updates to package.json, yarn.lock, or Gemfile.lock are not allowed. \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details."
