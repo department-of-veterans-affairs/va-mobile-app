@@ -1,5 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import { find } from 'underscore'
+
+import { getWhatsNewConfig } from 'components'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
@@ -63,7 +66,17 @@ export const setFeaturesSkipped = async (features: string[]) => {
 
   let featureSkips = await getFeaturesSkipped()
   featureSkips = featureSkips.concat(features)
-  await AsyncStorage.setItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, JSON.stringify(featureSkips))
+
+  const whatsNewItems = getWhatsNewConfig()
+  const currentFeatureSkips: string[] = []
+  featureSkips.forEach((featureSkip) => {
+    // If the skipped feature does not currently belong in the what's new config than do not include it in the skip list
+    if (find(whatsNewItems, (item) => item.featureName === featureSkip)) {
+      currentFeatureSkips.push(featureSkip)
+    }
+  })
+
+  await AsyncStorage.setItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, JSON.stringify(currentFeatureSkips))
 }
 
 /**
