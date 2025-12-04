@@ -4,18 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { WhatsNewConfig } from 'constants/whatsNew'
+import { WhatsNewConfig, WhatsNewConfigItem } from 'constants/whatsNew'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
-import { FeatureToggleType, featureEnabled } from 'utils/remoteConfig'
-
-export type WhatsNewConfigItem = {
-  // Name of the feature being described
-  featureName: string
-  // If controlled by a feature flag, will not show to the user unless they have the flag enabled
-  featureFlag?: FeatureToggleType
-}
+import { featureEnabled } from 'utils/remoteConfig'
 
 // Allows for mocking for tests
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {

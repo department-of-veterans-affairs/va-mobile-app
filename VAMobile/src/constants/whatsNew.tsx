@@ -1,3 +1,5 @@
+import { FeatureToggleType } from 'utils/remoteConfig'
+
 /**
  * Controls what will display on What's New alerts. Can be tied to a feature flag
  * that will cause the message not to be shown until the flag is activated.
@@ -10,7 +12,14 @@
  *
  */
 
-export const WhatsNewConfig = [
+export type WhatsNewConfigItem = {
+  // Name of the feature being described
+  featureName: string
+  // If controlled by a feature flag, will not show to the user unless they have the flag enabled
+  featureFlag?: FeatureToggleType
+}
+
+export const WhatsNewConfig: WhatsNewConfigItem[] = [
   {
     featureName: 'testFeature',
     featureFlag: 'remoteConfigRefreshTest',
