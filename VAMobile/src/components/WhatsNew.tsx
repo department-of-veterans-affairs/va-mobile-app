@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { AlertWithHaptics, Box, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
@@ -54,12 +53,10 @@ export const WhatsNew = () => {
       const bulletKey = `${featureStringBase}.bullet.${bullets.length + 1}`
       //@ts-ignore
       const text = t(bulletKey)
-      console.log('text: ' + text)
       //@ts-ignore
       const a11yLabel = t(`${bulletKey}.a11yLabel`)
 
       if (text.startsWith(featureStringBase) || !text || bullets.length > 20) {
-        console.log('!!!!! returning bullets')
         return bullets
       } else {
         bullets.push({
@@ -105,7 +102,7 @@ export const WhatsNew = () => {
       whatsNewDisplay.push(
         <>
           {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
-          <TextView accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.standardMarginBetween}>
+          <TextView accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.tinyMarginBetween}>
             {body}
           </TextView>
           {bullets.length ? <VABulletList listOfText={bullets} paragraphSpacing={true} /> : undefined}
@@ -117,9 +114,11 @@ export const WhatsNew = () => {
   const expandCollapsible = () => logAnalyticsEvent(Events.vama_whatsnew_more())
   const closeCollapsible = () => logAnalyticsEvent(Events.vama_whatsnew_close())
 
-  const onDismiss = () => {
+  const onDismiss = async () => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
-    setFeaturesSkipped(featuresDisplayed)
+    await setFeaturesSkipped(featuresDisplayed)
+    const storedSkippedFeatures = await getFeaturesSkipped()
+    setSkippedFeatures(storedSkippedFeatures)
   }
 
   const displayWN = !!whatsNewDisplay.length

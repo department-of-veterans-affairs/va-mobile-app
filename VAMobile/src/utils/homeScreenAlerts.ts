@@ -61,8 +61,8 @@ export const setFeaturesSkipped = async (features: string[]) => {
     return
   }
 
-  const featureSkips = await getFeaturesSkipped()
-  featureSkips.concat(features)
+  let featureSkips = await getFeaturesSkipped()
+  featureSkips = featureSkips.concat(features)
   await AsyncStorage.setItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, JSON.stringify(featureSkips))
 }
 
