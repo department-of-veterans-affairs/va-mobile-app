@@ -1,19 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AlertWithHaptics, Box, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { WhatsNewConfig } from 'constants/whatsNew'
 import { logAnalyticsEvent } from 'utils/analytics'
-import {
-  FeatureConstants,
-  getFeaturesSkipped,
-  getLocalVersion,
-  getVersionSkipped,
-  setFeaturesSkipped,
-  setVersionSkipped,
-} from 'utils/homeScreenAlerts'
+import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
 import { FeatureToggleType, featureEnabled } from 'utils/remoteConfig'
 
@@ -25,7 +18,7 @@ export type WhatsNewConfigItem = {
 }
 
 // Allows for mocking for tests
-export const getWhatsNewConfig = () => {
+export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
   return WhatsNewConfig
 }
 
@@ -72,7 +65,7 @@ export const WhatsNew = () => {
 
   // TODO: memoize this
   if (whatsNewItems.length) {
-    ;(whatsNewItems as WhatsNewConfigItem[]).forEach((newFeature) => {
+    whatsNewItems.forEach((newFeature, idx) => {
       // Do not show features that do not have their flag enabled
       const shouldDisplayFeature = !newFeature.featureFlag || featureEnabled(newFeature.featureFlag)
       // Check if the feature has already been skipped by dismissing a whats new including it
@@ -99,14 +92,32 @@ export const WhatsNew = () => {
       const body = t(featureStringBase)
       const bullets = getBullets(featureStringBase) || []
 
+      // get URL if it exists
+      const linkKey = `${featureStringBase}.link.url`
+      const linkUrl = t(linkKey)
+      const linkTextKey = `${featureStringBase}.link.text`
+      const linkText = t(linkTextKey)
+      // Check if we have a link to show
+      const showLink = !linkUrl.startsWith(featureStringBase)
+
+      const topPadding = idx === 0 ? 0 : theme.dimensions.standardMarginBetween
+
       whatsNewDisplay.push(
-        <>
+        <Box pt={topPadding}>
           {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
           <TextView accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.tinyMarginBetween}>
             {body}
           </TextView>
-          {bullets.length ? <VABulletList listOfText={bullets} paragraphSpacing={true} /> : undefined}
-        </>,
+          {bullets.length && <VABulletList listOfText={bullets} />}
+          {showLink && (
+            <LinkWithAnalytics
+              type="url"
+              url={linkUrl}
+              text={linkText}
+              a11yHint={`${linkText} ${t('mobileBodyLink.a11yHint')}`}
+            />
+          )}
+        </Box>,
       )
     })
   }

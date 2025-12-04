@@ -2047,6 +2047,8 @@
   "whatsNew.bodyCopy.testFeature.bullet.1.a11yLabel": "accessibility label to pronounce V-A",
   "whatsNew.bodyCopy.testFeature.bullet.2": "test feature bullet 2",
   "whatsNew.bodyCopy.testFeature.bullet.3": "test feature bullet 3",
+  "whatsNew.bodyCopy.testFeature.link.url": "http://www.google.com",
+  "whatsNew.bodyCopy.testFeature.link.text": "test link",
   "whatsNew.bodyCopy.testFeatureNoFlag": "Body text for a feature that is not tied to a flag",
   "whatsNew.bodyCopy.testFeatureNoFlag.bullet.1": "explanation of the feature",
   "whatsNew.dismissMessage": "Dismiss this message",
