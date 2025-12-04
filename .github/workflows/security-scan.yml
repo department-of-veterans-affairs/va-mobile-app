@@ -47,7 +47,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
-          files: VAMobile/package.json,VAMobile/yarn.lock,VAMobile/Gemfile.lock
+          files: '**/package.json,**/yarn.lock,**/Gemfile.lock'
       - name: Fail if package.json was changed
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
