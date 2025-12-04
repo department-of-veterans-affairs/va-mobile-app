@@ -13,6 +13,12 @@ on:
 jobs:
   security-check:
     runs-on: ubuntu-latest
+    outputs:
+      affected-count: ${{ steps.security_scan.outputs.affected-count }}
+      security-findings-count: ${{ steps.security_scan.outputs.security-findings-count }}
+      status: ${{ steps.security_scan.outputs.status }}
+      scan-time: ${{ steps.security_scan.outputs.scan-time }}
+      results: ${{ steps.security_scan.outputs.results }}
     steps:
       - name: Generate token
         id: generate_token
@@ -24,10 +30,12 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
       - name: Find and display Contents.json
-        run: find . -name "Contents.json" | head -n 5 | xargs head -n 10
+        run: find . -name "Contents.json" | head -n 10 | xargs head -n 10
       - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
+        id: security_scan
         with:
           fail-on-critical: true
+
 
   restrict-package-json-updates:
     name: Restrict package.json updates
@@ -55,7 +63,15 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: ":alert:Shai-Hulud 2.0 Security Check failed! \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.:alert:"
+      message: |
+        :alert:Shai-Hulud 2.0 Security Check failed!
+        See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for full results.
+        *Scan Results:*
+        *Status*: ${{ needs.security-check.outputs.status }}
+        *Affected Packages*: ${{ needs.security-check.outputs.affected-count }}
+        *Security Findings*: ${{ needs.security-check.outputs.security-findings-count }}
+        *Scan Time*: ${{ needs.security-check.outputs.scan-time }}ms
+        *Results*: ```${{ needs.security-check.outputs.results }}```
 
   slack_notification_package_json_failure:
     name: Slack notification for package.json failure
