@@ -202,7 +202,9 @@ jobs:
           HOMEBREW_NO_INSTALL_CLEANUP: 1
 
       - name: Install npm dependencies
-        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
+        run: |
+          yarn install --ignore-scripts --frozen-lockfile --non-interactive
+          yarn add detox-cli
 
       - name: Build Detox framework
         run: detox clean-framework-cache && detox build-framework-cache
