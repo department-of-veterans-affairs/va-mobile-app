@@ -6,10 +6,15 @@ import { AlertWithHaptics, Box, TextView, VABulletList, VABulletListText } from 
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { WhatsNewConfig } from 'constants/whatsNew'
-import { RootState } from 'store'
-import { DemoState } from 'store/slices/demoSlice'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { FeatureConstants, getLocalVersion, getVersionSkipped, setVersionSkipped } from 'utils/homeScreenAlerts'
+import {
+  FeatureConstants,
+  getFeaturesSkipped,
+  getLocalVersion,
+  getVersionSkipped,
+  setFeaturesSkipped,
+  setVersionSkipped,
+} from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
 import { FeatureToggleType, featureEnabled } from 'utils/remoteConfig'
 
@@ -30,8 +35,16 @@ export const WhatsNew = () => {
   const theme = useTheme()
   const whatsNewItems = getWhatsNewConfig()
 
-  const [localVersion, setVersionName] = useState<string>()
-  const [skippedVersion, setSkippedVersionHomeScreen] = useState<string>()
+  const [skippedFeatures, setSkippedFeatures] = useState<string[]>() //await getFeaturesSkipped()
+
+  useEffect(() => {
+    const retrieveSkippedFeatures = async () => {
+      const storedSkippedFeatures = await getFeaturesSkipped()
+      setSkippedFeatures(storedSkippedFeatures)
+    }
+
+    retrieveSkippedFeatures()
+  }, [])
 
   // TODO: refactor this to not use a while loop
   const getBullets = (featureStringBase: string) => {
@@ -41,10 +54,12 @@ export const WhatsNew = () => {
       const bulletKey = `${featureStringBase}.bullet.${bullets.length + 1}`
       //@ts-ignore
       const text = t(bulletKey)
+      console.log('text: ' + text)
       //@ts-ignore
       const a11yLabel = t(`${bulletKey}.a11yLabel`)
 
       if (text.startsWith(featureStringBase) || !text || bullets.length > 20) {
+        console.log('!!!!! returning bullets')
         return bullets
       } else {
         bullets.push({
@@ -60,9 +75,12 @@ export const WhatsNew = () => {
 
   if (whatsNewItems.length) {
     ;(whatsNewItems as WhatsNewConfigItem[]).forEach((newFeature) => {
+      // Do not show features that do not have their flag enabled
       const shouldDisplayFeature = !newFeature.featureFlag || featureEnabled(newFeature.featureFlag)
+      // Check if the feature has already been skipped by dismissing a whats new including it
+      const featureSkipped = skippedFeatures?.includes(newFeature.featureName)
 
-      if (!shouldDisplayFeature) {
+      if (!shouldDisplayFeature || featureSkipped) {
         return
       } else {
         featuresDisplayed.push(newFeature.featureName)
@@ -100,8 +118,7 @@ export const WhatsNew = () => {
 
   const onDismiss = () => {
     logAnalyticsEvent(Events.vama_whatsnew_dont_show())
-    setVersionSkipped(FeatureConstants.WHATSNEW, localVersion || '0.0')
-    setSkippedVersionHomeScreen(localVersion || '0.0')
+    setFeaturesSkipped(featuresDisplayed)
   }
 
   const displayWN = !!whatsNewDisplay.length
