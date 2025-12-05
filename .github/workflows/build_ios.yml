@@ -111,8 +111,8 @@ jobs:
       - name: Set SLACK_THREAD_TS environment variable
         if: inputs.slack_thread_ts
         run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
-      - name: Run iOS Setup Script
-        run: ../../.github/scripts/run-manual-setup.sh ios
+      - name: Install Pods
+        run: pod install
       - name: Bundle app
         run: yarn bundle:ios
       - name: Install gems
