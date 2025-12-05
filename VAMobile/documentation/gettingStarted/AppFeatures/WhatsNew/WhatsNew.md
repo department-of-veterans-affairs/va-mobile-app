@@ -20,13 +20,11 @@ What's new displays to the veteran what is new in the version that they upgraded
 
 What's new is displayed based on the WhatsNewConfig, which contains an array of feature names and optional flags and authorized services.
 
-* `featureName` will be mapped to the translation file by convention to display body content, bullet points, 
-and links 
+* `featureName` will be mapped to the translation file by convention to display body content, bullet points, and links 
 * `featureFlag` will prevent this feature from being displayed unless that flag is on for the user
 * `authorizedService` will prevent this feature from being displayed the user has that authorized service
 
-If the user dismisses the What's New alert and a flag or service later enables that feature, it will appear again 
-with that feature's content.
+If the user dismisses the What's New alert and a flag or service later enables that feature, it will appear again with that feature's content.
 
 ## Example Screenshots of the What's New feature
 
