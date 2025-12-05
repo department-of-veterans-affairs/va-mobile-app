@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen, waitFor } from '@testing-library/react-native'
+import { screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import WhatsNew from 'components/WhatsNew'
@@ -23,8 +23,8 @@ jest.mock('react-i18next', () => {
 })
 
 let mockGetConfig: jest.Mock
-jest.mock('constants/WhatsNew', () => {
-  const original = jest.requireActual('constants/WhatsNew')
+jest.mock('constants/whatsNew', () => {
+  const original = jest.requireActual('constants/whatsNew')
   mockGetConfig = jest.fn()
 
   return {
