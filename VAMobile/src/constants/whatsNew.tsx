@@ -1,3 +1,4 @@
+import { UserAuthorizedServicesData } from 'api/types'
 import { FeatureToggleType } from 'utils/remoteConfig'
 
 /**
@@ -12,6 +13,23 @@ import { FeatureToggleType } from 'utils/remoteConfig'
  *
  */
 
+/**
+ * Example Config
+ * [
+ *   {
+ *     featureName: 'testFeature',
+ *     featureFlag: 'remoteConfigRefreshTest',
+ *   },
+ *   {
+ *     featureName: 'testFeatureNoFlag',
+ *   },
+ *   {
+ *     featureName: 'testFeatureAuthService',
+ *     authorizedService: 'claims'
+ *   },
+ * ]
+ */
+
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
   return WhatsNewConfig
 }
@@ -21,6 +39,8 @@ export type WhatsNewConfigItem = {
   featureName: string
   // If controlled by a feature flag, will not show to the user unless they have the flag enabled
   featureFlag?: FeatureToggleType
+  // If controlled by an authorized service, will not show to the user unless authorized
+  authorizedService?: keyof UserAuthorizedServicesData
 }
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
@@ -30,5 +50,8 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   },
   {
     featureName: 'testFeatureNoFlag',
+  },
+  {
+    featureName: 'testFeatureAuthService',
   },
 ]

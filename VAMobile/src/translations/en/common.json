@@ -2051,6 +2051,7 @@
   "whatsNew.bodyCopy.testFeature.link.text": "test link",
   "whatsNew.bodyCopy.testFeatureNoFlag": "Body text for a feature that is not tied to a flag",
   "whatsNew.bodyCopy.testFeatureNoFlag.bullet.1": "explanation of the feature",
+  "whatsNew.bodyCopy.testFeatureAuthService": "Feature that needs claims",
   "whatsNew.dismissMessage": "Dismiss this message",
   "whatsNew.title": "What's new",
   "yes": "Yes"
