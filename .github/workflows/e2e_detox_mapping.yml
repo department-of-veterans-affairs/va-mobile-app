@@ -2,17 +2,22 @@
 # Detox e2e tests in CI
 #
 
-name: "[e2e] Detox Mapping"
+name: '[e2e] Detox Mapping'
 
 on:
   workflow_call:
     outputs:
       test_matrix:
-        description: "The matrix output for the e2e tests"
+        description: 'The matrix output for the e2e tests'
         value: ${{ jobs.find_detox_tests_to_run.outputs.output1 }}
       test_run:
-        description: "String saying test has been run"
+        description: 'String saying test has been run'
         value: ${{ jobs.find_detox_tests_to_run.outputs.output2}}
+    secrets:
+      FLAGSHIP_MOBILE_APP_ID:
+        required: true
+      FLAGSHIP_MOBILE_APP_PRIVATE_KEY:
+        required: true
 
 defaults:
   run:
@@ -44,10 +49,17 @@ jobs:
       output2: ${{ steps.testing_matrix.outputs.TEST_RUN}}
 
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Get SHA
         id: get-sha
         run: echo "sha=$(git rev-parse origin/develop)" >> $GITHUB_OUTPUT
@@ -55,14 +67,14 @@ jobs:
         id: changed_files_file_name
         uses: tj-actions/changed-files@v46
         with:
-          base_sha: "${{ steps.get-sha.outputs.sha }}"
+          base_sha: '${{ steps.get-sha.outputs.sha }}'
           path: './VAMobile/src'
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: Convert JavaScript mapping to JSON
         run: |
           # Use Node.js to load the JavaScript file and convert to JSON
@@ -72,19 +84,19 @@ jobs:
             fs.writeFileSync('/tmp/detoxMapping.json', JSON.stringify(detoxMapping, null, 2));
             console.log('Successfully converted detoxMapping.js to JSON');
           "
-          
+
           # Verify the JSON file was created and is valid
           if [ ! -f "/tmp/detoxMapping.json" ]; then
             echo "Failed to create detoxMapping.json"
             exit 1
           fi
-          
+
           # Validate JSON format
           if ! jq empty /tmp/detoxMapping.json; then
             echo "Generated JSON is invalid"
             exit 1
           fi
-          
+
           echo "detoxMapping.json created successfully"
       - name: Check if directory/file is in detox mapping
         id: detox_mapping_check
