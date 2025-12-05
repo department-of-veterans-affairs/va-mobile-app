@@ -9,7 +9,10 @@ import { FeatureToggleType } from 'utils/remoteConfig'
  *
  * featureName: name that will be used as the key for the feature including
  * in translation keys
- * featureFlag: the flag the feature is tied to. This will determine if it's shown or not
+ * featureFlag: optional feature flag the feature is tied to. This will determine
+ * if it's shown or not
+ * authorizedService: optional authorizedService the feature is tied to. This will
+ * determine if it's shown or not
  *
  */
 
