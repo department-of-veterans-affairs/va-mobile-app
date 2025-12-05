@@ -218,6 +218,7 @@ const detoxMapping = {
     'utils.ts': [],
     'vaccine.json': ['VaccineRecords'],
     'vaccine.ts': ['VaccineRecords'],
+    'whatsNew.ts': [],
   },
 }
 
