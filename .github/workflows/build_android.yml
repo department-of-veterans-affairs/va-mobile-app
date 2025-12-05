@@ -116,7 +116,9 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
+      - name: Run Android Setup Script
+        run: ../../.github/scripts/run-manual-setup.sh android
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
       - name: Bundle app

@@ -61,6 +61,7 @@ import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Dev
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
 import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
 import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
@@ -788,6 +789,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="RemoteConfigTestScreen"
+        component={RemoteConfigTestScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>
