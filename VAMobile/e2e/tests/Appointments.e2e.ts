@@ -1,32 +1,21 @@
 import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
-import { setTimeout } from 'timers/promises'
-
-import { EN_DASH } from 'utils/formattingUtils'
 
 import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth } from './utils'
 
 const todaysDate = DateTime.local()
-const shortDateFormat = 'MM-dd-yyyy'
+const dateFieldFormat = 'MMMM dd, yyyy'
 
-const sixtyThreeDaysLaterShort = todaysDate.plus({ days: 63 }).toFormat(shortDateFormat)
-const sixtyFourDaysLaterShort = todaysDate.plus({ days: 64 }).toFormat(shortDateFormat)
-
-const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
-const threeMonthsEarlier = todaysDate.minus({ months: 3 })
-const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
-const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
-const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
-const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
-const currentYear = todaysDate.get('year')
-const lastYearDateTime = todaysDate.minus({ years: 1 })
-const lastYear = lastYearDateTime.get('year')
+const threeMonthsEarlierFieldText = todaysDate.minus({ months: 3 }).toFormat(dateFieldFormat)
+const todaysDateFieldText = todaysDate.toFormat(dateFieldFormat)
 
 export const Appointmentse2eConstants = {
   APPOINTMENT_DESCRIPTION:
     "Here are your appointments. This list includes appointments you've requested but not yet confirmed.",
   VA_PAST_APPOINTMENT: 'To schedule another appointment, please visit VA.gov or call your VA medical center.',
   APPOINTMENT_CANCEL_REQUEST_TEXT: device.getPlatform() === 'ios' ? 'Cancel Request' : 'Cancel Request ',
+  DATE_PICKER_LABEL_TEXT: 'Select a past date range',
+  RESET_SELECTED_DATES_BUTTON_TEXT: 'Reset',
 }
 
 beforeAll(async () => {
@@ -96,88 +85,24 @@ describe('Appointments Screen', () => {
   it('should tap on and show past appointments', async () => {
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.id('apptsPastID')).tap()
-    if (device.getPlatform() === 'android') {
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
-    } else {
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
-    }
+    await expect(element(by.text(Appointmentse2eConstants.DATE_PICKER_LABEL_TEXT))).toExist()
   })
 
-  it('should show the same date field after cancelling', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    if (device.getPlatform() === 'android') {
-      await element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0).tap()
-      await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT)).atIndex(0)).toExist()
-    } else {
-      await element(by.id('pastApptsDateRangeCancelID')).tap()
-      await expect(element(by.text(CommonE2eIdConstants.DATE_RANGE_INITIAL_TEXT))).toExist()
-    }
+  it('should show the past 3 months date range after resetting', async () => {
+    await element(by.text(Appointmentse2eConstants.RESET_SELECTED_DATES_BUTTON_TEXT)).tap()
+    await expect(element(by.text(threeMonthsEarlierFieldText))).toExist()
+    await expect(element(by.text(todaysDateFieldText))).toExist()
   })
 
-  it('past appts: three months - five months earlier verification', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    await element(
-      by.text(
-        fiveMonthsEarlier.monthShort +
-          ' ' +
-          fiveMonthsEarlier.year +
-          ' ' +
-          EN_DASH +
-          ' ' +
-          threeMonthsEarlier.monthShort +
-          ' ' +
-          threeMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.text('Done')).tap()
+  it('should show the native calendar date picker when the From field is tapped', async () => {
+    await element(by.id('datePickerFromFieldTestId')).tap()
+    await expect(element(by.id('datePickerFromFieldTestId-nativeCalendar'))).toExist()
+    await element(by.id('datePickerFromFieldTestId')).tap()
   })
 
-  it('past appts: six months - eight months earlier verification', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    await element(
-      by.text(
-        eightMonthsEarlier.monthShort +
-          ' ' +
-          eightMonthsEarlier.year +
-          ' ' +
-          EN_DASH +
-          ' ' +
-          sixMonthsEarlier.monthShort +
-          ' ' +
-          sixMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.text('Done')).tap()
-  })
-
-  it('past appts: eleven months - nine months earlier verification', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    await element(
-      by.text(
-        elevenMonthsEarlier.monthShort +
-          ' ' +
-          elevenMonthsEarlier.year +
-          ' ' +
-          EN_DASH +
-          ' ' +
-          nineMonthsEarlier.monthShort +
-          ' ' +
-          nineMonthsEarlier.year,
-      ),
-    ).tap()
-    await element(by.text('Done')).tap()
-  })
-
-  it('past appts: current year verification', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    await element(by.text('All of ' + currentYear)).tap()
-    await element(by.text('Done')).tap()
-  })
-
-  it('past appts: previous year verification', async () => {
-    await element(by.id('getDateRangeTestID')).tap()
-    await element(by.text('All of ' + lastYear)).tap()
-    await element(by.text('Done')).tap()
+  it('should show the native calendar date picker when the To field is tapped', async () => {
+    await element(by.id('datePickerToFieldTestId')).tap()
+    await expect(element(by.id('datePickerToFieldTestId-nativeCalendar'))).toExist()
+    await element(by.id('datePickerToFieldTestId')).tap()
   })
 })

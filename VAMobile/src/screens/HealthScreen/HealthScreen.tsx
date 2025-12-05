@@ -41,6 +41,7 @@ import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/
 import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
+import CopaysScreen from 'screens/PaymentsScreen/Copays'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -166,7 +167,12 @@ export function HealthScreen({}: HealthScreenProps) {
           />
         )}
         {featureEnabled('overpayCopay') && (
-          <LargeNavButton title={t('copays.title')} onPress={() => navigateTo('Copays')} subText={copaysSubText} />
+          <LargeNavButton
+            title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
+            subText={copaysSubText}
+            showLoading={copaysLoading}
+          />
         )}
         <LargeNavButton
           title={t('secureMessaging.title')}
@@ -242,6 +248,7 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={Appointments}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
+      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
