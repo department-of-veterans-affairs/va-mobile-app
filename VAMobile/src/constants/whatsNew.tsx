@@ -16,17 +16,17 @@ import { FeatureToggleType } from 'utils/remoteConfig'
 /**
  * Example Config
  * [
- *   {
+ *   \{
  *     featureName: 'testFeature',
  *     featureFlag: 'remoteConfigRefreshTest',
- *   },
- *   {
+ *   \},
+ *   \{
  *     featureName: 'testFeatureNoFlag',
- *   },
- *   {
+ *   \},
+ *   \{
  *     featureName: 'testFeatureAuthService',
  *     authorizedService: 'claims'
- *   },
+ *   \},
  * ]
  */
 
