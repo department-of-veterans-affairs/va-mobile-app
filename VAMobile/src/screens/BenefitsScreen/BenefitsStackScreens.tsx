@@ -31,6 +31,9 @@ export type BenefitsStackParamList = {
     letterType: LetterTypes
     screenID: ScreenIDTypes
     descriptionA11yLabel?: string
+    displayAlert?: boolean
+    coeStatus?: string
+    referenceNum?: string
   }
   Claims: undefined
   ClaimDetailsScreen: {
