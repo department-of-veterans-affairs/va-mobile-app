@@ -772,7 +772,14 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
+
+  // Scroll to Remote Config button first to ensure it's fully visible
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
+    .scroll(200, 'down')
+
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
