@@ -2,7 +2,7 @@
 title: What belongs in the app
 ---
 
-These criteria help determine whether a feature or piece of content belongs in the VAHB mobile app. They’re designed to guide product owners, designers, and engineers toward evaluating user value, technical feasibility, and long-term sustainability. Before proposing or building new functionality, teams should use the questions below to assess whether the experience is appropriate for, and well-supported within, a mobile environment.
+These criteria help determine whether a feature or piece of content belongs in the VAHB mobile app. They’re designed to guide product owners, designers, and engineers toward evaluating user value, technical feasibility, and long-term sustainability. Before proposing or building new functionality, teams should use these criteria below to assess whether the experience is appropriate for, and well-supported within, a mobile environment.
 
 * It is a task that users perform repeatedly, and/or frequently
 * It is information users need to access quickly and/or frequently
