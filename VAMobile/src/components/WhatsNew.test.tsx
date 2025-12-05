@@ -3,12 +3,11 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import WhatsNew, { getWhatsNewConfig } from 'components/WhatsNew'
+import WhatsNew from 'components/WhatsNew'
 import { InitialState } from 'store/slices'
 import { context, render, when } from 'testUtils'
 import { FeatureToggleType, featureEnabled } from 'utils/remoteConfig'
 
-const mockGetConfig = jest.fn()
 const mockT = jest.fn()
 
 jest.mock('react-i18next', () => {
@@ -23,8 +22,10 @@ jest.mock('react-i18next', () => {
   }
 })
 
-jest.mock('components/WhatsNew', () => {
-  const original = jest.requireActual('components/WhatsNew')
+let mockGetConfig: jest.Mock
+jest.mock('constants/WhatsNew', () => {
+  const original = jest.requireActual('constants/WhatsNew')
+  mockGetConfig = jest.fn()
 
   return {
     ...original,
@@ -52,7 +53,7 @@ const featureConfigs = {
 
 context('WhatsNew', () => {
   const initializeTestInstance = (featureName: string, featureFlag?: string, flagEnabled?: boolean) => {
-    when(mockGetConfig).calledWith().mockReturnValue(featureConfigs[featureName])
+    mockGetConfig.mockImplementation(() => featureConfigs[featureName])
 
     if (featureFlag) {
       when(featureEnabled)

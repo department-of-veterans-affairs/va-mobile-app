@@ -4,21 +4,17 @@ import { useTranslation } from 'react-i18next'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { WhatsNewConfig, WhatsNewConfigItem } from 'constants/whatsNew'
+import { getWhatsNewConfig } from 'constants/whatsNew'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/homeScreenAlerts'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-
-// Allows for mocking for tests
-export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
-  return WhatsNewConfig
-}
+import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/whatsNew'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const whatsNewItems = getWhatsNewConfig()
+  console.debug(whatsNewItems)
 
   const [skippedFeatures, setSkippedFeatures] = useState<string[]>() //await getFeaturesSkipped()
 

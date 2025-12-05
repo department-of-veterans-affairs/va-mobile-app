@@ -1,8 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { find } from 'underscore'
-
-import { getWhatsNewConfig } from 'components'
 import { getBuildNumber, getVersionName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import { requestStoreVersion } from 'utils/rnInAppUpdate'
@@ -11,7 +8,6 @@ const APP_VERSION_SKIPPED_UPDATE_VAL = '@store_app_version_skipped'
 export const APP_VERSION_WHATS_NEW_SKIPPED_UPDATE_VAL = '@store_app_whats_new_version_skipped'
 const APP_VERSION_ENCOURAGE_UPDATE_LOCAL_OVERRIDE_VAL = '@store_app_version_encourage_update_local_override'
 export const APP_VERSION_WHATS_NEW_LOCAL_OVERRIDE_VAL = '@store_app_version_whats_new_local_override'
-export const APP_FEATURES_WHATS_NEW_SKIPPED_VAL = '@store_app_features_whats_new_skipped'
 
 export const FeatureConstants: {
   ENCOURAGEUPDATE: number
@@ -46,37 +42,6 @@ export const setVersionSkipped = async (feature: number, versionSkipped: string)
       await AsyncStorage.setItem(APP_VERSION_SKIPPED_UPDATE_VAL, versionSkipped)
       break
   }
-}
-
-export const getFeaturesSkipped = async () => {
-  const currentSkipsStr = await AsyncStorage.getItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL)
-  let featureSkips: string[] = []
-
-  if (currentSkipsStr) {
-    featureSkips = JSON.parse(currentSkipsStr)
-  }
-
-  return featureSkips
-}
-
-export const setFeaturesSkipped = async (features: string[]) => {
-  if (!features.length) {
-    return
-  }
-
-  let featureSkips = await getFeaturesSkipped()
-  featureSkips = featureSkips.concat(features)
-
-  const whatsNewItems = getWhatsNewConfig()
-  const currentFeatureSkips: string[] = []
-  featureSkips.forEach((featureSkip) => {
-    // If the skipped feature does not currently belong in the what's new config than do not include it in the skip list
-    if (find(whatsNewItems, (item) => item.featureName === featureSkip)) {
-      currentFeatureSkips.push(featureSkip)
-    }
-  })
-
-  await AsyncStorage.setItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, JSON.stringify(currentFeatureSkips))
 }
 
 /**
