@@ -10515,7 +10515,7 @@ react-native-localize@^3.3.0:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.3.0.tgz#aa40c9e15262bd7295b4b73bc7fcb9b01c1afbf3"
   integrity sha512-pbxiL0sL9hv3dRRcDRHEcsLGfuQavFfsK0dK5RNVjmTI8x3hiojRJHcppzqKOAUjZusehbA7Hnzdjz/7LkZsgw==
 
-react-native-notifications@^5.1.0:
+react-native-notifications@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-native-notifications/-/react-native-notifications-5.1.0.tgz#8cba105fd57ab9d5df9d27284acf1e2b4f3d7ea3"
   integrity sha512-laqDSDlCvEASmJR6cXpqaryK855ejQd07vrfYERzhv68YDOoSkKy/URExRP4vAfAOVqHhix80tLbNUcfvZk2VQ==
