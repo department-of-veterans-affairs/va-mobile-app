@@ -23,6 +23,7 @@ import {
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
@@ -75,12 +76,14 @@ import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from 'utils/accessibility'
 import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
-import { useAppDispatch, useFontScale } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
+import { fetchAndActivate } from 'utils/remoteConfig'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
+const REMOTE_CONFIG_REFRESH = 30 // minutes
 
 enableScreens(true)
 injectStore(store)
@@ -239,6 +242,41 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+
+  const [remoteConfigUpdateTime, setRemoteConfigUpdateTime] = useState<DateTime>(
+    DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }),
+  )
+  const [remoteConfigTimeoutId, setRemoteConfigTimeoutId] = useState<number>()
+
+  // Refetch remote config
+  useEffect(() => {
+    const refetchTimeout = setTimeout(async () => {
+      await fetchAndActivate()
+      setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
+    }, REMOTE_CONFIG_REFRESH * 60000)
+
+    /*
+      The return value of setTimeout is a number, but because we have NodeJS types imported for unit tests,
+      the tests expect this to be a NodeJS.Timeout while the standard build thinks it's a number, and they can't
+      be cast between without converting to an unknown first.
+     */
+    //@ts-ignore
+    setRemoteConfigTimeoutId(refetchTimeout)
+
+    return () => {
+      clearTimeout(refetchTimeout)
+      setRemoteConfigTimeoutId(undefined)
+    }
+  }, [remoteConfigUpdateTime])
+
+  useOnResumeForeground(() => {
+    const now = DateTime.now()
+    if (now > remoteConfigUpdateTime) {
+      clearTimeout(remoteConfigTimeoutId)
+      fetchAndActivate()
+      setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
+    }
+  })
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
