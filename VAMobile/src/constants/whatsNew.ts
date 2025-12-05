@@ -53,4 +53,8 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
   {
     featureName: 'testFeatureAuthService',
   },
+  {
+    featureName: 'COE',
+    featureFlag: 'COEAvailable',
+  },
 ]
