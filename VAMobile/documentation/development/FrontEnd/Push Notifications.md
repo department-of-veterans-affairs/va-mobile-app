@@ -10,7 +10,11 @@ Notification frequency should be managed carefully. Teams should coordinate to a
 
 Content should be clear, concise, and written in plain language. Veterans should be able to dismiss notifications at any time. If a notification is tapped, it should take the user directly to the appropriate location in the app. Notifications should also expire automatically after a set period.
 
-Success should be measured by tracking how many Veterans keep notifications enabled, how often they interact with them, and whether the intended action is completed. These insights can guide improvements to timing, frequency, and message design.
+Success should be measured by tracking how many Veterans keep notifications enabled, how often they interact with them, and whether the intended action is completed. These insights can guide improvements to timing, frequency, and message design. Some helpful metrics to track include: 
+- delivery rate (percentage of messages that reach devices)
+- open rate (percentage of users who open after receiving)
+- conversion rate (percentage of users who complete the intended action)
+- opt-out rate (percentage of users who disable the notification)
 
 ## Setting up push notifications
 
