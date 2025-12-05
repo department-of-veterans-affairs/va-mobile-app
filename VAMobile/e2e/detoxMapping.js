@@ -3,6 +3,7 @@
 // Full test run - used by components, slices, translations, utils
 const fullTestRun = [
   'Allergies',
+  'AllergiesAccelerated',
   'Appeals',
   'AppealsExpanded',
   'Appointments',
@@ -90,7 +91,7 @@ const debtsArray = ['Payments']
 
 const detoxMapping = {
   directory: {
-    allergies: ['Allergies'],
+    allergies: ['Allergies', 'AllergiesAccelerated'],
     AppealDetailsScreen: ['Appeals', 'AppealsExpanded'],
     Appointments: appointmentsArray,
     authorizedServices: authorizedServicesArray,
@@ -161,8 +162,8 @@ const detoxMapping = {
   },
   files: {
     'accounts.ts': ['DirectDeposit'],
-    'allergies.json': ['Allergies'],
-    'allergies.ts': ['Allergies'],
+    'allergies.json': ['Allergies', 'AllergiesAccelerated'],
+    'allergies.ts': ['Allergies', 'AllergiesAccelerated'],
     'analytics.ts': [],
     'api.ts': fullTestRun,
     'App.test.tsx': [],
