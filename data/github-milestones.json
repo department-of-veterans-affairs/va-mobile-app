@@ -1,7 +1,7 @@
 [
   {
     "title": "v2.64.0",
-    "due_on": "2025-12-02T08:00:00Z",
+    "due_on": "2025-12-02T00:00:00Z",
     "issues": [
       {
         "title": "120354 update send reply to flag oh messages for drafts",
@@ -49,7 +49,7 @@
   },
   {
     "title": "v2.63.0",
-    "due_on": "2025-11-18T08:00:00Z",
+    "due_on": "2025-11-18T00:00:00Z",
     "issues": [
       {
         "title": "Disable analytic collection during demo mode",
@@ -121,7 +121,7 @@
   },
   {
     "title": "v2.62.0",
-    "due_on": "2025-11-04T08:00:00Z",
+    "due_on": "2025-11-04T00:00:00Z",
     "issues": [
       {
         "title": "Revert \"#121006 [Benefits Management Team 2] [Appeals] Show list item under appeal claims that shows the number of issues with null descriptions\"",
@@ -139,7 +139,7 @@
   },
   {
     "title": "v2.61.0",
-    "due_on": "2025-10-21T07:00:00Z",
+    "due_on": "2025-10-21T00:00:00Z",
     "issues": [
       {
         "title": "875 - Payment Screen: Update Overpayment and Copayment components",
@@ -151,7 +151,7 @@
   },
   {
     "title": "v2.60.0",
-    "due_on": "2025-10-07T07:00:00Z",
+    "due_on": "2025-10-07T00:00:00Z",
     "issues": [
       {
         "title": "Reduce duplicative claims calls for BE stability",
@@ -193,7 +193,7 @@
   },
   {
     "title": "v2.59.0",
-    "due_on": "2025-09-23T07:00:00Z",
+    "due_on": "2025-09-23T00:00:00Z",
     "issues": [
       {
         "title": "Include Certificate of Eligibility for Home Loan letter",
@@ -247,7 +247,7 @@
   },
   {
     "title": "v2.58.0",
-    "due_on": "2025-09-09T07:00:00Z",
+    "due_on": "2025-09-09T00:00:00Z",
     "issues": [
       {
         "title": "Adding Feature Flag Toggle for Overpay Copay",
@@ -307,7 +307,7 @@
   },
   {
     "title": "v2.57.0",
-    "due_on": "2025-08-26T07:00:00Z",
+    "due_on": "2025-08-26T00:00:00Z",
     "issues": [
       {
         "title": "Filter out recent recipients to only include those existing in all recipients",
@@ -343,7 +343,7 @@
   },
   {
     "title": "v2.56.0",
-    "due_on": "2025-08-12T07:00:00Z",
+    "due_on": "2025-08-12T00:00:00Z",
     "issues": [
       {
         "title": "chore/vaos 114237 Match web upcoming/past appt logic",
@@ -445,7 +445,7 @@
   },
   {
     "title": "v2.55.0",
-    "due_on": "2025-07-29T07:00:00Z",
+    "due_on": "2025-07-29T00:00:00Z",
     "issues": [
       {
         "title": "542 - Update system error to yellow warning alert",
@@ -523,7 +523,7 @@
   },
   {
     "title": "v2.54.0",
-    "due_on": "2025-07-15T07:00:00Z",
+    "due_on": "2025-07-15T00:00:00Z",
     "issues": [
       {
         "title": "BUG - [Sev-2] - [Android] - Single Sign On for Appointment scheduling doesn't scroll in web view",
@@ -685,7 +685,7 @@
   },
   {
     "title": "v2.53.0",
-    "due_on": "2025-07-01T07:00:00Z",
+    "due_on": "2025-07-01T00:00:00Z",
     "issues": [
       {
         "title": "Make Homescreen Scroll Analytics Toggleable",
@@ -751,7 +751,7 @@
   },
   {
     "title": "v2.52.0",
-    "due_on": "2025-06-17T07:00:00Z",
+    "due_on": "2025-06-17T00:00:00Z",
     "issues": [
       {
         "title": "(FE) Refill Request Floating Button",
@@ -799,7 +799,7 @@
   },
   {
     "title": "v2.51.0",
-    "due_on": "2025-06-03T07:00:00Z",
+    "due_on": "2025-06-03T00:00:00Z",
     "issues": [
       {
         "title": "Add deep linking to claim letters screen",
@@ -829,7 +829,7 @@
   },
   {
     "title": "v2.50.0",
-    "due_on": "2025-05-20T07:00:00Z",
+    "due_on": "2025-05-20T00:00:00Z",
     "issues": [
       {
         "title": "Remove high traffic, non actionable events from the app code",
@@ -883,7 +883,7 @@
   },
   {
     "title": "v2.49.0",
-    "due_on": "2025-05-06T07:00:00Z",
+    "due_on": "2025-05-06T00:00:00Z",
     "issues": [
       {
         "title": "Enable Single Sign On for Claims Screen",
@@ -955,7 +955,7 @@
   },
   {
     "title": "v2.48.0",
-    "due_on": "2025-04-22T07:00:00Z",
+    "due_on": "2025-04-22T00:00:00Z",
     "issues": [
       {
         "title": "Veteran Status Card Error Analytics",
@@ -1015,7 +1015,7 @@
   },
   {
     "title": "v2.42.0",
-    "due_on": "2024-11-19T08:00:00Z",
+    "due_on": "2024-11-19T00:00:00Z",
     "issues": [
       {
         "title": "CU - Create a way to bypass phone number display with Availability Framework",
