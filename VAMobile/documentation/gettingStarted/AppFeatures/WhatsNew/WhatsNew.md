@@ -18,16 +18,7 @@ What's new displays to the veteran what is new in the version that they upgraded
 
 ## How to display What's New
 
-What's new is displayed based on the WhatsNewConfig, which contains an array of feature names and optional flags and 
-authorized services. 
-
-`
-    {
-        featureName: 'myFeature',
-        featureFlag: 'myFeatureFlag',
-        authorizedService: 'myAuthorizedService'
-    }
-`
+What's new is displayed based on the WhatsNewConfig, which contains an array of feature names and optional flags and authorized services.
 
 * `featureName` will be mapped to the translation file by convention to display body content, bullet points, 
 and links 
