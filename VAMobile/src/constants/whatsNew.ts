@@ -30,10 +30,6 @@ import { FeatureToggleType } from 'utils/remoteConfig'
  * ]
  */
 
-export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
-  return WhatsNewConfig
-}
-
 export type WhatsNewConfigItem = {
   // Name of the feature being described
   featureName: string

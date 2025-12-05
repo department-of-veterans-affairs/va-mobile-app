@@ -1,14 +1,16 @@
 import React from 'react'
 
-import { screen, waitFor } from '@testing-library/react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import WhatsNew from 'components/WhatsNew'
+import { WhatsNewConfigItem } from 'constants/whatsNew'
 import { InitialState } from 'store/slices'
 import { context, render, when } from 'testUtils'
-import { FeatureToggleType, featureEnabled } from 'utils/remoteConfig'
-
-const mockT = jest.fn()
+import { FeatureToggleType } from 'utils/remoteConfig'
+import { APP_FEATURES_WHATS_NEW_SKIPPED_VAL } from 'utils/whatsNew'
 
 jest.mock('react-i18next', () => {
   const original = jest.requireActual('react-i18next')
@@ -16,15 +18,15 @@ jest.mock('react-i18next', () => {
     ...original,
     useTranslation: () => {
       return {
-        t: mockT,
+        t: (key: string) => key,
       }
     },
   }
 })
 
-let mockGetConfig: jest.Mock
-jest.mock('constants/whatsNew', () => {
-  const original = jest.requireActual('constants/whatsNew')
+let mockGetConfig: jest.Mock<WhatsNewConfigItem[]>
+jest.mock('utils/whatsNew', () => {
+  const original = jest.requireActual('utils/whatsNew')
   mockGetConfig = jest.fn()
 
   return {
@@ -33,7 +35,23 @@ jest.mock('constants/whatsNew', () => {
   }
 })
 
-const featureConfigs = {
+let mockFeatureEnabled: jest.Mock
+jest.mock('utils/remoteConfig', () => {
+  const original = jest.requireActual('utils/remoteConfig')
+  mockFeatureEnabled = jest.fn()
+
+  return {
+    ...original,
+    featureEnabled: mockFeatureEnabled,
+  }
+})
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+}))
+
+const featureConfigs: Record<string, WhatsNewConfigItem[]> = {
   empty: [],
   oneFeatureNoFlag: [
     {
@@ -43,7 +61,7 @@ const featureConfigs = {
   twoFeaturesOneFlag: [
     {
       featureName: 'testFeature',
-      featureFlag: 'featureflag1',
+      featureFlag: 'testFeature',
     },
     {
       featureName: 'testFeatureNoFlag',
@@ -54,28 +72,11 @@ const featureConfigs = {
 context('WhatsNew', () => {
   const initializeTestInstance = (featureName: string, featureFlag?: string, flagEnabled?: boolean) => {
     mockGetConfig.mockImplementation(() => featureConfigs[featureName])
-
     if (featureFlag) {
-      when(featureEnabled)
+      when(mockFeatureEnabled)
         .calledWith(featureFlag as FeatureToggleType)
-        .mockReturnValue(flagEnabled)
+        .mockReturnValue(!!flagEnabled)
     }
-
-    // The component uses translation keys to hide and show its element, therefore we need to mock out translation to get it to render
-    when(mockT)
-      .calledWith('whatsNew.title')
-      .mockReturnValue(t('whatsNew.title'))
-      .calledWith('whatsNew.dismissMessage')
-      .mockReturnValue(t('whatsNew.dismissMessage'))
-      .calledWith(`whatsNew.bodyCopy.${featureName}`)
-      .mockReturnValue(`${featureName} main text`)
-      .calledWith(`whatsNew.bodyCopy.${featureName}.a11yLabel`)
-      .mockReturnValue(`${featureName} a11y label`)
-      .defaultReturnValue('')
-      .calledWith(`whatsNew.bodyCopy.${featureName}.bullet.1`)
-      .mockReturnValue(`${featureName} bullet 1`)
-      .calledWith(`whatsNew.bodyCopy.${featureName}.bullet.2`)
-      .mockReturnValue(`${featureName} bullet 2`)
 
     render(<WhatsNew />, {
       preloadedState: {
@@ -92,29 +93,54 @@ context('WhatsNew', () => {
     await waitFor(() => expect(screen.queryByText(t('whatsNew.title'))).toBeFalsy())
   })
 
-  // it('should render a feature that has not been skipped', async () => {
-  //   initializeTestInstance('oneFeatureNoFlag')
-  //   await waitFor(async () => {
-  //     const title = await screen.findByText(t('whatsNew.title'))
-  //     return expect(title).toBeTruthy()
-  //   })
-  // })
+  it('should render a feature that has not been skipped', async () => {
+    initializeTestInstance('oneFeatureNoFlag')
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
+    })
+  })
 
-  // it('should render details when expanded ', async () => {
-  //   initializeTestInstance('1.1', '1.0')
-  //   await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: t('whatsNew.title') })))
-  //   expect(screen.getByText(NEWS_LIST.SSO_TEXT)).toBeTruthy()
-  //   expect(screen.getByText(NEWS_LIST.BULLET1)).toBeTruthy()
-  //   expect(screen.getByText(NEWS_LIST.BULLET2)).toBeTruthy()
-  // })
-  //
-  // it('should set the next skip version when dismissed ', async () => {
-  //   initializeTestInstance('1.1', '1.0')
-  //   expect(setVersionSkipped).not.toBeCalled()
-  //
-  //   await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: t('whatsNew.title') })))
-  //   await waitFor(() => fireEvent.press(screen.getByRole('button', { name: t('whatsNew.dismissMessage') })))
-  //
-  //   expect(setVersionSkipped).toBeCalledWith(undefined, '1.1')
-  // })
+  it('should not render feature behind disabled feature flag', async () => {
+    initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
+      expect(screen.queryByText('whatsNew.bodyCopy.testFeature')).toBeFalsy()
+    })
+  })
+
+  it('should render feature behind enabled feature flag', async () => {
+    initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
+      expect(screen.getByText('whatsNew.bodyCopy.testFeature')).toBeTruthy()
+    })
+  })
+
+  it('should set the features as skipped when dismissed ', async () => {
+    initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
+
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
+
+    await waitFor(() => {
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+        APP_FEATURES_WHATS_NEW_SKIPPED_VAL,
+        '["testFeature","testFeatureNoFlag"]',
+      )
+    })
+  })
+
+  it('should not set features behind disabled feature flag as skipped when dismissed', async () => {
+    initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
+
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
+
+    await waitFor(() => {
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, '["testFeatureNoFlag"]')
+    })
+  })
 })

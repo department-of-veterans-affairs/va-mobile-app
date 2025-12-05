@@ -5,11 +5,10 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { getWhatsNewConfig } from 'constants/whatsNew'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
-import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/whatsNew'
+import { getFeaturesSkipped, getWhatsNewConfig, setFeaturesSkipped } from 'utils/whatsNew'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -99,7 +98,7 @@ export const WhatsNew = () => {
         const topPadding = idx === 0 ? 0 : theme.dimensions.standardMarginBetween
 
         display.push(
-          <Box pt={topPadding}>
+          <Box key={idx} pt={topPadding}>
             {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
             <TextView accessibilityLabel={bodyA11yLabel} pb={theme.dimensions.tinyMarginBetween}>
               {body}
