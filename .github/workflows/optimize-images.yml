@@ -11,8 +11,16 @@ jobs:
     name: Optimize Images
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Install imagemin-cli
         run: npm install -g imagemin-cli
       - name: Optimize iOS images
@@ -40,4 +48,4 @@ jobs:
             git push
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}

@@ -29,18 +29,24 @@ jobs:
       run:
         working-directory: VAMobile
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_ACTIONS_PAT }}
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Set username and email
         run: |
           git config --global user.name 'VA Mobile Automation Bot'
           git config --global user.email 'VAFlagshipMobile@va.gov'
       - name: Cut release branch
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           if [[ "${{ needs.get-workflow-environment.outputs.environment_name }}" == "manual-release" ]]; then
             ./release_branch.sh --bypass-date-check
