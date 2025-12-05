@@ -25,7 +25,7 @@ type GenericLetterProps = StackScreenProps<BenefitsStackParamList, 'GenericLette
 function GenericLetter({ navigation, route }: GenericLetterProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { header, description, letterType, descriptionA11yLabel } = route.params
+  const { header, description, letterType, descriptionA11yLabel, displayAlert, coeStatus, referenceNum } = route.params
   const { data: letterBeneficiaryData } = useLetterBeneficiaryData()
   const lettersOptions: LettersDownloadParams = {
     militaryService: false,
@@ -58,6 +58,22 @@ function GenericLetter({ navigation, route }: GenericLetterProps) {
       {letterType === LetterTypeConstants.serviceVerification && (
         <Box mb={theme.dimensions.standardMarginBetween}>
           <AlertWithHaptics variant="info" description={t('letters.serviceVerificationLetter.informational')} />
+        </Box>
+      )}
+      {letterType === LetterTypeConstants.certificateOfEligibility && displayAlert && coeStatus === 'ELIGIBLE' && (
+        <Box mb={theme.dimensions.standardMarginBetween}>
+          <AlertWithHaptics
+            variant="success"
+            expandable={true}
+            initializeExpanded={true}
+            header={t('letters.serviceVerificationLetter.informationalHeader')}
+            description={t('letters.certificateOfEligibility.success')}>
+            {referenceNum ? (
+              <TextView>{t('letters.certificateOfEligibility.referenceNum', { referenceNum: referenceNum })}</TextView>
+            ) : (
+              <></>
+            )}
+          </AlertWithHaptics>
         </Box>
       )}
       <TextArea>
