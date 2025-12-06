@@ -41,6 +41,7 @@ export type BenefitsStackParamList = {
     claimType: ClaimType
   }
   ClaimsHistoryScreen: undefined
+  TravelPayClaims: undefined
   ClaimLettersScreen: undefined
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: {
