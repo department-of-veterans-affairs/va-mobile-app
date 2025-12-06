@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { fireEvent } from '@testing-library/react-native'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
@@ -18,11 +17,14 @@ import {
   getCachedAppointmentById,
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { ErrorsState } from 'store/slices'
-import { QueriesData, RenderParams, render, screen, when } from 'testUtils'
+import { QueriesData, RenderParams, fireEvent, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
+import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { defaultAppointment } from 'utils/tests/appointments'
+
+const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
 jest.mock('utils/remoteConfig')
 
@@ -193,9 +195,11 @@ describe('AppointmentTravelClaimDetails', () => {
     subType: AppointmentDetailsSubType,
     attributes: Partial<AppointmentAttributes> = {},
     travelPaySMOCEnabled = true,
+    travelPayStatusListEnabled = false,
     options?: RenderParams,
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
+    when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(travelPayStatusListEnabled)
     const fullAttributes: AppointmentAttributes = { ...baseAppointmentAttributes, ...attributes }
 
     if (!options) {
@@ -217,7 +221,11 @@ describe('AppointmentTravelClaimDetails', () => {
     }
 
     return render(
-      <AppointmentTravelClaimDetails appointmentID="appointmentID-123" attributes={fullAttributes} subType={subType} />,
+      <AppointmentTravelClaimDetails
+        appointmentID="appointmentID-123"
+        attributes={{ ...baseAppointmentAttributes, ...attributes }}
+        subType={subType}
+      />,
       { ...options },
     )
   }
@@ -235,7 +243,7 @@ describe('AppointmentTravelClaimDetails', () => {
         endTime: DateTime.now().plus({ hours: 1 }),
       }
 
-      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, {
+      initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, false, false, {
         preloadedState: {
           errors: {
             downtimeWindowsByFeature: {
@@ -266,7 +274,7 @@ describe('AppointmentTravelClaimDetails', () => {
           endTime: DateTime.now().plus({ hours: 1 }),
         }
 
-        initializeTestInstance('Upcoming', {}, true, {
+        initializeTestInstance('Upcoming', {}, true, false, {
           preloadedState: {
             errors: {
               downtimeWindowsByFeature: {
@@ -408,7 +416,7 @@ describe('AppointmentTravelClaimDetails', () => {
               },
             ]
 
-            initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, { queriesData })
+            initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, false, { queriesData })
 
             fireEvent.press(screen.getByTestId('goToFileTravelClaimLink'))
             expect(mockNavigationSpy).toHaveBeenCalledWith('SubmitTravelPayClaimScreen', {
@@ -465,7 +473,7 @@ describe('AppointmentTravelClaimDetails', () => {
 
         tests.forEach((test) => {
           it(`initializes correctly when ${test.testName}`, () => {
-            initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, {
+            initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, true, {
               preloadedState: {
                 errors: {
                   downtimeWindowsByFeature: {
@@ -490,7 +498,7 @@ describe('AppointmentTravelClaimDetails', () => {
       })
 
       describe('when the claim submission is in progress', () => {
-        it('should render status of Submitting and a link to the claim status page', () => {
+        it('should render status of Submitting', () => {
           mockTravelClaimSubmissionMutationState = { status: 'pending' }
           initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined)
           expect(
@@ -500,8 +508,37 @@ describe('AppointmentTravelClaimDetails', () => {
               }),
             ),
           ).toBeTruthy()
-          expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
           expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+        })
+
+        it('should render a web view claims list message and link when the status list FF is OFF', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, false)
+          fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
+          expect(
+            screen.getByText(
+              t('travelPay.travelClaimFiledDetails.status', {
+                status: t('travelPay.travelClaimFiledDetails.status.submitting'),
+              }),
+            ),
+          ).toBeTruthy()
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))).toBeTruthy()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+            url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+            displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+            loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+            useSSO: true,
+          })
+        })
+
+        it('should render a link to the claims list screen when the status list FF is ON', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, true)
+          fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link'))).toBeTruthy()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
         })
       })
 
@@ -515,7 +552,7 @@ describe('AppointmentTravelClaimDetails', () => {
           meta: undefined,
         }
 
-        const { queryClient } = initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, {
+        const { queryClient } = initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, false, {
           queriesData: [
             {
               queryKey: [appointmentsKeys.appointments],
