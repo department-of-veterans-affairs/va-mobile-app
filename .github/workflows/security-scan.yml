@@ -25,6 +25,8 @@ jobs:
         uses: tj-actions/changed-files@v44
         with:
           files: '**/package.json,**/yarn.lock,**/Gemfile.lock'
+      - name: Debug changed files output
+        run: echo "The value of 'any_changed' is ${{ steps.changed-files.outputs.any_changed }}"
 
   request_bypass_approval:
     name: Request bypass approval
