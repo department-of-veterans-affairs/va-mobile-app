@@ -610,6 +610,8 @@
   "copays.currentBalance.amount": "Current balance: <bold>{{amount}}</bold>",
   "copays.details.title": "Copay bill",
   "copays.disputeCopay.title": "Dispute copay",
+  "copays.disputeCopay.copy": "<p>You have the right to dispute all or part of your VA copay charges. Write a letter explaining why you think the copay charges or balance amount may not be correct. To avoid late charges, you’ll need to dispute the debt within <bold>30 days</bold> of receiving your bill.</p><p>Mail the letter, or bring it in person, to the business office or health administration office at your nearest VA medical center. If you send your dispute by mail, please include \"Billing Dispute\" on the mailing envelope.</p>",
+  "copays.disputeCopay.link": "Learn more about disputing your copay charges",
   "copays.empty.body": "If you think this is incorrect, contact our Health Resource Center. We're here Monday through Friday, 8:00 a.m. to 8:00 p.m. ET.",
   "copays.empty.title": "You haven't received a copay bill in the past 6 months",
   "copays.error.description": "We're sorry. Information about copays you might have is unavailable because something went wrong on our end. Check back soon. \n\nIf you continue having trouble viewing information about your copays, contact the VA Health Resource Center. We're here Monday through Friday, 8:00 a.m. to 8:00 p.m. ET.",
