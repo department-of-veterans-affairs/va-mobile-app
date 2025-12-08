@@ -10,7 +10,7 @@ const importBenjaminAdamsData = () => {
     import('./disabilityRating.json'),
     import('./decisionLetters.json'),
     import('./labsAndTests.json'),
-    import('store/api/demo/mocks/default/letters.json'),
+    import('./letters.json'),
     import('./payments.json'),
     import('./prescriptions.json'),
     import('store/api/demo/mocks/default/notifications.json'),

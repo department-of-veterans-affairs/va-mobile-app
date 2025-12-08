@@ -1,5 +1,6 @@
 ---
-title: Releases
+title: Release calendar
+sidebar_position: 2
 ---
 
 ## Release Cycle

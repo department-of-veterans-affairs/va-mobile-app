@@ -151,6 +151,7 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
   }
 }
+
 /** Filters the claims based on the provided filter options
  * @param claims - The list of claims
  * @param filter - The filter options to apply
@@ -242,4 +243,15 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
   }
 
   return false
+}
+
+/**
+ * Navigates to the travel claims list screen from various entry points
+ * @param navigateTo - The navigation function to navigate between screens
+ */
+export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  navigateTo('BenefitsTab', {
+    screen: 'TravelPayClaims',
+    initial: false,
+  })
 }
