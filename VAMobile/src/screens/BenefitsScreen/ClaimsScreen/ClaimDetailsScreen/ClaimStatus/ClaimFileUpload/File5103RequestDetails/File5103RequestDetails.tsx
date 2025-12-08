@@ -122,7 +122,6 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
     <VAScrollView testID="file5103RequestDetailsID">
       <SubtaskTitle title={t('claimDetails.5103.title')} />
 
-      {/*<Box flex={1} mb={contentMarginBottom} backgroundColor='contentBox' />*/}
       <Box mb={contentMarginBottom} flex={1}>
         <Box backgroundColor="contentBox" {...borderStyles}>
           <Box p={cardPadding}>
