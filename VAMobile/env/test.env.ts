@@ -30,6 +30,7 @@ export const LINK_URL_GO_TO_MY_HEALTHEVET =
 export const LINK_URL_OMB_PAGE = 'https://www.reginfo.gov/public/do/PRAMain'
 export const APPLE_STORE_LINK = 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596'
 export const GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.mobileapp'
+export const LINK_URL_DISPUTE_COPAY = 'https://www.va.gov/health-care/pay-copay-bill/dispute-charges/'
 export const LINK_URL_GO_TO_BTSSS = 'https://dvagov-btsss.dynamics365portals.us/'
 export const LINK_URL_CLAIM_APPEAL_STATUS = 'https://va.gov/track-claims/appeals/'
 export const LINK_URL_GO_TO_PATIENT_PORTAL = 'https://patientportal.myhealth.va.gov/'
@@ -42,6 +43,9 @@ export const LINK_URL_HELP_FROM_VA_ACCREDITED_REPRESENTATIVE =
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
 export const LINK_URL_MY_MONEY_GOV = 'https://www.mymoney.gov/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_REQUEST_HELP_FORM_5655 =
+  'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction/'
+export const LINK_URL_REQUEST_HELP_VA_DEBT = 'https://www.va.gov/resources/options-to-request-help-with-va-debt/'
 export const LINK_URL_VA_FORM_5655 = 'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction'
 export const LINK_URL_VA_MENTAL_HEALTH_SERVICES =
   'https://www.va.gov/health-care/health-needs-conditions/mental-health/'

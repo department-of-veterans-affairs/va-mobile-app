@@ -123,6 +123,25 @@ jest.mock('api/travelPay', () => {
   mockUseTravelPayClaims = jest.fn((timeFrame: TimeFrameType) => {
     const claims = MOCK_TRAVEL_PAY_CLAIM_RESPONSE.data
     const claimsForTimeFrame = timeFrame === 'pastThreeMonths' ? [claims[0], claims[1]] : [claims[2]]
+
+    // Replace the hardcoded year with current year to work better with date picker tests
+    const currentYear = new Date().getFullYear().toString()
+    const pastYear = (new Date().getFullYear() - 1).toString()
+
+    claimsForTimeFrame.map((claim) => {
+      const attributes = { ...claim.attributes }
+      attributes.appointmentDateTime.replace('2025', currentYear)
+      attributes.appointmentDateTime.replace('2024', pastYear)
+      attributes.createdOn.replace('2025', currentYear)
+      attributes.createdOn.replace('2024', pastYear)
+      attributes.modifiedOn.replace('2025', currentYear)
+      attributes.modifiedOn.replace('2024', pastYear)
+
+      return {
+        ...claim,
+        attributes,
+      }
+    })
     const adjustedResponse = {
       ...MOCK_TRAVEL_PAY_CLAIM_RESPONSE,
       data: claimsForTimeFrame,
@@ -147,8 +166,21 @@ jest.mock('api/travelPay', () => {
 })
 
 context('TravelPayClaims', () => {
-  const initializeTestInstance = () => {
-    render(<TravelPayClaims {...mockNavProps()} />)
+  const initializeTestInstance = (routeMock?: { from: string }) => {
+    render(
+      <TravelPayClaims
+        {...mockNavProps(
+          {},
+          {
+            setOptions: jest.fn(),
+            navigate: jest.fn(),
+            addListener: jest.fn(),
+            goBack: jest.fn(),
+          },
+          { params: routeMock },
+        )}
+      />,
+    )
 
     mockUseDowntime.mockImplementation(() => false)
 
@@ -159,7 +191,7 @@ context('TravelPayClaims', () => {
 
   it('should show travel claims header', () => {
     initializeTestInstance()
-    expect(screen.getByLabelText(t('travelPay.title'))).toBeTruthy()
+    expect(screen.getByLabelText(t('travelPay.claims.title'))).toBeTruthy()
   })
 
   it('should show the date range picker and filter', () => {
@@ -188,20 +220,26 @@ context('TravelPayClaims', () => {
   it('should apply the selected date range to the list of claims', () => {
     initializeTestInstance()
 
+    const claimId1 = 'claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178'
+    const claimId2 = 'claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757'
+    const claimId3 = 'claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53'
+
     // Defaults to past 3 months, so the last one shouldn't be there
-    expect(screen.getByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeTruthy()
-    expect(screen.getByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeTruthy()
-    expect(screen.queryByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeFalsy()
+    expect(screen.getByTestId(claimId1)).toBeTruthy()
+    expect(screen.getByTestId(claimId2)).toBeTruthy()
+    expect(screen.queryByTestId(claimId3)).toBeFalsy()
+
+    const currentYear = new Date().getFullYear()
 
     // Bring up the date picker and select the last year option
     fireEvent.press(screen.getByTestId('getDateRangeTestID'))
-    fireEvent.press(screen.getByTestId('pastAllLastYearTestID'))
+    fireEvent.press(screen.getByTestId(`All of ${currentYear}`))
     fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
 
     // Check the claim list is accurate for the date selection
-    expect(screen.queryByTestId('claim_summary_f33ef640-000f-4ecf-82b8-1c50df13d178')).toBeFalsy()
-    expect(screen.queryByTestId('claim_summary_352b37f2-3566-4642-98b2-6a2bc0e63757')).toBeFalsy()
-    expect(screen.getByTestId('claim_summary_16cbc3d0-56de-4d86-abf3-ed0f6908ee53')).toBeTruthy()
+    expect(screen.queryByTestId(claimId1)).toBeFalsy()
+    expect(screen.queryByTestId(claimId2)).toBeFalsy()
+    expect(screen.getByTestId(claimId3)).toBeTruthy()
   })
 
   it('should show the loading component', async () => {
