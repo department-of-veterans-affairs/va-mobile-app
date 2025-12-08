@@ -66,7 +66,6 @@ type FeatureToggleValues = {
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
-  travelPayClaimsFullHistory: boolean
   travelPayClaimDetails: boolean
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
@@ -99,7 +98,6 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: true,
-  travelPayClaimsFullHistory: false,
   travelPayClaimDetails: false,
   travelPayStatusList: false,
   useOldLinkComponent: true,

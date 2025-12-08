@@ -59,7 +59,6 @@ export type HealthStackParamList = WebviewStackParams & {
   TravelClaimHelpScreen: {
     fromClaimDetails?: boolean
   }
-  TravelPayClaims: undefined
   TravelPayClaimDetailsScreen: {
     claimId: string
     backLabel?: string
