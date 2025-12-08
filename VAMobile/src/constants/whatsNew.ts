@@ -48,3 +48,7 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureFlag: 'COEAvailable',
   },
 ]
+
+export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
+  return WhatsNewConfig
+}

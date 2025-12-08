@@ -2,13 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { find } from 'underscore'
 
-import { WhatsNewConfig, WhatsNewConfigItem } from 'constants/whatsNew'
+import { getWhatsNewConfig } from 'constants/whatsNew'
 
 export const APP_FEATURES_WHATS_NEW_SKIPPED_VAL = '@store_app_features_whats_new_skipped'
-
-export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {
-  return WhatsNewConfig
-}
 
 export const getFeaturesSkipped = async () => {
   const currentSkipsStr = await AsyncStorage.getItem(APP_FEATURES_WHATS_NEW_SKIPPED_VAL)

@@ -25,8 +25,8 @@ jest.mock('react-i18next', () => {
 })
 
 let mockGetConfig: jest.Mock<WhatsNewConfigItem[]>
-jest.mock('utils/whatsNew', () => {
-  const original = jest.requireActual('utils/whatsNew')
+jest.mock('constants/whatsNew', () => {
+  const original = jest.requireActual('constants/whatsNew')
   mockGetConfig = jest.fn()
 
   return {
