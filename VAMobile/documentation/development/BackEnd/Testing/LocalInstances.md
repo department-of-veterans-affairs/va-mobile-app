@@ -98,7 +98,7 @@ Information on requirements, usage, and troubleshooting can be found in the [REA
 
 ## Feature Requests and Contributing
 
-If any upstream services have been ommitted, or if new integrations are added in the future, please help us by bringing them to our attention and providing any information you have that may help us.
+If any upstream services have been omitted, or if new integrations are added in the future, please help us by bringing them to our attention and providing any information you have that may help us.
 
 ### Open an issue
 
