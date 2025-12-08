@@ -44,16 +44,6 @@ export type WhatsNewConfigItem = {
 
 export const WhatsNewConfig: WhatsNewConfigItem[] = [
   {
-    featureName: 'testFeature',
-    featureFlag: 'remoteConfigRefreshTest',
-  },
-  {
-    featureName: 'testFeatureNoFlag',
-  },
-  {
-    featureName: 'testFeatureAuthService',
-  },
-  {
     featureName: 'COE',
     featureFlag: 'COEAvailable',
   },
