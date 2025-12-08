@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { DebtRecord, MedicalCopayDetail, MedicalCopayRecord, PaymentsData } from 'api/types'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import CopaysHelp from 'screens/PaymentsScreen/Copays/CopayHelp/CopayHelp'
-import DebtHelp from 'screens/PaymentsScreen/Debts/DebtHelp/DebtHelp'
+import DebtHelp, { debtHelpType } from 'screens/PaymentsScreen/Debts/DebtHelp/DebtHelp'
 import PaymentIssue from 'screens/PaymentsScreen/PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from 'screens/PaymentsScreen/PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
 
@@ -39,12 +39,14 @@ export type PaymentsStackParamList = {
   DebtDetails: {
     debt: DebtRecord
   }
-  DebtHelp: undefined
+  DebtHelp: { helpType: debtHelpType }
   DebtRequestHelp: undefined
   DisputeDebt: undefined
   PayDebt: {
     debt: DebtRecord
   }
+  TermDefinitions: undefined
+  NoticeOfRights: undefined
 }
 
 const PaymentsStack = createStackNavigator<PaymentsStackParamList>()

@@ -13,13 +13,25 @@ import {
 } from 'api/types'
 import { AppointmentTravelClaimDetails } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
-import { RenderParams, render, screen, when } from 'testUtils'
+import { RenderParams, fireEvent, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
+import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 
+const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
+
 jest.mock('utils/remoteConfig')
+
+const mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 const mockMutationState = { status: 'success' }
 let mockTravelClaimSubmissionMutationState = { ...mockMutationState }
@@ -180,10 +192,12 @@ describe('AppointmentTravelClaimDetails', () => {
     travelPaySMOCEnabled = true,
     options?: RenderParams,
     travelPayClaimsFullHistoryEnabled = false,
+    travelPayStatusListEnabled = false,
     maintenanceWindows?: { maintenanceWindows: DowntimeWindowsByFeatureType },
   ) => {
     when(mockFeatureEnabled).calledWith('travelPaySMOC').mockReturnValue(travelPaySMOCEnabled)
     when(mockFeatureEnabled).calledWith('travelPayClaimsFullHistory').mockReturnValue(travelPayClaimsFullHistoryEnabled)
+    when(mockFeatureEnabled).calledWith('travelPayStatusList').mockReturnValue(travelPayStatusListEnabled)
     useMaintenanceWindowsMock.mockReturnValue(maintenanceWindows || getMaintenanceWindowsPayload([]))
 
     render(
@@ -209,6 +223,7 @@ describe('AppointmentTravelClaimDetails', () => {
         { travelPayClaim: travelPayClaimData },
         false,
         undefined,
+        false,
         false,
         getMaintenanceWindowsPayload(['travel_pay_features']),
       )
@@ -320,7 +335,7 @@ describe('AppointmentTravelClaimDetails', () => {
           })
 
           describe('when travel pay claims data for more than 30 days is disabled', () => {
-            it('should render the visit claim status page message when appointment is more than 30 days old', () => {
+            it('should render a web view claims list message and link when the status list FF is OFF', () => {
               const missedClaimDeadlineData = createTestAppointmentAttributes({
                 startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
                 appointmentType: AppointmentTypeConstants.VA,
@@ -329,10 +344,43 @@ describe('AppointmentTravelClaimDetails', () => {
                   claim: undefined,
                 },
               })
-              initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, undefined, false)
+
+              initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, undefined, false, false)
+              fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
               expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))).toBeTruthy()
-              expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
+              expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))).toBeTruthy()
               expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+              expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+                useSSO: true,
+              })
+            })
+
+            it('should render the native claims list message and link when the status list FF is ON', () => {
+              const missedClaimDeadlineData = createTestAppointmentAttributes({
+                startDateUtc: DateTime.utc().minus({ days: 31 }).toISO(),
+                appointmentType: AppointmentTypeConstants.VA,
+                travelPayClaim: {
+                  ...travelPayClaimData,
+                  claim: undefined,
+                },
+              })
+
+              initializeTestInstance('Past', { ...missedClaimDeadlineData }, true, undefined, false, true)
+              fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
+              expect(screen.getByText(t('travelPay.travelClaimFiledDetails.yourAppointmentIsPast30Days'))).toBeTruthy()
+              expect(
+                screen.getByText(t('travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link')),
+              ).toBeTruthy()
+              expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+              expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', {
+                screen: 'TravelPayClaims',
+                initial: false,
+              })
             })
           })
         })
@@ -384,9 +432,17 @@ describe('AppointmentTravelClaimDetails', () => {
 
         tests.forEach((test) => {
           it(`initializes correctly when ${test.testName}`, () => {
-            initializeTestInstance('Past', { travelPayClaim: test.attributes.travelPayClaim }, true, undefined, false, {
-              maintenanceWindows: { travel_pay_features: downtimeWindow },
-            })
+            initializeTestInstance(
+              'Past',
+              { travelPayClaim: test.attributes.travelPayClaim },
+              true,
+              undefined,
+              false,
+              false,
+              {
+                maintenanceWindows: { travel_pay_features: downtimeWindow },
+              },
+            )
             expect(screen.getByTestId('travelClaimDetails')).toBeTruthy()
             expect(screen.getByText(t('travelPay.downtime.title'))).toBeTruthy()
             expect(
@@ -401,7 +457,7 @@ describe('AppointmentTravelClaimDetails', () => {
       })
 
       describe('when the claim submission is in progress', () => {
-        it('should render status of Submitting and a link to the claim status page', () => {
+        it('should render status of Submitting', () => {
           mockTravelClaimSubmissionMutationState = { status: 'pending' }
           initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined, true)
           expect(
@@ -411,8 +467,37 @@ describe('AppointmentTravelClaimDetails', () => {
               }),
             ),
           ).toBeTruthy()
-          expect(screen.getByTestId('goToVAGovTravelClaimStatus')).toBeTruthy()
           expect(screen.getByTestId('travelPayHelp')).toBeTruthy()
+        })
+
+        it('should render a web view claims list message and link when the status list FF is OFF', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined, true, false)
+          fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
+          expect(
+            screen.getByText(
+              t('travelPay.travelClaimFiledDetails.status', {
+                status: t('travelPay.travelClaimFiledDetails.status.submitting'),
+              }),
+            ),
+          ).toBeTruthy()
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))).toBeTruthy()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+            url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+            displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+            loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+            useSSO: true,
+          })
+        })
+
+        it('should render a link to the claims list screen when the status list FF is ON', () => {
+          mockTravelClaimSubmissionMutationState = { status: 'pending' }
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData }, true, undefined, true, true)
+          fireEvent.press(screen.getByTestId('goToVAGovTravelClaimStatus'))
+
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link'))).toBeTruthy()
+          expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
         })
       })
     })

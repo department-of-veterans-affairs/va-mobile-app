@@ -16,6 +16,7 @@ import InAppFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen
 import InAppRecruitmentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/InAppRecruitmentScreen/InAppRecruitmentScreen'
 import VeteranStatusScreen from 'screens/HomeScreen/VeteranStatusScreen/VeteranStatusScreen'
 import VeteransCrisisLineScreen from 'screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import TermDefinitions from 'screens/PaymentsScreen/Debts/PayDebt/TermDefinitions'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { Waygate } from 'utils/waygateConfig'
 
@@ -45,10 +46,12 @@ export type HomeStackParamList = WebviewStackParams & {
   SendUsFeedback: undefined
   FeedbackSent: undefined
   InAppFeedback: undefined
+  TermDefinitions: undefined
   FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
   DemoModeUsers: undefined
+  RemoteConfigTestScreen: undefined
   MaintenanceWindows: undefined
 }
 
@@ -127,6 +130,12 @@ export const getHomeScreens = () => {
       name="InAppFeedback"
       component={InAppFeedbackScreen}
       options={FULLSCREEN_SUBTASK_OPTIONS}
+    />,
+    <HomeStack.Screen
+      key={'TermDefinitions'}
+      name="TermDefinitions"
+      component={TermDefinitions}
+      options={LARGE_PANEL_OPTIONS}
     />,
   ]
 }
