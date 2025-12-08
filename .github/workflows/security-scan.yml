@@ -29,19 +29,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
-      - name: Find and display Contents.json
-        run: find . -name "Contents.json" | head -n 10 | xargs head -n 10
-      - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
-        id: security_scan
-        with:
-          fail-on-critical: true
-
-  restrict-package-json-updates:
-    name: Restrict package.json updates
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
           fetch-depth: 0
       - name: Get changed files
         id: changed-files
@@ -53,6 +40,10 @@ jobs:
         run: |
           echo "Error: Direct updates to package.json, yarn.lock, or Gemfile.lock are not allowed currently."
           exit 1
+      - uses: gensecaihq/Shai-Hulud-2.0-Detector@v1
+        id: security_scan
+        with:
+          fail-on-critical: true
 
   start_slack_thread_failure:
     name: Start Slack thread for failure
@@ -63,7 +54,7 @@ jobs:
     with:
       channel_name: va-mobile-build-alerts
       message: |
-        :alert:Shai-Hulud 2.0 Security Check failed!
+        :alert:Shai-Hulud 2.0 Security Check failed! :alert:
         See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for full results.
         *Scan Results:*
         *Status*: ${{ needs.security-check.outputs.status }}
@@ -71,13 +62,3 @@ jobs:
         *Security Findings*: ${{ needs.security-check.outputs.security-findings-count }}
         *Scan Time*: ${{ needs.security-check.outputs.scan-time }}ms
         *Results*: ```${{ needs.security-check.outputs.results }}```
-
-  slack_notification_package_json_failure:
-    name: Slack notification for package.json failure
-    needs: restrict-package-json-updates
-    if: ${{ failure() }}
-    uses: ./.github/workflows/start_slack_thread.yml
-    secrets: inherit
-    with:
-      channel_name: va-mobile-build-alerts
-      message: "Direct updates to package.json, yarn.lock, or Gemfile.lock are not allowed. \n See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details."
