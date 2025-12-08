@@ -74,7 +74,7 @@ jobs:
         with:
           node-version-file: 'VAMobile/.nvmrc'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: Convert JavaScript mapping to JSON
         run: |
           # Use Node.js to load the JavaScript file and convert to JSON

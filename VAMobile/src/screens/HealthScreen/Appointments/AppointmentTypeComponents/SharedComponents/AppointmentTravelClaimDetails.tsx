@@ -25,7 +25,7 @@ import { formatDateTimeReadable } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
-import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
+import { navigateToTravelClaims, useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -55,6 +55,30 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     return null
   }
 
+  const goToTravelClaims = () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar(snackbar, t)
+      return
+    }
+
+    // Go to the native screen if the FF is on, otherwise
+    // continue to go to the web view
+    if (featureEnabled('travelPayStatusList')) {
+      navigateToTravelClaims(navigateTo)
+    } else {
+      // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+      // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
+      // but the base web URL is actually /claims
+      logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
+      navigateTo('Webview', {
+        url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
+        displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
+        loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
+        useSSO: true,
+      })
+    }
+  }
+
   const getContent = () => {
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {
@@ -78,6 +102,10 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     const claimError = attributes.travelPayClaim?.metadata.success === false
 
     if (isSubmitting) {
+      const linkTextKey = featureEnabled('travelPayStatusList')
+        ? 'travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link'
+        : 'travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'
+
       // We are in the process of submitting a travel pay claim and don't yet have the claim details from the API
       // so we're displaying a placeholder status
       const status = t('travelPay.travelClaimFiledDetails.status.submitting')
@@ -88,24 +116,9 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           </TextView>
           <LinkWithAnalytics
             type="custom"
-            onPress={() => {
-              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                showOfflineSnackbar(snackbar, t)
-                return
-              }
-              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
-              // but the base web URL is actually /claims
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
-                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
-                useSSO: true,
-              })
-            }}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            onPress={goToTravelClaims}
+            text={t(linkTextKey)}
+            a11yLabel={a11yLabelVA(t(linkTextKey))}
             testID={`goToVAGovTravelClaimStatus`}
           />
           <TravelPayHelp />
@@ -182,36 +195,30 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     }
 
     if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
+      const { messageTextKey, linkTextKey } = featureEnabled('travelPayStatusList')
+        ? {
+            messageTextKey: 'travelPay.travelClaimFiledDetails.yourAppointmentIsPast30Days',
+            linkTextKey: 'travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link',
+          }
+        : {
+            messageTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage',
+            linkTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage.link',
+          }
+
       return (
         <>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
-            accessibilityLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage'))}
+            accessibilityLabel={a11yLabelVA(t(messageTextKey))}
             mb={theme.dimensions.condensedMarginBetween}
             variant="MobileBody">
-            {t('travelPay.travelClaimFiledDetails.visitClaimStatusPage')}
+            {t(messageTextKey)}
           </TextView>
           <LinkWithAnalytics
             type="custom"
-            onPress={() => {
-              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                showOfflineSnackbar(snackbar, t)
-                return
-              }
-
-              // To avoid adding a second env variable that is only used for this link that would be a duplicate of LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-              // we're reusing the same env variable. Note: the const name refers to "DETAILS" because it's typically used with a claim ID appended,
-              // but the base web URL is actually /claims
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS,
-                displayTitle: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.displayTitle'),
-                loadingMessage: t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.loading'),
-                useSSO: true,
-              })
-            }}
-            text={t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.visitClaimStatusPage.link'))}
+            onPress={goToTravelClaims}
+            text={t(linkTextKey)}
+            a11yLabel={a11yLabelVA(t(linkTextKey))}
             testID={`goToVAGovTravelClaimStatus`}
           />
           <TravelPayHelp />
