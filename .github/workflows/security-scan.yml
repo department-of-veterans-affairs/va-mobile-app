@@ -1,4 +1,4 @@
-name: Shai-Hulud 2.0 Security Check
+name: '[Security] Security Check'
 
 on:
   push:
