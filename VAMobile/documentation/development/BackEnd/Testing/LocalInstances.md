@@ -4,10 +4,10 @@ title: Local Instances (with upstream staging data)
 
 While it is possible to test local changes in vets-api against [mock data](https://github.com/department-of-veterans-affairs/vets-api-mockdata) or VCR Cassettes, sometimes it may be beneficial or even necessary to test those changes using data for one our many [staging users](https://github.com/department-of-veterans-affairs/va.gov-team-sensitive/blob/master/Administrative/vagov-users/mvi-staging-users.csv). To do this, a few things need to happen:
 
-* The Mobile App (or postman) must be authenticated for the Test User for whom you wish to access their data
+* The Mobile App (or Postman) must be authenticated for the Test User for whom you wish to access their data
 * Your local vets-api instance must be configured properly
   * You must have the proper Staging settings pulled into your local settings
-  * Temporary configurations, such as disabling SSL, but be put in place
+  * Temporary configurations, such as disabling SSL, must be put in place
 * Your local vets-api instance must be able to connect to upstream staging services, which exist within the VA network, and are not immediately accessible otherwise without the proper tooling.
 
 Two such tools are available for you that simplify these processes: [Mobile DevTools: Mobile Authentication](https://va-mobile-dev-tools-0cb741eb06ae.herokuapp.com/mobile-authentication) for the authentication piece, and Upstream-Connect, a CLI tool in vets-api that automates configuring your local instance and connecting to upstream environments. 
@@ -22,7 +22,7 @@ Mobile DevTools is a standalone application deployed [here](https://va-mobile-de
 
 When running vets-api locally, you cannot hit a mobile endpoint out of the box. You must have an access token imbedded with the identity of the intended Test User. Retrieving a token has become a simple process using our Mobile DevTools, once you have completed the pre-reqs (one time only):
 
-* [vets-api](https://github.com/department-of-veterans-affairs/vets-api) is cloned, set up and working properly. This includes bundled and all migrations run.
+* [vets-api](https://github.com/department-of-veterans-affairs/vets-api) is cloned, set up and working properly. This includes having bundled and all migrations run. See the vets-api README for help with this.
 * [vets-api-mockdata](https://github.com/department-of-veterans-affairs/vets-api-mockdata) cloned in sibling directorty (nothing to setup)
 * ngrok account created, installed, and configured. See [DevTools README](https://github.com/department-of-veterans-affairs/va-mobile-dev-tools/blob/main/README.md#ngrok-setup)
 
@@ -45,7 +45,7 @@ Once the pre-reqs are set up, follow these steps:
 
 #### Postman Collection
 
-We have a git-tracked Postman collection containing both vets-api endpoints and an endpoint to our DevTools app that allows users to easily refresh your token. In Postman's "Local View", you can sync it to the vets-api folder `modules/mobile/docs/postman` and will reflect the state of the branch. Here you can make changes and even push changes if needed. Note that my experience has shown it to be a bit janky, so consider just importing the collections/environments or `push to cloud` (which pushes what's on master/your branch to Postman)
+We have a git-tracked [Postman collection](https://github.com/department-of-veterans-affairs/vets-api/tree/master/modules/mobile/docs/postman) containing both vets-api endpoints and an endpoint to our DevTools app that allows users to easily refresh your token. In Postman's "Local View", you can sync it to the vets-api folder `modules/mobile/docs/postman` and will reflect the state of the branch. Here you can make changes and even push changes if needed. Note that my experience has shown it to be a bit janky, so consider just importing the collections/environments or `push to cloud` (which pushes what's on master/your branch to Postman)
 
 #### Automated Token Refresh with Postman
 
@@ -91,7 +91,30 @@ If you fail to do so, you will see something like the following in your response
 From the root of the vets-api repo, run: 
 
 ```bash
-script/upstream-connect/upstream-connect.sh <with whatever arguments>
+$ script/upstream-connect/upstream-connect.sh <args>
 ```
 
 Information on requirements, usage, and troubleshooting can be found in the [README](https://github.com/department-of-veterans-affairs/vets-api/blob/main/script/upstream-connect/README-upstream-connect.md)
+
+## Feature Requests and Contributing
+
+If any upstream services have been ommitted, or if new integrations are added in the future, please help us by bringing them to our attention and providing any information you have that may help us.
+
+### Open an issue
+
+If you don't know where to start or are unsure you have everything you need, please open an issue in the [va-mobile-app repo](https://github.com/department-of-veterans-affairs/va-mobile-app). Please include as much of the following as you can:
+
+* Name of the upstream service and/or what the collection of endpoints may be referred to in discussion (e.g. We sometimes refer to the Caseflow API as "Appeals", as that is where we go for Appeals data)
+* Relevant Mobile endpoints/controllers
+* Relevant vets-api services or anything else in the vets-api repo related to the integration
+* If the request is for an in-progress integration, link to any PRs where we might find information about the integration
+* Known test users with useful/relevant data. 
+* Links to web pages that would contain va.gov's version of the content being added (to compare test user data across modalities).
+
+### Contribute to Upstream-Connect
+
+If you feel confident about all of the moving pieces of the integration, please open a [vets-api](https://github.com/department-of-veterans-affairs/vets-api) PR with your additions to the [upstream_service_config.rb](https://github.com/department-of-veterans-affairs/vets-api/blob/master/script/upstream-connect/upstream_service_config.rb).
+
+## Questions and Troubleshooting
+
+If you have questions about anything above, please reach out to the #va-mobile-app-engineering in Slack
