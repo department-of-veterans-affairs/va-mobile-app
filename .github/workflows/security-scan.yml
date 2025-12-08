@@ -2,13 +2,13 @@ name: '[Security] Security Check'
 
 on:
   push:
-    branches:
-      - develop
-      - main
-  pull_request:
-    branches:
-      - develop
-      - main
+  #   branches:
+  #     - develop
+  #     - main
+  # pull_request:
+  #   branches:
+  #     - develop
+  #     - main
 
 jobs:
   check_for_locked_file_changes:
