@@ -18,6 +18,11 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
+
 context('VideoVAAppointment', () => {
   when(featureEnabled).calledWith('rescheduleLink').mockReturnValue(true)
 
