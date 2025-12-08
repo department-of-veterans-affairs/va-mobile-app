@@ -35,7 +35,6 @@ export type FeatureToggleType =
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
-  | 'travelPayClaimsFullHistory'
   | 'travelPayClaimDetails'
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
