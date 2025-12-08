@@ -45,6 +45,7 @@ export type PaymentsStackParamList = {
   PayDebt: {
     debt: DebtRecord
   }
+  TermDefinitions: undefined
   NoticeOfRights: undefined
 }
 

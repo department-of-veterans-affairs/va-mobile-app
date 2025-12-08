@@ -334,3 +334,14 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
 
   return false
 }
+
+/**
+ * Navigates to the travel claims list screen from various entry points
+ * @param navigateTo - The navigation function to navigate between screens
+ */
+export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  navigateTo('BenefitsTab', {
+    screen: 'TravelPayClaims',
+    initial: false,
+  })
+}

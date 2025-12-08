@@ -1,6 +1,14 @@
 import { by, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openTravelPayClaims, toggleRemoteConfigFlag } from './utils'
+// eslint-disable-next-line no-restricted-imports
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openTravelPayClaims,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const TravelPayClaimDetailsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
@@ -32,12 +40,13 @@ const TravelPayClaimDetailsE2eIds = {
 }
 
 beforeAll(async () => {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  // await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
-  await openHealth()
-  await openTravelPayClaims()
+  await openBenefits()
+  await openClaims()
+  await openTravelPayClaims({ useNativeLink: false })
 })
 
 // Helper function to ensure we're on claims list
@@ -59,16 +68,11 @@ const ensureOnClaimsList = async () => {
         .toExist()
         .withTimeout(4000)
     } catch {
-      // If we can't find Travel button, try navigating from root
+      // Navigate via Benefits > Claims entry point
       try {
-        await waitFor(element(by.text('Health')))
-          .toExist()
-          .withTimeout(4000)
-        await element(by.text('Health')).tap()
-        await waitFor(element(by.text('Travel claims')))
-          .toExist()
-          .withTimeout(4000)
-        await element(by.text('Travel claims')).atIndex(0).tap()
+        await openBenefits()
+        await openClaims()
+        await openTravelPayClaims({ useNativeLink: true })
         await waitFor(element(by.id(TravelPayClaimDetailsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID)))
           .toExist()
           .withTimeout(4000)
