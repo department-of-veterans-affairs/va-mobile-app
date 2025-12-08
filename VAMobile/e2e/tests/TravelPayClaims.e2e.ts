@@ -1,9 +1,19 @@
 import { by, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openHealth, openTravelPayClaims, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openBenefits,
+  openClaims,
+  openHealth,
+  openPayments,
+  openTravelPayClaims,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 const TravePayClaimsE2eIds = {
   TRAVEL_PAY_CLAIMS_TEST_ID: 'travelPayClaimsTestID',
+  BACK_BUTTON: 'travelPayClaimsBackButton',
   MOST_RECENT_CLAIM_1_ID: 'claim_summary_6a5302bb-f6ee-4cf9-89b7-7b2775f056bd',
   MOST_RECENT_CLAIM_11_ID: 'claim_summary_a3e6fb0d-5d30-48d7-9b4b-129b44d46088',
 
@@ -24,11 +34,35 @@ const TravePayClaimsE2eIds = {
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
-  await openHealth()
-  await openTravelPayClaims()
 })
 
 describe('Travel Pay Claims Screen', () => {
+  it('navigates from the different entry points', async () => {
+    // Visit through Benefits tab
+    await openBenefits()
+    await openClaims()
+    await openTravelPayClaims({ useNativeLink: false })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
+      .withTimeout(4000)
+    await element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)).tap()
+
+    // Visit through Payments tab
+    await openPayments()
+    await openTravelPayClaims({ useNativeLink: true })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
+      .withTimeout(4000)
+    await element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)).tap()
+
+    // Visit through Health tab
+    await openHealth()
+    await openTravelPayClaims({ useNativeLink: true })
+    await waitFor(element(by.id(TravePayClaimsE2eIds.BACK_BUTTON)))
+      .toExist()
+      .withTimeout(4000)
+  })
+
   it('navigates to the Travel Pay Claims screen and display title', async () => {
     await expect(element(by.id(TravePayClaimsE2eIds.TRAVEL_PAY_CLAIMS_TEST_ID))).toExist()
   })
