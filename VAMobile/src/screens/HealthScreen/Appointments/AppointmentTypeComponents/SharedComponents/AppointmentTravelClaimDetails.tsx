@@ -100,6 +100,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   }
 
   const getContent = () => {
+    const showTravelPayClaimDetails = featureEnabled('travelPayClaimDetails')
+
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {
       return (
@@ -177,18 +179,34 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-                displayTitle: t('travelPay.webview.claims.displayTitle'),
-                loadingMessage: t('travelPay.webview.claims.loading'),
-                useSSO: true,
-                backButtonTestID: `webviewBack`,
-              })
+              if (showTravelPayClaimDetails) {
+                logAnalyticsEvent(Events.vama_link_click)
+                navigateTo('TravelPayClaimDetailsScreen', {
+                  claimId,
+                  backLabel: t('appointments.appointment'),
+                })
+              } else {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+                navigateTo('Webview', {
+                  url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+                  displayTitle: t('travelPay.webview.claims.displayTitle'),
+                  loadingMessage: t('travelPay.webview.claims.loading'),
+                  useSSO: true,
+                  backButtonTestID: `webviewBack`,
+                })
+              }
             }}
-            text={t('travelPay.travelClaimFiledDetails.goToVAGov')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
-            testID={`goToVAGovID-${claimId}`}
+            text={
+              showTravelPayClaimDetails
+                ? t('travelPay.travelClaimFiledDetails.goToClaimDetails')
+                : t('travelPay.travelClaimFiledDetails.goToVAGov')
+            }
+            a11yLabel={
+              showTravelPayClaimDetails
+                ? a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))
+                : a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))
+            }
+            testID={showTravelPayClaimDetails ? `goToClaimDetails-${claimId}` : `goToVAGovID-${claimId}`}
           />
           <TravelPayHelp />
         </>

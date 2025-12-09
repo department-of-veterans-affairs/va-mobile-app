@@ -102,7 +102,6 @@ context('HealthScreen', () => {
         .mockReturnValue(false)
 
       initializeTestInstance()
-
       expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
     })
 
