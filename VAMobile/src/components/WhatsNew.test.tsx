@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import WhatsNew from 'components/WhatsNew'
 import { WhatsNewConfigItem } from 'constants/whatsNew'
 import { InitialState } from 'store/slices'
@@ -65,6 +66,12 @@ const featureConfigs: Record<string, WhatsNewConfigItem[]> = {
     },
     {
       featureName: 'testFeatureNoFlag',
+    },
+  ],
+  oneFeatureWithAuthorizedService: [
+    {
+      featureName: 'testFeatureWithAuthService',
+      authorizedService: 'isUserAtPretransitionedOhFacility',
     },
   ],
 }
@@ -141,6 +148,34 @@ context('WhatsNew', () => {
 
     await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, '["testFeatureNoFlag"]')
+    })
+  })
+  it('should not render feature the user is not authorized for', async () => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {},
+      meta: {
+        isUserAtPretransitionedOhFacility: false,
+      },
+    })
+    initializeTestInstance('oneFeatureWithAuthorizedService')
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(async () => {
+      expect(screen.queryByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeFalsy()
+    })
+  })
+
+  it('should render feature the user is authorized for', async () => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {},
+      meta: {
+        isUserAtPretransitionedOhFacility: true,
+      },
+    })
+
+    initializeTestInstance('oneFeatureWithAuthorizedService')
+    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeTruthy()
     })
   })
 })

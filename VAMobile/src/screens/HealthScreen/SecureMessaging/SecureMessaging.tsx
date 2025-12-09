@@ -137,6 +137,7 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
 
   const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
 
+  console.log(featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility)
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
@@ -179,7 +180,9 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
                 testIDs={controlIDs}
               />
             </Box>
-            {featureEnabled('showCernerAlertSM') && <CernerAlertSM />}
+            {featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility && (
+              <CernerAlertSM />
+            )}
             <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
               {secureMessagingTab === SegmentedControlIndexes.INBOX &&
                 (otherError ? (

@@ -38,7 +38,8 @@ export type FeatureToggleType =
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
-  | 'showCernerAlertSM'
+  | 'showCernerWarningAlert'
+  | 'showCernerWhatsNew'
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
   | 'overpayCopay'
@@ -68,7 +69,8 @@ type FeatureToggleValues = {
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
-  showCernerAlertSM: boolean
+  showCernerWarningAlert: boolean
+  showCernerWhatsNew: boolean
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
   overpayCopay: boolean
@@ -99,7 +101,8 @@ export const defaults: FeatureToggleValues = {
   travelPayStatusList: false,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
-  showCernerAlertSM: true,
+  showCernerWarningAlert: true,
+  showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayCopay: false,

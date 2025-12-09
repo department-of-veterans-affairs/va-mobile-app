@@ -1221,9 +1221,12 @@ export const Events = {
       name: 'vama_whatsnew_close',
     }
   },
-  vama_whatsnew_dont_show: (): Event => {
+  vama_whatsnew_dont_show: (skippedFeatures?: string[]): Event => {
     return {
       name: 'vama_whatsnew_dont_show',
+      params: {
+        q1: skippedFeatures,
+      },
     }
   },
   vama_whatsnew_more: (): Event => {
