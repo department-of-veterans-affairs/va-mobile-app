@@ -43,6 +43,11 @@ jest.mock('utils/hooks/offline', () => {
 
 jest.mock('utils/remoteConfig')
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
+
 const tests = [
   {
     description: 'renders PhoneAppointment details when appointment has phoneOnly attribute',

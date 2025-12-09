@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { useRoute } from '@react-navigation/native'
 
-import { AppointmentAttributes } from 'api/types'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { QueryClient, useQueryClient } from '@tanstack/react-query'
+
+import { appointmentsKeys } from 'api/appointments'
+import { AppointmentAttributes, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,10 +39,29 @@ type TravelClaimFiledDetailsProps = {
   subType: AppointmentDetailsSubType
 }
 
+export const getCachedAppointmentById = (queryClient: QueryClient, appointmentID: string) => {
+  const appointmentQueries = queryClient.getQueriesData<AppointmentsGetData>({
+    queryKey: [appointmentsKeys.appointments],
+  })
+
+  for (const [, queryData] of appointmentQueries) {
+    if (queryData?.data) {
+      const found = queryData.data.find((appt) => appt.id === appointmentID)
+      if (found) {
+        return found
+      }
+    }
+  }
+
+  return null
+}
+
 function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: TravelClaimFiledDetailsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const queryClient = useQueryClient()
+  const route = useRoute()
   const connectionStatus = useAppIsOnline()
   const snackbar = useSnackbar()
 
@@ -50,6 +73,12 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
   const mutationState = useTravelClaimSubmissionMutationState(appointmentID)
   const isSubmitting = mutationState?.status === 'pending'
+
+  const appointment = useMemo(() => {
+    return getCachedAppointmentById(queryClient, appointmentID)
+  }, [appointmentID, queryClient])
+
+  const appointmentLookupError = !appointment
 
   if (!featureEnabled('travelPaySMOC')) {
     return null
@@ -80,6 +109,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   }
 
   const getContent = () => {
+    const showTravelPayClaimDetails = featureEnabled('travelPayClaimDetails')
+
     // When travel pay is in downtime, display a downtime message
     if (travelPayInDowntime) {
       return (
@@ -100,6 +131,19 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     // When the appointment has a travel pay claim, display the claim details
     const { claim } = attributes.travelPayClaim || {}
     const claimError = attributes.travelPayClaim?.metadata.success === false
+
+    // When travel pay call fails, display an error message
+    // Also show in the odd case the appointment can't be looked up in the query data
+    if (claimError || appointmentLookupError) {
+      return (
+        <>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.error.general')}
+          </TextView>
+          <TravelPayHelp />
+        </>
+      )
+    }
 
     if (isSubmitting) {
       const linkTextKey = featureEnabled('travelPayStatusList')
@@ -149,31 +193,35 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
                 return
               }
 
-              logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-              navigateTo('Webview', {
-                url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-                displayTitle: t('travelPay.webview.claims.displayTitle'),
-                loadingMessage: t('travelPay.webview.claims.loading'),
-                useSSO: true,
-                backButtonTestID: `webviewBack`,
-              })
+              if (showTravelPayClaimDetails) {
+                logAnalyticsEvent(Events.vama_link_click)
+                navigateTo('TravelPayClaimDetailsScreen', {
+                  claimId,
+                  backLabel: t('appointments.appointment'),
+                })
+              } else {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+                navigateTo('Webview', {
+                  url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+                  displayTitle: t('travelPay.webview.claims.displayTitle'),
+                  loadingMessage: t('travelPay.webview.claims.loading'),
+                  useSSO: true,
+                  backButtonTestID: `webviewBack`,
+                })
+              }
             }}
-            text={t('travelPay.travelClaimFiledDetails.goToVAGov')}
-            a11yLabel={a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))}
-            testID={`goToVAGovID-${claimId}`}
+            text={
+              showTravelPayClaimDetails
+                ? t('travelPay.travelClaimFiledDetails.goToClaimDetails')
+                : t('travelPay.travelClaimFiledDetails.goToVAGov')
+            }
+            a11yLabel={
+              showTravelPayClaimDetails
+                ? a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))
+                : a11yLabelVA(t('travelPay.travelClaimFiledDetails.goToVAGov'))
+            }
+            testID={showTravelPayClaimDetails ? `goToClaimDetails-${claimId}` : `goToVAGovID-${claimId}`}
           />
-          <TravelPayHelp />
-        </>
-      )
-    }
-
-    // When travel pay call fails, display an error message
-    if (claimError) {
-      return (
-        <>
-          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-            {t('travelPay.error.general')}
-          </TextView>
           <TravelPayHelp />
         </>
       )
@@ -182,44 +230,25 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
     // When the appointment was eligible for travel pay but not filed within 30 days
     const daysLeftToFileTravelPay = getDaysLeftToFileTravelPay(attributes.startDateUtc)
 
-    // Api is currently returning only claims for the last 30 days, so for appointments > 30 days old we can't tell if a claim exists.
-    // This feature toggle is used to enable the full history of claims once the API is updated to return all claims.
-    const apiReturnsFullHistory = featureEnabled('travelPayClaimsFullHistory')
-
-    if (apiReturnsFullHistory && isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0 && !claimError) {
-      return (
-        <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {t('travelPay.travelClaimFiledDetails.noClaim')}
-        </TextView>
-      )
-    }
-
-    if (!apiReturnsFullHistory && daysLeftToFileTravelPay < 0 && !claimError) {
-      const { messageTextKey, linkTextKey } = featureEnabled('travelPayStatusList')
-        ? {
-            messageTextKey: 'travelPay.travelClaimFiledDetails.yourAppointmentIsPast30Days',
-            linkTextKey: 'travelPay.travelClaimFiledDetails.visitNativeClaimsStatusList.link',
-          }
-        : {
-            messageTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage',
-            linkTextKey: 'travelPay.travelClaimFiledDetails.visitClaimStatusPage.link',
-          }
-
+    if (isEligibleForTravelPay(attributes) && daysLeftToFileTravelPay < 0) {
       return (
         <>
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            accessibilityLabel={a11yLabelVA(t(messageTextKey))}
-            mb={theme.dimensions.condensedMarginBetween}
-            variant="MobileBody">
-            {t(messageTextKey)}
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.daysLeftToFile', { daysLeft: Math.max(daysLeftToFileTravelPay, 0) })}
+          </TextView>
+          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+            {t('travelPay.travelClaimFiledDetails.fileWhenNoDaysLeft')}
           </TextView>
           <LinkWithAnalytics
             type="custom"
-            onPress={goToTravelClaims}
-            text={t(linkTextKey)}
-            a11yLabel={a11yLabelVA(t(linkTextKey))}
-            testID={`goToVAGovTravelClaimStatus`}
+            onPress={() => {
+              navigateTo('SubmitTravelPayClaimScreen', {
+                appointment,
+                appointmentRouteKey: route.key,
+              })
+            }}
+            text={t('travelPay.travelClaimFiledDetails.fileTravelReimbursement.link')}
+            testID={`goToFileTravelClaimLink`}
           />
           <TravelPayHelp />
         </>
@@ -228,7 +257,6 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
     return null
   }
-
   switch (subType) {
     case AppointmentDetailsSubTypeConstants.Past:
       const content = getContent()

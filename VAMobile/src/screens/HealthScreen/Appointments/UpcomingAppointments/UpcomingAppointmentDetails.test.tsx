@@ -50,6 +50,11 @@ jest.mock('utils/analytics', () => {
   }
 })
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
+
 let defaultAppointments: AppointmentsList = []
 
 context('UpcomingAppointmentDetails', () => {
