@@ -84,13 +84,12 @@ const doRequest = async function (
         })
         .catch((error) => {
           console.error('Failed to get app version:', error)
-          _appVersion = ''
+          // Reset promise to allow retry on transient failures, but leave _appVersion undefined
+          _appVersionPromise = undefined
           return ''
         })
     }
     await _appVersionPromise
-    // Clear promise after all concurrent requests have resolved
-    _appVersionPromise = undefined
   }
   const fetchObj: RequestInit = {
     method,
