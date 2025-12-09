@@ -80,17 +80,17 @@ const doRequest = async function (
       _appVersionPromise = getVersionName()
         .then((version) => {
           _appVersion = version
-          _appVersionPromise = undefined // Clear promise after successful cache
           return version
         })
         .catch((error) => {
           console.error('Failed to get app version:', error)
           _appVersion = ''
-          _appVersionPromise = undefined // Reset to allow retry on transient failures
           return ''
         })
     }
     await _appVersionPromise
+    // Clear promise after all concurrent requests have resolved
+    _appVersionPromise = undefined
   }
   const fetchObj: RequestInit = {
     method,
