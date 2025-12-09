@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
-import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -26,7 +25,6 @@ import {
   BoxProps,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkWithAnalytics,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
@@ -56,7 +54,7 @@ import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescr
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
-const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
+const { LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
 const NON_VA_MEDS_ALERT_DISMISSED = '@non_va_medications_alert_dismissed'
 
