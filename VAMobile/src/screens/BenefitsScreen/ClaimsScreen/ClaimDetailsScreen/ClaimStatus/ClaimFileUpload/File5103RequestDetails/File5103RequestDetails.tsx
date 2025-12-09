@@ -3,7 +3,8 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
+import { Button, ButtonVariants, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { useDecisionLetters, useDownloadDecisionLetter } from 'api/decisionLetters'
 import {
@@ -11,6 +12,8 @@ import {
   BoxProps,
   DefaultList,
   DefaultListItemObj,
+  ErrorComponent,
+  LoadingComponent,
   TextLine,
   TextLineWithIconProps,
   TextView,
@@ -22,19 +25,22 @@ import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { getA11yLabelText } from 'utils/common'
+import { getA11yLabelText, isErrorObject } from 'utils/common'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type File5103RequestDetailsProps = StackScreenProps<FileRequestStackParams, 'File5103RequestDetails'>
 
 function File5103RequestDetails({ navigation, route }: File5103RequestDetailsProps) {
+  const snackbar = useSnackbar()
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const queryClient = useQueryClient()
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
   const [letterID, setLetterID] = useState<string>('')
@@ -57,16 +63,8 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
   })
 
   const { claimID, request } = route.params
-  const { standardMarginBetween, cardPadding, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, type, status, description, uploadDate, documents } = request
+  const { cardPadding, contentMarginBottom } = theme.dimensions
   const [showLetterModal, setShowLetterModal] = useState<boolean>(false)
-
-  // const [lettersToShow, setLettersToShow] = useState<DecisionLettersList>([])
-  //
-  // useEffect(() => {
-  //   const lettersList = decisionLettersData?.data
-  //   setLettersToShow(lettersList || [])
-  // }, [decisionLettersData])
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -91,6 +89,23 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
     },
   }
 
+  useEffect(() => {
+    if (downloadLetterErrorDetails && isErrorObject(downloadLetterErrorDetails)) {
+      snackbar.show(t('claimLetters.download.error'), { isError: true, onActionPressed: refetchLetter })
+    }
+  }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter, snackbar])
+
+  // const testPress = () => {
+  //   setShowLetterModal(false)
+  //   // logAnalyticsEvent(Events.vama_ddl_letter_view(typeDescription))
+  //   if (letterID === '87B6DE5D-CD79-4D15-B6DC-A5F9A324DC4F') {
+  //     refetchLetter()
+  //   } else {
+  //     setLetterID('87B6DE5D-CD79-4D15-B6DC-A5F9A324DC4F')
+  //     // setLetterReceivedAt(receivedAt.toString())
+  //   }
+  // }
+
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
     const variant = 'MobileBodyBold' as keyof VATypographyThemeVariants
@@ -99,7 +114,8 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
       const date = t('claimLetters.letterDate', { date: formatDateMMMMDDYYYY(receivedAt || '') })
       const textLines: Array<TextLine> = [{ text: date, variant }, { text: typeDescription }]
       const onPress = () => {
-        // logAnalyticsEvent(Events.vama_ddl_letter_view(typeDescription))
+        setShowLetterModal(false)
+        logAnalyticsEvent(Events.vama_ddl_letter_view(typeDescription))
         if (letterID === letter.id) {
           refetchLetter()
         } else {
@@ -119,49 +135,61 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
   }
 
   return (
-    <VAScrollView testID="file5103RequestDetailsID">
-      <SubtaskTitle title={t('claimDetails.5103.title')} />
+    <Box>
+      <VAScrollView testID="file5103RequestDetailsID">
+        <SubtaskTitle title={t('claimDetails.5103.title')} />
 
-      <Box mb={contentMarginBottom} flex={1}>
-        <Box backgroundColor="contentBox" {...borderStyles}>
-          <Box p={cardPadding}>
-            <TextView variant="ClaimHeader" accessibilityRole="header">
-              {t('claimDetails.5103.read')}
-            </TextView>
-            <TextView variant="MobileBody">{t('claimDetails.5103.body')}</TextView>
-          </Box>
-          <DefaultList
-            items={[
-              {
-                textLines: [iconTextLine],
-                onPress: () => setShowLetterModal(true),
-              },
-            ]}
+        {loading || downloading ? (
+          <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
+        ) : letterInfoError || claimsInDowntime ? (
+          <ErrorComponent
+            screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID}
+            onTryAgain={fetchInfoAgain}
+            error={letterInfoError}
           />
-          <TextView p={cardPadding} variant="MobileBody">
-            {t('claimDetails.5103.submit')}
-          </TextView>
-        </Box>
-        <Box p={cardPadding}>
-          <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-            <Trans i18nKey="claimDetails.5103.note" components={{ bold: <TextView variant="MobileBodyBold" /> }} />
-          </TextView>
-        </Box>
-        <Box mx={theme.dimensions.gutter}>
-          <Button
-            buttonType={ButtonVariants.Primary}
-            label={t('claimDetails.5103.review.waiver')}
-            onPress={() => navigateTo('File5103ReviewWaiver', { claimID, request })}
-          />
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <Button
-              buttonType={ButtonVariants.Secondary}
-              label={t('claimDetails.5103.submit.evidence')}
-              onPress={() => {}}
-            />
+        ) : (
+          <Box mb={contentMarginBottom} flex={1}>
+            <Box backgroundColor="contentBox" {...borderStyles}>
+              <Box p={cardPadding}>
+                <TextView variant="ClaimHeader" accessibilityRole="header">
+                  {t('claimDetails.5103.read')}
+                </TextView>
+                <TextView variant="MobileBody">{t('claimDetails.5103.body')}</TextView>
+              </Box>
+              <DefaultList
+                items={[
+                  {
+                    textLines: [iconTextLine],
+                    onPress: () => setShowLetterModal(true),
+                  },
+                ]}
+              />
+              <TextView p={cardPadding} variant="MobileBody">
+                {t('claimDetails.5103.submit')}
+              </TextView>
+            </Box>
+            <Box p={cardPadding}>
+              <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
+                <Trans i18nKey="claimDetails.5103.note" components={{ bold: <TextView variant="MobileBodyBold" /> }} />
+              </TextView>
+            </Box>
+            <Box mx={theme.dimensions.gutter}>
+              <Button
+                buttonType={ButtonVariants.Primary}
+                label={t('claimDetails.5103.review.waiver')}
+                onPress={() => navigateTo('File5103ReviewWaiver', { claimID, request })}
+              />
+              <Box mt={theme.dimensions.condensedMarginBetween}>
+                <Button
+                  buttonType={ButtonVariants.Secondary}
+                  label={t('claimDetails.5103.submit.evidence')}
+                  onPress={() => navigateTo('File5103SubmitEvidence', { claimID, request })}
+                />
+              </Box>
+            </Box>
           </Box>
-        </Box>
-      </Box>
+        )}
+      </VAScrollView>
       {showLetterModal && (
         <VAModalList
           showModal={showLetterModal}
@@ -174,7 +202,7 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
           }}
         />
       )}
-    </VAScrollView>
+    </Box>
   )
 }
 

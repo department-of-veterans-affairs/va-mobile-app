@@ -34,27 +34,6 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
-const mock5103 = {
-  type: 'still_need_from_you_list',
-  trackedItemId: 651827,
-  description: 'Automated 5103 Notice Response',
-  displayName: 'Automated 5103 Notice Response',
-  overdue: false,
-  status: 'NEEDED',
-  uploaded: false,
-  uploadsAllowed: true,
-  openedDate: '2025-11-24',
-  requestedDate: '2025-11-24',
-  receivedDate: null,
-  closedDate: null,
-  suspenseDate: '2025-12-24',
-  documents: [],
-  uploadDate: null,
-  date: '2025-11-24',
-  documentType: null,
-  filename: null,
-}
-
 function FileRequest({ navigation, route }: FileRequestProps) {
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -69,8 +48,6 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
-
-  requests.unshift(mock5103)
 
   const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
 

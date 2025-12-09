@@ -167,13 +167,13 @@ describe('Claims Screen', () => {
   })
 
   it('should verify that the review file request alert is visible', async () => {
-    await expect(element(by.label('You have 3 file requests')).atIndex(1)).toExist()
+    await expect(element(by.label('You have 4 file requests')).atIndex(1)).toExist()
     await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
-    await expect(element(by.text('You have 3 file requests from VA'))).toExist()
+    await expect(element(by.text('You have 4 file requests from VA'))).toExist()
     await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
@@ -186,31 +186,10 @@ describe('Claims Screen', () => {
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Back')).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
-  })
-
-  it('verify Review evaluation details', async () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
-    await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_PAGE)).scrollTo('bottom')
-    await element(by.id('Review evaluation details')).tap()
-    await expect(element(by.text('Claim evaluation'))).toExist()
-    await expect(
-      element(
-        by.text(
-          'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
-        ),
-      ),
-    ).toExist()
-    await expect(element(by.id('Request claim evaluation'))).toExist()
-  })
-
-  it('verify error is displayed when request claim evaluation isnt checked', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_PAGE)).scrollTo('bottom')
-    await element(by.id('Request claim evaluation')).tap()
-    await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
   })
 
   it('should verify details of claim on step 1', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_BACK)).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BACK)).tap()
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
     await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')
