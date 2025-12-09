@@ -21,6 +21,7 @@ import DisabilityRatingsScreen from 'screens/BenefitsScreen/DisabilityRatingsScr
 import { LettersListScreen, LettersOverviewScreen } from 'screens/BenefitsScreen/Letters'
 import BenefitSummaryServiceVerification from 'screens/BenefitsScreen/Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import GenericLetter from 'screens/BenefitsScreen/Letters/GenericLetter/GenericLetter'
+import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -131,6 +132,11 @@ function BenefitsStackScreen() {
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <BenefitsScreenStack.Screen name="Claims" component={ClaimsScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
+      <BenefitsScreenStack.Screen
+        name="TravelPayClaims"
+        component={TravelPayClaimsScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
       <BenefitsScreenStack.Screen
         name="ClaimLettersScreen"
         component={ClaimLettersScreen}

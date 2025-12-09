@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
-import { t } from 'i18next'
 import { when } from 'jest-when'
 import { DateTime } from 'luxon'
 
@@ -96,30 +95,35 @@ context('HealthScreen', () => {
     })
   })
 
-  describe('Travel button', () => {
+  describe('Travel Claims button', () => {
     it('is not displayed if feature toggle is disabled', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('travelPayStatusList')
         .mockReturnValue(false)
+
       initializeTestInstance()
-      expect(screen.queryByText(t('travelPay.title'))).toBeFalsy()
+      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
     })
 
     it('is displayed if feature toggle is enabled', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
+
       initializeTestInstance()
-      expect(screen.getByText(t('travelPay.title'))).toBeTruthy()
+
+      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
     })
 
-    it('navigates to Travel Reimbursement screen when pressed', () => {
+    it('navigates to Travel Claims screen when pressed', () => {
       when(featureEnabled as jest.Mock)
         .calledWith('travelPayStatusList')
         .mockReturnValue(true)
       initializeTestInstance()
-      fireEvent.press(screen.getByText(t('travelPay.title')))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaims')
+
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
+
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })
   })
 
