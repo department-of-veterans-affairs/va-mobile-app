@@ -172,6 +172,7 @@ context('WhatsNew', () => {
       },
     })
 
+    //empty commit test
     initializeTestInstance('oneFeatureWithAuthorizedService')
     await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
