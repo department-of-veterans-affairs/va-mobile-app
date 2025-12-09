@@ -13,6 +13,8 @@ import { context, render, when } from 'testUtils'
 import { FeatureToggleType } from 'utils/remoteConfig'
 import { APP_FEATURES_WHATS_NEW_SKIPPED_VAL } from 'utils/whatsNew'
 
+jest.mock('api/authorizedServices/getAuthorizedServices')
+
 jest.mock('react-i18next', () => {
   const original = jest.requireActual('react-i18next')
   return {
@@ -75,6 +77,16 @@ const featureConfigs: Record<string, WhatsNewConfigItem[]> = {
     },
   ],
 }
+
+beforeEach(() => {
+  ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+    data: {
+      prescriptions: true,
+      medicationsOracleHealthEnabled: false,
+      isUserAtPretransitionedOhFacility: false,
+    },
+  })
+})
 
 context('WhatsNew', () => {
   const initializeTestInstance = (featureName: string, featureFlag?: string, flagEnabled?: boolean) => {
@@ -152,22 +164,19 @@ context('WhatsNew', () => {
   })
   it('should not render feature the user is not authorized for', async () => {
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-      data: {},
-      meta: {
+      data: {
         isUserAtPretransitionedOhFacility: false,
       },
     })
     initializeTestInstance('oneFeatureWithAuthorizedService')
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
-      expect(screen.queryByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeFalsy()
+      expect(screen.queryByRole('tab', { name: 'whatsNew.title' })).toBeFalsy()
     })
   })
 
   it('should render feature the user is authorized for', async () => {
     ;(useAuthorizedServices as jest.Mock).mockReturnValue({
-      data: {},
-      meta: {
+      data: {
         isUserAtPretransitionedOhFacility: true,
       },
     })
