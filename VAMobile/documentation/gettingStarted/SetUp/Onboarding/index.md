@@ -4,6 +4,10 @@ title: Onboarding
 
 ## General Mobile Platform Onboarding
 
+Mobile Onboarding will help product owners and managers, designers, and engineers on experience teams understand the mobile app development process—especially how it differs from web development—so they can build effectively for the platform. It explains how to use the shared platform to deliver a Veteran experience that aligns with VA standards, Mobile team governance, and industry best practices.
+
+This onboarding also outlines how to engage the Mobile team for feature requests, including how to submit a request, how prioritization works, and how to track progress. In addition, the onboarding covers where and how to get support, as well as the types of feedback teams can expect and when that feedback will be provided.
+
 The following channels can be used to communicate async with the VA Mobile App and Platform team
 * **#va-mobile-app** - general communication for anything related to the VA Mobile App
 * **#va-mobile-app-design** - communication related to design and research efforts
