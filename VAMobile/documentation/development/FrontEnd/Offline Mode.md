@@ -14,7 +14,7 @@ Enabling offline mode works by utilizing two libraries, NetInfo to detect the ne
 On initial load of the App component, an event listener is set up to set the connection status for react-query using NetInfo. Offline mode is currently behind a feature flag and can be toggled by `offlineMode `in the remote config screen of the developer settings. After offline mode has been enabled in the remote config, restarting the app is required for it to function properly.
 
 ## How do I add offline mode to my feature?
-
+For examples of the following steps, look at the Appointments feature code where this is fully built out.
 1. For any query that a feature uses to fetch data, replace the use of tanstack useQuery with useQuery from the queryClient.ts file. This will enable saving of the last updated timestamp.
 2. In that useQuery add the retry option. You can use offlineRetry as basic functionality. This helps in the case that the network fails mid-request. Instead of throwing an error to be displayed, we simply retry now that we are offline, causing the query to go to the cache instead of making a second request.
 3. To add the Last Updated Timestamp to the UI, simply provide the lastUpdatedDate that is now returned from your offline enabled query and pass it to FeatureLandingAndChildTemplate as dataUpdatedAt
@@ -28,6 +28,7 @@ On initial load of the App component, an event listener is set up to set the con
 
 Developers can enable offline mode without disconnecting from the network by navigating to the developer screen and enabling the Offline Debug toggle. This will add a toggle to the header representing the connection status. On for online, off for offline. This is helpful for testing ui, accessibility and basic functionality, but the features should still be tested by actually disabling the connection before features are pushed.
 To clear the offline cache, go to the developer settings screen and press 'Reset offline storage'. This will reset all queries to empty states. This is helpful for testing features that use data that loads immediately on app launch that is difficult to test with no data otherwise.
+When using a physical android device connected to Android Studio, the command `adb shell svc wifi enable|disable` can be used to enable or disable Wi-Fi. This is useful for simulating a mid-request disconnect as well as testing screen reader behavior without leaving the app to disconnect.
 
 ## Testing
 
