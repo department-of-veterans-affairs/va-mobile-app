@@ -18,6 +18,7 @@ let _refresh_token: string | undefined
 let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
 let _store: ReduxToolkitStore | undefined
+let _appVersion: string | undefined
 
 const DEMO_MODE_DELAY = 300
 const METHODS_THAT_ALLOW_PARAMS = ['GET']
@@ -71,7 +72,15 @@ const doRequest = async function (
   contentType: ContentTypes = contentTypes.applicationJson,
   abortSignal?: AbortSignal,
 ): Promise<Response> {
-  const appVersion = await getVersionName()
+  // Cache the app version after first successful fetch
+  if (_appVersion === undefined) {
+    try {
+      _appVersion = await getVersionName()
+    } catch (error) {
+      console.error('Failed to get app version:', error)
+      _appVersion = ''
+    }
+  }
   const fetchObj: RequestInit = {
     method,
     credentials: 'include',
@@ -82,7 +91,7 @@ const doRequest = async function (
       'Authentication-Method': 'SIS',
       'Device-Model': DEVICE_MODEL,
       'OS-Version': OS_VERSION,
-      'App-Version': appVersion || '',
+      'App-Version': _appVersion || '',
     },
     ...({ signal: abortSignal } || {}),
   }
