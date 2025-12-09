@@ -2,14 +2,13 @@ import { Platform } from 'react-native'
 
 import _ from 'underscore'
 
-import { deviceKeys } from 'api/device/queryKeys'
-import queryClient from 'api/queryClient'
 import { Events } from 'constants/analytics'
 import { ReduxToolkitStore } from 'store'
 import { transform } from 'store/api/demo/store'
 import { APIError } from 'store/api/types'
 import { logout, refreshAccessToken } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getVersionName } from 'utils/deviceData'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
@@ -72,6 +71,7 @@ const doRequest = async function (
   contentType: ContentTypes = contentTypes.applicationJson,
   abortSignal?: AbortSignal,
 ): Promise<Response> {
+  const appVersion = await getVersionName()
   const fetchObj: RequestInit = {
     method,
     credentials: 'include',
@@ -82,7 +82,7 @@ const doRequest = async function (
       'Authentication-Method': 'SIS',
       'Device-Model': DEVICE_MODEL,
       'OS-Version': OS_VERSION,
-      'App-Version': queryClient.getQueryData(deviceKeys.appVersion) || '',
+      'App-Version': appVersion || '',
     },
     ...({ signal: abortSignal } || {}),
   }
