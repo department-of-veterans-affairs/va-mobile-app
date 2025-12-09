@@ -85,6 +85,7 @@ const doRequest = async function (
         .catch((error) => {
           console.error('Failed to get app version:', error)
           _appVersion = ''
+          _appVersionPromise = undefined // Reset to allow retry on transient failures
           return ''
         })
     }
