@@ -35,7 +35,7 @@ type ActionState = AnyAction & {
 }
 
 export class TrackedStore {
-  constructor(state: RootState) {
+  constructor(state?: RootState) {
     this.actions = []
     this.realStore = getConfiguredStore(state) as any
     this.subscribe = this.realStore.subscribe

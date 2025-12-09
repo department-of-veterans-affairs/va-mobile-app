@@ -19,18 +19,11 @@ import { isErrorObject } from 'utils/common'
 import { useAppDispatch } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 
-/**
-  By default, the query client caches for 5 minutes with a max expiration of 24 days.
- To support offline we want to allow cached by setting the garbage collection time to Infinity.
- */
-const GARBAGE_COLLECT_TIME = Infinity
-
 export default new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
       staleTime: 5000,
-      gcTime: GARBAGE_COLLECT_TIME,
     },
   },
   queryCache: new QueryCache({
@@ -70,6 +63,11 @@ export const useQuery = <
   const lastUpdatedDate = useGetLastUpdatedTime(options.queryKey)
   const dispatch = useAppDispatch()
   const queryResult = useTanstackQuery({
+    /**
+     By default, the query client caches for 5 minutes with a max expiration of 24 days.
+     To support offline we want to allow cached by setting the garbage collection time to Infinity.
+     */
+    gcTime: Infinity,
     retry: offlineRetry,
     ...options,
     queryFn: async (context) => {
