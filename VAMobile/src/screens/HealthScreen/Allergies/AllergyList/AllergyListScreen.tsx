@@ -7,7 +7,8 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 
 import { useAllergies } from 'api/allergies/getAllergies'
-import { Allergy } from 'api/types'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { AllergyAttributesV0, AllergyAttributesV1, AllergyData } from 'api/types'
 import {
   Box,
   DefaultList,
@@ -42,17 +43,33 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
   const [page, setPage] = useState(1)
   // checks for downtime, immunizations downtime constant is having an issue with unit test
   const allergiesInDowntime = useError(ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID)
+
+  const {
+    data: authorizedServices,
+    isFetching: loadingUserAuthorizedServices,
+    error: getUserAuthorizedServicesError,
+    refetch: refetchAuthServices,
+  } = useAuthorizedServices()
+
+  const isAccelerating =
+    authorizedServices?.allergiesOracleHealthEnabled &&
+    !loadingUserAuthorizedServices &&
+    !getUserAuthorizedServicesError
+
   const {
     data: allergies,
     isFetching: loading,
     error: allergyError,
     refetch: refetchAllergies,
-  } = useAllergies({ enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime })
+  } = useAllergies({
+    enabled: screenContentAllowed('WG_AllergyList') && !allergiesInDowntime,
+    isV1Api: isAccelerating,
+  })
 
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
-  const [AllergiesToShow, setAllergiesToShow] = useState<Array<Allergy>>([])
+  const [allergiesToShow, setAllergiesToShow] = useState<Array<AllergyData>>([])
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -69,13 +86,26 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
     setAllergiesToShow(allergyList || [])
   }, [allergies?.data, page])
 
-  const allergyButtons: Array<DefaultListItemObj> = map(AllergiesToShow, (allergy, index) => {
+  // TODO: once all calls are transitioned to v1 api only, we can remove the type checks
+  const allergyButtons: Array<DefaultListItemObj> = map(allergiesToShow, (allergy, index) => {
     const textLines: Array<TextLine> = [
       {
-        text: t('allergies.allergyName', { name: capitalizeFirstLetter(allergy.attributes?.code?.text as string) }),
+        text: t('allergies.allergyName', {
+          name: capitalizeFirstLetter(
+            (allergy.attributes as AllergyAttributesV0)?.code?.text ||
+              (allergy.attributes as AllergyAttributesV1)?.name ||
+              '',
+          ),
+        }),
         variant: 'MobileBodyBold',
       },
-      { text: formatDateMMMMDDYYYY(allergy.attributes?.recordedDate || '') },
+      {
+        text: formatDateMMMMDDYYYY(
+          (allergy.attributes as AllergyAttributesV0)?.recordedDate ||
+            (allergy.attributes as AllergyAttributesV1)?.date ||
+            '',
+        ),
+      },
     ]
 
     const allergyButton: DefaultListItemObj = {
@@ -126,13 +156,19 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       title="Allergies"
       titleA11y={a11yLabelVA(t('vaAllergies'))}
       scrollViewProps={scrollViewProps}>
-      {loading ? (
+      {loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('allergies.loading')} />
       ) : allergyError || allergiesInDowntime ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
           error={allergyError}
           onTryAgain={refetchAllergies}
+        />
+      ) : getUserAuthorizedServicesError ? (
+        <ErrorComponent
+          screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}
+          error={getUserAuthorizedServicesError}
+          onTryAgain={refetchAuthServices}
         />
       ) : allergies?.data?.length === 0 ? (
         <NoAllergyRecords />
