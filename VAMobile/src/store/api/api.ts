@@ -19,6 +19,7 @@ let refreshPromise: Promise<boolean> | undefined
 let _demoMode = false
 let _store: ReduxToolkitStore | undefined
 let _appVersion: string | undefined
+let _appVersionPromise: Promise<string> | undefined
 
 const DEMO_MODE_DELAY = 300
 const METHODS_THAT_ALLOW_PARAMS = ['GET']
@@ -72,14 +73,22 @@ const doRequest = async function (
   contentType: ContentTypes = contentTypes.applicationJson,
   abortSignal?: AbortSignal,
 ): Promise<Response> {
-  // Cache the app version after first successful fetch
+  // Use promise-based cache to prevent race condition when multiple requests
+  // are made simultaneously before _appVersion is initialized
   if (_appVersion === undefined) {
-    try {
-      _appVersion = await getVersionName()
-    } catch (error) {
-      console.error('Failed to get app version:', error)
-      _appVersion = ''
+    if (!_appVersionPromise) {
+      _appVersionPromise = getVersionName()
+        .then((version) => {
+          _appVersion = version
+          return version
+        })
+        .catch((error) => {
+          console.error('Failed to get app version:', error)
+          _appVersion = ''
+          return ''
+        })
     }
+    await _appVersionPromise
   }
   const fetchObj: RequestInit = {
     method,
