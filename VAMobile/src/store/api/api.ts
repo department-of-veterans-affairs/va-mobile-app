@@ -80,6 +80,7 @@ const doRequest = async function (
       _appVersionPromise = getVersionName()
         .then((version) => {
           _appVersion = version
+          _appVersionPromise = undefined // Clear promise after successful cache
           return version
         })
         .catch((error) => {
