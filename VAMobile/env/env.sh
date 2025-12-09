@@ -39,6 +39,11 @@ then
   echo "AUTH_SIS_TOKEN_EXCHANGE_URL=${LOCAL_BASE_URL}/v0/sign_in/token" >> .env
   echo "AUTH_SIS_TOKEN_REFRESH_URL=${LOCAL_BASE_URL}/v0/sign_in/refresh" >> .env
   echo "AUTH_SIS_REVOKE_URL=${LOCAL_BASE_URL}/v0/sign_in/revoke" >> .env
+
+  # Get all staging vars
+  while read p; do
+    echo "$p" >> .env
+  done<staging.env
 elif [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
@@ -51,6 +56,11 @@ then
   echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
   echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
   echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
+
+  # Get all staging vars
+  while read p; do
+    echo "$p" >> .env
+  done<staging.env
 else
   echo "Setting up Production environment"
   API_PREFIX="api."
@@ -62,32 +72,11 @@ else
   echo "AUTH_SIS_TOKEN_EXCHANGE_URL=https://${API_PREFIX}va.gov/v0/sign_in/token" >> .env
   echo "AUTH_SIS_TOKEN_REFRESH_URL=https://${API_PREFIX}va.gov/v0/sign_in/refresh" >> .env
   echo "AUTH_SIS_REVOKE_URL=https://${API_PREFIX}va.gov/v0/sign_in/revoke" >> .env
-fi
 
-# set website URLs by environment
-if [[ $environment == 'local' ]] || [[ $environment == 'staging' ]]
-then
-  echo "LINK_URL_VA_NOTIFICATIONS=https://staging.va.gov/profile/notifications/" >> .env
-  echo "LINK_URL_CLAIM_APPEAL_STATUS=https://staging.va.gov/track-claims/appeals/" >> .env
-  echo "LINK_URL_VA_SCHEDULING=https://staging.va.gov/health-care/schedule-view-va-appointments/" >> .env
-  echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://staging.va.gov/my-health/appointments/schedule/type-of-care" >> .env
-  echo "LINK_URL_TRAVEL_PAY_WEB_DETAILS=https://staging.va.gov/my-health/travel-pay/claims/" >> .env
-  echo "LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS=https://staging.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt" >> .env
-  echo "LINK_URL_MHV_VA_MEDICATIONS=https://staging.va.gov/my-health/medications" >> .env
-  echo "LINK_URL_MHV_VA_MEDICAL_RECORDS=https://staging.va.gov/my-health/medical-records/" >> .env
-  echo "LINK_URL_MHV_LABS_AND_TESTS=https://staging.va.gov/my-health/medical-records/labs-and-tests/" >> .env
-  echo "LINK_URL_ASK_VA_GOV=https://staging.va.gov/contact-us/ask-va/introduction" >> .env
-else
-  echo "LINK_URL_VA_NOTIFICATIONS=https://va.gov/profile/notifications/" >> .env
-  echo "LINK_URL_CLAIM_APPEAL_STATUS=https://va.gov/track-claims/appeals/" >> .env
-  echo "LINK_URL_VA_SCHEDULING=https://va.gov/health-care/schedule-view-va-appointments/" >> .env
-  echo "LINK_URL_SCHEDULE_APPOINTMENTS=https://va.gov/my-health/appointments/schedule/type-of-care" >> .env
-  echo "LINK_URL_TRAVEL_PAY_WEB_DETAILS=https://va.gov/my-health/travel-pay/claims/" >> .env
-  echo "LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS=https://va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt" >> .env
-  echo "LINK_URL_MHV_VA_MEDICATIONS=https://va.gov/my-health/medications" >> .env
-  echo "LINK_URL_MHV_VA_MEDICAL_RECORDS=https://va.gov/my-health/medical-records/" >> .env
-  echo "LINK_URL_MHV_LABS_AND_TESTS=https://va.gov/my-health/medical-records/labs-and-tests/" >> .env
-  echo "LINK_URL_ASK_VA_GOV=https://va.gov/contact-us/ask-va/introduction" >> .env
+  # Get all production vars
+  while read p; do
+    echo "$p" >> .env
+  done<prod.env
 fi
 
 if [[ $showDebug == 'true' ]]
