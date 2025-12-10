@@ -28,12 +28,13 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
 
   const { data: copaysData, isFetching: loadingCopays, error: copaysError, httpStatus } = useMedicalCopays()
 
-  const copays = useMemo(() => copaysData?.data ?? [], [copaysData])
+  const copays = useMemo(() => copaysData?.data ?? [], [copaysData?.data])
   const isEmpty = copays.length === 0
   const sorted = useMemo(() => sortStatementsByDate(copays), [copays])
   const copaysByUniqueFacility = useMemo(() => uniqBy(sorted, (c) => c.pSFacilityNum), [sorted])
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
   const backLabel = prevScreen === 'Health' ? t('health.title') : t('payments.title')
+
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
     scrollViewRef: scrollViewRef,

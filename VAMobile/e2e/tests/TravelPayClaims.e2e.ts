@@ -200,7 +200,6 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(4000)
     const currentYear = new Date().getFullYear()
-    await element(by.text('Past 3 months')).tap()
     await element(by.text(`All of ${currentYear}`)).tap()
     await element(by.id(DATE_PICKER_DONE_BUTTON_ID)).tap()
     await waitFor(element(by.text(`All of ${currentYear}`)))
