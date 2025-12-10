@@ -203,7 +203,7 @@ context('HealthScreen', () => {
       initializeTestInstance({
         queriesData: [
           {
-            queryKey: prescriptionKeys.prescriptions,
+            queryKey: [...prescriptionKeys.prescriptions, 'v0'],
             data: getPrescriptionsPayload(refillCount),
           },
         ],
@@ -220,7 +220,7 @@ context('HealthScreen', () => {
       initializeTestInstance({
         queriesData: [
           {
-            queryKey: prescriptionKeys.prescriptions,
+            queryKey: [...prescriptionKeys.prescriptions, 'v0'],
             data: getPrescriptionsPayload(refillCount),
           },
         ],

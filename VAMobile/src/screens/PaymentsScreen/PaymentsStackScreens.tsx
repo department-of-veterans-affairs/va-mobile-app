@@ -6,6 +6,7 @@ import { DebtRecord, MedicalCopayDetail, MedicalCopayRecord, PaymentsData } from
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import CopaysHelp from 'screens/PaymentsScreen/Copays/CopayHelp/CopayHelp'
 import DebtHelp, { debtHelpType } from 'screens/PaymentsScreen/Debts/DebtHelp/DebtHelp'
+import TermDefinitions from 'screens/PaymentsScreen/Debts/TermDefinitions/TermDefinitions'
 import PaymentIssue from 'screens/PaymentsScreen/PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from 'screens/PaymentsScreen/PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
 
@@ -67,5 +68,11 @@ export const getPaymentsScreens = (): Array<ReactNode> => {
     />,
     <PaymentsStack.Screen key={'CopayHelp'} name="CopayHelp" component={CopaysHelp} options={LARGE_PANEL_OPTIONS} />,
     <PaymentsStack.Screen key={'DebtHelp'} name="DebtHelp" component={DebtHelp} options={LARGE_PANEL_OPTIONS} />,
+    <PaymentsStack.Screen
+      key={'TermDefinitions'}
+      name="TermDefinitions"
+      component={TermDefinitions}
+      options={LARGE_PANEL_OPTIONS}
+    />,
   ]
 }
