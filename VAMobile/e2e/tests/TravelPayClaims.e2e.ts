@@ -194,11 +194,19 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(4000)
 
-    // Use the date range selector
+    // Change the date selection and verify label is correct
     await element(by.id(DATE_PICKER_ID)).tap()
     await waitFor(element(by.text(DATE_PICKER_HEADER_TEXT)))
       .toExist()
       .withTimeout(4000)
+    const currentYear = new Date().getFullYear()
+    await element(by.text('Past 3 months')).tap()
+    await element(by.text(`All of ${currentYear}`)).tap()
     await element(by.id(DATE_PICKER_DONE_BUTTON_ID)).tap()
+    await waitFor(element(by.text(`All of ${currentYear}`)))
+      .toExist()
+      .withTimeout(4000)
+
+    await expect(element(by.text(FILTERED_RESULTS_TEXT))).toExist()
   })
 })
