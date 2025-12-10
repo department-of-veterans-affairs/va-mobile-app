@@ -204,6 +204,9 @@ context('EditDraft', () => {
       },
     },
     included: [],
+    meta: {
+      userInTriageTeam: true,
+    },
   }
   const recipients: SecureMessagingRecipients = {
     data: [
