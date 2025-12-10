@@ -202,6 +202,12 @@ describe('Travel Pay Claims Screen', () => {
     const currentYear = new Date().getFullYear()
     await element(by.text(`All of ${currentYear}`)).tap()
     await element(by.id(DATE_PICKER_DONE_BUTTON_ID)).tap()
+
+    // Wait for modal to dismiss to make sure we're testing the correct text
+    await waitFor(element(by.id(DATE_PICKER_HEADER_TEXT)))
+      .not.toExist()
+      .withTimeout(4000)
+
     await waitFor(element(by.text(`All of ${currentYear}`)))
       .toExist()
       .withTimeout(4000)
