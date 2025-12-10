@@ -1,18 +1,53 @@
-name: UI Change Check
+name: UI Approval Check
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
-  assign-ui-reviewer:
+  check-ui-approval:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.body, '- [x] UI changes') || contains(github.event.pull_request.body, '- [X] UI changes')
     steps:
-      - name: Assign UI Reviewer
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - name: Check for UI changes checkbox
+        id: ui-checkbox
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          UI_REVIEWER: "rtwell"
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          gh pr edit $PR_URL --add-reviewer $UI_REVIEWER
+          if [[ "$PR_BODY" == *"[x] UI changes"* || "$PR_BODY" == *"[X] UI changes"* ]]; then
+            echo "ui_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "ui_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Assign UI Reviewer
+        if: steps.ui-checkbox.outputs.ui_changes == 'true' && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr edit $PR_URL --add-reviewer rtwell
+
+      - name: Check for UI Approval
+        if: steps.ui-checkbox.outputs.ui_changes == 'true'
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          reviews=$(gh api repos/$REPO/pulls/$PR_NUMBER/reviews --jq '.[] | select(.user.login == "rtwell" and .state == "APPROVED")')
+          if [[ -z "$reviews" ]]; then
+            echo "No approval from rtwell found."
+            exit 1
+          else
+            echo "Approval from rtwell found."
+            exit 0
+          fi
