@@ -71,4 +71,5 @@ export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking
 export const DEMO_PASSWORD = ''
 export const SMHD_APPLE_STORE_LINK = 'https://apps.apple.com/us/app/share-my-health-data/id1031651418'
 export const SMHD_GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.smhd'
+export const PAY_GOV_URL = 'https://www.pay.gov/'
 export const PAY_VA_GOV_URL = 'https://www.pay.va.gov/'
