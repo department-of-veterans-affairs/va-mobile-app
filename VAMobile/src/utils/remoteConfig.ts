@@ -18,6 +18,7 @@ export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'COEAvailable'
+  | 'copayments'
   | 'appointmentsTestTime'
   | 'datePickerUpdate'
   | 'decisionLettersWaygate'
@@ -42,7 +43,7 @@ export type FeatureToggleType =
   | 'showCernerAlertSM'
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
-  | 'overpayCopay'
+  | 'overpayments'
   | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
@@ -51,6 +52,7 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   datePickerUpdate: boolean
   COEAvailable: boolean
+  copayments: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
@@ -73,7 +75,7 @@ type FeatureToggleValues = {
   showCernerAlertSM: boolean
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
-  overpayCopay: boolean
+  overpayments: boolean
   remoteConfigRefreshTest: boolean
 }
 
@@ -83,6 +85,7 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   datePickerUpdate: true,
   COEAvailable: false,
+  copayments: false,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
@@ -105,7 +108,7 @@ export const defaults: FeatureToggleValues = {
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
-  overpayCopay: false,
+  overpayments: false,
   remoteConfigRefreshTest: false,
 }
 

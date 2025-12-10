@@ -76,7 +76,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
-      {featureEnabled('overpayCopay') && (
+      {(featureEnabled('overpayments') || featureEnabled('copayments')) && (
         <TextView
           mx={theme.dimensions.condensedMarginBetween}
           mb={theme.dimensions.standardMarginBetween}
@@ -91,7 +91,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
         )}
       </Box>
-      {featureEnabled('overpayCopay') && (
+      {(featureEnabled('overpayments') || featureEnabled('copayments')) && (
         <>
           <TextView
             mt={theme.dimensions.standardMarginBetween}
@@ -101,18 +101,22 @@ function PaymentsScreen({}: PaymentsScreenProps) {
             accessibilityRole="header">
             {t('payments.yourDebtAndBills')}
           </TextView>
-          <LargeNavButton
-            title={t('debts.title')}
-            onPress={() => navigateTo('Debts')}
-            subText={debtsSubText}
-            showLoading={debtsLoading}
-          />
-          <LargeNavButton
-            title={t('copays.title')}
-            onPress={() => navigateTo('Copays')}
-            subText={copaysSubText}
-            showLoading={copaysLoading}
-          />
+          {featureEnabled('overpayments') && (
+            <LargeNavButton
+              title={t('debts.title')}
+              onPress={() => navigateTo('Debts')}
+              subText={debtsSubText}
+              showLoading={debtsLoading}
+            />
+          )}
+          {featureEnabled('copayments') && (
+            <LargeNavButton
+              title={t('copays.title')}
+              onPress={() => navigateTo('Copays')}
+              subText={copaysSubText}
+              showLoading={copaysLoading}
+            />
+          )}
         </>
       )}
       {featureEnabled('travelPayStatusList') && (
