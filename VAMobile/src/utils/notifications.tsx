@@ -16,7 +16,7 @@ export const notificationsEnabled = async (): Promise<boolean> => {
 
 /**
  * Trims the id that follows the main url path
- * @param notificationUrl - url string of the format: vamobile://{path}/{id}
+ * @param notificationUrl - url string of the format: vamobile://[path]/[id]
  *
  * ex. 'vamobile://messages/1234' into 'vamobile://messages/'
  */
