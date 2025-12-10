@@ -17,11 +17,6 @@ jest.mock('@department-of-veterans-affairs/mobile-component-library', () => {
   }
 })
 
-declare module '@department-of-veterans-affairs/mobile-component-library' {
-  // test-only export from our jest.mock factory
-  export const __mockSnackbar: { show: jest.Mock }
-}
-
 context('PayDebtScreen (data render + copy snackbars)', () => {
   const baseDebt = {
     id: '1',
