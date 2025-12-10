@@ -1271,6 +1271,22 @@ export const Events = {
       },
     }
   },
+  vama_travel_pay_doc_dl: (
+    claim_id: string,
+    claim_status: string,
+    document_type: string,
+    document_filename: string,
+  ): Event => {
+    return {
+      name: 'vama_travel_pay_doc_dl',
+      params: {
+        claim_id,
+        claim_status,
+        document_type,
+        document_filename,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
