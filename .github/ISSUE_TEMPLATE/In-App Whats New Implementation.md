@@ -1,9 +1,12 @@
 ---
 name: In-App Whats New Content Template
-about: Template for implementing In-App Whats New Content 
-title: In-App Whats New Content - Feature Name - Release # 
-labels: front-end, content, qa, 
+about: Template for implementing In-App Whats New Content
+title: In-App Whats New Content - Feature Name - Release
+labels: content, front-end
+assignees: ''
+
 ---
+
 ## Dscription
 <!-- What is it that needs to be changed for code maintenance -->
 As VAHB Mobile App, I need to use In-App Whats New Feature to display content for [X feature] so that [Y]
@@ -20,6 +23,4 @@ As VAHB Mobile App, I need to use In-App Whats New Feature to display content fo
 - [ ] Finalize copy
 - [ ] When the new feature or existing feature is going to be released, Team PM prioritizes their FE engineer to implement the In-App Whats New Copy
 - [ ] FE implements In-App Whats New Copy in Github
-- [ ] Notify Release Manager this is being included 
-
-	
+- [ ] Notify Release Manager this is being included

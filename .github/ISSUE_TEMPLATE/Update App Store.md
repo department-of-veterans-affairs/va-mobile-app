@@ -1,11 +1,12 @@
 ---
 name: Update App Store
-about: Template for work needed to update Google, Apple or Va.Gov app store content and images 
+about: Template for work needed to update Google, Apple or Va.Gov app store content
+  and images
 title: Update App Store
-labels: app store
-assignees:
----
+labels: ''
+assignees: ''
 
+---
 
 ## Description 
 As the Veteran, I want all the app stores/pages to accurately reflect the most recent changes in the app so that I know what to expect before going into the app. 
@@ -69,5 +70,4 @@ Determine what, if any, changes are needed to Apple, Google and VA.gov App Store
 - [ ] Acceptance criteria defined
 - [ ] Labels added (front-end, back-end, feature)
 - [ ] Linked to an Epic
-- [ ] Notify Mobile Release Manager at least 1 sprint ahead of implementation date 
-
+- [ ] Notify Mobile Release Manager at least 1 sprint ahead of implementation date
