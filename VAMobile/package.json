@@ -41,8 +41,7 @@
     "e2e:attached-test": "yarn jest:clear && detox test -c attached --cleanup",
     "docs": "yarn && cd documentation && yarn && yarn build && yarn start",
     "nodes": "rm -rf node_modules && yarn install --ignore-scripts",
-    "pods": "cd ios && pod install && cd ..",
-    "detox": "yarn detos --help"
+    "pods": "cd ios && pod install && cd .."
   },
   "dependencies": {
     "@department-of-veterans-affairs/mobile-assets": "0.15.1",
