@@ -2,6 +2,7 @@ import React from 'react'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
+import { DateTime } from 'luxon'
 
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentStatus, AppointmentStatusConstants, AppointmentsGetData, AppointmentsList } from 'api/types'

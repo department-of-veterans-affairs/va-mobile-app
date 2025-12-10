@@ -435,6 +435,14 @@ export const Events = {
       },
     }
   },
+  vama_copay_stmt_download: (id: string): Event => {
+    return {
+      name: 'vama_copay_stmt_download',
+      params: {
+        id,
+      },
+    }
+  },
   vama_ddl_landing_click: (): Event => {
     return {
       name: 'vama_ddl_landing_click',
@@ -1257,6 +1265,22 @@ export const Events = {
       name: 'vama_smoc_error',
       params: {
         error,
+      },
+    }
+  },
+  vama_travel_pay_doc_dl: (
+    claim_id: string,
+    claim_status: string,
+    document_type: string,
+    document_filename: string,
+  ): Event => {
+    return {
+      name: 'vama_travel_pay_doc_dl',
+      params: {
+        claim_id,
+        claim_status,
+        document_type,
+        document_filename,
       },
     }
   },
