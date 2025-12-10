@@ -600,5 +600,22 @@ describe('Messages Screen', () => {
 
       await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
     })
+
+    it('should show Start new message and alert for old message when user is NOT in triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
+      await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
+
+      await expect(element(by.text('Find your VA facility'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
   })
 })
