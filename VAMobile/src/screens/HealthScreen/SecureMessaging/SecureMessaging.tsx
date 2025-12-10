@@ -137,7 +137,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
 
   const otherError = (foldersError || (inboxError && !termsAndConditionError)) && !refetchingFolders && !refetchingInbox
 
-  console.log(featureEnabled('showCernerWarningAlert') && userAuthorizedServices?.isUserAtPretransitionedOhFacility)
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}

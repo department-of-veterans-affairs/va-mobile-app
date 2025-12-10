@@ -21,7 +21,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
-  PRESCRIPTION_REFILL_WARNING_ID: 'prescriptionRefillWarningTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
   PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (32), sorted by status (A to Z)',
@@ -165,7 +164,6 @@ describe('Prescriptions Screen', () => {
     checkImages(tempPath)
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
     await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
-    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID))).toExist()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
     await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
@@ -180,27 +178,6 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toBeVisible()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toBeVisible()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toBeVisible()
-  })
-
-  it('verify prescription refill warning label information', async () => {
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID)).tap()
-    await expect(element(by.text("We can't refill some of your prescriptions in the app"))).toExist()
-    await expect(element(by.label('Some  V-A  health facilities use a new electronic health record system.'))).toExist()
-    await expect(
-      element(
-        by.label(
-          'Prescriptions affected by this change have a "Transferred" status. You can manage your prescriptions at these facilities using the My  V-A  Health portal.',
-        ),
-      ),
-    ).toExist()
-    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionVAHealthLink')
-    await device.launchApp({ newInstance: false })
-    await element(by.text("We can't refill some of your prescriptions in the app")).tap()
   })
 
   it('verify status label information', async () => {
