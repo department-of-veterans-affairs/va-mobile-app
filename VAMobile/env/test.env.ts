@@ -11,6 +11,7 @@ export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
   'https://www.va.gov/resources/how-to-change-your-legal-name-on-file-with-va/'
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
+export const LINK_URL_DISPUTE_DEBT = 'https://www.va.gov/manage-va-debt/dispute-debt/introduction/'
 export const LINK_URL_MHV_VA_MEDICAL_RECORDS = 'https://www.va.gov/my-health/medical-records/'
 export const LINK_URL_MHV_VA_MEDICATIONS = 'https://www.va.gov/my-health/medications'
 export const LINK_URL_IN_APP_RECRUITMENT =
@@ -70,3 +71,5 @@ export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking
 export const DEMO_PASSWORD = ''
 export const SMHD_APPLE_STORE_LINK = 'https://apps.apple.com/us/app/share-my-health-data/id1031651418'
 export const SMHD_GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.smhd'
+export const PAY_GOV_URL = 'https://www.pay.gov/'
+export const PAY_VA_GOV_URL = 'https://www.pay.va.gov/'
