@@ -433,7 +433,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                   accessibilityLabel={t('secureMessaging.reply.error.ifYouThinkA11y')}>
                   {t('secureMessaging.reply.error.ifYouThink')}
                 </TextView>
-                {/* below text and navigation are placeholders */}
                 <LinkWithAnalytics
                   type="custom"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
