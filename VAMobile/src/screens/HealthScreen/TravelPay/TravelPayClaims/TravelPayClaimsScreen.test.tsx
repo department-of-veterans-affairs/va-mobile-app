@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
@@ -240,6 +240,44 @@ context('TravelPayClaims', () => {
     expect(screen.queryByTestId(claimId1)).toBeFalsy()
     expect(screen.queryByTestId(claimId2)).toBeFalsy()
     expect(screen.getByTestId(claimId3)).toBeTruthy()
+  })
+
+  it('should reset the filter when the date range changes', async () => {
+    initializeTestInstance()
+
+    // Bring up the modal and set the filter to only "Claim submitted"
+    fireEvent.press(screen.getByTestId('travelClaimsFilterModalButtonTestId'))
+    await waitFor(() => screen.getByTestId('checkbox_label_Claim submitted'))
+    fireEvent.press(screen.getByTestId('checkbox_label_Claim submitted'))
+    fireEvent.press(screen.getByTestId('filterButtonApplyTestID'))
+    await waitFor(() => expect(screen.queryByTestId('filterButtonApplyTestID')).toBeNull())
+
+    // Verify filter shows "Filtered" with 1 claim
+    expect(
+      screen.getByText(
+        t('travelPay.statusList.list.title', {
+          count: 1,
+          filter: 'Filtered',
+          sort: t(`travelPay.statusList.sortOption.recent`).toLowerCase(),
+        }),
+      ),
+    ).toBeTruthy()
+
+    // Change the date range back
+    fireEvent.press(screen.getByTestId('getDateRangeTestID'))
+    fireEvent.press(screen.getByTestId(`Past 3 months`))
+    fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
+
+    // Verify filter is reset to "All"
+    expect(
+      screen.getByText(
+        t('travelPay.statusList.list.title', {
+          count: 2, // pastThreeMonths returns 3 claims in the mock
+          filter: 'All',
+          sort: t(`travelPay.statusList.sortOption.recent`).toLowerCase(),
+        }),
+      ),
+    ).toBeTruthy()
   })
 
   it('should show the loading component', async () => {

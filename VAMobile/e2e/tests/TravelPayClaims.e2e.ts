@@ -211,7 +211,5 @@ describe('Travel Pay Claims Screen', () => {
     await waitFor(element(by.text(`All of ${currentYear}`)))
       .toExist()
       .withTimeout(4000)
-
-    await expect(element(by.text(FILTERED_RESULTS_TEXT))).toExist()
   })
 })
