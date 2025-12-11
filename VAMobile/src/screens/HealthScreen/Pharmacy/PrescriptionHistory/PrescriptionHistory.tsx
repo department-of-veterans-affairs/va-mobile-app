@@ -453,9 +453,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const getTransferAlert = () => {
     if (userAuthorizedServices?.isUserAtPretransitionedOhFacility && featureEnabled('showCernerWarningAlert')) {
       return <CernerAlertSM />
-    } else {
-      return null
     }
+    return null
   }
 
   const getRequestRefillButton = () => {
