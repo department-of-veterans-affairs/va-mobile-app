@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react-native'
+import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { GetTravelPayClaimsResponse } from 'api/types'
-import { TimeFrameType } from 'constants/timeframes'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
 import TravelPayClaims from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import { context, mockNavProps, render, when } from 'testUtils'
+import { createTimeFrameDateRangeMap } from 'utils/dateUtils'
+import { formatDateRangeMMMyyyy } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
 // Mock screen reader hook to prevent act() warning within
@@ -217,6 +219,39 @@ context('TravelPayClaims', () => {
     expect(screen.getByTestId('travelPayClaimsListTestId')).toBeTruthy()
   })
 
+  it('renders the correct label for the selected time frame', async () => {
+    initializeTestInstance()
+
+    const map = createTimeFrameDateRangeMap()
+    const fiveMonthsToThreeMonths = map[TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS]
+    const eightMonthsToSixMonths = map[TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS]
+    const elevenMonthsToNineMonths = map[TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS]
+
+    // Default is past three months
+    expect(screen.getByText('Past 3 months')).toBeTruthy()
+
+    const currentYear = new Date().getFullYear()
+    const timeFrames = [
+      formatDateRangeMMMyyyy(fiveMonthsToThreeMonths.startDate, fiveMonthsToThreeMonths.endDate),
+      formatDateRangeMMMyyyy(eightMonthsToSixMonths.startDate, eightMonthsToSixMonths.endDate),
+      formatDateRangeMMMyyyy(elevenMonthsToNineMonths.startDate, elevenMonthsToNineMonths.endDate),
+      `All of ${currentYear}`,
+      `All of ${currentYear - 1}`,
+      'Past 3 months', // Go back to first
+    ]
+
+    for (let i = 0; i < timeFrames.length; i++) {
+      // Open the picker, select the date range, close the picker
+      fireEvent.press(screen.getByTestId('getDateRangeTestID'))
+      fireEvent.press(screen.getByText(timeFrames[i]))
+      fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
+      await waitFor(() => expect(screen.queryByTestId('filterButtonApplyTestID')).toBeNull())
+
+      // Check if the text was updated
+      expect(screen.getByText(timeFrames[i])).toBeTruthy()
+    }
+  })
+
   it('should apply the selected date range to the list of claims', () => {
     initializeTestInstance()
 
@@ -240,6 +275,44 @@ context('TravelPayClaims', () => {
     expect(screen.queryByTestId(claimId1)).toBeFalsy()
     expect(screen.queryByTestId(claimId2)).toBeFalsy()
     expect(screen.getByTestId(claimId3)).toBeTruthy()
+  })
+
+  it('should reset the filter when the date range changes', async () => {
+    initializeTestInstance()
+
+    // Bring up the modal and set the filter to only "Claim submitted"
+    fireEvent.press(screen.getByTestId('travelClaimsFilterModalButtonTestId'))
+    await waitFor(() => screen.getByTestId('checkbox_label_Claim submitted'))
+    fireEvent.press(screen.getByTestId('checkbox_label_Claim submitted'))
+    fireEvent.press(screen.getByTestId('filterButtonApplyTestID'))
+    await waitFor(() => expect(screen.queryByTestId('filterButtonApplyTestID')).toBeNull())
+
+    // Verify filter shows "Filtered" with 1 claim
+    expect(
+      screen.getByText(
+        t('travelPay.statusList.list.title', {
+          count: 1,
+          filter: 'Filtered',
+          sort: t(`travelPay.statusList.sortOption.recent`).toLowerCase(),
+        }),
+      ),
+    ).toBeTruthy()
+
+    // Change the date range back
+    fireEvent.press(screen.getByTestId('getDateRangeTestID'))
+    fireEvent.press(screen.getByTestId(`Past 3 months`))
+    fireEvent.press(screen.getByTestId('confirmDateRangeTestId'))
+
+    // Verify filter is reset to "All"
+    expect(
+      screen.getByText(
+        t('travelPay.statusList.list.title', {
+          count: 2, // pastThreeMonths returns 3 claims in the mock
+          filter: 'All',
+          sort: t(`travelPay.statusList.sortOption.recent`).toLowerCase(),
+        }),
+      ),
+    ).toBeTruthy()
   })
 
   it('should show the loading component', async () => {
