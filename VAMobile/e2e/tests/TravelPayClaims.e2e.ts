@@ -211,5 +211,8 @@ describe('Travel Pay Claims Screen', () => {
     await waitFor(element(by.text(`All of ${currentYear}`)))
       .toExist()
       .withTimeout(4000)
+
+    // Changing the date picker resets the filter, so we should see all text again
+    await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
   })
 })
