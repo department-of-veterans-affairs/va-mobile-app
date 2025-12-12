@@ -153,7 +153,7 @@ context('CopayDetailsScreen', () => {
 
     it('should display resolve bill button', () => {
       initializeTestInstance(mockCopay)
-      expect(screen.getByText(t('copays.resolveBill'))).toBeTruthy()
+      expect(screen.getByText(t('copays.resolveCopay'))).toBeTruthy()
     })
 
     it('should display go to statement link', () => {

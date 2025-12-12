@@ -24,7 +24,7 @@ import { getCopayInfo } from 'screens/PaymentsScreen/Copays/CopayCard/CopayCard'
 import PreviousPDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PreviousPDFStatements'
 import RecentStatementCharges from 'screens/PaymentsScreen/Copays/CopayDetails/RecentStatementCharges'
 import StatementAddresses from 'screens/PaymentsScreen/Copays/CopayDetails/StatementAddresses'
-import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
+import ResolveCopayButton from 'screens/PaymentsScreen/Copays/ResolveCopay/ResolveCopayButton'
 import NoticeOfRightsButton from 'screens/PaymentsScreen/NoticeOfRights/NoticeOfRightsButton'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -79,9 +79,9 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   const handleResolveClick = () => {
     const options = [
-      t('copays.resolveBill.payBill'),
-      t('copays.resolveBill.requestHelp'),
-      t('copays.resolveBill.disputeCopay'),
+      t('copays.resolveCopay.payBill'),
+      t('copays.resolveCopay.requestHelp'),
+      t('copays.resolveCopay.disputeCopay'),
       t('cancel'),
     ]
     const routeNames = ['PayBill', 'CopayRequestHelp', 'DisputeCopay']
@@ -89,8 +89,8 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
     showActionSheet(
       {
         options,
-        title: t('copays.resolveBill'),
-        message: t('copays.resolveBill.how'),
+        title: t('copays.resolveCopay'),
+        message: t('copays.resolveCopay.how'),
         cancelButtonIndex: 3,
       },
       (buttonIndex) => {
@@ -153,7 +153,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
       <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBody">
         {formattedDate}
       </TextView>
-      <ResolveBillButton />
+      <ResolveCopayButton copay={copay} />
       <Pressable onPress={() => downloadStatement(copay.id)} accessibilityRole="link" accessible={true}>
         <Box
           display={'flex'}
@@ -193,7 +193,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
                 variant="warning"
                 header={t('copays.balanceOverdue')}
                 primaryButton={{
-                  label: t('copays.resolveBill'),
+                  label: t('copays.resolveCopay'),
                   onPress: handleResolveClick,
                 }}
                 expandable>

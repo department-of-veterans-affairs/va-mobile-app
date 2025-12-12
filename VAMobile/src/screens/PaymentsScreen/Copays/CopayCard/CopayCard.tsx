@@ -7,7 +7,7 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { MedicalCopayRecord } from 'api/types/MedicalCopayData'
 import { Box, MultiTouchCard, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import ResolveBillButton from 'screens/PaymentsScreen/Copays/ResolveBill/ResolveBillButton'
+import ResolveCopayButton from 'screens/PaymentsScreen/Copays/ResolveCopay/ResolveCopayButton'
 import { DUE_DATE_DAYS, calcDueDate, formatDate, getMedicalCenterNameByID, verifyCurrentBalance } from 'utils/copays'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -120,8 +120,8 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
           />
         </Box>
       </Pressable>
-      {/* Resolve bill button */}
-      <ResolveBillButton copay={copay} />
+      {/* Resolve copay button */}
+      <ResolveCopayButton copay={copay} />
     </>
   )
 
