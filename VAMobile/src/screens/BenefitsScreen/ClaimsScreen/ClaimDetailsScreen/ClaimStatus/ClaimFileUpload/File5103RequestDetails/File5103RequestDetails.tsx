@@ -22,7 +22,7 @@ import {
 } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
-import { Events, UserAnalytics } from 'constants/analytics'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
@@ -94,17 +94,6 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
       snackbar.show(t('claimLetters.download.error'), { isError: true, onActionPressed: refetchLetter })
     }
   }, [downloadLetterErrorDetails, queryClient, dispatch, t, refetchLetter, snackbar])
-
-  // const testPress = () => {
-  //   setShowLetterModal(false)
-  //   // logAnalyticsEvent(Events.vama_ddl_letter_view(typeDescription))
-  //   if (letterID === '87B6DE5D-CD79-4D15-B6DC-A5F9A324DC4F') {
-  //     refetchLetter()
-  //   } else {
-  //     setLetterID('87B6DE5D-CD79-4D15-B6DC-A5F9A324DC4F')
-  //     // setLetterReceivedAt(receivedAt.toString())
-  //   }
-  // }
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
