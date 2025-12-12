@@ -275,7 +275,7 @@ describe('requestRefills', () => {
         expect(result.current.isSuccess).toBeTruthy()
       })
 
-      expect(invalidateQueriesSpy).toHaveBeenCalledWith({ queryKey: prescriptionKeys.prescriptions })
+      expect(invalidateQueriesSpy).toHaveBeenCalledWith({ queryKey: [...prescriptionKeys.prescriptions, 'v0'] })
     })
 
     it('should call review event registration on success', async () => {

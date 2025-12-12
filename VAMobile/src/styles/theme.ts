@@ -109,6 +109,8 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   textWithIconButton: string
   UnreadMessagesTag: string
+  vadsFontBodySmall: string
+  vadsFontBodyXsmall: string
   VAHeader: string
   VASelector: string
   VeteranStatusBranch: string
@@ -117,8 +119,8 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
-  vadsFontHeadingMedium: string
   vadsFontHeadingXsmall: string
+  vadsFontHeadingMedium: string
 }
 
 export type VABackgroundColors = {
