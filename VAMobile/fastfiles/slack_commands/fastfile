@@ -138,3 +138,7 @@ def slack_test()
      default_payloads: [],
   )
 end
+
+def sanitize_notes(notes)
+  notes.gsub(/['"&|;()<>!$]/, '')
+end

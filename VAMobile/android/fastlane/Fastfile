@@ -32,6 +32,7 @@ platform :android do
     upload("Development Team")
     bundle("Debug")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
+    notes = sanitize_notes(notes)
     distribute_to_firebase(notes, "qa")
     tag_build
     message = "New QA build successfully uploaded to Google Play"
@@ -56,6 +57,7 @@ platform :android do
     elsif notes.start_with?("feature-build-")
       notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
     end
+    notes = sanitize_notes(notes)
     puts notes
     distribute_to_firebase(notes, "qa")
     tag_build
@@ -70,6 +72,7 @@ platform :android do
     bundle("RC")
     rcVersion = "#{Gem::Version.new(ENV['VERSION_NAME']).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
+    notes = sanitize_notes(notes)
     distribute_to_firebase(notes, "qa")
     message = "New RC for #{rcVersion} successfully uploaded to Firebase Distribution"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Release Candidate", message, "Android", ENV['SLACK_THREAD_TS'])
