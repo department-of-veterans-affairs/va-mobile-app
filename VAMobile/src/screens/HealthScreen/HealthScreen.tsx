@@ -252,7 +252,6 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={Appointments}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
@@ -304,6 +303,7 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={MedicalRecordsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
+      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen
         name="LabsAndTestsList"
         component={LabsAndTestsListScreen}
