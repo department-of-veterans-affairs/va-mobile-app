@@ -19,7 +19,7 @@ function ResolveCopayButton({ copay }: ResolveCopayButtonProps) {
 
   function onButtonPress() {
     const options = [
-      t('copays.resolveCopay.payBill'),
+      t('copays.resolveCopay.makeAPayment'),
       t('copays.resolveCopay.requestHelp'),
       t('copays.resolveCopay.disputeCopay'),
       t('cancel'),
