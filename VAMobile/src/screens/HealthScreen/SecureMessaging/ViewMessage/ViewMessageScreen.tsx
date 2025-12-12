@@ -413,7 +413,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
             <Box my={theme.dimensions.standardMarginBetween}>
               <AlertWithHaptics
                 variant="warning"
-                header={t('secureMessaging.reply.tooOldforReplies')}
+                header={t('secureMessaging.reply.tooOldForReplies')}
                 description={t('secureMessaging.reply.olderThan45Days')}
                 testID="secureMessagingOlderThan45DaysAlertID"
               />
