@@ -322,3 +322,12 @@ jest.mock('react-native-webview', () => {
 jest.mock('react-native-haptic-feedback', () => ({
   HapticFeedbackTypes: {},
 }))
+
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  __esModule: true,
+  default: {
+    setString: jest.fn(),
+    getString: jest.fn().mockResolvedValue(''),
+    hasString: jest.fn().mockResolvedValue(false),
+  },
+}))
