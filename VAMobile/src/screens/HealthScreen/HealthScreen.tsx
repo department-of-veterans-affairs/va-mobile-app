@@ -111,7 +111,7 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-      ? t('copays.activityButton.subText', {
+      ? t('copays.amountDueForBills', {
           amount: numberToUSDollars(copaysSummary.amountDue),
           count: copaysSummary.count,
         })
