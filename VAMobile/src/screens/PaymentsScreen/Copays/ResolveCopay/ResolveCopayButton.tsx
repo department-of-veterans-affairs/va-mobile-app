@@ -6,7 +6,7 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { MedicalCopayRecord } from 'api/types'
 import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
 
 type ResolveCopayButtonProps = {
   copay?: MedicalCopayRecord
@@ -14,7 +14,6 @@ type ResolveCopayButtonProps = {
 
 function ResolveCopayButton({ copay }: ResolveCopayButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheet = useShowActionSheet()
 
@@ -48,7 +47,7 @@ function ResolveCopayButton({ copay }: ResolveCopayButtonProps) {
   }
 
   return (
-    <Box my={theme.dimensions.buttonPadding}>
+    <Box>
       <Button label={t('copays.resolveCopay')} onPress={onButtonPress} />
     </Box>
   )

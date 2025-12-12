@@ -94,7 +94,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
         />
       </TextView>
       {/* Summary with icon */}
-      <Box flexDirection="row" alignItems="center">
+      <Box flexDirection="row">
         <Icon name="Warning" fill={theme.colors.icon.warning} />
         <Box ml={theme.dimensions.condensedMarginBetween} flexShrink={1}>
           <TextView variant="HelperText">{renderSummary()}</TextView>
@@ -108,7 +108,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
           justifyContent={'space-between'}
           alignItems={'center'}
           minHeight={theme.dimensions.touchableMinHeight}
-          pt={5}>
+          py={theme.dimensions.buttonPadding}>
           <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
             {t('copays.reviewDetails')}
           </TextView>
