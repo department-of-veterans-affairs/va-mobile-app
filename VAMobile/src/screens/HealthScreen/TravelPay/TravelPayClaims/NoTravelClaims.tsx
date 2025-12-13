@@ -25,9 +25,9 @@ function NoTravelClaims() {
       </TextView>
       <LinkWithAnalytics
         type="custom"
-        onPress={() => navigateTo('Appointments', { tab: 1 })}
+        onPress={() => navigateTo('HealthTab', { screen: 'Appointments', params: { tab: 1 }, initial: false })}
         text={t('travelPay.statusList.noClaims.goToPastAppointments')}
-        testID={`goToVAGovTravelClaimStatus`}
+        testID={`goToPastAppointmentsLinkID`}
       />
     </Box>
   )
