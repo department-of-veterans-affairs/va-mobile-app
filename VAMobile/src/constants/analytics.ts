@@ -866,6 +866,27 @@ export const Events = {
       },
     }
   },
+  vama_offline_action: (): Event => {
+    return {
+      name: 'vama_offline_action',
+    }
+  },
+  vama_offline_cache: (value: string): Event => {
+    return {
+      name: 'vama_offline_cache',
+      params: {
+        value,
+      },
+    }
+  },
+  vama_offline_no_data: (value: string): Event => {
+    return {
+      name: 'vama_offline_no_data',
+      params: {
+        value,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',

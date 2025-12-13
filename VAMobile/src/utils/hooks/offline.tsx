@@ -1,13 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AccessibilityInfo, Alert } from 'react-native'
+import { AccessibilityInfo } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import NetInfo, { addEventListener, useNetInfo } from '@react-native-community/netinfo'
 import { useFocusEffect } from '@react-navigation/native'
 
 import { onlineManager } from '@tanstack/react-query'
-import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
@@ -15,8 +14,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
 import {
   OfflineState,
-  logOfflineEventQueue,
-  queueOfflineEvent,
+  queueOfflineScreenEvent,
   setBannerExpanded,
   setOfflineTimestamp,
   setShouldAnnounceOffline,
@@ -39,21 +37,11 @@ export const useOfflineEventQueue = (screen: string) => {
         return
       }
 
-      let isOnline: boolean | null = null
       const unsubscribe = addEventListener(({ isConnected }) => {
         const connected = forceOffline || isConnected
         // Upon navigating to a screen while offline queue an event
         if (connected === false) {
-          dispatch(queueOfflineEvent(Events.vama_offline_access(screen)))
-        }
-
-        // When the connection status changes update for later
-        if (connected !== isOnline) {
-          // Once connection has been reestablished log the offline events in the queue
-          if (connected) {
-            dispatch(logOfflineEventQueue())
-          }
-          isOnline = connected
+          dispatch(queueOfflineScreenEvent(Events.vama_offline_access(screen)))
         }
       })
 
@@ -136,22 +124,4 @@ export const useOfflineAnnounce = () => {
       }
     }
   }, [connectionStatus, offlineTimestamp, dispatch, t, remoteConfigActivated])
-}
-
-// Enabling any to handle the type of the snackbar which is not exposed in the component library
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function showOfflineSnackbar(snackbar: any, t: TFunction, inModal = false): void {
-  if (inModal) {
-    Alert.alert(t('offline.alert.title'), t('offline.alert.body'), [{ text: t('dismiss'), style: 'default' }])
-  } else {
-    snackbar.show(t('offline.toast.checkConnection'), { isError: true })
-  }
-}
-
-/**
- * Returns true if the user is currently focusing on a modal
- */
-export function useIsWithinModal(): boolean {
-  const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
-  return !!viewingModal
 }

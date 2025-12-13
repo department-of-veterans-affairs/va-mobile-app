@@ -12,11 +12,13 @@ import {
 import type { UndefinedInitialDataOptions } from '@tanstack/react-query/src/queryOptions'
 import type { UseQueryResult } from '@tanstack/react-query/src/types'
 
+import { Events } from 'constants/analytics'
 import { RootState } from 'store'
-import { OfflineState, setLastUpdatedTimestamp } from 'store/slices'
+import { OfflineState, queueOfflineEvent, setLastUpdatedTimestamp } from 'store/slices'
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useAppDispatch } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 export default new QueryClient({
@@ -47,6 +49,29 @@ export const offlineRetry = <TError = DefaultError>(_: number, error: TError) =>
   return featureEnabled('offlineMode') && !!error.networkError
 }
 
+const useQueryAnalytics = (queryKey: QueryKey) => {
+  const connectionStatus = useAppIsOnline()
+  const dispatch = useAppDispatch()
+  const lastUpdatedDate = useGetLastUpdatedTime(queryKey)
+
+  // This state prevents the events from being queued multiple times
+  const [cachedEventLogged, setCachedEventLogged] = useState(false)
+  const [noDataEventLogged, setNoDataEventLogged] = useState(false)
+
+  // log analytics to show when the user is getting cached data vs no data being available while offline
+  useEffect(() => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      if (lastUpdatedDate && !cachedEventLogged) {
+        dispatch(queueOfflineEvent(Events.vama_offline_cache(`${queryKey}`)))
+        setCachedEventLogged(true)
+      } else if (!lastUpdatedDate && !noDataEventLogged) {
+        dispatch(queueOfflineEvent(Events.vama_offline_no_data(`${queryKey}`)))
+        setNoDataEventLogged(true)
+      }
+    }
+  }, [cachedEventLogged, connectionStatus, dispatch, lastUpdatedDate, noDataEventLogged, queryKey])
+}
+
 /*
   useQuery is a wrapper hook for the react-query useQuery. It acts the same but with two changes. First it adds tracking
   for the last time the data was fetched from the api. And second it will kick off a retry when the device disconnects
@@ -62,6 +87,8 @@ export const useQuery = <
 ): UseQueryResult<TData, TError> & { lastUpdatedDate: number | undefined } => {
   const lastUpdatedDate = useGetLastUpdatedTime(options.queryKey)
   const dispatch = useAppDispatch()
+  useQueryAnalytics(options.queryKey)
+
   const queryResult = useTanstackQuery({
     /**
      By default, the query client caches for 5 minutes with a max expiration of 24 days.
@@ -74,6 +101,7 @@ export const useQuery = <
       const queryFn = options.queryFn as QueryFunction<TQueryFnData, TQueryKey, never>
       const response = await queryFn?.(context)
 
+      // Save last updated timestamp while online
       if (featureEnabled('offlineMode') && onlineManager.isOnline()) {
         dispatch(setLastUpdatedTimestamp(`${options.queryKey}`, Date.now().toString()))
       }

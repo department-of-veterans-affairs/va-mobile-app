@@ -2,14 +2,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { AppointmentData } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 type AppointmentFileTravelPayAlertProps = {
@@ -25,7 +24,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
   const mutationState = useTravelClaimSubmissionMutationState(appointment.id)
   const mutationStatus = mutationState?.status
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
@@ -43,7 +42,7 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
             if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-              showOfflineSnackbar(snackbar, t)
+              showOfflineSnackbar()
               return
             }
 

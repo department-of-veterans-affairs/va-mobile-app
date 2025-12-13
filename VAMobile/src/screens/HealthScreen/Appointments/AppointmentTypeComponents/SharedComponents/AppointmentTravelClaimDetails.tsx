@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { useRoute } from '@react-navigation/native'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { QueryClient, useQueryClient } from '@tanstack/react-query'
 
 import { appointmentsKeys } from 'api/appointments'
@@ -26,8 +25,8 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { navigateToTravelClaims, useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
@@ -63,7 +62,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const queryClient = useQueryClient()
   const route = useRoute()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -86,7 +85,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
 
   const goToTravelClaims = () => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 
@@ -189,7 +188,7 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
             type="custom"
             onPress={() => {
               if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                showOfflineSnackbar(snackbar, t)
+                showOfflineSnackbar()
                 return
               }
 

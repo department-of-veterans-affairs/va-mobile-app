@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
@@ -51,8 +50,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -89,6 +88,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
+  const showOfflineSnackbar = useOfflineSnackbar()
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED
@@ -110,7 +110,6 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -421,7 +420,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       ),
       onPress: (): void => {
         if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-          showOfflineSnackbar(snackbar, t)
+          showOfflineSnackbar()
           return
         }
 
@@ -545,7 +544,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         label={t('prescription.history.startRefillRequest')}
         onPress={() => {
           if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-            showOfflineSnackbar(snackbar, t)
+            showOfflineSnackbar()
             return
           }
           navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })

@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import _ from 'underscore'
 
 import { Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
-import { useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useOfflineSnackbar, useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 
 type GiveFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'GiveFeedback'>
 
@@ -20,14 +19,14 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
   const theme = useTheme()
   const openAppStore = useOpenAppStore()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const items: Array<SimpleListItemObj> = _.flatten([
     {
       text: t('giveFeedback.send'),
       onPress: () => {
         if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-          showOfflineSnackbar(snackbar, t)
+          showOfflineSnackbar()
           return
         }
 

@@ -17,7 +17,8 @@ export type OfflineState = {
    */
   viewingModal?: boolean
   lastUpdatedTimestamps: Record<string, string | undefined>
-  offlineEventsMap: Record<string, Event>
+  offlineEventScreenMap: Record<string, Event>
+  offlineEvents: Array<Event>
 }
 
 export const initialOfflineState: OfflineState = {
@@ -27,7 +28,8 @@ export const initialOfflineState: OfflineState = {
   forceOffline: false,
   shouldAnnounceOffline: false,
   lastUpdatedTimestamps: {},
-  offlineEventsMap: {},
+  offlineEventScreenMap: {},
+  offlineEvents: [],
 }
 
 export const setOfflineTimestamp =
@@ -54,6 +56,12 @@ export const setLastUpdatedTimestamp =
     dispatch(dispatchSetLastUpdatedTime({ queryKey, timestamp }))
   }
 
+export const queueOfflineScreenEvent =
+  (event: Event): AppThunk =>
+  async (dispatch) => {
+    dispatch(dispatchQueueOfflineScreenEvent(event))
+  }
+
 export const queueOfflineEvent =
   (event: Event): AppThunk =>
   async (dispatch) => {
@@ -61,8 +69,9 @@ export const queueOfflineEvent =
   }
 
 export const logOfflineEventQueue = (): AppThunk => async (dispatch) => {
-  const offlineEventQueue: Array<Event> = Object.values(store.getState().offline.offlineEventsMap)
-
+  const { offlineEventScreenMap, offlineEvents } = store.getState().offline
+  const offlineEventQueue: Array<Event> = [...Object.values(offlineEventScreenMap), ...offlineEvents]
+  console.log('logging offline events', offlineEventQueue.length)
   // Go through each queued event, log it and remove it from the queue
   while (offlineEventQueue.length) {
     await logAnalyticsEvent(offlineEventQueue[0])
@@ -111,22 +120,27 @@ const offlineSlice = createSlice({
       const { queryKey, timestamp } = action.payload
       state.lastUpdatedTimestamps[queryKey] = timestamp
     },
-    dispatchQueueOfflineEvent: (state, action: PayloadAction<Event>) => {
+    dispatchQueueOfflineScreenEvent: (state, action: PayloadAction<Event>) => {
       const screen = action.payload.params?.screen_name as string
-      if (!state.offlineEventsMap[screen]) {
-        state.offlineEventsMap = {
-          ...state.offlineEventsMap,
+      if (!state.offlineEventScreenMap[screen]) {
+        state.offlineEventScreenMap = {
+          ...state.offlineEventScreenMap,
           [screen]: action.payload,
         }
         console.debug(
           'NEW QUEUE LENGTH',
-          Object.keys(state.offlineEventsMap).length,
+          Object.keys(state.offlineEventScreenMap).length + state.offlineEvents.length,
           action.payload.params?.screen_name,
         )
       }
     },
+    dispatchQueueOfflineEvent: (state, action: PayloadAction<Event>) => {
+      state.offlineEvents = [...state.offlineEvents, action.payload]
+      console.debug('NEW QUEUE LENGTH', Object.keys(state.offlineEventScreenMap).length + state.offlineEvents.length)
+    },
     dispatchClearOfflineEventQueue: (state) => {
-      state.offlineEventsMap = {}
+      state.offlineEventScreenMap = {}
+      state.offlineEvents = []
     },
     dispatchSetForceOffline: (state, action: PayloadAction<boolean>) => {
       state.forceOffline = action.payload
@@ -148,6 +162,7 @@ const {
   dispatchUpdateBannerExpanded,
   dispatchUpdateViewingModal,
   dispatchSetLastUpdatedTime,
+  dispatchQueueOfflineScreenEvent,
   dispatchQueueOfflineEvent,
   dispatchClearOfflineEventQueue,
   dispatchSetForceOffline,

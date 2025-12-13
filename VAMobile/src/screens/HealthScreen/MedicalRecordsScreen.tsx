@@ -3,8 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
@@ -13,8 +11,8 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -28,7 +26,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const { data: authorizedServices } = useAuthorizedServices()
 
@@ -67,7 +65,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
           type="custom"
           onPress={() => {
             if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-              showOfflineSnackbar(snackbar, t)
+              showOfflineSnackbar()
               return
             }
 
