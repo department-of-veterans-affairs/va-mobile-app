@@ -472,6 +472,3 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 }
 
 export default ViewMessageScreen
-function getEnv(): { WEBVIEW_URL_FACILITY_LOCATOR: any } {
-  throw new Error('Function not implemented.')
-}
