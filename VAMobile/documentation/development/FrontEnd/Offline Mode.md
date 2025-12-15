@@ -3,14 +3,28 @@ title: Offline mode
 ---
 
 # Offline Mode
-
 ## What is offline mode
+Offline mode is a feature which enables the user to continue using the app with as little obstruction as possible in low connectivity environments. 
 
-Offline mode is a feature which enables the user to continue using the app with as little obstruction as possible in low connectivity environments. Disconnecting from the internet while using the app no longer displays error screens. Instead, cached data will be used to display the users' information if it has already been retrieved in this session. If data is not available for a feature, an informative message will be displayed instead of an error screen.
+Disconnecting from the internet while using the app:
+* No longer displays error screens for network failures.
+* Cached data will be used to display the users’ information if it has already been retrieved in this session.
+* If data is not available for a feature, an informative message will be displayed instead of an error screen.
 
 ## How does offline mode work
+Enabling offline mode works by utilizing two libraries:
+* [NetInfo](https://github.com/react-native-netinfo/react-native-netinfo) - detect the network status of the device
+* [react-query](https://tanstack.com/query/v5/docs/framework/react/overview) -  to store and fetch the data in the local cache
 
-Enabling offline mode works by utilizing two libraries, NetInfo to detect the network status of the device and react-query to store and fetch the data in the local cache. When the device disconnects from the network, NetInfo will listen for that change, display an offline mode banner app wide, and set the status for react-query to handle how data should be fetched. When in offline mode, react query will not make API requests. Instead, it will check the local cache for the query and provide that to the query caller. If no data is available in the cache for a query, an empty result is returned.
+When the device disconnects from the network:
+1. NetInfo will listen for that change, display an offline mode banner app wide
+2. Set the status for react-query to handle how data should be fetched.
+
+When in offline mode:
+* react query will not make API requests.
+* It will check the local cache for the query and provide that to the query caller
+* If no data is available in the cache for a query, an empty result is returned.
+
 On initial load of the App component, an event listener is set up to set the connection status for react-query using NetInfo. Offline mode is currently behind a feature flag and can be toggled by `offlineMode `in the remote config screen of the developer settings. After offline mode has been enabled in the remote config, restarting the app is required for it to function properly.
 
 ## How do I add offline mode to my feature?
@@ -24,13 +38,20 @@ For examples of the following steps, look at the Appointments feature code where
 7. If the feature has ui that performs an action that would require a network connection, this can be handled by short-circuiting the action and calling showOfflineSnackbar instead. To check the network status when the action is called, use useAppIsOnline and check if the connectionStatus is currently disconnected before performing your action.
 8. Ensure any interactions with offline mode are behind the offlineMode feature flag
 
-## Debugging                                           
+## Analytics
+These events are tracked while offline, then logged when a network connection is established in the same session.
+* **vama_offline_access** - Used to log navigation in the app. Takes the current route name as `screen_name`
+* **vama_offline_action** - Used to log when the user attempts to trigger an action that would require a network connection.
+* **vama_offline_cache** - Used to log when query data is accessed from the cache. Takes the query id as `value`
+* **vama_offline_no_data** - Used to log when there is no cached data for a query. Takes the query id as `value`
 
+## Debugging
 Developers can enable offline mode without disconnecting from the network by navigating to the developer screen and enabling the Offline Debug toggle. This will add a toggle to the header representing the connection status. On for online, off for offline. This is helpful for testing ui, accessibility and basic functionality, but the features should still be tested by actually disabling the connection before features are pushed.
-To clear the offline cache, go to the developer settings screen and press 'Reset offline storage'. This will reset all queries to empty states. This is helpful for testing features that use data that loads immediately on app launch that is difficult to test with no data otherwise.
-When using a physical android device connected to Android Studio, the command `adb shell svc wifi enable|disable` can be used to enable or disable Wi-Fi. This is useful for simulating a mid-request disconnect as well as testing screen reader behavior without leaving the app to disconnect.
+This will reset all queries to empty states. When using a physical android device connected to Android Studio, the command `adb shell svc wifi enable|disable` can be used to enable or disable Wi-Fi. This is useful for simulating a mid-request disconnect as well as testing screen reader behavior without leaving the app to disconnect.
+
+## To clear the offline cache
+To clear the offline cache, go to the developer settings screen and press 'Reset offline storage'. This will reset all queries and delete all cached data. This is helpful for testing features that use data that loads immediately on app launch that is difficult to test with no data otherwise.
 
 ## Testing
-
 * To enable offline mode in tests, pass the isOnline flag to the render function from testUtils. This will set the connection status for both react query and net info while tests are running. The default value of isOnline is true
 * NetInfo functionality has been fully mocked in jest/netinfoMock.ts
