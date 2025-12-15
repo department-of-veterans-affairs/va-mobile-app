@@ -52,7 +52,7 @@ jobs:
       - run: echo "Approval required for package lock file change. An admin from the required group must approve this step."
 
   security-check:
-    name: Shai-Hulud 2.0 Security Check
+    name: security-check
     runs-on: ubuntu-latest
     needs: [check_for_locked_file_changes, request_bypass_approval]
     if: always() && (needs.check_for_locked_file_changes.outputs.any_changed == 'false' || needs.request_bypass_approval.result == 'success')
