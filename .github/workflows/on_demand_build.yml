@@ -41,10 +41,9 @@ jobs:
           # Remove potentially dangerous characters: backticks, single and double quotes, and backslashes.
           # Then collapse whitespace and truncate to 1000 chars.
           SANITIZED=$(printf '%s' "$NOTES" \
-            | tr '\r\n' ' ' \
-            | sed -E 's/[[:space:]]+/ /g' \
-            | sed "s/[\\\`\"']//g" \
-            | sed -E 's/[[:space:]]+/ /g' \
+            | tr '\r' ' ' \
+            | tr '\n' ' ' \
+            | sed -E 's/[[:space:]]+/ /g; s/[`"'"'"\\]//g; s/[[:space:]]+/ /g' \
             | cut -c1-1000)
           # Ensure we don't accidentally emit an empty output variable without the proper format
           echo "notes_sanitized=$SANITIZED" >> "$GITHUB_OUTPUT"

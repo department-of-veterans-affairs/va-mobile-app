@@ -68,10 +68,14 @@ jobs:
     steps:
       - name: Post message to Slack
         id: post_message
+        env:
+          CHANNEL_ID: ${{ needs.get_channel_id.outputs.channel_id }}
+          MESSAGE: ${{ inputs.message }}
         run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
-            -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.get_channel_id.outputs.channel_id}}'","text":"${{inputs.message}}"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
+          # Use jq to build a properly-escaped JSON payload
+          payload=$(jq -n --arg channel "$CHANNEL_ID" --arg text "$MESSAGE" '{channel:$channel, text:$text}')
+          ts=$(curl -s -X POST -H "Authorization: Bearer $SLACK_API_TOKEN" \
+            -H "Content-type: application/json" \
+            --data "$payload" \
+            https://slack.com/api/chat.postMessage | jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
