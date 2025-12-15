@@ -87,7 +87,8 @@ jobs:
           ssh-private-key: ${{ secrets.VA_MOBILE_ROBOT_GITHUB_SSH_KEY }}
       - name: Decode base64 encoded App Store Connect API key and GoogleService-Info.plist
         run: |
-          echo "Notes: ${{ inputs.notes }}"
+          # Do not print raw user-provided notes to logs; avoid leaking or formatting issues
+          echo "Notes received"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
           echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
@@ -108,9 +109,23 @@ jobs:
           command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      - name: Sanitize inputs
+        run: |
+          # sanitize function: remove CR, escape newlines, quotes, backticks and dollar signs
+          sanitize() {
+            printf '%s' "$1" | tr -d '\r' | sed -E ':a;N;$!ba;s/\n/\\n/g' | sed -E 's/"/\\"/g; s/`/\\`/g; s/\$/\\$/g'
+          }
+
+          SANITIZED_NOTES=$(sanitize "${{ inputs.notes }}")
+          # write sanitized notes as multiline env var
+          echo "SANITIZED_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$SANITIZED_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+          if [ -n "${{ inputs.slack_thread_ts }}" ]; then
+            SANITIZED_SLACK_TS=$(sanitize "${{ inputs.slack_thread_ts }}")
+            echo "SLACK_THREAD_TS=$SANITIZED_SLACK_TS" >> $GITHUB_ENV
+          fi
       - name: Install Pods
         run: pod install
       - name: Bundle app
@@ -124,4 +139,5 @@ jobs:
         with:
           timeout_minutes: 20
           max_attempts: 3
-          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" tfGroup:"${{ inputs.tf_group }}" --verbose
+          # Use sanitized notes from the environment to avoid injection/formatting issues
+          command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"$SANITIZED_NOTES" tfGroup:"${{ inputs.tf_group }}" --verbose
