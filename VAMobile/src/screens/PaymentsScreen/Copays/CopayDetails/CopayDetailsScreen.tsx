@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Pressable } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Icon, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
+import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useDownloadCopayStatement, useMedicalCopays } from 'api/medicalCopays'
 import {
@@ -21,7 +20,7 @@ import {
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getCopayInfo } from 'screens/PaymentsScreen/Copays/CopayCard/CopayCard'
-import PreviousPDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PreviousPDFStatements'
+import PDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PDFStatements'
 import RecentStatementCharges from 'screens/PaymentsScreen/Copays/CopayDetails/RecentStatementCharges'
 import StatementAddresses from 'screens/PaymentsScreen/Copays/CopayDetails/StatementAddresses'
 import ResolveCopayButton from 'screens/PaymentsScreen/Copays/ResolveCopay/ResolveCopayButton'
@@ -51,8 +50,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
   const statements = useMemo(() => copaysData?.data ?? [], [copaysData?.data])
   const facilityCopays = statements.filter(({ pSFacilityNum }) => pSFacilityNum === copay?.pSFacilityNum)
   const sortedFacilityCopays = useMemo(() => sortStatementsByDate(facilityCopays), [facilityCopays])
-
-  const previousSortedFacilityCopays = sortedFacilityCopays.filter((statement) => statement.id !== copay.id)
 
   const { error: downloadStatementError, refetch: refetchStatement } = useDownloadCopayStatement(statementID, {
     enabled: statementID.length > 0,
@@ -154,25 +151,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
         {formattedDate}
       </TextView>
       <ResolveCopayButton copay={copay} />
-      <Pressable onPress={() => downloadStatement(copay.id)} accessibilityRole="link" accessible={true}>
-        <Box
-          display={'flex'}
-          flexDirection={'row'}
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          minHeight={theme.dimensions.touchableMinHeight}
-          pt={5}>
-          <TextView flex={1} variant={'HelperTextBold'} color={'link'}>
-            {t('copays.goToStatement')}
-          </TextView>
-          <Icon
-            name={'ChevronRight'}
-            fill={theme.colors.icon.chevronListItem}
-            width={theme.dimensions.chevronListItemWidth}
-            height={theme.dimensions.chevronListItemHeight}
-          />
-        </Box>
-      </Pressable>
     </>
   )
 
@@ -214,7 +192,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
             <MultiTouchCard mainContent={mainContent} />
           </Box>
           <RecentStatementCharges copay={copay} />
-          <PreviousPDFStatements statements={previousSortedFacilityCopays} downloadStatement={downloadStatement} />
+          <PDFStatements statements={sortedFacilityCopays} downloadStatement={downloadStatement} />
           <StatementAddresses copay={copay} facilityName={copayInfo.facilityName} />
           <NoticeOfRightsButton />
           {renderHelpContent()}
