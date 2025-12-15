@@ -31,8 +31,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
-import { useAlert, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useAlert, useBeforeNavBackListener, useOfflineSnackbar, useShowActionSheet, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>
@@ -81,6 +81,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   // TODO Remove this once country codes can be saved
   const countryCode =
@@ -149,7 +150,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
   const onSave = (): void => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 
@@ -304,7 +305,7 @@ function EditPhoneNumberScreen({ navigation, route }: IEditPhoneNumberScreen) {
 
   const onDeletePressed = (): void => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 
 import { ParamListBase } from '@react-navigation/native'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { TFunction } from 'i18next'
 
 import { Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
@@ -16,8 +15,8 @@ import {
   AppointmentDetailsTypeConstants,
 } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { RouteNavigationFunction, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -33,7 +32,7 @@ const WebViewLinkHelper = (
   testID?: string,
 ) => {
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   return (
     <LinkWithAnalytics
@@ -42,7 +41,7 @@ const WebViewLinkHelper = (
       testID={testID}
       onPress={() => {
         if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-          showOfflineSnackbar(snackbar, t)
+          showOfflineSnackbar()
           return
         }
 

@@ -7,12 +7,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { enableScreens } from 'react-native-screens'
 import { Provider, useSelector } from 'react-redux'
 
+import { addEventListener } from '@react-native-community/netinfo'
 import analytics from '@react-native-firebase/analytics'
 import { utils } from '@react-native-firebase/app'
 import crashlytics from '@react-native-firebase/crashlytics'
 import performance from '@react-native-firebase/perf'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native'
+import { NavigationContainer, useNavigation, useNavigationContainerRef } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import {
@@ -29,6 +30,7 @@ import queryClient from 'api/queryClient'
 import { ClaimData } from 'api/types'
 import { NavigationTabBar } from 'components'
 import NotificationManager, { useNotificationContext } from 'components/NotificationManager'
+import { Events } from 'constants/analytics'
 import { EnvironmentTypesConstants } from 'constants/common'
 import { linking } from 'constants/linking'
 import { NAMESPACE } from 'constants/namespaces'
@@ -61,7 +63,15 @@ import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, SettingsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
+import {
+  AnalyticsState,
+  AuthState,
+  SettingsState,
+  handleTokenCallbackUrl,
+  initializeAuth,
+  logOfflineEventQueue,
+  queueOfflineScreenEvent,
+} from 'store/slices'
 import {
   AccessibilityState,
   sendUsesLargeTextAnalytics,
@@ -76,10 +86,15 @@ import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
 import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
-import { useNetworkConnectionListener, useOfflineAnnounce } from 'utils/hooks/offline'
+import {
+  CONNECTION_STATUS,
+  useAppIsOnline,
+  useNetworkConnectionListener,
+  useOfflineAnnounce,
+} from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
-import { fetchAndActivate } from 'utils/remoteConfig'
+import { featureEnabled, fetchAndActivate } from 'utils/remoteConfig'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
 const REMOTE_CONFIG_REFRESH = 30 // minutes
@@ -208,6 +223,47 @@ function MainApp() {
       </QueryClientProvider>
     </Provider>
   )
+}
+
+const useOfflineNavEvents = () => {
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation()
+  const connectionStatus = useAppIsOnline()
+
+  useEffect(() => {
+    const cb = () => {
+      if (featureEnabled('offlineMode') && connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+        // @ts-ignore - getCurrentRoute does not appear on the type but does exist
+        dispatch(queueOfflineScreenEvent(Events.vama_offline_access(navigation.getCurrentRoute().name)))
+      }
+    }
+    navigation.addListener('state', cb)
+    return () => navigation.removeListener('state', cb)
+  }, [connectionStatus, dispatch, navigation])
+
+  // Listens to the connection status and triggers
+  useEffect(() => {
+    if (!featureEnabled('offlineMode')) {
+      return
+    }
+
+    let isOnline: boolean | null = null
+    const unsubscribe = addEventListener(({ isConnected }) => {
+      const connected = isConnected
+      // When the connection status changes update for later
+      if (connected !== isOnline) {
+        // Once connection has been reestablished log the offline events in the queue
+        if (connected) {
+          dispatch(logOfflineEventQueue())
+        }
+        isOnline = connected
+      }
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [dispatch])
 }
 
 export function AuthGuard() {
@@ -483,6 +539,7 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
+  useOfflineNavEvents()
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.

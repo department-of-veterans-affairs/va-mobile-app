@@ -5,7 +5,6 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { SegmentedControl, useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -26,8 +25,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -39,6 +38,8 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const showOfflineSnackbar = useOfflineSnackbar()
+
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
@@ -53,7 +54,6 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
 
   const {
     data: userAuthorizedServices,
@@ -139,7 +139,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
         label={t('appointments.startScheduling')}
         onPress={() => {
           if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-            showOfflineSnackbar(snackbar, t)
+            showOfflineSnackbar()
             return
           }
 

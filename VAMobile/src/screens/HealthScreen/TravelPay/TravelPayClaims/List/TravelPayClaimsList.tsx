@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { TravelPayClaimData } from 'api/types'
 import {
   Box,
@@ -20,8 +18,8 @@ import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
@@ -38,7 +36,7 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
   const [claimsToShow, setClaimsToShow] = useState<Array<TravelPayClaimData>>([])
 
   const perPage = DEFAULT_PAGE_SIZE
@@ -51,7 +49,7 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
 
   const goToClaimDetails = (claimId: string) => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 

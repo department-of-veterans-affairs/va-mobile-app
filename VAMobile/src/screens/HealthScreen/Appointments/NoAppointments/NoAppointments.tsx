@@ -1,8 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-
 import { Box, LinkWithAnalytics, TextView } from 'components'
 import ContentUnavailableCard from 'components/ContentUnavailableCard'
 import { Events } from 'constants/analytics'
@@ -10,8 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
@@ -27,7 +25,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
     return (
@@ -62,7 +60,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
             type="custom"
             onPress={() => {
               if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                showOfflineSnackbar(snackbar, t)
+                showOfflineSnackbar()
                 return
               }
 

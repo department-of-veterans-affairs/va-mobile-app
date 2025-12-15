@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { MutateOptions, useQueryClient } from '@tanstack/react-query'
 
 import {
@@ -43,8 +42,8 @@ import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } 
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppDispatch, useOfflineSnackbar, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
@@ -63,7 +62,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const {
     data: systemNotificationData,
@@ -239,7 +238,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
               type="custom"
               onPress={() => {
                 if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                  showOfflineSnackbar(snackbar, t)
+                  showOfflineSnackbar()
                   return
                 }
 

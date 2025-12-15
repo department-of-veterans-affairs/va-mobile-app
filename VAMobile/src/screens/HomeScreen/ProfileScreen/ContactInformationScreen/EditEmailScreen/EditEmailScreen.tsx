@@ -24,8 +24,15 @@ import { NAMESPACE } from 'constants/namespaces'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { updateDisplayEmailConfirmationAlert } from 'store/slices'
 import { isErrorObject } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline } from 'utils/hooks/offline'
+import {
+  useAlert,
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useOfflineSnackbar,
+  useShowActionSheet,
+  useTheme,
+} from 'utils/hooks'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -44,6 +51,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const deleteEmailAlert = useAlert()
   const confirmAlert = useShowActionSheet()
   const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -97,7 +105,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
 
   const onSave = (): void => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 
@@ -185,7 +193,7 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
 
   const onDeletePressed = (): void => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 

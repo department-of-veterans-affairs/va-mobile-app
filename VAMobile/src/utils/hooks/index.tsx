@@ -34,7 +34,7 @@ import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
+import { DowntimeWindowsByFeatureType, ErrorsState, OfflineState, queueOfflineEvent } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -42,7 +42,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
-import { CONNECTION_STATUS, showOfflineSnackbar, useAppIsOnline, useIsWithinModal } from 'utils/hooks/offline'
+import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -190,8 +190,7 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
-  const inModal = useIsWithinModal()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   return (url: string, eventParams?: EventParams) => {
     logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
@@ -203,7 +202,7 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
       if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-        showOfflineSnackbar(snackbar, t, inModal)
+        showOfflineSnackbar()
         return
       }
 
@@ -503,13 +502,12 @@ export function useOpenAppStore(): () => void {
   const launchExternalLink = useExternalLink()
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
-  const { t } = useTranslation(NAMESPACE.COMMON)
   const connectionStatus = useAppIsOnline()
-  const snackbar = useSnackbar()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   return () => {
     if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-      showOfflineSnackbar(snackbar, t)
+      showOfflineSnackbar()
       return
     }
 
@@ -556,5 +554,29 @@ export function useShowActionSheet(): (
     }
 
     showActionSheetWithOptions(sheetOptions, callback)
+  }
+}
+
+/**
+ * Returns true if the user is currently focusing on a modal
+ */
+export function useIsWithinModal(): boolean {
+  const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
+  return !!viewingModal
+}
+
+export const useOfflineSnackbar = () => {
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+  const snackbar = useSnackbar()
+  const inModal = useIsWithinModal()
+
+  return () => {
+    if (inModal) {
+      Alert.alert(t('offline.alert.title'), t('offline.alert.body'), [{ text: t('dismiss'), style: 'default' }])
+    } else {
+      snackbar.show(t('offline.toast.checkConnection'), { isError: true })
+    }
+    dispatch(queueOfflineEvent(Events.vama_offline_action()))
   }
 }
