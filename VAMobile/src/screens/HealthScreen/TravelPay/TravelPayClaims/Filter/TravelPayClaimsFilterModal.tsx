@@ -5,11 +5,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { Box, BoxProps, RadioGroup, TextView, VAScrollView } from 'components'
+import { Box, BoxProps, RadioGroup, TextView, VAScrollView, radioOption } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import TravelClaimsFilterCheckboxGroup from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilterCheckboxGroup'
 import { setAccessibilityFocus } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import { isIOS } from 'utils/platform'
 import { CheckboxOption, SortOption, SortOptionType, useFilterToggle } from 'utils/travelPay'
 
 type TravelPayClaimsFilterModalProps = {
@@ -43,16 +44,33 @@ const TravelPayClaimsFilterModal: FC<TravelPayClaimsFilterModalProps> = ({
 
   useEffect(() => setSelectedFilter(currentFilter), [currentFilter, setSelectedFilter])
 
-  const sortOptions = [
-    {
-      optionLabelKey: t('travelPay.statusList.sortOption.recent'),
-      value: SortOption.Recent,
-    },
-    {
-      optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
-      value: SortOption.Oldest,
-    },
-  ]
+  const sortOptions = useMemo(
+    (): Array<radioOption<SortOptionType>> => [
+      {
+        optionLabelKey: t('travelPay.statusList.sortOption.recent'),
+        value: SortOption.Recent,
+        a11yLabel: `${t('travelPay.statusList.sortOption.recent')}, ${
+          selectedSortBy === SortOption.Recent
+            ? isIOS()
+              ? t('travelPay.statusList.sortOption.selected')
+              : '' // Android will announce selected automatically
+            : t('travelPay.statusList.sortOption.notSelected')
+        },`,
+      },
+      {
+        optionLabelKey: t('travelPay.statusList.sortOption.oldest'),
+        value: SortOption.Oldest,
+        a11yLabel: `${t('travelPay.statusList.sortOption.oldest')}, ${
+          selectedSortBy === SortOption.Oldest
+            ? isIOS()
+              ? t('travelPay.statusList.sortOption.selected')
+              : ''
+            : t('travelPay.statusList.sortOption.notSelected')
+        },`,
+      },
+    ],
+    [t, selectedSortBy],
+  )
 
   // Workaround to fix issue with ScrollView nested inside a Modal - affects Android
   // https://github.com/facebook/react-native/issues/48822
