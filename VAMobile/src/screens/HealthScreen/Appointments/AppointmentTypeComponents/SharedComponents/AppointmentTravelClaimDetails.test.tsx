@@ -17,7 +17,6 @@ import {
   AppointmentTravelClaimDetails,
   getCachedAppointmentById,
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents'
-import { ErrorsState } from 'store/slices'
 import { DowntimeWindowsByFeatureType } from 'store/slices'
 import { QueriesData, RenderParams, fireEvent, render, screen, when } from 'testUtils'
 import { AppointmentDetailsSubType } from 'utils/appointments'
