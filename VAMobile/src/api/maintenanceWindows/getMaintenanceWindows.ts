@@ -16,6 +16,7 @@ import { AuthState, DowntimeWindowsByFeatureType } from 'store/slices'
 
 export type MaintenanceWindowOverrideStorage = Record<string, { startTime: string; endTime: string } | undefined>
 export const MAINTENANCE_WINDOW_OVERRIDES = '@maintenance_window_overrides'
+const MAINTENANCE_WINDOW_REFETCH_INTERVAL = 180000 // 3 minutes
 
 const initializeDowntimeWindowsByFeature = (): DowntimeWindowsByFeatureType => {
   return reduce(
@@ -82,7 +83,7 @@ const useMaintenanceWindowQuery = () => {
     meta: {
       errorName: 'getMaintenanceWindows: Service error',
     },
-    refetchInterval: 180000, // 3 minutes
+    refetchInterval: MAINTENANCE_WINDOW_REFETCH_INTERVAL,
   })
 }
 
