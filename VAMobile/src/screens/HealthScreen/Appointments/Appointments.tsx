@@ -29,6 +29,7 @@ import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'u
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
@@ -146,7 +147,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
           logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
           navigateTo('Webview', {
             url: LINK_URL_SCHEDULE_APPOINTMENTS,
-            displayTitle: t('webview.vagov'),
+            displayTitle: vaGovWebviewTitle(t),
             loadingMessage: t('webview.appointments.loading'),
             useSSO: true,
           })

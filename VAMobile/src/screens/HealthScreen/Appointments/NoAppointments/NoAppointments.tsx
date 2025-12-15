@@ -11,6 +11,7 @@ import getEnv from 'utils/env'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
@@ -67,7 +68,7 @@ export function NoAppointments({ subText, subTextA11yLabel, showVAGovLink = true
               logAnalyticsEvent(Events.vama_webview(LINK_URL_SCHEDULE_APPOINTMENTS))
               navigateTo('Webview', {
                 url: LINK_URL_SCHEDULE_APPOINTMENTS,
-                displayTitle: t('webview.vagov'),
+                displayTitle: vaGovWebviewTitle(t),
                 loadingMessage: t('webview.appointments.loading'),
                 useSSO: true,
               })

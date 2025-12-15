@@ -45,6 +45,7 @@ import getEnv from 'utils/env'
 import { useAppDispatch, useOfflineSnackbar, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
@@ -245,7 +246,7 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
                 navigateTo('Webview', {
                   url: LINK_URL_VA_NOTIFICATIONS,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('webview.notifications.loading'),
                   useSSO: true,
                 })

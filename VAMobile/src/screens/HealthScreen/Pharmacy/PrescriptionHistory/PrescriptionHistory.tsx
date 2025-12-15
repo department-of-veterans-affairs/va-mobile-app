@@ -55,6 +55,7 @@ import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
@@ -427,7 +428,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
           url: LINK_URL_MHV_VA_MEDICATIONS,
-          displayTitle: t('webview.vagov'),
+          displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
           useSSO: true,
         })

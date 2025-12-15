@@ -15,6 +15,7 @@ import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
@@ -72,7 +73,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
             logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
             navigateTo('Webview', {
               url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
-              displayTitle: t('webview.vagov'),
+              displayTitle: vaGovWebviewTitle(t),
               loadingMessage: t('webview.medicalRecords.loading'),
               useSSO: true,
             })

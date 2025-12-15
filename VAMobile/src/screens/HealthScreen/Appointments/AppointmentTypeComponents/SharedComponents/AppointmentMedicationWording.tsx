@@ -17,6 +17,7 @@ import {
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
 import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -47,7 +48,7 @@ const WebViewLinkHelper = (
 
         navigateTo('Webview', {
           url,
-          displayTitle: t('webview.vagov'),
+          displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
         })
       }}
