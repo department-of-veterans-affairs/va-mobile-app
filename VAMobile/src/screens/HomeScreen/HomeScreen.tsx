@@ -78,6 +78,7 @@ import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -313,7 +314,7 @@ export function HomeScreen({}: HomeScreenProps) {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
