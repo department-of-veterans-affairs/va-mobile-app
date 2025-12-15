@@ -52,6 +52,10 @@ export const WhatsNewConfig: WhatsNewConfigItem[] = [
     featureName: 'COE',
     featureFlag: 'COEAvailable',
   },
+  {
+    featureName: 'TravelListAndStatus',
+    featureFlag: 'travelPayStatusList',
+  },
 ]
 
 export const getWhatsNewConfig = (): WhatsNewConfigItem[] => {

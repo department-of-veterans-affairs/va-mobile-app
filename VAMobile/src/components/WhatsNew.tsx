@@ -156,6 +156,7 @@ export const WhatsNew = () => {
         <AlertWithHaptics
           variant="info"
           expandable={true}
+          initializeExpanded={true}
           header={t('whatsNew.title')}
           secondaryButton={{ label: t('whatsNew.dismissMessage'), onPress: onDismiss }}
           analytics={{ onExpand: expandCollapsible, onCollapse: closeCollapsible }}>
