@@ -95,7 +95,6 @@ context('WhatsNew', () => {
 
   it('should render a feature that has not been skipped', async () => {
     initializeTestInstance('oneFeatureNoFlag')
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
     })
@@ -103,7 +102,6 @@ context('WhatsNew', () => {
 
   it('should not render feature behind disabled feature flag', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
       expect(screen.queryByText('whatsNew.bodyCopy.testFeature')).toBeFalsy()
@@ -112,7 +110,6 @@ context('WhatsNew', () => {
 
   it('should render feature behind enabled feature flag', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
       expect(screen.getByText('whatsNew.bodyCopy.testFeature')).toBeTruthy()
@@ -122,7 +119,6 @@ context('WhatsNew', () => {
   it('should set the features as skipped when dismissed ', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
 
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
 
     await waitFor(() => {
@@ -136,7 +132,6 @@ context('WhatsNew', () => {
   it('should not set features behind disabled feature flag as skipped when dismissed', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
 
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
 
     await waitFor(() => {

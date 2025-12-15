@@ -16,6 +16,7 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const {
   WEBVIEW_URL_WHAT_TO_BRING_TO_APPOINTMENTS,
@@ -38,7 +39,7 @@ const webViewLinkHelper = (
       onPress={() => {
         navigateTo('Webview', {
           url,
-          displayTitle: t('webview.vagov'),
+          displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
         })
       }}
