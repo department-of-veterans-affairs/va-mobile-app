@@ -30,12 +30,22 @@ jobs:
       notes_sanitized: ${{ steps.sanitize.outputs.notes_sanitized }}
     steps:
       - id: sanitize
+        # Put the raw notes into the step environment so the runner sets it safely
+        env:
+          NOTES: ${{ github.event.inputs.notes }}
         run: |
           set -euo pipefail
-          # Read the raw notes input
-          NOTES="${{ github.event.inputs.notes }}"
+          # Read the raw notes input from the environment (safe against quotes/backticks)
+          : "Using NOTES from env"
           # Replace newlines with spaces, collapse repeated whitespace, escape double quotes, and trim to 1000 chars
-          SANITIZED=$(printf '%s' "$NOTES" | tr '\r\n' ' ' | sed -E 's/[[:space:]]+/ /g' | sed 's/"/\\"/g' | cut -c1-1000)
+          # Remove potentially dangerous characters: backticks, single and double quotes, and backslashes.
+          # Then collapse whitespace and truncate to 1000 chars.
+          SANITIZED=$(printf '%s' "$NOTES" \
+            | tr '\r\n' ' ' \
+            | sed -E 's/[[:space:]]+/ /g' \
+            | sed "s/[\\\`\"']//g" \
+            | sed -E 's/[[:space:]]+/ /g' \
+            | cut -c1-1000)
           # Ensure we don't accidentally emit an empty output variable without the proper format
           echo "notes_sanitized=$SANITIZED" >> "$GITHUB_OUTPUT"
   start_slack_thread:
