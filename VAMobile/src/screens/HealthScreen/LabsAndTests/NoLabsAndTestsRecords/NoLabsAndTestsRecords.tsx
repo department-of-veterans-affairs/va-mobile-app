@@ -7,7 +7,6 @@ import { a11yLabelMyVA411, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
 
-
 function NoLabsAndTestsRecords() {
   const { t } = useTranslation(NAMESPACE.COMMON)
 
