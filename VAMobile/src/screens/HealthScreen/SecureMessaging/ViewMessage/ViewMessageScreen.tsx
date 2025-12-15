@@ -52,11 +52,14 @@ import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { DemoState } from 'store/slices/demoSlice'
 import { GenerateFolderMessage } from 'translations/en/functions'
+import { a11yLabelVA } from 'utils/a11yLabel/va'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { useDowntimeByScreenID, useTheme } from 'utils/hooks'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { getfolderName } from 'utils/secureMessaging'
 import { screenContentAllowed } from 'utils/waygateConfig'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessage'>
 
@@ -425,6 +428,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 variant="warning"
                 header={t('secureMessaging.reply.youCanNoLonger')}
                 description={t('secureMessaging.reply.youCanNoLonger.description')}
+                descriptionA11yLabel={a11yLabelVA(t('secureMessaging.reply.youCanNoLonger.description'))}
                 testID="secureMessagingYouCanNoLongerAlertID">
                 {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
                 <TextView
@@ -436,7 +440,7 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
                 <LinkWithAnalytics
                   type="custom"
                   text={t('upcomingAppointmentDetails.findYourVAFacility')}
-                  onPress={() => Linking.openURL('https://www.va.gov/find-locations')}
+                  onPress={() => Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)}
                 />
               </AlertWithHaptics>
             </Box>
@@ -468,3 +472,6 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
 }
 
 export default ViewMessageScreen
+function getEnv(): { WEBVIEW_URL_FACILITY_LOCATOR: any } {
+  throw new Error('Function not implemented.')
+}
