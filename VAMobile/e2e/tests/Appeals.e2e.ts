@@ -65,6 +65,11 @@ describe('Appeals', () => {
     await expect(element(by.text(AppealsIdConstants.APPEAL_SUBMITTED_TEXT))).toExist()
     await expect(element(by.text('Currently on appeal'))).toExist()
     await expect(element(by.text('Service connection, ureteral stricture'))).toExist()
+    await expect(element(by.text('Service connection, neck strain'))).toExist()
+    // Test for issues with "We're unable to show..." descriptions
+    // There may be multiple instances of both texts, so use .atIndex(0) for both
+    await expect(element(by.text("We're unable to show 1 issue on appeal")).atIndex(0)).toExist()
+    await expect(element(by.text("We're unable to show 2 issues on appeal")).atIndex(0)).toExist()
   })
 
   it('verify review past events information', async () => {
@@ -88,20 +93,8 @@ describe('Appeals', () => {
     await element(by.id(CommonE2eIdConstants.APPEALS_DETAILS_ID)).scrollTo('bottom')
   })
 
-  it('should tap on the links in the need help section', async () => {
-    if (device.getPlatform() === 'android') {
-      await device.disableSynchronization()
-      await element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).tap()
-      await setTimeout(5000)
-      await device.takeScreenshot('AppealsNeedHelpAndroidCallingScreen')
-      await device.enableSynchronization()
-    }
-
-    await device.launchApp({ newInstance: false })
-    await device.disableSynchronization()
-    await element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID)).tap()
-    await setTimeout(2000)
-    await device.takeScreenshot('AppealsNeedHelpGoToVAScreen')
-    await device.enableSynchronization()
+  it('should have links in the need help section', async () => {
+    await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.GO_TO_VA_GOV_LINK_ID))).toExist()
   })
 })

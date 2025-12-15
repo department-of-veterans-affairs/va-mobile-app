@@ -7,10 +7,9 @@ import { claimsAndAppealsKeys } from 'api/claimsAndAppeals'
 import { ClaimsAndAppealsListPayload } from 'api/types'
 import { ClaimType } from 'constants/claims'
 import { LARGE_PAGE_SIZE } from 'constants/common'
+import ClaimsAndAppealsListView from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import * as api from 'store/api'
 import { QueriesData, context, mockNavProps, render, when } from 'testUtils'
-
-import ClaimsAndAppealsListView from './ClaimsAndAppealsListView'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -32,7 +31,8 @@ const mockPayload: ClaimsAndAppealsListPayload = {
         decisionLetterSent: false,
         dateFiled: '2020-10-01',
         updatedAt: '2020-10-05',
-        displayTitle: 'Compensation',
+        displayTitle: 'Claim for compensation',
+        claimTypeBase: 'compensation claim',
         phase: 3,
         claimTypeCode: '',
         documentsNeeded: true,
@@ -55,12 +55,13 @@ const mockPayload: ClaimsAndAppealsListPayload = {
       id: '3',
       type: 'claim',
       attributes: {
-        subtype: 'Dependency',
+        subtype: 'Compensation',
         completed: false,
         decisionLetterSent: false,
         dateFiled: '2020-10-04',
         updatedAt: '2020-11-18',
-        displayTitle: 'Dependency',
+        displayTitle: 'Claim for disability compensation',
+        claimTypeBase: 'disability compensation claim',
         phase: 6,
         claimTypeCode: '010LCOMP',
         documentsNeeded: false,
@@ -121,14 +122,14 @@ context('ClaimsAndAppealsListView', () => {
       expect(screen.getByText('Insurance on docket appeal')).toBeTruthy()
       expect(screen.getByText(t('claimDetails.receivedOn', { date: 'December 22, 2020' }))).toBeTruthy()
 
-      expect(screen.getByText('Dependency')).toBeTruthy()
+      expect(screen.getByText('Claim for disability compensation')).toBeTruthy()
       expect(screen.getByText(t('claimDetails.receivedOn', { date: 'October 04, 2020' }))).toBeTruthy()
       expect(
         screen.getByText(`${t('stepXofY', { current: 6, total: 8 })}: ${t('claimPhase.8step.heading.phase6')}`),
       ).toBeTruthy()
       expect(screen.getByText(t('movedToThisStepOn', { date: 'November 18, 2020' }))).toBeTruthy()
 
-      expect(screen.getByText('Compensation')).toBeTruthy()
+      expect(screen.getByText('Claim for compensation')).toBeTruthy()
       expect(screen.getByText(t('claims.moreInfoNeeded'))).toBeTruthy()
       expect(screen.getByText(t('claimDetails.receivedOn', { date: 'October 01, 2020' }))).toBeTruthy()
       expect(
@@ -155,7 +156,7 @@ context('ClaimsAndAppealsListView', () => {
       await waitFor(() =>
         fireEvent.press(
           screen.getByRole('link', {
-            name: `Compensation ${t('claims.moreInfoNeeded')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
+            name: `Claim for compensation ${t('claims.moreInfoNeeded')} ${t('claimDetails.receivedOn', { date: 'October 01, 2020' })} ${t('stepXofY', { current: 3, total: 5 })}: ${t('claimPhase.5step.heading.phase3')} ${t('movedToThisStepOn', { date: 'October 05, 2020' })}`,
           }),
         ),
       )

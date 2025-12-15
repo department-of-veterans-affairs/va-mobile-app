@@ -18,6 +18,11 @@ import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig')
 
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: jest.fn(),
+}))
+
 context('PhoneAppointment', () => {
   const defaultAppointmentAttributes: AppointmentAttributes = {
     //appointmentType and Status not used at this point in the logic, those are used in the upcoming appointments details
@@ -801,6 +806,28 @@ context('PhoneAppointment', () => {
       expect(screen.getAllByLabelText('1 2 3 4 5 6 7 8 9 0')).toBeTruthy()
       expect(screen.getAllByRole('link', { name: t('contactVA.tty.displayText') })).toBeTruthy()
       expect(screen.getAllByLabelText(t('contactVA.tty.number.a11yLabel'))).toBeTruthy()
+    })
+  })
+
+  describe('PhoneAppointment cerner appointments without reason and comment details', () => {
+    it('does not render details section', () => {
+      const attributes: AppointmentAttributes = {
+        ...defaultAppointmentAttributes,
+        isCerner: true,
+      }
+      initializeTestInstance(attributes, AppointmentDetailsSubTypeConstants.Upcoming)
+
+      expect(screen.queryByRole('header', { name: t('upcomingAppointmentDetails.sharedProvider') })).toBeFalsy()
+      expect(
+        screen.queryByText(t('upcomingAppointmentDetails.reasonDetails', { reason: 'Running a Fever' })),
+      ).toBeFalsy()
+      expect(
+        screen.queryByText(
+          t('upcomingAppointmentDetails.reasonComment', {
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+          }),
+        ),
+      ).toBeFalsy()
     })
   })
 })

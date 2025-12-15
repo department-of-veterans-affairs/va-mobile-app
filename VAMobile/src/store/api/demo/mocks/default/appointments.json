@@ -41,7 +41,7 @@
             "reason": "Test",
             "isCovidVaccine": false,
             "typeOfCare": "Podiatry",
-            "travelPayEligible": false,
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -51,7 +51,7 @@
               "claim": {
                 "id": "16cbc3d0-56de-4d86-ebf3-ed0f6908ee53",
                 "claimNumber": "TC00000000042",
-                "claimStatus": "In Progress",
+                "claimStatus": "Incomplete",
                 "appointmentDateTime": "2023-02-23T22:22:52.549Z",
                 "facilityId": "442",
                 "facilityName": "Tomah VA Medical Center",
@@ -972,6 +972,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "claim": {
                 "claimNumber": "TC0928098230498",
@@ -1278,6 +1279,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1386,6 +1388,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1506,6 +1509,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1515,7 +1519,7 @@
               "claim": {
                 "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
                 "claimNumber": "TC00000000002",
-                "claimStatus": "Paid",
+                "claimStatus": "Claim Paid",
                 "appointmentDateTime": "2023-02-23T22:22:52.549Z",
                 "facilityId": "442",
                 "facilityName": "Tomah VA Medical Center",
@@ -1572,6 +1576,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1637,6 +1642,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1745,6 +1751,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -1754,7 +1761,7 @@
               "claim": {
                 "id": "16cbc3d0-56de-4d86-abf3-ed0f6908ee53",
                 "claimNumber": "TC00000000032",
-                "claimStatus": "Paid",
+                "claimStatus": "Claim Paid",
                 "appointmentDateTime": "2023-02-23T22:22:52.549Z",
                 "facilityId": "442",
                 "facilityName": "Tomah VA Medical Center",
@@ -1865,6 +1872,7 @@
             "patientEmail": "Vilasini.reddy@va.gov",
             "bestTimeToCall": ["Morning"],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayEligible": true,
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -3955,7 +3963,6 @@
             "statusDetail": null,
             "timeZone": "America/Denver",
             "vetextId": null,
-            "reason": "Mock Cerner appointment - New Issue",
             "isCovidVaccine": null,
             "isPending": false,
             "proposedTimes": [
@@ -4009,8 +4016,8 @@
             },
             "minutesDuration": null,
             "phoneOnly": false,
-            "startDateLocal": "{{now + 48 days}}",
-            "startDateUtc": "{{now + 48 days utc}}",
+            "startDateLocal": "{{now + 49 days}}",
+            "startDateUtc": "{{now + 49 days utc}}",
             "status": "BOOKED",
             "statusDetail": null,
             "timeZone": "America/Denver",
@@ -4020,15 +4027,15 @@
             "isPending": false,
             "proposedTimes": [
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "PM"
               },
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "AM"
               },
               {
-                "date": "{{now + 48 days short}}",
+                "date": "{{now + 49 days short}}",
                 "time": "AM"
               }
             ],

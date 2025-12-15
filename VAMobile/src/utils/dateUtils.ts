@@ -2,7 +2,7 @@ import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { TimeFrameDropDownItem, TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
-import { formatDateMMMyyyy, formatDateRangeMMMyyyy } from 'utils/formattingUtils'
+import { formatDateMMMMyyyy, formatDateRangeMMMyyyy } from 'utils/formattingUtils'
 
 export const todaysDate = DateTime.local()
 
@@ -265,7 +265,6 @@ export const getPickerOptions = (
       label: t(pastThreeMonthsTKey),
       value: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       a11yLabel: t(pastThreeMonthsTKey),
-      testID: 'pastThreeMonthsTestID',
       dates: {
         startDate: fiveMonthsToThreeMonths.startDate,
         endDate: fiveMonthsToThreeMonths.endDate,
@@ -275,10 +274,9 @@ export const getPickerOptions = (
       label: formatDateRangeMMMyyyy(fiveMonthsToThreeMonths.startDate, fiveMonthsToThreeMonths.endDate),
       value: TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS,
       a11yLabel: t(dateRangeA11yLabelTKey, {
-        date1: formatDateMMMyyyy(fiveMonthsToThreeMonths.startDate),
-        date2: formatDateMMMyyyy(fiveMonthsToThreeMonths.endDate),
+        date1: formatDateMMMMyyyy(fiveMonthsToThreeMonths.startDate),
+        date2: formatDateMMMMyyyy(fiveMonthsToThreeMonths.endDate),
       }),
-      testID: 'pastFiveToThreeMonthsTestID',
       dates: {
         startDate: fiveMonthsToThreeMonths.startDate,
         endDate: fiveMonthsToThreeMonths.endDate,
@@ -288,10 +286,9 @@ export const getPickerOptions = (
       label: formatDateRangeMMMyyyy(eightMonthsToSixMonths.startDate, eightMonthsToSixMonths.endDate),
       value: TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS,
       a11yLabel: t(dateRangeA11yLabelTKey, {
-        date1: formatDateMMMyyyy(eightMonthsToSixMonths.startDate),
-        date2: formatDateMMMyyyy(eightMonthsToSixMonths.endDate),
+        date1: formatDateMMMMyyyy(eightMonthsToSixMonths.startDate),
+        date2: formatDateMMMMyyyy(eightMonthsToSixMonths.endDate),
       }),
-      testID: 'pastEightToSixMonthsTestID',
       dates: {
         startDate: eightMonthsToSixMonths.startDate,
         endDate: eightMonthsToSixMonths.endDate,
@@ -301,10 +298,9 @@ export const getPickerOptions = (
       label: formatDateRangeMMMyyyy(elevenMonthsToNineMonths.startDate, elevenMonthsToNineMonths.endDate),
       value: TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
       a11yLabel: t(dateRangeA11yLabelTKey, {
-        date1: formatDateMMMyyyy(elevenMonthsToNineMonths.startDate),
-        date2: formatDateMMMyyyy(elevenMonthsToNineMonths.endDate),
+        date1: formatDateMMMMyyyy(elevenMonthsToNineMonths.startDate),
+        date2: formatDateMMMMyyyy(elevenMonthsToNineMonths.endDate),
       }),
-      testID: 'pastElevenToNineMonthsTestID',
       dates: {
         startDate: elevenMonthsToNineMonths.startDate,
         endDate: elevenMonthsToNineMonths.endDate,
@@ -314,7 +310,6 @@ export const getPickerOptions = (
       label: t(allOfTKey, { year: pastAllCurrentYear.startDate.year }),
       value: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       a11yLabel: t(allOfTKey, { year: pastAllCurrentYear.startDate.year }),
-      testID: 'pastAllCurrentYearTestID',
       dates: {
         startDate: pastAllCurrentYear.startDate,
         endDate: pastAllCurrentYear.endDate,
@@ -324,7 +319,6 @@ export const getPickerOptions = (
       label: t(allOfTKey, { year: pastAllLastYear.startDate.year }),
       value: TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
       a11yLabel: t(allOfTKey, { year: pastAllLastYear.startDate.year }),
-      testID: 'pastAllLastYearTestID',
       dates: {
         startDate: pastAllLastYear.startDate,
         endDate: pastAllLastYear.endDate,

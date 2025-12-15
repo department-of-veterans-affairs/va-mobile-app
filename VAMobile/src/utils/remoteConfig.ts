@@ -9,7 +9,7 @@ const { IS_TEST } = getEnv()
 
 const fetchRemote = !__DEV__ && !IS_TEST
 const RC_FETCH_TIMEOUT = 10000 // 10 sec
-const RC_CACHE_TIME = 1800 // 30 min
+const RC_CACHE_TIME = 1740 // 29 min
 const REMOTE_CONFIG_OVERRIDES_KEY = '@store_remote_config_overrides'
 export let overrideRemote = false
 
@@ -19,6 +19,7 @@ export type FeatureToggleType =
   | 'cernerTrueForDemo'
   | 'COEAvailable'
   | 'appointmentsTestTime'
+  | 'datePickerUpdate'
   | 'decisionLettersWaygate'
   | 'haptics'
   | 'hsScrollAnalytics'
@@ -34,18 +35,21 @@ export type FeatureToggleType =
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
-  | 'travelPayClaimsFullHistory'
+  | 'travelPayClaimDetails'
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
   | 'showCernerAlertSM'
   | 'showEmailConfirmationAlert'
+  | 'showTimezoneMessage'
   | 'overpayCopay'
+  | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
   appointmentRequests: boolean
   appointmentsTestTime: boolean
   cernerTrueForDemo: boolean
+  datePickerUpdate: boolean
   COEAvailable: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
@@ -62,19 +66,22 @@ type FeatureToggleValues = {
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
-  travelPayClaimsFullHistory: boolean
+  travelPayClaimDetails: boolean
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
   showCernerAlertSM: boolean
   showEmailConfirmationAlert: boolean
+  showTimezoneMessage: boolean
   overpayCopay: boolean
+  remoteConfigRefreshTest: boolean
 }
 
 export const defaults: FeatureToggleValues = {
   appointmentRequests: false,
   appointmentsTestTime: false,
   cernerTrueForDemo: false,
+  datePickerUpdate: true,
   COEAvailable: false,
   decisionLettersWaygate: true,
   haptics: true,
@@ -82,7 +89,7 @@ export const defaults: FeatureToggleValues = {
   inAppRecruitment: false,
   inAppFeedback: true,
   inAppReview: true,
-  labsAndTests: false,
+  labsAndTests: true,
   nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
@@ -91,16 +98,32 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: true,
-  travelPayClaimsFullHistory: false,
-  travelPayStatusList: false,
+  travelPayClaimDetails: true,
+  travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
   showCernerAlertSM: true,
   showEmailConfirmationAlert: true,
+  showTimezoneMessage: true,
   overpayCopay: false,
+  remoteConfigRefreshTest: false,
 }
 
 export let devConfig: FeatureToggleValues = defaults
+
+export const fetchAndActivate = async () => {
+  /**
+   * If in staging or production, fetch and activate remote settings.  Otherwise,
+   * we'll use the devConfig for local development.
+   */
+  if (fetchRemote) {
+    console.debug('Remote Config: Fetching and activating')
+    await remoteConfig().fetch(RC_CACHE_TIME)
+    await remoteConfig().activate()
+  }
+
+  await loadOverrides()
+}
 
 /**
  * Sets up Remote Config, sets defaults, fetches and activates config from firebase
@@ -114,18 +137,7 @@ export const activateRemoteConfig = async (): Promise<void> => {
     await remoteConfig().setDefaults(defaults)
     console.debug('Remote Config: Defaults set', defaults)
 
-    /**
-     * If in staging or production, fetch and activate remote settings.  Otherwise,
-     * we'll use the devConfig for local development.
-     */
-    if (fetchRemote) {
-      console.debug('Remote Config: Fetching and activating')
-      await remoteConfig().fetch(RC_CACHE_TIME)
-      await remoteConfig().activate()
-      console.debug('Remote Config: Activated config')
-    }
-
-    await loadOverrides()
+    await fetchAndActivate()
   } catch (err) {
     logNonFatalErrorToFirebase(err, 'activateRemoteConfig: Firebase Remote Config Error')
     console.debug('activateRemoteConfig: Failed to activate remote config')

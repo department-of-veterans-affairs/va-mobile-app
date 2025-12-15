@@ -31,7 +31,9 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
+import { useRouteNavigation } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_ASK_VA_GOV } = getEnv()
 
@@ -43,6 +45,7 @@ type BenefitSummaryServiceVerificationProps = StackScreenProps<
 function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryServiceVerificationProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const {
     data: letterBeneficiaryData,
     error: letterBeneficiaryError,
@@ -313,11 +316,20 @@ function BenefitSummaryServiceVerification({ navigation }: BenefitSummaryService
 
           <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <LinkWithAnalytics
-              type="url"
-              url={LINK_URL_ASK_VA_GOV}
+              type="custom"
               text={t('letters.benefitService.sendMessage')}
               a11yLabel={a11yLabelVA(t('letters.benefitService.sendMessage'))}
               a11yHint={t('letters.benefitService.sendMessageA11yHint')}
+              onPress={() => {
+                logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
+                navigateTo('Webview', {
+                  url: LINK_URL_ASK_VA_GOV,
+                  displayTitle: vaGovWebviewTitle(t),
+                  loadingMessage: t('loading.vaWebsite'),
+                  useSSO: true,
+                  backButtonTestID: 'webviewBack',
+                })
+              }}
               testID="lettersBenefitServiceGoToAskVAID"
             />
           </Box>

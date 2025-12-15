@@ -122,6 +122,29 @@ export const Events = {
       },
     }
   },
+  vama_appt_noauth: (): Event => {
+    return {
+      name: 'vama_appt_noauth',
+    }
+  },
+  vama_appt_invalid_range: (): Event => {
+    return {
+      name: 'vama_appt_invalid_range',
+    }
+  },
+  vama_appt_empty_range: (): Event => {
+    return {
+      name: 'vama_appt_empty_range',
+    }
+  },
+  vama_appt_time_frame: (timeFrame: string): Event => {
+    return {
+      name: 'vama_appt_time_frame',
+      params: {
+        timeFrame,
+      },
+    }
+  },
   vama_cerner_alert: (): Event => {
     return {
       name: 'vama_cerner_alert',
@@ -409,6 +432,14 @@ export const Events = {
         text_clicked,
         screen_name,
         additional_details,
+      },
+    }
+  },
+  vama_copay_stmt_download: (id: string): Event => {
+    return {
+      name: 'vama_copay_stmt_download',
+      params: {
+        id,
       },
     }
   },
@@ -1234,6 +1265,22 @@ export const Events = {
       name: 'vama_smoc_error',
       params: {
         error,
+      },
+    }
+  },
+  vama_travel_pay_doc_dl: (
+    claim_id: string,
+    claim_status: string,
+    document_type: string,
+    document_filename: string,
+  ): Event => {
+    return {
+      name: 'vama_travel_pay_doc_dl',
+      params: {
+        claim_id,
+        claim_status,
+        document_type,
+        document_filename,
       },
     }
   },

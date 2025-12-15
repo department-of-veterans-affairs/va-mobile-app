@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
@@ -13,6 +14,7 @@ import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
@@ -24,13 +26,15 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
 
+  const { data: authorizedServices } = useAuthorizedServices()
+
   return (
     <FeatureLandingTemplate
       backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('vaMedicalRecords.title')}>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {featureEnabled('labsAndTests') && (
+        {featureEnabled('labsAndTests') && authorizedServices?.labsAndTestsEnabled && (
           <LargeNavButton
             title={t('labsAndTests.buttonTitle')}
             onPress={() => navigateTo('LabsAndTestsList')}
@@ -61,7 +65,7 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
             logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
             navigateTo('Webview', {
               url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
-              displayTitle: t('webview.vagov'),
+              displayTitle: vaGovWebviewTitle(t),
               loadingMessage: t('webview.medicalRecords.loading'),
               useSSO: true,
             })

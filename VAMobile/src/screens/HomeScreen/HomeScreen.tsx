@@ -17,8 +17,10 @@ import { DateTime } from 'luxon'
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
+import { useDebts } from 'api/debts'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useMedicalCopays } from 'api/medicalCopays'
 import { useServiceHistory } from 'api/militaryService'
 import { usePayments } from 'api/payments'
 import { usePersonalInformation } from 'api/personalInformation/getPersonalInformation'
@@ -59,6 +61,7 @@ import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Dev
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
 import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
 import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
@@ -74,6 +77,7 @@ import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -127,6 +131,12 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
+
+  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+  const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
+
+  const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -303,7 +313,7 @@ export function HomeScreen({}: HomeScreenProps) {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
@@ -416,16 +426,6 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'claims'}
                 />
               )}
-              {featureEnabled('overpayCopay') && (
-                <ActivityButton
-                  title={t('copays.title')}
-                  subText={t('copays.activityButton.subText', {
-                    amount: numberToUSDollars(0),
-                    count: 0,
-                  })}
-                  deepLink={'copays'}
-                />
-              )}
               {!!foldersQuery.data?.inboxUnreadCount && (
                 <ActivityButton
                   title={`${t('messages')}`}
@@ -433,12 +433,22 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {featureEnabled('overpayCopay') && (
+              {featureEnabled('overpayCopay') && showCopays && (
+                <ActivityButton
+                  title={t('copays.title')}
+                  subText={t('copays.activityButton.subText', {
+                    amount: numberToUSDollars(copaysSummary.amountDue),
+                    count: copaysSummary.count,
+                  })}
+                  deepLink={'copays'}
+                />
+              )}
+              {featureEnabled('overpayCopay') && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    amount: numberToUSDollars(0),
-                    count: 0,
+                    amount: numberToUSDollars(debtsSummary.amountDue),
+                    count: debtsSummary.count,
                   })}
                   deepLink={'debts'}
                 />
@@ -771,6 +781,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="RemoteConfigTestScreen"
+        component={RemoteConfigTestScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>

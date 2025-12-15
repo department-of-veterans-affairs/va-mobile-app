@@ -47,6 +47,8 @@ export type VAIconColors = {
   deleteFill: string
   success: string
   error: string
+  info: string
+  warning: string
   active: string
   inactive: string
   checkboxEnabledPrimary: string
@@ -106,6 +108,8 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   textWithIconButton: string
   UnreadMessagesTag: string
+  vadsFontBodySmall: string
+  vadsFontBodyXsmall: string
   VAHeader: string
   VASelector: string
   VeteranStatusBranch: string
@@ -115,6 +119,7 @@ export type VATypographyThemeVariants = {
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
   vadsFontHeadingXsmall: string
+  vadsFontHeadingMedium: string
 }
 
 export type VABackgroundColors = {

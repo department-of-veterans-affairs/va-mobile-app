@@ -20,7 +20,15 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -29,18 +37,25 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - run: yarn lint:ci
   super-linter:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Run Super-Linter
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PAT }}
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
           LINTER_RULES_PATH: '.github/linters/'
           VALIDATE_ALL_CODEBASE: false
@@ -82,33 +97,6 @@ jobs:
           VALIDATE_XML: false
           VALIDATE_YAML_PRETTIER: false
         uses: super-linter/super-linter@v7.4.0
-  lint-changed:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: 'VAMobile/.nvmrc'
-      - name: Install dependencies
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-      - name: Get changed files
-        id: get-changed-apps
-        uses: ./.github/actions/get-changed-files
-      - name: lint-changed-files
-        env:
-          CHANGED_FILES: ${{ steps.get-changed-apps.outputs.changed_files }}
-        run: |
-          if [ "$CHANGED_FILES" ]; then
-            yarn run lint:changed:ci; 
-          fi
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -116,7 +104,15 @@ jobs:
         chunk: [1, 2, 3, 4, 5] # Array of chunks we want to split the tests into
       fail-fast: false
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -125,7 +121,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - name: yarn test
         # GHA does not have test splitting built in, so we run this script to split our tests into chunks and run
         # jest with the specified files.  The number at the end is the # of chunks we're splitting the tests into.
@@ -134,7 +130,15 @@ jobs:
   bundle_android:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -143,12 +147,20 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
       - run: yarn bundle:android
   bundle_ios:
     runs-on: macos-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - uses: actions/setup-node@v3
         with:
           node-version-file: 'VAMobile/.nvmrc'
@@ -157,5 +169,5 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: cd VAMobile && yarn install --frozen-lockfile --non-interactive
-      - run: yarn pods && yarn bundle:ios
+          command: cd VAMobile && yarn install --ignore-scripts --frozen-lockfile --non-interactive
+      - run: ../.github/scripts/run-manual-setup.sh ios && yarn bundle:ios

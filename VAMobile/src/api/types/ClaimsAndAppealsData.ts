@@ -407,6 +407,18 @@ export const AppealTypesConstants: {
   appeal: 'appeal',
 }
 
+export const AppealTypesDisplayNames: {
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview'
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim'
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal'
+  appeal: 'appealDetails.appealTypesDisplayName.appeal'
+} = {
+  higherLevelReview: 'appealDetails.appealTypesDisplayName.higherLevelReview',
+  supplementalClaim: 'appealDetails.appealTypesDisplayName.supplementalClaim',
+  legacyAppeal: 'appealDetails.appealTypesDisplayName.legacyAppeal',
+  appeal: 'appealDetails.appealTypesDisplayName.appeal',
+}
+
 export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'
 
 export type AppealGetData = {
@@ -457,6 +469,7 @@ export type ClaimsAndAppealsList = {
     dateFiled: string
     updatedAt: string
     displayTitle: string
+    claimTypeBase?: string
     decisionLetterSent: boolean
     phase?: number | string
     claimTypeCode?: string
@@ -519,6 +532,8 @@ export type ClaimAttributesData = {
   requestedDecision: boolean
   claimType: string
   claimTypeCode: string
+  displayTitle: string
+  claimTypeBase?: string
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string

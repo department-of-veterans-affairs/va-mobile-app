@@ -53,5 +53,19 @@ module.exports = {
       },
     ],
     'react-native-a11y/has-accessibility-hint': 1,
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: ['.*'],
+      },
+    ],
   },
+  overrides: [
+    {
+      files: ['**/index.ts'],
+      rules: {
+        'no-restricted-imports': 'off',
+      },
+    },
+  ],
 }

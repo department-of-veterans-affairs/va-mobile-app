@@ -3,7 +3,7 @@
     "meta": {
       "status": 200,
       "pageNumber": 1,
-      "totalRecordCount": 34
+      "totalRecordCount": 35
     },
     "data": [
       {
@@ -17,8 +17,23 @@
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 47.5,
+          "reimbursementAmount": 47.5
+        }
+      },
+      {
+        "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+        "type": "travelPayClaimSummary",
+        "attributes": {
+          "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "claimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "claimStatus": "Denied",
+          "appointmentDateTime": "{{now - 2 days}}",
+          "facilityName": "Tomah VA Medical Center",
+          "createdOn": "{{now - 2 days}}",
+          "modifiedOn": "{{now - 1 day}}",
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 0.0
         }
       },
       {
@@ -27,13 +42,13 @@
         "attributes": {
           "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
           "claimNumber": "93b5fff2-a71d-4b97-9e98-3298ae0564db",
-          "claimStatus": "Saved",
+          "claimStatus": "Claim paid",
           "appointmentDateTime": "{{now - 3 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 2 days}}",
           "modifiedOn": "{{now - 2 days}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 25.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 180.0
         }
       },
       {
@@ -73,12 +88,12 @@
           "id": "a3e6fb0d-5d30-48d7-9b4b-129b44d46088",
           "claimNumber": "96b54742-b5e4-46a3-b37a-a3c47453d875",
           "claimStatus": "Appealed",
-          "appointmentDateTime": "{{now - 6 days}}",
+          "appointmentDateTime": "{{now - 150 hours}}",
           "facilityName": "Dubuque VA Clinic",
           "createdOn": "{{now - 5 days}}",
           "modifiedOn": "{{now - 5 days}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 250.0,
+          "reimbursementAmount": 180.0
         }
       },
       {
@@ -102,13 +117,13 @@
         "attributes": {
           "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
           "claimNumber": "a9777414-b4b5-4830-84f7-61016027c7c4",
-          "claimStatus": "Claim submitted",
+          "claimStatus": "Claim paid",
           "appointmentDateTime": "{{now - 10 days}}",
           "facilityName": "Minnepolis VA Medical Center",
           "createdOn": "{{now - 7 days}}",
           "modifiedOn": "{{now - 7 days}}",
           "totalCostRequested": 150.0,
-          "reimbursementAmount": 100.0
+          "reimbursementAmount": 150.0
         }
       },
       {
@@ -313,7 +328,7 @@
           "id": "20d73591-ff18-4b66-9838-1429ebbf1b6e",
           "claimNumber": "eeef2e5a-1990-45f0-a469-43096739289c",
           "claimStatus": "Claim submitted",
-          "appointmentDateTime": "{{now - 6 days}}",
+          "appointmentDateTime": "{{now - 7 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 3 days}}",
           "modifiedOn": "{{now - 2 days}}",
@@ -358,7 +373,7 @@
           "id": "7eef3e51-ef2d-4913-92e5-02e9981563e2",
           "claimNumber": "25659591-36bf-4b1c-8faa-19e3855173eb",
           "claimStatus": "Closed",
-          "appointmentDateTime": "{{now - 3 days}}",
+          "appointmentDateTime": "{{now - 4 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 30 minutes}}",
           "modifiedOn": "{{now - 30 minutes}}",
@@ -448,12 +463,12 @@
           "id": "6a5302bb-f6ee-4cf9-89b7-7b2775f056bd",
           "claimNumber": "ec8b6f84-7a29-4e30-9800-d6ff2dd6cc7e",
           "claimStatus": "In manual review",
-          "appointmentDateTime": "{{now - 2 days}}",
+          "appointmentDateTime": "{{now - 1 day}}",
           "facilityName": "Cheyenne VA Medical Center",
           "createdOn": "{{now - 1 day}}",
           "modifiedOn": "{{now - 1 day}}",
-          "totalCostRequested": 50.0,
-          "reimbursementAmount": 50.0
+          "totalCostRequested": 47.5,
+          "reimbursementAmount": 47.5
         }
       },
       {
@@ -463,7 +478,7 @@
           "id": "63bd7bc9-5ac4-41af-9f2d-4c1a7ce33b1d",
           "claimNumber": "d962acf5-c1df-47be-a2a9-9958b693d9b2",
           "claimStatus": "Closed",
-          "appointmentDateTime": "{{now - 3 days}}",
+          "appointmentDateTime": "{{now - 4 days}}",
           "facilityName": "Tomah VA Medical Center",
           "createdOn": "{{now - 45 minutes}}",
           "modifiedOn": "{{now - 45 minutes}}",
@@ -517,5 +532,313 @@
         }
       }
     ]
+  },
+  "/v0/travel-pay/claims/:id": {
+    "data": {
+      "id": "f33ef640-000f-4ecf-82b8-1c50df13d178",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "f33ef640-000f-4ecf-82b8-1c50df13d178",
+        "claimNumber": "c68baadf-3d95-45d5-857b-eca5bef6d4a5",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "In manual review",
+        "appointmentDate": "{{now - 2 days}}",
+        "facilityName": "Cheyenne VA Medical Center",
+        "totalCostRequested": 47.5,
+        "reimbursementAmount": 0,
+        "rejectionReason": null,
+        "appointment": {
+          "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 2 days}}",
+          "appointmentName": "Primary Care Appointment",
+          "appointmentType": "Primary Care",
+          "facilityId": "442",
+          "facilityName": "Cheyenne VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-12345",
+          "associatedClaimId": "f33ef640-000f-4ecf-82b8-1c50df13d178",
+          "associatedClaimNumber": "c68baadf-3d95-45d5-857b-eca5bef6d4a5",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 2 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 42.5,
+            "costSubmitted": 42.5
+          },
+          {
+            "id": "exp2-3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 2 days}}",
+            "description": "Medical center parking",
+            "costRequested": 5.0,
+            "costSubmitted": 5.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 1 day}}"
+          },
+          {
+            "documentId": "doc2-3fa85f64-5717-4562-b3fc-2c963f66afa7",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 1 day}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
+  },
+  "/v0/travel-pay/claims/7519378a-e9ef-4a84-8673-591776c8f06b": {
+    "data": {
+      "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "7519378a-e9ef-4a84-8673-591776c8f06b",
+        "claimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "Denied",
+        "appointmentDate": "{{now - 4 days}}",
+        "facilityName": "Tomah VA Medical Center",
+        "totalCostRequested": 250.0,
+        "reimbursementAmount": 0.0,
+        "rejectionReason": {
+          "rejectionReasonId": "INELIGIBLE_DISTANCE",
+          "rejectionReasonName": "Ineligible Distance",
+          "rejectionReasonTitle": "Distance requirement not met",
+          "rejectionReasonDescription": "Your home address is less than 30 miles from the VA medical facility. Travel reimbursement is only available for Veterans who live more than 30 miles from their VA medical facility or have other qualifying circumstances."
+        },
+        "decisionLetterReason": "Your home address is less than 30 miles from the VA medical facility. Travel reimbursement is only available for Veterans who live more than 30 miles from their VA medical facility or have other qualifying circumstances.",
+        "appointment": {
+          "id": "7519378a-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 4 days}}",
+          "appointmentName": "Mental Health Appointment",
+          "appointmentType": "Mental Health",
+          "facilityId": "618",
+          "facilityName": "Tomah VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-67890",
+          "associatedClaimId": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "associatedClaimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-denied-claim-mileage",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 225.0,
+            "costSubmitted": 225.0
+          },
+          {
+            "id": "exp2-denied-claim-parking",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Medical center parking",
+            "costRequested": 25.0,
+            "costSubmitted": 25.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-denied-mileage-receipt",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc2-denied-parking-receipt",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc3-decision-letter-denied",
+            "filename": "Decision Letter.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 2 days}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
+  },
+  "/v0/travel-pay/claims/352b37f2-3566-4642-98b2-6a2bc0e63757": {
+    "data": {
+      "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "352b37f2-3566-4642-98b2-6a2bc0e63757",
+        "claimNumber": "93b5fff2-a71d-4b97-9e98-3298ae0564db",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "Claim paid",
+        "appointmentDate": "{{now - 2 days}}",
+        "facilityName": "Tomah VA Medical Center",
+        "totalCostRequested": 250.0,
+        "reimbursementAmount": 180.0,
+        "rejectionReason": null,
+        "decisionLetterReason": "Mileage approved but parking not eligible per policy. Only travel expenses over 30 miles are reimbursable.",
+        "appointment": {
+          "id": "7519378a-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 3 days}}",
+          "appointmentName": "Mental Health Appointment",
+          "appointmentType": "Mental Health",
+          "facilityId": "618",
+          "facilityName": "Tomah VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-67890",
+          "associatedClaimId": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "associatedClaimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-partial-claim-mileage",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 225.0,
+            "costSubmitted": 180.0
+          },
+          {
+            "id": "exp2-partial-claim-parking",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Medical center parking",
+            "costRequested": 25.0,
+            "costSubmitted": 0.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-partial-mileage-receipt",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc2-partial-parking-receipt",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc3-partial-payment-letter",
+            "filename": "Decision Letter.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 1 day}}"
+          }
+        ],
+        "createdOn": "{{now - 2 days}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
+  },
+  "/v0/travel-pay/claims/3158ca03-e28b-49f9-ab6f-10ad809de7a4": {
+    "data": {
+      "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
+      "type": "travelPayClaimDetails",
+      "attributes": {
+        "id": "3158ca03-e28b-49f9-ab6f-10ad809de7a4",
+        "claimNumber": "a9777414-b4b5-4830-84f7-61016027c7c4",
+        "claimName": "Travel reimbursement",
+        "claimantFirstName": "Samantha",
+        "claimantMiddleName": "Michelle",
+        "claimantLastName": "Doe",
+        "claimStatus": "Claim paid",
+        "appointmentDate": "{{now - 10 days}}",
+        "facilityName": "Minnepolis VA Medical Cente",
+        "totalCostRequested": 150.0,
+        "reimbursementAmount": 150.0,
+        "rejectionReason": null,
+        "decisionLetterReason": null,
+        "appointment": {
+          "id": "7519378a-appointment-id",
+          "appointmentSource": "VAOS",
+          "appointmentDateTime": "{{now - 10 days}}",
+          "appointmentName": "Mental Health Appointment",
+          "appointmentType": "Mental Health",
+          "facilityId": "618",
+          "facilityName": "Minnepolis VA Medical Center",
+          "serviceConnectedDisability": 0,
+          "currentStatus": "BOOKED",
+          "appointmentStatus": "CONFIRMED",
+          "externalAppointmentId": "EXT-67890",
+          "associatedClaimId": "7519378a-e9ef-4a84-8673-591776c8f06b",
+          "associatedClaimNumber": "7e4461bf-6a75-4b0b-a76d-3b51b4e10809",
+          "isCompleted": true
+        },
+        "expenses": [
+          {
+            "id": "exp1-partial-claim-mileage",
+            "expenseType": "Mileage",
+            "name": "Round trip mileage",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Travel from home to medical center",
+            "costRequested": 225.0,
+            "costSubmitted": 180.0
+          },
+          {
+            "id": "exp2-partial-claim-parking",
+            "expenseType": "Parking",
+            "name": "Parking fee",
+            "dateIncurred": "{{now - 4 days}}",
+            "description": "Medical center parking",
+            "costRequested": 25.0,
+            "costSubmitted": 0.0
+          }
+        ],
+        "documents": [
+          {
+            "documentId": "doc1-partial-mileage-receipt",
+            "filename": "mileage_receipt.pdf",
+            "mimetype": "application/pdf",
+            "createdon": "{{now - 3 days}}"
+          },
+          {
+            "documentId": "doc2-partial-parking-receipt",
+            "filename": "parking_receipt.jpg",
+            "mimetype": "image/jpeg",
+            "createdon": "{{now - 3 days}}"
+          }
+        ],
+        "createdOn": "{{now - 2 days}}",
+        "modifiedOn": "{{now - 1 day}}"
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Animated, Easing, useAnimatedValue } from 'react-native'
 
-import { Box, BoxProps, TextView, TextViewProps } from './index'
+import { Box, BoxProps, TextView, TextViewProps } from 'components'
 
 export type ObfuscatedTextViewProps = {
   /** If true, will show the revealed text */

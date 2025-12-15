@@ -10,6 +10,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { useAppointments } from 'api/appointments'
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useMedicalCopays } from 'api/medicalCopays'
 import { usePrescriptions } from 'api/prescriptions'
 import { useFolders } from 'api/secureMessaging'
 import {
@@ -19,6 +20,7 @@ import {
   CategoryLandingAlert,
   EmailConfirmationAlert,
   LargeNavButton,
+  LinkWithAnalytics,
 } from 'components'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,9 +39,9 @@ import PrescriptionHistory from 'screens/HealthScreen/Pharmacy/PrescriptionHisto
 import SecureMessaging from 'screens/HealthScreen/SecureMessaging'
 import FolderMessages from 'screens/HealthScreen/SecureMessaging/FolderMessages/FolderMessages'
 import ViewMessageScreen from 'screens/HealthScreen/SecureMessaging/ViewMessage/ViewMessageScreen'
-import TravelPayClaimsScreen from 'screens/HealthScreen/TravelPay/TravelPayClaims/TravelPayClaimsScreen'
 import VaccineDetailsScreen from 'screens/HealthScreen/Vaccines/VaccineDetails/VaccineDetailsScreen'
 import VaccineListScreen from 'screens/HealthScreen/Vaccines/VaccineList/VaccineListScreen'
+import CopaysScreen from 'screens/PaymentsScreen/Copays'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { FIRST_TIME_LOGIN, NEW_SESSION } from 'store/slices'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -48,6 +50,7 @@ import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_APPLY_FOR_HEALTH_CARE } = getEnv()
@@ -104,6 +107,16 @@ export function HealthScreen({}: HealthScreenProps) {
   })
   const unreadMessageCount = foldersData?.inboxUnreadCount || 0
 
+  const { summary: copaysSummary, isLoading: copaysLoading, error: copaysError } = useMedicalCopays({ enabled: true })
+
+  const copaysSubText =
+    !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
+      ? t('copays.activityButton.subText', {
+          amount: numberToUSDollars(copaysSummary.amountDue),
+          count: copaysSummary.count,
+        })
+      : undefined
+
   useEffect(() => {
     async function healthHelpScreenCheck() {
       const firstTimeLogin = await AsyncStorage.getItem(FIRST_TIME_LOGIN)
@@ -147,21 +160,12 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('travelPayStatusList') && (
-          <LargeNavButton
-            title={t('travelPay.title')}
-            onPress={() => navigateTo('TravelPayClaims')}
-            testID="toTravelPayClaimsID"
-          />
-        )}
         {featureEnabled('overpayCopay') && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
-            subText={t('copays.activityButton.subText', {
-              amount: numberToUSDollars(0),
-              count: 0,
-            })}
+            subText={copaysSubText}
+            showLoading={copaysLoading}
           />
         )}
         <LargeNavButton
@@ -191,6 +195,16 @@ export function HealthScreen({}: HealthScreenProps) {
           onPress={() => navigateTo('MedicalRecordsList')}
           testID="toMedicalRecordsListID"
         />
+        {featureEnabled('travelPayStatusList') && (
+          <Box ml={theme.dimensions.gutter}>
+            <LinkWithAnalytics
+              type="custom"
+              text={t('travelPay.claims.viewYourClaims')}
+              testID="toTravelPayClaimsLinkID"
+              onPress={() => navigateToTravelClaims(navigateTo)}
+            />
+          </Box>
+        )}
         {showAlert && <CategoryLandingAlert text={alertMessage} isError={activityError} />}
       </Box>
       {!enrolledInVAHealthCare && (
@@ -238,15 +252,11 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={Appointments}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
+      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
         component={PastAppointmentDetails}
-        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
-      />
-      <HealthScreenStack.Screen
-        name="TravelPayClaims"
-        component={TravelPayClaimsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
       <HealthScreenStack.Screen

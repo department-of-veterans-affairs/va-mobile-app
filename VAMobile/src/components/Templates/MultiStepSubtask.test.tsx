@@ -2,10 +2,9 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
+import MultiStepSubtask from 'components/Templates/MultiStepSubtask'
 import TextView from 'components/TextView'
 import { context, render, screen } from 'testUtils'
-
-import MultiStepSubtask from './MultiStepSubtask'
 
 context('MultiStepSubtask', () => {
   type TestStackParams = {
