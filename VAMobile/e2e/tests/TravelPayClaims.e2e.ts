@@ -35,8 +35,6 @@ const TravePayClaimsE2eIds = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -194,11 +192,25 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(4000)
 
-    // Use the date range selector
+    // Change the date selection and verify label is correct
     await element(by.id(DATE_PICKER_ID)).tap()
     await waitFor(element(by.text(DATE_PICKER_HEADER_TEXT)))
       .toExist()
       .withTimeout(4000)
+    const currentYear = new Date().getFullYear()
+    await element(by.text(`All of ${currentYear}`)).tap()
     await element(by.id(DATE_PICKER_DONE_BUTTON_ID)).tap()
+
+    // Wait for modal to dismiss to make sure we're testing the correct text
+    await waitFor(element(by.id(DATE_PICKER_HEADER_TEXT)))
+      .not.toExist()
+      .withTimeout(4000)
+
+    await waitFor(element(by.text(`All of ${currentYear}`)))
+      .toExist()
+      .withTimeout(4000)
+
+    // Changing the date picker resets the filter, so we should see all text again
+    await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
   })
 })

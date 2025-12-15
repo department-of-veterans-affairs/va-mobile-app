@@ -5,17 +5,17 @@ import Clipboard from '@react-native-clipboard/clipboard'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView } from 'components'
-import { InlineCopyLink } from 'screens/PaymentsScreen/Debts/PayDebt/InlineCopyLink'
+import { InlineCopyLinkCopay } from 'screens/PaymentsScreen/Copays/PayBill/InlineCopyLinkCopay'
 import { useTheme } from 'utils/hooks'
 
-type InfoRowProps = {
+type InfoRowCopayProps = {
   label: string
   value?: string
   copyable?: boolean
   testID?: string
 }
 
-export function InfoRow({ label, value, copyable = false, testID }: InfoRowProps) {
+export function InfoRowCopay({ label, value, copyable = false, testID }: InfoRowCopayProps) {
   const theme = useTheme()
   const snackbar = useSnackbar()
   const display = value && value.length > 0 ? value : '—'
@@ -41,7 +41,7 @@ export function InfoRow({ label, value, copyable = false, testID }: InfoRowProps
         </TextView>
       </Box>
 
-      {copyable && value ? <InlineCopyLink onPress={handleCopy} testID={`${testID}-copy`} /> : null}
+      {copyable && value ? <InlineCopyLinkCopay onPress={handleCopy} testID={`${testID}-copy`} /> : null}
     </Box>
   )
 }
