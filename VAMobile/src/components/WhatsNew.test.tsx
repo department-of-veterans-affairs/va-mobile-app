@@ -177,7 +177,6 @@ context('WhatsNew', () => {
     })
 
     initializeTestInstance('oneFeatureWithAuthorizedService')
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeTruthy()
     })
