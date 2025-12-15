@@ -188,6 +188,7 @@ const tests = [
 describe('AppointmentTravelClaimDetails', () => {
   afterEach(() => {
     mockTravelClaimSubmissionMutationState = { ...mockMutationState }
+    jest.clearAllMocks()
   })
 
   const mockFeatureEnabled = featureEnabled as jest.Mock
@@ -340,6 +341,71 @@ describe('AppointmentTravelClaimDetails', () => {
             ),
           ).toBeTruthy()
           expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+        })
+
+        it('should display native claim details link when travelPayClaimDetails feature flag is enabled', () => {
+          // Mock the travelPayClaimDetails feature flag to be enabled
+          when(mockFeatureEnabled).calledWith('travelPayClaimDetails').mockReturnValue(true)
+
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
+
+          // Should show the native claim details text and testID
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))).toBeTruthy()
+          expect(screen.getByTestId('goToClaimDetails-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+
+          // Should not show the VA.gov webview link
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.goToVAGov'))).toBeFalsy()
+          expect(screen.queryByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeFalsy()
+        })
+
+        it('should display webview link when travelPayClaimDetails feature flag is disabled', () => {
+          // Mock the travelPayClaimDetails feature flag to be disabled
+          when(mockFeatureEnabled).calledWith('travelPayClaimDetails').mockReturnValue(false)
+
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
+
+          // Should show the VA.gov webview text and testID
+          expect(screen.getByText(t('travelPay.travelClaimFiledDetails.goToVAGov'))).toBeTruthy()
+          expect(screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeTruthy()
+
+          // Should not show the native claim details link
+          expect(screen.queryByText(t('travelPay.travelClaimFiledDetails.goToClaimDetails'))).toBeFalsy()
+          expect(screen.queryByTestId('goToClaimDetails-20d73591-ff18-4b66-9838-1429ebbf1b6e')).toBeFalsy()
+        })
+
+        it('should navigate to native TravelPayClaimDetailsScreen when feature flag is enabled and link is clicked', () => {
+          // Mock the travelPayClaimDetails feature flag to be enabled
+          when(mockFeatureEnabled).calledWith('travelPayClaimDetails').mockReturnValue(true)
+
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
+
+          const claimDetailsLink = screen.getByTestId('goToClaimDetails-20d73591-ff18-4b66-9838-1429ebbf1b6e')
+          fireEvent.press(claimDetailsLink)
+
+          // Should navigate to the native screen with correct claimId and backLabel
+          expect(mockNavigationSpy).toHaveBeenCalledWith('TravelPayClaimDetailsScreen', {
+            claimId: '20d73591-ff18-4b66-9838-1429ebbf1b6e',
+            backLabel: t('appointments.appointment'),
+          })
+        })
+
+        it('should navigate to Webview when feature flag is disabled and link is clicked', () => {
+          // Mock the travelPayClaimDetails feature flag to be disabled
+          when(mockFeatureEnabled).calledWith('travelPayClaimDetails').mockReturnValue(false)
+
+          initializeTestInstance('Past', { travelPayClaim: travelPayClaimData })
+
+          const webviewLink = screen.getByTestId('goToVAGovID-20d73591-ff18-4b66-9838-1429ebbf1b6e')
+          fireEvent.press(webviewLink)
+
+          // Should navigate to Webview with correct URL and options
+          expect(mockNavigationSpy).toHaveBeenCalledWith('Webview', {
+            url: expect.stringContaining('20d73591-ff18-4b66-9838-1429ebbf1b6e'),
+            displayTitle: t('travelPay.webview.claims.displayTitle'),
+            loadingMessage: t('travelPay.webview.claims.loading'),
+            useSSO: true,
+            backButtonTestID: 'webviewBack',
+          })
         })
       })
 

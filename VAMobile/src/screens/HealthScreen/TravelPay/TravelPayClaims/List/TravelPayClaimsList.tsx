@@ -19,6 +19,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()
 
@@ -45,14 +46,22 @@ function TravelPayClaimsList({ claims, currentPage, onNext, onPrev }: TravelPayC
   }, [claims, currentPage, perPage])
 
   const goToClaimDetails = (claimId: string) => {
-    logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
-    navigateTo('Webview', {
-      url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
-      displayTitle: t('travelPay.webview.claims.displayTitle'),
-      loadingMessage: t('travelPay.webview.claims.loading'),
-      useSSO: true,
-      backButtonTestID: `webviewBack`,
-    })
+    const isEnabled = featureEnabled('travelPayClaimDetails')
+    if (!isEnabled) {
+      logAnalyticsEvent(Events.vama_webview(LINK_URL_TRAVEL_PAY_WEB_DETAILS, claimId))
+      navigateTo('Webview', {
+        url: LINK_URL_TRAVEL_PAY_WEB_DETAILS + claimId,
+        displayTitle: t('travelPay.webview.claims.displayTitle'),
+        loadingMessage: t('travelPay.webview.claims.loading'),
+        useSSO: true,
+        backButtonTestID: `webviewBack`,
+      })
+    } else {
+      navigateTo('TravelPayClaimDetailsScreen', {
+        claimId: claimId,
+        backLabel: t('travelPay.claims.title'),
+      })
+    }
   }
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
