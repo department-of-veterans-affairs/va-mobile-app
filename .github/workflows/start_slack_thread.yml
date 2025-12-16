@@ -39,7 +39,7 @@ jobs:
             https://slack.com/api/conversations.list\?limit=1000\&cursor=$cursor | jq .)
           }
           get_id() {
-            id=$(jq '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' <<< $last_response)
+            id=$(jq -r '.channels[] | .name as $data | select($data == "${{inputs.channel_name}}").id' <<< $last_response)
           }
             
           get_cursor() {
@@ -72,15 +72,25 @@ jobs:
           SLACK_MESSAGE: ${{ inputs.message }}
           CHANNEL_ID: ${{ needs.get_channel_id.outputs.channel_id }}
         run: |
-          response=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+          # Build JSON payload using jq to safely escape the message
+          payload=$(jq -n \
+            --arg channel "$CHANNEL_ID" \
+            --arg text "$SLACK_MESSAGE" \
+            '{channel: $channel, text: $text}')
+          
+          response=$(curl -X POST \
+            -H "Authorization: Bearer $SLACK_API_TOKEN" \
             -H 'Content-type: application/json' \
-            --data "$(jq -n --arg channel "$CHANNEL_ID" --arg text "$SLACK_MESSAGE" '{channel: $channel, text: $text}')" \
+            --data "$payload" \
             https://slack.com/api/chat.postMessage)
           
           # Check if the Slack API call was successful
           ok=$(echo "$response" | jq -r '.ok')
           if [ "$ok" != "true" ]; then
-            echo "Slack API error: $(echo "$response" | jq -r '.error')"
+            echo "Slack API error response:"
+            echo "$response"
+            error=$(echo "$response" | jq -r '.error // "unknown error"')
+            echo "Error: $error"
             exit 1
           fi
           
