@@ -256,31 +256,31 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             variant={'info'}
             header={t('labsAndTests.zeroHoldTime.heading')}
             headerA11yLabel={t('labsAndTests.zeroHoldTime.heading')}
-            // description,
-            // descriptionA11yLabel,
-            // children,
+            description={t('labsAndTests.zeroHoldTime.start')}
+            descriptionA11yLabel={t('labsAndTests.zeroHoldTime.start')}
             expandable={true}
             initializeExpanded={false}
             testID="labsAndTestsZeroHoldTimeAlertID">
-            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-              {t('labsAndTests.zeroHoldTime.start')}
-            </TextView>
-            <TextView variant="MobileBody">
+            <TextView
+              paragraphSpacing={true}
+              variant="MobileBody"
+            >
               {t('labsAndTests.zeroHoldTime.end')}
             </TextView>
           </Alert>
         ) :
-        /* Surely there is a better way to insert bold text into a display string... */
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('labsAndTests.availability.start')}
-          <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
-            {t('labsAndTests.availability.timing.bold')}
-          </TextView>
+        (
+          /* Surely there is a better way to insert bold text into a display string... */
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('labsAndTests.availability.end')}
+            {t('labsAndTests.availability.start')}
+            <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
+              {t('labsAndTests.availability.timing.bold')}
+            </TextView>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('labsAndTests.availability.end')}
+            </TextView>
           </TextView>
-        </TextView>
-}
+        )}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>
           <TextView variant="MobileBody">{t('labsAndTests.medicalImages.noteText')}</TextView>

@@ -7,8 +7,13 @@ import { LabsAndTests } from 'api/types'
 import LabsAndTestsListScreen from 'screens/HealthScreen/LabsAndTests/LabsAndTestsList/LabsAndTestsListScreen'
 import * as api from 'store/api'
 import { context, mockNavProps, render, waitFor, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
+
+jest.mock('utils/remoteConfig')
 
 context('LabsAndTestsListScreen', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
+
   afterEach(() => {
     jest.clearAllMocks()
   })
@@ -30,7 +35,8 @@ context('LabsAndTestsListScreen', () => {
     },
   ]
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (mrHide36HrHoldTimes = false) => {
+    when(mockFeatureEnabled).calledWith('mrHide36HrHoldTimes').mockReturnValue(mrHide36HrHoldTimes)
     const props = mockNavProps(undefined, undefined, undefined)
     return render(<LabsAndTestsListScreen {...props} />)
   }
@@ -59,11 +65,27 @@ context('LabsAndTestsListScreen', () => {
     expect(screen.getByTestId('labsAndTestDateRangePickerTestID').children[0]).toEqual('Past 3 months')
   })
 
-  it('renders the correct availability timing', async () => {
-    initializeTestInstance()
-    await waitFor(() =>
-      expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
-    )
+  describe('when mrHide36HrHoldTimes is false', () => {
+    it('renders the correct availability timing with 36 hours text', async () => {
+      initializeTestInstance(false)
+      await waitFor(() =>
+        expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
+      )
+    })
+  })
+
+  describe('when mrHide36HrHoldTimes is true', () => {
+    it('renders the zero hold time alert instead of availability timing', async () => {
+      initializeTestInstance(true)
+      await waitFor(() => {
+        expect(screen.getByTestId('labsAndTestsZeroHoldTimeAlertID')).toBeTruthy()
+        expect(
+          screen.getByText('We encourage you to wait for your care team to contact you before reviewing results.'),
+        ).toBeTruthy()
+      })
+      // Verify the old availability timing text is not present
+      expect(screen.queryByTestId('labsAndTestsAvailabilityTimingTestID')).toBeFalsy()
+    })
   })
 
   it('calls API with correct date range for "past 3 months"', async () => {
