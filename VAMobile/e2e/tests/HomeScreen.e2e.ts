@@ -39,7 +39,6 @@ export const HomeE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -54,7 +53,6 @@ describe('Home Screen', () => {
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
     await loginToDemoMode()
   })
 
