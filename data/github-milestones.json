@@ -1,5 +1,59 @@
 [
   {
+    "title": "v2.65.0",
+    "due_on": "2025-12-16T00:00:00Z",
+    "issues": [
+      {
+        "title": "BUG: Fixed missing data",
+        "number": 12043,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12043",
+        "isPR": true
+      },
+      {
+        "title": "Remove reason fields from Cerner/OH appointments",
+        "number": 11998,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11998",
+        "isPR": true
+      },
+      {
+        "title": "Feature 906 - Implemented the Dispute Copay Screen",
+        "number": 11771,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11771",
+        "isPR": true
+      },
+      {
+        "title": "Feature 902 - Implement Debt Dispute Screen for Overpayments",
+        "number": 11769,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11769",
+        "isPR": true
+      },
+      {
+        "title": "Feature 905 - Implement Request Help Screen Copays",
+        "number": 11764,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11764",
+        "isPR": true
+      },
+      {
+        "title": "Feature/904 - Implement the PayBillScreen for Copays",
+        "number": 11759,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11759",
+        "isPR": true
+      },
+      {
+        "title": "Feature 901 - Implement Request Help Screen for Overpayments",
+        "number": 11746,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11746",
+        "isPR": true
+      },
+      {
+        "title": "Feature/900 - Implement the Pay debt screen (Overpayments)",
+        "number": 11733,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11733",
+        "isPR": true
+      }
+    ]
+  },
+  {
     "title": "v2.64.0",
     "due_on": "2025-12-02T00:00:00Z",
     "issues": [
