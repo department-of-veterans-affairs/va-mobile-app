@@ -16,6 +16,8 @@ import {
 export const LabsAndTestsE2eIDConstants = {
   DATE_RANGE_PICKER_ID: 'labsAndTestDateRangePickerTestID',
   DATE_RANGE_CONFIRM_PICKER_ID: 'labsAndTestsDateRangeConfirmID',
+  ZERO_HOLD_TIME_ALERT_ID: 'labsAndTestsZeroHoldTimeAlertID',
+  MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT: 'mrHide36HrHoldTimes',
 }
 
 const navigateToLabsAndTests = async () => {
@@ -183,5 +185,117 @@ describe('Labs And Test Details Screen with Observations', () => {
     await element(by.id(TEST_IDS.BACK_BUTTON_ID)).tap()
     // the title should be labs and tests
     await expect(element(by.text(HEADER_TEXT))).toExist()
+  })
+})
+
+describe('Labs And Tests - Remote Config: mrHide36HrHoldTimes', () => {
+  beforeEach(async () => {
+    await navigateToLabsAndTests()
+  })
+
+  it('should show 36 hour text when flag is disabled (no records scenario)', async () => {
+    // Select a date range with no records (e.g., 10 years ago)
+    const tenYearsAgo = DateTime.now().year - 10
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
+    await element(by.id(`range-${tenYearsAgo}`)).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
+
+    // Verify the 36 hour text is displayed when flag is off
+    await waitFor(
+      element(
+        by.text(
+          "We're sorry. We update your labs and tests records every 24 hours, but new records can take up to 36 hours to appear.",
+        ),
+      ),
+    )
+      .toExist()
+      .withTimeout(5000)
+
+    // Reset date range
+    await resetDateRangeToDefault()
+  })
+
+  it('should hide 36 hour text when flag is enabled (no records scenario)', async () => {
+    await toggleRemoteConfigFlag(LabsAndTestsE2eIDConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
+    await navigateToLabsAndTests()
+
+    // Select a date range with no records
+    const tenYearsAgo = DateTime.now().year - 10
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_PICKER_ID)).tap()
+    await element(by.id(`range-${tenYearsAgo}`)).tap()
+    await element(by.id(LabsAndTestsE2eIDConstants.DATE_RANGE_CONFIRM_PICKER_ID)).tap()
+
+    // Verify the 36 hour text is NOT displayed when flag is on
+    await waitFor(
+      element(
+        by.text(
+          "We're sorry. We update your labs and tests records every 24 hours, but new records can take up to 36 hours to appear.",
+        ),
+      ),
+    )
+      .not.toExist()
+      .withTimeout(5000)
+
+    // Verify the simplified text IS displayed
+    await expect(element(by.text('We update your labs and tests records every 24 hours.'))).toExist()
+
+    // Reset date range and toggle flag back
+    await resetDateRangeToDefault()
+    await toggleRemoteConfigFlag(LabsAndTestsE2eIDConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
+  })
+
+  it('should show 36 hour availability text when flag is disabled (with records scenario)', async () => {
+    await navigateToLabsAndTests()
+
+    // Verify the availability text with "36 hours" is displayed
+    await expect(element(by.text('36 hours'))).toExist()
+
+    // Verify the zero hold time alert is NOT displayed
+    await expect(element(by.id(LabsAndTestsE2eIDConstants.ZERO_HOLD_TIME_ALERT_ID))).not.toExist()
+  })
+
+  it('should show expandable alert when flag is enabled (with records scenario)', async () => {
+    await toggleRemoteConfigFlag(LabsAndTestsE2eIDConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
+    await navigateToLabsAndTests()
+
+    // Verify the zero hold time alert is displayed
+    await expect(element(by.id(LabsAndTestsE2eIDConstants.ZERO_HOLD_TIME_ALERT_ID))).toExist()
+
+    // Verify the alert heading is visible
+    await expect(
+      element(by.text('We encourage you to wait for your care team to contact you before reviewing results.')),
+    ).toExist()
+
+    // Verify the 36 hour availability text is NOT displayed
+    await expect(element(by.text('36 hours'))).not.toExist()
+  })
+
+  it('should expand alert when tapped and show additional text', async () => {
+    await navigateToLabsAndTests()
+
+    // Verify alert is present
+    await expect(element(by.id(LabsAndTestsE2eIDConstants.ZERO_HOLD_TIME_ALERT_ID))).toExist()
+
+    // Tap on the alert to expand it
+    await element(by.id(LabsAndTestsE2eIDConstants.ZERO_HOLD_TIME_ALERT_ID)).tap()
+
+    // Verify the expanded content is now visible
+    await expect(
+      element(by.text('Your team can help you understand what the results mean for your overall health.')),
+    ).toExist()
+
+    await expect(
+      element(
+        by.text(
+          'If you do review results on your own, remember that many factors can affect what they mean for you. If you have concerns, contact your care team.',
+        ),
+      ),
+    ).toExist()
+
+    // Tap again to collapse
+    await element(by.id(LabsAndTestsE2eIDConstants.ZERO_HOLD_TIME_ALERT_ID)).tap()
+
+    // Toggle flag back off for cleanup
+    await toggleRemoteConfigFlag(LabsAndTestsE2eIDConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
   })
 })

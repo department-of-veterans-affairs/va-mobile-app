@@ -9,12 +9,14 @@ This script should be updated whenever new things are added/changed in vaccines 
 import { by, element, expect } from 'detox'
 
 import {
+  changeDemoModeUser,
   CommonE2eIdConstants,
   checkImages,
   loginToDemoMode,
   openHealth,
   openMedicalRecords,
   openVaccineRecords,
+  toggleRemoteConfigFlag,
 } from './utils'
 
 export const VaccinesE2eIdConstants = {
@@ -24,6 +26,8 @@ export const VaccinesE2eIdConstants = {
   VACCINE_5_ID: 'PneumoPPV vaccine April 28, 2016',
   VACCINE_6_ID: 'FLU vaccine April 28, 2016',
   VACCINE_DETAILS_BACK_ID: 'vaccinesDetailsBackID',
+  NO_VACCINES_DEMO_USER_ID: 'Benjamin Adams option 2 of 4',
+  MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT: 'mrHide36HrHoldTimes',
 }
 
 beforeAll(async () => {
@@ -92,5 +96,43 @@ describe('Vaccine Records Screen', () => {
     await element(by.id(VaccinesE2eIdConstants.VACCINE_3_ID)).tap()
     await expect(element(by.text('Manufacturer'))).not.toExist()
     await element(by.id(VaccinesE2eIdConstants.VACCINE_DETAILS_BACK_ID)).tap()
+  })
+})
+
+describe('Vaccines - Remote Config: mrHide36HrHoldTimes', () => {
+  it('should show 36 hour text when flag is disabled', async () => {
+    await loginToDemoMode()
+    await changeDemoModeUser(VaccinesE2eIdConstants.NO_VACCINES_DEMO_USER_ID)
+    await openHealth()
+    await openMedicalRecords()
+    await openVaccineRecords()
+
+    // Verify the 36 hour text is displayed when flag is off
+    await expect(
+      element(
+        by.text(
+          "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",
+        ),
+      ),
+    ).toExist()
+  })
+
+  it('should hide 36 hour text when flag is enabled', async () => {
+    await toggleRemoteConfigFlag(VaccinesE2eIdConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
+    await openHealth()
+    await openMedicalRecords()
+    await openVaccineRecords()
+
+    // Verify the 36 hour text is NOT displayed when flag is on
+    await expect(
+      element(
+        by.text(
+          "We're sorry. We update your vaccine records every 24 hours, but new records can take up to 36 hours to appear.",
+        ),
+      ),
+    ).not.toExist()
+
+    // Verify the simplified text IS displayed
+    await expect(element(by.text('We update your vaccine records every 24 hours.'))).toExist()
   })
 })
