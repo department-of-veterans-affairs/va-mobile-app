@@ -4,9 +4,10 @@ def slack_build_success (buildNum, version, buildType, message, os, thread_ts = 
  post_to_slack(
    channel: "#va-mobile-build-alerts",
    username: "VA App Builder",
-        icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
-        message: sanitize_notes(message),
-        success: true,   default_payloads: [],
+   icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/build_bot.png?raw=true",
+   message: message,
+   success: true,
+   default_payloads: [],
    attachment_properties: {
      fields: [
        {title: "OS", value: os},
@@ -25,14 +26,14 @@ def slack_build_error(e, buildType, message, os, thread_ts = nil)
     channel: "#va-mobile-build-alerts",
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
-    message: sanitize_notes(message),
+    message: message,
     success: false,
     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
     attachment_properties: {
       fields: [
         {title: "OS", value: os},
         {title: "Build Type", value: buildType},
-        {title: "Exception", value: sanitize_notes(e)}
+        {title: "Exception", value: e}
       ]
     },
     thread_ts: thread_ts
@@ -45,13 +46,13 @@ def slack_github_error(e, message, os, thread_ts = nil)
     channel: "#va-mobile-build-alerts",
     username: "VA App Builder",
     icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
-    message: sanitize_notes(message),
+    message: message,
     success: false,
     default_payloads: [:git_branch],
     attachment_properties: {
       fields: [
         {title: "OS", value: os},
-        {title: "Exception", value: sanitize_notes(e)}
+        {title: "Exception", value: e}
       ]
     },
     thread_ts: thread_ts
@@ -77,14 +78,14 @@ def slack_release_error(version, os, e, thread_ts = nil)
      channel: "#va-mobile-app",
      username: "VA App Ground Control",
      icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/sad_robot.jpeg?raw=true",
-     message: sanitize_notes("Version #{version} release failed for #{os}"),
+     message: "Version #{version} release failed for #{os}",
      success: true,
      default_payloads: [],
      attachment_properties: {
       fields: [
         {title: "OS", value: os},
         {title: "Version", value: version},
-        {title: "Exception", value: sanitize_notes(e)}
+        {title: "Exception", value: e}
       ]
     },
     thread_ts: thread_ts
@@ -103,7 +104,7 @@ def slack_firebase_dist_error(os, e, thread_ts = nil)
      attachment_properties: {
       fields: [
         {title: "OS", value: os},
-        {title: "Exception", value: sanitize_notes(e)}
+        {title: "Exception", value: e}
       ]
     },
     thread_ts: thread_ts
@@ -115,9 +116,10 @@ def slack_sent_for_review(buildNum, version, message, os, thread_ts = nil)
   post_to_slack(
    channel: "#va-mobile-app",
    username: "VA App Delivery Services",
-       icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/delivered.jpeg?raw=true",
-       message: sanitize_notes(message),
-       success: true,   default_payloads: [],
+   icon_url: "https://github.com/department-of-veterans-affairs/va.gov-team/blob/master/products/va-mobile-app/engineering/delivered.jpeg?raw=true",
+   message: message,
+   success: true,
+   default_payloads: [],
    attachment_properties: {
      fields: [
        {title: "OS", value: os},
@@ -135,8 +137,4 @@ def slack_test()
      channel: "#va-mobile-build-alerts",
      default_payloads: [],
   )
-end
-
-def sanitize_notes(notes)
-  notes.gsub(/['"&|;()<>!$]/, '')
 end

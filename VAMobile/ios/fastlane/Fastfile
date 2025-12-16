@@ -39,7 +39,6 @@ platform :ios do
     sign
     build("QA")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
-    notes = sanitize_notes(notes)
     upload_tf(notes, "Development Team")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
@@ -64,7 +63,6 @@ platform :ios do
       notes = "Feature Build: #{notes.gsub('feature-build-','').gsub('-',' ')} - " + datetime
     end
 
-    notes = sanitize_notes(notes)
     puts notes
     upload_tf(notes, tf_group)
     message = "New On Demand build successfully uploaded to TestFlight Group " + tf_group
@@ -81,7 +79,6 @@ platform :ios do
     build("RC")
     rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
-    notes = sanitize_notes(notes)
     upload_tf(notes, "Development Team")
     tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
