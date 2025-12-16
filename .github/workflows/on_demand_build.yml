@@ -30,9 +30,11 @@ jobs:
       notes_sanitized: ${{ steps.sanitize.outputs.notes_sanitized }}
     steps:
       - id: sanitize
+        env:
+          NOTES_INPUT: ${{ github.event.inputs.notes }}
         run: |
-          # Remove problematic characters: backticks, quotes, commas, slashes, apostrophes
-          SANITIZED=$(printf '%s' '${{ github.event.inputs.notes }}' | tr -d '`"'"'"',/\\')
+          # Remove problematic characters: backticks, quotes, commas, slashes, apostrophes, question marks, exclamation points
+          SANITIZED=$(echo "$NOTES_INPUT" | tr -d '`"'"'"',/\\?!')
           echo "notes_sanitized=$SANITIZED" >> "$GITHUB_OUTPUT"
   start_slack_thread:
     name: Start Slack thread
