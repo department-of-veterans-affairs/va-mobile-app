@@ -9,6 +9,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_CLAIM_APPEAL_STATUS } = getEnv()
 
@@ -39,7 +40,7 @@ function NeedHelpData({ appealId }: NeedHelpDataProps) {
               logAnalyticsEvent(Events.vama_webview(LINK_URL_CLAIM_APPEAL_STATUS, appealId))
               navigateTo('Webview', {
                 url: LINK_URL_CLAIM_APPEAL_STATUS + appealId,
-                displayTitle: t('webview.vagov'),
+                displayTitle: vaGovWebviewTitle(t),
                 loadingMessage: t('webview.claims.loading'),
                 useSSO: true,
               })

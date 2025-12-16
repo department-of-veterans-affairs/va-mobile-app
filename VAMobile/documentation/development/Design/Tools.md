@@ -1,6 +1,6 @@
 ---
 title: Tools
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 # Where we work

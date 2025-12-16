@@ -61,6 +61,7 @@ import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Dev
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
 import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
 import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
@@ -76,6 +77,7 @@ import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -311,7 +313,7 @@ export function HomeScreen({}: HomeScreenProps) {
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
@@ -779,6 +781,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="RemoteConfigTestScreen"
+        component={RemoteConfigTestScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>
