@@ -68,10 +68,21 @@ jobs:
     steps:
       - name: Post message to Slack
         id: post_message
+        env:
+          SLACK_MESSAGE: ${{ inputs.message }}
+          CHANNEL_ID: ${{ needs.get_channel_id.outputs.channel_id }}
         run: |
-          ts=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
+          response=$(curl -X POST -H 'Authorization: Bearer '"$SLACK_API_TOKEN"' ' \
             -H 'Content-type: application/json' \
-            --data '{"channel":"'${{needs.get_channel_id.outputs.channel_id}}'","text":"${{inputs.message}}"}' \
-            https://slack.com/api/chat.postMessage|
-            jq -r '.ts')
+            --data "$(jq -n --arg channel "$CHANNEL_ID" --arg text "$SLACK_MESSAGE" '{channel: $channel, text: $text}')" \
+            https://slack.com/api/chat.postMessage)
+          
+          # Check if the Slack API call was successful
+          ok=$(echo "$response" | jq -r '.ok')
+          if [ "$ok" != "true" ]; then
+            echo "Slack API error: $(echo "$response" | jq -r '.error')"
+            exit 1
+          fi
+          
+          ts=$(echo "$response" | jq -r '.ts')
           echo SLACK_THREAD_TS=${ts} >> $GITHUB_OUTPUT
