@@ -13,7 +13,7 @@ Below is a list of questions a front end engineer contributing to the VA: Health
 * Have I setup waygate defaults for any new screens to enable testing via developer menu?
 * Have I correctly identified authorized services and gated calls to any api's behind maintenance windows, authorization, and feature flags?
 * Have I included feature documentation for the mobile app platform docs page?
-* Should I consider offline mode considerations?
+* How does this feature work offline?
 * Should my feature interact with any other places in the mobile app? (Home Screen activity button? Push Notification?)
 * Should I be considering the new feature element as an in app review/in app feedback trigger?
 * Does my feature look as expected in dark mode?
