@@ -103,7 +103,7 @@ context('DebtsScreen', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('debts.title') })).toBeTruthy())
       fireEvent.press(screen.getByTestId('debtHelpID'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp', { helpType: 'questionsAboutDebt' })
     })
 
     it('should navigate to DebtDetails when review details is pressed', async () => {

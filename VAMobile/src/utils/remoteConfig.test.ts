@@ -37,8 +37,8 @@ const mockOverrides = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: false,
-  travelPayClaimsFullHistory: false,
-  travelPayStatusList: false,
+  travelPayClaimDetails: true,
+  travelPayStatusList: true,
   useOldLinkComponent: false,
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
@@ -46,6 +46,7 @@ const mockOverrides = {
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayCopay: false,
+  remoteConfigRefreshTest: false,
 }
 
 describe('activate', () => {

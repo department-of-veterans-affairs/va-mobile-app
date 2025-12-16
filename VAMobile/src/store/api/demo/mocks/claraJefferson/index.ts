@@ -8,6 +8,7 @@ const importClaraJeffersonData = () => {
     import('store/api/demo/mocks/default/notifications.json'),
     import('store/api/demo/mocks/default/contactInformation.json'),
     import('./getAuthorizedServices.json'),
+    import('./letters.json'),
     featureEnabled('cernerTrueForDemo')
       ? import('store/api/demo/mocks/default/getFacilitiesInfoCerner.json')
       : import('store/api/demo/mocks/default/getFacilitiesInfo.json'),
