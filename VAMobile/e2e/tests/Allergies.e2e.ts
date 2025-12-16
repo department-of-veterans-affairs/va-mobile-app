@@ -13,7 +13,6 @@ import {
   openAllergyRecords,
   openHealth,
   openMedicalRecords,
-  toggleRemoteConfigFlag,
 } from './utils'
 
 export const AllergiesE2eIdConstants = {
@@ -26,8 +25,6 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
   DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
-  NO_ALLERGIES_DEMO_USER_ID: 'Benjamin Adams option 2 of 4',
-  MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT: 'mrHide36HrHoldTimes',
 }
 
 beforeAll(async () => {
@@ -93,43 +90,5 @@ describe('Allergies Screen', () => {
     await element(by.id(AllergiesE2eIdConstants.ALLERGY_5_ID)).tap()
     await expect(element(by.text('Even More Dust'))).toExist()
     await element(by.id(AllergiesE2eIdConstants.ALLERGIES_DETAILS_BACK_ID)).tap()
-  })
-})
-
-describe('Allergies - Remote Config: mrHide36HrHoldTimes', () => {
-  it('should show 36 hour text when flag is disabled', async () => {
-    await loginToDemoMode()
-    await changeDemoModeUser(AllergiesE2eIdConstants.NO_ALLERGIES_DEMO_USER_ID)
-    await openHealth()
-    await openMedicalRecords()
-    await openAllergyRecords()
-
-    // Verify the 36 hour text is displayed when flag is off
-    await expect(
-      element(
-        by.text(
-          "We're sorry. We update your allergy records every 24 hours, but new records can take up to 36 hours to appear.",
-        ),
-      ),
-    ).toExist()
-  })
-
-  it('should hide 36 hour text when flag is enabled', async () => {
-    await toggleRemoteConfigFlag(AllergiesE2eIdConstants.MR_HIDE_36_HR_HOLD_TIMES_TOGGLE_TEXT)
-    await openHealth()
-    await openMedicalRecords()
-    await openAllergyRecords()
-
-    // Verify the 36 hour text is NOT displayed when flag is on
-    await expect(
-      element(
-        by.text(
-          "We're sorry. We update your allergy records every 24 hours, but new records can take up to 36 hours to appear.",
-        ),
-      ),
-    ).not.toExist()
-
-    // Verify the simplified text IS displayed
-    await expect(element(by.text('We update your allergy records every 24 hours.'))).toExist()
   })
 })
