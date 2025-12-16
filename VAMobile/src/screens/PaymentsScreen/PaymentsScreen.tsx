@@ -8,7 +8,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
-import { Box, CategoryLanding, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
+import { Box, CategoryLanding, LargeNavButton, LinkWithAnalytics } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import CopaysScreen from 'screens/PaymentsScreen/Copays'
@@ -77,13 +77,20 @@ function PaymentsScreen({}: PaymentsScreenProps) {
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
       {featureEnabled('overpayCopay') && (
-        <TextView
-          mx={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.standardMarginBetween}
-          variant={'MobileBodyBold'}
-          accessibilityRole="header">
-          {t('payments.toYou')}
-        </TextView>
+        <>
+          <LargeNavButton
+            title={t('copays.title')}
+            onPress={() => navigateTo('Copays')}
+            subText={copaysSubText}
+            showLoading={copaysLoading}
+          />
+          <LargeNavButton
+            title={t('debts.title')}
+            onPress={() => navigateTo('Debts')}
+            subText={debtsSubText}
+            showLoading={debtsLoading}
+          />
+        </>
       )}
       <Box>
         <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
@@ -91,30 +98,6 @@ function PaymentsScreen({}: PaymentsScreenProps) {
           <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
         )}
       </Box>
-      {featureEnabled('overpayCopay') && (
-        <>
-          <TextView
-            mt={theme.dimensions.standardMarginBetween}
-            mx={theme.dimensions.condensedMarginBetween}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'MobileBodyBold'}
-            accessibilityRole="header">
-            {t('payments.yourDebtAndBills')}
-          </TextView>
-          <LargeNavButton
-            title={t('debts.title')}
-            onPress={() => navigateTo('Debts')}
-            subText={debtsSubText}
-            showLoading={debtsLoading}
-          />
-          <LargeNavButton
-            title={t('copays.title')}
-            onPress={() => navigateTo('Copays')}
-            subText={copaysSubText}
-            showLoading={copaysLoading}
-          />
-        </>
-      )}
       {featureEnabled('travelPayStatusList') && (
         <Box ml={theme.dimensions.gutter}>
           <LinkWithAnalytics

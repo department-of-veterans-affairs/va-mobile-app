@@ -5,10 +5,10 @@ import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import {
+  AccordionCollapsible,
   Box,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  TextArea,
   TextView,
   VABulletList,
   VABulletListText,
@@ -23,16 +23,16 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type DebtRequestHelpScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtRequestHelp'>
 
-const { LINK_URL_REQUEST_HELP_FORM_5655, LINK_URL_REQUEST_HELP_VA_DEBT } = getEnv()
+const { LINK_URL_REQUEST_HELP_FORM_5655 } = getEnv()
 
 function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { gutter, contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.overpayment') : t('debts')
+  const backLabel = prevScreen === 'DebtDetails' ? t('debts.details.title') : t('debts.details.backButton.title')
 
   const items: VABulletListText[] = [
     {
@@ -49,6 +49,78 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
     },
   ]
 
+  const renderQuestionsAccordion = () => {
+    const header = (
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
+        {t('debts.requestHelp.questions.header')}
+      </TextView>
+    )
+
+    const expandedContent = (
+      <Box mt={condensedMarginBetween}>
+        <Trans
+          i18nKey="debts.requestHelp.questions"
+          components={{
+            p: <TextView my={condensedMarginBetween} variant="MobileBody" />,
+            tel: <PhoneNumberComponent variant="standalone" ttyBypass={true} />,
+            tty: <PhoneNumberComponent variant="standalone" />,
+          }}
+        />
+      </Box>
+    )
+
+    return (
+      <AccordionCollapsible
+        header={header}
+        expandedContent={expandedContent}
+        testID="debtRequestHelpQuestionsAccordionID"
+      />
+    )
+  }
+
+  const renderFinancialHelpAccordion = () => {
+    const header = (
+      <TextView variant="MobileBodyBold" accessibilityRole="header">
+        {t('debts.requestHelp.financialHelp.header')}
+      </TextView>
+    )
+
+    const expandedContent = (
+      <Box mt={standardMarginBetween}>
+        <TextView variant="MobileBody">{t('debts.requestHelp.financialHelp.intro')}</TextView>
+
+        <Box mt={standardMarginBetween}>
+          <VABulletList paragraphSpacing listOfText={items} />
+        </Box>
+
+        <Box mt={condensedMarginBetween}>
+          <LinkWithAnalytics
+            type="custom"
+            onPress={() => {
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_REQUEST_HELP_FORM_5655))
+              navigateTo('Webview', {
+                url: LINK_URL_REQUEST_HELP_FORM_5655,
+                displayTitle: t('webview.vagov'),
+                loadingMessage: t('loading.vaWebsite'),
+                useSSO: false,
+              })
+            }}
+            text={t('debts.requestHelp.relief.link')}
+            testID="debt-relief-start-link"
+          />
+        </Box>
+      </Box>
+    )
+
+    return (
+      <AccordionCollapsible
+        header={header}
+        expandedContent={expandedContent}
+        testID="debtRequestHelpFinancialAccordionID"
+      />
+    )
+  }
+
   return (
     <FeatureLandingTemplate
       backLabel={backLabel}
@@ -57,60 +129,9 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
       testID="debtRequestHelpTestID"
       backLabelTestID="debtRequestHelpBackTestID">
       <>
-        <Box>
-          <TextArea>
-            <TextView variant="MobileBody">{t('debts.requestHelp.financialHelp.intro')}</TextView>
+        <Box>{renderQuestionsAccordion()}</Box>
 
-            <Box mt={standardMarginBetween}>
-              <VABulletList paragraphSpacing listOfText={items} />
-            </Box>
-
-            <Box>
-              <LinkWithAnalytics
-                type="custom"
-                onPress={() => {
-                  logAnalyticsEvent(Events.vama_webview(LINK_URL_REQUEST_HELP_FORM_5655))
-                  navigateTo('Webview', {
-                    url: LINK_URL_REQUEST_HELP_FORM_5655,
-                    displayTitle: t('webview.vagov'),
-                    loadingMessage: t('loading.vaWebsite'),
-                    useSSO: false,
-                  })
-                }}
-                text={t('debts.requestHelp.relief.link')}
-                testID="debt-relief-start-link"
-              />
-            </Box>
-          </TextArea>
-        </Box>
-
-        <Box my={theme.dimensions.standardMarginBetween} mx={gutter} alignItems="center">
-          <LinkWithAnalytics
-            type="url"
-            url={LINK_URL_REQUEST_HELP_VA_DEBT}
-            text={t('debts.requestHelp.footer.link')}
-            testID="request-help-options-link"
-          />
-        </Box>
-
-        <Box mb={contentMarginBottom}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('debts.requestHelp.questions.header')}
-            </TextView>
-
-            <Box mt={condensedMarginBetween}>
-              <Trans
-                i18nKey="debts.requestHelp.questions"
-                components={{
-                  p: <TextView my={condensedMarginBetween} variant="MobileBody" />,
-                  tel: <PhoneNumberComponent variant="standalone" ttyBypass={true} />,
-                  tty: <PhoneNumberComponent variant="standalone" />,
-                }}
-              />
-            </Box>
-          </TextArea>
-        </Box>
+        <Box mb={contentMarginBottom}>{renderFinancialHelpAccordion()}</Box>
       </>
     </FeatureLandingTemplate>
   )
