@@ -123,19 +123,12 @@ jobs:
         run: yarn env:${{ inputs.environment }}
       - name: Sanitize inputs
         run: |
-          # sanitize function: remove CR, escape newlines, quotes, backticks and dollar signs
-          sanitize() {
-            printf '%s' "$1" | tr -d '\r' | sed -E ':a;N;$!ba;s/\n/\\n/g' | sed -E 's/"/\\"/g; s/`/\\`/g; s/\$/\\$/g'
-          }
-
-          SANITIZED_NOTES=$(sanitize "${{ inputs.notes }}")
-          echo "SANITIZED_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$SANITIZED_NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          # Remove problematic characters and collapse whitespace
+          SANITIZED_NOTES=$(printf '%s' '${{ inputs.notes }}' | tr -d '`"'"'"',/\\' | tr '\r\n' ' ' | sed -E 's/[[:space:]]+/ /g')
+          echo "SANITIZED_NOTES=$SANITIZED_NOTES" >> $GITHUB_ENV
 
           if [ -n "${{ inputs.slack_thread_ts }}" ]; then
-            SANITIZED_SLACK_TS=$(sanitize "${{ inputs.slack_thread_ts }}")
-            echo "SLACK_THREAD_TS=$SANITIZED_SLACK_TS" >> $GITHUB_ENV
+            echo "SLACK_THREAD_TS=${{ inputs.slack_thread_ts }}" >> $GITHUB_ENV
           fi
 
       - name: Bundle app

@@ -23,33 +23,44 @@ jobs:
     name: Queue Build
     uses: ./.github/workflows/queue_builds.yml
     secrets: inherit
+  sanitize_inputs:
+    name: Sanitize inputs
+    runs-on: ubuntu-latest
+    outputs:
+      notes_sanitized: ${{ steps.sanitize.outputs.notes_sanitized }}
+    steps:
+      - id: sanitize
+        run: |
+          # Remove problematic characters: backticks, quotes, commas, slashes, apostrophes
+          SANITIZED=$(printf '%s' '${{ github.event.inputs.notes }}' | tr -d '`"'"'"',/\\')
+          echo "notes_sanitized=$SANITIZED" >> "$GITHUB_OUTPUT"
   start_slack_thread:
     name: Start Slack thread
-    needs: queue_build
+    needs: [queue_build, sanitize_inputs]
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
       channel_name: va-mobile-build-alerts
-      message: 'On demand build started by ${{ github.actor }}: "${{ inputs.notes }}"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+      message: 'On demand build started by ${{ github.actor }}: "${{ needs.sanitize_inputs.outputs.notes_sanitized }}"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build, start_slack_thread, sanitize_inputs]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
       lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
-      notes: ${{ inputs.notes }}
+      notes: ${{ needs.sanitize_inputs.outputs.notes_sanitized }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
   android:
     name: Android On Demand Build
-    needs: [queue_build, start_slack_thread]
+    needs: [queue_build, start_slack_thread, sanitize_inputs]
     uses: ./.github/workflows/build_android.yml
     secrets: inherit
     with:
       lane: on_demand
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
-      notes: ${{ inputs.notes }}
+      notes: ${{ needs.sanitize_inputs.outputs.notes_sanitized }}
       slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
