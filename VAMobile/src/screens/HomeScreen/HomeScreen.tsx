@@ -445,7 +445,7 @@ export function HomeScreen({}: HomeScreenProps) {
               {featureEnabled('overpayCopay') && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
-                  subText={t('debts.count', {
+                  subText={t('debts.activityButton.subText', {
                     count: debtsSummary.count,
                   })}
                   deepLink={'debts'}

@@ -544,7 +544,7 @@ context('HomeScreen', () => {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
-      const debtsSub = t('debts.count', {
+      const debtsSub = t('debts.activityButton.subText', {
         count: 2,
       })
 

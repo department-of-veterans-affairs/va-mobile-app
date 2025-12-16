@@ -57,7 +57,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   const debtsSubText =
     !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
-      ? t('debts.activityButton.subText', {
+      ? t('payments.overpaymentsTile.subText', {
           amount: numberToUSDollars(debtsSummary.amountDue),
           count: debtsSummary.count,
         })
