@@ -7,6 +7,7 @@ import { TFunction } from 'i18next'
 
 import { Box, LinkWithAnalytics, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import {
   AppointmentDetailsScreenType,
@@ -16,7 +17,7 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { RouteNavigationFunction, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { vaGovWebviewTitle } from 'utils/webview'
 
 const {

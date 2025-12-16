@@ -4,16 +4,18 @@ import { AccessibilityInfo } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import NetInfo, { addEventListener, useNetInfo } from '@react-native-community/netinfo'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 import { onlineManager } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { RootState } from 'store'
 import {
   OfflineState,
+  logOfflineEventQueue,
   queueOfflineScreenEvent,
   setBannerExpanded,
   setOfflineTimestamp,
@@ -50,12 +52,6 @@ export const useOfflineEventQueue = (screen: string) => {
       }
     }, [dispatch, forceOffline, screen]),
   )
-}
-
-export const CONNECTION_STATUS = {
-  CONNECTED: 'CONNECTED',
-  DISCONNECTED: 'DISCONNECTED',
-  UNKNOWN: 'UNKNOWN',
 }
 
 /**
@@ -124,4 +120,46 @@ export const useOfflineAnnounce = () => {
       }
     }
   }, [connectionStatus, offlineTimestamp, dispatch, t, remoteConfigActivated])
+}
+
+export const useOfflineNavEvents = () => {
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation()
+  const connectionStatus = useAppIsOnline()
+
+  // Starts a listener to queue analytics events when navigating between screens.
+  useEffect(() => {
+    const cb = () => {
+      if (featureEnabled('offlineMode') && connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+        // @ts-ignore - getCurrentRoute does not appear on the type but does exist
+        dispatch(queueOfflineScreenEvent(Events.vama_offline_access(navigation.getCurrentRoute().name)))
+      }
+    }
+    navigation.addListener('state', cb)
+    return () => navigation.removeListener('state', cb)
+  }, [connectionStatus, dispatch, navigation])
+
+  // Listens to the connection status and triggers
+  useEffect(() => {
+    if (!featureEnabled('offlineMode')) {
+      return
+    }
+
+    let isOnline: boolean | null = null
+    const unsubscribe = addEventListener(({ isConnected }) => {
+      const connected = isConnected
+      // When the connection status changes update for later
+      if (connected !== isOnline) {
+        // Once connection has been reestablished log the offline events in the queue
+        if (connected) {
+          dispatch(logOfflineEventQueue())
+        }
+        isOnline = connected
+      }
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  }, [dispatch])
 }

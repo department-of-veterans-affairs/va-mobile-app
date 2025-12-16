@@ -7,9 +7,10 @@ import _ from 'underscore'
 
 import { Box, ButtonDecoratorType, FeatureLandingTemplate, SimpleList, SimpleListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { useOfflineSnackbar, useOpenAppStore, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 type GiveFeedbackScreenProps = StackScreenProps<HomeStackParamList, 'GiveFeedback'>
 

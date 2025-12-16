@@ -29,6 +29,14 @@ jest.mock('utils/hooks/offline', () => {
   }
 })
 
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  return {
+    ...original,
+    useAppDispatch: jest.fn().mockReturnValue(jest.fn()),
+  }
+})
+
 jest.mock('react-native-keyboard-manager', () => ({
   setEnable: jest.fn(() => {}),
   setKeyboardDistanceFromTextField: jest.fn(() => {}),

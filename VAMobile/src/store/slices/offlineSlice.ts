@@ -71,7 +71,7 @@ export const queueOfflineEvent =
 export const logOfflineEventQueue = (): AppThunk => async (dispatch) => {
   const { offlineEventScreenMap, offlineEvents } = store.getState().offline
   const offlineEventQueue: Array<Event> = [...Object.values(offlineEventScreenMap), ...offlineEvents]
-  console.log('logging offline events', offlineEventQueue.length)
+
   // Go through each queued event, log it and remove it from the queue
   while (offlineEventQueue.length) {
     await logAnalyticsEvent(offlineEventQueue[0])

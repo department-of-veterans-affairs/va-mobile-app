@@ -28,11 +28,12 @@ import {
 import { MAX_DIGITS, MAX_DIGITS_AFTER_FORMAT } from 'constants/common'
 import { DefaultFlagCode, FlagT, Flags } from 'constants/flags'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { getFormattedPhoneNumber, isErrorObject } from 'utils/common'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { useAlert, useBeforeNavBackListener, useOfflineSnackbar, useShowActionSheet, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type IEditPhoneNumberScreen = StackScreenProps<HomeStackParamList, 'EditPhoneNumber'>

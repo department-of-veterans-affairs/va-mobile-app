@@ -862,7 +862,7 @@ export const Events = {
     return {
       name: 'vama_offline_access',
       params: {
-        screen_name,
+        value: screen_name,
       },
     }
   },
@@ -871,19 +871,19 @@ export const Events = {
       name: 'vama_offline_action',
     }
   },
-  vama_offline_cache: (value: string): Event => {
+  vama_offline_cache: (queryKey: string): Event => {
     return {
       name: 'vama_offline_cache',
       params: {
-        value,
+        value: queryKey,
       },
     }
   },
-  vama_offline_no_data: (value: string): Event => {
+  vama_offline_no_data: (queryKey: string): Event => {
     return {
       name: 'vama_offline_no_data',
       params: {
-        value,
+        value: queryKey,
       },
     }
   },

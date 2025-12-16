@@ -21,6 +21,7 @@ import {
 import { CONFIRM_EMAIL_ALERT_DISMISSED } from 'components/EmailConfirmationAlert'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { updateDisplayEmailConfirmationAlert } from 'store/slices'
 import { isErrorObject } from 'utils/common'
@@ -32,7 +33,7 @@ import {
   useShowActionSheet,
   useTheme,
 } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 

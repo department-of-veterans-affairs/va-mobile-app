@@ -14,12 +14,13 @@ import {
 import { Events } from 'constants/analytics'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_TRAVEL_PAY_WEB_DETAILS } = getEnv()

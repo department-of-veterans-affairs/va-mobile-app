@@ -13,12 +13,13 @@ import type { UndefinedInitialDataOptions } from '@tanstack/react-query/src/quer
 import type { UseQueryResult } from '@tanstack/react-query/src/types'
 
 import { Events } from 'constants/analytics'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { RootState } from 'store'
 import { OfflineState, queueOfflineEvent, setLastUpdatedTimestamp } from 'store/slices'
 import { UserAnalytic, logNonFatalErrorToFirebase, setAnalyticsUserProperty } from 'utils/analytics'
 import { isErrorObject } from 'utils/common'
 import { useAppDispatch } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 export default new QueryClient({
@@ -43,12 +44,16 @@ export default new QueryClient({
     },
   }),
 })
+
 // Retry on network error. If the connection is lost this will trigger pulling the latest data from the cache
 export const offlineRetry = <TError = DefaultError>(_: number, error: TError) => {
   // @ts-ignore networkError comes from a locally thrown error and is not expected on type Error
   return featureEnabled('offlineMode') && !!error.networkError
 }
-
+/**
+ * useQueryAnalytics is a hook used to log analytics events for queries. It logs vama_offline_cache when the cache is
+ * accessed vama_offline_no_data when there is no cache available for the query.
+ */
 const useQueryAnalytics = (queryKey: QueryKey) => {
   const connectionStatus = useAppIsOnline()
   const dispatch = useAppDispatch()
@@ -72,7 +77,7 @@ const useQueryAnalytics = (queryKey: QueryKey) => {
   }, [cachedEventLogged, connectionStatus, dispatch, lastUpdatedDate, noDataEventLogged, queryKey])
 }
 
-/*
+/**
   useQuery is a wrapper hook for the react-query useQuery. It acts the same but with two changes. First it adds tracking
   for the last time the data was fetched from the api. And second it will kick off a retry when the device disconnects
   mid-request to fetch the data from the cache instead.
@@ -124,13 +129,9 @@ const useGetLastUpdatedTime = (key: QueryKey) => {
   const { lastUpdatedTimestamps } = useSelector<RootState, OfflineState>((state) => state.offline)
 
   useEffect(() => {
-    const getTime = async () => {
+    if (featureEnabled('offlineMode')) {
       const storedTime = lastUpdatedTimestamps[`${key}`]
       setTime(storedTime ? Number(storedTime) : undefined)
-    }
-
-    if (featureEnabled('offlineMode')) {
-      getTime()
     }
   }, [key, lastUpdatedTimestamps])
 

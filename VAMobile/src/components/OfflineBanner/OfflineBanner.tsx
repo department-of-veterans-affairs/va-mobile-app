@@ -7,11 +7,12 @@ import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
 
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { RootState } from 'store'
 import { OfflineState } from 'store/slices'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 const OfflineBannerTimestamp: FC = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)

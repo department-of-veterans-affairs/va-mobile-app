@@ -9,10 +9,11 @@ import { useDemographics } from 'api/demographics/getDemographics'
 import { useUpdatePreferredName } from 'api/demographics/updatePreferredName'
 import { Box, FieldType, FormFieldType, FormWrapper, FullScreenSubtask, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { stringToTitleCase } from 'utils/formattingUtils'
 import { useOfflineSnackbar, useShowActionSheet, useTheme } from 'utils/hooks'
-import { CONNECTION_STATUS, useAppIsOnline } from 'utils/hooks/offline'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 type PreferredNameScreenProps = StackScreenProps<HomeStackParamList, 'PreferredName'>
 
