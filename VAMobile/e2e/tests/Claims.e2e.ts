@@ -56,6 +56,10 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_LEARN_WHAT_TO_DO: 'claimDetailsLearnWhatToDoIFDisagreeLinkID',
   CLAIMS_DECISION_REVIEW_OPTIONS: 'ClaimsDecisionReviewOptionsTestID',
   CLAIMS_LEARN_WHAT_TO_DO_BACK: 'claimsWhatToDoDisagreementCloseID',
+  NOTICE_5103_REVIEW_WAIVER: 'Review waiver',
+  NOTICE_5103_SUBMIT_WAIVER: 'Submit waiver',
+  NOTICE_5103_SUBMIT_WAIVER_ERROR: 'You must confirm you’re done adding evidence for now before submitting the waiver',
+  NOTICE_5103_SUBMIT_EVIDENCE: 'Submit evidence',
 }
 
 beforeAll(async () => {
@@ -187,6 +191,27 @@ describe('Claims Screen', () => {
     await element(by.text('Back')).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
+  })
+
+  it('should be able to open the 5103 notice', async () => {
+    await element(by.text('Automated 5103 Notice Response')).tap()
+
+    await expect(element(by.text('5103 notice - Evidence we may need'))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE))).toExist()
+
+    // Review waiver screen, error content should appear if checkbox is not checked
+    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER)).tap()
+    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER)).tap()
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER_ERROR))).toExist()
+    await element(by.text('Back')).tap()
+
+    // Submit evidence screen
+    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
+    await element(by.text('Back')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it('should verify details of claim on step 1', async () => {

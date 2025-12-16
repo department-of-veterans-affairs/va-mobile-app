@@ -179,18 +179,16 @@ function File5103RequestDetails({ navigation, route }: File5103RequestDetailsPro
           </Box>
         )}
       </VAScrollView>
-      {showLetterModal && (
-        <VAModalList
-          showModal={showLetterModal}
-          setShowModal={setShowLetterModal}
-          listItems={getListItemVals()}
-          title={t('claimDetails.5103.letters')}
-          rightButton={{
-            text: t('close'),
-            onPress: () => setShowLetterModal(false),
-          }}
-        />
-      )}
+      <VAModalList
+        showModal={showLetterModal}
+        setShowModal={setShowLetterModal}
+        listItems={getListItemVals()}
+        title={t('claimDetails.5103.letters')}
+        rightButton={{
+          text: t('close'),
+          onPress: () => setShowLetterModal(false),
+        }}
+      />
     </Box>
   )
 }
