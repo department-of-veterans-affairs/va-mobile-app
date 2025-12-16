@@ -1,0 +1,148 @@
+name: '[Admin] Prune Stale Branches'
+
+on:
+  schedule:
+    # Run every Sunday at 2:00 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (list branches without deleting)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  prune-branches:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Prune stale branches
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          DRY_RUN: ${{ github.event.inputs.dry_run != 'false' && 'true' || 'false' }}
+        run: |
+          echo "=== Pruning Stale Branches ==="
+          echo "Dry run mode: $DRY_RUN"
+          echo ""
+          
+          # Calculate cutoff date (30 days ago)
+          CUTOFF_DATE=$(date -u -d '30 days ago' +%s 2>/dev/null || date -u -v-30d +%s)
+          CUTOFF_READABLE=$(date -u -d "@$CUTOFF_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$CUTOFF_DATE" '+%Y-%m-%d')
+          
+          echo "Cutoff date: $CUTOFF_READABLE (branches with no commits after this date will be deleted)"
+          echo ""
+          
+          # Protected branch patterns (won't be deleted)
+          PROTECTED_PATTERNS=(
+            "develop"
+            "main"
+            "master"
+            "release/*"
+            "hotfix/*"
+            "staging"
+            "production"
+          )
+          
+          # Get all remote branches
+          git fetch --all --prune
+          
+          DELETED_COUNT=0
+          PROTECTED_COUNT=0
+          ACTIVE_COUNT=0
+          
+          echo "=== Analyzing branches ==="
+          echo ""
+          
+          # Get all remote branches except HEAD
+          for branch in $(git branch -r | grep -v 'HEAD' | sed 's/origin\///'); do
+            # Check if branch matches any protected pattern
+            PROTECTED=false
+            for pattern in "${PROTECTED_PATTERNS[@]}"; do
+              if [[ "$branch" == $pattern ]]; then
+                PROTECTED=true
+                ((PROTECTED_COUNT++))
+                break
+              fi
+            done
+            
+            if [[ "$PROTECTED" == true ]]; then
+              echo "⚠️  PROTECTED: $branch"
+              continue
+            fi
+            
+            # Get the last commit date for this branch
+            LAST_COMMIT_DATE=$(git log -1 --format=%ct origin/"$branch" 2>/dev/null)
+            
+            if [[ -z "$LAST_COMMIT_DATE" ]]; then
+              echo "⚠️  ERROR: Could not get commit date for $branch"
+              continue
+            fi
+            
+            # Check if branch is stale
+            if [[ $LAST_COMMIT_DATE -lt $CUTOFF_DATE ]]; then
+              LAST_COMMIT_READABLE=$(date -u -d "@$LAST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$LAST_COMMIT_DATE" '+%Y-%m-%d')
+              DAYS_OLD=$(( ($(date +%s) - LAST_COMMIT_DATE) / 86400 ))
+              
+              if [[ "$DRY_RUN" == "true" ]]; then
+                echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
+                ((DELETED_COUNT++))
+              else
+                echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
+                if git push origin --delete "$branch" 2>&1; then
+                  ((DELETED_COUNT++))
+                else
+                  echo "   ❌ Failed to delete $branch"
+                fi
+              fi
+            else
+              ((ACTIVE_COUNT++))
+            fi
+          done
+          
+          echo ""
+          echo "=== Summary ==="
+          echo "Protected branches: $PROTECTED_COUNT"
+          echo "Active branches (< 30 days): $ACTIVE_COUNT"
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo "Branches that would be deleted: $DELETED_COUNT"
+          else
+            echo "Branches deleted: $DELETED_COUNT"
+          fi
+          
+          # Create a summary for GitHub Actions
+          {
+            echo "### Branch Pruning Summary"
+            echo ""
+            echo "**Cutoff Date:** $CUTOFF_READABLE"
+            echo "**Mode:** $(if [[ "$DRY_RUN" == "true" ]]; then echo "Dry Run"; else echo "Live"; fi)"
+            echo ""
+            echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
+            echo "- ✅ Active branches: $ACTIVE_COUNT"
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "- 🔍 Branches that would be deleted: $DELETED_COUNT"
+            else
+              echo "- 🗑️ Branches deleted: $DELETED_COUNT"
+            fi
+          } >> $GITHUB_STEP_SUMMARY
+
+      - name: Comment on issue if scheduled
+        if: github.event_name == 'schedule' && github.event.inputs.dry_run != 'true'
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          echo "Scheduled run completed. Check the workflow run summary for details."
