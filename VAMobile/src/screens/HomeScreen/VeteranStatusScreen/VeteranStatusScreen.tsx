@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Platform } from 'react-native'
 import { useTranslation } from 'react-i18next'
+import { Platform } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
@@ -209,11 +209,13 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
 
   const passPayload: VeteranPassPayload | undefined = personalInfo?.fullName
     ? {
-      name: personalInfo.fullName,
-      id: personalInfo?.edipi ?? 'V00000000',
-      disability_percent: ratingIsDefined ? Number(ratingPercent) : undefined,
-      as_of_date: new Date().toISOString().slice(0, 10),
-    }
+        name: personalInfo.fullName,
+        // NOTE: Use random ID for testing purposes only
+        // id: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+        id: personalInfo?.edipi ?? 'V00000000',
+        disability_percent: ratingIsDefined ? Number(ratingPercent) : undefined,
+        as_of_date: new Date().toISOString().slice(0, 10),
+      }
     : undefined
 
   return (

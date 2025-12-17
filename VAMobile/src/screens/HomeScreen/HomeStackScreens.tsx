@@ -20,7 +20,7 @@ import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { Waygate } from 'utils/waygateConfig'
 
 export type HomeStackParamList = WebviewStackParams & {
-  Home: undefined
+  Home: { openVeteranStatus?: boolean } | undefined
   Profile: undefined
   ContactVA: undefined
   VeteranStatus: undefined

@@ -40,7 +40,25 @@ export const linking: LinkingOptions<any> = {
   // Sets the navigation state for deeply nested screens to ensure navigating backwards works correctly
   getStateFromPath(path) {
     const pathParts = path.split('/').filter(Boolean)
-    if (pathParts[0] === 'messages') {
+    if (pathParts[0] === 'veteranStatus') {
+      return {
+        routes: [
+          {
+            name: 'Tabs',
+            state: {
+              routes: [
+                {
+                  name: 'HomeTab',
+                  state: {
+                    routes: [{ name: 'Home', params: { openVeteranStatus: true } }],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+    } else if (pathParts[0] === 'messages') {
       const hasMessageID = pathParts.length === 2
       return {
         routes: [

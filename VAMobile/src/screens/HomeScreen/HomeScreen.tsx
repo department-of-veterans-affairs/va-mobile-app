@@ -80,7 +80,7 @@ const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 const MemoizedLoadingComponent = React.memo(LoadingComponent)
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-export function HomeScreen({}: HomeScreenProps) {
+export function HomeScreen({ navigation, route }: HomeScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -127,6 +127,19 @@ export function HomeScreen({}: HomeScreenProps) {
   const serviceHistoryQuery = useServiceHistory()
   const paymentHistoryQuery = usePayments('', 1)
   const personalInformationQuery = usePersonalInformation()
+
+  // Handle deep link to VeteranStatus
+  useEffect(() => {
+    if (route?.params?.openVeteranStatus) {
+      // Small delay to ensure the Home screen is fully loaded
+      const timer = setTimeout(() => {
+        // Clear the parameter to prevent reopening when modal closes
+        navigation.setParams({ openVeteranStatus: undefined })
+        navigateTo('VeteranStatus')
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [route?.params?.openVeteranStatus, navigateTo, navigation])
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
