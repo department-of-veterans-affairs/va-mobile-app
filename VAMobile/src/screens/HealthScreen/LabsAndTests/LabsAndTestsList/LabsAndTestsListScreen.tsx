@@ -155,7 +155,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     return !!start && !!end && start !== '' && end !== ''
   }
 
-  const labsEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
+  const isLabsEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
 
   const {
     data: labsAndTests,
@@ -170,7 +170,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: selectedDateRange.timeFrame,
     },
-    { enabled: screenContentAllowed('WG_LabsAndTestsList') && labsEnabled && hasValidDates() },
+    { enabled: screenContentAllowed('WG_LabsAndTestsList') && isLabsEnabled && hasValidDates() },
   )
 
   // Analytics
@@ -268,18 +268,19 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
                 {t('labsAndTests.zeroHoldTime.end')}
               </TextView>
           </Alert>
-        ) :
-        (
+        ) : (
           /* Surely there is a better way to insert bold text into a display string... */
-          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('labsAndTests.availability.start')}
+          <>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('labsAndTests.availability.start')}
+            </TextView>
             <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
               {t('labsAndTests.availability.timing.bold')}
             </TextView>
             <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-              {t('labsAndTests.availability.end')}
-            </TextView>
-          </TextView>
+                {t('labsAndTests.availability.end')}
+              </TextView>
+            </>
         )}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>

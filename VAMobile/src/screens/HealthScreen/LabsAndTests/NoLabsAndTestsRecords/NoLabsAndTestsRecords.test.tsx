@@ -30,10 +30,10 @@ context('NoLabsAndTestsRecords', () => {
     it('displays the correct alert description with 36 hour text', () => {
       initializeTestInstance(false)
       expect(
-        screen.getByText(t('labsAndTests.noRecords.alert.text.1')),
+        screen.getByText(t('labsAndTests.noRecords.alert.text.1'))
       ).toBeTruthy()
       expect(
-        screen.getByText(t('labsAndTests.noRecords.alert.text.2')),
+        screen.getByText(t('labsAndTests.noRecords.alert.text.2'))
       ).toBeTruthy()
     })
   })
@@ -42,9 +42,7 @@ context('NoLabsAndTestsRecords', () => {
     it('displays the correct alert description without 36 hour text', () => {
       initializeTestInstance(true)
       expect(screen.getByText(t('labsAndTests.noRecords.zeroHoldTimes.text.1'))).toBeTruthy()
-      expect(
-        screen.getByText(t('labsAndTests.noRecords.alert.text.2')),
-      ).toBeTruthy()
+      expect(screen.getByText(t('labsAndTests.noRecords.alert.text.2'))).toBeTruthy()
     })
   })
 

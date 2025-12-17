@@ -80,9 +80,7 @@ context('LabsAndTestsListScreen', () => {
       initializeTestInstance(true)
       await waitFor(() => {
         expect(screen.getByTestId('labsAndTestsZeroHoldTimeAlertID')).toBeTruthy()
-        expect(
-          screen.getByText(t('labsAndTests.zeroHoldTime.heading')),
-        ).toBeTruthy()
+        expect(screen.getByText(t('labsAndTests.zeroHoldTime.heading'))).toBeTruthy()
       })
       // Verify the old availability timing text is not present
       expect(screen.queryByTestId('labsAndTestsAvailabilityTimingTestID')).toBeFalsy()

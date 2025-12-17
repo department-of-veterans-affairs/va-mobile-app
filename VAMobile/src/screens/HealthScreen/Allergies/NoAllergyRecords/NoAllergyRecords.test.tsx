@@ -22,12 +22,8 @@ context('NoAllergyRecords', () => {
     it('initializes correctly with 36 hour text', () => {
       initializeTestInstance(false)
       expect(screen.getByRole('heading', { name: t('noAllergyRecords.alert.title') })).toBeTruthy()
-      expect(
-        screen.getByText(t('noAllergyRecords.alert.text.1')),
-      ).toBeTruthy()
-      expect(
-        screen.getByText(t('noAllergyRecords.alert.text.2')),
-      ).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.1'))).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy()
       expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
       expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
@@ -38,9 +34,7 @@ context('NoAllergyRecords', () => {
       initializeTestInstance(true)
       expect(screen.getByRole('heading', { name: t('noAllergyRecords.alert.title') })).toBeTruthy()
       expect(screen.getByText(t('noAllergyRecords.zeroHoldTimes.text.1'))).toBeTruthy()
-      expect(
-        screen.getByText(t('noAllergyRecords.alert.text.2')),
-      ).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy();
       expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
       expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })
