@@ -270,17 +270,15 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
           </Alert>
         ) : (
           /* Surely there is a better way to insert bold text into a display string... */
-          <>
-            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-              {t('labsAndTests.availability.start')}
-            </TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+            {t('labsAndTests.availability.start')}
             <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
               {t('labsAndTests.availability.timing.bold')}
             </TextView>
             <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-                {t('labsAndTests.availability.end')}
-              </TextView>
-            </>
+              {t('labsAndTests.availability.end')}
+            </TextView>
+          </TextView>
         )}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>
