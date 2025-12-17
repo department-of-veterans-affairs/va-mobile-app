@@ -62,6 +62,8 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
   MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
   MILITARY_PERIOD_OF_SERVICE: 'July 13, 1970 – August 31, 1998',
+  // Components
+  SELECTION_LIST_ITEM_BUTTON_ID: 'selectionListItemButtonId',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',

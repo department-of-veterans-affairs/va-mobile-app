@@ -398,7 +398,11 @@ describe('Prescriptions Screen', () => {
   })
 
   it('verify action sheet for request refill', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0).tap()
+    await element(
+      by
+        .text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)
+        .withAncestor(by.id(CommonE2eIdConstants.SELECTION_LIST_ITEM_BUTTON_ID)),
+    ).tap()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
     await expect(element(by.text('Request prescription refill?'))).toExist()
     if (device.getPlatform() === 'android') {
