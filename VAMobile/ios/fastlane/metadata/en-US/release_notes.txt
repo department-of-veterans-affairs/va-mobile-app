@@ -1,1 +1,2 @@
 We have expanded Travel Claims functionality which includes viewing their status and value, reading and downloading decision letters, and accessing additional information about next steps.
+We also fixed a few bugs.
