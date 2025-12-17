@@ -1,1 +1,1 @@
-You can now view your Travel Claims which includes viewing their status and value, reading and downloading decision letters, and accessing additional information about next steps.
+We have expanded Travel Claims functionality which includes viewing their status and value, reading and downloading decision letters, and accessing additional information about next steps.
