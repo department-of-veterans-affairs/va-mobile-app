@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { t } from 'i18next'
 import { screen } from '@testing-library/react-native'
 
 import NoLabsAndTestsRecords from 'screens/HealthScreen/LabsAndTests/NoLabsAndTestsRecords/NoLabsAndTestsRecords'
@@ -23,21 +23,17 @@ context('NoLabsAndTestsRecords', () => {
 
   it('displays the correct alert title', () => {
     initializeTestInstance()
-    expect(screen.getByText("We couldn't find information about your labs and tests")).toBeTruthy()
+    expect(screen.getByText(t('labsAndTests.noRecords.alert.title'))).toBeTruthy()
   })
 
   describe('when mrHide36HrHoldTimes is false', () => {
     it('displays the correct alert description with 36 hour text', () => {
       initializeTestInstance(false)
       expect(
-        screen.getByText(
-          "We're sorry. We update your labs and tests records every 24 hours, but new records can take up to 36 hours to appear.",
-        ),
+        screen.getByText(t('labsAndTests.noRecords.alert.text.1')),
       ).toBeTruthy()
       expect(
-        screen.getByText(
-          "If you think your labs and tests records should be here, call our MyVA411 main information line. We're here 24/7.",
-        ),
+        screen.getByText(t('labsAndTests.noRecords.alert.text.2')),
       ).toBeTruthy()
     })
   })
@@ -45,11 +41,9 @@ context('NoLabsAndTestsRecords', () => {
   describe('when mrHide36HrHoldTimes is true', () => {
     it('displays the correct alert description without 36 hour text', () => {
       initializeTestInstance(true)
-      expect(screen.getByText('We update your labs and tests records every 24 hours.')).toBeTruthy()
+      expect(screen.getByText(t('labsAndTests.noRecords.zeroHoldTimes.text.1'))).toBeTruthy()
       expect(
-        screen.getByText(
-          "If you think your labs and tests records should be here, call our MyVA411 main information line. We're here 24/7.",
-        ),
+        screen.getByText(t('labsAndTests.noRecords.alert.text.2')),
       ).toBeTruthy()
     })
   })

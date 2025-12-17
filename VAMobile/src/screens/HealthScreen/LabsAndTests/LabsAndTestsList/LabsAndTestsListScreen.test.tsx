@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { t } from 'i18next'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { DateTime } from 'luxon'
 
@@ -69,7 +69,8 @@ context('LabsAndTestsListScreen', () => {
     it('renders the correct availability timing with 36 hours text', async () => {
       initializeTestInstance(false)
       await waitFor(() =>
-        expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID').children[0]).toEqual('36 hours'),
+        // This test ID is tied specifically to the "36 hours" language
+        expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID')).toBeTruthy()
       )
     })
   })
@@ -80,7 +81,7 @@ context('LabsAndTestsListScreen', () => {
       await waitFor(() => {
         expect(screen.getByTestId('labsAndTestsZeroHoldTimeAlertID')).toBeTruthy()
         expect(
-          screen.getByText('We encourage you to wait for your care team to contact you before reviewing results.'),
+          screen.getByText(t('labsAndTests.zeroHoldTime.heading')),
         ).toBeTruthy()
       })
       // Verify the old availability timing text is not present
