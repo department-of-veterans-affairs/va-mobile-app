@@ -369,7 +369,8 @@ const checkUpcomingApptDetails = async (
   // Also check if the appointment was in the past (to work with how the tests are constructed)
   if (travelClaimId && pastAppointment) {
     await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
-    await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    // await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    await expect(element(by.id('goToClaimDetails-' + travelClaimId))).toExist()
     await expect(element(by.id('travelPayHelp'))).toExist()
   } else {
     const isAllowed =

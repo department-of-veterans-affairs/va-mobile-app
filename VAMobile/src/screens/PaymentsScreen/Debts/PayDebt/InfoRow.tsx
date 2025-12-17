@@ -1,5 +1,6 @@
 import React from 'react'
-import { Clipboard } from 'react-native'
+
+import Clipboard from '@react-native-clipboard/clipboard'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 
@@ -35,7 +36,7 @@ export function InfoRow({ label, value, copyable = false, testID }: InfoRowProps
       pt={theme.dimensions.standardMarginBetween}>
       <Box flex={1} mr={theme.dimensions.condensedMarginBetween}>
         <TextView variant="MobileBody">{label}</TextView>
-        <TextView mb={6} variant="MobileBodyBold" selectable testID={`${testID}-value`}>
+        <TextView mb={6} variant="MobileBody" selectable testID={`${testID}-value`}>
           {display}
         </TextView>
       </Box>
