@@ -1,14 +1,37 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import { ParamListBase } from '@react-navigation/native'
 
 import { useMutationState } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { DateTime } from 'luxon'
+import { sortBy } from 'underscore'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimData, TravelPayClaimDocument, TravelPayClaimSummary } from 'api/types'
+import { DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { Events } from 'constants/analytics'
+import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getA11yLabelText } from 'utils/common'
 import { RouteNavigationFunction } from 'utils/hooks'
+
+export const FILTER_KEY_ALL = 'all'
+
+export type SortOptionType = 'recent' | 'oldest'
+
+export const SortOption: {
+  Recent: SortOptionType
+  Oldest: SortOptionType
+} = {
+  Recent: 'recent',
+  Oldest: 'oldest',
+}
+
+export type CheckboxOption = {
+  optionLabelKey: string
+  value: string
+}
 
 /**
  * Strips the timezone offset from a datetime string
@@ -130,4 +153,195 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
     const totalTime = DateTime.now().diff(DateTime.fromISO(smocFlowStartDate)).toMillis()
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
   }
+}
+
+// ============================================================================
+// Travel Pay Document Helpers
+// ============================================================================
+
+/**
+ * Determines the document type based on filename patterns
+ * Used for analytics tracking
+ */
+export const getDocumentType = (filename: string): string => {
+  if (!filename) {
+    return 'unknown'
+  }
+  if (filename.includes('Rejection Letter')) {
+    return 'rejection_letter'
+  }
+  if (filename.includes('Decision Letter')) {
+    return 'decision_letter'
+  }
+  return 'user_submitted'
+}
+
+/**
+ * Helper function to create a document list item
+ * @param isDecisionLetter - If true, uses bold font and shows icon (for decision letters).
+ *                           If false, uses normal font and no icon (for user-submitted documents)
+ */
+export const createTravelPayDocumentListItem = (
+  document: TravelPayClaimDocument,
+  claimId: string,
+  claimStatus: string,
+  onDocumentPress: (docId: string, filename: string) => void,
+  theme: VATheme,
+  t: TFunction,
+  linkText?: string,
+  isDecisionLetter?: boolean,
+): DefaultListItemObj => {
+  const handlePress = () => {
+    // Log analytics before triggering download
+    const documentType = getDocumentType(document.filename)
+    logAnalyticsEvent(Events.vama_travel_pay_doc_dl(claimId, claimStatus, documentType, document.filename))
+    onDocumentPress(document.documentId, document.filename)
+  }
+
+  // Decision letters are bold with icon, user-submitted docs are normal with no icon
+  const variant = isDecisionLetter
+    ? ('MobileBodyBold' as keyof VATypographyThemeVariants)
+    : ('MobileBody' as keyof VATypographyThemeVariants)
+  const iconProps = isDecisionLetter
+    ? {
+        name: 'Description' as const,
+        width: 24,
+        height: 24,
+        fill: theme.colors.text.primary,
+      }
+    : undefined
+
+  const textLines: Array<TextLineWithIconProps> = [
+    {
+      text: linkText || document.filename,
+      variant,
+      iconProps,
+    },
+  ]
+
+  return {
+    textLines,
+    onPress: handlePress,
+    testId: getA11yLabelText(textLines),
+    a11yHintText: t('travelPay.claimDetails.document.decisionLetter'),
+  }
+}
+
+/**
+ * Converts a string to PascalCase format
+ * @param str - The string to convert
+ * @returns The string in PascalCase format
+ * @example
+ * toPascalCase('in manual review') // Returns: 'InManualReview'
+ * toPascalCase('denied') // Returns: 'Denied'
+ */
+export function toPascalCase(str: string): string {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('')
+}
+
+/** Filters the claims based on the provided filter options
+ * @param claims - The list of claims
+ * @param filter - The filter options to apply
+ * @returns The filtered claims
+ */
+export const filteredClaims = (claims: Array<TravelPayClaimData>, filter: Set<string>) =>
+  filter.size === 0 ? claims : claims.filter((claim) => filter.has(claim.attributes.claimStatus))
+
+/**
+ * Sorts the claims based on the provided sort option
+ * @param claims - The list of claims
+ * @param sortBy - The sort option to apply
+ * @returns The list of claims sorted according to the sort option
+ */
+export const sortedClaims = (claims: Array<TravelPayClaimData>, sortOption: SortOptionType) =>
+  sortBy(claims, (claim) => {
+    const dateTime = new Date(claim.attributes.appointmentDateTime).getTime()
+    switch (sortOption) {
+      case SortOption.Recent:
+        return -dateTime
+      case SortOption.Oldest:
+        return dateTime
+      default:
+        return 0
+    }
+  })
+
+/**
+ * Hook to manage toggling a set of filters and tracking the state of which ones are active
+ *
+ * @param options - Set of all available filter options
+ * @param initialFilter - Set of initially selected filter options
+ * @returns A tuple containing:
+ *   - `selectedFilter` - Set of currently selected filter keys
+ *   - `setSelectedFilter` - Setter to update the selected filters
+ *   - `toggleFilter` - Toggles a specific filter on/off. When toggling FILTER_KEY_ALL,
+ *     it will select everything if none/some are selected, or deselect everything if all are selected
+ */
+export const useFilterToggle = (
+  options: Set<string>,
+  initialFilter: Set<string>,
+): [Set<string>, Dispatch<SetStateAction<Set<string>>>, (filterKey: string) => void] => {
+  const [selectedFilter, setSelectedFilter] = useState<Set<string>>(initialFilter)
+
+  const toggleFilter = (filterKey: string) => {
+    setSelectedFilter((prevFilter) => {
+      // Select or deselect everything when pressing "All"
+      if (filterKey === FILTER_KEY_ALL) {
+        return prevFilter.size === options.size ? new Set() : new Set([...options])
+      }
+
+      // Toggle the filter
+      return prevFilter.has(filterKey)
+        ? new Set([...prevFilter].filter((key) => key !== filterKey))
+        : new Set([...prevFilter, filterKey])
+    })
+  }
+
+  return [selectedFilter, setSelectedFilter, toggleFilter]
+}
+
+/**
+ * Determine if a checkbox is checked based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the value is selected, false otherwise
+ */
+export const isChecked = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size === allOptions.size
+  }
+
+  return selectedValues.has(value)
+}
+
+/**
+ * Determine if a checkbox is in an indeterminate state based on the specified value and current selection
+ * @param value - The value to check
+ * @param options - The list of all available values
+ * @param selectedValues - The set of currently selected values
+ * @returns True if the checkbox is indeterminate, false otherwise
+ */
+export const isIndeterminate = (value: string, options: Array<CheckboxOption>, selectedValues: Set<string>) => {
+  if (value === FILTER_KEY_ALL) {
+    const allOptions = new Set(options.map((option) => option.value))
+    return selectedValues.size > 0 && selectedValues.size < allOptions.size
+  }
+
+  return false
+}
+
+/**
+ * Navigates to the travel claims list screen from various entry points
+ * @param navigateTo - The navigation function to navigate between screens
+ */
+export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  navigateTo('BenefitsTab', {
+    screen: 'TravelPayClaims',
+    initial: false,
+  })
 }

@@ -65,15 +65,18 @@ const navigationDic = {
   Health: [
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], 'Appointments', 'Appointments'],
     [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Vilanisi Reddy'], 'Details'],
-    [['Appointments.e2e', 'AppointmentsExpanded.e2e'], ['Appointments', 'Past'], 'Past 3 months'],
     ['Messages.e2e', 'Messages', 'Messages'],
     ['Messages.e2e', ['Messages', 'Medication: Naproxen side effects'], 'Review message'],
     ['Prescriptions.e2e', 'Prescriptions', 'Prescriptions'],
     ['Prescriptions.e2e', ['Prescriptions', 'Get prescription details'], 'AMLODIPINE BESYLATE 10MG TAB'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines'], 'Vaccines'],
     ['VaccineRecords.e2e', ['Medical records', 'Vaccines', 'January 14, 2021'], 'COVID-19 vaccine'],
-    ['Allergies.e2e', ['Medical records', 'Allergies'], 'Allergies'],
-    ['Allergies.e2e', ['Medical records', 'Allergies', 'January 10, 2023'], 'Penicillins allergy'],
+    [['Allergies.e2e', 'AllergiesAccelerated.e2e'], ['Medical records', 'Allergies'], 'Allergies'],
+    [
+      ['Allergies.e2e', 'AllergiesAccelerated.e2e'],
+      ['Medical records', 'Allergies', 'January 10, 2023'],
+      'Penicillins allergy',
+    ],
   ],
   Payments: [
     ['Payments.e2e', 'VA payment history', 'History'],
@@ -248,10 +251,8 @@ const navigateToPage = async (key, navigationDicValue) => {
     }
 
     if (subNavigationArray.slice(-1)[0] === 'Get prescription details') {
-      await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-        .scroll(50, 'down', 0.5, 0.5)
+      // Scroll so that 'Get prescription details' is visible but not under the 'Start refill request' button
+      await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scroll(100, 'down', 0.5, 0.5)
     } else if (subNavigationArray.slice(-1)[0] === 'Received June 12, 2008') {
       await waitFor(element(by.text('Received June 12, 2008')))
         .toBeVisible()

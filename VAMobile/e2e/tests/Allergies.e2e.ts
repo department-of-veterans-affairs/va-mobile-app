@@ -6,7 +6,14 @@ This script should be updated whenever new things are added/changed in allergies
 */
 import { by, element, expect } from 'detox'
 
-import { checkImages, loginToDemoMode, openAllergyRecords, openHealth, openMedicalRecords } from './utils'
+import {
+  changeDemoModeUser,
+  checkImages,
+  loginToDemoMode,
+  openAllergyRecords,
+  openHealth,
+  openMedicalRecords,
+} from './utils'
 
 export const AllergiesE2eIdConstants = {
   ALLERGY_1_ID: 'Penicillins allergy January 10, 2023',
@@ -17,10 +24,12 @@ export const AllergiesE2eIdConstants = {
   ALLERGY_6_ID: 'Latex allergy August 20, 2020',
   ALLERGY_7_ID: 'Sulfonamides allergy July 12, 2020',
   ALLERGIES_DETAILS_BACK_ID: 'allergiesDetailsBackID',
+  DESIRED_DEMO_MODE_USER_ID: 'Dennis Madison option 4 of 4',
 }
 
 beforeAll(async () => {
   await loginToDemoMode()
+  await changeDemoModeUser(AllergiesE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
   await openMedicalRecords()
   await openAllergyRecords()
@@ -34,7 +43,6 @@ describe('Allergies Screen', () => {
       'defaultAllergyTemplate',
     )
     checkImages(defaultAllergyTemplate)
-    const allergy1Text = await element(by.id(AllergiesE2eIdConstants.ALLERGY_7_ID)).getAttributes()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_1_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_2_ID))).toExist()
     await expect(element(by.id(AllergiesE2eIdConstants.ALLERGY_3_ID))).toExist()

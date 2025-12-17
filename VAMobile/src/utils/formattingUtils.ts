@@ -6,6 +6,8 @@ import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
 
+export const EN_DASH = '\u2013'
+
 /**
  * Returns the formatted phone number
  *
@@ -369,11 +371,25 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
 }
 
 /**
- * Converts 1234567890 to 123-456-7890
+ * Converts 1234567890 to 123-456-7890 and 12345678901 to +1-234-567-8901
  * @param phoneNumber - string that has the phone number
  */
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
-  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  if (phoneNumber.length === 10) {
+    return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  } else if (phoneNumber.length === 11) {
+    return (
+      '+' +
+      phoneNumber.substring(0, 1) +
+      '-' +
+      phoneNumber.substring(1, 4) +
+      '-' +
+      phoneNumber.substring(4, 7) +
+      '-' +
+      phoneNumber.substring(7, 11)
+    )
+  }
+  return phoneNumber
 }
 
 /**
@@ -511,5 +527,5 @@ export const formatDateMMMMyyyy = (date: DateTime): string => {
  * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
  */
 export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
-  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
+  return `${formatDateMMMyyyy(startDate)} ${EN_DASH} ${formatDateMMMyyyy(endDate)}`
 }
