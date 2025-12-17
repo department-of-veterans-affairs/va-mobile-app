@@ -261,7 +261,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             expandable={true}
             initializeExpanded={false}
             testID="labsAndTestsZeroHoldTimeAlertID">
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              <TextView variant="MobileBody">
                 {t('labsAndTests.zeroHoldTime.text2')}
               </TextView>
               <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
