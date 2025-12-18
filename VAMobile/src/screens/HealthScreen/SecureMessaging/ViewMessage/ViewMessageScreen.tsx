@@ -360,7 +360,8 @@ function ViewMessageScreen({ route, navigation }: ViewMessageScreenProps) {
       title={t('reviewMessage')}
       headerButton={headerButton}
       testID="viewMessageTestID"
-      backLabelTestID="backToMessagesID">
+      backLabelTestID="backToMessagesID"
+      screenID={screenID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

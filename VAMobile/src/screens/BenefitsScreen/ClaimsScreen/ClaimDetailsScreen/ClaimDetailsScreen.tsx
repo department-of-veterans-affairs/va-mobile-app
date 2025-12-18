@@ -320,7 +320,8 @@ function ClaimDetailsScreen({ navigation, route }: ClaimDetailsScreenProps) {
       title={t('claimDetails.title')}
       scrollViewProps={{ scrollViewRef }}
       testID="ClaimDetailsScreen"
-      backLabelTestID="claimsDetailsBackTestID">
+      backLabelTestID="claimsDetailsBackTestID"
+      screenID={ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID}>
       {loadingClaim || loadingEFolder || downloading ? (
         <LoadingComponent text={downloading ? t('claimFile.loading') : t('claimInformation.loading')} />
       ) : claimError || claimEfolderError ? (

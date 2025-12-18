@@ -155,7 +155,8 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID"
-      backLabelTestID="backToProfileID">
+      backLabelTestID="backToProfileID"
+      screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}>
       {loadingCheck ? (
         <LoadingComponent text={t('personalInformation.loading')} />
       ) : errorCheck ? (

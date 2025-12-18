@@ -1401,6 +1401,8 @@
   "login": "Login",
   "logout.confirm.text": "Sign out?",
   "logout.title": "Sign out",
+  "maintenanceBanner.header": "Maintenance in progress",
+  "maintenanceBanner.info": "Some features may be unavailable until {{time}}",
   "messages": "Messages",
   "militaryInformation.branch": "{{branch}}",
   "militaryInformation.history": "{{begin}} – {{end}}",

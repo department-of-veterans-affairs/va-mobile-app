@@ -148,7 +148,8 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
       backLabelOnPress={navigation.goBack}
       title={t('claimLetters.title')}
       scrollViewProps={scrollViewProps}
-      backLabelTestID="claimLettersBackTestID">
+      backLabelTestID="claimLettersBackTestID"
+      screenID={ScreenIDTypesConstants.DECISION_LETTERS_LIST_SCREEN_ID}>
       {loading || downloading ? (
         <LoadingComponent text={t(loading ? 'claimLetters.loading' : 'claimLetters.downloading')} />
       ) : letterInfoError || claimsInDowntime ? (

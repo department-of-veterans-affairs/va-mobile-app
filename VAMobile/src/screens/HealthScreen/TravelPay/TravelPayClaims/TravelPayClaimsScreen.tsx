@@ -112,7 +112,8 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
       backLabelTestID="travelPayClaimsBackButton"
       title={t('travelPay.claims.title')}
       testID="travelPayClaimsTestID"
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIMS_SCREEN_ID}>
       {error ? (
         <ErrorComponent
           onTryAgain={refetch}

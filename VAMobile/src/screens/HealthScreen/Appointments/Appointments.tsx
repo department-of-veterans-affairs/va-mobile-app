@@ -153,10 +153,9 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       scrollViewProps={scrollViewProps}
       testID="appointmentsTestID"
       footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
-      backLabelTestID="appointmentsBackTestID">
-      {!apptsNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
-      ) : getUserAuthorizedServicesError && !fetchingAuthServices ? (
+      backLabelTestID="appointmentsBackTestID"
+      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}>
+      {getUserAuthorizedServicesError && !fetchingAuthServices ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
           onTryAgain={refetchUserAuthorizedServices}

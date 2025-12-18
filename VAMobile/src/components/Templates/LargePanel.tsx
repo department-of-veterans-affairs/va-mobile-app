@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { VAScrollView, WaygateWrapper } from 'components'
+import { MaintenanceBanner, VAScrollView, WaygateWrapper } from 'components'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import { NAMESPACE } from 'constants/namespaces'
 import { useShowActionSheet, useTheme } from 'utils/hooks'
@@ -146,6 +146,7 @@ export const LargePanel: FC<LargePanelProps> = ({
     <Modal visible={!hideModal} animationType="slide" transparent={true}>
       <View {...fillStyle}>
         <HeaderBanner {...headerProps} />
+        <MaintenanceBanner screenID={'APPOINTMENTS_SCREEN'} />
         {showScrollView && (
           <VAScrollView
             testID={testID}

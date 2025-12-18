@@ -8,11 +8,12 @@ import { StackActions, useNavigation } from '@react-navigation/native'
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
 
-import { Box, CrisisLineButton, VAScrollView, WaygateWrapper } from 'components'
+import { Box, CrisisLineButton, MaintenanceBanner, VAScrollView, WaygateWrapper } from 'components'
 import { MenuViewActionsType } from 'components/Menu'
 import HeaderBanner, { HeaderBannerProps } from 'components/Templates/HeaderBanner'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypes } from 'store/api'
 import { useShowActionSheet, useTheme } from 'utils/hooks'
 
 /*To use this template to wrap the screen you want in <FullScreenSubtask> </FullScreenSubtask> and supply the needed props for them to display
@@ -65,6 +66,8 @@ export type FullScreenSubtaskProps = {
   showCrisisLineButton?: boolean
   /** Optional testID */
   testID?: string
+  /** Required to show the maintenance banner **/
+  screenID?: ScreenIDTypes
 }
 
 export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
@@ -90,6 +93,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   navigationMultiStepCancelScreen,
   showCrisisLineButton = false,
   testID,
+  screenID,
 }) => {
   const theme = useTheme()
   const navigation = useNavigation()
@@ -184,6 +188,7 @@ export const FullScreenSubtask: FC<FullScreenSubtaskProps> = ({
   return (
     <View {...fillStyle}>
       <HeaderBanner {...headerProps} />
+      <MaintenanceBanner screenID={screenID} />
       <VAScrollView scrollViewRef={scrollViewRef} testID={testID}>
         {showCrisisLineButton && <CrisisLineButton />}
         {title && <SubtaskTitle title={title} a11yLabel={titleA11yLabel} mt={titleMarginTop} />}

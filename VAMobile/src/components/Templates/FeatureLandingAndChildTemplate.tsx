@@ -5,9 +5,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
-import { HeaderBanner, HeaderBannerProps, HeaderButton, TextView, TextViewProps, WaygateWrapper } from 'components'
+import {
+  HeaderBanner,
+  HeaderBannerProps,
+  HeaderButton,
+  MaintenanceBanner,
+  TextView,
+  TextViewProps,
+  WaygateWrapper,
+} from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypes } from 'store/api'
 import { useTheme } from 'utils/hooks'
 
 /* To use these templates:
@@ -38,6 +47,8 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Required to show the maintenance banner **/
+  screenID?: ScreenIDTypes
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -54,6 +65,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  screenID,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -133,6 +145,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <MaintenanceBanner screenID={screenID} />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}

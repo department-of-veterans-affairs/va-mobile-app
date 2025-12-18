@@ -200,7 +200,8 @@ function LettersListScreen({ navigation }: LettersListScreenProps) {
     <FeatureLandingTemplate
       backLabel={t('letters.overview.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('letters.overview.viewLetters')}>
+      title={t('letters.overview.viewLetters')}
+      screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID}>
       {!lettersNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
       ) : loading || loadingUserAuthorizedServices ? (

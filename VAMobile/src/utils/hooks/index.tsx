@@ -33,7 +33,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
-import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
+import {
+  DowntimeFeatureType,
+  DowntimeFeatureTypeConstants,
+  ScreenIDToDowntimeFeatures,
+  ScreenIDTypes,
+  ScreenIDTypesConstants,
+} from 'store/api/types'
 import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'

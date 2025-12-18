@@ -201,7 +201,8 @@ function RefillTrackingDetails({ route, navigation }: RefillTrackingDetailsProps
       title={t('prescriptionTracking')}
       rightButtonText={t('close')}
       testID="refillTrackingDetailsTestID"
-      rightButtonTestID="prescriptionsBackTestID">
+      rightButtonTestID="prescriptionsBackTestID"
+      screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID}>
       {prescriptionInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
       ) : loadingTrackingInfo ? (

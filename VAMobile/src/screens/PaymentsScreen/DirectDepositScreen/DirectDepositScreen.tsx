@@ -96,7 +96,8 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount"
-      backLabelTestID="directDepositPageBackID">
+      backLabelTestID="directDepositPageBackID"
+      screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}>
       {loading ? (
         <LoadingComponent text={t('directDeposit.loading')} />
       ) : hasError ? (

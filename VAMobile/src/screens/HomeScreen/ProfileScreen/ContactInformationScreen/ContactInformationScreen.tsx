@@ -289,7 +289,8 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
-      testID="ContactInfoTestID">
+      testID="ContactInfoTestID"
+      screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}>
       {loadingCheck ? (
         <LoadingComponent text={t('contactInformation.loading')} />
       ) : contactInfoErrorCheck ? (

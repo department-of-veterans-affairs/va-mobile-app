@@ -189,7 +189,8 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       backLabelTestID="backToSettingsScreenID"
-      title={t('notifications.title')}>
+      title={t('notifications.title')}
+      screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}>
       {loadingCheck ? (
         <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
       ) : hasError ||

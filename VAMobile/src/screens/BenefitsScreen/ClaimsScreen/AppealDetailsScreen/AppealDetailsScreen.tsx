@@ -99,7 +99,8 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('appealDetails.title')}
       testID="appealsDetailsTestID"
-      backLabelTestID="appealsBackID">
+      backLabelTestID="appealsBackID"
+      screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID}>
       {loadingAppeal ? (
         <LoadingComponent text={t('appealDetails.loading')} />
       ) : appealError ? (

@@ -78,7 +78,8 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('militaryInformation.title')}
-      backLabelTestID="backToProfileID">
+      backLabelTestID="backToProfileID"
+      screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}>
       {!mhNotInDowntime ? (
         <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
       ) : loadingCheck ? (

@@ -248,7 +248,8 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       title={t('labsAndTests.title')}
       titleA11y={a11yLabelVA(t('labsAndTests.title'))}
       testID="labs-and-tests-list-screen"
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      screenID={ScreenIDTypesConstants.LABS_AND_TESTS_LIST_SCREEN_ID}>
       <Box mx={theme.dimensions.gutter}>
         {/* Surely there is a better way to insert bold text into a display string... */}
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
