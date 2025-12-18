@@ -41,6 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
           DRY_RUN: ${{ github.event.inputs.dry_run == 'false' && 'false' || 'true' }}
         run: |
+          set +e  # Don't exit on errors, handle them gracefully
+          
           echo "=== Pruning Stale Branches ==="
           echo "Dry run mode: $DRY_RUN"
           echo ""
