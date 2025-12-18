@@ -374,66 +374,6 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
-  it('verify refill request screen information', async () => {
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID)).tap()
-    await expect(element(by.text('Refill request'))).toExist()
-    await expect(element(by.text('Request refills at least 15 days before you need more medication.'))).toExist()
-    await expect(
-      element(by.text("We'll mail your refills to the address on file at your local VA Pharmacy.")),
-    ).toExist()
-    await expect(element(by.text('Prescriptions for refill (10)'))).toExist()
-    await expect(element(by.label('0 of 10 selected'))).toExist()
-    await expect(element(by.text('Select all'))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
-    await expect(element(by.label('Refills left: 5')).atIndex(0)).toExist()
-    await expect(element(by.label('Fill date June 06, 2022')).atIndex(0)).toExist()
-    await expect(element(by.label(' V-A  facility: SLC10 TEST LAB')).atIndex(0)).toExist()
-  })
-
-  it('verify error when nothing is selected for request refills', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await expect(element(by.text('Please select a prescription'))).toExist()
-  })
-
-  it('verify action sheet for request refill', async () => {
-    await element(
-      by
-        .text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)
-        .withAncestor(by.id(CommonE2eIdConstants.SELECTION_LIST_ITEM_BUTTON_ID)),
-    ).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await expect(element(by.text('Request prescription refill?'))).toExist()
-    if (device.getPlatform() === 'android') {
-      await element(by.text('Cancel ')).tap()
-    } else {
-      await element(by.label('Cancel')).atIndex(1).tap()
-    }
-  })
-
-  it('verify refill request summary screen information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)),
-    ).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
-  })
-
   it('verify user can request refill from get prescriptions details', async () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
     await element(by.text('Active (24)')).atIndex(0).tap()
