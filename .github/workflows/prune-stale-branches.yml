@@ -292,6 +292,4 @@ jobs:
         • Total branches: ${{ needs.prune-branches.outputs.total_branches }}
         • Remaining branches: ${{ needs.prune-branches.outputs.remaining_branches }}
         
-        • Download CSV artifact: ${{ needs.prune-branches.outputs.artifact_url }}
-        
         View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
