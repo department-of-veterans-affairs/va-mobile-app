@@ -112,14 +112,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
       )
     })
 
-    const expandedContent = (
-      <>
-        <TextView mt={theme.dimensions.condensedMarginBetween} variant="MobileBody">
-          {t('debts.transaction.history.description')}
-        </TextView>
-        {rows}
-      </>
-    )
+    const expandedContent = <>{rows}</>
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
@@ -244,6 +237,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
               // Leveraged from web implementation:
               // vets-website/src/applications/combined-debt-portal/debt-letters/const/deduction-codes/index.js
               helpType: debt.attributes.deductionCode === '30' ? 'whyDisabilityPensionDebt' : 'whyEducationDebt',
+              titleKey: t('help'),
             })
           }}
         />

@@ -16,11 +16,13 @@ type DebtHelpProps = StackScreenProps<PaymentsStackParamList, 'DebtHelp'>
 function DebtHelp({ route }: DebtHelpProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { helpType } = route.params
+  const { helpType, titleKey } = route.params
   const { gutter, condensedMarginBetween } = theme.dimensions
 
+  const panelTitle = t(titleKey ?? 'debts.help.title')
+
   return (
-    <LargePanel title={t('debts.help.title')} rightButtonText={t('close')}>
+    <LargePanel title={panelTitle} rightButtonText={t('close')}>
       <Box mx={gutter}>
         {helpType === 'questionsAboutDebt' && (
           <>
