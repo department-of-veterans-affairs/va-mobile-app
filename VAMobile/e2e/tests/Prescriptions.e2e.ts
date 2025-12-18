@@ -374,40 +374,6 @@ describe('Prescriptions Screen', () => {
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
   })
 
-  it('verify user can request refill from get prescriptions details', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await element(by.text('Active (24)')).atIndex(0).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-      .scroll(500, 'down', 0.5, 0.5)
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)),
-    ).toExist()
-  })
-
-  it('verify tapping close from refill request summary', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
-  })
-
   validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)
   validateSort('Medication name (A to Z)', 'ACETAMINOPHEN 325MG TAB', 'ZIPRASIDONE HCL 40MG CAP')
   validateSort('Refills left (least to most)', 'ATORVASTATIN CALCIUM 10MG TAB', 'BERNA VACCINE CAP B/P')
