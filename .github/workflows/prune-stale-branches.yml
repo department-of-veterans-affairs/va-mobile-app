@@ -60,6 +60,7 @@ jobs:
             "main"
             "master"
             "release/*"
+            "release-*"
             "hotfix/*"
             "staging"
             "production"
@@ -101,27 +102,33 @@ jobs:
               continue
             fi
             
+            # Get the branch creator (author of first commit on branch)
+            BRANCH_CREATOR=$(git log origin/"$branch" --reverse --format=%an | head -n1 2>/dev/null)
+            
+            # Get the last committer
+            LAST_COMMITTER=$(git log -1 --format=%an origin/"$branch" 2>/dev/null)
+            
             # Check if branch is stale
             if [[ $LAST_COMMIT_DATE -lt $CUTOFF_DATE ]]; then
               LAST_COMMIT_READABLE=$(date -u -d "@$LAST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$LAST_COMMIT_DATE" '+%Y-%m-%d')
               DAYS_OLD=$(( ($(date +%s) - LAST_COMMIT_DATE) / 86400 ))
               
               if [[ "$DRY_RUN" == "true" ]]; then
-                echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
-                DELETED_BRANCHES+=("$branch")
+                echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
                 ((DELETED_COUNT++))
               else
-                echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
+                echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
                 # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
                 # if git push origin --delete "$branch" 2>&1; then
-                #   DELETED_BRANCHES+=("$branch")
+                #   DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
                 #   ((DELETED_COUNT++))
                 # else
                 #   echo "   ❌ Failed to delete $branch"
                 # fi
                 
                 # TEMPORARY: Simulate deletion for testing
-                DELETED_BRANCHES+=("$branch")
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
                 ((DELETED_COUNT++))
                 echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
               fi
@@ -173,8 +180,12 @@ jobs:
           # Format deleted branches list for Slack
           if [ -f /tmp/deleted_branches.txt ]; then
             BRANCH_LIST=""
-            while IFS= read -r branch; do
-              BRANCH_LIST="${BRANCH_LIST}• \`${branch}\`"$'\n'
+            while IFS='|' read -r branch creator last_committer; do
+              if [[ "$creator" == "$last_committer" ]]; then
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (by ${creator})"$'\n'
+              else
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (created by ${creator}, last commit by ${last_committer})"$'\n'
+              fi
             done < /tmp/deleted_branches.txt
             
             echo "branch_list<<EOF" >> $GITHUB_OUTPUT
@@ -206,7 +217,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: 'va-mobile-app-alerts'
+      channel_name: 'va-mobile-sandbox'
       message: |
         🌿 *Branch Pruning Summary*
         
