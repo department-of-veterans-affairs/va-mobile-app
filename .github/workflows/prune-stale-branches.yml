@@ -105,9 +105,15 @@ jobs:
               continue
             fi
             
-            # Get the branch creator (author of first commit on branch)
-            BRANCH_CREATOR=$(git log origin/"$branch" --reverse --format=%an | head -n1 2>/dev/null)
-            
+            # Get the branch creator (author of first commit unique to branch when possible)
+            DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@refs/remotes/origin/@@' || echo "main")
+            FIRST_COMMIT=$(git rev-list --reverse origin/"$branch" ^origin/"$DEFAULT_BRANCH" 2>/dev/null | head -n1)
+            if [ -n "$FIRST_COMMIT" ]; then
+              BRANCH_CREATOR=$(git show -s --format='%an' "$FIRST_COMMIT" 2>/dev/null)
+            else
+              BRANCH_CREATOR=$(git log origin/"$branch" --reverse --format=%an | head -n1 2>/dev/null)
+            fi
+
             # Get the last committer
             LAST_COMMITTER=$(git log -1 --format=%an origin/"$branch" 2>/dev/null)
             
