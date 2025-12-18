@@ -1,6 +1,7 @@
 name: '[Admin] Prune Stale Branches'
 
 on:
+  push:
   schedule:
     # Run every Sunday at 2:00 AM UTC
     - cron: '0 2 * * 0'
@@ -17,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      deleted_count: ${{ steps.set-summary.outputs.deleted_count }}
+      dry_run: ${{ steps.set-summary.outputs.dry_run }}
+      branch_list: ${{ steps.set-summary.outputs.branch_list }}
     steps:
       - name: Generate token
         id: generate_token
@@ -34,14 +39,14 @@ jobs:
       - name: Prune stale branches
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          DRY_RUN: ${{ github.event.inputs.dry_run != 'false' && 'true' || 'false' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'false' && 'false' || 'true' }}
         run: |
           echo "=== Pruning Stale Branches ==="
           echo "Dry run mode: $DRY_RUN"
           echo ""
           
-          # Calculate cutoff date (30 days ago)
-          CUTOFF_DATE=$(date -u -d '30 days ago' +%s 2>/dev/null || date -u -v-30d +%s)
+          # Calculate cutoff date (90 days ago)
+          CUTOFF_DATE=$(date -u -d '90 days ago' +%s 2>/dev/null || date -u -v-90d +%s)
           CUTOFF_READABLE=$(date -u -d "@$CUTOFF_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$CUTOFF_DATE" '+%Y-%m-%d')
           
           echo "Cutoff date: $CUTOFF_READABLE (branches with no commits after this date will be deleted)"
@@ -64,6 +69,7 @@ jobs:
           DELETED_COUNT=0
           PROTECTED_COUNT=0
           ACTIVE_COUNT=0
+          DELETED_BRANCHES=()
           
           echo "=== Analyzing branches ==="
           echo ""
@@ -100,14 +106,22 @@ jobs:
               
               if [[ "$DRY_RUN" == "true" ]]; then
                 echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
+                DELETED_BRANCHES+=("$branch")
                 ((DELETED_COUNT++))
               else
                 echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old)"
-                if git push origin --delete "$branch" 2>&1; then
-                  ((DELETED_COUNT++))
-                else
-                  echo "   ❌ Failed to delete $branch"
-                fi
+                # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
+                # if git push origin --delete "$branch" 2>&1; then
+                #   DELETED_BRANCHES+=("$branch")
+                #   ((DELETED_COUNT++))
+                # else
+                #   echo "   ❌ Failed to delete $branch"
+                # fi
+                
+                # TEMPORARY: Simulate deletion for testing
+                DELETED_BRANCHES+=("$branch")
+                ((DELETED_COUNT++))
+                echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
               fi
             else
               ((ACTIVE_COUNT++))
@@ -117,7 +131,7 @@ jobs:
           echo ""
           echo "=== Summary ==="
           echo "Protected branches: $PROTECTED_COUNT"
-          echo "Active branches (< 30 days): $ACTIVE_COUNT"
+          echo "Active branches (< 90 days): $ACTIVE_COUNT"
           if [[ "$DRY_RUN" == "true" ]]; then
             echo "Branches that would be deleted: $DELETED_COUNT"
           else
@@ -139,6 +153,42 @@ jobs:
               echo "- 🗑️ Branches deleted: $DELETED_COUNT"
             fi
           } >> $GITHUB_STEP_SUMMARY
+          
+          # Save deleted branches to file for next step
+          printf '%s\n' "${DELETED_BRANCHES[@]}" > /tmp/deleted_branches.txt
+          echo "DELETED_COUNT=$DELETED_COUNT" >> $GITHUB_ENV
+          echo "DRY_RUN=$DRY_RUN" >> $GITHUB_ENV
+
+      - name: Set summary outputs
+        id: set-summary
+        env:
+          DELETED_COUNT: ${{ env.DELETED_COUNT }}
+          DRY_RUN: ${{ env.DRY_RUN }}
+        run: |
+          echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
+          echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
+          
+          # Format deleted branches list for Slack
+          if [ -f /tmp/deleted_branches.txt ]; then
+            BRANCH_LIST=""
+            while IFS= read -r branch; do
+              BRANCH_LIST="${BRANCH_LIST}• \`${branch}\`"$'\n'
+            done < /tmp/deleted_branches.txt
+            
+            echo "branch_list<<EOF" >> $GITHUB_OUTPUT
+            echo "$BRANCH_LIST" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "branch_list=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload deleted branches list
+        if: env.DELETED_COUNT != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: deleted-branches-${{ github.run_id }}
+          path: /tmp/deleted_branches.txt
+          retention-days: 90
 
       - name: Comment on issue if scheduled
         if: github.event_name == 'schedule' && github.event.inputs.dry_run != 'true'
@@ -146,3 +196,25 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           echo "Scheduled run completed. Check the workflow run summary for details."
+
+  notify-slack:
+    name: Notify Slack
+    needs: prune-branches
+    if: always() && needs.prune-branches.outputs.deleted_count != '0'
+    uses: ./.github/workflows/start_slack_thread.yml
+    secrets: inherit
+    with:
+      channel_name: 'va-mobile-app-alerts'
+      message: |
+        🌿 *Branch Pruning Summary*
+        
+        Branches with no commits in the last 90 days have been processed.
+        
+        *Results:*
+        • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
+        • Branches ${{ needs.prune-branches.outputs.dry_run == 'true' && 'that would be deleted' || 'deleted' }}: ${{ needs.prune-branches.outputs.deleted_count }}
+        
+        *Branch List:*
+        ${{ needs.prune-branches.outputs.branch_list }}
+        
+        View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
