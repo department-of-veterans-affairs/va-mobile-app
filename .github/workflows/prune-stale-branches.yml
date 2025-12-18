@@ -237,28 +237,28 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           ARTIFACT_URL=$(python - <<'PY'
-import os,sys,time,json,urllib.request
-repo=os.environ['GITHUB_REPOSITORY']
-run_id=os.environ['GITHUB_RUN_ID']
-token=os.environ['GITHUB_TOKEN']
-url=f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
-headers={'Authorization':f'token {token}','Accept':'application/vnd.github+json'}
-for _ in range(6):
-    try:
-        req=urllib.request.Request(url,headers=headers)
-        resp=urllib.request.urlopen(req, timeout=10)
-        data=json.load(resp)
-    except Exception:
-        data={}
-    name=f"deleted-branches-{run_id}"
-    for a in data.get('artifacts',[]):
-        if a.get('name')==name:
-            print(a.get('archive_download_url'))
-            sys.exit(0)
-    time.sleep(2)
-print('')
-PY
-)
+          import os,sys,time,json,urllib.request
+          repo=os.environ['GITHUB_REPOSITORY']
+          run_id=os.environ['GITHUB_RUN_ID']
+          token=os.environ['GITHUB_TOKEN']
+          url=f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
+          headers={'Authorization':f'token {token}','Accept':'application/vnd.github+json'}
+          for _ in range(6):
+              try:
+                  req=urllib.request.Request(url,headers=headers)
+                  resp=urllib.request.urlopen(req, timeout=10)
+                  data=json.load(resp)
+              except Exception:
+                  data={}
+              name=f"deleted-branches-{run_id}"
+              for a in data.get('artifacts',[]):
+                  if a.get('name')==name:
+                      print(a.get('archive_download_url'))
+                      sys.exit(0)
+              time.sleep(2)
+          print('')
+          PY
+          )
           echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
       - name: Comment on issue if scheduled
