@@ -23,6 +23,7 @@ jobs:
       dry_run: ${{ steps.set-summary.outputs.dry_run }}
       branch_list: ${{ steps.set-summary.outputs.branch_list }}
       total_branches: ${{ steps.set-summary.outputs.total_branches }}
+      remaining_branches: ${{ steps.set-summary.outputs.remaining_branches }}
       artifact_url: ${{ steps.get-artifact-url.outputs.artifact_url }}
     steps:
       - name: Generate token
@@ -163,6 +164,7 @@ jobs:
             echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
             echo "- ✅ Active branches: $ACTIVE_COUNT"
             echo "- 🔢 Total branches: $TOTAL_COUNT"
+            echo "- 🔢 Remaining branches: $((TOTAL_COUNT - DELETED_COUNT))"
             if [[ "$DRY_RUN" == "true" ]]; then
               echo "- 🔍 Branches that would be deleted: $DELETED_COUNT"
             else
@@ -215,6 +217,10 @@ jobs:
 
           echo "total_branches=$TOTAL_BRANCHES" >> $GITHUB_OUTPUT
 
+          # Compute remaining branches (total - deleted)
+          REMAINING=$((TOTAL_BRANCHES - DELETED_COUNT))
+          echo "remaining_branches=$REMAINING" >> $GITHUB_OUTPUT
+
       - name: Upload deleted branches list
         id: upload-artifact
         if: env.DELETED_COUNT != '0'
@@ -230,7 +236,29 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          ARTIFACT_URL=$(gh api repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts --jq '.artifacts[] | select(.name=="deleted-branches-'${GITHUB_RUN_ID}'") | .archive_download_url')
+          ARTIFACT_URL=$(python - <<'PY'
+import os,sys,time,json,urllib.request
+repo=os.environ['GITHUB_REPOSITORY']
+run_id=os.environ['GITHUB_RUN_ID']
+token=os.environ['GITHUB_TOKEN']
+url=f"https://api.github.com/repos/{repo}/actions/runs/{run_id}/artifacts"
+headers={'Authorization':f'token {token}','Accept':'application/vnd.github+json'}
+for _ in range(6):
+    try:
+        req=urllib.request.Request(url,headers=headers)
+        resp=urllib.request.urlopen(req, timeout=10)
+        data=json.load(resp)
+    except Exception:
+        data={}
+    name=f"deleted-branches-{run_id}"
+    for a in data.get('artifacts',[]):
+        if a.get('name')==name:
+            print(a.get('archive_download_url'))
+            sys.exit(0)
+    time.sleep(2)
+print('')
+PY
+)
           echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
       - name: Comment on issue if scheduled
@@ -250,16 +278,13 @@ jobs:
       channel_name: 'va-mobile-sandbox'
       message: |
         🌿 *Branch Pruning Summary*
-        
-        Branches with no commits in the last 90 days have been processed.
+        :alert: Branches with no commits in the last 90 days that would have been processed. :alert:
         
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
         • Branches ${{ needs.prune-branches.outputs.dry_run == 'true' && 'that would be deleted' || 'deleted' }}: ${{ needs.prune-branches.outputs.deleted_count }}
         • Total branches: ${{ needs.prune-branches.outputs.total_branches }}
-        
-        *Branch List:*
-        ${{ needs.prune-branches.outputs.branch_list }}
+        • Remaining branches: ${{ needs.prune-branches.outputs.remaining_branches }}
         
         • Download CSV artifact: ${{ needs.prune-branches.outputs.artifact_url }}
         
