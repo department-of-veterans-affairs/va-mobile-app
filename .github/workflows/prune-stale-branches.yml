@@ -22,6 +22,8 @@ jobs:
       deleted_count: ${{ steps.set-summary.outputs.deleted_count }}
       dry_run: ${{ steps.set-summary.outputs.dry_run }}
       branch_list: ${{ steps.set-summary.outputs.branch_list }}
+      total_branches: ${{ steps.set-summary.outputs.total_branches }}
+      artifact_url: ${{ steps.get-artifact-url.outputs.artifact_url }}
     steps:
       - name: Generate token
         id: generate_token
@@ -115,7 +117,7 @@ jobs:
               
               if [[ "$DRY_RUN" == "true" ]]; then
                 echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_READABLE")
                 ((DELETED_COUNT++))
               else
                 echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
@@ -128,7 +130,7 @@ jobs:
                 # fi
                 
                 # TEMPORARY: Simulate deletion for testing
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_READABLE")
                 ((DELETED_COUNT++))
                 echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
               fi
@@ -138,9 +140,13 @@ jobs:
           done
           
           echo ""
+          TOTAL_COUNT=$(git branch -r | grep -v 'HEAD' | sed 's/origin\///' | wc -l | tr -d ' ')
+          echo "Total branches: $TOTAL_COUNT"
+          echo "TOTAL_BRANCHES=$TOTAL_COUNT" >> $GITHUB_ENV
           echo "=== Summary ==="
           echo "Protected branches: $PROTECTED_COUNT"
           echo "Active branches (< 90 days): $ACTIVE_COUNT"
+          echo "Total branches: $TOTAL_COUNT"
           if [[ "$DRY_RUN" == "true" ]]; then
             echo "Branches that would be deleted: $DELETED_COUNT"
           else
@@ -156,6 +162,7 @@ jobs:
             echo ""
             echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
             echo "- ✅ Active branches: $ACTIVE_COUNT"
+            echo "- 🔢 Total branches: $TOTAL_COUNT"
             if [[ "$DRY_RUN" == "true" ]]; then
               echo "- 🔍 Branches that would be deleted: $DELETED_COUNT"
             else
@@ -163,8 +170,18 @@ jobs:
             fi
           } >> $GITHUB_STEP_SUMMARY
           
-          # Save deleted branches to file for next step
+          # Save deleted branches to file for next step (raw pipe-delimited)
           printf '%s\n' "${DELETED_BRANCHES[@]}" > /tmp/deleted_branches.txt
+          # Also create a CSV artifact for easier consumption
+          echo 'branch,creator,last_committer,last_commit_date' > /tmp/deleted_branches.csv
+          while IFS='|' read -r branch creator last_committer last_commit_date; do
+            # Escape double quotes in fields
+            esc_branch=$(printf '%s' "$branch" | sed 's/"/""/g')
+            esc_creator=$(printf '%s' "$creator" | sed 's/"/""/g')
+            esc_last_committer=$(printf '%s' "$last_committer" | sed 's/"/""/g')
+            esc_last_commit_date=$(printf '%s' "$last_commit_date" | sed 's/"/""/g')
+            printf '"%s","%s","%s","%s"\n' "$esc_branch" "$esc_creator" "$esc_last_committer" "$esc_last_commit_date" >> /tmp/deleted_branches.csv
+          done < /tmp/deleted_branches.txt
           echo "DELETED_COUNT=$DELETED_COUNT" >> $GITHUB_ENV
           echo "DRY_RUN=$DRY_RUN" >> $GITHUB_ENV
 
@@ -173,6 +190,7 @@ jobs:
         env:
           DELETED_COUNT: ${{ env.DELETED_COUNT }}
           DRY_RUN: ${{ env.DRY_RUN }}
+          TOTAL_BRANCHES: ${{ env.TOTAL_BRANCHES }}
         run: |
           echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
           echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
@@ -180,11 +198,11 @@ jobs:
           # Format deleted branches list for Slack
           if [ -f /tmp/deleted_branches.txt ]; then
             BRANCH_LIST=""
-            while IFS='|' read -r branch creator last_committer; do
+            while IFS='|' read -r branch creator last_committer last_commit_date; do
               if [[ "$creator" == "$last_committer" ]]; then
-                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (by ${creator})"$'\n'
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (by ${creator}, last commit on ${last_commit_date})"$'\n'
               else
-                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (created by ${creator}, last commit by ${last_committer})"$'\n'
+                BRANCH_LIST="${BRANCH_LIST}• \`${branch}\` (created by ${creator}, last commit by ${last_committer} on ${last_commit_date})"$'\n'
               fi
             done < /tmp/deleted_branches.txt
             
@@ -195,13 +213,25 @@ jobs:
             echo "branch_list=" >> $GITHUB_OUTPUT
           fi
 
+          echo "total_branches=$TOTAL_BRANCHES" >> $GITHUB_OUTPUT
+
       - name: Upload deleted branches list
+        id: upload-artifact
         if: env.DELETED_COUNT != '0'
         uses: actions/upload-artifact@v4
         with:
           name: deleted-branches-${{ github.run_id }}
-          path: /tmp/deleted_branches.txt
+          path: /tmp/deleted_branches.csv
           retention-days: 90
+
+      - name: Get artifact download URL
+        id: get-artifact-url
+        if: env.DELETED_COUNT != '0'
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          ARTIFACT_URL=$(gh api repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts --jq '.artifacts[] | select(.name=="deleted-branches-'${GITHUB_RUN_ID}'") | .archive_download_url')
+          echo "artifact_url=$ARTIFACT_URL" >> $GITHUB_OUTPUT
 
       - name: Comment on issue if scheduled
         if: github.event_name == 'schedule' && github.event.inputs.dry_run != 'true'
@@ -226,8 +256,11 @@ jobs:
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
         • Branches ${{ needs.prune-branches.outputs.dry_run == 'true' && 'that would be deleted' || 'deleted' }}: ${{ needs.prune-branches.outputs.deleted_count }}
+        • Total branches: ${{ needs.prune-branches.outputs.total_branches }}
         
         *Branch List:*
         ${{ needs.prune-branches.outputs.branch_list }}
+        
+        • Download CSV artifact: ${{ needs.prune-branches.outputs.artifact_url }}
         
         View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
