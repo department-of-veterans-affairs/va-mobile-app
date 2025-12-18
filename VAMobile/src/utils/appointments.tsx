@@ -31,6 +31,8 @@ import {
   getFormattedTimeForTimeZone,
 } from 'utils/formattingUtils'
 
+import { featureEnabled } from './remoteConfig'
+
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
 const atFacilityAddress = (location: AppointmentLocation | undefined, t: TFunction) => {
@@ -525,12 +527,22 @@ export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
 }
 
 /**
- * Returns the date rage for appointments in the past 3 months
+ * Returns the date range for appointments in the past 3 months
  *
  * @returns AppointmentsDateRange
  */
 export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
   const todaysDate = DateTime.local()
+  const testingAppointmentsDateRangeOverride = featureEnabled('apptCalendarAVSRange')
+  if (testingAppointmentsDateRangeOverride) {
+    const fourtyNine = DateTime.local().minus({ days: 49 })
+    const fifty = todaysDate.minus({ months: 50 })
+
+    return {
+      startDate: fifty.startOf('day').toISO(),
+      endDate: fourtyNine.endOf('day').toISO(),
+    }
+  }
   const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
   return {

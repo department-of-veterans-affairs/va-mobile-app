@@ -89,6 +89,7 @@ export const CommonE2eIdConstants = {
   CONFIRM_EMAIL_TEXT: 'Confirm',
   SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
+  CALENDAR_AVS_RANGE: 'apptCalendarAVSRange',
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
