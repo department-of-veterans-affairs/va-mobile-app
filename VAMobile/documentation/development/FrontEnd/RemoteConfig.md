@@ -6,9 +6,11 @@ Remote Configuration (Feature Flipper/Toggles)
 
 ## Background
 
-Due of the growing complexity of the Flagship app and the types of features we are incorporating, we have an increasing need for the ability to manage aspects of the app remotely. In mobile, as in web, the best way to do this is by incorporating a remote configuration that allows features, behavior, and appearance aspects of the app to be updated without issuing a full app update.
+Due to the growing complexity of the Flagship app and the types of features we are incorporating, we have an increasing need for the ability to manage aspects of the app remotely. In mobile, as in web, the best way to do this is by incorporating a remote configuration that allows features, behavior, and appearance aspects of the app to be updated without issuing a full app update.
 
 [Firebase's Remote Config](https://firebase.google.com/docs/remote-config) product allows us to store and modify values remotely, enable or disable certain app features, as well as roll them out to a certain percentage of users at a time.
+
+The Remote Config data is fetched on startup and on an interval of 30 minutes to ensure the user has access to the latest features as soon as possible.
 
 ## Environments
 

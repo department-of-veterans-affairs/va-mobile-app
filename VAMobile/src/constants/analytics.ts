@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
+import { trimNotificationUrl } from 'utils/notifications'
 
 /**
  * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
@@ -851,10 +852,12 @@ export const Events = {
     }
   },
   vama_notification_click: (notification_url?: string): Event => {
+    // Omit the id that follows the main url path for better logging
+    const trimmed_notification_url = trimNotificationUrl(notification_url || '')
     return {
       name: 'vama_notification_click',
       params: {
-        notification_url,
+        notification_url: trimmed_notification_url,
       },
     }
   },
