@@ -9,6 +9,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE } = getEnv()
 
@@ -29,7 +30,7 @@ function CopayErrorStates({ httpStatus }: CopayErrorStatesProps) {
           logAnalyticsEvent(Events.vama_webview(LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE))
           navigateTo('Webview', {
             url: LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE,
-            displayTitle: t('webview.vagov'),
+            displayTitle: vaGovWebviewTitle(t),
             loadingMessage: t('loading.vaWebsite'),
             useSSO: true,
           })
