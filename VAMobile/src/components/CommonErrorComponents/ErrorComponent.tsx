@@ -40,17 +40,17 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
     const errorType = errorsByScreenID[screenID] || ''
 
-    // if (isInDowntime) {
-    //   if (logDowntimeAnalytics) {
-    //     features.forEach((feature) => {
-    //       const downtimeWindow = downtimeWindowsByFeature[feature]
-    //       if (downtimeWindow)
-    //         logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
-    //     })
-    //     setLogDowntimeAnalytics(false)
-    //   }
-    //   return <DowntimeError screenID={screenID} />
-    // }
+    if (isInDowntime) {
+      if (logDowntimeAnalytics) {
+        features.forEach((feature) => {
+          const downtimeWindow = downtimeWindowsByFeature[feature]
+          if (downtimeWindow)
+            logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
+        })
+        setLogDowntimeAnalytics(false)
+      }
+      return <DowntimeError screenID={screenID} />
+    }
 
     if (error && isErrorObject(error)) {
       let custom

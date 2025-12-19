@@ -16,8 +16,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import ClaimsAndAppealsListView from 'screens/BenefitsScreen/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import NoClaimsAndAppealsAccess from 'screens/BenefitsScreen/ClaimsScreen/NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
-import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { useDowntime, useTheme } from 'utils/hooks'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
@@ -42,8 +42,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
   const [claimsAndAppealsServiceErrors, setClaimsAndAppealsServiceErrors] = useState(false)
   const claimType =
     selectedTab === controlLabels.indexOf(t('claimsTab.active')) ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
-  const claimsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.claims)
-  const appealsNotInDowntime = !useDowntime(DowntimeFeatureTypeConstants.appeals)
+
   const {
     data: claimsAndAppealsListPayload,
     error: claimsAndAppealsListError,
