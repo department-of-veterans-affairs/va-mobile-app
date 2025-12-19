@@ -127,9 +127,7 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
       scrollViewProps={scrollViewProps}
       backLabelTestID="claimsHistoryBackTestID"
       screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID}>
-      {!claimsNotInDowntime && !appealsNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_HISTORY_SCREEN_ID} />
-      ) : loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
+      {loadingClaimsAndAppealsList || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
       ) : getUserAuthorizedServicesError ? (
         <ErrorComponent

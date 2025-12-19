@@ -25,10 +25,11 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
+import _ from 'underscore'
 
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
-import { WebProtocolTypesConstants } from 'constants/common'
+import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -40,7 +41,7 @@ import {
   ScreenIDTypes,
   ScreenIDTypesConstants,
 } from 'store/api/types'
-import { DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
+import { DowntimeWindow, DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -86,11 +87,67 @@ export const featureInDowntime = (
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 
+export const featureInDowntimeWindow = (
+  feature: DowntimeFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): boolean => {
+  const mw = downtimeWindows[feature]
+  return (
+    !!mw &&
+    mw.startTime <= DateTime.now().plus({ hour: MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS }) &&
+    DateTime.now() <= mw.endTime
+  )
+}
+
 export const oneOfFeaturesInDowntime = (
   features: DowntimeFeatureType[],
   downtimeWindows: DowntimeWindowsByFeatureType,
 ): boolean => {
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+export const getFeaturesInDowntime = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return _.filter(features, (feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+export const getFeaturesInDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeFeatureType[] => {
+  if (!features) {
+    return []
+  }
+
+  return _.filter(features, (feature) => featureInDowntimeWindow(feature as DowntimeFeatureType, downtimeWindows))
+}
+
+/**
+ * Finds the latest end time of an active window for a list of downtime windows
+ */
+export const latestDowntimeWindow = (
+  features: DowntimeFeatureType[],
+  downtimeWindows: DowntimeWindowsByFeatureType,
+): DowntimeWindow | undefined => {
+  let downtimeWindow: DowntimeWindow | undefined
+
+  features.forEach((feature) => {
+    if (!downtimeWindow) {
+      downtimeWindow = downtimeWindows[feature]
+    } else {
+      if (downtimeWindows[feature]?.endTime && downtimeWindows[feature]?.endTime > downtimeWindow?.endTime) {
+        downtimeWindow = downtimeWindows[feature]
+      }
+    }
+  })
+
+  return downtimeWindow
 }
 
 /**
@@ -292,7 +349,7 @@ export function useAutoScrollToElement(): [
               const offsetValue = offset || 0
               viewRef.current.measureLayout(
                 scrollPoint,
-                (_, y) => {
+                (_ignore, y) => {
                   currentObject.scrollTo({ y: y + offsetValue, animated: !screenReaderEnabled })
                 },
                 () => {

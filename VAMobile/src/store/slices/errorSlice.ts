@@ -69,10 +69,12 @@ export const initialErrorsState: ErrorsState = {
  */
 export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
   try {
-    const response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
+    // TODO: revert debug
+    let response = await get<MaintenanceWindowsGetData>('/v0/maintenance_windows')
     if (!response) {
-      dispatch(dispatchSetDowntime(undefined))
-      return
+      // dispatch(dispatchSetDowntime(undefined))
+      // return
+      response = { data: [] }
     }
 
     // filtering out any maintenance windows we haven't mapped to a screen in the app
@@ -91,6 +93,23 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
         [maintWindow.service]: metadata,
       }
     }
+
+    // TODO: remove debug code
+    downtimeWindows[DowntimeFeatureTypeConstants.claims] = {
+      startTime: DateTime.now(),
+      endTime: DateTime.now().plus({ minute: 60 }),
+    }
+
+    downtimeWindows[DowntimeFeatureTypeConstants.appeals] = {
+      startTime: DateTime.now(),
+      endTime: DateTime.now().plus({ minute: 60 }),
+    }
+
+    downtimeWindows[DowntimeFeatureTypeConstants.appointments] = {
+      startTime: DateTime.now().plus({ minute: 30 }),
+      endTime: DateTime.now().plus({ minute: 90 }),
+    }
+
     dispatch(dispatchSetDowntime(downtimeWindows))
   } catch (e) {
     logNonFatalErrorToFirebase(e, 'Maintenance Window Retrieval Failure')

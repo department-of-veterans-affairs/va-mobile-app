@@ -9,7 +9,7 @@ import { RootState } from 'store'
 import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api'
 import { ErrorsState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { oneOfFeaturesInDowntime, useTheme } from 'utils/hooks'
+import { getFeaturesInDowntime, getFeaturesInDowntimeWindow, latestDowntimeWindow, useTheme } from 'utils/hooks'
 
 export type MaintenanceBannerProps = {
   screenID?: ScreenIDTypes
@@ -21,26 +21,44 @@ const MaintenanceBanner: FC<MaintenanceBannerProps> = (props) => {
 
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const [logDowntimeAnalytics, setLogDowntimeAnalytics] = useState(true)
+  const features = props.screenID ? ScreenIDToDowntimeFeatures[props.screenID] : []
 
+  // If we have no screen to match downtime features on, display nothing
   if (!props.screenID) {
     return null
   }
 
-  const features = ScreenIDToDowntimeFeatures[props.screenID]
-  const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  const featuresInDowntime = getFeaturesInDowntime(features, downtimeWindowsByFeature)
+  const isInDowntime = !!featuresInDowntime.length
+  const featuresInDowntimeWindow = getFeaturesInDowntimeWindow(features, downtimeWindowsByFeature)
+  const isInDowntimeWindow = !!featuresInDowntimeWindow.length
 
-  if (!isInDowntime) {
+  if (!isInDowntime && !isInDowntimeWindow) {
     return null
   }
 
-  if (isInDowntime) {
-    if (logDowntimeAnalytics) {
-      features.forEach((feature) => {
-        const downtimeWindow = downtimeWindowsByFeature[feature]
-        if (downtimeWindow)
-          logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
+  // Trigger analytics
+  if (logDowntimeAnalytics) {
+    features.forEach((feature) => {
+      const downtimeWindow = downtimeWindowsByFeature[feature]
+      if (downtimeWindow)
+        logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
+    })
+    setLogDowntimeAnalytics(false)
+  }
+
+  const getDowntimeMessage = () => {
+    if (isInDowntime) {
+      const window = latestDowntimeWindow(featuresInDowntime, downtimeWindowsByFeature)
+      return t('maintenanceBanner.info', { time: window?.endTime.toLocal().toFormat('HH:mm ZZZZ') })
+    } else {
+      const window = latestDowntimeWindow(featuresInDowntimeWindow, downtimeWindowsByFeature)
+
+      return t('maintenanceBanner.info.window', {
+        date: window?.startTime.toLocal().toFormat('MMMM d'),
+        start: window?.startTime.toLocal().toFormat('HH:mm'),
+        end: window?.endTime.toLocal().toFormat('HH:mm ZZZZ'),
       })
-      setLogDowntimeAnalytics(false)
     }
   }
 
@@ -48,10 +66,10 @@ const MaintenanceBanner: FC<MaintenanceBannerProps> = (props) => {
     <Box mb={theme.dimensions.condensedMarginBetween}>
       <AlertWithHaptics
         variant="info"
-        header={t('maintenanceBanner.header')}
+        header={isInDowntime ? t('maintenanceBanner.header') : t('maintenanceBanner.header.upcoming')}
         expandable={true}
         initializeExpanded={false}>
-        <TextView>{t('maintenanceBanner.info')}</TextView>
+        <TextView>{getDowntimeMessage()}</TextView>
       </AlertWithHaptics>
     </Box>
   )
