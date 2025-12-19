@@ -1,8 +1,8 @@
-import { useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useFocusEffect } from '@react-navigation/native'
+import { useNavigationState } from '@react-navigation/native'
 
 import { useQuery } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
@@ -70,6 +70,7 @@ const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> =>
   return maintenanceWindows
 }
 
+const initialData = initializeDowntimeWindowsByFeature()
 /**
  * Returns a query for maintenance windows
  */
@@ -83,23 +84,31 @@ const useMaintenanceWindowQuery = () => {
     meta: {
       errorName: 'getMaintenanceWindows: Service error',
     },
+    initialData,
     refetchInterval: MAINTENANCE_WINDOW_REFETCH_INTERVAL,
+    staleTime: MAINTENANCE_WINDOW_REFETCH_INTERVAL,
   })
 }
 
+/**
+ * returns the maintenance windows. Only passes the maintenance windows to the component from initial render to prevent new
+ * maintenance window changes affecting the currently focused screen.
+ */
 export const useMaintenanceWindows = () => {
   const { data, isFetched } = useMaintenanceWindowQuery()
-  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType>(
-    initializeDowntimeWindowsByFeature(),
-  )
+  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType>(data)
+  const routeName = useNavigationState((state) => state?.routes[state.index]?.name)
+  const [prevRoute, setPrevRoute] = useState<string>('')
 
-  useFocusEffect(
-    useCallback(() => {
+  // Only updates maintenance window when the screen changes
+  useEffect(() => {
+    if (prevRoute !== routeName) {
+      setPrevRoute(routeName)
       if (data) {
         setMaintenanceWindows(data)
       }
-    }, [data]),
-  )
+    }
+  }, [data, prevRoute, routeName])
 
   return { maintenanceWindows, isFetched }
 }
