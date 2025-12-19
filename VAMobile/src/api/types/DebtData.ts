@@ -6,23 +6,23 @@ export type DebtHistory = {
 
 export type DebtTransaction = {
   debtId: number
-  debtIncreaseAmount?: number | null
-  hinesCode?: string | null
-  offsetAmount?: number | null
-  offsetType?: string | null
-  paymentType?: string | null
-  transactionAdminAmount?: number | null
-  transactionCourtAmount?: number | null
   transactionDate: string
-  transactionDescription?: string | null
-  transactionExplanation?: string | null
-  transactionFiscalCode?: string | null
-  transactionFiscalSource?: string | null
-  transactionFiscalYear?: string | null
-  transactionInterestAmount?: number | null
-  transactionMarshallAmount?: number | null
-  transactionPrincipalAmount?: number | null
-  transactionTotalAmount?: number | null
+  transactionTotalAmount?: number
+  transactionPrincipalAmount?: number
+  debtIncreaseAmount?: number
+  offsetAmount?: number
+  transactionDescription?: string
+  transactionExplanation?: string
+  hinesCode?: string
+  offsetType?: string
+  paymentType?: string
+  transactionAdminAmount?: number
+  transactionCourtAmount?: number
+  transactionFiscalCode?: string
+  transactionFiscalSource?: string
+  transactionFiscalYear?: string
+  transactionInterestAmount?: number
+  transactionMarshallAmount?: number
 }
 
 export type DebtRecord = {

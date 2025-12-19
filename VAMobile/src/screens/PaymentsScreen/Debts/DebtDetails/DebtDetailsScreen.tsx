@@ -248,8 +248,6 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
   function renderContent() {
     const debtHistory = getFilteredDebtHistory(debt)
     const transactionHistory = debt.attributes.fiscalTransactionData ?? []
-    console.log('debt.attributes.debtHistory', debt.attributes.debtHistory)
-    console.log('debtHistory', debtHistory)
     return (
       <>
         <Box mx={theme.dimensions.gutter}>
