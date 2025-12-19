@@ -55,7 +55,7 @@ const VAModalList: FC<VAModalListProps> = ({ showModal, setShowModal, listItems,
     variant: 'MobileBody',
     color: 'link',
     allowFontScaling: false,
-    py: 3, // bump up the padding to make touch target a bit bigger #2740
+    py: 3,
   }
 
   return (

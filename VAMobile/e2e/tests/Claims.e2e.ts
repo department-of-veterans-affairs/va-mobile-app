@@ -201,13 +201,13 @@ describe('Claims Screen', () => {
     await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE))).toExist()
 
     // Review waiver screen, error content should appear if checkbox is not checked
-    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER)).tap()
-    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER)).tap()
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER)).tap()
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER)).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER_ERROR))).toExist()
     await element(by.text('Back')).tap()
 
     // Submit evidence screen
-    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
     await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
     await element(by.text('Back')).tap()
