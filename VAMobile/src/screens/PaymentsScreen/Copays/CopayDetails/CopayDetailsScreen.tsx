@@ -34,6 +34,7 @@ import { formatDate, sortStatementsByDate, verifyCurrentBalance } from 'utils/co
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber, numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type CopayDetailsScreenProps = StackScreenProps<PaymentsStackParamList, 'CopayDetails'>
 
@@ -126,7 +127,7 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
               logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
               navigateTo('Webview', {
                 url: LINK_URL_ASK_VA_GOV,
-                displayTitle: t('webview.vagov'),
+                displayTitle: vaGovWebviewTitle(t),
                 loadingMessage: t('loading.vaWebsite'),
                 useSSO: false,
               })

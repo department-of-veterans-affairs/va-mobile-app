@@ -1,10 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { Button } from '@department-of-veterans-affairs/mobile-component-library'
-import { DateTime } from 'luxon'
 
 import { useDownloadFileAttachment } from 'api/secureMessaging'
 import {
@@ -23,9 +21,7 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { READ, REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
-import { RootState } from 'store'
-import { DemoState } from 'store/slices/demoSlice'
+import { READ } from 'constants/secureMessaging'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { bytesToFinalSizeDisplay, bytesToFinalSizeDisplayA11y } from 'utils/common'
 import { getFormattedDateAndTimeZone } from 'utils/formattingUtils'
@@ -37,9 +33,11 @@ export type MessageCardProps = {
   /* message object */
   message: SecureMessagingMessageAttributes
   folderId: number
+  userInTriageTeam?: boolean
+  replyExpired?: boolean
 }
 
-function MessageCard({ message, folderId }: MessageCardProps) {
+function MessageCard({ message, folderId, userInTriageTeam, replyExpired }: MessageCardProps) {
   const theme = useTheme()
   const { t: t } = useTranslation(NAMESPACE.COMMON)
   const isPortrait = useOrientation()
@@ -53,12 +51,6 @@ function MessageCard({ message, folderId }: MessageCardProps) {
     enabled: false,
   })
   const showReadReceipt = folderId === SecureMessagingSystemFolderIdConstants.SENT && readReceipt === READ
-  const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const replyExpired =
-    demoMode && message.messageId === 2092809
-      ? false
-      : DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
-
   const onPressAttachment = (file: SecureMessagingAttachment) => {
     fileToGet.filename = file.filename
     fileToGet.id = file.id
@@ -168,7 +160,7 @@ function MessageCard({ message, folderId }: MessageCardProps) {
   function getReplyOrStartNewMessageButton() {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
-        {!replyExpired ? (
+        {!replyExpired && userInTriageTeam ? (
           <Button label={t('reply')} onPress={onReplyPress} testID={'replyTestID'} />
         ) : (
           <Button

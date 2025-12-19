@@ -131,9 +131,9 @@
             "body": null,
             "hasAttachments": false,
             "attachment": false,
-            "sentDate": "2024-10-26T22:22:06.000Z",
+            "sentDate": "2025-11-01T22:22:06.000Z",
             "senderId": 1835650,
-            "senderName": "MARTHA KAPLAN, MD",
+            "senderName": "RATANA, NARIN ",
             "recipientId": 523757,
             "recipientName": "FREEMAN, MELVIN  V",
             "readReceipt": "UNREAD",
@@ -153,7 +153,7 @@
             "body": null,
             "hasAttachments": true,
             "attachment": true,
-            "sentDate": "2024-10-19T22:21:11.000Z",
+            "sentDate": "2025-11-01T22:21:11.000Z",
             "senderId": 1835650,
             "senderName": "DIANA PERSSON, MD",
             "recipientId": 523757,
@@ -298,6 +298,50 @@
           }
         },
         {
+          "id": "9000003",
+          "type": "messages",
+          "attributes": {
+            "messageId": 9000003,
+            "category": "TEST_RESULTS",
+            "subject": "Lab results ready",
+            "body": null,
+            "hasAttachments": false,
+            "attachment": false,
+            "sentDate": "2024-08-01T10:00:00.000Z",
+            "senderId": 1835650,
+            "senderName": "LEO SPACEMAN, MD",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ",
+            "isOhMessage": true
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000003"
+          }
+        },
+        {
+          "id": "9000002",
+          "type": "messages",
+          "attributes": {
+            "messageId": 9000002,
+            "category": "APPOINTMENTS",
+            "subject": "Follow-up from your last visit",
+            "body": null,
+            "hasAttachments": false,
+            "attachment": false,
+            "sentDate": "2024-08-01T10:00:00.000Z",
+            "senderId": 1835650,
+            "senderName": "JOHNSON, PATRICIA A.",
+            "recipientId": 523757,
+            "recipientName": "FREEMAN, MELVIN  V",
+            "readReceipt": "READ",
+            "isOhMessage": true
+          },
+          "links": {
+            "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000002"
+          }
+        },
+        {
           "id": "2060047",
           "type": "messages",
           "attributes": {
@@ -417,7 +461,7 @@
         "body": "Upset stomach is a common side effect of this medication.\nMild stomach pain is normal, but if            you are having severe stomach pains, please let us know or seek in-person care.\tIf you need further assistance that isn't an emergency please call 8006982411 or 800-698-2411 or (800)698-2411, or (800)-698-2411 or 800 698 2411 or +8006982411 or +18006982411 or 1-800-698-2411. For more information on the side effects please go to one of these links: https://www.va.gov/ or https://rb.gy/riwea or https://va.gov or http://www.va.gov/ or https://www.va.gov/education/about-gi-bill-benefits/ or www.va.gov or www.google.com or google.com you can also email me at test@va.gov or mailto:test@va.gov or you can come to the office at iOS: http://maps.apple.com/?q=Mexican+Restaurant&sll=50.894967,4.341626&z=10&t=s or android: http://maps.google.com/?q=50.894967,4.341626",
         "hasAttachments": false,
         "attachment": false,
-        "sentDate": "2024-10-26T22:22:06.000Z",
+        "sentDate": "2025-11-01T22:22:06.000Z",
         "senderId": 1835650,
         "senderName": "RATANA, NARIN ",
         "recipientId": 523757,
@@ -433,9 +477,82 @@
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092809"
       }
+    },
+    "meta": {
+      "userInTriageTeam": true
     }
   },
   "/v1/messaging/health/messages/2092809/thread?excludeProvidedMessage=true": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/9000002": {
+    "data": {
+      "id": "9000002",
+      "type": "messages",
+      "attributes": {
+        "messageId": 9000002,
+        "category": "APPOINTMENTS",
+        "subject": "Follow-up from your last visit",
+        "body": "Thank you for coming in for your annual physical. Your vitals look good and your blood pressure is well controlled. Please continue with your current medications and we will see you again in 6 months for a follow-up.",
+        "hasAttachments": false,
+        "attachment": false,
+        "sentDate": "2024-08-01T10:00:00.000Z",
+        "senderId": 1835650,
+        "senderName": "JOHNSON, PATRICIA A.",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "READ",
+        "isOhMessage": true
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000002"
+      }
+    },
+    "meta": {
+      "userInTriageTeam": true
+    }
+  },
+  "/v1/messaging/health/messages/9000002/thread?excludeProvidedMessage=true": {
+    "data": []
+  },
+  "/v0/messaging/health/messages/9000003": {
+    "data": {
+      "id": "9000003",
+      "type": "messages",
+      "attributes": {
+        "messageId": 9000003,
+        "category": "TEST_RESULTS",
+        "subject": "Lab results ready",
+        "body": "Your recent lab work has been processed. Your cholesterol levels and blood glucose are within normal ranges. Keep up the good work with your diet and exercise routine. Your full results are available in your health records.",
+        "hasAttachments": false,
+        "attachment": false,
+        "sentDate": "2025-11-01T10:00:00.000Z",
+        "senderId": 1835650,
+        "senderName": "LEO SPACEMAN, MD",
+        "recipientId": 523757,
+        "recipientName": "FREEMAN, MELVIN  V",
+        "readReceipt": "UNREAD",
+        "isOhMessage": true
+      },
+      "relationships": {
+        "attachments": {
+          "data": []
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/9000003"
+      }
+    },
+    "meta": {
+      "userInTriageTeam": false
+    }
+  },
+  "/v1/messaging/health/messages/9000003/thread?excludeProvidedMessage=true": {
     "data": []
   },
   "/v1/messaging/health/messages/2113020/thread?excludeProvidedMessage=false": {
@@ -540,6 +657,9 @@
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092803"
       }
     },
+    "meta": {
+      "userInTriageTeam": false
+    },
     "included": [
       {
         "id": "2092801",
@@ -585,6 +705,9 @@
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092789"
       }
+    },
+    "meta": {
+      "userInTriageTeam": true
     }
   },
   "/v1/messaging/health/messages/2092789/thread?excludeProvidedMessage=true": {
@@ -617,6 +740,9 @@
       "links": {
         "self": "https://staging-api.va.gov/mobile/v0/messaging/health/messages/2092775"
       }
+    },
+    "meta": {
+      "userInTriageTeam": true
     }
   },
   "/v1/messaging/health/messages/2092775/thread?excludeProvidedMessage=true": {
