@@ -76,8 +76,8 @@ context('SyncScreen', () => {
     expect(screen.getByText(t('sync.progress.signout'))).toBeTruthy()
   })
 
-  describe.only('sync completion', () => {
-    it.only('should complete the sync when all loading is finished', async () => {
+  describe('sync completion', () => {
+    it('should complete the sync when all loading is finished', async () => {
       initializeTestInstance(true, false, false)
       await waitFor(() => {
         expect(completeSync).toHaveBeenCalled()
