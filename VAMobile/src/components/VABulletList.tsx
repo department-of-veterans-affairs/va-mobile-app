@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import _ from 'underscore'
 
@@ -48,6 +49,7 @@ export type VABulletListProps = {
  */
 const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bulletColor }) => {
   const theme = useTheme()
+  const { t } = useTranslation()
 
   const getUpdatedListOfText = (): Array<VABulletListText> => {
     if (_.isString(listOfText[0])) {
@@ -61,9 +63,10 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bul
     return listOfText as Array<VABulletListText>
   }
 
+  const list = getUpdatedListOfText()
   return (
-    <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined}>
-      {_.map(getUpdatedListOfText(), (textItem, index) => {
+    <Box mb={paragraphSpacing ? theme.dimensions.standardMarginBetween : undefined} accessibilityRole="list">
+      {_.map(list, (textItem, index) => {
         const { variant, color, text, boldedTextPrefix, boldedText, a11yLabel } = textItem
 
         const textViewProps: TextViewProps = {
@@ -85,7 +88,9 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, paragraphSpacing, bul
               <Box backgroundColor={bulletColor || 'bullet'} height={6} width={6} />
             </Box>
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-            <TextView {...textViewProps} accessibilityLabel={a11yLabel}>
+            <TextView
+              {...textViewProps}
+              accessibilityLabel={`${a11yLabel || text}, ${t('listPosition', { position: index + 1, total: list.length })}`}>
               {!!boldedTextPrefix && <TextView variant="MobileBodyBold">{boldedTextPrefix}</TextView>}
               {text.trim()}
               {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
