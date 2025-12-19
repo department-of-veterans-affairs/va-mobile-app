@@ -151,26 +151,6 @@ export const Events = {
       name: 'vama_cerner_alert',
     }
   },
-  vama_blue_alert_sm: (): Event => {
-    return {
-      name: 'vama_blue_alert_sm',
-    }
-  },
-  vama_blue_alert_rx: (): Event => {
-    return {
-      name: 'vama_blue_alert_rx',
-    }
-  },
-  vama_blue_sm_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_sm_link_conf',
-    }
-  },
-  vama_blue_rx_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_rx_link_conf',
-    }
-  },
   vama_cerner_alert_exp: (): Event => {
     return {
       name: 'vama_cerner_alert_exp',
