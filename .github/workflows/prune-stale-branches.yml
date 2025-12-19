@@ -49,12 +49,9 @@ jobs:
           echo "=== Pruning Stale Branches ==="
           echo "Dry run mode: $DRY_RUN"
           echo ""
-          
-          # Calculate cutoff date (90 days ago)
-          CUTOFF_DATE=$(date -u -d '90 days ago' +%s 2>/dev/null || date -u -v-90d +%s)
-          CUTOFF_READABLE=$(date -u -d "@$CUTOFF_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$CUTOFF_DATE" '+%Y-%m-%d')
-          
-          echo "Cutoff date: $CUTOFF_READABLE (branches with no commits after this date will be deleted)"
+
+          # Deletion criteria: branches that have at least one merged PR
+          echo "Deletion criteria: branches with a merged pull request (branches with open or draft PRs will be skipped)"
           echo ""
           
           # Protected branch patterns (won't be deleted)
@@ -71,6 +68,9 @@ jobs:
           
           # Get all remote branches
           git fetch --all --prune
+
+          # Repo owner (used to query PRs by head)
+          REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
           
           DELETED_COUNT=0
           PROTECTED_COUNT=0
@@ -117,17 +117,17 @@ jobs:
             # Get the last committer
             LAST_COMMITTER=$(git log -1 --format=%an origin/"$branch" 2>/dev/null)
             
-            # Check if branch is stale
-            if [[ $LAST_COMMIT_DATE -lt $CUTOFF_DATE ]]; then
-              LAST_COMMIT_READABLE=$(date -u -d "@$LAST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$LAST_COMMIT_DATE" '+%Y-%m-%d')
-              DAYS_OLD=$(( ($(date +%s) - LAST_COMMIT_DATE) / 86400 ))
-              
+            # Delete branch if it has at least one merged PR (skip open/draft PRs)
+            SEARCH_URL="https://api.github.com/search/issues?q=repo:${GITHUB_REPOSITORY}+type:pr+head:${REPO_OWNER}:${branch}+is:merged"
+            SEARCH=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$SEARCH_URL")
+            MERGED_COUNT=$(echo "$SEARCH" | grep -o '"total_count":[0-9]*' | head -n1 | sed 's/[^0-9]*//g')
+            if [[ -n "$MERGED_COUNT" && "$MERGED_COUNT" -gt 0 ]]; then
               if [[ "$DRY_RUN" == "true" ]]; then
-                echo "🔍 WOULD DELETE: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_READABLE")
+                echo "🔍 WOULD DELETE: $branch (has $MERGED_COUNT merged PR(s), creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
                 ((DELETED_COUNT++))
               else
-                echo "🗑️  DELETING: $branch (last commit: $LAST_COMMIT_READABLE, $DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                echo "🗑️  DELETING: $branch (has $MERGED_COUNT merged PR(s), creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
                 # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
                 # if git push origin --delete "$branch" 2>&1; then
                 #   DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
@@ -135,9 +135,7 @@ jobs:
                 # else
                 #   echo "   ❌ Failed to delete $branch"
                 # fi
-                
-                # TEMPORARY: Simulate deletion for testing
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_READABLE")
+                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
                 ((DELETED_COUNT++))
                 echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
               fi
@@ -164,7 +162,7 @@ jobs:
           {
             echo "### Branch Pruning Summary"
             echo ""
-            echo "**Cutoff Date:** $CUTOFF_READABLE"
+            echo "**Deletion Criteria:** branches with a merged pull request"
             echo "**Mode:** $(if [[ "$DRY_RUN" == "true" ]]; then echo "Dry Run"; else echo "Live"; fi)"
             echo ""
             echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
