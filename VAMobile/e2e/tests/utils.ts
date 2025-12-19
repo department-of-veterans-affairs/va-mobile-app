@@ -4,11 +4,14 @@ Detox script for functions/constants that effect multiple other scripts.
 When to update:
 New functions/constants should be added when anything is created that might effect multiple scripts.
 */
-import { expect as jestExpect } from '@jest/globals'
-import { by, device, element, expect, waitFor } from 'detox'
-import { setTimeout } from 'timers/promises'
+import { expect as jestExpect } from '@jest/globals';
+import { by, device, element, expect, waitFor } from 'detox';
+import { setTimeout } from 'timers/promises';
 
-import getEnv from '../../src/utils/env'
+
+
+import getEnv from '../../src/utils/env';
+
 
 const spawnSync = require('child_process').spawnSync
 
@@ -780,7 +783,7 @@ export async function toggleRemoteConfigFlag(flagName: string) {
     .scroll(200, 'down')
 
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 
