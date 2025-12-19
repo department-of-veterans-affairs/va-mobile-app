@@ -65,9 +65,7 @@ context('AppealDetailsScreen', () => {
       await waitFor(() => expect(screen.getByText('Received')).toBeTruthy())
       await waitFor(() => expect(screen.getByText('Review past events')).toBeTruthy())
       await waitFor(() => expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy())
-      await waitFor(() =>
-        expect(screen.getByRole('header', { name: 'A reviewer is examining your new evidence' })).toBeTruthy(),
-      )
+      await waitFor(() => expect(screen.getByText('A reviewer is examining your new evidence')).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByText(
