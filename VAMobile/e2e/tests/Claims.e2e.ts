@@ -60,6 +60,7 @@ export const ClaimsE2eIdConstants = {
   NOTICE_5103_SUBMIT_WAIVER: 'Submit waiver',
   NOTICE_5103_SUBMIT_WAIVER_ERROR: 'You must confirm you’re done adding evidence for now before submitting the waiver',
   NOTICE_5103_SUBMIT_EVIDENCE: 'Submit evidence',
+  NOTICE_5103_REQUEST_DETAILS_ID: 'file5103RequestDetailsID',
 }
 
 beforeAll(async () => {
@@ -197,6 +198,8 @@ describe('Claims Screen', () => {
     await element(by.text('Automated 5103 Notice Response')).tap()
 
     await expect(element(by.text('5103 notice - Evidence we may need'))).toExist()
+    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_REQUEST_DETAILS_ID)).scrollTo('bottom')
+
     await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER))).toExist()
     await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE))).toExist()
 
