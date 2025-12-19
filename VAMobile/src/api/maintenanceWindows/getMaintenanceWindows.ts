@@ -70,7 +70,6 @@ const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> =>
   return maintenanceWindows
 }
 
-const initialData = initializeDowntimeWindowsByFeature()
 /**
  * Returns a query for maintenance windows
  */
@@ -84,19 +83,19 @@ const useMaintenanceWindowQuery = () => {
     meta: {
       errorName: 'getMaintenanceWindows: Service error',
     },
-    initialData,
     refetchInterval: MAINTENANCE_WINDOW_REFETCH_INTERVAL,
     staleTime: MAINTENANCE_WINDOW_REFETCH_INTERVAL,
   })
 }
 
+const initialData = initializeDowntimeWindowsByFeature()
 /**
  * returns the maintenance windows. Only passes the maintenance windows to the component from initial render to prevent new
  * maintenance window changes affecting the currently focused screen.
  */
 export const useMaintenanceWindows = () => {
   const { data, isFetched } = useMaintenanceWindowQuery()
-  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType>(data)
+  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType>(initialData)
   const routeName = useNavigationState((state) => state?.routes[state.index]?.name)
   const [prevRoute, setPrevRoute] = useState<string>('')
 
