@@ -111,6 +111,30 @@ This will launch the app with the provided URL, similar to how a push notificati
 npx uri-scheme open "vamobile://messages/1234" --ios
 ```
 
+#### Xcode command-line tools
+
+For testing on iOS, you can simulate a push notification using Xcode's command-line tools. First, you will need to define a [remote notification payload](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html) in a `payload.json` file:
+
+```json
+{
+  "url": "vamobile://messages/1234",
+  "aps": {
+    "alert": {
+      "title": "VA Mobile App",
+      "body": "Notification body text"
+    }
+  }
+}
+```
+
+Then, you can use `xcrun` to send a push notification to the iOS simulator by running the following command in your terminal:
+
+```
+xcrun simctl push booted gov.va.vamobileapp payload.json
+```
+
+A push notification will appear in the simulator with the specified title and body text. When tapped, it will open the deep link provided in the url field.
+
 #### Detox
 
 You can also use our automated UI testing tool Detox to simulate push notifications on a virtual device. Detox supports [mocking push notifications](https://wix.github.io/Detox/docs/guide/mocking-user-notifications/), which provides a more complete view of how the app will behave when a deep link is opened from a push notification. Since Detox is already used in our repository, all you'll need to do is create a new test for your push notification, and run it locally. [View an example of a Detox test for a push notification](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/e2e/tests/PushNotifications.e2e.ts).
