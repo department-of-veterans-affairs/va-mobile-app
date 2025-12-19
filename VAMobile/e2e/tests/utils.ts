@@ -188,8 +188,8 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
-  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
-  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsID',
+  TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
+  TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID: 'toTravelPayClaimsLinkID',
   DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
   DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
 }
@@ -429,8 +429,12 @@ export async function openAppointments() {
   await element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID)).tap()
 }
 
-export async function openTravelPayClaims() {
-  await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
+export async function openTravelPayClaims({ useNativeLink = false }) {
+  if (useNativeLink) {
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID)).tap()
+  } else {
+    await element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID)).tap()
+  }
 }
 
 export async function openPayments() {
@@ -774,7 +778,14 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
+
+  // Scroll to Remote Config button first to ensure it's fully visible
+  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
+    .toBeVisible()
+    .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
+    .scroll(200, 'down')
+
+  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }

@@ -145,7 +145,6 @@ export const getEpochSecondsOfDate = (date: string): number => {
  * Returns timezone-aware warning message about file upload date display discrepancies.
  *
  * Due to API returning date-only strings, files display with UTC date instead of local date.
- * Uses Luxon's DateTime methods directly to format time and timezone abbreviations.
  *
  * @param t - Translation function from i18next
  * @returns Localized message string explaining upload time and display date behavior, or empty string if no discrepancy exists
@@ -169,17 +168,16 @@ export const getFileUploadTimezoneMessage = (t: TFunction): string => {
     return ''
   }
 
-  // Format time using Luxon's built-in methods
-  const timeStr = localTime.toFormat('h a')
-  let tzAbbr = localTime.offsetNameShort || ''
+  // Format as "9 AM GMT+9" or "4 PM PST"
+  let formattedTime = localTime.toLocaleString({
+    hour: 'numeric',
+    timeZoneName: 'short',
+  })
 
-  // Apply GMT → friendly abbreviation replacements for U.S. territories and Philippines
-  if (tzAbbr.includes(GMTPrefix)) {
+  // Apply friendly abbreviation replacements for GMT-offset timezones (e.g., GMT+8 → PHT)
+  if (formattedTime.includes(GMTPrefix)) {
     for (const { pattern, value } of GMTTimezones) {
-      if (tzAbbr === pattern) {
-        tzAbbr = value
-        break
-      }
+      formattedTime = formattedTime.replace(pattern, value)
     }
   }
 
@@ -190,7 +188,7 @@ export const getFileUploadTimezoneMessage = (t: TFunction): string => {
 
   return t('fileUpload.timezoneMessage', {
     beforeAfter: isEastOfUTC ? 'before' : 'after',
-    time: `${timeStr} ${tzAbbr}`.trim(),
+    time: formattedTime,
     nextPrevious: isEastOfUTC ? 'previous' : 'next',
   })
 }
@@ -371,11 +369,25 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
 }
 
 /**
- * Converts 1234567890 to 123-456-7890
+ * Converts 1234567890 to 123-456-7890 and 12345678901 to +1-234-567-8901
  * @param phoneNumber - string that has the phone number
  */
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
-  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  if (phoneNumber.length === 10) {
+    return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  } else if (phoneNumber.length === 11) {
+    return (
+      '+' +
+      phoneNumber.substring(0, 1) +
+      '-' +
+      phoneNumber.substring(1, 4) +
+      '-' +
+      phoneNumber.substring(4, 7) +
+      '-' +
+      phoneNumber.substring(7, 11)
+    )
+  }
+  return phoneNumber
 }
 
 /**

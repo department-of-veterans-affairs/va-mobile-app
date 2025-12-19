@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
+import { trimNotificationUrl } from 'utils/notifications'
 
 /**
  * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
@@ -435,6 +436,14 @@ export const Events = {
       },
     }
   },
+  vama_copay_stmt_download: (id: string): Event => {
+    return {
+      name: 'vama_copay_stmt_download',
+      params: {
+        id,
+      },
+    }
+  },
   vama_ddl_landing_click: (): Event => {
     return {
       name: 'vama_ddl_landing_click',
@@ -843,10 +852,12 @@ export const Events = {
     }
   },
   vama_notification_click: (notification_url?: string): Event => {
+    // Omit the id that follows the main url path for better logging
+    const trimmed_notification_url = trimNotificationUrl(notification_url || '')
     return {
       name: 'vama_notification_click',
       params: {
-        notification_url,
+        notification_url: trimmed_notification_url,
       },
     }
   },
@@ -1257,6 +1268,22 @@ export const Events = {
       name: 'vama_smoc_error',
       params: {
         error,
+      },
+    }
+  },
+  vama_travel_pay_doc_dl: (
+    claim_id: string,
+    claim_status: string,
+    document_type: string,
+    document_filename: string,
+  ): Event => {
+    return {
+      name: 'vama_travel_pay_doc_dl',
+      params: {
+        claim_id,
+        claim_status,
+        document_type,
+        document_filename,
       },
     }
   },
