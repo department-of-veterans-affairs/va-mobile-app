@@ -103,7 +103,7 @@ const detoxMapping = {
     ClaimLettersScreen: ['Claims'],
     ClaimsAndAppealsListView: claimsAndAppealsArray,
     ClaimsHistoryScreen: ['Claims'],
-    ClaimsScreen: claimsAndAppealsArray,
+    ClaimsScreen: [...claimsAndAppealsArray, 'TravelPay'],
     claraJefferson: [],
     components: fullTestRun,
     contactInformation: contactInfoArray,
@@ -218,6 +218,7 @@ const detoxMapping = {
     'utils.ts': [],
     'vaccine.json': ['VaccineRecords'],
     'vaccine.ts': ['VaccineRecords'],
+    'whatsNew.ts': [],
   },
 }
 

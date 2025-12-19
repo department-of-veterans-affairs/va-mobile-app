@@ -45,6 +45,7 @@ export type HomeStackParamList = WebviewStackParams & {
   SendUsFeedback: undefined
   FeedbackSent: undefined
   InAppFeedback: undefined
+  TermDefinitions: undefined
   FeedbackTermsAndConditions: undefined
   WaygateEdit: { waygateName: string; waygate: Waygate }
   WhatToKnow: undefined
