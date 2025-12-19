@@ -56,8 +56,8 @@ const TravelPayE2eIdConstants = {
   FINISH_TRAVEL_CLAIM_LINK_ID: 'finishTravelClaimLinkID',
   FULL_ADDRESS_TEXT_ID: 'Home address 3101 N Fort Valley Rd, 2 Flagstaff, AZ, 86001',
   GO_TO_APPOINTMENT_LINK_ID: 'goToAppointmentLinkID',
-  GO_TO_VAGOV_ID: 'goToVAGovID-mock_id',
-  GO_TO_VAGOV_ID_PARTIAL_SUCCESS_ID: 'goToVAGovID-mock_id_partial_success',
+  GO_TO_CLAIM_DETAILS_ID: 'goToClaimDetails-mock_id',
+  GO_TO_CLAIM_DETAILS_ID_PARTIAL_SUCCESS_ID: 'goToClaimDetails-mock_id_partial_success',
   HELP_TEXT_ID: 'helpTextID',
   HELP_TITLE_ID: 'helpTitleID',
   HOW_ID: 'howID',
@@ -708,18 +708,12 @@ describe('Travel Pay', () => {
   })
 
   it('shows the travel claim detials after filing the travel pay claim', async () => {
-    await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID)))
+    await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID)))
       .toBeVisible()
       .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
       .scroll(100, 'down', NaN, 0.8)
-    await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID))).toExist()
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
-  })
-
-  it('opens a webview to view claim details on web', async () => {
-    await element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID)).tap()
-    await expect(element(by.text(TravelPayE2eIdConstants.TRAVEL_CLAIM_DETAILS_TEXT))).toExist()
-    await element(by.id(TravelPayE2eIdConstants.WEBVIEW_BACK_BUTTON_ID)).tap()
   })
 
   it('updates the appointments cache when the travel pay claim is submitted', async () => {
@@ -728,11 +722,11 @@ describe('Travel Pay', () => {
     await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
     await element(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID)).scrollTo('bottom')
-    await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID)))
+    await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID)))
       .toBeVisible()
       .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
       .scroll(100, 'down', NaN, 0.8)
-    await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID))).toExist()
+    await expect(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID))).toExist()
     await expect(element(by.text(TravelPayE2eIdConstants.TAVEL_PAY_DETAILS_STATUS_TEXT))).toExist()
   })
 
@@ -757,7 +751,7 @@ describe('Travel Pay', () => {
 
     it('shows the travel claim details', async () => {
       await element(by.id(TravelPayE2eIdConstants.RIGHT_CLOSE_BUTTON_ID)).tap()
-      await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_VAGOV_ID_PARTIAL_SUCCESS_ID)))
+      await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID_PARTIAL_SUCCESS_ID)))
         .toBeVisible()
         .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
         .scroll(100, 'down', NaN, 0.8)

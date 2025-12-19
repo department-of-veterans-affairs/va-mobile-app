@@ -50,6 +50,7 @@ Test User(s)
 
 ### New features
 
+- [ ] UI changes
 - [ ] Code is attached to a feature flag, or reason is given for no feature flag
 - [ ] Design and UX has been approved by the code mobile team (documented on the PR or attached issue)
 

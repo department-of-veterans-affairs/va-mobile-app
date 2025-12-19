@@ -12,6 +12,7 @@ import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type CopayHelpProps = StackScreenProps<PaymentsStackParamList, 'CopayHelp'>
 
@@ -45,7 +46,7 @@ function CopayHelp({}: CopayHelpProps) {
             logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
             navigateTo('Webview', {
               url: LINK_URL_ASK_VA_GOV,
-              displayTitle: t('webview.vagov'),
+              displayTitle: vaGovWebviewTitle(t),
               loadingMessage: t('loading.vaWebsite'),
               useSSO: true,
             })

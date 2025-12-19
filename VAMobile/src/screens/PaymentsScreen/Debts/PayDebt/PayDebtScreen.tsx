@@ -19,8 +19,11 @@ import { NAMESPACE } from 'constants/namespaces'
 import { InfoRow } from 'screens/PaymentsScreen/Debts/PayDebt/InfoRow'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
+import getEnv from 'utils/env'
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+
+const { PAY_VA_GOV_URL } = getEnv()
 
 type PayDebtScreenProps = StackScreenProps<PaymentsStackParamList, 'PayDebt'>
 
@@ -48,7 +51,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
       testID="payDebtTestID"
       backLabelTestID="payDebtBackTestID">
       <>
-        <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <TextArea>
             <TextView mb={theme.dimensions.condensedMarginBetween} variant="MobileBodyBold">
               {t('debts.payDebt.intro')}
@@ -84,7 +87,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
 
             <LinkWithAnalytics
               type="url"
-              url={'https://www.pay.va.gov/'}
+              url={PAY_VA_GOV_URL}
               text={t('debts.payDebt.payOnSite')}
               a11yLabel={a11yLabelVA(t('debts.payDebt.payOnSite'))}
               a11yHint={t('debts.payDebt.payOnSite')}
@@ -106,7 +109,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
               </Box>
             }
             expandedContent={
-              <Box pb={theme.dimensions.cardPadding}>
+              <Box>
                 <Trans
                   i18nKey={'debts.payDebt.howToPay.payByPhone'}
                   components={{
@@ -146,9 +149,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
                     }
                   />
                 </Box>
-                <TextView mt={theme.dimensions.standardMarginBetween} variant="MobileBodyBold">
-                  {t('debts.payDebt.mail.addressHeader')}
-                </TextView>
+                <TextView variant="MobileBodyBold">{t('debts.payDebt.mail.addressHeader')}</TextView>
                 <Box>
                   <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
                     {t('debts.payDebt.mail.line1')}

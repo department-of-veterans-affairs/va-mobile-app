@@ -20,6 +20,7 @@ import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScre
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type DebtRequestHelpScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtRequestHelp'>
 
@@ -72,7 +73,7 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
                   logAnalyticsEvent(Events.vama_webview(LINK_URL_REQUEST_HELP_FORM_5655))
                   navigateTo('Webview', {
                     url: LINK_URL_REQUEST_HELP_FORM_5655,
-                    displayTitle: t('webview.vagov'),
+                    displayTitle: vaGovWebviewTitle(t),
                     loadingMessage: t('loading.vaWebsite'),
                     useSSO: false,
                   })
