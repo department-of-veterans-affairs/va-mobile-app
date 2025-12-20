@@ -95,20 +95,20 @@ export const checkForDowntimeErrors = (): AppThunk => async (dispatch) => {
     }
 
     // TODO: remove debug code
-    downtimeWindows[DowntimeFeatureTypeConstants.claims] = {
-      startTime: DateTime.now(),
-      endTime: DateTime.now().plus({ minute: 60 }),
-    }
-
-    downtimeWindows[DowntimeFeatureTypeConstants.appeals] = {
-      startTime: DateTime.now(),
-      endTime: DateTime.now().plus({ minute: 60 }),
-    }
-
-    downtimeWindows[DowntimeFeatureTypeConstants.appointments] = {
-      startTime: DateTime.now().plus({ minute: 30 }),
-      endTime: DateTime.now().plus({ minute: 90 }),
-    }
+    // downtimeWindows[DowntimeFeatureTypeConstants.claims] = {
+    //   startTime: DateTime.now(),
+    //   endTime: DateTime.now().plus({ minute: 60 }),
+    // }
+    //
+    // downtimeWindows[DowntimeFeatureTypeConstants.appeals] = {
+    //   startTime: DateTime.now(),
+    //   endTime: DateTime.now().plus({ minute: 60 }),
+    // }
+    //
+    // downtimeWindows[DowntimeFeatureTypeConstants.appointments] = {
+    //   startTime: DateTime.now().plus({ minute: 30 }),
+    //   endTime: DateTime.now().plus({ minute: 90 }),
+    // }
 
     dispatch(dispatchSetDowntime(downtimeWindows))
   } catch (e) {
