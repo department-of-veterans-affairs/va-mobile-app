@@ -4,6 +4,12 @@
     "due_on": "2025-12-16T00:00:00Z",
     "issues": [
       {
+        "title": "2.65.0 What's New and Release Notes",
+        "number": 12146,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12146",
+        "isPR": false
+      },
+      {
         "title": "BUG: Fixed missing data",
         "number": 12043,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12043",
