@@ -13,10 +13,7 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
-
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   filterAppointments,
