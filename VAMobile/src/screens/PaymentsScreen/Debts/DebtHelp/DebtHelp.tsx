@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Box, ClickToCallPhoneNumber, LargePanel, LinkWithAnalytics, TextView, VABulletList } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScreens'
-import { displayedTextPhoneNumber } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
-import { Events } from 'constants/analytics'
+import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { a11yLabelVA } from 'utils/a11yLabel'
+import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 export type debtHelpType = 'questionsAboutDebt' | 'whyEducationDebt' | 'whyDisabilityPensionDebt'
 
