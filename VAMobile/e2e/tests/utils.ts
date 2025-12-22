@@ -4,14 +4,11 @@ Detox script for functions/constants that effect multiple other scripts.
 When to update:
 New functions/constants should be added when anything is created that might effect multiple scripts.
 */
-import { expect as jestExpect } from '@jest/globals';
-import { by, device, element, expect, waitFor } from 'detox';
-import { setTimeout } from 'timers/promises';
+import { expect as jestExpect } from '@jest/globals'
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
-
-
-import getEnv from '../../src/utils/env';
-
+import getEnv from '../../src/utils/env'
 
 const spawnSync = require('child_process').spawnSync
 
@@ -65,6 +62,8 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
   MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
   MILITARY_PERIOD_OF_SERVICE: 'July 13, 1970 – August 31, 1998',
+  // Components
+  SELECTION_LIST_ITEM_BUTTON_ID: 'selectionListItemButtonId',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
@@ -149,6 +148,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -776,14 +776,8 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openSettings()
   await openDeveloperScreen()
 
-  // Scroll to Remote Config button first to ensure it's fully visible
-  await waitFor(element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)))
-    .toBeVisible()
-    .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
-    .scroll(200, 'down')
-
-  await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 
