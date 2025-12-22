@@ -20,10 +20,11 @@ import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScre
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { a11yLabelVA } from 'utils/a11yLabel'
 
 type DebtRequestHelpScreenProps = StackScreenProps<PaymentsStackParamList, 'DebtRequestHelp'>
 
-const { LINK_URL_REQUEST_HELP_FORM_5655 } = getEnv()
+const { LINK_URL_ASK_VA_GOV, LINK_URL_REQUEST_HELP_FORM_5655 } = getEnv()
 
 function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -65,6 +66,24 @@ function DebtRequestHelpScreen({ navigation }: DebtRequestHelpScreenProps) {
             tel: <PhoneNumberComponent variant="standalone" ttyBypass={true} />,
             tty: <PhoneNumberComponent variant="standalone" />,
           }}
+        />
+        <TextView my={theme.dimensions.condensedMarginBetween} variant="MobileBody" paragraphSpacing={false}>
+          {t('debts.help.orContactAskVA')}
+        </TextView>
+        <LinkWithAnalytics
+          type="custom"
+          onPress={() => {
+            logAnalyticsEvent(Events.vama_webview(LINK_URL_ASK_VA_GOV))
+            navigateTo('Webview', {
+              url: LINK_URL_ASK_VA_GOV,
+              displayTitle: t('webview.vagov'),
+              loadingMessage: t('loading.vaWebsite'),
+              useSSO: false,
+            })
+          }}
+          text={t('debts.help.askVA')}
+          a11yLabel={a11yLabelVA(t('debts.help.askVA'))}
+          a11yHint={t('debts.help.askVAA11yHint')}
         />
       </Box>
     )

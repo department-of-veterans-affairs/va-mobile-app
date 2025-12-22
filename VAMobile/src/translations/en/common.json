@@ -769,7 +769,7 @@
   "debts.details.title": "Details",
   "debts.details.updated": "Updated {{date}}.",
   "debts.disputeDebt.title": "Dispute overpayment",
-  "debts.disputeDebt.copy": "<p>If you think your debt is an error, your first step should be to dispute the charges. The time limit to dispute a debt is <bold>1 year</bold> from the date you received your first debt letter. If you dispute the debt within <bold>30 days</bold>, you can avoid collection actions.</p><p>You’ll need to continue making payments on your debt while we review your dispute.</p>",
+  "debts.disputeDebt.copy": "<p>If you think your debt is an error, your first step should be to dispute the charges. If you dispute the debt within <bold>30 days</bold>, you can avoid collection actions.</p><p>You’ll need to continue making payments on your debt while we review your dispute.</p>",
   "debts.disputeDebt.link": "Start your overpayment dispute",
   "debts.empty.body": "Our records show you don’t have any outstanding overpayments related to VA benefits. If you think this is incorrect, call the Debt Management Center (DMC). We’re here Monday through Friday, 7:30 a.m. to 7:00 p.m. ET.",
   "debts.empty.title": "You don’t have any outstanding overpayments",
