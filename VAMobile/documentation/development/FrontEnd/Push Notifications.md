@@ -91,7 +91,17 @@ More information on navigation state can be found in the [React Navigation docum
 
 Once you've configured deep linking for your push notification, you'll be able to test it by triggering push notifications remotely from the responsible service. The VANotify API can also be used to send push notifications to a device, but this requires an API key that will need to be provided by the VANotify team.
 
-_Note: Remote push notifications will only work on a physical device with a non-development build installed, so you'll need to run an [on demand build](../QA/QABuilds.md#on-demand-builds) for your branch._
+1. Contact VANotify on Slack [#va-notify-public](https://dsva.slack.com/archives/C010R6AUPHT) to receive an API key to start testing. Note that this API key will be sent to your VA email.
+2. Download the [postman collection](https://github.com/department-of-veterans-affairs/notification-api/blob/main/documents/postman/README.md) provided by VANotify.
+   1. The `staging-simplified.postman_environment.json` should be imported to your Postman `Environments`. The `serviceId` and `api-key` should be included in the email.
+    ![Postman Environment](/img/pushNotifications/push_postman_env.png)
+   2. The `notification-api-simplified.postman_collection.json` file should be imported to your Postman `Collections`. Ensure that the correct environment is chosen for the collection.
+    ![Postman Collection](/img/pushNotifications/push_postman_collection.png)
+3. The main endpoint that will be used to send push notifications will be `/v2/notifications/push`. This endpoint uses `{{icn}}`, which corresponds to a staging user that the push notification will be sent to and a `{{vetext-template-id}}`, which is the type of push notification that is sent (ex. Secure messaging or Appointment). These values can be populated in the environment file.
+4. Hit `Send` on Postman to send a push notification. Note that a notification will be sent to everyone who is logged into that user.  
+:::note 
+Remote push notifications will only work on a physical device with a non-development build installed, so you'll need to run an [on demand build](../QA/QABuilds.md#on-demand-builds) for your branch as well as log in with a staging user.
+:::
 
 ### Local testing
 
