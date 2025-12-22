@@ -1,5 +1,7 @@
 import { by, device, element, expect, waitFor } from 'detox'
 
+import { WhatsNew } from 'components'
+
 import { disableAF, loginToDemoMode } from '../tests/utils'
 import utils from './screenshot.utils'
 import { ScreenshotData, screenshotData } from './screenshot_data'
@@ -7,6 +9,7 @@ import { ScreenshotData, screenshotData } from './screenshot_data'
 describe('Screenshot Generation', () => {
   beforeAll(async () => {
     await loginToDemoMode()
+    await utils.whatsNewBanner()
   })
 
   for (const data of screenshotData) {

@@ -40,6 +40,12 @@ const utils = {
     } catch (e) {}
   },
 
+  whatsNewBanner: async () => {
+    try {
+      await element(by.text('Dismiss this message')).tap()
+    } catch (e) {}
+  },
+
   demoUser: async () => {
     await openProfile()
     await openSettings()
