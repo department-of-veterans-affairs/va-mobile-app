@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
-import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { Alert, Icon } from '@department-of-veterans-affairs/mobile-component-library'
 import { DateTime } from 'luxon'
 import { map } from 'underscore'
 
@@ -39,6 +39,7 @@ import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { featureEnabled } from 'utils/remoteConfig'
 
 const { LINK_URL_MHV_LABS_AND_TESTS } = getEnv()
 const DATE_RANGE_PAST_THREE_MONTHS = 'past-3-months'
@@ -154,7 +155,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
     return !!start && !!end && start !== '' && end !== ''
   }
 
-  const featureEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
+  const isLabsEnabled = authorizedServices?.labsAndTestsEnabled && !labsAndTestsInDowntime
 
   const {
     data: labsAndTests,
@@ -169,7 +170,7 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       },
       timeFrame: selectedDateRange.timeFrame,
     },
-    { enabled: screenContentAllowed('WG_LabsAndTestsList') && featureEnabled && hasValidDates() },
+    { enabled: screenContentAllowed('WG_LabsAndTestsList') && isLabsEnabled && hasValidDates() },
   )
 
   // Analytics
@@ -250,16 +251,35 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
       testID="labs-and-tests-list-screen"
       scrollViewProps={scrollViewProps}>
       <Box mx={theme.dimensions.gutter}>
-        {/* Surely there is a better way to insert bold text into a display string... */}
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('labsAndTests.availability.start')}
-          <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
-            {t('labsAndTests.availability.timing.bold')}
-          </TextView>
+        {featureEnabled('mrHide36HrHoldTimes') ? (
+          <Alert
+            variant={'info'}
+            header={t('labsAndTests.zeroHoldTime.heading')}
+            headerA11yLabel={t('labsAndTests.zeroHoldTime.heading')}
+            description={t('labsAndTests.zeroHoldTime.start')}
+            descriptionA11yLabel={t('labsAndTests.zeroHoldTime.start')}
+            expandable={true}
+            initializeExpanded={false}
+            testID="labsAndTestsZeroHoldTimeAlertID">
+              <TextView variant="MobileBody">
+                {t('labsAndTests.zeroHoldTime.text2')}
+              </TextView>
+              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+                {t('labsAndTests.zeroHoldTime.end')}
+              </TextView>
+          </Alert>
+        ) : (
+          /* Surely there is a better way to insert bold text into a display string... */
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-            {t('labsAndTests.availability.end')}
+            {t('labsAndTests.availability.start')}
+            <TextView variant="MobileBodyBold" testID="labsAndTestsAvailabilityTimingTestID">
+              {t('labsAndTests.availability.timing.bold')}
+            </TextView>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('labsAndTests.availability.end')}
+            </TextView>
           </TextView>
-        </TextView>
+        )}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold">{t('labsAndTests.medicalImages.note')} </TextView>
           <TextView variant="MobileBody">{t('labsAndTests.medicalImages.noteText')}</TextView>

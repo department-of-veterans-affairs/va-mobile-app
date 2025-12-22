@@ -27,6 +27,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'labsAndTests'
+  | 'mrHide36HrHoldTimes'
   | 'nonVAMedsLink'
   | 'rescheduleLink'
   | 'shareMyHealthDataLink'
@@ -59,6 +60,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   labsAndTests: boolean
+  mrHide36HrHoldTimes: boolean
   nonVAMedsLink: boolean
   rescheduleLink: boolean
   shareMyHealthDataLink: boolean
@@ -92,6 +94,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: true,
   inAppReview: true,
   labsAndTests: true,
+  mrHide36HrHoldTimes: false,
   nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
