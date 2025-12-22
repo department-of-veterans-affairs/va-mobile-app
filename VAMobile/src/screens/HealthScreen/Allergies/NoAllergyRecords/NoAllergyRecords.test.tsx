@@ -1,8 +1,8 @@
 import React from 'react'
 import { Linking } from 'react-native'
-import { t } from 'i18next'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import NoAllergyRecords from 'screens/HealthScreen/Allergies/NoAllergyRecords/NoAllergyRecords'
 import { context, render, when } from 'testUtils'
@@ -34,7 +34,7 @@ context('NoAllergyRecords', () => {
       initializeTestInstance(true)
       expect(screen.getByRole('heading', { name: t('noAllergyRecords.alert.title') })).toBeTruthy()
       expect(screen.getByText(t('noAllergyRecords.zeroHoldTimes.text.1'))).toBeTruthy()
-      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy();
+      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy()
       expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
       expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
     })

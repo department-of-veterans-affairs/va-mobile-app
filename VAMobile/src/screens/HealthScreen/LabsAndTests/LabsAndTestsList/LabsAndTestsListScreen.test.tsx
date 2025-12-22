@@ -1,6 +1,7 @@
 import React from 'react'
-import { t } from 'i18next'
+
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
 import { LabsAndTests } from 'api/types'
@@ -70,7 +71,7 @@ context('LabsAndTestsListScreen', () => {
       initializeTestInstance(false)
       await waitFor(() =>
         // This test ID is tied specifically to the "36 hours" language
-        expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID')).toBeTruthy()
+        expect(screen.getByTestId('labsAndTestsAvailabilityTimingTestID')).toBeTruthy(),
       )
     })
   })

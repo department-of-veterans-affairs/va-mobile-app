@@ -841,6 +841,35 @@ export const Events = {
       },
     }
   },
+  vama_offline_access: (screen_name: string): Event => {
+    return {
+      name: 'vama_offline_access',
+      params: {
+        value: screen_name,
+      },
+    }
+  },
+  vama_offline_action: (): Event => {
+    return {
+      name: 'vama_offline_action',
+    }
+  },
+  vama_offline_cache: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_cache',
+      params: {
+        value: queryKey,
+      },
+    }
+  },
+  vama_offline_no_data: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_no_data',
+      params: {
+        value: queryKey,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
