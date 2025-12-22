@@ -5,6 +5,7 @@ import { AlertWithHaptics, ClickToCallPhoneNumber, TextView, VAScrollView } from
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelMyVA411, a11yLabelVA } from 'utils/a11yLabel'
 import { displayedTextPhoneNumber } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 function NoLabsAndTestsRecords() {
   const { t } = useTranslation(NAMESPACE.COMMON)
@@ -15,7 +16,7 @@ function NoLabsAndTestsRecords() {
         variant="info"
         header={t('labsAndTests.noRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('labsAndTests.noRecords.alert.title'))}
-        description={t('labsAndTests.noRecords.alert.text.1')}>
+        description={featureEnabled('mrHide36HrHoldTimes') ? t('labsAndTests.noRecords.zeroHoldTimes.text.1') : t('labsAndTests.noRecords.alert.text.1')}>
         <TextView
           paragraphSpacing={true}
           variant="MobileBody"

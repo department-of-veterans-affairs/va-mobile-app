@@ -26,6 +26,10 @@
           "userProfileUpdate": true
         }
       }
+    },
+    "meta": {
+      "isUserAtPretransitionedOhFacility": false,
+      "isUserFacilityReadyForInfoAlert": false
     }
   }
 }
