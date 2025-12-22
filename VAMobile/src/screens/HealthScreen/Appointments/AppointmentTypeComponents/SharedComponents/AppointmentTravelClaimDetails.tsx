@@ -11,6 +11,7 @@ import { AppointmentAttributes, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LinkWithAnalytics, TextAreaSpacer, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { TravelPayHelp } from 'screens/HealthScreen/TravelPay/SubmitTravelPayFlowSteps/components'
 import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
@@ -25,7 +26,8 @@ import {
 } from 'utils/appointments'
 import getEnv from 'utils/env'
 import { formatDateTimeReadable } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { navigateToTravelClaims, useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
@@ -60,6 +62,8 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   const theme = useTheme()
   const queryClient = useQueryClient()
   const route = useRoute()
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
   const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
@@ -81,6 +85,11 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
   }
 
   const goToTravelClaims = () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
     // Go to the native screen if the FF is on, otherwise
     // continue to go to the web view
     if (featureEnabled('travelPayStatusList')) {
@@ -179,6 +188,11 @@ function AppointmentTravelClaimDetails({ appointmentID, attributes, subType }: T
           <LinkWithAnalytics
             type="custom"
             onPress={() => {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+                showOfflineSnackbar()
+                return
+              }
+
               if (showTravelPayClaimDetails) {
                 logAnalyticsEvent(Events.vama_link_click)
                 navigateTo('TravelPayClaimDetailsScreen', {
