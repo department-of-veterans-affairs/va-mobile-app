@@ -13,7 +13,10 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+
+import { RootState } from 'store'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
+import { ErrorsState } from 'store/slices'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   filterAppointments,
@@ -23,6 +26,7 @@ import {
   getPastTimeFrame,
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
@@ -45,6 +49,7 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
   const [page, setPage] = useState(1)
   const [onApplyClicked, setOnApplyClicked] = useState(false)
   const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()

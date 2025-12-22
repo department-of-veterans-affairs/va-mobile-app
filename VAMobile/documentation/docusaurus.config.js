@@ -3,6 +3,8 @@
 //
 import { themes as prismThemes } from 'prism-react-renderer'
 
+require('dotenv').config()
+
 /**
  * Function to form up configuration for Design System Engineering Docs imported from va-mobile-library repo
  * @param {string} name - Lower case name that must be unique; used for filename (sets URL for page) for some files
@@ -146,6 +148,11 @@ const config = {
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+        },
+        /** Tracking only works for prod so set a fake one for dev as it is required. Replace G-XXXXXXXXXX with development ID from Google Analytics for any dev testing*/
+        gtag: {
+          trackingID: process.env.MOBILE_DOC_MEASUREMENT_ID || 'G-XXXXXXXXXX',
+          anonymizeIP: true,
         },
       },
     ],
