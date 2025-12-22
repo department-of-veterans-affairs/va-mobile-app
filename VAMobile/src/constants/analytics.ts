@@ -151,26 +151,6 @@ export const Events = {
       name: 'vama_cerner_alert',
     }
   },
-  vama_blue_alert_sm: (): Event => {
-    return {
-      name: 'vama_blue_alert_sm',
-    }
-  },
-  vama_blue_alert_rx: (): Event => {
-    return {
-      name: 'vama_blue_alert_rx',
-    }
-  },
-  vama_blue_sm_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_sm_link_conf',
-    }
-  },
-  vama_blue_rx_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_rx_link_conf',
-    }
-  },
   vama_cerner_alert_exp: (): Event => {
     return {
       name: 'vama_cerner_alert_exp',
@@ -1224,9 +1204,12 @@ export const Events = {
       name: 'vama_whatsnew_close',
     }
   },
-  vama_whatsnew_dont_show: (): Event => {
+  vama_whatsnew_dont_show: (skippedFeatures?: string[]): Event => {
     return {
       name: 'vama_whatsnew_dont_show',
+      params: {
+        q1: skippedFeatures,
+      },
     }
   },
   vama_whatsnew_more: (): Event => {

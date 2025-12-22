@@ -1,34 +1,48 @@
 import React from 'react'
 import { Linking } from 'react-native'
+import { t } from 'i18next'
 
 import { fireEvent, screen } from '@testing-library/react-native'
 
 import NoAllergyRecords from 'screens/HealthScreen/Allergies/NoAllergyRecords/NoAllergyRecords'
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
-context('NoVaccineRecords', () => {
-  beforeEach(() => {
+jest.mock('utils/remoteConfig')
+
+context('NoAllergyRecords', () => {
+  const mockFeatureEnabled = featureEnabled as jest.Mock
+
+  const initializeTestInstance = (mrHide36HrHoldTimes = false) => {
+    when(mockFeatureEnabled).calledWith('mrHide36HrHoldTimes').mockReturnValue(mrHide36HrHoldTimes)
     render(<NoAllergyRecords />)
+  }
+
+  describe('when mrHide36HrHoldTimes is false', () => {
+    it('initializes correctly with 36 hour text', () => {
+      initializeTestInstance(false)
+      expect(screen.getByRole('heading', { name: t('noAllergyRecords.alert.title') })).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.1'))).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy()
+      expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+    })
   })
 
-  it('initializes correctly', () => {
-    expect(screen.getByRole('heading', { name: "We couldn't find information about your VA allergies" })).toBeTruthy()
-    expect(
-      screen.getByText(
-        "We're sorry. We update your allergy records every 24 hours, but new records can take up to 36 hours to appear.",
-      ),
-    ).toBeTruthy()
-    expect(
-      screen.getByText(
-        "If you think your allergy records should be here, call our MyVA411 main information line. We're here 24/7.",
-      ),
-    ).toBeTruthy()
-    expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+  describe('when mrHide36HrHoldTimes is true', () => {
+    it('initializes correctly without 36 hour text', () => {
+      initializeTestInstance(true)
+      expect(screen.getByRole('heading', { name: t('noAllergyRecords.alert.title') })).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.zeroHoldTimes.text.1'))).toBeTruthy()
+      expect(screen.getByText(t('noAllergyRecords.alert.text.2'))).toBeTruthy();
+      expect(screen.getByRole('link', { name: '800-698-2411' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'TTY: 711' })).toBeTruthy()
+    })
   })
 
   describe('when the My HealtheVet phone number link is clicked', () => {
     it('should call Linking open url with the parameter tel:8006982411', () => {
+      initializeTestInstance(false)
       fireEvent.press(screen.getByRole('link', { name: '800-698-2411' }))
       expect(Linking.openURL).toBeCalledWith('tel:8006982411')
     })
@@ -36,6 +50,7 @@ context('NoVaccineRecords', () => {
 
   describe('when the call TTY phone link is clicked', () => {
     it('should call Linking open url with the parameter tel:711', () => {
+      initializeTestInstance(false)
       fireEvent.press(screen.getByRole('link', { name: 'TTY: 711' }))
       expect(Linking.openURL).toBeCalledWith('tel:711')
     })
