@@ -4,9 +4,8 @@ import ReactNativeBlobUtil from 'react-native-blob-util'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
-import { AppointmentAttributes } from 'api/types'
+import { AppointmentAttributes, SummaryObject } from 'api/types'
 import AppointmentAfterVisitSummary, {
-  SummaryObject,
   getListItemVals,
   handleDismiss,
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentAfterVisitSummary'

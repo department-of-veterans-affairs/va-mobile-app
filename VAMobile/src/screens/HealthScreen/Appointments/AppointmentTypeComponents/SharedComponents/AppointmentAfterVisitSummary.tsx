@@ -4,7 +4,7 @@ import FileViewer from 'react-native-file-viewer'
 
 import { TFunction } from 'i18next'
 
-import { AppointmentAttributes } from 'api/types'
+import { AppointmentAttributes, SummaryObject } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps, TextView } from 'components'
 import { AfterVisitSummaryToIncludeOH, AfterVisitSummaryToIncludeVistA } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,18 +15,6 @@ import { useTheme } from 'utils/hooks'
 
 export type AppointmentAfterVisitSummaryProps = {
   attributes: AppointmentAttributes
-}
-
-export type Base64String = string
-
-export type SummaryObject = {
-  apptId: string
-  id: string
-  name: string
-  loincCodes: Array<string>
-  noteType: string
-  contentType: string
-  binary: Base64String
 }
 
 // Export for testing - deletes the file at filePath when the viewer is dismissed
