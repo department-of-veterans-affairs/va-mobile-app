@@ -10,7 +10,7 @@ import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
-import { NO_LONGER_REQUIRED, SUBMITTED_AWAITING_REVIEW } from 'constants/claims'
+import { ClaimStatusConstants } from 'constants/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { logAnalyticsEvent } from 'utils/analytics'
@@ -35,8 +35,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   })
 
   const hasUploaded = hasUploadedOrReceived(request)
-  const isClosed = type.startsWith('never_received') || status === NO_LONGER_REQUIRED
-  const isReviewed = type.startsWith('received_from') && status !== SUBMITTED_AWAITING_REVIEW
+  const isClosed = type.startsWith('never_received') || status === ClaimStatusConstants.NO_LONGER_REQUIRED
+  const isReviewed = type.startsWith('received_from') && status !== ClaimStatusConstants.SUBMITTED_AWAITING_REVIEW
   const isPending = !isClosed && !isReviewed
   const noneNoted = t('noneNoted')
 
