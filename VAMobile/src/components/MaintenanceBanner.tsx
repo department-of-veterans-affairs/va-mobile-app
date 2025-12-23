@@ -5,7 +5,7 @@ import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWind
 import { AlertWithHaptics, Box, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDToDowntimeFeatures, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api'
+import { ScreenIDToDowntimeFeatures, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getFeaturesInDowntime, getFeaturesInDowntimeWindow, latestDowntimeWindow, useTheme } from 'utils/hooks'
 
