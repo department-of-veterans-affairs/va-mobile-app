@@ -67,6 +67,22 @@ const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> =>
     }
   }
 
+  // TODO: remove debug code
+  maintenanceWindows[DowntimeFeatureTypeConstants.claims] = {
+    startTime: DateTime.now(),
+    endTime: DateTime.now().plus({ minute: 60 }),
+  }
+
+  maintenanceWindows[DowntimeFeatureTypeConstants.appeals] = {
+    startTime: DateTime.now(),
+    endTime: DateTime.now().plus({ minute: 60 }),
+  }
+
+  maintenanceWindows[DowntimeFeatureTypeConstants.appointments] = {
+    startTime: DateTime.now().plus({ minute: 30 }),
+    endTime: DateTime.now().plus({ minute: 90 }),
+  }
+
   return maintenanceWindows
 }
 
