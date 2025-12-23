@@ -112,7 +112,10 @@
             "typeOfCare": "Podiatry",
             "patientPhoneNumber": "724-316-5274",
             "patientEmail": "christopher.ray3@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening"],
+            "bestTimeToCall": [
+              "Afternoon",
+              "Evening"
+            ],
             "friendlyLocationName": "Denver VA Medical Center",
             "serviceCategoryName": null,
             "travelPayClaim": {
@@ -169,7 +172,9 @@
             "typeOfCare": "Podiatry",
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Evening"],
+            "bestTimeToCall": [
+              "Evening"
+            ],
             "friendlyLocationName": null,
             "serviceCategoryName": null,
             "showScheduleLink": true,
@@ -337,7 +342,6 @@
             }
           }
         },
-
         {
           "id": "57",
           "type": "appointment",
@@ -486,7 +490,9 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"],
+            "bestTimeToCall": [
+              "Afternoon"
+            ],
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -643,7 +649,9 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"],
+            "bestTimeToCall": [
+              "Afternoon"
+            ],
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -653,7 +661,6 @@
             }
           }
         },
-
         {
           "id": "63",
           "type": "appointment",
@@ -801,7 +808,9 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"],
+            "bestTimeToCall": [
+              "Afternoon"
+            ],
             "travelPayClaim": {
               "metadata": {
                 "status": 200,
@@ -970,7 +979,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1047,7 +1058,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1115,7 +1128,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1169,7 +1184,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1223,7 +1240,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1277,7 +1296,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1332,7 +1353,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1386,7 +1409,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1453,7 +1478,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1507,7 +1534,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1574,7 +1603,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1640,7 +1671,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1695,7 +1728,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1749,7 +1784,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -1816,7 +1853,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -1870,7 +1909,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
             "travelPayEligible": true,
             "travelPayClaim": {
@@ -2038,7 +2079,11 @@
             "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "bestTimeToCall": [
+              "Afternoon",
+              "Evening",
+              "Morning"
+            ],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center",
             "travelPayClaim": {
               "metadata": {
@@ -2047,6 +2092,534 @@
                 "success": true
               }
             }
+          }
+        },
+        {
+          "id": "testcerner001",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc001",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 001",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 48 day}}",
+            "startDateUtc": "{{now - 48 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "20875041789",
+                "apptId": "testcerner001a",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+              },
+              {
+                "id": "20875041799",
+                "apptId": "testcerner001a",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner002",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc002",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 002",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 49 day}}",
+            "startDateUtc": "{{now - 49 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "20875041789",
+                "apptId": "testcerner002",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": ""
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner003",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc003",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 003",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 50 day}}",
+            "startDateUtc": "{{now - 50 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "20875041789",
+                "apptId": "testcerner003",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKJeLjz9M#INVALID-DATA$$%%123=="
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner004",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc0004",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 004",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 51 day}}",
+            "startDateUtc": "{{now - 51 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "20875041789",
+                "apptId": "AVS_PDF_Test_4",
+                "name": "Pharmacology Discharge summary",
+                "noteType": "pharmacology_discharge_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner005",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc0005",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 005",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 52 day}}",
+            "startDateUtc": "{{now - 52 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": [
+              {
+                "id": "20875041789",
+                "apptId": "testcerner005",
+                "name": "Pharmacology Discharge summary",
+                "noteType": "pharmacology_discharge_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKJeLjz9M#INVALID-DATA$$%%123=="
+              },
+              {
+                "id": "20875041789",
+                "apptId": "testcerner005",
+                "name": "Auditory Visit Summary",
+                "noteType": "auditory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+              },
+              {
+                "id": "20875041789",
+                "apptId": "testcerner005",
+                "name": "Ambulatory Visit Summary",
+                "noteType": "ambulatory_patient_summary",
+                "loincCodes": [
+                  "4189669",
+                  "96345-4"
+                ],
+                "contentType": "application/pdf",
+                "binary": "JVBERi0xLjQKMSAwIG9iago8PC9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlIC9QYWdlcwovS2lkcyBbMyAwIFJdCi9Db3VudCAxCj4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUgL1BhZ2UKL1BhcmVudCAyIDAgUgovTWVkaWFCb3ggWzAgMCA1OTUgODQyXQovQ29udGVudHMgNSAwIFIKL1Jlc291cmNlcyA8PC9Qcm9jU2V0IFsvUERGIC9UZXh0XQovRm9udCA8PC9GMSA0IDAgUj4+Cj4+Cj4+CmVuZG9iago0IDAgb2JqCjw8L1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9OYW1lIC9GMQovQmFzZUZvbnQgL0hlbHZldGljYQovRW5jb2RpbmcgL01hY1JvbWFuRW5jb2RpbmcKPj4KZW5kb2JqCjUgMCBvYmoKPDwvTGVuZ3RoIDUzCj4+CnN0cmVhbQpCVAovRjEgMjAgVGYKMjIwIDQwMCBUZAooRHVtbXkgUERGKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCnhyZWYKMCA2CjAwMDAwMDAwMDAgNjU1MzUgZgowMDAwMDAwMDA5IDAwMDAwIG4KMDAwMDAwMDA2MyAwMDAwMCBuCjAwMDAwMDAxMjQgMDAwMDAgbgowMDAwMDAwMjc3IDAwMDAwIG4KMDAwMDAwMDM5MiAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA2Ci9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0OTUKJSVFQ0VPRg=="
+              }
+            ]
+          }
+        },
+        {
+          "id": "testcerner006",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": "testcernerc0006",
+            "comment": null,
+            "healthcareProvider": "Jane Smith CERNER 006",
+            "healthcareService": null,
+            "location": {
+              "id": "442",
+              "name": "San Francisco VA Health Care System",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 41.148027,
+              "long": -104.7862575,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 53 day}}",
+            "startDateUtc": "{{now - 53 day utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": null,
+            "reason": "New Issue",
+            "isCovidVaccine": null,
+            "isPending": false,
+            "proposedTimes": [
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "PM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              },
+              {
+                "date": "{{now + 26 days short}}",
+                "time": "AM"
+              }
+            ],
+            "typeOfCare": "Primary Care",
+            "patientPhoneNumber": "(666) 666-6666",
+            "patientEmail": "Vilasini.reddy@va.gov",
+            "bestTimeToCall": [
+              "Morning"
+            ],
+            "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center",
+            "travelPayClaim": {
+              "metadata": {
+                "status": 200,
+                "message": "Data retrieved successfully",
+                "success": true
+              }
+            },
+            "isCerner": true,
+            "avsPdf": null,
+            "avsError": "Error retrieving AVS PDF"
           }
         }
       ],
@@ -2070,6 +2643,62 @@
     },
     "upcoming": {
       "data": [
+        {
+          "id": "fa88571de3f559065cfe900e4ce92785c90314290ec4d616df2e55377eb37846",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "appointmentIen": "19722",
+            "cancelId": null,
+            "comment": null,
+            "healthcareProvider": null,
+            "healthcareService": null,
+            "location": {
+              "id": "983",
+              "name": "Cheyenne VA Medical Center",
+              "address": {
+                "street": "2360 East Pershing Boulevard",
+                "city": "Cheyenne",
+                "state": "WY",
+                "zipCode": "82001-5356"
+              },
+              "lat": 39.744507,
+              "long": -104.830956,
+              "phone": {
+                "areaCode": "307",
+                "number": "778-7550",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "physicalLocation": "TEST",
+            "minutesDuration": 20,
+            "phoneOnly": false,
+            "startDateLocal": "{{now - 1 minute}}",
+            "startDateUtc": "{{now - 1 minute utc}}",
+            "status": "BOOKED",
+            "statusDetail": null,
+            "timeZone": "America/Denver",
+            "vetextId": "442;3251216.13",
+            "reason": null,
+            "isCovidVaccine": true,
+            "isPending": false,
+            "proposedTimes": null,
+            "typeOfCare": null,
+            "patientPhoneNumber": null,
+            "patientEmail": null,
+            "bestTimeToCall": null,
+            "friendlyLocationName": "Cheyenne VA Medical Center",
+            "serviceCategoryName": "REGULAR",
+            "travelPayClaim": null,
+            "travelPayEligible": null,
+            "showScheduleLink": null,
+            "isCerner": false,
+            "avsPdf": null,
+            "avsError": null
+          }
+        },
         {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
@@ -2162,7 +2791,10 @@
             "typeOfCare": "Podiatry",
             "patientPhoneNumber": "724-316-5274",
             "patientEmail": "christopher.ray3@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening"],
+            "bestTimeToCall": [
+              "Afternoon",
+              "Evening"
+            ],
             "friendlyLocationName": "Denver VA Medical Center",
             "serviceCategoryName": null
           }
@@ -2212,7 +2844,9 @@
             "typeOfCare": "Podiatry",
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Evening"],
+            "bestTimeToCall": [
+              "Evening"
+            ],
             "friendlyLocationName": null,
             "serviceCategoryName": null,
             "showScheduleLink": true
@@ -2351,7 +2985,6 @@
             "typeOfCare": "Mental Health"
           }
         },
-
         {
           "id": "57",
           "type": "appointment",
@@ -2485,7 +3118,9 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": [
+              "Afternoon"
+            ]
           }
         },
         {
@@ -2621,10 +3256,11 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": [
+              "Afternoon"
+            ]
           }
         },
-
         {
           "id": "63",
           "type": "appointment",
@@ -2758,7 +3394,9 @@
             ],
             "patientPhoneNumber": "413-757-5329",
             "patientEmail": "Judy.morrison@id.me",
-            "bestTimeToCall": ["Afternoon"]
+            "bestTimeToCall": [
+              "Afternoon"
+            ]
           }
         },
         {
@@ -2856,7 +3494,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "Jane Smith",
+            "healthcareProvider": "Jane Smith XXX",
             "healthcareService": null,
             "location": {
               "id": "442",
@@ -2905,7 +3543,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -2965,7 +3605,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3025,7 +3667,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3072,7 +3716,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3119,7 +3765,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3166,7 +3814,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3213,7 +3863,9 @@
             "typeOfCare": null,
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3260,7 +3912,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3307,7 +3961,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3354,7 +4010,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3401,7 +4059,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3448,7 +4108,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3495,7 +4157,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3542,7 +4206,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3589,7 +4255,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3636,7 +4304,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "DAYTSHR - Dayton VA Medical Center"
           }
         },
@@ -3683,7 +4353,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "Manila VA Clinic"
           }
         },
@@ -3730,7 +4402,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "Guam VA Clinic"
           }
         },
@@ -3777,7 +4451,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "friendlyLocationName": "American Samoa Vet Center"
           }
         },
@@ -3923,7 +4599,11 @@
             "typeOfCare": "Phone consultation-Pending",
             "patientPhoneNumber": "(703) 652-0000",
             "patientEmail": "samatha.girla@va.gov",
-            "bestTimeToCall": ["Afternoon", "Evening", "Morning"],
+            "bestTimeToCall": [
+              "Afternoon",
+              "Evening",
+              "Morning"
+            ],
             "friendlyLocationName": "CHYSHR-Cheyenne VA Medical Center"
           }
         },
@@ -3982,7 +4662,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "isCerner": true
           }
         },
@@ -4042,7 +4724,9 @@
             "typeOfCare": "Primary Care",
             "patientPhoneNumber": "(666) 666-6666",
             "patientEmail": "Vilasini.reddy@va.gov",
-            "bestTimeToCall": ["Morning"],
+            "bestTimeToCall": [
+              "Morning"
+            ],
             "isCerner": false
           }
         }
