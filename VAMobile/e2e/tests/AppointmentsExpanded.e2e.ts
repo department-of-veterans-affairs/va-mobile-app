@@ -4,10 +4,10 @@ import { todaysDate } from 'utils/dateUtils'
 
 import {
   CommonE2eIdConstants,
+  iosPastApptDate,
   loginToDemoMode,
   openAppointments,
   openHealth,
-  pastApptDate,
   scrollToElement,
   toggleRemoteConfigFlag,
 } from './utils'
@@ -1309,7 +1309,7 @@ describe(':ios: Appointments Screen OH AVS', () => {
     const back48days = todaysDate.minus({ days: 48 })
     await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
     await element(by.text('Past')).tap()
-    await pastApptDate({ to: back48days })
+    await iosPastApptDate({ to: back48days })
     await element(by.text('Apply')).tap()
     await sleep(1000) // Wait for the list to update
   })
