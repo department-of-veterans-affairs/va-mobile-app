@@ -32,7 +32,7 @@ function PayDebtScreen({ route, navigation }: PayDebtScreenProps) {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.overpayment') : t('debts')
+  const backLabel = prevScreen === 'DebtDetails' ? t('debts.details.title') : t('debts.details.backButton.title') // Determine back label based on previous screen
 
   const { debt } = route.params
   const { condensedMarginBetween } = theme.dimensions

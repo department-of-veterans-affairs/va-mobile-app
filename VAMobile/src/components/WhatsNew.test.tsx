@@ -5,12 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
 
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import WhatsNew from 'components/WhatsNew'
 import { WhatsNewConfigItem } from 'constants/whatsNew'
 import { InitialState } from 'store/slices'
 import { context, render, when } from 'testUtils'
 import { FeatureToggleType } from 'utils/remoteConfig'
 import { APP_FEATURES_WHATS_NEW_SKIPPED_VAL } from 'utils/whatsNew'
+
+jest.mock('api/authorizedServices/getAuthorizedServices')
 
 jest.mock('react-i18next', () => {
   const original = jest.requireActual('react-i18next')
@@ -67,7 +70,23 @@ const featureConfigs: Record<string, WhatsNewConfigItem[]> = {
       featureName: 'testFeatureNoFlag',
     },
   ],
+  oneFeatureWithAuthorizedService: [
+    {
+      featureName: 'testFeatureWithAuthService',
+      authorizedService: 'isUserAtPretransitionedOhFacility',
+    },
+  ],
 }
+
+beforeEach(() => {
+  ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+    data: {
+      prescriptions: true,
+      medicationsOracleHealthEnabled: false,
+      isUserAtPretransitionedOhFacility: false,
+    },
+  })
+})
 
 context('WhatsNew', () => {
   const initializeTestInstance = (featureName: string, featureFlag?: string, flagEnabled?: boolean) => {
@@ -95,7 +114,6 @@ context('WhatsNew', () => {
 
   it('should render a feature that has not been skipped', async () => {
     initializeTestInstance('oneFeatureNoFlag')
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
     })
@@ -103,7 +121,6 @@ context('WhatsNew', () => {
 
   it('should not render feature behind disabled feature flag', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
       expect(screen.queryByText('whatsNew.bodyCopy.testFeature')).toBeFalsy()
@@ -112,7 +129,6 @@ context('WhatsNew', () => {
 
   it('should render feature behind enabled feature flag', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(async () => {
       expect(screen.getByText('whatsNew.bodyCopy.testFeatureNoFlag')).toBeTruthy()
       expect(screen.getByText('whatsNew.bodyCopy.testFeature')).toBeTruthy()
@@ -122,7 +138,6 @@ context('WhatsNew', () => {
   it('should set the features as skipped when dismissed ', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', true)
 
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
 
     await waitFor(() => {
@@ -136,11 +151,34 @@ context('WhatsNew', () => {
   it('should not set features behind disabled feature flag as skipped when dismissed', async () => {
     initializeTestInstance('twoFeaturesOneFlag', 'testFeature', false)
 
-    await waitFor(() => fireEvent.press(screen.getByRole('tab', { name: 'whatsNew.title' })))
     await waitFor(() => fireEvent.press(screen.getByRole('button', { name: 'whatsNew.dismissMessage' })))
 
     await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(APP_FEATURES_WHATS_NEW_SKIPPED_VAL, '["testFeatureNoFlag"]')
+    })
+  })
+  it('should not render feature the user is not authorized for', async () => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        isUserAtPretransitionedOhFacility: false,
+      },
+    })
+    initializeTestInstance('oneFeatureWithAuthorizedService')
+    await waitFor(async () => {
+      expect(screen.queryByRole('tab', { name: 'whatsNew.title' })).toBeFalsy()
+    })
+  })
+
+  it('should render feature the user is authorized for', async () => {
+    ;(useAuthorizedServices as jest.Mock).mockReturnValue({
+      data: {
+        isUserAtPretransitionedOhFacility: true,
+      },
+    })
+
+    initializeTestInstance('oneFeatureWithAuthorizedService')
+    await waitFor(async () => {
+      expect(screen.getByText('whatsNew.bodyCopy.testFeatureWithAuthService')).toBeTruthy()
     })
   })
 })

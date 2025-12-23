@@ -28,6 +28,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'labsAndTests'
+  | 'mrHide36HrHoldTimes'
   | 'nonVAMedsLink'
   | 'rescheduleLink'
   | 'shareMyHealthDataLink'
@@ -40,10 +41,12 @@ export type FeatureToggleType =
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
-  | 'showCernerAlertSM'
+  | 'showCernerWarningAlert'
+  | 'showCernerWhatsNew'
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
   | 'overpayments'
+  | 'offlineMode'
   | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
@@ -60,6 +63,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   labsAndTests: boolean
+  mrHide36HrHoldTimes: boolean
   nonVAMedsLink: boolean
   rescheduleLink: boolean
   shareMyHealthDataLink: boolean
@@ -72,10 +76,12 @@ type FeatureToggleValues = {
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
-  showCernerAlertSM: boolean
+  showCernerWarningAlert: boolean
+  showCernerWhatsNew: boolean
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
   overpayments: boolean
+  offlineMode: boolean
   remoteConfigRefreshTest: boolean
 }
 
@@ -93,6 +99,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: true,
   inAppReview: true,
   labsAndTests: true,
+  mrHide36HrHoldTimes: false,
   nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
@@ -101,15 +108,20 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: true,
-  travelPayClaimDetails: false,
-  travelPayStatusList: false,
+  travelPayClaimDetails: true,
+  travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
-  showCernerAlertSM: true,
+  showCernerWarningAlert: true,
+  showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayments: false,
   remoteConfigRefreshTest: false,
+  offlineMode: false,
+}
+export const FeatureToggleDescriptions: Record<string, string> = {
+  offlineMode: '(Restart required)',
 }
 
 export let devConfig: FeatureToggleValues = defaults

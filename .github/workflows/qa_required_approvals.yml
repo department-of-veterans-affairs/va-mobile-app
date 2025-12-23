@@ -44,10 +44,12 @@ jobs:
           # and for ".github/", we need ".github/*"
           INCLUDE_PATTERNS=(
             "VAMobile/src/*"
+            "VAMobile/env/*"
             "VAMobile/package.json"
           )
+          shopt -s globstar
           EXCLUDE_PATTERNS=(
-            ".github/*" # Exclude anything in .github/
+            ".github/**" # Exclude anything in .github/ at any depth
             "VAMobile/src/*.test.tsx" # Exclude test files
           )
           for file in $CHANGED_FILES; do
@@ -73,9 +75,9 @@ jobs:
               fi
             done
           done
-          
+
           echo "QA_APPROVAL_NEEDED_BY_FILES=$QA_APPROVAL_NEEDED_BY_FILES" >> "$GITHUB_OUTPUT"
-         
+
           if ! $QA_APPROVAL_NEEDED_BY_FILES; then
             echo "No relevant files changed for QA approval based on workflow path filters. Skipping QA approval check."
             exit 0

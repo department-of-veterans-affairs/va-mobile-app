@@ -62,6 +62,8 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
   MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
   MILITARY_PERIOD_OF_SERVICE: 'July 13, 1970 – August 31, 1998',
+  // Components
+  SELECTION_LIST_ITEM_BUTTON_ID: 'selectionListItemButtonId',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
@@ -146,6 +148,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -188,8 +191,6 @@ export const CommonE2eIdConstants = {
   HOW_WE_USE_CONTACT_INFO_LINK_ID: 'howWeUseContactInfoLinkTestID',
   // travel pay
   TRAVEL_PAY_CONFIG_FLAG_TEXT: 'travelPaySMOC',
-  TRAVEL_PAY_STATUS_LIST_FLAG_TEXT: 'travelPayStatusList',
-  TRAVEL_PAY_CLAIM_DETAILS_FLAG_TEXT: 'travelPayClaimDetails',
   TRAVEL_PAY_CLAIMS_BUTTON_ID: 'toTravelPayClaimsButtonID',
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID: 'toTravelPayClaimsLinkID',
   DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
@@ -530,11 +531,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .scroll(200, 'down')
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(600, 'down')
-    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
+    await scrollToIDThenTap(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
@@ -778,8 +775,9 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+
+  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+  await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 

@@ -77,6 +77,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const onTimeFrameChanged = (value: TimeFrameType) => {
     setCurrentPage(1)
     setTimeFrame(value)
+    setFilter(new Set())
   }
 
   const onFilterChanged = (value: Set<string>) => {
