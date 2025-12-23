@@ -73,7 +73,6 @@ context('CopaysScreen', () => {
       initializeTestInstance(mockCopaysData)
       await waitFor(() => {
         expect(screen.getByText(t('copays.subtitle'))).toBeTruthy()
-        expect(screen.getByText(t('copays.subtitle.description'))).toBeTruthy()
       })
     })
 

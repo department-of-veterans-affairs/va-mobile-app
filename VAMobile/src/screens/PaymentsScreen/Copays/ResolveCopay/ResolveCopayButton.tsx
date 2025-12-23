@@ -6,23 +6,22 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 import { MedicalCopayRecord } from 'api/types'
 import { Box } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
+import { useRouteNavigation, useShowActionSheet } from 'utils/hooks'
 
-type ResolveBillButtonProps = {
+type ResolveCopayButtonProps = {
   copay?: MedicalCopayRecord
 }
 
-function ResolveBillButton({ copay }: ResolveBillButtonProps) {
+function ResolveCopayButton({ copay }: ResolveCopayButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
-  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheet = useShowActionSheet()
 
   function onButtonPress() {
     const options = [
-      t('copays.resolveBill.payBill'),
-      t('copays.resolveBill.requestHelp'),
-      t('copays.resolveBill.disputeCopay'),
+      t('copays.resolveCopay.makeAPayment'),
+      t('copays.resolveCopay.requestHelp'),
+      t('copays.resolveCopay.disputeCopay'),
       t('cancel'),
     ]
     const routeNames = ['PayBill', 'CopayRequestHelp', 'DisputeCopay']
@@ -30,8 +29,8 @@ function ResolveBillButton({ copay }: ResolveBillButtonProps) {
     showActionSheet(
       {
         options,
-        title: t('copays.resolveBill'),
-        message: t('copays.resolveBill.how'),
+        title: t('copays.resolveCopay'),
+        message: t('copays.resolveCopay.how'),
         cancelButtonIndex: 3,
       },
       (buttonIndex) => {
@@ -48,10 +47,10 @@ function ResolveBillButton({ copay }: ResolveBillButtonProps) {
   }
 
   return (
-    <Box my={theme.dimensions.buttonPadding}>
-      <Button label={t('copays.resolveBill')} onPress={onButtonPress} />
+    <Box>
+      <Button label={t('copays.resolveCopay')} onPress={onButtonPress} />
     </Box>
   )
 }
 
-export default ResolveBillButton
+export default ResolveCopayButton
