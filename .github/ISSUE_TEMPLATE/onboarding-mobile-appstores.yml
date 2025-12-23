@@ -2,6 +2,7 @@ name: Onboarding Request (Mobile App Stores)
 description: Testflight/AppTester Access
 title: 'Add user to App Stores: [name]'
 labels: [TestFlight & AppTester]
+projects: ['department-of-veterans-affairs/1616']
 assignees:
   - jbergman-oddball
   - dumathane
