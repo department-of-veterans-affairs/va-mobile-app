@@ -2,8 +2,11 @@
 name: Code Upkeep Template
 about: Template for proposed code upkeep
 title: CU - [Short Description]
-labels: code upkeep, front-end
+labels: front-end
+assignees: ''
+
 ---
+
 ## Proposed Change
 <!-- What is it that needs to be changed for code maintenance -->
 

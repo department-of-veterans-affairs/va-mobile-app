@@ -1,10 +1,12 @@
 ---
 name: Go-Live Approval Template
-about: Template for Going LIVE with a new Feature 
-title: Go-Live Approval Request - Feature Name 
-labels: front-end, content, qa
-assignees: dumathane, BeccaTupaj, b-rocha, rtwell
+about: Template for Going LIVE with a new Feature
+title: Go-Live Approval Request - Feature Name
+labels: content, front-end
+assignees: b-rocha, BeccaTupaj, dumathane, rtwell
+
 ---
+
 ## Feature requesting LIVE launch
 <!-- Which feature is ready to go LIVE? -->
 As a VAHB Mobile App Experience Team, I believe my feature: Feature Name, is ready for user release.
@@ -20,6 +22,3 @@ As a VAHB Mobile App Experience Team, I believe my feature: Feature Name, is rea
 
 ## Help Desk Documentation Update
 <!-- Please include for us your help desk documentation information regarding your new feature-->
-
-
-	

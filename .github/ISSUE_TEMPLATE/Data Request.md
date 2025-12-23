@@ -1,11 +1,12 @@
 ---
-name: Data Request 
-about: Template for requesting mobile app data definitions, dashboard creation / updates, analysis, etc
+name: Data Request
+about: Template for requesting mobile app data definitions, dashboard creation / updates,
+  analysis, etc
 title: Data Request
 labels: analytics
-assignees: OVezeamama
----
+assignees: ''
 
+---
 
 ## Data Request Details  
 ### What is your specific ask / need from data analytics 
@@ -54,5 +55,3 @@ We want to measure __________________ in order to:
 
 * If not, write up tickets for tracking events to be added. Also write up follow up tickets for each measure to be added and mark it as blocked until 30 days post-production implementation of tracking events.
      * Then, follow up with requestor and define and prioritize inclusion of alternative proxies while we wait for the tracking to be available.
-
-

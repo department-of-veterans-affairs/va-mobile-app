@@ -1,10 +1,12 @@
 ---
 name: Epic Ticket
 about: Template for new Epics
-title: [Epic Name]
+title: '["Epic Name"]'
 labels: Epic
-assignees:
+assignees: ''
+
 ---
+
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 
 # Epic Status Overview
@@ -46,4 +48,4 @@ What measurable outcomes will be used to indicate that this epic has successfull
 ### Reference Links
 List links related to epics, pitch deck, one pager, product folder, etc.
 
-- 
+-

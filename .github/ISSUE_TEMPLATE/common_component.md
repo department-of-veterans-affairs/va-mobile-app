@@ -2,9 +2,11 @@
 name: Common Component
 about: Template for new common component for VA mobile app
 title: Component:[Insert name of component here]
-labels: component-documentation, ux
-assignees:
+labels: ux
+assignees: ''
+
 ---
+
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. It's ok if it's a draft, that's the point. This is just the first step in fleshing out documentation and the Component Committee will help. Any section that doesn't need to have info should be labeled as NA -->
 
 # Common Component Ticket

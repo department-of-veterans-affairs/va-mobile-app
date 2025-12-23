@@ -1,10 +1,13 @@
 ---
 name: QA Feature Signoff
-about: Template for creating a ticket to document QA feature signoff for each epic (beyond individual tickets)
+about: Template for creating a ticket to document QA feature signoff for each epic
+  (beyond individual tickets)
 title: QA Feature Signoff
-labels: qa, QA and Release
-assignees: 
+labels: QA and Release
+assignees: ''
+
 ---
+
 _'QA signoff' column to include initials & date (intentionally *not* using the checkbox list because that's easier to inadvertently check/uncheck)_
 _'Relevant for this epic?' column to include Y or N, and explanation if a N_
 

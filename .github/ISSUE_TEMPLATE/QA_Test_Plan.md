@@ -2,8 +2,9 @@
 name: QA Test Plan
 about: Template for creating QA test plan, cases, and data prep
 title: 'QA: Test Plan'
-labels: qa
+labels: ''
 assignees: ''
+
 ---
 
 <!-- Ticket creator to fill out: -->  
@@ -44,8 +45,4 @@ The purpose of this ticket is to document the test plan for <!-- List the desire
 5. - [ ] Decide if a feature signoff is needed. If yes, [create the ticket](https://github.com/department-of-veterans-affairs/va-mobile-app/issues/new?template=QA_feature_signoff.md) and link to the appropriate epic.
 6. - [ ] Socialize the testing plan with relevant practices (Eng, UX, Product)
     
-Notes: 
-
-
-
-
+Notes:
