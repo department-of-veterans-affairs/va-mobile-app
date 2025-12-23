@@ -520,7 +520,8 @@ context('HomeScreen', () => {
     })
 
     it('renders Copays and Debts with correct subtext when amount & count > 0', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 396.93, count: 6 },
         isLoading: false,
@@ -555,7 +556,8 @@ context('HomeScreen', () => {
     })
 
     it('hides Copays and Debts tiles when summaries are empty', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 0, count: 0 },
         isLoading: false,

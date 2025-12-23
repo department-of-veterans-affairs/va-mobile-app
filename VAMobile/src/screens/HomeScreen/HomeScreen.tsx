@@ -443,7 +443,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {featureEnabled('overpayCopay') && showCopays && (
+              {featureEnabled('copayments') && showCopays && (
                 <ActivityButton
                   title={t('copays.title')}
                   subText={t('copays.activityButton.subText', {
@@ -453,7 +453,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'copays'}
                 />
               )}
-              {featureEnabled('overpayCopay') && showDebts && (
+              {featureEnabled('overpayments') && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
