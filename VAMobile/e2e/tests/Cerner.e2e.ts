@@ -10,6 +10,7 @@ import {
   openMessages,
   openProfile,
   openSettings,
+  scrollToIDThenTap,
 } from './utils'
 
 export const CernerIdConstants = {
@@ -43,11 +44,7 @@ beforeAll(async () => {
       .whileElement(by.id(CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
     await element(by.text('Remote Config')).tap()
-    await waitFor(element(by.text('cernerTrueForDemo')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(200, 'down')
-    await element(by.text('cernerTrueForDemo')).tap()
+    await scrollToIDThenTap('cernerTrueForDemo', CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
     await waitFor(element(by.text('Apply Overrides')))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))

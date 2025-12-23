@@ -47,6 +47,7 @@ import {
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -60,6 +61,7 @@ import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Acc
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import OverrideMaintenanceWindows from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideMaintenanceWindows'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
@@ -75,7 +77,8 @@ import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'ut
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
 
@@ -90,6 +93,8 @@ export function HomeScreen({}: HomeScreenProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
   const ref = useRef(null)
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -310,6 +315,11 @@ export function HomeScreen({}: HomeScreenProps) {
   )
 
   const onFacilityLocator = () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -786,6 +796,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfigTestScreen"
         component={RemoteConfigTestScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MaintenanceWindows"
+        component={OverrideMaintenanceWindows}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>
