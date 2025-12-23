@@ -61,6 +61,7 @@ import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Acc
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import OverrideMaintenanceWindows from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideMaintenanceWindows'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
@@ -140,7 +141,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
+  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -456,7 +457,6 @@ export function HomeScreen({}: HomeScreenProps) {
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    amount: numberToUSDollars(debtsSummary.amountDue),
                     count: debtsSummary.count,
                   })}
                   deepLink={'debts'}
@@ -795,6 +795,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfigTestScreen"
         component={RemoteConfigTestScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MaintenanceWindows"
+        component={OverrideMaintenanceWindows}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>

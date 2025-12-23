@@ -10,6 +10,7 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { useClaimsAndAppeals } from 'api/claimsAndAppeals'
 import { useDisabilityRating } from 'api/disabilityRating'
 import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useServiceHistory } from 'api/militaryService'
 import { usePayments } from 'api/payments'
 import { usePrescriptions } from 'api/prescriptions'
@@ -19,7 +20,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootState } from 'store'
-import { AuthState, ErrorsState, checkForDowntimeErrors, completeSync, logInDemoMode } from 'store/slices'
+import { AuthState, completeSync, logInDemoMode } from 'store/slices'
 import { DemoState } from 'store/slices/demoSlice'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import { getUpcomingAppointmentDateRange } from 'utils/appointments'
@@ -42,7 +43,7 @@ function SyncScreen({}: SyncScreenProps) {
 
   const { loggedIn, loggingOut, syncing } = useSelector<RootState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
-  const { downtimeWindowsFetched } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { isFetched: downtimeWindowsFetched } = useMaintenanceWindows()
   const { isFetched: authorizedServicesFetched } = useAuthorizedServices()
 
   // Prefetch data for `Activity` section
@@ -66,10 +67,6 @@ function SyncScreen({}: SyncScreenProps) {
   usePayments('', 1, { enabled: !loggingOut && loggedIn && downtimeWindowsFetched })
 
   const [displayMessage, setDisplayMessage] = useState('')
-
-  useEffect(() => {
-    dispatch(checkForDowntimeErrors())
-  }, [dispatch])
 
   useEffect(() => {
     if (demoMode && !loggedIn) {
