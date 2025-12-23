@@ -5,9 +5,15 @@ import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWind
 import { AlertWithHaptics, Box, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api'
+import { ScreenIDToDowntimeFeatures, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getFeaturesInDowntime, getFeaturesInDowntimeWindow, latestDowntimeWindow, useTheme } from 'utils/hooks'
+
+/**
+ * Only show the maintenance banner on screens that have implemented their maintenance/offline modes. To show
+ * the maintenance banner on a new screen, add it's screen ID to this list.
+ */
+const MAINTENANCE_BANNER_SCREEN_WHITE_LIST = [ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID]
 
 export type MaintenanceBannerProps = {
   screenID?: ScreenIDTypes
@@ -23,6 +29,11 @@ const MaintenanceBanner: FC<MaintenanceBannerProps> = (props) => {
 
   // If we have no screen to match downtime features on, display nothing
   if (!props.screenID) {
+    return null
+  }
+
+  // If the screen is not white listed, display nothing
+  if (!MAINTENANCE_BANNER_SCREEN_WHITE_LIST.includes(props.screenID)) {
     return null
   }
 
