@@ -6,7 +6,10 @@ New functions/constants should be added when anything is created that might effe
 */
 import { expect as jestExpect } from '@jest/globals'
 import { by, device, element, expect, waitFor } from 'detox'
+import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
+
+import { todaysDate } from 'utils/dateUtils'
 
 import getEnv from '../../src/utils/env'
 
@@ -831,4 +834,36 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   await element(by.id(testIdOfDesiredUser)).tap()
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
   await loginToDemoMode()
+}
+
+// Helper function to use the date picker for past appointments in iOS
+export async function iosSelectDateInPicker(selectDate: DateTime, pickerId: string) {
+  const dateToUse = pickerId.includes('From') ? todaysDate.minus({ months: 3 }) : todaysDate
+  console.error(`Selecting date ${selectDate.toISODate()} in picker ${pickerId} `)
+  const selectDateMonth = selectDate.monthLong
+  const selectDateYear = selectDate.year.toString()
+  const selectDateDay = selectDate.day.toString() // not 0 based
+  const dateToUseMonth = dateToUse.monthLong
+  const dateToUseYear = dateToUse.year.toString()
+
+  await element(by.id(pickerId)).tap()
+  await element(by.text(`${dateToUseMonth} ${dateToUseYear}`))
+    .atIndex(0)
+    .tap()
+  await element(by.type('UIPickerView')).setColumnToValue(0, `${selectDateMonth}`)
+  await element(by.type('UIPickerView')).setColumnToValue(1, `${selectDateYear}`)
+  await element(by.text('Apply')).tap()
+  await element(by.id(pickerId)).tap()
+  await expect(element(by.text(`${selectDateMonth} ${selectDateYear}`)).atIndex(0)).toBeVisible()
+  const el = element(by.text(new RegExp(`^${selectDateDay}$`)).withAncestor(by.type('UIDatePicker')))
+  await el.atIndex(1).tap()
+}
+
+export async function iosPastApptDate({ to, from }: { to?: DateTime; from?: DateTime }) {
+  if (to) {
+    await iosSelectDateInPicker(to, 'datePickerToFieldTestId')
+  }
+  if (from) {
+    await iosSelectDateInPicker(from, 'datePickerFromFieldTestId')
+  }
 }

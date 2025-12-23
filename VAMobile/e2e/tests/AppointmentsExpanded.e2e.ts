@@ -1,9 +1,16 @@
-import { by, device, element, expect, waitFor } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
 
 import { todaysDate } from 'utils/dateUtils'
-import { overrideRemote, setOverrideRemote } from 'utils/remoteConfig'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import {
+  CommonE2eIdConstants,
+  loginToDemoMode,
+  openAppointments,
+  openHealth,
+  pastApptDate,
+  scrollToElement,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const AppointmentsExpandede2eConstants = {
   PATIENT_CANCELLATION: 'You canceled this appointment.',
@@ -451,18 +458,102 @@ const scrollToThenTap = async (text: string, pastAppointment: string) => {
   await element(by.text(text)).tap()
 }
 
-export async function checkOHAVS() {
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.CALENDAR_AVS_RANGE)
-  await element(by.text('Health')).atIndex(0).tap()
-  await openAppointments()
-  await waitFor(element(by.text('Upcoming')))
-    .toExist()
-    .withTimeout(10000)
-  await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
-  await element(by.text('Past')).tap()
-  await device.takeScreenshot('xyz')
-  it('should open appointment with OH AVS', async () => {
-    await expect(element(by.id('datePickerFromFieldTestId'))).toBeVisible()
+// Scroll to element, if not found, if enabled, go to next page and continue scrolling
+export async function scrollTo(text: string, shouldTap = false, shouldGoToNextPage = false, currScroll = 0) {
+  const maxScrolls = 7
+  try {
+    await scrollToElement(text, CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)
+    if (shouldTap) {
+      await element(by.text(text)).tap()
+    }
+    return
+  } catch (e) {
+    if (shouldGoToNextPage) {
+      if (currScroll >= maxScrolls) {
+        throw new Error(`Could not find element with text: ${text} after ${maxScrolls} scrolls`)
+      }
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      await scrollTo(text, shouldTap, true, currScroll + 1)
+    }
+    throw new Error(`ERR: ${(e as Error).message}`)
+  }
+}
+
+export async function checkHasAvs(
+  hasAvs: boolean,
+  i?: number,
+  prefixText: string = 'Review after-visit summary',
+  nonExistingId = 'NoAvsAvailable',
+) {
+  if (hasAvs) {
+    if (i !== undefined) {
+      await expect(element(by.text(`${prefixText} ${i}`))).toExist()
+    } else {
+      await expect(element(by.text(`${prefixText}`))).toExist()
+    }
+  } else {
+    await expect(element(by.id(nonExistingId))).toExist()
+  }
+}
+
+// In text, elements are 1-based
+export async function clickAvsID(n?: number, text = 'Review after-visit summary') {
+  await element(by.text(`${text}${n !== undefined ? ` ${n}` : ''}`)).tap()
+  await waitFor(element(by.text('Done')))
+    .toBeVisible()
+    .withTimeout(20000)
+    .then(async () => {
+      await sleep(4000)
+      await element(by.text('Done')).tap()
+    })
+}
+const sleep = (milliseconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+export async function returnToAppointmentsFromDetails() {
+  await waitFor(element(by.text('Appointments')))
+    .toBeVisible()
+    .withTimeout(20000)
+    .then(async () => {
+      await element(by.text('Appointments')).tap()
+    })
+}
+
+export function checkOHAVS() {
+  afterEach(async () => {
+    await returnToAppointmentsFromDetails()
+  })
+  it('should open appointment with multiple AVS and click on first', async () => {
+    await scrollTo('Jane Smith CERNER 001', true)
+    await checkHasAvs(true, 1)
+    await checkHasAvs(true, 2)
+    await clickAvsID(1)
+    // Seems to have a similar problem as webview reopening in the same test flow
+    // await clickAvsID(2)
+  })
+  it('should open appointment details with empty binary for AVS', async () => {
+    await scrollTo('Jane Smith CERNER 002', true)
+    await checkHasAvs(false)
+  })
+  it('should open appointment with invalid binary data for AVS', async () => {
+    await scrollTo('Jane Smith CERNER 003', true)
+    await checkHasAvs(false)
+  })
+  it('should open appointment with no currently supported type of AVS', async () => {
+    await scrollTo('Jane Smith CERNER 004', true)
+    await checkHasAvs(false)
+  })
+  it('should open with two valid binary data but only one supported type of AVS', async () => {
+    await scrollTo('Jane Smith CERNER 005', true)
+    await checkHasAvs(true) // no number means no suffix
+    // Seems to have a similar problem as webview reopening in the same test flow
+    // await clickAvsID(undefined, 'Review after-visit summary') // no number means no suffix
+  })
+  it('should open appointment with error alert for AVS PDF (no shown PDF even if there is data)', async () => {
+    await scrollTo('Jane Smith CERNER 006', true)
+    // AVS error case
+    await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
   })
 }
 
@@ -1191,30 +1282,36 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 }
 
-beforeAll(async () => {
-  console.error('IS RUNNING')
-  setOverrideRemote(true)
-  await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-  await loginToDemoMode()
-  await openHealth()
-  await openAppointments()
-  await waitFor(element(by.text('Upcoming')))
-    .toExist()
-    .withTimeout(10000)
+describe(':ios: Appointments Screen Expansion', () => {
+  beforeAll(async () => {
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+    await loginToDemoMode()
+    await openHealth()
+    await openAppointments()
+    await waitFor(element(by.text('Upcoming')))
+      .toExist()
+      .withTimeout(10000)
+  })
+  apppointmentVerification()
+  apppointmentVerification(true)
 })
 
-describe(':ios: Appointments Screen Expansion', () => {
-  apppointmentVerification()
-  //   apppointmentVerification(true)
-
+describe(':ios: Appointments Screen OH AVS', () => {
+  beforeAll(async () => {
+    await loginToDemoMode()
+    await openHealth()
+    await openAppointments()
+    await waitFor(element(by.text('Upcoming')))
+      .toExist()
+      .withTimeout(10000)
+    // Test Cerner 001 is 48 days in past, all are prior (But less than default 3 months)
+    const back48days = todaysDate.minus({ days: 48 })
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
+    await element(by.text('Past')).tap()
+    await pastApptDate({ to: back48days })
+    await element(by.text('Apply')).tap()
+    await sleep(1000) // Wait for the list to update
+  })
   checkOHAVS()
-    .then(() => {
-      process.exit(0)
-    })
-    .catch((error) => {
-      console.error(error)
-      process.exit(1)
-    })
 })

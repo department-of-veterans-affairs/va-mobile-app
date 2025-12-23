@@ -32,8 +32,8 @@ export type SummaryObject = {
 // Export for testing - deletes the file at filePath when the viewer is dismissed
 export const handleDismiss = (filePath: string) => {
   return () => {
-    unlinkFile(filePath).catch(() => {
-      // do nothing if we can't delete the file
+    unlinkFile(filePath).catch((e) => {
+      console.warn('Could not delete AVS file after viewing:', e)
     })
   }
 }
@@ -77,12 +77,11 @@ export const getListItemVals = (
       ]
 
       const onPress = () => {
-        createFileFromBase64(
-          summary.binary,
-          `${summary.name.split(' ').join('_')}_${summary.apptId}_${i + 1}.pdf`,
-        ).then((filePath) => {
-          FileViewer.open(filePath, { onDismiss: handleDismiss(filePath) })
-        })
+        createFileFromBase64(summary.binary, `${summary.name.split(' ').join('_')}_${summary.id}_${i + 1}.pdf`).then(
+          (filePath) => {
+            FileViewer.open(filePath, { onDismiss: handleDismiss(filePath) })
+          },
+        )
         return true
       }
 
@@ -119,7 +118,7 @@ export default function AppointmentAfterVisitSummary({ attributes }: Appointment
         {/* Space is required because otherwise Android makes a huge gap */}
       </TextView>
       {!listItems.length ? (
-        <TextView variant="MobileBody" mt={0} px={theme.dimensions.cardPadding} selectable>
+        <TextView variant="MobileBody" mt={0} px={theme.dimensions.cardPadding} selectable testID="NoAvsAvailable">
           {t('appointments.afterVisitSummary.noneAvailable') + ' '}
         </TextView>
       ) : (
