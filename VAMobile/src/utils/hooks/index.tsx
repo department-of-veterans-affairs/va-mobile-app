@@ -26,6 +26,7 @@ import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescri
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
 import { WebProtocolTypesConstants } from 'constants/common'
@@ -64,14 +65,14 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return featureInDowntime(feature, downtimeWindowsByFeature)
+  const { maintenanceWindows } = useMaintenanceWindows()
+  return featureInDowntime(feature, maintenanceWindows)
 }
 
 export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { maintenanceWindows } = useMaintenanceWindows()
   const features = ScreenIDToDowntimeFeatures[currentScreenID]
-  return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  return oneOfFeaturesInDowntime(features, maintenanceWindows)
 }
 
 export const featureInDowntime = (

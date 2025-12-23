@@ -61,6 +61,7 @@ import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Acc
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import OverrideMaintenanceWindows from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideMaintenanceWindows'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
 import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
@@ -795,6 +796,11 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfigTestScreen"
         component={RemoteConfigTestScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MaintenanceWindows"
+        component={OverrideMaintenanceWindows}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>
