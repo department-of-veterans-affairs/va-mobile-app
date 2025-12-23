@@ -521,6 +521,21 @@ export async function returnToAppointmentsFromDetails() {
 }
 
 export function checkOHAVS() {
+  beforeAll(async () => {
+    await loginToDemoMode()
+    await openHealth()
+    await openAppointments()
+    await waitFor(element(by.text('Upcoming')))
+      .toExist()
+      .withTimeout(10000)
+    // Test Cerner 001 is 48 days in past, all are prior (But less than default 3 months)
+    const back48days = todaysDate.minus({ days: 48 })
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
+    await element(by.text('Past')).tap()
+    await iosPastApptDate({ to: back48days })
+    await element(by.text('Apply')).tap()
+    await sleep(1000) // Wait for the list to update
+  })
   afterEach(async () => {
     await returnToAppointmentsFromDetails()
   })
@@ -1295,23 +1310,5 @@ describe(':ios: Appointments Screen Expansion', () => {
   })
   apppointmentVerification()
   apppointmentVerification(true)
-})
-
-describe(':ios: Appointments Screen OH AVS', () => {
-  beforeAll(async () => {
-    await loginToDemoMode()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
-    // Test Cerner 001 is 48 days in past, all are prior (But less than default 3 months)
-    const back48days = todaysDate.minus({ days: 48 })
-    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
-    await element(by.text('Past')).tap()
-    await iosPastApptDate({ to: back48days })
-    await element(by.text('Apply')).tap()
-    await sleep(1000) // Wait for the list to update
-  })
   checkOHAVS()
 })
