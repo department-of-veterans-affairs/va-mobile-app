@@ -37,6 +37,7 @@ import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModa
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
 import PrescriptionHistoryNoMatches from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoMatches'
@@ -49,7 +50,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
@@ -87,6 +89,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
+  const showOfflineSnackbar = useOfflineSnackbar()
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED
@@ -107,6 +110,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
+  const connectionStatus = useAppIsOnline()
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -416,6 +420,11 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
       ),
       onPress: (): void => {
+        if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+          showOfflineSnackbar()
+          return
+        }
+
         logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
           url: LINK_URL_MHV_VA_MEDICATIONS,
@@ -474,7 +483,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         isHidden={hideRefillRequestButton}
         testID="refillRequestTestID"
         label={t('prescription.history.startRefillRequest')}
-        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+        onPress={() => {
+          if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+            showOfflineSnackbar()
+            return
+          }
+          navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })
+        }}
       />
     )
   }

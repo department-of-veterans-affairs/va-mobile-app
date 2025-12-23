@@ -16,7 +16,11 @@ function NoLabsAndTestsRecords() {
         variant="info"
         header={t('labsAndTests.noRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('labsAndTests.noRecords.alert.title'))}
-        description={featureEnabled('mrHide36HrHoldTimes') ? t('labsAndTests.noRecords.zeroHoldTimes.text.1') : t('labsAndTests.noRecords.alert.text.1')}>
+        description={
+          featureEnabled('mrHide36HrHoldTimes')
+            ? t('labsAndTests.noRecords.zeroHoldTimes.text.1')
+            : t('labsAndTests.noRecords.alert.text.1')
+        }>
         <TextView
           paragraphSpacing={true}
           variant="MobileBody"

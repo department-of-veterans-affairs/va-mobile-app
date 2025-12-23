@@ -15,6 +15,7 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import NoMatchInRecords from 'screens/HealthScreen/Appointments/NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointments'
 import PastAppointmentsOld from 'screens/HealthScreen/Appointments/PastAppointments/PastAppointmentsOld'
@@ -25,7 +26,8 @@ import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'utils/appointments'
 import getEnv from 'utils/env'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
 import { vaGovWebviewTitle } from 'utils/webview'
@@ -38,6 +40,8 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const showOfflineSnackbar = useOfflineSnackbar()
+
   const controlLabels = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const controlIDs = ['apptsUpcomingID', 'apptsPastID']
@@ -51,6 +55,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
   )
   const [page, setPage] = useState(1)
   const screenReaderEnabled = useIsScreenReaderEnabled()
+  const connectionStatus = useAppIsOnline()
 
   const {
     data: userAuthorizedServices,
@@ -64,9 +69,11 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
     error: appointmentsHasError,
     isFetching: loadingAppointments,
     refetch: refetchAppts,
+    lastUpdatedDate,
   } = useAppointments(dateRange.startDate, dateRange.endDate, timeFrame, {
     enabled: screenContentAllowed('WG_Appointments'),
   })
+
   // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,
@@ -133,6 +140,11 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
         testID="startSchedulingTestID"
         label={t('appointments.startScheduling')}
         onPress={() => {
+          if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+            showOfflineSnackbar()
+            return
+          }
+
           logAnalyticsEvent(Events.vama_webview('StartScheduling: ' + LINK_URL_SCHEDULE_APPOINTMENTS))
           navigateTo('Webview', {
             url: LINK_URL_SCHEDULE_APPOINTMENTS,
@@ -154,7 +166,8 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
       testID="appointmentsTestID"
       footerContent={screenReaderEnabled || !featureEnabled('startScheduling') ? undefined : getStartSchedulingButton()}
       backLabelTestID="appointmentsBackTestID"
-      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}>
+      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+      dataUpdatedAt={lastUpdatedDate}>
       {getUserAuthorizedServicesError && !fetchingAuthServices ? (
         <ErrorComponent
           screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
@@ -182,7 +195,7 @@ function Appointments({ navigation, route }: AppointmentsScreenProps) {
             />
           </Box>
           {serviceErrorAlert()}
-          <Box mb={theme.dimensions.floatingButtonOffset}>
+          <Box>
             {selectedTab === 1 &&
               (featureEnabled('datePickerUpdate') ? (
                 <PastAppointments

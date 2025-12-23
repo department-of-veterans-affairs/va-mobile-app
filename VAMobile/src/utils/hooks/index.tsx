@@ -20,22 +20,30 @@ import { CommonActions, EventArg, useNavigation } from '@react-navigation/native
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { StackNavigationProp } from '@react-navigation/stack'
 
-import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
+import { useIsScreenReaderEnabled, useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import { ActionSheetOptions } from '@expo/react-native-action-sheet/lib/typescript/types'
 import { DateTime } from 'luxon'
 import { useTheme as styledComponentsUseTheme } from 'styled-components'
 import _ from 'underscore'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { SecureMessagingSignatureDataAttributes } from 'api/types'
 import { Events } from 'constants/analytics'
 import { MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS, WebProtocolTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { PREPOPULATE_SIGNATURE } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import { AppDispatch, RootState } from 'store'
 import { DowntimeFeatureType, ScreenIDToDowntimeFeatures, ScreenIDTypes } from 'store/api/types'
-import { DowntimeWindow, DowntimeWindowsByFeatureType, ErrorsState } from 'store/slices'
+import {
+  DowntimeWindow,
+  DowntimeWindowsByFeatureType,
+  ErrorsState,
+  OfflineState,
+  queueOfflineEvent,
+} from 'store/slices'
 import { AccessibilityState, updateAccessibilityFocus } from 'store/slices/accessibilitySlice'
 import { VATheme } from 'styles/theme'
 import { getTheme } from 'styles/themes/standardTheme'
@@ -43,6 +51,7 @@ import { setAccessibilityFocus } from 'utils/accessibility'
 import { EventParams, logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { capitalizeFirstLetter, stringToTitleCase } from 'utils/formattingUtils'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { isAndroid, isIOS, isIpad } from 'utils/platform'
 import { WaygateToggleType, waygateNativeAlert } from 'utils/waygateConfig'
 
@@ -63,14 +72,14 @@ export const useError = (currentScreenID: ScreenIDTypes): boolean => {
 }
 
 export const useDowntime = (feature: DowntimeFeatureType): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  return featureInDowntime(feature, downtimeWindowsByFeature)
+  const { maintenanceWindows } = useMaintenanceWindows()
+  return featureInDowntime(feature, maintenanceWindows)
 }
 
 export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean => {
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { maintenanceWindows } = useMaintenanceWindows()
   const features = ScreenIDToDowntimeFeatures[currentScreenID]
-  return oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  return oneOfFeaturesInDowntime(features, maintenanceWindows)
 }
 
 export const featureInDowntime = (
@@ -245,6 +254,8 @@ export function useAccessibilityFocus<T>(): [MutableRefObject<T>, () => void] {
  */
 export function useExternalLink(): (url: string, eventParams?: EventParams) => void {
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   return (url: string, eventParams?: EventParams) => {
     logAnalyticsEvent(Events.vama_link_click({ url, ...eventParams }))
@@ -255,6 +266,11 @@ export function useExternalLink(): (url: string, eventParams?: EventParams) => v
     }
 
     if (url.startsWith(WebProtocolTypesConstants.http)) {
+      if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+        showOfflineSnackbar()
+        return
+      }
+
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('leavingApp.cancel'),
@@ -551,8 +567,17 @@ export function useOpenAppStore(): () => void {
   const launchExternalLink = useExternalLink()
   const { APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
   const appStoreLink = isIOS() ? APPLE_STORE_LINK : GOOGLE_PLAY_LINK
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
-  return () => launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  return () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
+    launchExternalLink(appStoreLink, { appStore: 'app_store' })
+  }
 }
 
 export type ActionSheetProps = ActionSheetOptions & { destructiveButtonIndex?: number }
@@ -594,5 +619,29 @@ export function useShowActionSheet(): (
     }
 
     showActionSheetWithOptions(sheetOptions, callback)
+  }
+}
+
+/**
+ * Returns true if the user is currently focusing on a modal
+ */
+export function useIsWithinModal(): boolean {
+  const { viewingModal } = useSelector<RootState, OfflineState>((state) => state.offline)
+  return !!viewingModal
+}
+
+export const useOfflineSnackbar = () => {
+  const dispatch = useAppDispatch()
+  const { t } = useTranslation()
+  const snackbar = useSnackbar()
+  const inModal = useIsWithinModal()
+
+  return () => {
+    if (inModal) {
+      Alert.alert(t('offline.alert.title'), t('offline.alert.body'), [{ text: t('dismiss'), style: 'default' }])
+    } else {
+      snackbar.show(t('offline.toast.checkConnection'), { isError: true })
+    }
+    dispatch(queueOfflineEvent(Events.vama_offline_action()))
   }
 }

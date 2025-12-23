@@ -29,6 +29,7 @@ import {
   getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -37,12 +38,14 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const { appointment, vetextID } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const registerReviewEvent = useReviewEvent(true)
+  useOfflineEventQueue(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
     isFetching: loadingAppointments,
     error: getApptError,
     refetch: refetchAppointments,
+    lastUpdatedDate,
   } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
     enabled: !appointment,
   })
@@ -110,7 +113,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
       title={t('details')}
       testID="UpcomingApptDetailsTestID"
       backLabelTestID="apptDetailsBackID"
-      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}>
+      screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID}
+      dataUpdatedAt={lastUpdatedDate}>
       {isLoading ? (
         <LoadingComponent
           text={

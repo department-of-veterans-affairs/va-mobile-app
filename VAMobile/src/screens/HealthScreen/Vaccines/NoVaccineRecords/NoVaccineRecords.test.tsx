@@ -1,8 +1,8 @@
 import React from 'react'
 import { Linking } from 'react-native'
-import { t } from 'i18next'
 
 import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
 import NoVaccineRecords from 'screens/HealthScreen/Vaccines/NoVaccineRecords/NoVaccineRecords'
 import { context, render, when } from 'testUtils'
