@@ -2,17 +2,17 @@ import React from 'react'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { when } from 'jest-when'
-import { DateTime } from 'luxon'
 
 import { appointmentsKeys } from 'api/appointments'
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { prescriptionKeys } from 'api/prescriptions'
 import { secureMessagingKeys } from 'api/secureMessaging'
 import { DEFAULT_UPCOMING_DAYS_LIMIT, TimeFrameTypeConstants } from 'constants/appointments'
 import { HealthScreen } from 'screens/HealthScreen/HealthScreen'
-import { get } from 'store/api'
-import { ErrorsState } from 'store/slices'
+import { DowntimeFeatureType, get } from 'store/api'
 import { RenderParams, context, mockNavProps, render } from 'testUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 import { getAppointmentsPayload, getFoldersPayload, getPrescriptionsPayload } from 'utils/tests/personalization'
 
 const mockNavigationSpy = jest.fn()
@@ -26,18 +26,42 @@ jest.mock('utils/hooks', () => {
   }
 })
 
+jest.mock('api/queryClient', () => {
+  const original = jest.requireActual('@tanstack/react-query')
+
+  return {
+    useQuery: original.useQuery,
+  }
+})
+
+jest.mock('utils/hooks/offline', () => {
+  const original = jest.requireActual('utils/hooks/offline')
+
+  return {
+    ...original,
+    useOfflineEventQueue: () => jest.fn(),
+  }
+})
+
 jest.mock('utils/remoteConfig', () => ({
   featureEnabled: jest.fn(),
 }))
+
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
+  }
+})
 
 context('HealthScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  const initializeTestInstance = (options?: RenderParams) => {
+  const initializeTestInstance = (options?: RenderParams, maintenanceWindows?: Array<DowntimeFeatureType>) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-
+    useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(maintenanceWindows || []))
     render(<HealthScreen {...props} />, { ...options })
   }
 
@@ -244,18 +268,7 @@ context('HealthScreen', () => {
       .calledWith('/v0/health/rx/prescriptions', expect.anything())
       .mockResolvedValue(getPrescriptionsPayload(3))
 
-    initializeTestInstance({
-      preloadedState: {
-        errors: {
-          downtimeWindowsByFeature: {
-            rx_refill: {
-              startTime: DateTime.now(),
-              endTime: DateTime.now().plus({ minutes: 1 }),
-            },
-          },
-        } as ErrorsState,
-      },
-    })
+    initializeTestInstance(undefined, ['rx_refill'])
     await waitFor(() => expect(screen.queryByText('Loading mobile app activity...')).toBeFalsy())
     await waitFor(() =>
       expect(

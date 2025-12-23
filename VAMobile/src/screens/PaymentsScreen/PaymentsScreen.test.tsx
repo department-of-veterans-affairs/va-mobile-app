@@ -122,7 +122,7 @@ context('PaymentsScreen', () => {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
-      const debtsSub = t('debts.activityButton.subText', {
+      const debtsSub = t('payments.overpaymentsTile.subText', {
         amount: numberToUSDollars(347.5),
         count: 2,
       })
