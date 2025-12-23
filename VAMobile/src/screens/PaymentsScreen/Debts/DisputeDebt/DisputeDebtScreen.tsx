@@ -23,7 +23,7 @@ function DisputeDebtScreen({ navigation }: DisputeDebtScreenProps) {
   const { contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'DebtDetails' ? t('debts.overpayment') : t('debts')
+  const backLabel = prevScreen === 'DebtDetails' ? t('debts.details.title') : t('debts.details.backButton.title')
 
   return (
     <FeatureLandingTemplate

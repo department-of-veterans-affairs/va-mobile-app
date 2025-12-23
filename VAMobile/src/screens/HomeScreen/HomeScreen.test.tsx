@@ -527,7 +527,7 @@ context('HomeScreen', () => {
         error: undefined,
       })
       ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { amountDue: 347.5, count: 2 },
+        summary: { count: 2 },
         isLoading: false,
         error: undefined,
       })
@@ -544,7 +544,6 @@ context('HomeScreen', () => {
         count: 6,
       })
       const debtsSub = t('debts.activityButton.subText', {
-        amount: numberToUSDollars(347.5),
         count: 2,
       })
 
