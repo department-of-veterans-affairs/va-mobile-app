@@ -186,34 +186,34 @@ jobs:
   #              -H 'Content-type: application/json' \
   #              -d @- \
   #              https://slack.com/api/chat.postMessage
-      approval:
-        name: Run release approval
-        runs-on: ubuntu-latest
-        needs: release_ticket
-        environment:
-          name: release
-        steps:
-          - name: Generate token
-            id: generate_token
-            uses: actions/create-github-app-token@v1
-            with:
-              app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-              private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-          - name: "Checkout repo"
-            uses: actions/checkout@v3
-            with:
-              token: ${{ steps.generate_token.outputs.token }}
-          - name: get_approver
-            id: approver-id
-            run: |
-              APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login')
-              APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
-              echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
-              echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
-              gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "approving version ${{ needs.release_ticket.outputs.versionNumber }} 
-              Approved by: @$APPROVER_NAME"
-            env:
-              GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-        run_approval_workflow:
-          uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/run_approval.yml@chore.12210.slash.command.update
-          secrets: inherit
+  approval:
+    name: Run release approval
+    runs-on: ubuntu-latest
+    needs: release_ticket
+    environment:
+      name: release
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: "Checkout repo"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: get_approver
+        id: approver-id
+        run: |
+          APPROVER=$( gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/approvals | jq '.[] | select(.state == "approved") | select(.user.login | contains("[bot]") | not) | .user.login')
+          APPROVER_NAME=$(echo "$APPROVER" | sed 's/"//g')
+          echo "approver=${APPROVER}" >> "$GITHUB_OUTPUT"
+          echo "approver_name=${APPROVER_NAME}" >> "$GITHUB_OUTPUT"
+          gh issue comment ${{ needs.release_ticket.outputs.ticketNumber }} -b "approving version ${{ needs.release_ticket.outputs.versionNumber }} 
+          Approved by: @$APPROVER_NAME"
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+  run_approval_workflow:
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/run_approval.yml@chore.12210.slash.command.update
+    secrets: inherit
