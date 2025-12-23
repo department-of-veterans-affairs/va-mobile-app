@@ -686,7 +686,7 @@
   "copays.requestHelp.current.item1.desc": "This means you offer a lesser one-time lump sum amount as full payment of the debt. If we approve your request, you’ll have to pay the one-time amount within 30 days.",
   "copays.requestHelp.current.item2.term": "Waiver. ",
   "copays.requestHelp.current.item2.desc": "This means you ask us to forgive (or “waive”) part or all of the debt. If we approve your request, you won’t have to pay the amount waived.",
-  "copays.requestHelp.current.link": "Request help with your debt",
+  "copays.requestHelp.current.link": "Request help with your copays",
   "copays.requestHelp.future.header": "Request help for future health care",
   "copays.requestHelp.future.copy": "You may be eligible for a hardship determination, which would qualify you for a copay exemption. This means we’ll assign you to a higher priority group, and you won’t have to pay any VA copays for the rest of the calendar year.",
   "copays.requestHelp.future.link": "Learn more about requesting a hardship determination",
