@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { CallHelpCenter, CustomError, DowntimeError, ErrorAlert, NetworkConnectionError } from 'components'
 import { Events } from 'constants/analytics'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -26,14 +27,11 @@ export type ErrorComponentProps = {
 
 /**Main error handling component. This component will show the proper screen according to the type of error.*/
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const {
-    errorsByScreenID,
-    downtimeWindowsByFeature,
-    tryAgain: storeTryAgain,
-  } = useSelector<RootState, ErrorsState>((state) => state.errors)
+  const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<RootState, ErrorsState>((state) => state.errors)
   const { t } = useTranslation(NAMESPACE.COMMON)
+  const { maintenanceWindows } = useMaintenanceWindows()
   const features = ScreenIDToDowntimeFeatures[props.screenID]
-  const isInDowntime = oneOfFeaturesInDowntime(features, downtimeWindowsByFeature)
+  const isInDowntime = oneOfFeaturesInDowntime(features, maintenanceWindows)
   const [logDowntimeAnalytics, setLogDowntimeAnalytics] = useState(true)
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, screenID, error }) => {
@@ -43,7 +41,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     if (isInDowntime) {
       if (logDowntimeAnalytics) {
         features.forEach((feature) => {
-          const downtimeWindow = downtimeWindowsByFeature[feature]
+          const downtimeWindow = maintenanceWindows[feature]
           if (downtimeWindow)
             logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
         })
