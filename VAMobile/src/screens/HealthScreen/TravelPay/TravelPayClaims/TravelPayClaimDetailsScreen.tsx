@@ -154,7 +154,8 @@ function TravelPayClaimDetailsScreen({ navigation, route }: TravelPayClaimDetail
       backLabelTestID="travelClaimDetailBackButtonID"
       title={t('travelPay.claimDetails.title')}
       testID="TravelPayClaimDetailsScreen"
-      headerButton={headerButton}>
+      headerButton={headerButton}
+      screenID={ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID}>
       {loadingClaimDetails || downloading ? (
         <LoadingComponent
           text={t(

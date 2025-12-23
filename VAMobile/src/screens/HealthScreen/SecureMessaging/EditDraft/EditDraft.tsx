@@ -785,7 +785,8 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       showCrisisLineButton={!(isLoading || hasError)}
       leftButtonTestID="editDraftCancelTestID"
       testID="editDraftTestID"
-      rightButtonTestID="editDraftMoreID">
+      rightButtonTestID="editDraftMoreID"
+      screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID}>
       {isLoading ? (
         <LoadingComponent text={loadingText} />
       ) : hasError ? (

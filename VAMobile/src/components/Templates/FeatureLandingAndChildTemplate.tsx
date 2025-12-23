@@ -11,6 +11,7 @@ import {
   HeaderBannerProps,
   HeaderButton,
   LastUpdatedTimestamp,
+  MaintenanceBanner,
   OfflineBanner,
   TextView,
   TextViewProps,
@@ -18,6 +19,7 @@ import {
 } from 'components'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypes } from 'store/api'
 import { useTheme } from 'utils/hooks'
 
 /* To use these templates:
@@ -48,6 +50,8 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
+  /** Required to show the maintenance banner **/
+  screenID?: ScreenIDTypes
   /** Optional timestamp that the data on this screen last updated */
   dataUpdatedAt?: number
 }
@@ -66,6 +70,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  screenID,
   dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
@@ -147,6 +152,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
       />
       <HeaderBanner {...headerProps} />
       <OfflineBanner />
+      <MaintenanceBanner screenID={screenID} />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}

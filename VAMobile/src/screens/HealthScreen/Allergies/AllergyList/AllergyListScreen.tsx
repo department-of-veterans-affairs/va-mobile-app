@@ -155,7 +155,8 @@ function AllergyListScreen({ navigation }: AllergyListScreenProps) {
       backLabelOnPress={navigation.goBack}
       title="Allergies"
       titleA11y={a11yLabelVA(t('vaAllergies'))}
-      scrollViewProps={scrollViewProps}>
+      scrollViewProps={scrollViewProps}
+      screenID={ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID}>
       {loading || loadingUserAuthorizedServices ? (
         <LoadingComponent text={t('allergies.loading')} />
       ) : allergyError || allergiesInDowntime ? (

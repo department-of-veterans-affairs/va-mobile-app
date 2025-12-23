@@ -127,7 +127,8 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
       backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
-      testID="paymentHistoryTestID">
+      testID="paymentHistoryTestID"
+      screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}>
       {loading ? (
         <LoadingComponent text={t('payments.loading')} />
       ) : hasErrorOrDowntime ? (
