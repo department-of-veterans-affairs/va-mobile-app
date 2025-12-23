@@ -1,10 +1,8 @@
 import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Box, BoxProps, DefaultList, DefaultListItemObj, TextView, TextViewProps, VAScrollView } from 'components'
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type HeaderButtonProps = {
@@ -26,7 +24,6 @@ type VAModalListProps = {
 /**A common component to display a picker for the device with an optional label*/
 const VAModalList: FC<VAModalListProps> = ({ showModal, setShowModal, listItems, title, leftButton, rightButton }) => {
   const theme = useTheme()
-  const { t } = useTranslation()
   const insets = useSafeAreaInsets()
 
   const actionsBarBoxProps: BoxProps = {
@@ -42,13 +39,10 @@ const VAModalList: FC<VAModalListProps> = ({ showModal, setShowModal, listItems,
   }
 
   const topPadding = insets.top + 60
-  const cancelLabel = t('cancel')
 
-  const cancelButtonProps: PressableProps = {
+  const actionButtonProps: PressableProps = {
     accessible: true,
     accessibilityRole: 'button',
-    accessibilityLabel: cancelLabel,
-    ...a11yHintProp(t('cancel.picker.a11yHint')),
   }
 
   const commonButtonProps: TextViewProps = {
@@ -75,7 +69,7 @@ const VAModalList: FC<VAModalListProps> = ({ showModal, setShowModal, listItems,
             <Box {...actionsBarBoxProps}>
               <Box flex={1} alignItems="flex-start">
                 {leftButton && (
-                  <Pressable onPress={leftButton.onPress} {...cancelButtonProps}>
+                  <Pressable onPress={leftButton.onPress} {...actionButtonProps}>
                     <TextView {...commonButtonProps}>{leftButton.text}</TextView>
                   </Pressable>
                 )}
@@ -87,7 +81,7 @@ const VAModalList: FC<VAModalListProps> = ({ showModal, setShowModal, listItems,
               </Box>
               <Box flex={1} alignItems={'flex-end'}>
                 {rightButton && (
-                  <Pressable onPress={rightButton.onPress} {...cancelButtonProps}>
+                  <Pressable onPress={rightButton.onPress} {...actionButtonProps}>
                     <TextView {...commonButtonProps}>{rightButton.text}</TextView>
                   </Pressable>
                 )}
