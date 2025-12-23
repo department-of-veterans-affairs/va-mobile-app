@@ -3,12 +3,13 @@ import React from 'react'
 import { UseMutateFunction } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
-import { Box, TextArea } from 'components'
 import {
   AppointmentCalendarButton,
   AppointmentCancelReschedule,
   AppointmentDateAndTime,
+  AppointmentDetailsBox,
   AppointmentDetailsModality,
+  AppointmentDetailsTextArea,
   AppointmentLocation,
   AppointmentMedicationWording,
   AppointmentPersonalContactInfo,
@@ -49,9 +50,11 @@ function CommunityCareAppointment({
   ].includes(subType)
 
   return (
-    <Box>
-      <TextArea>
+    <AppointmentDetailsBox>
+      <AppointmentDetailsTextArea position="first">
         <AppointmentDetailsModality attributes={attributes} subType={subType} type={type} />
+      </AppointmentDetailsTextArea>
+      <AppointmentDetailsTextArea position="last">
         <AppointmentDateAndTime attributes={attributes} subType={subType} />
         {featureEnabled('useOldLinkComponent') ? (
           <DEPRECATED_AppointmentCalendarButton
@@ -87,8 +90,8 @@ function CommunityCareAppointment({
           goBack={goBack}
           cancelAppointment={cancelAppointment}
         />
-      </TextArea>
-    </Box>
+      </AppointmentDetailsTextArea>
+    </AppointmentDetailsBox>
   )
 }
 

@@ -155,6 +155,18 @@ export type AppointmentProposedTimesItem = {
 
 export type AppointmentProposedTimes = Array<AppointmentProposedTimesItem>
 
+export type Base64String = string
+
+export type SummaryObject = {
+  apptId: string
+  id: string
+  name: string
+  loincCodes: Array<string>
+  noteType: string
+  contentType: string
+  binary: Base64String
+}
+
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
@@ -188,6 +200,8 @@ export type AppointmentAttributes = {
   travelPayClaim?: AppointmentTravelPayClaim
   showScheduleLink?: boolean
   isCerner?: boolean
+  avsPdf?: Array<SummaryObject>
+  avsError?: string
 }
 
 export type AppointmentData = {
