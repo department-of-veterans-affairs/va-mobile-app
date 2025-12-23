@@ -8,6 +8,16 @@ export const ClaimTypeConstants: {
 
 export type ClaimType = 'ACTIVE' | 'CLOSED'
 
+export type ClaimStatusType = 'NO_LONGER_REQUIRED' | 'SUBMITTED_AWAITING_REVIEW'
+
+export const ClaimStatusConstants: {
+  NO_LONGER_REQUIRED: ClaimStatusType
+  SUBMITTED_AWAITING_REVIEW: ClaimStatusType
+} = {
+  NO_LONGER_REQUIRED: 'NO_LONGER_REQUIRED',
+  SUBMITTED_AWAITING_REVIEW: 'SUBMITTED_AWAITING_REVIEW',
+}
+
 // These are claim type codes for Disability Compensation claims. Claim type codes listed here
 // are used in isDisabilityCompensationClaim() to show the 8 claim phase steps instead of 5.
 export const DISABILITY_COMPENSATION_CLAIM_TYPE_CODES = [
