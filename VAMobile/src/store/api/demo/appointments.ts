@@ -1,7 +1,8 @@
 import { DateTime, Interval } from 'luxon'
 
-import { AppointmentData, AppointmentsGetData } from 'api/types'
+import { AppointmentData, AppointmentsGetData, AvsBinariesGetData, SummaryBinaryGetData } from 'api/types'
 import { Params } from 'store/api/api'
+import { data as avsBinariesMockData } from 'store/api/demo/mocks/default/avsBinaries'
 import { DemoStore } from 'store/api/demo/store'
 
 /**
@@ -14,10 +15,7 @@ export type AppointmentsDemoStore = {
   }
 }
 
-/**
- * Type to define the mock returns to keep type safety
- */
-export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData
+export type AppointmentDemoReturnTypes = undefined | AppointmentsGetData | AvsBinariesGetData
 
 /**
  * Function used to get user appointments
@@ -46,5 +44,41 @@ export const getAppointments = (store: DemoStore, params: Params): AppointmentsG
     }
   } else {
     return undefined
+  }
+}
+
+/**
+ * Function used to get AVS binary data for an appointment from demo store metadata
+ * @param params - GET params, expects optional docIds comma-separated list
+ * @param endpoint - API endpoint containing appointment id in /v0/appointments/avs_binaries/:id
+ */
+export const getAvsBinaries = (_store: DemoStore, params: Params, endpoint: string): AvsBinariesGetData | undefined => {
+  const appointmentId = endpoint.match(/^\/v0\/appointments\/avs_binaries\/([^/]+)\/?$/)?.[1]
+  if (!appointmentId) {
+    return undefined
+  }
+
+  const docIdsParam = params.docIds
+  const docIds = typeof docIdsParam === 'string' && docIdsParam.length > 0 ? docIdsParam.split(',') : undefined
+
+  const binariesForAppointment = avsBinariesMockData[appointmentId as keyof typeof avsBinariesMockData]
+  if (!binariesForAppointment?.length) {
+    return { data: [] }
+  }
+
+  const filteredByDocIds = docIds?.length
+    ? binariesForAppointment.filter((summary) => docIds.includes(summary.docId))
+    : binariesForAppointment
+
+  return {
+    data: filteredByDocIds.map((summary: SummaryBinaryGetData) => ({
+      id: summary.docId,
+      type: 'avs_binary',
+      attributes: {
+        docId: summary.docId,
+        binary: summary.binary ?? null,
+        error: summary.error ?? null,
+      },
+    })),
   }
 }

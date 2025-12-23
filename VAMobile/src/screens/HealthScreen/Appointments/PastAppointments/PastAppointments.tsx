@@ -4,7 +4,9 @@ import { ScrollView } from 'react-native'
 
 import { DateTime } from 'luxon'
 
+import { prefetchAvsBinaries } from 'api/appointments/getAvsBinaries'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
+import queryClient from 'api/queryClient'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
@@ -24,7 +26,7 @@ import {
   getPastTimeFrame,
 } from 'utils/appointments'
 import { getPickerOptions } from 'utils/dateUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -55,6 +57,7 @@ function PastAppointments({
 }: PastAppointmentsProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const dispatch = useAppDispatch()
   const navigateTo = useRouteNavigation()
   useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
   const [page, setPage] = useState(1)
@@ -62,6 +65,7 @@ function PastAppointments({
   const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()
 
   const useOldDatePicker = featureEnabled('useOldDatePicker')
+  const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
   const datePickerRange = getDatePickerRange(dateRange)
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
@@ -186,8 +190,20 @@ function PastAppointments({
       />
     )
   }
-
   const onPastAppointmentPress = (appointment: AppointmentData): void => {
+    const { attributes } = appointment || ({} as AppointmentData)
+    const avsMetadata = attributes?.avsPdf
+    const shouldPrefetchAvs = !!avsMetadata?.length && !!attributes?.isCerner && !attributes?.avsError && isAvsEnabled
+
+    if (shouldPrefetchAvs) {
+      const hasMissingBinary = avsMetadata.some((summary) => !summary.binary)
+      if (hasMissingBinary) {
+        prefetchAvsBinaries(queryClient, dispatch, avsMetadata).catch(() => {
+          // Ignore prefetch errors — detail page will handle loading state.
+        })
+      }
+    }
+
     navigateTo('PastAppointmentDetails', { appointment })
   }
 

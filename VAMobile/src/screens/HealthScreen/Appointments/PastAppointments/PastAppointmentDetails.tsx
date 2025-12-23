@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { useAppointments } from 'api/appointments'
+import { useAvsBinaries } from 'api/appointments/getAvsBinaries'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
-import { FeatureLandingTemplate } from 'components'
+import { FeatureLandingTemplate, LoadingComponent } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,6 +34,7 @@ import {
 import { useDowntime } from 'utils/hooks'
 import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
@@ -51,6 +53,27 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
     enabled: !appointment,
   })
   const travelPayEnabled = !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
+  const isAvsEnabled = featureEnabled('vaOnlineSchedulingAddOhAvs')
+  const avsMetadataToFetch =
+    attributes?.isCerner && !attributes?.avsError && isAvsEnabled ? attributes?.avsPdf : undefined
+  const { isFetching: avsLoading, data: avsBinariesData } = useAvsBinaries(avsMetadataToFetch)
+
+  // Merge fetched binary data back into avsPdf so AppointmentAfterVisitSummary can render the PDFs
+  const mergedAttributes = useMemo(() => {
+    if (!avsBinariesData?.data?.length || !attributes?.avsPdf) {
+      return attributes
+    }
+    const binaryByDocId = new Map(avsBinariesData.data.map(({ attributes: a }) => [a.docId, a]))
+    return {
+      ...attributes,
+      avsPdf: attributes.avsPdf.map((summary) => {
+        const fetched = binaryByDocId.get(summary.id)
+        return fetched
+          ? { ...summary, binary: fetched.binary ?? summary.binary, error: fetched.error ?? summary.error }
+          : summary
+      }),
+    }
+  }, [attributes, avsBinariesData])
 
   useEffect(() => {
     if (attributes) {
@@ -93,65 +116,73 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       dataUpdatedAt={lastUpdatedDate}>
-      {travelPayEnabled && <AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey={route.key} />}
-      {isPhoneAppointment ? (
-        <PhoneAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isInPersonVAAppointment ? (
-        <InPersonVAAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoVAAppointment ? (
-        <VideoVAAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoGFEAppointment ? (
-        <VideoGFEAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoAtlasAppointment ? (
-        <VideoAtlasAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isClaimExamAppointment ? (
-        <ClaimExamAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isCommunityCareAppointment ? (
-        <CommunityCareAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
-      ) : isVideoHomeAppointment ? (
-        <VideoHomeAppointment
-          appointmentID={appointment.id}
-          attributes={attributes}
-          subType={subType}
-          goBack={navigation.goBack}
-        />
+      {avsLoading ? (
+        <LoadingComponent text={t('appointmentDetails.loading')} />
       ) : (
-        <></>
+        <>
+          {travelPayEnabled && (
+            <AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey={route.key} />
+          )}
+          {isPhoneAppointment ? (
+            <PhoneAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isInPersonVAAppointment ? (
+            <InPersonVAAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isVideoVAAppointment ? (
+            <VideoVAAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isVideoGFEAppointment ? (
+            <VideoGFEAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isVideoAtlasAppointment ? (
+            <VideoAtlasAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isClaimExamAppointment ? (
+            <ClaimExamAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isCommunityCareAppointment ? (
+            <CommunityCareAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : isVideoHomeAppointment ? (
+            <VideoHomeAppointment
+              appointmentID={appointment.id}
+              attributes={mergedAttributes}
+              subType={subType}
+              goBack={navigation.goBack}
+            />
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </FeatureLandingTemplate>
   )

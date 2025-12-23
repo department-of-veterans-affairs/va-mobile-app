@@ -41,6 +41,7 @@ export type FeatureToggleType =
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
   | 'useOldDatePicker'
+  | 'vaOnlineSchedulingAddOhAvs'
   | 'veteranStatusCardUpdate'
 
 type FeatureToggleValues = {
@@ -70,6 +71,7 @@ type FeatureToggleValues = {
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
   useOldDatePicker: boolean
+  vaOnlineSchedulingAddOhAvs: boolean
   veteranStatusCardUpdate: boolean
 }
 
@@ -100,6 +102,7 @@ export const defaults: FeatureToggleValues = {
   remoteConfigRefreshTest: false,
   offlineMode: false,
   useOldDatePicker: false,
+  vaOnlineSchedulingAddOhAvs: false,
   veteranStatusCardUpdate: false,
 }
 export const FeatureToggleDescriptions: Record<string, string> = {
