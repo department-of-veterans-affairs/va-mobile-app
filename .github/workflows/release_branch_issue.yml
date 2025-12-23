@@ -5,7 +5,7 @@ on:
   create:
 jobs:
   release_ticket:
-    if: ${{ contains(github.ref, 'refs/heads/release/') }}
+    # if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     outputs:
       ticketNumber: ${{steps.create_issue.outputs.number}}
