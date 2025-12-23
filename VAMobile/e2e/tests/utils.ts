@@ -839,7 +839,6 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
 // Helper function to use the date picker for past appointments in iOS
 export async function iosSelectDateInPicker(selectDate: DateTime, pickerId: string) {
   const dateToUse = pickerId.includes('From') ? todaysDate.minus({ months: 3 }) : todaysDate
-  console.error(`Selecting date ${selectDate.toISODate()} in picker ${pickerId} `)
   const selectDateMonth = selectDate.monthLong
   const selectDateYear = selectDate.year.toString()
   const selectDateDay = selectDate.day.toString() // not 0 based
