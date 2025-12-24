@@ -2,11 +2,6 @@ name: '[Release] Run approval Workflow'
 
 on:
   workflow_call:  
-    # inputs:
-    #   version:
-    #     description: 'Version Number (eg. v1.1.0)'
-    #     type: string
-    #     required: true
 
 jobs:
   indicate_start:
@@ -31,45 +26,36 @@ jobs:
           repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
           comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
           reaction-type: rocket
-  # run_prs:
-  #   needs: indicate_start
-  #   uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
-  #   with:
-  #     version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
-  #   secrets: inherit
-  # comment_complete:
-  #   needs: [indicate_start, run_prs]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Generate token
-  #       id: generate_token
-  #       uses: actions/create-github-app-token@v1
-  #       with:
-  #         app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-  #         private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-  #     - name: 'Checkout repo'
-  #       uses: actions/checkout@v3
-  #       with:
-  #         token: ${{ steps.generate_token.outputs.token }}
-  #     - name: 'Set up GH CLI secret'
-  #       run: echo "${{ steps.generate_token.outputs.token }}" >> token.txt
-  #     - name: 'Log into GH CLI'
-  #       run: gh auth login --with-token < token.txt
-  #     - name: 'Comment on original issue with PR info'
-  #       run: |
-  #         gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
-  #         [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
-  #         Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
-  #     - name: 'Close original issue'
-  #       run: |
-  #         gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
-  #         gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
-  # start_slack_thread:
-  #   name: Start Slack thread
-  #   if: ${{ failure() }}
-  #   needs: [indicate_start, comment_complete]
-  #   uses: ./.github/workflows/start_slack_thread.yml
-  #   secrets: inherit
-  #   with:
-  #     channel_name: va-mobile-build-alerts
-  #     message: 'The `/approve` command for release ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }} has failed. See <${{ github.server_url }}/${{ github.repository }} has failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
+  run_prs:
+    needs: indicate_start
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
+    with:
+      version: ${{ github.event.client_payload.slash_command.args.unnamed.arg1 }}
+    secrets: inherit
+  comment_complete:
+    needs: [indicate_start, run_prs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+      - name: 'Checkout repo'
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: 'Set up GH CLI secret'
+        run: echo "${{ steps.generate_token.outputs.token }}" >> token.txt
+      - name: 'Log into GH CLI'
+        run: gh auth login --with-token < token.txt
+      - name: 'Comment on original issue with PR info'
+        run: |
+          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "PRs Successfully Created! :raised_hands:
+          [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
+          Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
+      - name: 'Close original issue'
+        run: |
+          gh issue close ${{ github.event.client_payload.github.payload.issue.number }}
+          gh issue comment ${{ github.event.client_payload.github.payload.issue.number }} -b "Issue Successfully Closed"
