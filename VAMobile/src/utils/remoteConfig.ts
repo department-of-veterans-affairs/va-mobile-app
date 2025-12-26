@@ -45,6 +45,7 @@ export type FeatureToggleType =
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
   | 'overpayCopay'
+  | 'offlineMode'
   | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
@@ -78,6 +79,7 @@ type FeatureToggleValues = {
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
   overpayCopay: boolean
+  offlineMode: boolean
   remoteConfigRefreshTest: boolean
 }
 
@@ -113,6 +115,10 @@ export const defaults: FeatureToggleValues = {
   showTimezoneMessage: true,
   overpayCopay: false,
   remoteConfigRefreshTest: false,
+  offlineMode: false,
+}
+export const FeatureToggleDescriptions: Record<string, string> = {
+  offlineMode: '(Restart required)',
 }
 
 export let devConfig: FeatureToggleValues = defaults

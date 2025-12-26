@@ -16,7 +16,11 @@ function NoAllergyRecords() {
         variant="info"
         header={t('noAllergyRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('noAllergyRecords.alert.title'))}
-        description={featureEnabled('mrHide36HrHoldTimes') ? t('noAllergyRecords.zeroHoldTimes.text.1') : t('noAllergyRecords.alert.text.1')}>
+        description={
+          featureEnabled('mrHide36HrHoldTimes')
+            ? t('noAllergyRecords.zeroHoldTimes.text.1')
+            : t('noAllergyRecords.alert.text.1')
+        }>
         <TextView paragraphSpacing={true} variant="MobileBody">
           {t('noAllergyRecords.alert.text.2')}
         </TextView>

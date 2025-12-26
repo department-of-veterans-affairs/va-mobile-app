@@ -48,6 +48,7 @@ const mockOverrides = {
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
   overpayCopay: false,
+  offlineMode: false,
   remoteConfigRefreshTest: false,
 }
 

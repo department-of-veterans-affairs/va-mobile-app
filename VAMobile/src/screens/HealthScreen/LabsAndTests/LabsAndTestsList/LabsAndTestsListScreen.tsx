@@ -38,8 +38,8 @@ import { getA11yLabelText } from 'utils/common'
 import getEnv from 'utils/env'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useError, useRouteNavigation, useTheme } from 'utils/hooks'
-import { screenContentAllowed } from 'utils/waygateConfig'
 import { featureEnabled } from 'utils/remoteConfig'
+import { screenContentAllowed } from 'utils/waygateConfig'
 
 const { LINK_URL_MHV_LABS_AND_TESTS } = getEnv()
 const DATE_RANGE_PAST_THREE_MONTHS = 'past-3-months'
@@ -261,12 +261,10 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
             expandable={true}
             initializeExpanded={false}
             testID="labsAndTestsZeroHoldTimeAlertID">
-              <TextView variant="MobileBody">
-                {t('labsAndTests.zeroHoldTime.text2')}
-              </TextView>
-              <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-                {t('labsAndTests.zeroHoldTime.end')}
-              </TextView>
+            <TextView variant="MobileBody">{t('labsAndTests.zeroHoldTime.text2')}</TextView>
+            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
+              {t('labsAndTests.zeroHoldTime.end')}
+            </TextView>
           </Alert>
         ) : (
           /* Surely there is a better way to insert bold text into a display string... */

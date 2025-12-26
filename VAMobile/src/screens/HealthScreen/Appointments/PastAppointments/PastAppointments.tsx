@@ -1,10 +1,10 @@
 import React, { RefObject, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
 import { DateTime } from 'luxon'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps } from 'components'
 import DatePicker, { DatePickerRange } from 'components/DatePicker/DatePicker'
@@ -13,9 +13,7 @@ import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
-import { RootState } from 'store'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent } from 'utils/analytics'
 import {
   filterAppointments,
@@ -25,6 +23,7 @@ import {
   getPastTimeFrame,
 } from 'utils/appointments'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
 
 type PastAppointmentsProps = {
@@ -47,6 +46,7 @@ function PastAppointments({
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)
   const [page, setPage] = useState(1)
   const [onApplyClicked, setOnApplyClicked] = useState(false)
   const [invalidDateRange, setInvalidDateRange] = useState<DatePickerRange>()
@@ -54,9 +54,8 @@ function PastAppointments({
   const datePickerRange = getDatePickerRange(dateRange)
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const endTime =
-    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const { maintenanceWindows } = useMaintenanceWindows()
+  const endTime = maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const filteredAppointments = useMemo(

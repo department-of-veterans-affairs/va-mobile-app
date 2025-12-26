@@ -16,7 +16,11 @@ function NoVaccineRecords() {
         variant="info"
         header={t('noVaccineRecords.alert.title')}
         headerA11yLabel={a11yLabelVA(t('noVaccineRecords.alert.title'))}
-        description={featureEnabled('mrHide36HrHoldTimes') ? t('noVaccineRecords.zeroHoldTimes.text.1') :t('noVaccineRecords.alert.text.1')}>
+        description={
+          featureEnabled('mrHide36HrHoldTimes')
+            ? t('noVaccineRecords.zeroHoldTimes.text.1')
+            : t('noVaccineRecords.alert.text.1')
+        }>
         <TextView paragraphSpacing={true} variant="MobileBody">
           {t('noVaccineRecords.alert.text.2')}
         </TextView>

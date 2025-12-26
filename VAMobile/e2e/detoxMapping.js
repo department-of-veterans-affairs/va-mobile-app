@@ -122,6 +122,7 @@ const detoxMapping = {
     Letters: ['VALetters'],
     letters: ['VALetters'],
     LoginScreen: ['LoginScreen'],
+    maintenanceWindows: fullTestRun,
     militaryService: ['MilitaryInformation', 'VeteranStatusCard'],
     MilitaryInformationScreen: ['MilitaryInformation', 'VeteranStatusCard'],
     NeedHelpData: claimsAndAppealsArray,
