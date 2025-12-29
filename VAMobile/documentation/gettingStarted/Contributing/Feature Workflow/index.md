@@ -5,7 +5,7 @@ sidebar_position: 2
 This page provides an overview of the Mobile Workflow Process, including the general flow of the process, activities your team should take in order to develop on mobile, and an outline of the checkpoints needed to obtain Mobile App Platform team approval.
 Before engaging in the Mobile Design and Development process, please review the guidance below to help plan and execute your work.
 
-## Should I use the full feature workflow process or the standalone pull request requirements?  
+## Full feature workflow process or pull request?  
 There is no 'minimum speed limit' in regards to applying the steps in the full feature workflow process and engaging the Mobile App Platform team for assistance in your delivery. We suggest any work that extends beyond 1 or 2 reasonably sized pull requests go through the full workflow process in order to potentially head off issues you would face at peer review/UX review. If you have questions about whether you should use the full process or the standalone pull request requirements, feel free to ask in one of our public channels.
 
 -----------
