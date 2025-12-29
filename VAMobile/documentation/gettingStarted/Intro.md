@@ -1,18 +1,28 @@
 ---
-title: Mobile App Platform Workflow
+title: Mobile Workflow Process
 sidebar_position: 1
 ---
+This page provides an overview of the Mobile Workflow Process, including the general flow of the process, activities your team should take in order to develop on mobile, and an outline of the checkpoints needed to obtain Mobile App Platform team approval.
+Before engaging in the Mobile Design and Development process, please review the guidance below to help plan and execute your work.
 
 ## Full Process
 ![Feature Workflow](FeatureWorkflow.png)
 
+-----------  
 ## Project Kickoff
-Main objectives:
+-----------  
+**Purpose**:  
+The goal of the Product Kickoff and Approval phase is to get alignment with the Mobile App (Platform) team on what you’re building, why it matters, and what it will require - before you invest heavily in design or engineering.
+This phase centers on having a defined problem statement and success criteria, the scope of the work, key dependencies/constraints, how you’ll test it, and how it may impact existing parts of the app (like navigation, notifications, or the homescreen). The outcome is an agreed-upon foundation that the Platform team can support and plan for.  
+
+**Main objectives**:
 ![Project Kickoff Objectives](KickoffMainObjectives.png)
 
+
 **During this step feature teams are responsible for:**
-* Create an epic ticket documenting the problem statement and success criteria
-* Schedule a kickoff meeting with the Mobile App Platform Team
+* Clearly articulating the problem statement and success criteria
+* Identifying a rough sense of scope (what’s in/out) and how the feature should behave
+* Discussing technical dependencies/constraints, testing needs, and a high-level timeline
 
 **During this step the Mobile App Platform team will be responsible for:**
 * Ensuring feature teams have access to appropriate process documentation
@@ -21,8 +31,16 @@ Main objectives:
 * Warning about any potential code or delivery collisions with other teams
 * Creating Mobile App Platform team work tied to any homescreen integrations
 
+Please post in the **#va-mobile-app** channel to request a Project Definition Kickoff Meeting and we'll work with you to schedule ASAP.
+
+-----------  
 ## Design Cycle
-Main objectives:
+-----------  
+**Purpose**:  
+The goal of the Design Cycle is to get from an early UX direction (lo-fi wireframes) to an approved UI that’s ready for development - while making sure the work aligns with Mobile App Platform standards and won’t collide with other UI patterns.
+This step is meant to be collaborative. It gives the Mobile App Platform team an early view into what you’re building, and creates a structured moment to identify risks (process/documentation gaps, potential implementation hurdles, cross-modality needs, delivery collisions, homescreen integration impacts) before the team is too far down the road.
+
+**Main objectives**:
 ![Design Cycle Objectives](DesignCycleObjectives.png)
 
 **During this step feature teams are responsible for:**
@@ -33,8 +51,14 @@ Main objectives:
 * Helping iterate on proposed designs
 * Confirming approved UI for development
 
+-----------  
 ## Development
-Main objectives:
+-----------   
+**Purpose**:  
+The goal of the Development phase is to build the product and UX you’ve aligned on, while following Mobile App Platform best practices so the implementation is reliable, accessible, and maintainable.
+This phase is where the team turns approved UI/UX into working code—making sure the work meets quality standards (unit/e2e tests, accessibility, backwards compatibility) and fits cleanly into the broader app ecosystem (feature flags, shared components, and platform conventions).  
+
+**Main objectives**:
 ![Devlopment Objectives](DevelopmentObjectives.png)
 **During this step feature teams are responsible for:**
 * Following development best practices:
@@ -56,9 +80,13 @@ Main objectives:
 * Supplying pre-existing models as a template
 * Helping to alter components and processes appwide for new required functionality
 
-
+-----------  
 ## Code Review/QA
-Main objectives:
+-----------  
+**Purpose**:  
+The goal of the Code Review & QA phase is to validate that what was built actually meets the feature objectives, and to ensure that the feature is ready to ship with the right level of quality given Mobile Platform standards.  
+
+**Main objectives**:
 ![Code Review and QA Objectives](CRandQAObjectives.png)
 **During this step feature teams are responsible for:**
 * Creating [pull requests](./SetUp/Pull%20Requests/) that meet engineering and QA requirements
@@ -74,8 +102,14 @@ Main objectives:
 * Thorough accessibility testing and acceptance criteria confirmation on both Android and iOS devices
 * All feedback/bugs described as required or not for merge
 
+-----------  
 ## Prep for Go-Live
-Main objectives:
+-----------  
+**Purpose**:  
+The goal of the Prep for Go-Live phase is to make sure the feature is truly ready for release in production - tested end-to-end, fully approved from a UX standpoint, and packaged with the right go-live documentation so that rollout is smooth and low-risk.
+This phase is where teams shift from “it works in dev/staging” to “it’s ready for Veterans.” The focus is on regression/production testing, completing go-live readiness documentation, and aligning on rollout and any final QA requirements.  
+
+**Main objectives**:
 ![Go Live Objectives](GoLiveObjectives.png)
 **During this step feature teams are responsible for:**
 * Documenting a production test with Veteran volunteers or requesting the Mobile App Platform team to do so
@@ -89,8 +123,14 @@ Main objectives:
 * Add in-app what's new content and release notes when applicable
 * Ensure there are no feature collisions with other teams
 
+-----------  
 ## Monitor Feature
-Main objectives:
+-----------  
+**Purpose**:  
+The goal of the Monitor Feature phase is to make sure the feature is healthy after go-live, and to confirm you’re actually achieving the product outcomes you set out to deliver.
+This phase is about shifting from “we shipped it” to “it’s working in the real world.” You’ll use analytics and Datadog traffic to monitor feature health, gather broader feedback, and make decisions about what happens next (iterate, expand, retire analytics, or plan follow-on work).  
+
+**Main objectives**:
 ![Monitor Objectives](MonitorObjectives.png)
 **During this step feature teams are responsible for:**
 * Reviewing given analytic solutions for feature health at Go-Live and beyond
@@ -102,5 +142,9 @@ Main objectives:
 * Report any unique user feedback to the feature team
 * Report any critical issues identified to the feature team ASAP
 
+-----------  
 ## Mobile Platform Approval Steps
+-----------  
+To create features successfully on the Mobile App Platform, these are the checkpoints every feature team should be moving towards and through:  
+
 ![Mandatory Steps](MandatorySteps.png)
