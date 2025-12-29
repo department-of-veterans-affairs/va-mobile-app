@@ -1,6 +1,6 @@
 ---
 title: Mobile Workflow Process
-sidebar_position: 1
+sidebar_position: 2
 ---
 This page provides an overview of the Mobile Workflow Process, including the general flow of the process, activities your team should take in order to develop on mobile, and an outline of the checkpoints needed to obtain Mobile App Platform team approval.
 Before engaging in the Mobile Design and Development process, please review the guidance below to help plan and execute your work.
@@ -59,7 +59,7 @@ This step is meant to be collaborative. It gives the Mobile App Platform team an
 ![Design Cycle Objectives](DesignCycleObjectives.png)
 
 **During this step feature teams are responsible for:**
-* Scheduling a design critique meeting [when applicable](../design/About/designers#when-to-attend)
+* Scheduling a design critique meeting [when applicable](../../../design/About/designers#when-to-attend)
 * Getting officially approved signoff on UI and design from the Mobile App Platform team
 
 **During this step the Mobile App Platform team will be responsible for:**
@@ -104,7 +104,7 @@ The goal of the Code Review & QA phase is to validate that what was built actual
 **Main objectives**:
 ![Code Review and QA Objectives](CRandQAObjectives.png)
 **During this step feature teams are responsible for:**
-* Creating [pull requests](./SetUp/Pull%20Requests/) that meet engineering and QA requirements
+* Creating [pull requests](../../SetUp/Pull%20Requests/) that meet engineering and QA requirements
 * Supplying meaningful and comprehensive acceptance criteria, accessibility requirements, and staging data
 * Responding to peer review change requests and comments
 * Engaging in good faith discourse
