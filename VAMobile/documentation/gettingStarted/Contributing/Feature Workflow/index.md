@@ -21,7 +21,7 @@ There is no 'minimum speed limit' in regards to applying the steps in the full f
 
 ## B: Full Feature Workflow
 -----------
-![Feature Workflow](FeatureWorkflow.png)
+![Feature Workflow](../../../static/img/featureWorkflow/FeatureWorkflow.png)
 
 -----------  
 ## Project Kickoff
@@ -31,7 +31,7 @@ The goal of the Product Kickoff and Approval phase is to get alignment with the 
 This phase centers on having a defined problem statement and success criteria, the scope of the work, key dependencies/constraints, how you’ll test it, and how it may impact existing parts of the app (like navigation, notifications, or the homescreen). The outcome is an agreed-upon foundation that the Platform team can support and plan for.  
 
 **Main objectives**:
-![Project Kickoff Objectives](KickoffMainObjectives.png)
+![Project Kickoff Objectives](../../../static/img/featureWorkflow/KickoffMainObjectives.png)
 
 
 **During this step feature teams are responsible for:**
@@ -56,7 +56,7 @@ The goal of the Design Cycle is to get from an early UX direction (lo-fi wirefra
 This step is meant to be collaborative. It gives the Mobile App Platform team an early view into what you’re building, and creates a structured moment to identify risks (process/documentation gaps, potential implementation hurdles, cross-modality needs, delivery collisions, homescreen integration impacts) before the team is too far down the road.
 
 **Main objectives**:
-![Design Cycle Objectives](DesignCycleObjectives.png)
+![Design Cycle Objectives](../../../static/img/featureWorkflow/DesignCycleObjectives.png)
 
 **During this step feature teams are responsible for:**
 * Scheduling a design critique meeting [when applicable](../../../design/About/designers#when-to-attend)
@@ -74,7 +74,7 @@ The goal of the Development phase is to build the product and UX you’ve aligne
 This phase is where the team turns approved UI/UX into working code—making sure the work meets quality standards (unit/e2e tests, accessibility, backwards compatibility) and fits cleanly into the broader app ecosystem (feature flags, shared components, and platform conventions).  
 
 **Main objectives**:
-![Devlopment Objectives](DevelopmentObjectives.png)
+![Devlopment Objectives](../../../static/img/featureWorkflow/DevelopmentObjectives.png)
 **During this step feature teams are responsible for:**
 * Following development best practices:
     * Avoid NPM Library imports except when absolutely required
@@ -102,7 +102,7 @@ This phase is where the team turns approved UI/UX into working code—making sur
 The goal of the Code Review & QA phase is to validate that what was built actually meets the feature objectives, and to ensure that the feature is ready to ship with the right level of quality given Mobile Platform standards.  
 
 **Main objectives**:
-![Code Review and QA Objectives](CRandQAObjectives.png)
+![Code Review and QA Objectives](../../../static/img/featureWorkflow/CRandQAObjectives.png)
 **During this step feature teams are responsible for:**
 * Creating [pull requests](../../SetUp/Pull%20Requests/) that meet engineering and QA requirements
 * Supplying meaningful and comprehensive acceptance criteria, accessibility requirements, and staging data
@@ -125,7 +125,7 @@ The goal of the Prep for Go-Live phase is to make sure the feature is truly read
 This phase is where teams shift from “it works in dev/staging” to “it’s ready for Veterans.” The focus is on regression/production testing, completing go-live readiness documentation, and aligning on rollout and any final QA requirements.  
 
 **Main objectives**:
-![Go Live Objectives](GoLiveObjectives.png)
+![Go Live Objectives](../../../static/img/featureWorkflow/GoLiveObjectives.png)
 **During this step feature teams are responsible for:**
 * Documenting a production test with Veteran volunteers or requesting the Mobile App Platform team to do so
 * Confirming all UX has been approved by the Mobile App Platform PO
@@ -146,7 +146,7 @@ The goal of the Monitor Feature phase is to make sure the feature is healthy aft
 This phase is about shifting from “we shipped it” to “it’s working in the real world.” You’ll use analytics and Datadog traffic to monitor feature health, gather broader feedback, and make decisions about what happens next (iterate, expand, retire analytics, or plan follow-on work).  
 
 **Main objectives**:
-![Monitor Objectives](MonitorObjectives.png)
+![Monitor Objectives](../../../static/img/featureWorkflow/MonitorObjectives.png)
 **During this step feature teams are responsible for:**
 * Reviewing given analytic solutions for feature health at Go-Live and beyond
 * Gathering larger scale feedback regarding feature
@@ -162,4 +162,4 @@ This phase is about shifting from “we shipped it” to “it’s working in th
 -----------  
 To create features successfully on the Mobile App Platform, these are the checkpoints every feature team should be moving towards and through:  
 
-![Mandatory Steps](MandatorySteps.png)
+![Mandatory Steps](../../../static/img/featureWorkflow/MandatorySteps.png)
