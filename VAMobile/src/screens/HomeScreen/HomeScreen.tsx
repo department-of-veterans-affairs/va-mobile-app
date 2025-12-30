@@ -141,7 +141,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
+  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -457,7 +457,6 @@ export function HomeScreen({}: HomeScreenProps) {
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    amount: numberToUSDollars(debtsSummary.amountDue),
                     count: debtsSummary.count,
                   })}
                   deepLink={'debts'}

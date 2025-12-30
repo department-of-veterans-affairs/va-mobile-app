@@ -22,6 +22,48 @@
               "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
             }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 1,
+              "debtIncreaseAmount": 46.27,
+              "hinesCode": "H1",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "09/01/2012",
+              "transactionDescription": "Initial overpayment established",
+              "transactionExplanation": "Tuition adjustment created an overpayment",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 46.27,
+              "transactionTotalAmount": 46.27
+            },
+            {
+              "debtId": 1,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H2",
+              "offsetAmount": -20.0,
+              "offsetType": "WITHHOLD",
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "10/15/2012",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Payment received",
+              "transactionFiscalCode": "PMT",
+              "transactionFiscalSource": "CASHIER",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -20.0,
+              "transactionTotalAmount": -20.0
+            }
           ]
         }
       },
@@ -45,6 +87,68 @@
               "date": "09/18/2012",
               "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
+            }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 2,
+              "debtIncreaseAmount": 321.69,
+              "hinesCode": "H3",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "09/01/2012",
+              "transactionDescription": "Balance increase",
+              "transactionExplanation": "Housing stipend adjustment",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 321.69,
+              "transactionTotalAmount": 321.69
+            },
+            {
+              "debtId": 2,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H4",
+              "offsetAmount": -150.0,
+              "offsetType": "BENEFIT_OFFSET",
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "10/10/2012",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Benefit offset applied",
+              "transactionFiscalCode": "OFF",
+              "transactionFiscalSource": "BSP",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -150.0,
+              "transactionTotalAmount": -150.0
+            },
+            {
+              "debtId": 2,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H5",
+              "offsetAmount": -121.69,
+              "offsetType": "PAYMENT",
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "11/01/2012",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Payment received",
+              "transactionFiscalCode": "PMT",
+              "transactionFiscalSource": "CASHIER",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -121.69,
+              "transactionTotalAmount": -121.69
             }
           ]
         }
@@ -85,6 +189,48 @@
               "letterCode": "212",
               "description": "Bad Address - Locator Request Sent"
             }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 3,
+              "debtIncreaseAmount": 100.0,
+              "hinesCode": "H6",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH35",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "10/01/2012",
+              "transactionDescription": "Overpayment created",
+              "transactionExplanation": "Education benefit adjustment",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2012",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 100.0,
+              "transactionTotalAmount": 100.0
+            },
+            {
+              "debtId": 3,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H7",
+              "offsetAmount": -40.0,
+              "offsetType": "TREASURY_OFFSET",
+              "paymentType": "CH35",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "04/15/2013",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Treasury offset applied",
+              "transactionFiscalCode": "TOP",
+              "transactionFiscalSource": "TREASURY",
+              "transactionFiscalYear": "2013",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -40.0,
+              "transactionTotalAmount": -40.0
+            }
           ]
         }
       },
@@ -113,6 +259,28 @@
               "date": "12/19/2018",
               "letterCode": "681",
               "description": "Account returned from Treasury Cross Servicing. Account is at TOP.  TOP offsets will be applied to account as Federal funds become available."
+            }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 4,
+              "debtIncreaseAmount": 1800.0,
+              "hinesCode": "H8",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH35",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "12/01/2012",
+              "transactionDescription": "Balance increase",
+              "transactionExplanation": "Multiple terms adjusted",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2018",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 1800.0,
+              "transactionTotalAmount": 1800.0
             }
           ]
         }
@@ -153,6 +321,48 @@
               "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
             }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 5,
+              "debtIncreaseAmount": 2210.9,
+              "hinesCode": "H9",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "03/01/2015",
+              "transactionDescription": "Balance increase",
+              "transactionExplanation": "Tuition overpayment established",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2015",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 2210.9,
+              "transactionTotalAmount": 2210.9
+            },
+            {
+              "debtId": 5,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H10",
+              "offsetAmount": -1210.9,
+              "offsetType": "BENEFIT_OFFSET",
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "04/01/2017",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Offset from future benefits",
+              "transactionFiscalCode": "OFF",
+              "transactionFiscalSource": "BSP",
+              "transactionFiscalYear": "2017",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -1210.9,
+              "transactionTotalAmount": -1210.9
+            }
           ]
         }
       },
@@ -181,6 +391,48 @@
               "date": "07/19/2018",
               "letterCode": "100",
               "description": "First Demand Letter - Inactive Benefits - Due Process"
+            }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 6,
+              "debtIncreaseAmount": 321.76,
+              "hinesCode": "H11",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "07/01/2018",
+              "transactionDescription": "Balance increase",
+              "transactionExplanation": "Housing adjustment",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2018",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 321.76,
+              "transactionTotalAmount": 321.76
+            },
+            {
+              "debtId": 6,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H12",
+              "offsetAmount": -121.76,
+              "offsetType": "PAYMENT",
+              "paymentType": "CH33",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "08/15/2018",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Partial payment",
+              "transactionFiscalCode": "PMT",
+              "transactionFiscalSource": "CASHIER",
+              "transactionFiscalYear": "2018",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -121.76,
+              "transactionTotalAmount": -121.76
             }
           ]
         }
@@ -215,6 +467,48 @@
               "date": "12/03/2008",
               "letterCode": "487",
               "description": "Death Case Pending Action"
+            }
+          ],
+          "fiscalTransactionData": [
+            {
+              "debtId": 7,
+              "debtIncreaseAmount": 136.24,
+              "hinesCode": "H13",
+              "offsetAmount": null,
+              "offsetType": null,
+              "paymentType": "COMP",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "12/01/2008",
+              "transactionDescription": "Balance increase",
+              "transactionExplanation": "Compensation adjustment created overpayment",
+              "transactionFiscalCode": "OP",
+              "transactionFiscalSource": "VACOLS",
+              "transactionFiscalYear": "2008",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": 136.24,
+              "transactionTotalAmount": 136.24
+            },
+            {
+              "debtId": 7,
+              "debtIncreaseAmount": null,
+              "hinesCode": "H14",
+              "offsetAmount": -111.24,
+              "offsetType": "BENEFIT_OFFSET",
+              "paymentType": "COMP",
+              "transactionAdminAmount": null,
+              "transactionCourtAmount": null,
+              "transactionDate": "02/01/2009",
+              "transactionDescription": "Balance decrease",
+              "transactionExplanation": "Benefit offset applied",
+              "transactionFiscalCode": "OFF",
+              "transactionFiscalSource": "BSP",
+              "transactionFiscalYear": "2009",
+              "transactionInterestAmount": null,
+              "transactionMarshallAmount": null,
+              "transactionPrincipalAmount": -111.24,
+              "transactionTotalAmount": -111.24
             }
           ]
         }
