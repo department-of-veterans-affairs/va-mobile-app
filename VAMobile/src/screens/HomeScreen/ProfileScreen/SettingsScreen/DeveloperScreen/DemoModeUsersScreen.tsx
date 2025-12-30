@@ -38,10 +38,7 @@ function DemoModeUsersScreen({ navigation }: DemoModeUsersScreenSettingsScreenPr
   }))
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('debug.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('demoModeUsers.title')}>
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('demoModeUsers.title')}>
       <Box mb={contentMarginBottom}>
         <RadioGroup isRadioList value={demoUser} options={demoUsers} onChange={setDemoUser} />
       </Box>

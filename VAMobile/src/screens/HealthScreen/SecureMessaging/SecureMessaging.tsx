@@ -139,7 +139,6 @@ function SecureMessaging({ navigation, route }: SecureMessagingScreen) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
       backLabelOnPress={navigation.goBack}
       title={t('messages')}
       testID="messagesTestID"

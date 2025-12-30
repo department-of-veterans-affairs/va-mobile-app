@@ -151,7 +151,6 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID"

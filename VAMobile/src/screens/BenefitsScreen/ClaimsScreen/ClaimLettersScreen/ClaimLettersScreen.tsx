@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
@@ -45,7 +44,6 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const claimsInDowntime = useDowntime(DowntimeFeatureTypeConstants.claims)
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
   const [letterID, setLetterID] = useState<string>('')
   const [letterReceivedAt, setLetterReceivedAt] = useState<string>('')
   const {
@@ -63,9 +61,7 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
   } = useDownloadDecisionLetter(letterID, letterReceivedAt, {
     enabled: letterID.length > 0 && letterReceivedAt.length > 0,
   })
-  // This screen is reachable from two different screens, so adjust back button label
   const decisionLetters = decisionLettersData?.data || ([] as DecisionLettersList)
-  const backLabel = prevScreen === 'ClaimDetailsScreen' ? t('claimDetails.title') : t('claims.title')
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -144,7 +140,6 @@ const ClaimLettersScreen = ({ navigation }: ClaimLettersScreenProps) => {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('claimLetters.title')}
       scrollViewProps={scrollViewProps}

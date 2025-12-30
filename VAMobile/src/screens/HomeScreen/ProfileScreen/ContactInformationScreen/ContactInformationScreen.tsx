@@ -286,7 +286,6 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID">

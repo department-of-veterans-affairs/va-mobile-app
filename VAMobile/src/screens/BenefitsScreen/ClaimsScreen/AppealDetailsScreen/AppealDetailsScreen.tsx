@@ -95,7 +95,6 @@ function AppealDetailsScreen({ navigation, route }: AppealDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('claims.title')}
       backLabelOnPress={navigation.goBack}
       title={t('appealDetails.title')}
       testID="appealsDetailsTestID"

@@ -60,10 +60,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
     featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
       ? t('claimsHistory.title')
       : t('claims.title')
-  const backLabel =
-    featureEnabled('decisionLettersWaygate') && userAuthorizedServices?.decisionLetters
-      ? t('claims.title')
-      : t('benefits.title')
 
   const fetchInfoAgain = (): void => {
     refetchUserAuthorizedServices()
@@ -120,7 +116,6 @@ function ClaimsHistoryScreen({ navigation }: IClaimsHistoryScreen) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={title}
       testID="claimsHistoryID"

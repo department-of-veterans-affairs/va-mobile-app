@@ -146,11 +146,7 @@ function SettingsScreen({ navigation }: SettingsScreenProps) {
   const loadingCheck = settingBiometricPreference
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('profile.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('settings.title')}
-      testID="settingsID">
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('settings.title')} testID="settingsID">
       {loadingCheck ? (
         <LoadingComponent text={t('biometricsPreference.saving')} />
       ) : (
