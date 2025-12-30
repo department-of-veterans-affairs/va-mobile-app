@@ -1174,7 +1174,7 @@
   "fileUpload.ifMoreThan10.1": "You can ",
   "fileUpload.ifMoreThan10.2": "submit up to 10 photos",
   "fileUpload.ifMoreThan10.3": ". If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.",
-  "fileUpload.ifMoreThan10.a11y": "You can add up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on V-A dot guv.",
+  "fileUpload.ifMoreThan10.a11y": "You can submit up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on V-A dot guv.",
   "fileUpload.loading": "Submitting your file...",
   "fileUpload.maxFileSize": "Maximum file size:",
   "fileUpload.ofFiftyMB": "{{sizeOfPhotos}} of 50MB",
