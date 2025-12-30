@@ -43,6 +43,7 @@ const mockOverrides = {
   useOldLinkComponent: false,
   appointmentsTestTime: true,
   internationalPhoneNumber: false,
+  show5103Flow: false,
   showCernerWarningAlert: true,
   showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,

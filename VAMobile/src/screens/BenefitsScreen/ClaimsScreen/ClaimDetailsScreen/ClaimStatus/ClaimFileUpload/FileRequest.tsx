@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack'
 
+import { Button } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
 import { useClaim } from 'api/claimsAndAppeals'
@@ -13,6 +14,7 @@ import {
   LoadingComponent,
   SimpleList,
   SimpleListItemObj,
+  TextArea,
   TextView,
   VAScrollView,
 } from 'components'
@@ -31,6 +33,7 @@ import {
   numberOfItemsNeedingAttentionFromVet,
 } from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
@@ -49,7 +52,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
 
-  const { condensedMarginBetween, contentMarginBottom, gutter } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
   useSubtaskProps({
     leftButtonText: t('cancel'),
@@ -67,7 +70,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
 
-      if (is5103Notice(request.displayName || '')) {
+      if (featureEnabled('show5103Flow') && is5103Notice(request.displayName || '')) {
         navigateTo('File5103RequestDetails', { claimID, request })
       } else {
         navigateTo('FileRequestDetails', { claimID, request })
@@ -109,6 +112,22 @@ function FileRequest({ navigation, route }: FileRequestProps) {
     })
   }
 
+  const viewEvaluationDetailsPress = () => {
+    if (claim) {
+      logAnalyticsEvent(Events.vama_claim_eval(claim.id, claim.attributes.claimType, claim.attributes.phase, count))
+    } else if (claimFallBack) {
+      logAnalyticsEvent(
+        Events.vama_claim_eval(
+          claimFallBack.id,
+          claimFallBack.attributes.claimType,
+          claimFallBack.attributes.phase,
+          count,
+        ),
+      )
+    }
+    navigateTo('AskForClaimDecision', { claimID })
+  }
+
   return (
     <VAScrollView testID="fileRequestPageTestID">
       <SubtaskTitle title={t('fileRequest.title')} />
@@ -143,6 +162,24 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             accessibilityRole="header">
             {t('fileRequest.weSentYouALaterText')}
           </TextView>
+          {!featureEnabled('show5103Flow') && (
+            <Box mt={standardMarginBetween}>
+              <TextArea>
+                <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                  {t('fileRequest.askForYourClaimEvaluationTitle')}
+                </TextView>
+                <TextView variant="MobileBody" paragraphSpacing={true}>
+                  {t('fileRequest.askForYourClaimEvaluationBody')}
+                </TextView>
+                <Button
+                  onPress={viewEvaluationDetailsPress}
+                  label={t('fileRequest.viewEvaluationDetails')}
+                  testID={t('fileRequest.viewEvaluationDetails')}
+                  a11yHint={t('fileRequest.viewEvaluationDetails')}
+                />
+              </TextArea>
+            </Box>
+          )}
         </Box>
       )}
     </VAScrollView>

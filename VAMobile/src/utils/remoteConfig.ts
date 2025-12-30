@@ -40,6 +40,7 @@ export type FeatureToggleType =
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
+  | 'show5103Flow'
   | 'showCernerWarningAlert'
   | 'showCernerWhatsNew'
   | 'showEmailConfirmationAlert'
@@ -74,6 +75,7 @@ type FeatureToggleValues = {
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
+  show5103Flow: boolean
   showCernerWarningAlert: boolean
   showCernerWhatsNew: boolean
   showEmailConfirmationAlert: boolean
@@ -109,6 +111,7 @@ export const defaults: FeatureToggleValues = {
   travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
+  show5103Flow: false,
   showCernerWarningAlert: true,
   showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
