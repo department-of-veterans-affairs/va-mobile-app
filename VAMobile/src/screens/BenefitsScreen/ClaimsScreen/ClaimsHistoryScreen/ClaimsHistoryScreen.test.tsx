@@ -48,6 +48,29 @@ const mockPayload: ClaimsAndAppealsListPayload = {
   },
 }
 
+const mockClaimsAndAppealsAPI = (payload: unknown, shouldReject = false) => {
+  const mock = when(api.get as jest.Mock).calledWith(`/v0/claims-and-appeals-overview`, {
+    showCompleted: 'false',
+    'page[size]': LARGE_PAGE_SIZE.toString(),
+    'page[number]': '1',
+    useCache: 'false',
+  })
+
+  if (shouldReject) {
+    mock.mockRejectedValue(payload)
+  } else {
+    mock.mockResolvedValue(payload)
+  }
+}
+
+const createPayloadWithErrors = (services: Array<'claims' | 'appeals'>) => ({
+  ...mockPayload,
+  meta: {
+    ...mockPayload.meta,
+    errors: services.map((service) => ({ service })),
+  },
+})
+
 context('ClaimsHistoryScreen', () => {
   const initializeTestInstance = (authorized: boolean = true) => {
     const queriesData: QueriesData = [
@@ -77,14 +100,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when claims service and appeals service are both not authorized', () => {
     it('should render the NoClaimsAndAppealsAccess component', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, {
-          showCompleted: 'false',
-          'page[size]': LARGE_PAGE_SIZE.toString(),
-          'page[number]': '1',
-          useCache: 'false',
-        })
-        .mockResolvedValue(mockPayload)
+      mockClaimsAndAppealsAPI(mockPayload)
       initializeTestInstance(false)
       await waitFor(() => expect(screen.getByText(t('claimsAndAppeals.noClaimsAndAppealsAccess.title'))).toBeTruthy())
     })
@@ -92,14 +108,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async () => {
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, {
-          showCompleted: 'false',
-          'page[size]': LARGE_PAGE_SIZE.toString(),
-          'page[number]': '1',
-          useCache: 'false',
-        })
-        .mockRejectedValue({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR })
+      mockClaimsAndAppealsAPI({ error: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR }, true)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('errors.callHelpCenter.vaAppNotWorking'))).toBeTruthy())
     })
@@ -107,24 +116,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when there is both a claimsServiceError and an appealsServiceError', () => {
     it('should display an alert and not display the segmented control or the ClaimsAndAppealsListView component', async () => {
-      const error = [
-        {
-          service: 'claims',
-        },
-        {
-          service: 'appeals',
-        },
-      ]
-      const payload = mockPayload
-      payload.meta.errors = error
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, {
-          showCompleted: 'false',
-          'page[size]': LARGE_PAGE_SIZE.toString(),
-          'page[number]': '1',
-          useCache: 'false',
-        })
-        .mockResolvedValue(payload)
+      mockClaimsAndAppealsAPI(createPayloadWithErrors(['claims', 'appeals']))
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.claimAndAppealStatusUnavailable'))).toBeTruthy())
       expect(screen.queryByText(t('claimsTab.active'))).toBeFalsy()
@@ -134,20 +126,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when there is only a claimsServiceError', () => {
     it('should display a warning alert for claims unavailable', async () => {
-      const error = [
-        {
-          service: 'claims',
-        },
-      ]
-      const payload = { ...mockPayload, meta: { ...mockPayload.meta, errors: error } }
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, {
-          showCompleted: 'false',
-          'page[size]': LARGE_PAGE_SIZE.toString(),
-          'page[number]': '1',
-          useCache: 'false',
-        })
-        .mockResolvedValue(payload)
+      mockClaimsAndAppealsAPI(createPayloadWithErrors(['claims']))
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.claimStatusUnavailable'))).toBeTruthy())
       expect(screen.getByText(t('claimsTab.active'))).toBeTruthy()
@@ -157,20 +136,7 @@ context('ClaimsHistoryScreen', () => {
 
   describe('when there is only an appealsServiceError', () => {
     it('should display a warning alert for appeals unavailable', async () => {
-      const error = [
-        {
-          service: 'appeals',
-        },
-      ]
-      const payload = { ...mockPayload, meta: { ...mockPayload.meta, errors: error } }
-      when(api.get as jest.Mock)
-        .calledWith(`/v0/claims-and-appeals-overview`, {
-          showCompleted: 'false',
-          'page[size]': LARGE_PAGE_SIZE.toString(),
-          'page[number]': '1',
-          useCache: 'false',
-        })
-        .mockResolvedValue(payload)
+      mockClaimsAndAppealsAPI(createPayloadWithErrors(['appeals']))
       initializeTestInstance()
       await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.appealStatusUnavailable'))).toBeTruthy())
       expect(screen.getByText(t('claimsTab.active'))).toBeTruthy()
