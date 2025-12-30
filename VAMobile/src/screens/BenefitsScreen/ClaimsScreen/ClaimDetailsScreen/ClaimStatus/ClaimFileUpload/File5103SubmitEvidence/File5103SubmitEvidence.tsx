@@ -122,7 +122,7 @@ function File5103SubmitEvidence({ navigation, route }: File5103SubmitEvidencePro
               t('claimDetails.5103.submit.evidence.bullet2'),
             ]}
           />
-          <TextView mt={standardMarginBetween} variant="MobileBody" accessibilityRole="header">
+          <TextView mt={standardMarginBetween} variant="MobileBody">
             {t('claimDetails.5103.submit.evidence.body')}
           </TextView>
         </TextArea>
