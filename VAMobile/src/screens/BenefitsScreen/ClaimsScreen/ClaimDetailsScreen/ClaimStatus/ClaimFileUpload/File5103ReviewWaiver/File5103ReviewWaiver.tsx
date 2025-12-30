@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { ScrollView } from 'react-native'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -52,6 +53,7 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const submitWaiverAlert = useShowActionSheet()
   const navigateTo = useRouteNavigation()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
@@ -135,13 +137,14 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
   }
 
   return (
-    <VAScrollView testID="file5103ReviewWaiverID">
+    <VAScrollView testID="file5103ReviewWaiverID" scrollViewRef={scrollViewRef}>
       {formContainsError && (
         <Box mb={standardMarginBetween}>
           <AlertWithHaptics
             variant="error"
             description={t('claimDetails.5103.review.waiver.confirmation.error.alert')}
             focusOnError={onSaveClicked}
+            scrollViewRef={scrollViewRef}
           />
         </Box>
       )}
