@@ -131,4 +131,50 @@ context('ClaimsHistoryScreen', () => {
       expect(screen.queryByText(t('claimsTab.closed'))).toBeFalsy()
     })
   })
+
+  describe('when there is only a claimsServiceError', () => {
+    it('should display a warning alert for claims unavailable', async () => {
+      const error = [
+        {
+          service: 'claims',
+        },
+      ]
+      const payload = { ...mockPayload, meta: { ...mockPayload.meta, errors: error } }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(payload)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.claimStatusUnavailable'))).toBeTruthy())
+      expect(screen.getByText(t('claimsTab.active'))).toBeTruthy()
+      expect(screen.getByText(t('claimsTab.closed'))).toBeTruthy()
+    })
+  })
+
+  describe('when there is only an appealsServiceError', () => {
+    it('should display a warning alert for appeals unavailable', async () => {
+      const error = [
+        {
+          service: 'appeals',
+        },
+      ]
+      const payload = { ...mockPayload, meta: { ...mockPayload.meta, errors: error } }
+      when(api.get as jest.Mock)
+        .calledWith(`/v0/claims-and-appeals-overview`, {
+          showCompleted: 'false',
+          'page[size]': LARGE_PAGE_SIZE.toString(),
+          'page[number]': '1',
+          useCache: 'false',
+        })
+        .mockResolvedValue(payload)
+      initializeTestInstance()
+      await waitFor(() => expect(screen.getByText(t('claimsAndAppeal.appealStatusUnavailable'))).toBeTruthy())
+      expect(screen.getByText(t('claimsTab.active'))).toBeTruthy()
+      expect(screen.getByText(t('claimsTab.closed'))).toBeTruthy()
+    })
+  })
 })
