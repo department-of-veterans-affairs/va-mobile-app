@@ -5,8 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { DebtRecord, MedicalCopayDetail, MedicalCopayRecord, PaymentsData } from 'api/types'
 import { LARGE_PANEL_OPTIONS } from 'constants/screens'
 import CopaysHelp from 'screens/PaymentsScreen/Copays/CopayHelp/CopayHelp'
-import TermDefinitions from 'screens/PaymentsScreen/Debts/TermDefinitions/TermDefinitions'
 import DebtHelp, { debtHelpType } from 'screens/PaymentsScreen/Debts/DebtHelp/DebtHelp'
+import TermDefinitions from 'screens/PaymentsScreen/Debts/TermDefinitions/TermDefinitions'
 import PaymentIssue from 'screens/PaymentsScreen/PaymentHistory/PaymentIssueScreen/PaymentIssueScreen'
 import PaymentMissing from 'screens/PaymentsScreen/PaymentHistory/PaymentMissingSceen/PaymentMissingScreen'
 
@@ -40,7 +40,10 @@ export type PaymentsStackParamList = {
   DebtDetails: {
     debt: DebtRecord
   }
-  DebtHelp: { helpType: debtHelpType }
+  DebtHelp: {
+    helpType: debtHelpType
+    titleKey?: string
+  }
   DebtRequestHelp: undefined
   DisputeDebt: undefined
   PayDebt: {
