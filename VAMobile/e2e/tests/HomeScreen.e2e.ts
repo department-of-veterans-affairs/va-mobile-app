@@ -1,10 +1,15 @@
-import { by, device, element, expect, waitFor } from 'detox';
-import { setTimeout } from 'timers/promises';
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
-
-
-import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, toggleRemoteConfigFlag, verifyAF } from './utils';
-
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  disableAF,
+  enableAF,
+  loginToDemoMode,
+  toggleRemoteConfigFlag,
+  verifyAF,
+} from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
