@@ -18,6 +18,7 @@ export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'COEAvailable'
+  | 'copayments'
   | 'appointmentsTestTime'
   | 'datePickerUpdate'
   | 'decisionLettersWaygate'
@@ -27,6 +28,7 @@ export type FeatureToggleType =
   | 'inAppFeedback'
   | 'inAppReview'
   | 'labsAndTests'
+  | 'mrHide36HrHoldTimes'
   | 'nonVAMedsLink'
   | 'rescheduleLink'
   | 'shareMyHealthDataLink'
@@ -35,14 +37,16 @@ export type FeatureToggleType =
   | 'startScheduling'
   | 'testFeature'
   | 'travelPaySMOC'
-  | 'travelPayClaimsFullHistory'
+  | 'travelPayClaimDetails'
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
-  | 'showCernerAlertSM'
+  | 'showCernerWarningAlert'
+  | 'showCernerWhatsNew'
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
-  | 'overpayCopay'
+  | 'overpayments'
+  | 'offlineMode'
   | 'remoteConfigRefreshTest'
 
 type FeatureToggleValues = {
@@ -51,6 +55,7 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   datePickerUpdate: boolean
   COEAvailable: boolean
+  copayments: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
@@ -58,6 +63,7 @@ type FeatureToggleValues = {
   inAppFeedback: boolean
   inAppReview: boolean
   labsAndTests: boolean
+  mrHide36HrHoldTimes: boolean
   nonVAMedsLink: boolean
   rescheduleLink: boolean
   shareMyHealthDataLink: boolean
@@ -66,14 +72,16 @@ type FeatureToggleValues = {
   startScheduling: boolean
   testFeature: boolean
   travelPaySMOC: boolean
-  travelPayClaimsFullHistory: boolean
+  travelPayClaimDetails: boolean
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
-  showCernerAlertSM: boolean
+  showCernerWarningAlert: boolean
+  showCernerWhatsNew: boolean
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
-  overpayCopay: boolean
+  overpayments: boolean
+  offlineMode: boolean
   remoteConfigRefreshTest: boolean
 }
 
@@ -83,6 +91,7 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   datePickerUpdate: true,
   COEAvailable: false,
+  copayments: false,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
@@ -90,6 +99,7 @@ export const defaults: FeatureToggleValues = {
   inAppFeedback: true,
   inAppReview: true,
   labsAndTests: true,
+  mrHide36HrHoldTimes: false,
   nonVAMedsLink: true,
   rescheduleLink: true,
   submitEvidenceExpansion: true,
@@ -98,15 +108,20 @@ export const defaults: FeatureToggleValues = {
   startScheduling: false,
   testFeature: false,
   travelPaySMOC: true,
-  travelPayClaimsFullHistory: false,
-  travelPayStatusList: false,
+  travelPayClaimDetails: true,
+  travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
-  showCernerAlertSM: true,
+  showCernerWarningAlert: true,
+  showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
-  overpayCopay: false,
+  overpayments: false,
   remoteConfigRefreshTest: false,
+  offlineMode: false,
+}
+export const FeatureToggleDescriptions: Record<string, string> = {
+  offlineMode: '(Restart required)',
 }
 
 export let devConfig: FeatureToggleValues = defaults

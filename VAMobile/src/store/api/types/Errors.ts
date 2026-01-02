@@ -99,6 +99,7 @@ export const ScreenIDToFeatureName = {
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: 'Payments',
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: 'VA Prescriptions',
   [ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID]: 'Travel Pay',
+  [ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID]: 'Travel Pay Claim Details',
 }
 
 export const ScreenIDToDowntimeFeatures = {
@@ -121,6 +122,7 @@ export const ScreenIDToDowntimeFeatures = {
   [ScreenIDTypesConstants.PAYMENTS_SCREEN_ID]: [DowntimeFeatureTypeConstants.payments],
   [ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID]: [DowntimeFeatureTypeConstants.rx],
   [ScreenIDTypesConstants.TRAVEL_PAY_SUBMISSION_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPayFeatures],
+  [ScreenIDTypesConstants.TRAVEL_PAY_CLAIM_DETAILS_SCREEN_ID]: [DowntimeFeatureTypeConstants.travelPayFeatures],
 }
 
 export type MaintenanceWindowsGetData = {

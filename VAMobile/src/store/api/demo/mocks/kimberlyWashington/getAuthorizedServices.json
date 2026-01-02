@@ -5,6 +5,7 @@
       "id": "abe3f152-90b0-45cb-8776-4958bad0e0ef",
       "attributes": {
         "authorizedServices": {
+          "allergiesOracleHealthEnabled": true,
           "appeals": true,
           "appointments": true,
           "claims": true,
@@ -25,6 +26,10 @@
           "userProfileUpdate": true
         }
       }
+    },
+    "meta": {
+      "isUserAtPretransitionedOhFacility": true,
+      "isUserFacilityReadyForInfoAlert": false
     }
   }
 }

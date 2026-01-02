@@ -8,7 +8,7 @@ import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-li
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
-import { Box, CategoryLanding, LargeNavButton, TextView } from 'components'
+import { Box, CategoryLanding, LargeNavButton, LinkWithAnalytics } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import CopaysScreen from 'screens/PaymentsScreen/Copays'
@@ -31,6 +31,7 @@ import { PaymentsStackParamList } from 'screens/PaymentsScreen/PaymentsStackScre
 import { numberToUSDollars } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
+import { navigateToTravelClaims } from 'utils/travelPay'
 import { screenContentAllowed } from 'utils/waygateConfig'
 
 type PaymentsScreenProps = StackScreenProps<PaymentsStackParamList, 'Payments'>
@@ -56,7 +57,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   const debtsSubText =
     !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
-      ? t('debts.activityButton.subText', {
+      ? t('payments.overpaymentsTile.subText', {
           amount: numberToUSDollars(debtsSummary.amountDue),
           count: debtsSummary.count,
         })
@@ -75,43 +76,39 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
-      {featureEnabled('overpayCopay') && (
-        <TextView
-          mx={theme.dimensions.condensedMarginBetween}
-          mb={theme.dimensions.standardMarginBetween}
-          variant={'MobileBodyBold'}
-          accessibilityRole="header">
-          {t('payments.toYou')}
-        </TextView>
-      )}
-      <Box mb={theme.dimensions.standardMarginBetween}>
-        <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
-        {userAuthorizedServices?.directDepositBenefits && (
-          <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
-        )}
-      </Box>
-      {featureEnabled('overpayCopay') && (
-        <>
-          <TextView
-            mx={theme.dimensions.condensedMarginBetween}
-            mb={theme.dimensions.standardMarginBetween}
-            variant={'MobileBodyBold'}
-            accessibilityRole="header">
-            {t('payments.yourDebtAndBills')}
-          </TextView>
-          <LargeNavButton
-            title={t('debts.title')}
-            onPress={() => navigateTo('Debts')}
-            subText={debtsSubText}
-            showLoading={debtsLoading}
-          />
+      <>
+        {featureEnabled('copayments') && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
             subText={copaysSubText}
             showLoading={copaysLoading}
           />
-        </>
+        )}
+        {featureEnabled('overpayments') && (
+          <LargeNavButton
+            title={t('debts.title')}
+            onPress={() => navigateTo('Debts')}
+            subText={debtsSubText}
+            showLoading={debtsLoading}
+          />
+        )}
+      </>
+      <Box>
+        <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
+        {userAuthorizedServices?.directDepositBenefits && (
+          <LargeNavButton title={t('directDeposit.information')} onPress={onDirectDeposit} testID="toDirectDepositID" />
+        )}
+      </Box>
+      {featureEnabled('travelPayStatusList') && (
+        <Box ml={theme.dimensions.gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            text={t('travelPay.claims.viewYourClaims')}
+            testID="toTravelPayClaimsLinkID"
+            onPress={() => navigateToTravelClaims(navigateTo)}
+          />
+        </Box>
       )}
     </CategoryLanding>
   )

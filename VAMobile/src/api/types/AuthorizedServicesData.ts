@@ -4,6 +4,7 @@ export type AuthorizedServicesPayload = {
     type: string
     attributes: {
       authorizedServices: {
+        allergiesOracleHealthEnabled: boolean
         appeals: boolean
         appointments: boolean
         claims: boolean
@@ -25,9 +26,14 @@ export type AuthorizedServicesPayload = {
       }
     }
   }
+  meta: {
+    isUserAtPretransitionedOhFacility: boolean
+    isUserFacilityReadyForInfoAlert: boolean
+  }
 }
 
 export type UserAuthorizedServicesData = {
+  allergiesOracleHealthEnabled: boolean
   appeals: boolean
   appointments: boolean
   claims: boolean
@@ -46,4 +52,6 @@ export type UserAuthorizedServicesData = {
   secureMessaging: boolean
   secureMessagingOracleHealthEnabled: boolean
   userProfileUpdate: boolean
+  isUserAtPretransitionedOhFacility: boolean
+  isUserFacilityReadyForInfoAlert: boolean
 }

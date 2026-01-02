@@ -18,20 +18,20 @@ interface CopayCardProps {
   totalCopays: number
 }
 
+export const getCopayInfo = (
+  copayRecord: MedicalCopayRecord,
+): { facilityName: string; balance: number | undefined; date: string } => {
+  return {
+    facilityName: getMedicalCenterNameByID(copayRecord.station.facilitYNum),
+    balance: copayRecord.pHAmtDue,
+    date: copayRecord.pSStatementDateOutput || '',
+  }
+}
+
 function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-
-  const getCopayInfo = (
-    copayRecord: MedicalCopayRecord,
-  ): { facilityName: string; balance: number | undefined; date: string } => {
-    return {
-      facilityName: getMedicalCenterNameByID(copay.station.facilitYNum),
-      balance: copayRecord.pHAmtDue,
-      date: copayRecord.pSStatementDateOutput || '',
-    }
-  }
 
   const copayDetailsClicked = (copayRecord: MedicalCopayRecord) => {
     navigateTo('CopayDetails', { copay: copayRecord })
@@ -121,7 +121,7 @@ function CopayCard({ copay, index, totalCopays }: CopayCardProps) {
         </Box>
       </Pressable>
       {/* Resolve bill button */}
-      <ResolveBillButton />
+      <ResolveBillButton copay={copay} />
     </>
   )
 
