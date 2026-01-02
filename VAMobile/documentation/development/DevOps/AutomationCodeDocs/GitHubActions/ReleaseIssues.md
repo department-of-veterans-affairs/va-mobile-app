@@ -10,7 +10,7 @@ Occasionally, a build may fail for one reason or another, or we may determine th
 2. If possible, remove any pending versions for review
    1. [App Store Connect](https://appstoreconnect.apple.com/apps/1559609596/distribution)
    2. [Google Play Console](https://play.google.com/console/u/0/developers/7507611851470273082/app/4974294731909201030/releases/overview)
-      i. **Note: Recently removing the google play console version broke our ability to make android builds because of an inability to roll over to the next build number. Skip deleting in android until rectified.**
+      i. **Note: Archiving pending Android builds may cause issues with the build number, we recommend waiting until the issue is resolved before archiving any unwanted builds**
 3. Make any changes necessary to the corresponding `release/vX.X.X` branch or have an FE engineer do so
 4. Since the `vX.X.X` tag exists already from the previous build attempt, we need to delete the tag, both locally and remotely
    1. Delete the local tag: `git tag --delete vX.X.X`
