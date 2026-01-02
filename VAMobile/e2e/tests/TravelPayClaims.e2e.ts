@@ -1,4 +1,5 @@
 import { by, element, expect, waitFor } from 'detox'
+import { DateTime } from 'luxon'
 
 import { EN_DASH } from 'utils/formattingUtils'
 
@@ -227,17 +228,14 @@ describe('Travel Pay Claims Screen', () => {
       .toExist()
       .withTimeout(4000)
 
-    // Select the date range that yields no results: 8 to 5 months ago
-    const now = new Date()
-    const eightMonthsAgo = new Date(now)
-    eightMonthsAgo.setMonth(new Date().getMonth() - 8)
-    const sixMonthsAgo = new Date(now)
-    sixMonthsAgo.setMonth(new Date().getMonth() - 6)
+    const todaysDate = DateTime.local()
+    const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month')
+    const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month')
 
-    const monthStart = eightMonthsAgo.toLocaleString('en-US', { month: 'short' })
-    const yearStart = eightMonthsAgo.getFullYear()
-    const monthEnd = sixMonthsAgo.toLocaleString('en-US', { month: 'short' })
-    const yearEnd = sixMonthsAgo.getFullYear()
+    const monthStart = eightMonthsEarlier.toFormat('MMM')
+    const yearStart = eightMonthsEarlier.year
+    const monthEnd = sixMonthsEarlier.toFormat('MMM')
+    const yearEnd = sixMonthsEarlier.year
 
     const dateRangeText = `${monthStart} ${yearStart} ${EN_DASH} ${monthEnd} ${yearEnd}`
     await waitFor(element(by.label(dateRangeText)))
