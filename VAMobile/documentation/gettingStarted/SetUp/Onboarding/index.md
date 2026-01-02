@@ -11,6 +11,9 @@ Mobile Onboarding will help product owners/managers, designers, and engineers wo
 * the types of feedback available and when/how it will be provided  
 
 **Communication**
+
+This onboarding also outlines how to engage the Mobile team for feature requests, including how to submit a request, how prioritization works, and how to track progress. In addition, the onboarding covers where and how to get support, as well as the types of feedback teams can expect and when that feedback will be provided.
+
 The following channels can be used to communicate async with the VA Mobile App and Platform team
 * **#va-mobile-app** - general communication for anything related to the VA Mobile App
 * **#va-mobile-app-design** - communication related to design and research efforts

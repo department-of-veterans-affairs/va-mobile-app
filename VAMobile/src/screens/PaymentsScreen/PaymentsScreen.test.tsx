@@ -43,7 +43,11 @@ jest.mock('utils/hooks', () => {
 context('PaymentsScreen', () => {
   const initializeTestInstance = (authorized = true): void => {
     when(featureEnabled as jest.Mock)
-      .calledWith('overpayCopay')
+      .calledWith('overpayments')
+      .mockReturnValue(true)
+
+    when(featureEnabled as jest.Mock)
+      .calledWith('copayments')
       .mockReturnValue(true)
 
     render(<PaymentsScreen />, {
@@ -122,7 +126,7 @@ context('PaymentsScreen', () => {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
-      const debtsSub = t('debts.activityButton.subText', {
+      const debtsSub = t('payments.overpaymentsTile.subText', {
         amount: numberToUSDollars(347.5),
         count: 2,
       })
