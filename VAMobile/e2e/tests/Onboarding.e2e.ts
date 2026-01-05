@@ -4,9 +4,12 @@ Detox script that follows the Sign in Splash screens (onboarding) test case foun
 When to update:
 This script should be updated whenever new things are added/changed to the onboarding flow.
 */
-import { by, device, element, expect } from 'detox'
+import { by, device, element, expect } from 'detox';
 
-import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
+
+
+import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils';
+
 
 export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',
@@ -53,7 +56,7 @@ describe('Onboarding Screen', () => {
     await expect(element(by.text('Use our benefits tools to manage tasks like these:'))).toExist()
     await expect(element(by.text('Review your disability rating'))).toExist()
     await expect(element(by.text('Check the status of your claims and appeals'))).toExist()
-    await expect(element(by.label('Download common  V-A  letters'))).toExist()
+    await expect(element(by.label('Download common  V-A  letters, 3 of 3'))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.SKIP_BACK_BUTTON_ID))).toExist()
     await expect(element(by.id(OnboardingE2eIdConstants.DONE_NEXT_BUTTON_ID))).toExist()
   })
