@@ -21,20 +21,58 @@ jobs:
           echo "Current week number: $WEEK_NUM"
           # Map week number to reviewer and backup (weeks 40-52)
           case $WEEK_NUM in
-            40) REVIEWER="matthew-df"; BACKUP="dftony";;
-            41) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            42) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            43) REVIEWER="jmarchi"; BACKUP="dumathane";;
-            44) REVIEWER="keli13"; BACKUP="jmarchi";;
-            45) REVIEWER="dftony"; BACKUP="keli13";;
-            46) REVIEWER="matthew-df"; BACKUP="dftony";;
-            47) REVIEWER="AdryienH"; BACKUP="matthew-df";;
-            48) REVIEWER="dumathane"; BACKUP="AdryienH";;
-            49) REVIEWER="jmarchi"; BACKUP="dumathane";;
-            50) REVIEWER="keli13"; BACKUP="jmarchi";;
-            51) REVIEWER="dftony"; BACKUP="keli13";;
-            52) REVIEWER="matthew-df"; BACKUP="dftony";;
-            *) REVIEWER="AdryienH"; BACKUP="matthew-df";;
+            02) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            03) REVIEWER="jmarchi"; BACKUP="narin";;
+            04) REVIEWER="narin"; BACKUP="matthew-df";;
+            05) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            06) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            07) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            08) REVIEWER="jmarchi"; BACKUP="narin";;
+            09) REVIEWER="narin"; BACKUP="matthew-df";;
+            10) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            11) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            12) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            13) REVIEWER="jmarchi"; BACKUP="narin";;
+            14) REVIEWER="narin"; BACKUP="matthew-df";;
+            15) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            16) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            17) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            18) REVIEWER="jmarchi"; BACKUP="narin";;
+            19) REVIEWER="narin"; BACKUP="matthew-df";;
+            20) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            21) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            22) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            23) REVIEWER="jmarchi"; BACKUP="narin";;
+            24) REVIEWER="narin"; BACKUP="matthew-df";;
+            25) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            26) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            27) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            28) REVIEWER="jmarchi"; BACKUP="narin";;
+            29) REVIEWER="narin"; BACKUP="matthew-df";;
+            30) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            31) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            32) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            33) REVIEWER="jmarchi"; BACKUP="narin";;
+            34) REVIEWER="narin"; BACKUP="matthew-df";;
+            35) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            36) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            37) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            38) REVIEWER="jmarchi"; BACKUP="narin";;
+            39) REVIEWER="narin"; BACKUP="matthew-df";;
+            40) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            41) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            42) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            43) REVIEWER="jmarchi"; BACKUP="narin";;
+            44) REVIEWER="narin"; BACKUP="matthew-df";;
+            45) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            46) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            47) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            48) REVIEWER="jmarchi"; BACKUP="narin";;
+            49) REVIEWER="narin"; BACKUP="matthew-df";;
+            50) REVIEWER="matthew-df"; BACKUP="AdryienH";;
+            51) REVIEWER="AdryienH";; BACKUP="dumathane";;
+            52) REVIEWER="dumathane"; BACKUP="jmarchi";;
+            *) REVIEWER="jmarchi"; BACKUP="narin";;
           esac
           declare -A GITHUB_TO_SLACK=(
             ["AdryienH"]="U08N85KC05Q"
@@ -87,7 +125,7 @@ jobs:
           BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
           CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
           URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
-          MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
+          MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\nOn deck reviewer: <$URL>"
           echo "Sending Slack notification..."
           curl -X POST \
             -H "Authorization: Bearer $SLACK_API_TOKEN" \
