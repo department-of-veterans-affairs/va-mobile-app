@@ -125,7 +125,7 @@ jobs:
           BACKUP_SLACK_MENTION="${{ steps.select-reviewer.outputs.backup_slack_mention }}"
           CHANNEL_ID="${{ steps.get-channel.outputs.channel_id }}"
           URL="https://department-of-veterans-affairs.github.io/va-mobile-app/gettingStarted/SetUp/DevelopmentSetUpProcess/#pull-request-review"
-          MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\nOn deck reviewer: <$URL>"
+          MESSAGE=" *Primary channel for Mobile App & Platform Team and any comms related to mobile app features. All Mobile App epics are tracked on the Global Mobile GitHub project.*\nPull Request reviewer rotation this week: $SLACK_MENTION\nBackup reviewer: $BACKUP_SLACK_MENTION\n<$URL>"
           echo "Sending Slack notification..."
           curl -X POST \
             -H "Authorization: Bearer $SLACK_API_TOKEN" \
