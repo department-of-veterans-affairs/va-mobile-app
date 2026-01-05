@@ -72,4 +72,3 @@ jobs:
         run: |
           gh issue close ${{ inputs.issue_number }}
           gh issue comment ${{ inputs.issue_number }} -b "Issue Successfully Closed"
-
