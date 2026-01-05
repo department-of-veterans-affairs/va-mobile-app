@@ -38,7 +38,7 @@ const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
 jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
   return {
     useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
-    }
+  }
 })
 
 jest.mock('api/queryClient', () => {
@@ -55,7 +55,6 @@ jest.mock('utils/hooks/offline', () => {
   return {
     ...original,
     useOfflineEventQueue: () => jest.fn(),
-
   }
 })
 

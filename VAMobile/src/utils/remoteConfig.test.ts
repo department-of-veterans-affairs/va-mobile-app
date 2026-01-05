@@ -22,6 +22,7 @@ const mockOverrides = {
   cernerTrueForDemo: false,
   datePickerUpdate: true,
   COEAvailable: false,
+  copayments: false,
   decisionLettersWaygate: false,
   haptics: false,
   hsScrollAnalytics: false,
@@ -48,7 +49,7 @@ const mockOverrides = {
   showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
-  overpayCopay: false,
+  overpayments: false,
   offlineMode: false,
   remoteConfigRefreshTest: false,
 }
