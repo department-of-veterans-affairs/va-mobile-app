@@ -45,7 +45,8 @@ jobs:
   #     version: ${{ inputs.version }}
   #   secrets: inherit
   comment_complete:
-    needs: [indicate_start, run_prs]
+    # needs: [indicate_start, run_prs]
+    needs: [indicate_start]
     if: ${{ inputs.issue_number != '' }}
     runs-on: ubuntu-latest
     steps:
