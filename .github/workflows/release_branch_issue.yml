@@ -215,5 +215,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
   run_approval_workflow:
     needs: [approval, release_ticket]
-    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/run_approval.yml@develop
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/run_approval.yml@chore.12210.slash.command.update
+    with:
+      version: ${{ needs.release_ticket.outputs.versionNumber }}
+      issue_number: ${{ needs.release_ticket.outputs.ticketNumber }}
     secrets: inherit
