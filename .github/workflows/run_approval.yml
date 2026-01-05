@@ -38,15 +38,14 @@ jobs:
           repository: ${{ github.repository }}
           comment-id: ${{ inputs.comment_id }}
           reaction-type: rocket
-  # run_prs:
-  #   needs: indicate_start
-  #   uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
-  #   with:
-  #     version: ${{ inputs.version }}
-  #   secrets: inherit
+  run_prs:
+    needs: indicate_start
+    uses: department-of-veterans-affairs/va-mobile-app/.github/workflows/release_pull_request.yml@develop
+    with:
+      version: ${{ inputs.version }}
+    secrets: inherit
   comment_complete:
-    # needs: [indicate_start, run_prs]
-    needs: [indicate_start]
+    needs: [indicate_start, run_prs]
     if: ${{ inputs.issue_number != '' }}
     runs-on: ubuntu-latest
     steps:
@@ -64,11 +63,11 @@ jobs:
         run: echo "${{ steps.generate_token.outputs.token }}" >> token.txt
       - name: 'Log into GH CLI'
         run: gh auth login --with-token < token.txt
-      # - name: 'Comment on original issue with PR info'
-      #   run: |
-      #     gh issue comment ${{ inputs.issue_number }} -b "PRs Successfully Created! :raised_hands:
-      # [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
-      # Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
+      - name: 'Comment on original issue with PR info'
+        run: |
+          gh issue comment ${{ inputs.issue_number }} -b "PRs Successfully Created! :raised_hands:
+            [PR to develop](${{needs.run_prs.outputs.devPrUrl}})
+            Merge to main commit ${{needs.run_prs.outputs.releaseHash}}"
       - name: 'Close original issue'
         run: |
           gh issue close ${{ inputs.issue_number }}
