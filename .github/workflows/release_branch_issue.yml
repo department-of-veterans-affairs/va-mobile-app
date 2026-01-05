@@ -1,6 +1,7 @@
-name: "[Release] New Release Issue"
+name: '[Release] New Release Issue'
 
 on:
+  push:
   create:
 jobs:
   release_ticket:
@@ -137,7 +138,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app
-      message: "*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:"
+      message: '*Release ${{ needs.release_ticket.outputs.versionNumber }} Coordination :thread:'
   release_coordination:
     name: release coordination
     if: ${{ success() }}
@@ -198,7 +199,7 @@ jobs:
         with:
           app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
           private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
-      - name: "Checkout repo"
+      - name: 'Checkout repo'
         uses: actions/checkout@v3
         with:
           token: ${{ steps.generate_token.outputs.token }}
@@ -220,3 +221,4 @@ jobs:
       version: ${{ needs.release_ticket.outputs.versionNumber }}
       issue_number: ${{ needs.release_ticket.outputs.ticketNumber }}
     secrets: inherit
+
