@@ -55,7 +55,6 @@ context('SyncScreen', () => {
           },
         },
       })
-    initializeTestInstance()
   })
 
   afterEach(() => {

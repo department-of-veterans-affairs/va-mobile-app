@@ -40,7 +40,10 @@ export type PaymentsStackParamList = {
   DebtDetails: {
     debt: DebtRecord
   }
-  DebtHelp: { helpType: debtHelpType }
+  DebtHelp: {
+    helpType: debtHelpType
+    titleKey?: string
+  }
   DebtRequestHelp: undefined
   DisputeDebt: undefined
   PayDebt: {

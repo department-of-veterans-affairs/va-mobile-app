@@ -88,7 +88,7 @@ context('DebtsScreen', () => {
         .calledWith('/v0/debts')
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
-      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveDebt') })
+      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveOverpayment') })
       expect(allButtons).toHaveLength(1)
       const resolveDebtButton = allButtons[0]
       expect(resolveDebtButton).toBeTruthy()
