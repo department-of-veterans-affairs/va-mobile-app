@@ -139,15 +139,15 @@ function File5103SubmitEvidence({ navigation, route }: File5103SubmitEvidencePro
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
             <Button
               onPress={onFilePress}
-              label={t('fileUpload.selectAFile')}
-              testID={t('fileUpload.selectAFile')}
+              label={t('fileUpload.selectAFile2')}
+              testID={t('fileUpload.selectAFile2')}
               buttonType={ButtonVariants.Secondary}
             />
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <Button
                 onPress={onPhotoPress}
-                label={t('fileUpload.takePhotos')}
-                testID={t('fileUpload.takePhotos')}
+                label={t('fileUpload.takeOrSelectPhotos2')}
+                testID={t('fileUpload.takeOrSelectPhotos2')}
                 buttonType={ButtonVariants.Secondary}
               />
             </Box>

@@ -40,7 +40,9 @@ export const ClaimsE2eIdConstants = {
   FILE_REQUEST_BUTTON_ID: 'Step3FileRequestButton',
   CURRENT_STEP_TEXT: 'Current step',
   SELECT_A_FILE_TEXT: 'Select a file',
+  SELECT_A_FILE_TEXT2: 'Select a file\uFEFF',
   TAKE_OR_SELECT_PHOTOS_TEXT: 'Take or select photos',
+  TAKE_OR_SELECT_PHOTOS_TEXT2: 'Take or select photos\uFEFF',
   ACCEPTED_FILE_TYPES_TEXT: 'PDF (unlocked), GIF, JPEG, JPG, BMP, TXT',
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_STATUS_ID: 'claimsStatusID',
@@ -65,6 +67,7 @@ export const ClaimsE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.SHOW_5103_FLOW)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -210,9 +213,14 @@ describe('Claims Screen', () => {
     await element(by.text('Back')).tap()
 
     // Submit evidence screen
+    await element(by.id(CommonE2eIdConstants.REQUEST_DETAILS_5103_ID)).scrollTo('bottom')
+
     await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
-    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT))).toExist()
-    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT))).toExist()
+
+    await element(by.id(CommonE2eIdConstants.SUBMIT_EVIDENCE_5103_ID)).scrollTo('bottom')
+
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT2))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT2))).toExist()
     await element(by.text('Back')).tap()
     await element(by.text('Back')).tap()
   })
