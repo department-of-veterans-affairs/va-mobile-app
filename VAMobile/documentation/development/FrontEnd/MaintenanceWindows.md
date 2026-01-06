@@ -12,7 +12,7 @@ Downtime messages use the same display pattern as errors in code, with additiona
 
 ## Maintenance Window Technical Description
 
-The data returned from the back-end for a `maintenance window` includes a `service name`, and start time, and an end time. The service name is determined by the back-end and is not directly equivalent to `feature names` used in the front-end, so a mapping from `service name` to `feature name` as well as `service name` to the affected `screen ID` is provided in the `store/api/types/Errors.ts` file. Anytime a new feature with downtime is added, this mapping needs to be updated and the rest of the logic will automatically piggyback off of error logic and the checks in `store/slices/errorSlice.ts:checkForDowntimeErrors()`.
+The data returned from the back-end for a `maintenance window` includes a `service name`, and start time, and an end time. The service name is determined by the back-end and is not directly equivalent to `feature names` used in the front-end, so a mapping from `service name` to `feature name` as well as `service name` to the affected `screen ID` is provided in the `store/api/types/Errors.ts` file. Anytime a new feature with downtime is added, this mapping needs to be updated and the rest of the logic will automatically piggyback off of error logic and the checks in `api/maintenanceWindows/getMaintenanceWindows.ts:useMaintenanceWindows()`. This hook will refetch maintenance window on an interval of 3 minutes. New maintenance window data pulled from the refetch will only affect a screen on when navigating to or from a feature affected by a maintenance window to avoid disruption.   
 
 Maintenance windows, as derived from `DowntimeFeatureTypeConstants`, are also used in some cases within view components to disable data fetches from the backend to avoid fetching data that we know will be unavailable or unreliable during maintenance windows.
 
@@ -39,6 +39,9 @@ data: [
   },
 ]
 ```
+
+## Development
+In a develop environment, maintenance windows can be mocked by going to the Developer Screen and pressing 'Override Maintenance Windows'. On this screen, enter a delay time and a window length time (in minutes) for any maintenance windows to be tested.
 
 ## Downtime Messages Display
 

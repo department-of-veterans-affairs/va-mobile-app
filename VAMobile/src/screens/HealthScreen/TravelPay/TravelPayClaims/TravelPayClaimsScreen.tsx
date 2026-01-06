@@ -11,7 +11,7 @@ import { VAScrollViewProps } from 'components/VAScrollView'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/timeframes'
-import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { BenefitsStackParamList } from 'screens/BenefitsScreen/BenefitsStackScreens'
 import TravelPayClaimsDatePicker from 'screens/HealthScreen/TravelPay/TravelPayClaims/DatePicker/TravelPayClaimsDatePicker'
 import TravelPayClaimsFilter from 'screens/HealthScreen/TravelPay/TravelPayClaims/Filter/TravelPayClaimsFilter'
 import TravelPayClaimsList from 'screens/HealthScreen/TravelPay/TravelPayClaims/List/TravelPayClaimsList'
@@ -20,7 +20,7 @@ import { ScreenIDTypesConstants } from 'store/api'
 import { useTheme } from 'utils/hooks'
 import { SortOption, SortOptionType, filteredClaims, sortedClaims } from 'utils/travelPay'
 
-type TravelPayClaimsProps = StackScreenProps<HealthStackParamList, 'TravelPayClaims'>
+type TravelPayClaimsProps = StackScreenProps<BenefitsStackParamList, 'TravelPayClaims'>
 
 const emptyClaims: Array<TravelPayClaimData> = []
 
@@ -77,6 +77,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
   const onTimeFrameChanged = (value: TimeFrameType) => {
     setCurrentPage(1)
     setTimeFrame(value)
+    setFilter(new Set())
   }
 
   const onFilterChanged = (value: Set<string>) => {
@@ -106,9 +107,10 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('health.title')}
+      backLabel={t('claims.title')}
       backLabelOnPress={navigation.goBack}
-      title={t('travelPay.title')}
+      backLabelTestID="travelPayClaimsBackButton"
+      title={t('travelPay.claims.title')}
       testID="travelPayClaimsTestID"
       scrollViewProps={scrollViewProps}>
       {error ? (
@@ -127,7 +129,7 @@ function TravelPayClaimsScreen({ navigation }: TravelPayClaimsProps) {
             <NoTravelClaims />
           ) : (
             <>
-              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
                 <TextView
                   mx={2}
                   mb={theme.dimensions.condensedMarginBetween}

@@ -26,6 +26,10 @@ export type AuthorizedServicesPayload = {
       }
     }
   }
+  meta: {
+    isUserAtPretransitionedOhFacility: boolean
+    isUserFacilityReadyForInfoAlert: boolean
+  }
 }
 
 export type UserAuthorizedServicesData = {
@@ -48,4 +52,6 @@ export type UserAuthorizedServicesData = {
   secureMessaging: boolean
   secureMessagingOracleHealthEnabled: boolean
   userProfileUpdate: boolean
+  isUserAtPretransitionedOhFacility: boolean
+  isUserFacilityReadyForInfoAlert: boolean
 }

@@ -39,6 +39,7 @@ export type VATextColors = {
   activityFooter: string
   categoryLandingError: string
   categoryLandingWarning: string
+  lastUpdated: string
 }
 
 export type VAIconColors = {
@@ -72,6 +73,7 @@ export type VAIconColors = {
   linkRow: string
   largeNavButton: string
   ussf: string
+  contrast: string
 }
 
 export type VATypographyThemeVariants = {
@@ -108,6 +110,8 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   textWithIconButton: string
   UnreadMessagesTag: string
+  vadsFontBodySmall: string
+  vadsFontBodyXsmall: string
   VAHeader: string
   VASelector: string
   VeteranStatusBranch: string
@@ -116,8 +120,8 @@ export type VATypographyThemeVariants = {
   MobileFooterLink: string
   VeteranStatusCardHeaderPortraitBold: string
   VeteranStatusCardHeaderLandscapeBold: string
-  vadsFontHeadingMedium: string
   vadsFontHeadingXsmall: string
+  vadsFontHeadingMedium: string
 }
 
 export type VABackgroundColors = {
@@ -155,6 +159,7 @@ export type VABackgroundColors = {
   skeletonLoaderSecondary: string
   bullet: string
   carouselBullet: string
+  offlineBanner: string
 }
 
 export type VABorderColors = {

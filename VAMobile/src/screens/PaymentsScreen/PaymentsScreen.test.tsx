@@ -7,11 +7,12 @@ import { authorizedServicesKeys } from 'api/authorizedServices/queryKeys'
 import { useDebts } from 'api/debts'
 import { useMedicalCopays } from 'api/medicalCopays'
 import PaymentsScreen from 'screens/PaymentsScreen'
-import { context, render } from 'testUtils'
+import { context, render, when } from 'testUtils'
 import { numberToUSDollars } from 'utils/formattingUtils'
+import { featureEnabled } from 'utils/remoteConfig'
 
 jest.mock('utils/remoteConfig', () => ({
-  featureEnabled: (key: string) => key === 'overpayCopay',
+  featureEnabled: jest.fn(),
 }))
 
 jest.mock('api/medicalCopays', () => ({
@@ -41,6 +42,14 @@ jest.mock('utils/hooks', () => {
 
 context('PaymentsScreen', () => {
   const initializeTestInstance = (authorized = true): void => {
+    when(featureEnabled as jest.Mock)
+      .calledWith('overpayments')
+      .mockReturnValue(true)
+
+    when(featureEnabled as jest.Mock)
+      .calledWith('copayments')
+      .mockReturnValue(true)
+
     render(<PaymentsScreen />, {
       queriesData: [
         {
@@ -117,7 +126,7 @@ context('PaymentsScreen', () => {
         amount: numberToUSDollars(396.93),
         count: 6,
       })
-      const debtsSub = t('debts.activityButton.subText', {
+      const debtsSub = t('payments.overpaymentsTile.subText', {
         amount: numberToUSDollars(347.5),
         count: 2,
       })
@@ -151,6 +160,36 @@ context('PaymentsScreen', () => {
 
       expect(screen.queryByText(t('copays.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
       expect(screen.queryByText(t('debts.activityButton.subText', { amount: 0, count: 0 }))).toBeNull()
+    })
+  })
+
+  describe('Travel Claims button', () => {
+    it('is not displayed if feature toggle is disabled', () => {
+      initializeTestInstance()
+
+      expect(screen.queryByTestId('toTravelPayClaimsLinkID')).toBeFalsy()
+    })
+
+    it('is displayed if feature toggle is enabled', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+
+      initializeTestInstance()
+
+      expect(screen.getByTestId('toTravelPayClaimsLinkID')).toBeTruthy()
+    })
+
+    it('navigates to Travel Claims screen when pressed', () => {
+      when(featureEnabled as jest.Mock)
+        .calledWith('travelPayStatusList')
+        .mockReturnValue(true)
+
+      initializeTestInstance()
+
+      fireEvent.press(screen.getByTestId('toTravelPayClaimsLinkID'))
+
+      expect(mockNavigationSpy).toHaveBeenCalledWith('BenefitsTab', { screen: 'TravelPayClaims', initial: false })
     })
   })
 })

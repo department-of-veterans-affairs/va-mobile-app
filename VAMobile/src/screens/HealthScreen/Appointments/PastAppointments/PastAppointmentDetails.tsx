@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { useAppointments } from 'api/appointments'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
 import { FeatureLandingTemplate } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import {
   ClaimExamAppointment,
@@ -19,15 +21,17 @@ import {
 } from 'screens/HealthScreen/Appointments/AppointmentTypeComponents'
 import AppointmentFileTravelPayAlert from 'screens/HealthScreen/Appointments/AppointmentTypeComponents/SharedComponents/AppointmentFileTravelPayAlert'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { DowntimeFeatureTypeConstants } from 'store/api/types'
+import { DowntimeFeatureTypeConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import {
   AppointmentDetailsSubTypeConstants,
   getAppointmentAnalyticsDays,
   getAppointmentAnalyticsStatus,
+  getPastAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
 import { useDowntime } from 'utils/hooks'
+import { useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
 import { featureEnabled } from 'utils/remoteConfig'
 
@@ -37,12 +41,16 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
   const { appointment } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const registerReviewEvent = useReviewEvent(true)
+  useOfflineEventQueue(ScreenIDTypesConstants.PAST_APPOINTMENT_DETAILS_SCREEN_ID)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, status, phoneOnly, serviceCategoryName } = attributes || ({} as AppointmentAttributes)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
+  const dateRange = getPastAppointmentDateRange()
   const pendingAppointment = isAPendingAppointment(attributes)
-
+  const { lastUpdatedDate } = useAppointments(dateRange.startDate, dateRange.endDate, TimeFrameTypeConstants.UPCOMING, {
+    enabled: !appointment,
+  })
   const travelPayEnabled =
     !useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures) && featureEnabled('travelPaySMOC')
 
@@ -86,7 +94,8 @@ function PastAppointmentDetails({ route, navigation }: PastAppointmentDetailsPro
       testID="PastApptDetailsTestID"
       backLabel={t('appointments')}
       backLabelOnPress={navigation.goBack}
-      title={t('details')}>
+      title={t('details')}
+      dataUpdatedAt={lastUpdatedDate}>
       {travelPayEnabled && <AppointmentFileTravelPayAlert appointment={appointment} appointmentRouteKey={route.key} />}
       {isPhoneAppointment ? (
         <PhoneAppointment

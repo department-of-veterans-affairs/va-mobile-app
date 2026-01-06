@@ -3,9 +3,9 @@ import { Linking } from 'react-native'
 
 import { fireEvent, screen, waitFor } from '@testing-library/react-native'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 
 import { useDebts } from 'api/debts'
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useMedicalCopays } from 'api/medicalCopays'
 import {
   ClaimsAndAppealsListPayload,
@@ -17,11 +17,12 @@ import {
 } from 'api/types'
 import { DEFAULT_UPCOMING_DAYS_LIMIT } from 'constants/appointments'
 import { HomeScreen } from 'screens/HomeScreen/HomeScreen'
-import { get } from 'store/api'
-import { ErrorsState } from 'store/slices'
+import { DowntimeFeatureType, get } from 'store/api'
+import { AuthState } from 'store/slices'
 import { RenderParams, context, mockNavProps, render, when } from 'testUtils'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
 import { featureEnabled } from 'utils/remoteConfig'
+import { getMaintenanceWindowsPayload } from 'utils/tests/maintenanceWindows'
 import {
   getAppointmentsPayload,
   getClaimsAndAppealsPayload,
@@ -38,6 +39,21 @@ jest.mock('utils/hooks', () => {
   return {
     ...original,
     useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
+const allMaintenanceWindowServices: Array<DowntimeFeatureType> = [
+  'rx_refill',
+  'appointments',
+  'appeals',
+  'claims',
+  'secure_messaging',
+  'payment_history',
+]
+const useMaintenanceWindowsMock = useMaintenanceWindows as jest.Mock
+jest.mock('api/maintenanceWindows/getMaintenanceWindows', () => {
+  return {
+    useMaintenanceWindows: jest.fn().mockReturnValue({ maintenanceWindows: {} }),
   }
 })
 
@@ -154,9 +170,11 @@ const mockClaimsAndAppealsPayload: ClaimsAndAppealsListPayload = {
 
 context('HomeScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
-  const initializeTestInstance = (options?: RenderParams) => {
+
+  const initializeTestInstance = (options?: RenderParams, maintenanceWindows?: Array<DowntimeFeatureType>) => {
     const props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: mockNavigationSpy })
-    render(<HomeScreen {...props} />, { ...options })
+    useMaintenanceWindowsMock.mockReturnValue(getMaintenanceWindowsPayload(maintenanceWindows || []))
+    return render(<HomeScreen {...props} />, { ...options })
   }
 
   describe('Activity section', () => {
@@ -186,27 +204,22 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
 
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              rx_refill: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
+
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
 
     it('displays error message when all the features are in downtime', async () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ minutes: 1 }),
-      }
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(3, 5))
@@ -217,19 +230,16 @@ context('HomeScreen', () => {
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
 
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: downtimeWindow,
-              appeals: downtimeWindow,
-              claims: downtimeWindow,
-              secure_messaging: downtimeWindow,
-              rx_refill: downtimeWindow,
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.getByText(t('activity.error.cantShowAllActivity'))).toBeTruthy())
     })
@@ -318,18 +328,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(3, 0))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('upcomingAppointments') })).toBeFalsy())
     })
@@ -386,18 +394,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/appointments', expect.anything())
         .mockResolvedValue(getAppointmentsPayload(0, 3))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appointments: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('pastAppointments') })).toBeFalsy())
     })
@@ -467,24 +473,19 @@ context('HomeScreen', () => {
     })
 
     it('is not displayed when claims is in downtime', async () => {
-      const downtimeWindow = {
-        startTime: DateTime.now(),
-        endTime: DateTime.now().plus({ minutes: 1 }),
-      }
-
       when(get as jest.Mock)
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
         .mockResolvedValue(getClaimsAndAppealsPayload(2))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              appeals: downtimeWindow,
-              claims: downtimeWindow,
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('claims.title') })).toBeFalsy())
     })
@@ -538,18 +539,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/messaging/health/folders')
         .mockResolvedValue(getFoldersPayload(3))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              secure_messaging: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('messages') })).toBeFalsy())
     })
@@ -561,14 +560,15 @@ context('HomeScreen', () => {
     })
 
     it('renders Copays and Debts with correct subtext when amount & count > 0', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 396.93, count: 6 },
         isLoading: false,
         error: undefined,
       })
       ;(useDebts as jest.Mock).mockReturnValue({
-        summary: { amountDue: 347.5, count: 2 },
+        summary: { count: 2 },
         isLoading: false,
         error: undefined,
       })
@@ -585,7 +585,6 @@ context('HomeScreen', () => {
         count: 6,
       })
       const debtsSub = t('debts.activityButton.subText', {
-        amount: numberToUSDollars(347.5),
         count: 2,
       })
 
@@ -597,7 +596,8 @@ context('HomeScreen', () => {
     })
 
     it('hides Copays and Debts tiles when summaries are empty', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 0, count: 0 },
         isLoading: false,
@@ -668,18 +668,16 @@ context('HomeScreen', () => {
       when(get as jest.Mock)
         .calledWith('/v0/health/rx/prescriptions', expect.anything())
         .mockResolvedValue(getPrescriptionsPayload(3))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              rx_refill: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('activity.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByRole('link', { name: t('prescription.title') })).toBeFalsy())
     })
@@ -789,18 +787,16 @@ context('HomeScreen', () => {
         .mockResolvedValue(getPaymentHistoryPayload('$3000', '2025-03-21T00:00:00.000-06:00'))
         .calledWith('/v0/military-service-history')
         .mockResolvedValue(getMilitaryServiceHistoryPayload({} as ServiceHistoryAttributes))
-      initializeTestInstance({
-        preloadedState: {
-          errors: {
-            downtimeWindowsByFeature: {
-              payment_history: {
-                startTime: DateTime.now(),
-                endTime: DateTime.now().plus({ minutes: 1 }),
-              },
-            },
-          } as ErrorsState,
+      initializeTestInstance(
+        {
+          preloadedState: {
+            auth: {
+              loggedIn: true,
+            } as AuthState,
+          },
         },
-      })
+        allMaintenanceWindowServices,
+      )
       await waitFor(() => expect(screen.queryByText(t('aboutYou.loading'))).toBeFalsy())
       await waitFor(() => expect(screen.queryByText(t('aboutYou.error.cantShowAllInfo'))).toBeTruthy())
     })
