@@ -1,7 +1,6 @@
 name: '[Admin] Notify Slack of DevOps issues'
 
 on:
-  push:
   issues:
     types:
       - opened
@@ -50,13 +49,9 @@ jobs:
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
-          echo "=== Available Status Options ==="
-          jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | .name' project_data.json
-          echo "================================"
-
           echo 'PROJECT_ID='$(jq -r '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'STATUS_FIELD_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'READY_TO_WORK_OPTION_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name | test("^Ready to [Ww]ork$")) | .id' project_data.json) >> $GITHUB_ENV
+          echo 'READY_TO_WORK_OPTION_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Ready to Work") | .id' project_data.json) >> $GITHUB_ENV
 
       - name: Add issue to project
         env:

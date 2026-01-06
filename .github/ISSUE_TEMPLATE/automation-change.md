@@ -26,7 +26,7 @@ assignees:
 - [ ] Other
 
 ## If other, please specify:
-<!-- If not above, descriibe your change -->
+<!-- If not above, describe your change -->
 
 
 
