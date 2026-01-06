@@ -30,6 +30,7 @@ function CernerAlertSM() {
     return (
       <>
         <TextView
+          accessible
           variant="MobileBody"
           mb={theme.dimensions.standardMarginBetween}
           accessibilityLabel={a11yLabelVA(t('cernerAlertSM.sendingAMessage'))}

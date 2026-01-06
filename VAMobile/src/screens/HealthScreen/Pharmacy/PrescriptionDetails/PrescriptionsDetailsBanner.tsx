@@ -42,18 +42,19 @@ function PrescriptionsDetailsBanner() {
       <>
         {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
+          accessible
           variant="MobileBody"
           accessibilityLabel={a11yLabelVA(t('prescription.details.banner.body1'))}
           mb={standardMarginBetween}>
           {t('prescription.details.banner.body1')}
         </TextView>
-        <TextView variant="MobileBody" mb={standardMarginBetween}>
+        <TextView accessible variant="MobileBody" mb={standardMarginBetween}>
           {t('prescription.details.banner.body2')}
         </TextView>
         <Box>
           <VABulletList listOfText={bullets} paragraphSpacing={true} />
         </Box>
-        <TextView variant="MobileBody">{t('automatedPhoneSystem')}</TextView>
+        <TextView accessible variant="MobileBody">{t('automatedPhoneSystem')}</TextView>
         <ClickToCallPhoneNumber
           phone={t('5418307563')}
           displayedText={`${displayedTextPhoneNumber(t('5418307563'))}`}

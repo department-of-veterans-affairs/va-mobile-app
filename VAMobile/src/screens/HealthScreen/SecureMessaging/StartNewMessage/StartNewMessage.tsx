@@ -455,7 +455,7 @@ function StartNewMessage({ navigation, route }: StartNewMessageProps) {
             header={t('secureMessaging.startNewMessage.nonurgent.title')}
             testID={'startNewMessageNonUrgentWarning'}
             scrollViewRef={scrollViewRef}>
-            <TextView variant="MobileBody">
+            <TextView accessible variant="MobileBody">
               {t('secureMessaging.startNewMessage.nonurgent.careTeam')}
               <TextView variant="MobileBodyBold">{t('secureMessaging.startNewMessage.nonurgent.threeDays')}</TextView>
               {t('secureMessaging.startNewMessage.nonurgent.reply')}

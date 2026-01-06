@@ -61,6 +61,7 @@ function NoMatchInRecords() {
           description={t('noMatch.alert.text.1')}>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
+            accessible
             variant="MobileBody"
             paragraphSpacing={true}
             accessibilityLabel={a11yLabelVA(t('noMatch.alert.text.2'))}>
@@ -68,6 +69,7 @@ function NoMatchInRecords() {
           </TextView>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
           <TextView
+            accessible
             variant="MobileBody"
             paragraphSpacing={true}
             accessibilityLabel={a11yLabelVA(t('noMatch.alert.text.3'))}>

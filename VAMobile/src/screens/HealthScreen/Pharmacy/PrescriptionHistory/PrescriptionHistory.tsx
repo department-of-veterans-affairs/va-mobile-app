@@ -596,34 +596,8 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
       title={t('prescription.title')}
       testID="PrescriptionHistory"
       footerContent={screenReaderEnabled ? undefined : getRequestRefillButton()}>
-      {prescriptionInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.PRESCRIPTION_SCREEN_ID} />
-      ) : loadingHistory || loadingUserAuthorizedServices ? (
-        <LoadingComponent text={t('prescriptions.loading')} a11yLabel={t('prescriptions.loading.a11yLabel')} />
-      ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
-          onTryAgain={refetchAuthServices}
-        />
-      ) : !userAuthorizedServices?.prescriptions ? (
-        <PrescriptionHistoryNotAuthorized />
-      ) : hasError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PRESCRIPTION_HISTORY_SCREEN_ID}
-          error={hasError}
-          onTryAgain={refetchPrescriptions}
-        />
-      ) : !allPrescriptions?.length ? (
-        <PrescriptionHistoryNoPrescriptions />
-      ) : (
-        <>
-          {featureEnabled('nonVAMedsLink') && getNonVAMedsAlert()}
-          {getTransferAlert()}
-          {screenReaderEnabled ? getRequestRefillButton() : undefined}
-          {getContent()}
-        </>
-      )}
+      <PrescriptionHistoryNoPrescriptions />
+
     </FeatureLandingTemplate>
   )
 }

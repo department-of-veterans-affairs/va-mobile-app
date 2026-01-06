@@ -143,7 +143,7 @@ function VeteranStatusScreen({ navigation }: VeteranStatusScreenProps) {
           description={t('veteranStatus.error.notTitle38.body1')}
           descriptionA11yLabel={a11yLabelVA(t('veteranStatus.error.notTitle38.body1'))}>
           {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView accessibilityLabel={t('veteranStatus.error.notTitle38.body2')}>
+          <TextView accessible accessibilityLabel={t('veteranStatus.error.notTitle38.body2')}>
             {t('veteranStatus.error.notTitle38.body2')}
           </TextView>
           <ClickToCallPhoneNumber

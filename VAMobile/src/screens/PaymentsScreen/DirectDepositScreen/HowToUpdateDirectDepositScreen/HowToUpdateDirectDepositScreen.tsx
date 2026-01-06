@@ -29,7 +29,7 @@ function HowToUpdateDirectDepositScreen({ navigation }: HowToUpdateDirectDeposit
           variant="warning"
           header={t('howToUpdateDirectDeposit.alert.title')}
           description={t('howToUpdateDirectDeposit.alert.body.1')}>
-          <TextView variant="MobileBody" mt={theme.dimensions.contentMarginTop}>
+          <TextView accessible variant="MobileBody" mt={theme.dimensions.contentMarginTop}>
             {t('howToUpdateDirectDeposit.alert.body.2')}
           </TextView>
         </AlertWithHaptics>

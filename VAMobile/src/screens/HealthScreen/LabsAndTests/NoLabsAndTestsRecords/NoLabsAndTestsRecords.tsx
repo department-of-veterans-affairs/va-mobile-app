@@ -22,6 +22,7 @@ function NoLabsAndTestsRecords() {
             : t('labsAndTests.noRecords.alert.text.1')
         }>
         <TextView
+          accessible
           paragraphSpacing={true}
           variant="MobileBody"
           accessibilityLabel={a11yLabelMyVA411(t('labsAndTests.noRecords.alert.text.2'))}

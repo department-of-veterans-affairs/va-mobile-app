@@ -21,7 +21,7 @@ function NoAllergyRecords() {
             ? t('noAllergyRecords.zeroHoldTimes.text.1')
             : t('noAllergyRecords.alert.text.1')
         }>
-        <TextView paragraphSpacing={true} variant="MobileBody">
+        <TextView accessible paragraphSpacing={true} variant="MobileBody">
           {t('noAllergyRecords.alert.text.2')}
         </TextView>
         <ClickToCallPhoneNumber

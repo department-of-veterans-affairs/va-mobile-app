@@ -70,6 +70,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({
             {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
             <TextView
               variant="MobileBody"
+              accessible
               paragraphSpacing={true}
               accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
