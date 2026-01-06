@@ -420,6 +420,8 @@
   "cernerAlertSM.sendingAMessage": "To manage your care at these facilities you'll need to use our My VA Health portal.",
   "claim.backLabel": "Claim",
   "claims.activityButton.subText": "{{count}} active",
+  "claims.evidenceRequest.subText": " with {{count}} evidence request",
+  "claims.evidenceRequest.subText_plural": " with {{count}} evidence requests",
   "claimDetails.callVA": "Call our VA benefits hotline. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.",
   "claimDetails.callVA.a11yLabel": "Call our V-A benefits hotline. We’re here Monday through Friday, 8 a.m. to 9 p.m. E-T.",
   "claimDetails.claimType": "Claim type",
