@@ -4,12 +4,9 @@ Detox script that follows the Sign in Splash screens (onboarding) test case foun
 When to update:
 This script should be updated whenever new things are added/changed to the onboarding flow.
 */
-import { by, device, element, expect } from 'detox';
+import { by, device, element, expect } from 'detox'
 
-
-
-import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils';
-
+import { CommonE2eIdConstants, checkImages, loginToDemoMode } from './utils'
 
 export const OnboardingE2eIdConstants = {
   VA_ICON_ID: 'VAIconOnboardingLogo',

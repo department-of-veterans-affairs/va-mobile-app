@@ -1,18 +1,13 @@
-import React from 'react';
+import React from 'react'
 
+import { fireEvent, screen } from '@testing-library/react-native'
+import { t } from 'i18next'
 
-
-import { fireEvent, screen } from '@testing-library/react-native';
-import { t } from 'i18next';
-
-
-
-import { personalInformationKeys } from 'api/personalInformation/queryKeys';
-import OnboardingCarousel from 'screens/OnboardingCarousel/OnboardingCarousel';
-import { completeFirstTimeLogin } from 'store/slices';
-import { QueriesData, context, render } from 'testUtils';
-import { a11yLabelVA } from 'utils/a11yLabel';
-
+import { personalInformationKeys } from 'api/personalInformation/queryKeys'
+import OnboardingCarousel from 'screens/OnboardingCarousel/OnboardingCarousel'
+import { completeFirstTimeLogin } from 'store/slices'
+import { QueriesData, context, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
