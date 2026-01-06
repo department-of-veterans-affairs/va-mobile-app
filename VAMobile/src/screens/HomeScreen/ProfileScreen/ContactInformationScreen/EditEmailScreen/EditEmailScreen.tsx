@@ -21,10 +21,19 @@ import {
 import { CONFIRM_EMAIL_ALERT_DISMISSED } from 'components/EmailConfirmationAlert'
 import { EMAIL_REGEX_EXP } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { updateDisplayEmailConfirmationAlert } from 'store/slices'
 import { isErrorObject } from 'utils/common'
-import { useAlert, useAppDispatch, useBeforeNavBackListener, useShowActionSheet, useTheme } from 'utils/hooks'
+import {
+  useAlert,
+  useAppDispatch,
+  useBeforeNavBackListener,
+  useOfflineSnackbar,
+  useShowActionSheet,
+  useTheme,
+} from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 
 type EditEmailScreenProps = StackScreenProps<HomeStackParamList, 'EditEmail'>
 
@@ -42,6 +51,8 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const emailId = contactInformation?.contactEmail?.id
   const deleteEmailAlert = useAlert()
   const confirmAlert = useShowActionSheet()
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const [email, setEmail] = useState(contactInformation?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -94,6 +105,11 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   }
 
   const onSave = (): void => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
     const emailData: SaveEmailData = { emailAddress: email, id: emailId }
 
     const mutateOptions = {
@@ -177,6 +193,11 @@ function EditEmailScreen({ navigation }: EditEmailScreenProps) {
   const emailTitle = t('contactInformation.emailAddress').toLowerCase()
 
   const onDeletePressed = (): void => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
     deleteEmailAlert({
       title: t('contactInformation.removeInformation.title', { info: emailTitle }),
       message: t('contactInformation.removeInformation.body', { info: emailTitle }),

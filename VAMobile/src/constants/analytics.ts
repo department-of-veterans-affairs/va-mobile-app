@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 
 import { CategoryTypes } from 'api/types'
 import { Event, EventParams, UserAnalytic } from 'utils/analytics'
+import { trimNotificationUrl } from 'utils/notifications'
 
 /**
  * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
@@ -148,26 +149,6 @@ export const Events = {
   vama_cerner_alert: (): Event => {
     return {
       name: 'vama_cerner_alert',
-    }
-  },
-  vama_blue_alert_sm: (): Event => {
-    return {
-      name: 'vama_blue_alert_sm',
-    }
-  },
-  vama_blue_alert_rx: (): Event => {
-    return {
-      name: 'vama_blue_alert_rx',
-    }
-  },
-  vama_blue_sm_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_sm_link_conf',
-    }
-  },
-  vama_blue_rx_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_rx_link_conf',
     }
   },
   vama_cerner_alert_exp: (): Event => {
@@ -851,10 +832,41 @@ export const Events = {
     }
   },
   vama_notification_click: (notification_url?: string): Event => {
+    // Omit the id that follows the main url path for better logging
+    const trimmed_notification_url = trimNotificationUrl(notification_url || '')
     return {
       name: 'vama_notification_click',
       params: {
-        notification_url,
+        notification_url: trimmed_notification_url,
+      },
+    }
+  },
+  vama_offline_access: (screen_name: string): Event => {
+    return {
+      name: 'vama_offline_access',
+      params: {
+        value: screen_name,
+      },
+    }
+  },
+  vama_offline_action: (): Event => {
+    return {
+      name: 'vama_offline_action',
+    }
+  },
+  vama_offline_cache: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_cache',
+      params: {
+        value: queryKey,
+      },
+    }
+  },
+  vama_offline_no_data: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_no_data',
+      params: {
+        value: queryKey,
       },
     }
   },
@@ -1221,9 +1233,12 @@ export const Events = {
       name: 'vama_whatsnew_close',
     }
   },
-  vama_whatsnew_dont_show: (): Event => {
+  vama_whatsnew_dont_show: (skippedFeatures?: string[]): Event => {
     return {
       name: 'vama_whatsnew_dont_show',
+      params: {
+        q1: skippedFeatures,
+      },
     }
   },
   vama_whatsnew_more: (): Event => {
