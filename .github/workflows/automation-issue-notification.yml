@@ -51,8 +51,7 @@ jobs:
 
           echo 'PROJECT_ID='$(jq -r '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'STATUS_FIELD_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'READY_TO_WORK_OPTION_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Ready to work") | .id' project_data.json) >> $GITHUB_ENV
-
+          echo 'READY_TO_WORK_OPTION_ID='$(jq -r '.data.organization.projectV2.fields.nodes[] | select(.name== "Status") | .options[] | select(.name=="Ready to Work") | .id' project_data.json) >> $GITHUB_ENV
       - name: Add issue to project
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
@@ -97,4 +96,4 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-devops
-      message: "🔧 New DevOps issue: *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>"
+      message: '🔧 New DevOps issue: *${{ github.event.issue.title }}* | <${{ github.event.issue.html_url }}|View Issue>'
