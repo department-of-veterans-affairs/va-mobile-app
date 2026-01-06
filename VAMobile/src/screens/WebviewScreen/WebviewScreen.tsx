@@ -112,7 +112,7 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
       setWebviewLoadFailed(false)
       setFetchingSSOCookies(true)
     }
-    webviewRef?.current.reload()
+    webviewRef.current?.reload()
   }
 
   useEffect(() => {
@@ -138,11 +138,11 @@ function WebviewScreen({ navigation, route }: WebviewScreenProps) {
   }, [fetchingSSOCookies])
 
   const backPressed = (): void => {
-    webviewRef?.current.goBack()
+    webviewRef.current?.goBack()
   }
 
   const forwardPressed = (): void => {
-    webviewRef?.current.goForward()
+    webviewRef.current?.goForward()
   }
 
   const openPressed = (): void => {
