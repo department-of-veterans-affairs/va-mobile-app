@@ -8,7 +8,7 @@ import { when } from 'jest-when'
 import MaintenanceBanner, { MaintenanceBannerProps } from 'components/MaintenanceBanner'
 import { MaintenanceWindowsEntry, get } from 'store/api'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { QueriesData, context, render } from 'testUtils'
+import { context, render } from 'testUtils'
 
 jest.mock('@react-navigation/native', () => {
   const original = jest.requireActual('@react-navigation/native')
@@ -23,7 +23,7 @@ jest.mock('@react-navigation/native', () => {
 })
 
 context('MaintenanceBanner', () => {
-  const initializeTestInstance = (props?: MaintenanceBannerProps, queriesData?: QueriesData) => {
+  const initializeTestInstance = (props?: MaintenanceBannerProps) => {
     render(<MaintenanceBanner {...props} />, {
       preloadedState: {
         auth: {
