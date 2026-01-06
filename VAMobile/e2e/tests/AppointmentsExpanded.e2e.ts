@@ -1309,5 +1309,5 @@ beforeAll(async () => {
 describe(':ios: Appointments Screen Expansion', () => {
   apppointmentVerification()
   apppointmentVerification(true)
-  //checkOHAVS()
+  checkOHAVS()
 })
