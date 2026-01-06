@@ -691,7 +691,7 @@ export const Events = {
     return {
       name: 'vama_hs_appts_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -699,7 +699,7 @@ export const Events = {
     return {
       name: 'vama_hs_claims_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -707,7 +707,7 @@ export const Events = {
     return {
       name: 'vama_hs_rx_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -730,7 +730,7 @@ export const Events = {
     return {
       name: 'vama_hs_sm_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -739,7 +739,7 @@ export const Events = {
     return {
       name: 'vama_hs_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
