@@ -27,7 +27,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/FileRequestSubtask'
 import { ScreenIDTypesConstants } from 'store/api'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type File5103ReviewWaiverProps = StackScreenProps<FileRequestStackParams, 'File5103ReviewWaiver'>
@@ -58,7 +57,6 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
   const navigateToClaimsDetailsPage = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
   const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
-  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   useSubtaskProps({
     leftButtonText: t('back'),
@@ -96,29 +94,29 @@ function File5103ReviewWaiver({ navigation, route }: File5103ReviewWaiverProps) 
   ]
 
   const onSubmit = (): void => {
-    if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_conf(claim.id, claim.attributes.claimType, numberOfRequests))
-    }
     const mutateOptions = {
       onSuccess: () => {
+        if (claim) {
+          logAnalyticsEvent(Events.vama_5103_wvr_submit(claim.id, claim.attributes.claimType))
+        }
         setSubmittedDecision(true)
         snackbar.show(t('claimDetails.5103.review.waiver.submitted'))
       },
-      onError: () =>
+      onError: () => {
+        if (claim) {
+          logAnalyticsEvent(Events.vama_5103_wvr_submit_err(claim.id, claim.attributes.claimType))
+        }
         snackbar.show(t('claimDetails.5103.review.waiver.submitted.error'), {
           isError: true,
           offset: theme.dimensions.snackBarBottomOffset,
           onActionPressed: () => onSubmit,
-        }),
+        })
+      },
     }
     submitClaimDecision(claimID, mutateOptions)
   }
 
   const onSave = (): void => {
-    if (claim) {
-      logAnalyticsEvent(Events.vama_claim_eval_submit(claim.id, claim.attributes.claimType, numberOfRequests))
-    }
-
     const options = [t('claimDetails.5103.submit.waiver'), t('cancel')]
     submitWaiverAlert(
       {

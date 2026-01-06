@@ -308,6 +308,24 @@ export const Events = {
       },
     }
   },
+  vama_5103_wvr_submit: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_5103_wvr_submit',
+      params: {
+        claim_id,
+        claim_type,
+      },
+    }
+  },
+  vama_5103_wvr_submit_err: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_5103_wvr_submit_err',
+      params: {
+        claim_id,
+        claim_type,
+      },
+    }
+  },
   vama_claim_file_request: (claim_id: string): Event => {
     return {
       name: 'vama_claim_file_request',
