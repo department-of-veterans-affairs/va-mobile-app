@@ -6,7 +6,6 @@ import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABul
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { getWhatsNewConfig } from 'constants/whatsNew'
-import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/CernerAlertSM'
 import { logAnalyticsEvent } from 'utils/analytics'
 import { useTheme } from 'utils/hooks'
 import { featureEnabled } from 'utils/remoteConfig'
@@ -163,7 +162,6 @@ export const WhatsNew = () => {
           analytics={{ onExpand: expandCollapsible, onCollapse: closeCollapsible }}>
           {whatsNewDisplay}
         </AlertWithHaptics>
-        <CernerAlertSM />
       </Box>
     )
   } else {
