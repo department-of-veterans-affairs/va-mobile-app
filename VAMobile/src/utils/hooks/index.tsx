@@ -84,17 +84,17 @@ export const useDowntimeByScreenID = (currentScreenID: ScreenIDTypes): boolean =
 
 export const featureInDowntime = (
   feature: DowntimeFeatureType,
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
-  const mw = downtimeWindows[feature]
+  const mw = downtimeWindows?.[feature]
   return !!mw && mw.startTime <= DateTime.now() && DateTime.now() <= mw.endTime
 }
 
 export const featureInDowntimeWindow = (
   feature: DowntimeFeatureType,
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
-  const mw = downtimeWindows[feature]
+  const mw = downtimeWindows?.[feature]
   return (
     !!mw &&
     mw.startTime <= DateTime.now().plus({ hour: MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS }) &&
@@ -104,7 +104,7 @@ export const featureInDowntimeWindow = (
 
 export const oneOfFeaturesInDowntime = (
   features: DowntimeFeatureType[],
-  downtimeWindows: DowntimeWindowsByFeatureType,
+  downtimeWindows: DowntimeWindowsByFeatureType | undefined,
 ): boolean => {
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }

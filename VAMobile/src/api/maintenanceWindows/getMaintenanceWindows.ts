@@ -18,17 +18,6 @@ export type MaintenanceWindowOverrideStorage = Record<string, { startTime: strin
 export const MAINTENANCE_WINDOW_OVERRIDES = '@maintenance_window_overrides'
 const MAINTENANCE_WINDOW_REFETCH_INTERVAL = 180000 // 3 minutes
 
-const initializeDowntimeWindowsByFeature = (): DowntimeWindowsByFeatureType => {
-  return reduce(
-    DowntimeFeatureTypeConstants,
-    (memo: DowntimeWindowsByFeatureType, value: DowntimeFeatureType): DowntimeWindowsByFeatureType => {
-      memo[value] = undefined
-      return memo
-    },
-    {} as DowntimeWindowsByFeatureType,
-  )
-}
-
 /**
  * Fetch maintenance windows
  */
@@ -88,16 +77,22 @@ const useMaintenanceWindowQuery = () => {
   })
 }
 
-const initialData = initializeDowntimeWindowsByFeature()
 /**
  * returns the maintenance windows. Only passes the maintenance windows to the component from initial render to prevent new
  * maintenance window changes affecting the currently focused screen.
  */
 export const useMaintenanceWindows = () => {
   const { data, isFetched } = useMaintenanceWindowQuery()
-  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType>(initialData)
+  const [maintenanceWindows, setMaintenanceWindows] = useState<DowntimeWindowsByFeatureType | undefined>(data)
   const routeName = useNavigationState((state) => state?.routes[state.index]?.name)
   const [prevRoute, setPrevRoute] = useState<string>('')
+
+  // Update local state when data loads for the first time
+  useEffect(() => {
+    if (data && maintenanceWindows === undefined) {
+      setMaintenanceWindows(data)
+    }
+  }, [data, maintenanceWindows])
 
   // Only updates maintenance window when the screen changes
   useEffect(() => {
