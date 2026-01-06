@@ -78,7 +78,7 @@ If you need to escalate an issue, these are the relevant personnel listed below:
 | Role             | Person         | Contact Method |
 |------------------|----------------|----------------|
 | Product Owner    | Ryan Thurlwell | OCTO Slack     |
-| Engineering Lead | Tim Wright     | OCTO Slack     |
+| Engineering Lead | Jon Bindbeutel | OCTO Slack     |
 | Product Lead     | Becca Tupaj    | OCTO Slack     |
 | System Owner.    | Chris Johnston | OCTO Slack     |
 

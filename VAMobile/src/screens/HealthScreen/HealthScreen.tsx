@@ -160,7 +160,7 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('overpayCopay') && (
+        {featureEnabled('copayments') && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}

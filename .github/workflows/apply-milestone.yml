@@ -29,11 +29,28 @@ jobs:
           echo "Linked Issues Count: ${{ steps.check-linked-issues.outputs.linked_issues_count }}"
           echo "Linked Issues: ${{ steps.check-linked-issues.outputs.issues }}"
 
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
+          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
+
+      - name: Verify token was generated
+        run: |
+          if [[ -z "${{ steps.generate_token.outputs.token }}" ]]; then
+            echo "ERROR: GitHub App token was not generated"
+            echo "Check that FLAGSHIP_MOBILE_APP_ID and FLAGSHIP_MOBILE_APP_PRIVATE_KEY secrets are set"
+            exit 1
+          else
+            echo "GitHub App token generated successfully"
+          fi
+
       - name: Use linked issues
         id: found_linked_issues
         if: steps.check-linked-issues.outcome == 'success'
         run: |
-          LINKED_ISSUE_STRING="${{ steps.check-linked-issues.outputs.issues }}"
+          LINKED_ISSUE_STRING='${{ steps.check-linked-issues.outputs.issues }}'
           # Using jq to safely parse the JSON array and get the first element
           LINKED_ISSUE=$(echo "$LINKED_ISSUE_STRING" | jq -r '.[0]')
 
@@ -56,13 +73,6 @@ jobs:
           echo "Failed to check linked issues (likely due to external repository reference)"
           echo "Will add milestone to PR instead"
           echo "force_pr_milestone=true" >> $GITHUB_OUTPUT
-
-      - name: Generate token
-        id: generate_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.FLAGSHIP_MOBILE_APP_ID }}
-          private-key: ${{ secrets.FLAGSHIP_MOBILE_APP_PRIVATE_KEY }}
 
       - name: Conditional Action Add Milestone to issue or PR
         if: ${{ always() }}

@@ -43,7 +43,11 @@ jest.mock('utils/hooks', () => {
 context('PaymentsScreen', () => {
   const initializeTestInstance = (authorized = true): void => {
     when(featureEnabled as jest.Mock)
-      .calledWith('overpayCopay')
+      .calledWith('overpayments')
+      .mockReturnValue(true)
+
+    when(featureEnabled as jest.Mock)
+      .calledWith('copayments')
       .mockReturnValue(true)
 
     render(<PaymentsScreen />, {
