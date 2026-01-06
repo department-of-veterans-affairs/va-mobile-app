@@ -118,6 +118,9 @@ const message: SecureMessagingMessageGetData = {
     },
   },
   included: [],
+  meta: {
+    userInTriageTeam: false,
+  },
 }
 
 context('ReplyMessage', () => {

@@ -7,7 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack'
 
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 import { Icon, IconProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/Icon'
-import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 import { filter, find } from 'underscore'
 
 import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
@@ -26,7 +25,6 @@ import {
   BoxProps,
   ErrorComponent,
   FeatureLandingTemplate,
-  LinkWithAnalytics,
   LoadingComponent,
   MultiTouchCard,
   MultiTouchCardProps,
@@ -39,23 +37,27 @@ import RadioGroupModal, { RadioGroupModalProps } from 'components/RadioGroupModa
 import { Events } from 'constants/analytics'
 import { ASCENDING, DEFAULT_PAGE_SIZE, DESCENDING } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { PrescriptionListItem } from 'screens/HealthScreen/Pharmacy/PrescriptionCommon'
 import PrescriptionHistoryNoMatches from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoMatches'
 import PrescriptionHistoryNoPrescriptions from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNoPrescriptions'
 import PrescriptionHistoryNotAuthorized from 'screens/HealthScreen/Pharmacy/PrescriptionHistory/PrescriptionHistoryNotAuthorized'
+import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/CernerAlertSM'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
 import { getTranslation } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { filterAndSortPrescriptions, getFilterArgsForFilter } from 'utils/prescriptions'
 import { featureEnabled } from 'utils/remoteConfig'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
-const { LINK_URL_GO_TO_PATIENT_PORTAL, LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
+const { LINK_URL_MHV_VA_MEDICATIONS } = getEnv()
 
 const NON_VA_MEDS_ALERT_DISMISSED = '@non_va_medications_alert_dismissed'
 
@@ -87,6 +89,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   } = usePrescriptions({
     enabled: screenContentAllowed('WG_PrescriptionHistory'),
   })
+  const showOfflineSnackbar = useOfflineSnackbar()
   const [allPrescriptions, setAllPrescriptions] = useState<PrescriptionsList>([])
   const transferredPrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.refillStatus === RefillStatusConstants.TRANSFERRED
@@ -107,6 +110,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const startingFilter = route?.params?.startingFilter
   const hasTransferred = !!transferredPrescriptions?.length
   const hasNonVaMeds = !!prescriptionData?.meta.hasNonVaMeds
+  const connectionStatus = useAppIsOnline()
 
   const [page, setPage] = useState(1)
   const [currentPrescriptions, setCurrentPrescriptions] = useState<PrescriptionsList>([])
@@ -416,10 +420,15 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         t('prescription.history.nonVAMeds.message') + t('prescription.history.nonVAMeds.link.text'),
       ),
       onPress: (): void => {
+        if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+          showOfflineSnackbar()
+          return
+        }
+
         logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICATIONS))
         navigateTo('Webview', {
           url: LINK_URL_MHV_VA_MEDICATIONS,
-          displayTitle: t('webview.vagov'),
+          displayTitle: vaGovWebviewTitle(t),
           loadingMessage: t('loading.vaWebsite'),
           useSSO: true,
         })
@@ -452,70 +461,10 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   }
 
   const getTransferAlert = () => {
-    if (!hasTransferred) {
-      return <></>
+    if (userAuthorizedServices?.isUserAtPretransitionedOhFacility && featureEnabled('showCernerWarningAlert')) {
+      return <CernerAlertSM />
     }
-
-    const linkProps: LinkProps = {
-      type: 'url',
-      url: LINK_URL_GO_TO_PATIENT_PORTAL,
-      text: t('goToMyVAHealth'),
-      a11yLabel: a11yLabelVA(t('goToMyVAHealth')),
-      variant: 'base',
-      testID: 'goToMyVAHealthPrescriptionHistoryID',
-    }
-
-    if (userAuthorizedServices?.medicationsOracleHealthEnabled) {
-      logAnalyticsEvent(Events.vama_blue_alert_rx())
-      return (
-        <Box mx={theme.dimensions.gutter}>
-          <AlertWithHaptics
-            variant="info"
-            expandable={true}
-            focusOnError={false}
-            header={t('healthHelp.cernerTransitionInfoBanner.header')}
-            headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
-            testID="smCernerInfoAlertTestID">
-            <TextView variant="MobileBody">
-              {t('healthHelp.cernerTransitionInfoBanner.content')}
-              <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
-              {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
-            </TextView>
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <LinkWithAnalytics
-                {...linkProps}
-                analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_rx_link_conf())}
-              />
-            </Box>
-          </AlertWithHaptics>
-        </Box>
-      )
-    }
-
-    return (
-      <Box mx={theme.dimensions.gutter}>
-        <AlertWithHaptics
-          variant="warning"
-          expandable={true}
-          focusOnError={false}
-          header={t('prescription.history.transferred.title')}
-          description={t('prescription.history.transferred.instructions')}
-          descriptionA11yLabel={a11yLabelVA(t('prescription.history.transferred.instructions'))}
-          analytics={{
-            onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()),
-          }}
-          testID="prescriptionRefillWarningTestID">
-          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-          <TextView
-            mt={theme.dimensions.standardMarginBetween}
-            paragraphSpacing={true}
-            accessibilityLabel={a11yLabelVA(t('prescription.history.transferred.youCan'))}>
-            {t('prescription.history.transferred.youCan')}
-          </TextView>
-          <LinkWithAnalytics {...linkProps} />
-        </AlertWithHaptics>
-      </Box>
-    )
+    return null
   }
 
   const getRequestRefillButton = () => {
@@ -534,7 +483,13 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         isHidden={hideRefillRequestButton}
         testID="refillRequestTestID"
         label={t('prescription.history.startRefillRequest')}
-        onPress={() => navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })}
+        onPress={() => {
+          if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+            showOfflineSnackbar()
+            return
+          }
+          navigateTo('RefillScreenModal', { refillRequestSummaryItems: undefined })
+        }}
       />
     )
   }

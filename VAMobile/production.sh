@@ -91,7 +91,7 @@ echo VERSION: "$version"
 
 BASE_DIR="$PWD"
 
-yarn install &&
+yarn install --ignore-scripts &&
 yarn env:production &&
 
 if [[ -z "$os" || $os == "ios" ]]

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { I18nextProvider } from 'react-i18next'
-import { useTranslation } from 'react-i18next'
+import { I18nextProvider, useTranslation } from 'react-i18next'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import 'react-native-gesture-handler'
 import KeyboardManager from 'react-native-keyboard-manager'
@@ -23,6 +22,7 @@ import {
 } from '@department-of-veterans-affairs/mobile-component-library'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { DateTime } from 'luxon'
 import { ThemeProvider } from 'styled-components'
 
 import queryClient from 'api/queryClient'
@@ -61,8 +61,7 @@ import LoaGate from 'screens/auth/LoaGate'
 import RequestNotificationsScreen from 'screens/auth/RequestNotifications/RequestNotificationsScreen'
 import store, { RootState } from 'store'
 import { injectStore } from 'store/api/api'
-import { AnalyticsState, AuthState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
-import { SettingsState } from 'store/slices'
+import { AnalyticsState, AuthState, SettingsState, handleTokenCallbackUrl, initializeAuth } from 'store/slices'
 import {
   AccessibilityState,
   sendUsesLargeTextAnalytics,
@@ -75,12 +74,15 @@ import theme, { getTheme, setColorScheme } from 'styles/themes/standardTheme'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from 'utils/accessibility'
 import { initHideWarnings } from 'utils/consoleWarnings'
 import getEnv from 'utils/env'
-import { useAppDispatch, useFontScale } from 'utils/hooks'
+import { useAppDispatch, useFontScale, useOnResumeForeground } from 'utils/hooks'
 import { useHeaderStyles, useTopPaddingAsHeaderStyles } from 'utils/hooks/headerStyles'
+import { useNetworkConnectionListener, useOfflineAnnounce, useOfflineNavEvents } from 'utils/hooks/offline'
 import i18n from 'utils/i18n'
 import { isIOS } from 'utils/platform'
+import { fetchAndActivate } from 'utils/remoteConfig'
 
 const { ENVIRONMENT, IS_TEST, REACTOTRON_ENABLED } = getEnv()
+const REMOTE_CONFIG_REFRESH = 30 // minutes
 
 enableScreens(true)
 injectStore(store)
@@ -178,35 +180,33 @@ function MainApp() {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ActionSheetProvider>
           <ThemeProvider theme={currentTheme}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18n}>
-                <NavigationContainer
-                  ref={navigationRef}
-                  linking={linking}
-                  onReady={navOnReady}
-                  onStateChange={onNavStateChange}>
-                  <NotificationManager>
-                    <SafeAreaProvider>
-                      <StatusBar
-                        barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
-                        backgroundColor={currentTheme.colors.background.main}
-                      />
-                      <SnackbarProvider>
-                        <AuthGuard />
-                      </SnackbarProvider>
-                    </SafeAreaProvider>
-                  </NotificationManager>
-                </NavigationContainer>
-              </I18nextProvider>
-            </Provider>
+            <I18nextProvider i18n={i18n}>
+              <NavigationContainer
+                ref={navigationRef}
+                linking={linking}
+                onReady={navOnReady}
+                onStateChange={onNavStateChange}>
+                <NotificationManager>
+                  <SafeAreaProvider>
+                    <StatusBar
+                      barStyle={theme.mode === 'dark' ? 'light-content' : 'dark-content'}
+                      backgroundColor={currentTheme.colors.background.main}
+                    />
+                    <SnackbarProvider>
+                      <AuthGuard />
+                    </SnackbarProvider>
+                  </SafeAreaProvider>
+                </NotificationManager>
+              </NavigationContainer>
+            </I18nextProvider>
           </ThemeProvider>
         </ActionSheetProvider>
       </QueryClientProvider>
-    </>
+    </Provider>
   )
 }
 
@@ -239,6 +239,43 @@ export function AuthGuard() {
   const fontScaleFunction = useFontScale()
   const sendUsesLargeTextScal = fontScaleFunction(30)
   const { demoMode } = useSelector<RootState, DemoState>((state) => state.demo)
+  useNetworkConnectionListener()
+  useOfflineAnnounce()
+
+  const [remoteConfigUpdateTime, setRemoteConfigUpdateTime] = useState<DateTime>(
+    DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }),
+  )
+  const [remoteConfigTimeoutId, setRemoteConfigTimeoutId] = useState<number>()
+
+  // Refetch remote config
+  useEffect(() => {
+    const refetchTimeout = setTimeout(async () => {
+      await fetchAndActivate()
+      setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
+    }, REMOTE_CONFIG_REFRESH * 60000)
+
+    /*
+      The return value of setTimeout is a number, but because we have NodeJS types imported for unit tests,
+      the tests expect this to be a NodeJS.Timeout while the standard build thinks it's a number, and they can't
+      be cast between without converting to an unknown first.
+     */
+    //@ts-ignore
+    setRemoteConfigTimeoutId(refetchTimeout)
+
+    return () => {
+      clearTimeout(refetchTimeout)
+      setRemoteConfigTimeoutId(undefined)
+    }
+  }, [remoteConfigUpdateTime])
+
+  useOnResumeForeground(() => {
+    const now = DateTime.now()
+    if (now > remoteConfigUpdateTime) {
+      clearTimeout(remoteConfigTimeoutId)
+      fetchAndActivate()
+      setRemoteConfigUpdateTime(DateTime.now().plus({ minute: REMOTE_CONFIG_REFRESH }))
+    }
+  })
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
@@ -446,6 +483,7 @@ export function AuthedApp({ initialDeepLink }: AuthedAppProps) {
   const benefitsScreens = getBenefitsScreens()
   const healthScreens = getHealthScreens()
   const paymentsScreens = getPaymentsScreens()
+  useOfflineNavEvents()
 
   // When applicable, this will open the deep link from the notification that launched the app once sign in
   // is complete. Mapping the link to the appropriate screen is handled by the React Navigation linking config.

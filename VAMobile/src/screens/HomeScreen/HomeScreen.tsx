@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Platform, View } from 'react-native'
 import { InView } from 'react-native-intersection-observer'
@@ -47,6 +47,7 @@ import {
 import { Events } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { FEATURE_LANDING_TEMPLATE_OPTIONS } from 'constants/screens'
 import ContactVAScreen from 'screens/HomeScreen/ContactVAScreen/ContactVAScreen'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
@@ -60,7 +61,9 @@ import AccountSecurity from 'screens/HomeScreen/ProfileScreen/SettingsScreen/Acc
 import DeveloperScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen'
 import DemoModeUsersScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/DemoModeUsersScreen'
 import OverrideAPIScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideApiScreen'
+import OverrideMaintenanceWindows from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/OverrideMaintenanceWindows'
 import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigScreen'
+import RemoteConfigTestScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/DeveloperScreen/RemoteConfigTestScreen'
 import GiveFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/GiveFeedback'
 import FeedbackSentScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/FeedbackSent/FeedbackSent'
 import SendUsFeedbackScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/GiveFeedback/SendUsFeedback/SendUsFeedback'
@@ -74,8 +77,10 @@ import { getPastAppointmentDateRange, getUpcomingAppointmentDateRange } from 'ut
 import { isValidDisabilityRating } from 'utils/claims'
 import getEnv from 'utils/env'
 import { formatDateUtc, numberToUSDollars } from 'utils/formattingUtils'
-import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useDowntime, useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_ABOUT_PACT_ACT } = getEnv()
 
@@ -88,6 +93,8 @@ export function HomeScreen({}: HomeScreenProps) {
   const navigateTo = useRouteNavigation()
   const isFocused = useIsFocused()
   const ref = useRef(null)
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const authorizedServicesQuery = useAuthorizedServices()
   const appointmentsInDowntime = useDowntime(DowntimeFeatureTypeConstants.appointments)
@@ -134,7 +141,7 @@ export function HomeScreen({}: HomeScreenProps) {
   const { summary: debtsSummary, isLoading: debtsLoading, error: debtsError } = useDebts()
 
   const showCopays = !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0 && debtsSummary.amountDue > 0
+  const showDebts = !debtsLoading && !debtsError && debtsSummary.count > 0
 
   const { loginTimestamp } = useSelector<RootState, AnalyticsState>((state) => state.analytics)
 
@@ -308,10 +315,15 @@ export function HomeScreen({}: HomeScreenProps) {
   )
 
   const onFacilityLocator = () => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
     logAnalyticsEvent(Events.vama_find_location())
     navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
-      displayTitle: t('webview.vagov'),
+      displayTitle: vaGovWebviewTitle(t),
       loadingMessage: t('webview.valocation.loading'),
     })
   }
@@ -342,6 +354,10 @@ export function HomeScreen({}: HomeScreenProps) {
       }),
     },
   }
+
+  const numClaimsWithEvidenceRequests = useMemo(() => {
+    return claimsAndAppealsQuery.data?.data.filter((claim) => claim.attributes.documentsNeeded).length
+  }, [claimsAndAppealsQuery.data?.data])
 
   return (
     <CategoryLanding headerButton={headerButton} testID="homeScreenID">
@@ -418,9 +434,14 @@ export function HomeScreen({}: HomeScreenProps) {
               {!claimsError && !!claimsAndAppealsQuery.data?.meta.activeClaimsCount && (
                 <ActivityButton
                   title={t('claims.title')}
-                  subText={t('claims.activityButton.subText', {
-                    count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
-                  })}
+                  subText={
+                    t('claims.activityButton.subText', {
+                      count: claimsAndAppealsQuery.data.meta.activeClaimsCount,
+                    }) +
+                    (numClaimsWithEvidenceRequests
+                      ? t('claims.evidenceRequest.subText', { count: numClaimsWithEvidenceRequests })
+                      : '')
+                  }
                   deepLink={'claims'}
                 />
               )}
@@ -431,7 +452,7 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'messages'}
                 />
               )}
-              {featureEnabled('overpayCopay') && showCopays && (
+              {featureEnabled('copayments') && showCopays && (
                 <ActivityButton
                   title={t('copays.title')}
                   subText={t('copays.activityButton.subText', {
@@ -441,11 +462,10 @@ export function HomeScreen({}: HomeScreenProps) {
                   deepLink={'copays'}
                 />
               )}
-              {featureEnabled('overpayCopay') && showDebts && (
+              {featureEnabled('overpayments') && showDebts && (
                 <ActivityButton
                   title={t('debts.title')}
                   subText={t('debts.activityButton.subText', {
-                    amount: numberToUSDollars(debtsSummary.amountDue),
                     count: debtsSummary.count,
                   })}
                   deepLink={'debts'}
@@ -779,6 +799,16 @@ function HomeStackScreen({}: HomeStackScreenProps) {
       <HomeScreenStack.Screen
         name="RemoteConfig"
         component={RemoteConfigScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="RemoteConfigTestScreen"
+        component={RemoteConfigTestScreen}
+        options={FEATURE_LANDING_TEMPLATE_OPTIONS}
+      />
+      <HomeScreenStack.Screen
+        name="MaintenanceWindows"
+        component={OverrideMaintenanceWindows}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
     </HomeScreenStack.Navigator>

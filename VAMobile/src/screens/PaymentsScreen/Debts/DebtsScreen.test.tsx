@@ -88,7 +88,7 @@ context('DebtsScreen', () => {
         .calledWith('/v0/debts')
         .mockResolvedValue(debtsDataMock)
       initializeTestInstance()
-      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveDebt') })
+      const allButtons = await screen.findAllByRole('button', { name: t('debts.resolveOverpayment') })
       expect(allButtons).toHaveLength(1)
       const resolveDebtButton = allButtons[0]
       expect(resolveDebtButton).toBeTruthy()
@@ -103,7 +103,7 @@ context('DebtsScreen', () => {
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('header', { name: t('debts.title') })).toBeTruthy())
       fireEvent.press(screen.getByTestId('debtHelpID'))
-      expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp')
+      expect(mockNavigationSpy).toHaveBeenCalledWith('DebtHelp', { helpType: 'questionsAboutDebt' })
     })
 
     it('should navigate to DebtDetails when review details is pressed', async () => {

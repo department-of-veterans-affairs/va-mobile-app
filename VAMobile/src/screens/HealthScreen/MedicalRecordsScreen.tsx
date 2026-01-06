@@ -7,13 +7,16 @@ import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServi
 import { Box, FeatureLandingTemplate, LargeNavButton, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { isIOS } from 'utils/platform'
 import { featureEnabled } from 'utils/remoteConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 type MedicalRecordsScreenProps = StackScreenProps<HealthStackParamList, 'MedicalRecordsList'>
 
@@ -24,6 +27,8 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { gutter } = theme.dimensions
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const { data: authorizedServices } = useAuthorizedServices()
 
@@ -61,10 +66,15 @@ const MedicalRecordsScreen = ({ navigation }: MedicalRecordsScreenProps) => {
         <LinkWithAnalytics
           type="custom"
           onPress={() => {
+            if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+              showOfflineSnackbar()
+              return
+            }
+
             logAnalyticsEvent(Events.vama_webview(LINK_URL_MHV_VA_MEDICAL_RECORDS))
             navigateTo('Webview', {
               url: LINK_URL_MHV_VA_MEDICAL_RECORDS,
-              displayTitle: t('webview.vagov'),
+              displayTitle: vaGovWebviewTitle(t),
               loadingMessage: t('webview.medicalRecords.loading'),
               useSSO: true,
             })

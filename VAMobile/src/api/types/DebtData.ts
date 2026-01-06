@@ -1,7 +1,28 @@
 export type DebtHistory = {
-  date?: string
-  letterCode?: string
-  description?: string
+  date: string
+  letterCode: string
+  description: string
+}
+
+export type DebtTransaction = {
+  debtId: number
+  transactionDate: string
+  transactionTotalAmount?: number
+  transactionPrincipalAmount?: number
+  debtIncreaseAmount?: number
+  offsetAmount?: number
+  transactionDescription?: string
+  transactionExplanation?: string
+  hinesCode?: string
+  offsetType?: string
+  paymentType?: string
+  transactionAdminAmount?: number
+  transactionCourtAmount?: number
+  transactionFiscalCode?: string
+  transactionFiscalSource?: string
+  transactionFiscalYear?: string
+  transactionInterestAmount?: number
+  transactionMarshallAmount?: number
 }
 
 export type DebtRecord = {
@@ -18,10 +39,11 @@ export type DebtRecord = {
 
     amountOverpaid?: number
     amountWithheld?: number
-    originalAr?: number
+    originalAr: number
     currentAr: number
 
     debtHistory?: DebtHistory[]
+    fiscalTransactionData?: DebtTransaction[]
   }
 }
 
