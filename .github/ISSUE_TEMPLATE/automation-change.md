@@ -26,7 +26,7 @@ assignees:
 - [ ] Other
 
 ## If other, please specify:
-<!-- If not above, descriibe your change -->
+<!-- If not above, describe your change -->
 
 
 
@@ -41,5 +41,5 @@ assignees:
 #### What testing needs to be done to ensure that this work is complete in production?
 
 ## Acceptability Criteria
-<!-- What Is the Definition of Done -->
+<!-- What is the Definition of Done -->
 - [ ] 
