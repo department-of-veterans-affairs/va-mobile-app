@@ -1,36 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-
-
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices';
-import {
-  AlertWithHaptics,
-  Box,
-  CallHelpCenter,
-  CustomError,
-  DowntimeError,
-  EmailConfirmationAlert,
-  ErrorAlert,
-  LinkWithAnalytics,
-  MessageAlert,
-  TextView,
-  VABulletList,
-  VABulletListText,
-  WaygateWrapper,
-} from 'components'
-import FormValidationAlert from 'components/FormValidationAlert'
+import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
 import { Events } from 'constants/analytics'
-import { NAMESPACE } from 'constants/namespaces';
-import { getWhatsNewConfig } from 'constants/whatsNew';
-import PrescriptionsDetailsBanner from 'screens/HealthScreen/Pharmacy/PrescriptionDetails/PrescriptionsDetailsBanner'
+import { NAMESPACE } from 'constants/namespaces'
+import { getWhatsNewConfig } from 'constants/whatsNew'
 import CernerAlertSM from 'screens/HealthScreen/SecureMessaging/CernerAlertSM/CernerAlertSM'
-import { ScreenIDTypesConstants } from 'store/api';
-import { logAnalyticsEvent } from 'utils/analytics';
-import { useTheme } from 'utils/hooks';
-import { featureEnabled } from 'utils/remoteConfig';
-import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/whatsNew';
-
+import { logAnalyticsEvent } from 'utils/analytics'
+import { useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
+import { getFeaturesSkipped, setFeaturesSkipped } from 'utils/whatsNew'
 
 export const WhatsNew = () => {
   const { t } = useTranslation(NAMESPACE.COMMON)
