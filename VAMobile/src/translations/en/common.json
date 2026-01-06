@@ -415,6 +415,8 @@
   "cernerAlertSM.sendingAMessage": "To manage your care at these facilities you'll need to use our My VA Health portal.",
   "claim.backLabel": "Claim",
   "claims.activityButton.subText": "{{count}} active",
+  "claims.evidenceRequest.subText": " with {{count}} evidence request",
+  "claims.evidenceRequest.subText_plural": " with {{count}} evidence requests",
   "claimDetails.5103.letters": "Claim letters",
   "claimDetails.5103.title": "5103 notice - Evidence we may need",
   "claimDetails.5103.read": "Read your 5103 notice letter",
