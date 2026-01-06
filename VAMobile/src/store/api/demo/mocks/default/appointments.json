@@ -2644,62 +2644,6 @@
     "upcoming": {
       "data": [
         {
-          "id": "fa88571de3f559065cfe900e4ce92785c90314290ec4d616df2e55377eb37846",
-          "type": "appointment",
-          "attributes": {
-            "appointmentType": "VA",
-            "appointmentIen": "19722",
-            "cancelId": null,
-            "comment": null,
-            "healthcareProvider": null,
-            "healthcareService": null,
-            "location": {
-              "id": "983",
-              "name": "Cheyenne VA Medical Center",
-              "address": {
-                "street": "2360 East Pershing Boulevard",
-                "city": "Cheyenne",
-                "state": "WY",
-                "zipCode": "82001-5356"
-              },
-              "lat": 39.744507,
-              "long": -104.830956,
-              "phone": {
-                "areaCode": "307",
-                "number": "778-7550",
-                "extension": null
-              },
-              "url": null,
-              "code": null
-            },
-            "physicalLocation": "TEST",
-            "minutesDuration": 20,
-            "phoneOnly": false,
-            "startDateLocal": "{{now - 1 minute}}",
-            "startDateUtc": "{{now - 1 minute utc}}",
-            "status": "BOOKED",
-            "statusDetail": null,
-            "timeZone": "America/Denver",
-            "vetextId": "442;3251216.13",
-            "reason": null,
-            "isCovidVaccine": true,
-            "isPending": false,
-            "proposedTimes": null,
-            "typeOfCare": null,
-            "patientPhoneNumber": null,
-            "patientEmail": null,
-            "bestTimeToCall": null,
-            "friendlyLocationName": "Cheyenne VA Medical Center",
-            "serviceCategoryName": "REGULAR",
-            "travelPayClaim": null,
-            "travelPayEligible": null,
-            "showScheduleLink": null,
-            "isCerner": false,
-            "avsPdf": null,
-            "avsError": null
-          }
-        },
-        {
           "id": "8a48e2fe7956f4d30179cddf3f3d00ac",
           "type": "appointment",
           "attributes": {
@@ -3494,7 +3438,7 @@
             "appointmentType": "VA",
             "cancelId": "12",
             "comment": null,
-            "healthcareProvider": "Jane Smith XXX",
+            "healthcareProvider": "Jane Smith",
             "healthcareService": null,
             "location": {
               "id": "442",

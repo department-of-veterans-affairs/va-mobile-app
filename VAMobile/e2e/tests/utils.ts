@@ -9,6 +9,7 @@ import { by, device, element, expect, waitFor } from 'detox'
 import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
 
+import { getDateFromMock } from 'store/api/demo/dateHelpers'
 import { todaysDate } from 'utils/dateUtils'
 
 import getEnv from '../../src/utils/env'
@@ -849,8 +850,12 @@ export async function iosSelectDateInPicker(selectDate: DateTime, pickerId: stri
   await element(by.text(`${dateToUseMonth} ${dateToUseYear}`))
     .atIndex(0)
     .tap()
-  await element(by.type('UIPickerView')).setColumnToValue(0, `${selectDateMonth}`)
+  console.error('dateToUseMonth:', dateToUseMonth)
+  console.error('dateToUseYear:', dateToUseYear)
+  console.error('selectDateMonth:', selectDateMonth)
+  console.error('selectDateYear:', selectDateYear)
   await element(by.type('UIPickerView')).setColumnToValue(1, `${selectDateYear}`)
+  await element(by.type('UIPickerView')).setColumnToValue(0, `${selectDateMonth}`)
   await element(by.text('Apply')).tap()
   await element(by.id(pickerId)).tap()
   await expect(element(by.text(`${selectDateMonth} ${selectDateYear}`)).atIndex(0)).toBeVisible()
@@ -865,4 +870,30 @@ export async function iosPastApptDate({ to, from }: { to?: DateTime; from?: Date
   if (from) {
     await iosSelectDateInPicker(from, 'datePickerFromFieldTestId')
   }
+}
+
+export const getAppointmentPastDate = async ({ provider, location }: { provider?: string; location?: string }) => {
+  if (!provider && !location) {
+    throw new Error('Either provider or location must be provided to get appointment past date')
+  }
+  const pastData = (await import('../../src/store/api/demo/mocks/default/appointments.json'))?.default?.[
+    '/v0/appointments'
+  ]?.past.data
+  const appointments = pastData.filter((appt) => {
+    if (provider && location) {
+      return appt.attributes.healthcareProvider === provider && appt.attributes.location.name === location
+    } else if (provider) {
+      return appt.attributes.healthcareProvider === provider
+    } else if (location) {
+      return appt.attributes.location.name === location
+    }
+    return false
+  })
+  if (appointments.length === 0) {
+    throw new Error('No appointment found matching the provided criteria')
+  }
+  const appointmentDates = appointments.map((appt) => getDateFromMock(appt.attributes.startDateLocal))
+  console.error('appointmentDates:', appointmentDates)
+  console.error('past:', appointmentDates[0].diffNow().as('days'))
+  return appointmentDates
 }

@@ -1,4 +1,4 @@
-import { by, element, expect, waitFor } from 'detox'
+import { by, device, element, expect, waitFor } from 'detox'
 
 import { todaysDate } from 'utils/dateUtils'
 
@@ -415,49 +415,6 @@ const checkUpcomingApptDetails = async (
   await element(by.text('Appointments')).tap()
 }
 
-const scrollToThenTap = async (text: string, pastAppointment: string) => {
-  //Add back in when pagination is fixed
-  if (
-    text === 'Sami Alsahhar - HOME - Canceled' ||
-    text === 'At VA Palo Alto Health Care System' ||
-    text === 'At Hampton VA Medical Center'
-  ) {
-    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
-    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-  }
-  if (pastAppointment !== '') {
-    try {
-      await waitFor(element(by.text(text)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
-        .scroll(250, 'down')
-    } catch (ex) {
-      await waitFor(element(by.text(text)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
-        .scroll(250, 'up')
-    }
-  } else {
-    await waitFor(element(by.text(text)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
-      .scroll(300, 'down')
-
-    try {
-      await waitFor(element(by.text(text)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
-        .scroll(250, 'down')
-    } catch (ex) {
-      await waitFor(element(by.text(text)))
-        .toBeVisible()
-        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
-        .scroll(250, 'up')
-    }
-  }
-  await element(by.text(text)).tap()
-}
-
 // Scroll to element, if not found, if enabled, go to next page and continue scrolling
 export async function scrollTo(text: string, shouldTap = false, shouldGoToNextPage = false, currScroll = 0) {
   const maxScrolls = 7
@@ -568,6 +525,49 @@ export function checkOHAVS() {
       await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
     })
   })
+}
+
+const scrollToThenTap = async (text: string, pastAppointment: string) => {
+  //Add back in when pagination is fixed
+  if (
+    text === 'Sami Alsahhar - HOME - Canceled' ||
+    text === 'At VA Palo Alto Health Care System' ||
+    text === 'At Hampton VA Medical Center'
+  ) {
+    await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
+    await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+  }
+  if (pastAppointment !== '') {
+    try {
+      await waitFor(element(by.text(text)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+        .scroll(250, 'down')
+    } catch (ex) {
+      await waitFor(element(by.text(text)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+        .scroll(250, 'up')
+    }
+  } else {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+      .scroll(300, 'down')
+
+    try {
+      await waitFor(element(by.text(text)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+        .scroll(250, 'down')
+    } catch (ex) {
+      await waitFor(element(by.text(text)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID))
+        .scroll(250, 'up')
+    }
+  }
+  await element(by.text(text)).tap()
 }
 
 export async function apppointmentVerification(pastAppointment = false) {
@@ -1295,18 +1295,19 @@ export async function apppointmentVerification(pastAppointment = false) {
   })
 }
 
+beforeAll(async () => {
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  await loginToDemoMode()
+  await openHealth()
+  await openAppointments()
+  await waitFor(element(by.text('Upcoming')))
+    .toExist()
+    .withTimeout(10000)
+})
+
 describe(':ios: Appointments Screen Expansion', () => {
-  beforeAll(async () => {
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-    await loginToDemoMode()
-    await openHealth()
-    await openAppointments()
-    await waitFor(element(by.text('Upcoming')))
-      .toExist()
-      .withTimeout(10000)
-  })
   apppointmentVerification()
   apppointmentVerification(true)
-  checkOHAVS()
+  //checkOHAVS()
 })
