@@ -10,8 +10,8 @@ body:
   - type: dropdown
     id: change-type
     attributes:
-      label: change-type
-      description: Type of Change
+      label: Type of change
+      description: What type of change are you completing
       options:
         - Update Existing Automation
         - Add new automation functionality
@@ -22,8 +22,8 @@ body:
   - type: dropdown
     id: whats-changing
     attributes:
-      label: change
-      description: "What systems/scripts are changing?"
+      label: What is chaging
+      description: 'What systems/scripts are changing?'
       options:
         - Github Actions
         - Github Repo
@@ -36,36 +36,36 @@ body:
   - type: input
     id: change-other
     attributes:
-      label: change-other
-      description: "If change is not listed, please specify."
+      label: If other, please specify
+      description: 'Describe other change'
 
   - type: textarea
     id: work-done
     attributes:
-      label: work-being-done
-      description: "What is the work being done?"
+      label: Work Being Done
+      description: 'What is the work being done with this change?'
 
   - type: textarea
     id: testing-done
     attributes:
-      label: testing-done
-      description: "What testing did you do?"
+      label: Testing Done
+      description: 'What testing did you do?'
 
   - type: textarea
     id: testing-reviewer
     attributes:
-      label: testing-reviewer
-      description: "What testing needs to be done by the reviewer?"
+      label: Testing Reviewer
+      description: 'What testing needs to be done by the reviewer?'
 
   - type: textarea
     id: testing-for-prod
     attributes:
-      label: testing-for-prod
-      description: "What testing needs to be done to ensure this work is complete in production?"
+      label: Testing for Prod
+      description: 'What testing needs to be done to ensure this work is complete in production?'
 
   - type: textarea
     id: ac
     attributes:
       label: Acceptance Criteria
-      description: "What is the acceptance criteria?"
+      description: 'What is the acceptance criteria?'
       placeholder: "- [ ] AC1\n- [ ] AC2"
