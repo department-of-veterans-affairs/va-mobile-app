@@ -86,8 +86,7 @@ jobs:
           message: |
             :rotating_light: New member(s) added to ${{ env.TEAM_SLUG }} team:
             ${{ steps.compare_members.outputs.new_members }}
-            Please update the slack mapping data and open an on boarding ticket.
-        secrets: inherit
+            Please update the slack mapping data and open an onboarding ticket.
 
       - name: Update TEAM_MEMBERS_JSON variable
         if: ${{ steps.compare_members.outputs.new_members != '[]' }}
@@ -97,4 +96,3 @@ jobs:
             -f value='${{ steps.compare_members.outputs.current_members_for_update }}'
         env:
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
-
