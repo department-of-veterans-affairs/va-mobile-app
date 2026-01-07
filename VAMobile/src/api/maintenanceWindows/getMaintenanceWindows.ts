@@ -6,7 +6,7 @@ import { useNavigationState } from '@react-navigation/native'
 
 import { useQuery } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
-import { each, reduce } from 'underscore'
+import { each } from 'underscore'
 
 import { maintenanceWindowsKeys } from 'api/maintenanceWindows/queryKeys'
 import { RootState } from 'store'
