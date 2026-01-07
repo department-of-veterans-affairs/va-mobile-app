@@ -14,7 +14,13 @@ import { AuthState } from 'store/slices'
  */
 export const getAuthorizedServices = async (): Promise<UserAuthorizedServicesData | undefined> => {
   const response = await get<AuthorizedServicesPayload>('/v0/user/authorized-services')
-  return response?.data.attributes.authorizedServices
+  return response
+    ? {
+        ...response.data.attributes.authorizedServices,
+        isUserAtPretransitionedOhFacility: response.meta.isUserAtPretransitionedOhFacility,
+        isUserFacilityReadyForInfoAlert: response.meta.isUserFacilityReadyForInfoAlert,
+      }
+    : undefined
 }
 
 /**
