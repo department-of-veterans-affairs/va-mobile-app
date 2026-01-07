@@ -1,4 +1,3 @@
----
 name: Automation Change Template
 about: Template for requesting a change to the automation pipeline for the application
 title: Automation - [Describe issue]
@@ -6,40 +5,67 @@ labels: devops
 projects: ['department-of-veterans-affairs/1616']
 assignees:
   - jbergman-oddball
----
-# Automation Ticket
-<!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
-## Type of Change
-- [ ] Update existing automation
-- [ ] Add new automation functionality
-- [ ] Fix automation bug
-- [ ] AWS Access
-- [ ] Github Migration
 
-## What systems/scripts are changing?
-- [ ] Git Hub Actions
-- [ ] Github Repo
-- [ ] AWS Infrastructure
-- [ ] Fastlane
-- [ ] Bash Scripts
-- [ ] Issues Templates
-- [ ] Other
+body:
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: change-type
+      description: Type of Change
+      options:
+        - Update Existing Automation
+        - Add new automation functionality
+        - Fix Automation Bug
+        - AWS Access
+        - Github Migration
 
-## If other, please specify:
-<!-- If not above, describe your change -->
+  - type: dropdown
+    id: whats-changing
+    attributes:
+      label: change
+      description: "What systems/scripts are changing?"
+      options:
+        - Github Actions
+        - Github Repo
+        - AWS Infrastructure
+        - Fastlane
+        - Bash Scripts
+        - Issue Templates
+        - Other
 
+  - type: input
+    id: change-other
+    attributes:
+      label: change-other
+      description: "If change is not listed, please specify."
 
+  - type: textarea
+    id: work-done
+    attributes:
+      label: work-being-done
+      description: "What is the work being done?"
 
-## What is the work being done?
-<!-- Describe the changes being made to the work and in what systems the changes are affecting -->
+  - type: textarea
+    id: testing-done
+    attributes:
+      label: testing-done
+      description: "What testing did you do?"
 
+  - type: textarea
+    id: testing-reviewer
+    attributes:
+      label: testing-reviewer
+      description: "What testing needs to be done by the reviewer?"
 
-## Testing considerations
-<!-- Explain how to test this change. What did you do, what should a reviewer do and how do we know the change was successful in production? Add links to Circle jobs or GH action runs or any other output that helps to show what we are looking for. -->
-#### What testing did you do?
-#### What testing needs to be done by the reviewer?
-#### What testing needs to be done to ensure that this work is complete in production?
+  - type: textarea
+    id: testing-for-prod
+    attributes:
+      label: testing-for-prod
+      description: "What testing needs to be done to ensure this work is complete in production?"
 
-## Acceptability Criteria
-<!-- What is the Definition of Done -->
-- [ ] 
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+      description: "What is the acceptance criteria?"
+      placeholder: "- [ ] AC1\n- [ ] AC2"
