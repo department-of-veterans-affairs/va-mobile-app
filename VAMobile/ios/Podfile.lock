@@ -1394,6 +1394,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-notifications (5.1.0):
     - React-Core
   - react-native-safe-area-context (5.4.0):
@@ -1891,6 +1893,7 @@ DEPENDENCIES:
   - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notifications (from `../node_modules/react-native-notifications`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -2053,6 +2056,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-notifications:
     :path: "../node_modules/react-native-notifications"
   react-native-safe-area-context:
@@ -2216,6 +2221,7 @@ SPEC CHECKSUMS:
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
   react-native-document-picker: cd4d6b36a5207ad7a9e599ebb9eb0c2e84fa0b87
   react-native-image-picker: f104798044ef2c9211c42a48025d0693b5f34981
+  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-notifications: 4601a5a8db4ced6ae7cfc43b44d35fe437ac50c4
   react-native-safe-area-context: 8870dc3e45c8d241336cd8ee3fa3fc76f3a040ac
   react-native-webview: 3113f47b24b228a7dec250da41a8426481540be4
@@ -2251,6 +2257,7 @@ SPEC CHECKSUMS:
   ReactNativeKeyboardManager: 60292dbac467c49841a7d69588208ec4a4f7b2a2
   ReactNativeWebPFormat: a40e251d8727e946461055997e539c4e985481f1
   RNCAsyncStorage: addfc2cb6511dbe199c56c6b26ede383b6c38919
+  RNCClipboard: dfeb43751adff21e588657b5b6c888c72f3aa68e
   RNFBAnalytics: 60ffe0c9c80f404246e384d0d2076e35dd129b16
   RNFBApp: a3e139715386fe79a09c387f2dbeb6890eb05b39
   RNFBCrashlytics: e6d595ed2619e5e8ee3cdfd12c6a62e470280a03
@@ -2264,7 +2271,7 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 288ef2881046914e9108441e783f64899807282a
   RNScreens: 8f13e30fb86d3e2130643a1878e1198bd59ca453
   RNSVG: 4cbae6c6f0ef2b0aa277c5fce8447d3e4cd97cd0
-  SDWebImage: f29024626962457f3470184232766516dee8dfea
+  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 92f3bb322c40a86b7233b815854730442e01b8c4

@@ -7,6 +7,7 @@ import { personalInformationKeys } from 'api/personalInformation/queryKeys'
 import OnboardingCarousel from 'screens/OnboardingCarousel/OnboardingCarousel'
 import { completeFirstTimeLogin } from 'store/slices'
 import { QueriesData, context, render } from 'testUtils'
+import { a11yLabelVA } from 'utils/a11yLabel'
 
 jest.mock('utils/hooks', () => {
   const original = jest.requireActual('utils/hooks')
@@ -65,6 +66,7 @@ context('OnboardingCarousel', () => {
     expect(screen.getByText(t('onboarding.benefits.disability.bullet'))).toBeTruthy()
     expect(screen.getByText(t('onboarding.benefits.claimsAndAppeals.bullet'))).toBeTruthy()
     expect(screen.getByText(t('onboarding.benefits.commonLetters.bullet'))).toBeTruthy()
+    expect(screen.getByLabelText(`${a11yLabelVA(t('onboarding.benefits.commonLetters.bullet'))}, 3 of 3`)).toBeTruthy()
     fireEvent.press(screen.getByRole('link', { name: t('next') }))
     expect(screen.getByRole('header', { name: t('onboarding.payments.header') })).toBeTruthy()
     expect(screen.getByText(t('onboarding.payments.details'))).toBeTruthy()
