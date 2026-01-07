@@ -153,12 +153,7 @@ context('CopayDetailsScreen', () => {
 
     it('should display resolve bill button', () => {
       initializeTestInstance(mockCopay)
-      expect(screen.getByText(t('copays.resolveBill'))).toBeTruthy()
-    })
-
-    it('should display go to statement link', () => {
-      initializeTestInstance(mockCopay)
-      expect(screen.getByText(t('copays.goToStatement'))).toBeTruthy()
+      expect(screen.getByText(t('copays.resolveCopay'))).toBeTruthy()
     })
   })
 
@@ -184,7 +179,7 @@ context('CopayDetailsScreen', () => {
 
     it('should display previous PDF statements accordion', () => {
       initializeTestInstance(mockCopay)
-      expect(screen.getByText(t('copays.previousStatements'))).toBeTruthy()
+      expect(screen.getByText(t('copays.pdfStatements'))).toBeTruthy()
     })
 
     it('should display statement addresses accordion', () => {
@@ -199,39 +194,25 @@ context('CopayDetailsScreen', () => {
   })
 
   describe('previous statements', () => {
-    it('should display previous statements for same facility', async () => {
+    it('should display all statements for same facility including current as first', async () => {
       initializeTestInstance(mockCopay)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
+        // Should show current statement first with "Current statement" label
+        expect(screen.getByText(t('copays.pdfStatements.currentStatement'))).toBeTruthy()
         // Should show the other statement from facility 123 (id: 3)
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'December 15, 2023' })),
-        ).toBeTruthy()
-      })
-    })
-
-    it('should not display current statement in previous statements', async () => {
-      initializeTestInstance(mockCopay)
-      const accordion = screen.getByText(t('copays.previousStatements'))
-      fireEvent.press(accordion)
-      await waitFor(() => {
-        // Should not show the current statement (id: 1)
-        expect(
-          screen.queryByText(t('copays.previousStatements.statementDate', { date: 'January 15, 2024' })),
-        ).toBeFalsy()
+        expect(screen.getByText(t('copays.pdfStatements.statementDate', { date: 'December 15, 2023' }))).toBeTruthy()
       })
     })
 
     it('should not display statements from different facilities', async () => {
       initializeTestInstance(mockCopay)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
         // Should not show statement from facility 456 (id: 4)
-        expect(
-          screen.queryByText(t('copays.previousStatements.statementDate', { date: 'November 15, 2023' })),
-        ).toBeFalsy()
+        expect(screen.queryByText(t('copays.pdfStatements.statementDate', { date: 'November 15, 2023' }))).toBeFalsy()
       })
     })
   })
@@ -261,11 +242,14 @@ context('CopayDetailsScreen', () => {
   })
 
   describe('download statement', () => {
-    it('should trigger download when go to statement is pressed', async () => {
+    it('should trigger download when statement is pressed in PDF statements', async () => {
       initializeTestInstance(mockCopay)
+      const accordion = screen.getByText(t('copays.pdfStatements'))
+      fireEvent.press(accordion)
       await waitFor(() => {
-        const downloadLink = screen.getByText(t('copays.goToStatement'))
-        fireEvent.press(downloadLink)
+        // Find the current statement and press it to trigger download
+        const currentStatement = screen.getByText(t('copays.pdfStatements.currentStatement'))
+        fireEvent.press(currentStatement)
         // Download happens in background, screen content remains visible
         expect(screen.getByTestId('copayDetailsTestID')).toBeTruthy()
       })
