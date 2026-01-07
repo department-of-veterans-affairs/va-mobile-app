@@ -11,6 +11,7 @@ export const WEBVIEW_URL_CHANGE_LEGAL_NAME =
   'https://www.va.gov/resources/how-to-change-your-legal-name-on-file-with-va/'
 export const WEBVIEW_URL_CORONA_FAQ = 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions'
 export const WEBVIEW_URL_FACILITY_LOCATOR = 'https://www.va.gov/find-locations/'
+export const LINK_URL_DISPUTE_DEBT = 'https://www.va.gov/manage-va-debt/dispute-debt/introduction/'
 export const LINK_URL_MHV_VA_MEDICAL_RECORDS = 'https://www.va.gov/my-health/medical-records/'
 export const LINK_URL_MHV_VA_MEDICATIONS = 'https://www.va.gov/my-health/medications'
 export const LINK_URL_IN_APP_RECRUITMENT =
@@ -20,7 +21,9 @@ export const LINK_URL_VETERANS_CRISIS_LINE = 'https://www.veteranscrisisline.net
 export const LINK_URL_VETERANS_CRISIS_LINE_GET_HELP = 'https://www.veteranscrisisline.net/get-help/chat'
 export const LINK_URL_PRIVACY_POLICY = 'https://www.va.gov/privacy-policy/'
 export const LINK_URL_DECISION_REVIEWS = 'https://www.va.gov/decision-reviews/'
+export const LINK_URL_COPAY_HARDSHIP_INFO = 'https://www.va.gov/health-care/pay-copay-bill/financial-hardship/'
 export const LINK_URL_COMPENSATION_CLAIM_EXAM = 'https://benefits.va.gov/compensation/claimexam.asp'
+export const LINK_URL_CONSUMER_GOV = 'https://consumer.gov/'
 export const LINK_URL_YOUR_CLAIMS = 'https://www.va.gov/your-claims'
 export const LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT =
   'https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication'
@@ -29,6 +32,7 @@ export const LINK_URL_GO_TO_MY_HEALTHEVET =
 export const LINK_URL_OMB_PAGE = 'https://www.reginfo.gov/public/do/PRAMain'
 export const APPLE_STORE_LINK = 'https://apps.apple.com/us/app/va-health-and-benefits/id1559609596'
 export const GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.mobileapp'
+export const LINK_URL_DISPUTE_COPAY = 'https://www.va.gov/health-care/pay-copay-bill/dispute-charges/'
 export const LINK_URL_GO_TO_BTSSS = 'https://dvagov-btsss.dynamics365portals.us/'
 export const LINK_URL_CLAIM_APPEAL_STATUS = 'https://va.gov/track-claims/appeals/'
 export const LINK_URL_GO_TO_PATIENT_PORTAL = 'https://patientportal.myhealth.va.gov/'
@@ -36,8 +40,19 @@ export const LINK_URL_ASK_VA_GOV = 'https://va.gov/contact-us/ask-va/introductio
 export const LINK_URL_GO_TO_VA_GOV = 'https://va.gov'
 export const LINK_URL_ABOUT_PACT_ACT = 'https://www.va.gov/resources/the-pact-act-and-your-va-benefits/'
 export const LINK_URL_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/apply/application/introduction'
+export const LINK_URL_HELP_FROM_VA_ACCREDITED_REPRESENTATIVE =
+  'https://www.va.gov/get-help-from-accredited-representative/'
 export const LINK_URL_HOW_TO_APPLY_FOR_HEALTH_CARE = 'https://www.va.gov/health-care/how-to-apply/'
+export const LINK_URL_MY_MONEY_GOV = 'https://www.mymoney.gov/'
 export const LINK_URL_VA_FORM_10_3542 = 'https://www.va.gov/resources/va-form-10-3542/'
+export const LINK_URL_REQUEST_HELP_FORM_5655 =
+  'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction/'
+export const LINK_URL_REQUEST_HELP_VA_DEBT = 'https://www.va.gov/resources/options-to-request-help-with-va-debt/'
+export const LINK_URL_VA_FORM_5655 = 'https://www.va.gov/manage-va-debt/request-debt-help-form-5655/introduction'
+export const LINK_URL_VA_MENTAL_HEALTH_SERVICES =
+  'https://www.va.gov/health-care/health-needs-conditions/mental-health/'
+export const LINK_URL_VA_PRIVACY_POLICIES = 'https://department.va.gov/privacy/va-privacy-policies/'
+export const LINK_URL_VETERANS_BENEFITS_BANKING = 'https://veteransbenefitsbanking.org/'
 export const LINK_URL_TRAVEL_PAY_FILE_CLAIM_BTSSS =
   'https://www.va.gov/health-care/get-reimbursed-for-travel-pay/#file-a-claim-for-general-healt'
 export const LINK_URL_TRAVEL_PAY_ELIGIBILITY =
@@ -46,6 +61,8 @@ export const LINK_URL_TRAVEL_PAY_SET_UP_DIRECT_DEPOSIT =
   'https://www.va.gov/resources/how-to-set-up-direct-deposit-for-va-travel-pay-reimbursement/'
 export const LINK_URL_TRAVEL_PAY_WEB_DETAILS = 'https://www.va.gov/my-health/travel-pay/claims/'
 export const LINK_URL_SCHEDULE_APPOINTMENTS = 'https://va.gov/my-health/appointments/schedule/type-of-care'
+export const LINK_URL_WAIVERS_FOR_VA_BENEFIT_DEBT = 'https://va.gov/resources/waivers-for-va-benefit-debt/'
+export const LINK_URL_REQUEST_HARDSHIP_ASSISTANCE = 'https://www.va.gov/health-care/pay-copay-bill/financial-hardship/'
 export const ENVIRONMENT = 'test'
 export const CARRIER_TRACKING_URL_USPS = 'https://tools.usps.com/go/TrackConfirmAction_input?strOrigTrackNum='
 export const CARRIER_TRACKING_URL_UPS = 'https://wwwapps.ups.com/WebTracking/track?track=yes&trackNums='
@@ -54,3 +71,5 @@ export const CARRIER_TRACKING_URL_DHL = 'https://www.dhl.com/en/express/tracking
 export const DEMO_PASSWORD = ''
 export const SMHD_APPLE_STORE_LINK = 'https://apps.apple.com/us/app/share-my-health-data/id1031651418'
 export const SMHD_GOOGLE_PLAY_LINK = 'https://play.google.com/store/apps/details?id=gov.va.smhd'
+export const PAY_GOV_URL = 'https://www.pay.gov/'
+export const PAY_VA_GOV_URL = 'https://www.pay.va.gov/'

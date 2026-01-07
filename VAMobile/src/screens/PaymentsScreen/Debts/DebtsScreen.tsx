@@ -68,7 +68,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
     label: t('help'),
     icon: helpIconProps,
     onPress: () => {
-      navigateTo('DebtHelp')
+      navigateTo('DebtHelp', { helpType: 'questionsAboutDebt' })
     },
     testID: 'debtHelpID',
   }
@@ -155,7 +155,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
             />
           </TextView>
           {/* Summary with icon */}
-          <Box flexDirection="row" alignItems="center">
+          <Box flexDirection="row">
             <Icon {...iconProps} />
             <Box ml={theme.dimensions.condensedMarginBetween} flexShrink={1}>
               <TextView variant="HelperText">

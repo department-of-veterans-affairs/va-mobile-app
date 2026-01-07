@@ -35,14 +35,14 @@ export type SubmitTravelPayFlowModalStackParamList = WebviewStackParams & {
   SMOCErrorScreen: {
     error: TravelPayError
   }
-  TravelClaimHelpScreen: undefined
+  TravelClaimHelpScreen: { fromClaimDetails?: boolean }
 }
 
 export type TravelPayStack = WebviewStackParams & {
   FlowSteps: undefined
   BurdenStatementScreen: undefined
   BeneficiaryTravelAgreementScreen: undefined
-  TravelClaimHelpScreen: undefined
+  TravelClaimHelpScreen: { fromClaimDetails?: boolean }
 }
 
 type SubmitMileageTravelPayScreenProps = StackScreenProps<HealthStackParamList, 'SubmitTravelPayClaimScreen'>

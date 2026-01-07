@@ -35,6 +35,7 @@ import {
 } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { HomeStackParamList } from 'screens/HomeScreen/HomeStackScreens'
 import { RootState } from 'store'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -42,8 +43,10 @@ import { AuthState, setNotificationsPreferenceScreen, setRequestNotifications } 
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
 import getEnv from 'utils/env'
-import { useAppDispatch, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppDispatch, useOfflineSnackbar, useOnResumeForeground, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { screenContentAllowed } from 'utils/waygateConfig'
+import { vaGovWebviewTitle } from 'utils/webview'
 
 const NOTIFICATION_COMPLETED_KEY = '@store_notification_preference_complete'
 const FIRST_NOTIFICATION_STORAGE_VAL = 'COMPLETE'
@@ -60,6 +63,8 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   const queryClient = useQueryClient()
   const { gutter, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const isFocused = useIsFocused()
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const {
     data: systemNotificationData,
@@ -234,10 +239,15 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
             <LinkWithAnalytics
               type="custom"
               onPress={() => {
+                if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+                  showOfflineSnackbar()
+                  return
+                }
+
                 logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
                 navigateTo('Webview', {
                   url: LINK_URL_VA_NOTIFICATIONS,
-                  displayTitle: t('webview.vagov'),
+                  displayTitle: vaGovWebviewTitle(t),
                   loadingMessage: t('webview.notifications.loading'),
                   useSSO: true,
                 })
