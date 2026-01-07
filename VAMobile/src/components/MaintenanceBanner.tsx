@@ -23,7 +23,7 @@ const MaintenanceBanner: FC<MaintenanceBannerProps> = (props) => {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
-  const { maintenanceWindows } = useMaintenanceWindows()
+  const { maintenanceWindows = {} } = useMaintenanceWindows()
   const [logDowntimeAnalytics, setLogDowntimeAnalytics] = useState(true)
   const features = props.screenID ? ScreenIDToDowntimeFeatures[props.screenID] : []
 

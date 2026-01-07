@@ -41,7 +41,7 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
     if (isInDowntime) {
       if (logDowntimeAnalytics) {
         features.forEach((feature) => {
-          const downtimeWindow = maintenanceWindows[feature]
+          const downtimeWindow = maintenanceWindows?.[feature]
           if (downtimeWindow)
             logAnalyticsEvent(Events.vama_mw_shown(feature, downtimeWindow.startTime, downtimeWindow?.endTime))
         })
