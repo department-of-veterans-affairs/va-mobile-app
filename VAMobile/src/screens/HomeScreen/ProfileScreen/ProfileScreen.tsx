@@ -47,11 +47,7 @@ function ProfileScreen({ navigation }: ProfileScreenProps) {
   )
 
   return (
-    <ChildTemplate
-      title={t('profile.title')}
-      backLabel={t('home.title')}
-      backLabelOnPress={navigation.goBack}
-      testID="profileID">
+    <ChildTemplate title={t('profile.title')} backLabelOnPress={navigation.goBack} testID="profileID">
       {loadingCheck ? (
         <Box>
           {displayName}

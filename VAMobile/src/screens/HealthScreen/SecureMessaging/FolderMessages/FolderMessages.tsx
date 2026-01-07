@@ -115,7 +115,6 @@ function FolderMessages({ route }: FolderMessagesProps) {
 
   return (
     <ChildTemplate
-      backLabel={t('messages')}
       backLabelOnPress={() => {
         navigateTo('SecureMessaging', { activeTab: 1 })
       }}
