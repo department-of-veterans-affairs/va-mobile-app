@@ -85,20 +85,30 @@ jobs:
           MILESTONE_ID=$(gh api "repos/${{ github.repository }}/milestones?sort=due_on&direction=asc" --jq '([.[] | select(.due_on != null).number][0])')
           MILESTONE_TITLE=$(gh api "repos/${{ github.repository }}/milestones?sort=due_on&direction=asc" --jq '([.[] | select(.due_on != null).title][0])')
 
+          # Check if a milestone with a due date was found
+          if [[ -z "$MILESTONE_TITLE" || "$MILESTONE_TITLE" == "null" ]]; then
+            echo "ERROR: No milestone with a due date found in the repository."
+            echo "Please add a due date to an open milestone before merging PRs."
+            echo "Milestones can be managed at: https://github.com/${{ github.repository }}/milestones"
+            exit 1
+          fi
+
+          echo "Found milestone: $MILESTONE_TITLE (ID: $MILESTONE_ID)"
+
           # If the check-linked-issues step failed, force milestone on PR
           if [[ "$FORCE_PR_MILESTONE" == "true" ]]; then
-            echo "Check linked issues failed - adding milestone $MILESTONE_TITLE to PR $PR_NUM"
-            gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
+            echo "Check linked issues failed - adding milestone '$MILESTONE_TITLE' to PR $PR_NUM"
+            gh pr edit $PR_NUM --milestone "$MILESTONE_TITLE"
           elif [[ -n "$LINKED_ISSUE_NUM" && "$LINKED_ISSUE_REPO" == "$CURRENT_REPO" ]]; then
-            echo "Linked issue #$LINKED_ISSUE_NUM found in current repo. Adding milestone $MILESTONE_TITLE."
-            gh issue edit $LINKED_ISSUE_NUM --milestone $MILESTONE_TITLE
+            echo "Linked issue #$LINKED_ISSUE_NUM found in current repo. Adding milestone '$MILESTONE_TITLE'."
+            gh issue edit $LINKED_ISSUE_NUM --milestone "$MILESTONE_TITLE"
           elif [[ -n "$LINKED_ISSUE_NUM" && "$LINKED_ISSUE_REPO" != "$CURRENT_REPO" ]]; then
             echo "Linked issue #$LINKED_ISSUE_NUM is in external repo '$LINKED_ISSUE_REPO'. Adding milestone to PR #$PR_NUM instead."
-            gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
+            gh pr edit $PR_NUM --milestone "$MILESTONE_TITLE"
           else
-            echo "No linked issue found or other condition. Setting milestone $MILESTONE_TITLE for PR $PR_NUM"
+            echo "No linked issue found or other condition. Setting milestone '$MILESTONE_TITLE' for PR $PR_NUM"
             echo "Processing PR $PR_NUM..."
-            gh pr edit $PR_NUM --milestone $MILESTONE_TITLE
+            gh pr edit $PR_NUM --milestone "$MILESTONE_TITLE"
           fi
         env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
