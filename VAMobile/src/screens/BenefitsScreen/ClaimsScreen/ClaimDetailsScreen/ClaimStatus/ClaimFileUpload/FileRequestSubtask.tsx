@@ -67,7 +67,11 @@ const FileRequestStack = createStackNavigator<FileRequestStackParams>()
 
 export const fileRequestSharedScreens = [
   <FileRequestStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} key="AskForClaimDecision" />,
-  <FileRequestStack.Screen name="File5103RequestDetails" component={File5103RequestDetails} key="FileRequestDetails" />,
+  <FileRequestStack.Screen
+    name="File5103RequestDetails"
+    component={File5103RequestDetails}
+    key="File5103RequestDetails"
+  />,
   <FileRequestStack.Screen name="File5103ReviewWaiver" component={File5103ReviewWaiver} key="File5103ReviewWaiver" />,
   <FileRequestStack.Screen
     name="File5103SubmitEvidence"
