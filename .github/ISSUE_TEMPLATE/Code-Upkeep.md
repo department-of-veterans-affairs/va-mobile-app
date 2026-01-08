@@ -23,7 +23,3 @@ PTS#	Size	    Rough Timing
 	
 ## Testing Considerations
 <!-- Please indicate to the best of your ability areas QA should test for this ticket, this sometimes means X area functions the same -->
-
-## Checklist
-- [ ] Add the relevant team label (Health, global, design system, API, Qa and Release etc.)
-- [ ] Attach to ticket to the relevant Team Tech Debt Epic epic (old frontend engineering epic is no longer in use as each team is managing their code's technical debt and code upkeep work)

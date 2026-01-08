@@ -1,6 +1,8 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 
+import { NavigationContainer } from '@react-navigation/native'
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderHook, waitFor } from '@testing-library/react-native'
 
@@ -39,9 +41,11 @@ describe('usePrescriptions', () => {
   })
 
   const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store.realStore}>{children}</Provider>
-    </QueryClientProvider>
+    <NavigationContainer initialState={{ routes: [] }}>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store.realStore}>{children}</Provider>
+      </QueryClientProvider>
+    </NavigationContainer>
   )
 
   const mockPrescriptionsV0: PrescriptionsGetData = {

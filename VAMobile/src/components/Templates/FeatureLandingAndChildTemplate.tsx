@@ -6,10 +6,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useIsScreenReaderEnabled } from '@department-of-veterans-affairs/mobile-component-library'
 
 import {
+  Box,
   HeaderBanner,
   HeaderBannerProps,
   HeaderButton,
+  LastUpdatedTimestamp,
   LoadingComponent,
+  OfflineBanner,
   TextView,
   TextViewProps,
   WaygateWrapper,
@@ -60,6 +63,8 @@ export type ChildTemplateProps = {
   screenID?: ScreenIDTypes
   /** Optional array of errors to be handled by the given screen */
   errors?: Array<ScreenError>
+  /** Optional timestamp that the data on this screen last updated */
+  dataUpdatedAt?: number
 }
 
 export type FeatureLandingProps = ChildTemplateProps // Passthrough to same props
@@ -80,6 +85,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   loadingText,
   screenID,
   errors,
+  dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
   const fontScale = useWindowDimensions().fontScale
@@ -179,6 +185,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         backgroundColor={theme.colors.background.main}
       />
       <HeaderBanner {...headerProps} />
+      <OfflineBanner />
       <VAScrollView
         testID={testID}
         scrollEventThrottle={1}
@@ -192,7 +199,12 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
             <TextView {...subtitleProps}>{title}</TextView>
           </View>
         ) : null}
-        <WaygateWrapper>{renderContent()}</WaygateWrapper>
+        <WaygateWrapper>
+          <Box display="flex" justifyContent="space-between" flex={1}>
+            <Box>{renderContent()}</Box>
+            <LastUpdatedTimestamp datetime={dataUpdatedAt} />
+          </Box>
+        </WaygateWrapper>
       </VAScrollView>
       <WaygateWrapper bypassAlertBox={true}>{footerContent}</WaygateWrapper>
     </View>

@@ -578,6 +578,26 @@
         "vaRepresentative": null,
         "eventsTimeline": [
           {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 651827,
+            "description": "Automated 5103 Notice Response",
+            "displayName": "Automated 5103 Notice Response",
+            "overdue": false,
+            "status": "NEEDED",
+            "uploaded": false,
+            "uploadsAllowed": true,
+            "openedDate": "2025-11-24",
+            "requestedDate": "2025-11-24",
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2025-12-24",
+            "documents": [],
+            "uploadDate": null,
+            "date": "2025-11-24",
+            "documentType": null,
+            "filename": null
+          },
+          {
             "type": "never_received_from_you_list",
             "trackedItemId": 293440,
             "description": "21-4142a",

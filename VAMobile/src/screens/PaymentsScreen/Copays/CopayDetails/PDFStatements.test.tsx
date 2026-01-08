@@ -4,7 +4,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 import { t } from 'i18next'
 
 import { MedicalCopayRecord } from 'api/types'
-import PreviousPDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PreviousPDFStatements'
+import PDFStatements from 'screens/PaymentsScreen/Copays/CopayDetails/PDFStatements'
 import { context, render, waitFor } from 'testUtils'
 
 const mockStatements: MedicalCopayRecord[] = [
@@ -42,7 +42,7 @@ const mockStatements: MedicalCopayRecord[] = [
 
 const emptyStatements: MedicalCopayRecord[] = []
 
-context('PreviousPDFStatements', () => {
+context('PDFStatements', () => {
   const mockDownloadStatement = jest.fn()
 
   beforeEach(() => {
@@ -50,49 +50,41 @@ context('PreviousPDFStatements', () => {
   })
 
   const initializeTestInstance = (statements: MedicalCopayRecord[]) => {
-    render(<PreviousPDFStatements statements={statements} downloadStatement={mockDownloadStatement} />)
+    render(<PDFStatements statements={statements} downloadStatement={mockDownloadStatement} />)
   }
 
   describe('with statements', () => {
     it('should display accordion header', () => {
       initializeTestInstance(mockStatements)
-      expect(screen.getByText(t('copays.previousStatements'))).toBeTruthy()
+      expect(screen.getByText(t('copays.pdfStatements'))).toBeTruthy()
     })
 
     it('should display description when expanded', async () => {
       initializeTestInstance(mockStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(screen.getByText(t('copays.previousStatements.description'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.description'))).toBeTruthy()
       })
     })
 
     it('should display all statement dates', async () => {
       initializeTestInstance(mockStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'December 15, 2024' })),
-        ).toBeTruthy()
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'November 15, 2024' })),
-        ).toBeTruthy()
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'October 15, 2024' })),
-        ).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.currentStatement'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.statementDate', { date: 'November 15, 2024' }))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.statementDate', { date: 'October 15, 2024' }))).toBeTruthy()
       })
     })
 
     it('should call downloadStatement when statement is pressed', async () => {
       initializeTestInstance(mockStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        const firstStatement = screen.getByText(
-          t('copays.previousStatements.statementDate', { date: 'December 15, 2024' }),
-        )
+        const firstStatement = screen.getByText(t('copays.pdfStatements.currentStatement'))
         fireEvent.press(firstStatement)
         expect(mockDownloadStatement).toHaveBeenCalledWith('1')
       })
@@ -100,12 +92,10 @@ context('PreviousPDFStatements', () => {
 
     it('should call downloadStatement with correct ID for each statement', async () => {
       initializeTestInstance(mockStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        const secondStatement = screen.getByText(
-          t('copays.previousStatements.statementDate', { date: 'November 15, 2024' }),
-        )
+        const secondStatement = screen.getByText(t('copays.pdfStatements.statementDate', { date: 'November 15, 2024' }))
         fireEvent.press(secondStatement)
         expect(mockDownloadStatement).toHaveBeenCalledWith('2')
       })
@@ -113,18 +103,12 @@ context('PreviousPDFStatements', () => {
 
     it('should display all statement items as pressable', async () => {
       initializeTestInstance(mockStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'December 15, 2024' })),
-        ).toBeTruthy()
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'November 15, 2024' })),
-        ).toBeTruthy()
-        expect(
-          screen.getByText(t('copays.previousStatements.statementDate', { date: 'October 15, 2024' })),
-        ).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.currentStatement'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.statementDate', { date: 'November 15, 2024' }))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.statementDate', { date: 'October 15, 2024' }))).toBeTruthy()
       })
     })
   })
@@ -132,24 +116,24 @@ context('PreviousPDFStatements', () => {
   describe('with no statements', () => {
     it('should display accordion header', () => {
       initializeTestInstance(emptyStatements)
-      expect(screen.getByText(t('copays.previousStatements'))).toBeTruthy()
+      expect(screen.getByText(t('copays.pdfStatements'))).toBeTruthy()
     })
 
     it('should display description with no statements', async () => {
       initializeTestInstance(emptyStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(screen.getByText(t('copays.previousStatements.description'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.description'))).toBeTruthy()
       })
     })
 
     it('should not display any statement items', async () => {
       initializeTestInstance(emptyStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(screen.getByText(t('copays.previousStatements.description'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.description'))).toBeTruthy()
         // No statement dates should be present
         expect(screen.queryByText(/statement \(PDF\)/)).toBeFalsy()
       })
@@ -157,10 +141,10 @@ context('PreviousPDFStatements', () => {
 
     it('should display "No previous statements" message when empty', async () => {
       initializeTestInstance(emptyStatements)
-      const accordion = screen.getByText(t('copays.previousStatements'))
+      const accordion = screen.getByText(t('copays.pdfStatements'))
       fireEvent.press(accordion)
       await waitFor(() => {
-        expect(screen.getByText(t('copays.previousStatements.noStatements'))).toBeTruthy()
+        expect(screen.getByText(t('copays.pdfStatements.noStatements'))).toBeTruthy()
       })
     })
   })

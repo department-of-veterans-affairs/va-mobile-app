@@ -121,18 +121,27 @@ jobs:
         run: ../../.github/scripts/run-manual-setup.sh android
       - name: Set app environment variables
         run: yarn env:${{ inputs.environment }}
+      - name: Sanitize inputs
+        run: |
+          # Remove problematic characters and collapse whitespace
+          SANITIZED_NOTES=$(printf '%s' '${{ inputs.notes }}' | tr -d '`"'"'"',/\\' | tr '\r\n' ' ' | sed -E 's/[[:space:]]+/ /g')
+          echo "SANITIZED_NOTES=$SANITIZED_NOTES" >> $GITHUB_ENV
+
+          if [ -n "${{ inputs.slack_thread_ts }}" ]; then
+            echo "SLACK_THREAD_TS=${{ inputs.slack_thread_ts }}" >> $GITHUB_ENV
+          fi
+
       - name: Bundle app
         run: yarn bundle:android
       - name: Update fastlane
         run: |
           bundle update fastlane
           bundle exec fastlane update_plugins
-      - name: Set SLACK_THREAD_TS environment variable
-        if: inputs.slack_thread_ts
-        run: echo SLACK_THREAD_TS=${{inputs.slack_thread_ts}} >> $GITHUB_ENV
+      # SLACK_THREAD_TS is set by the Sanitize inputs step (if provided)
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 20
           max_attempts: 3
-          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"${{ inputs.notes }}" psTrack:"${{ inputs.ps_track }}"
+          # Use sanitized notes from the environment to avoid injection/formatting issues
+          command: cd VAMobile/android && bundle exec fastlane ${{ inputs.lane }} --verbose version:"${{ inputs.version }}" notes:"$SANITIZED_NOTES" psTrack:"${{ inputs.ps_track }}"
