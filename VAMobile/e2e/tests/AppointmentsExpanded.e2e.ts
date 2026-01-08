@@ -1,5 +1,4 @@
-import { by, device, element, expect, waitFor } from 'detox'
-import { t } from 'i18next'
+import { by, element, expect, waitFor } from 'detox'
 
 import { todaysDate } from 'utils/dateUtils'
 
