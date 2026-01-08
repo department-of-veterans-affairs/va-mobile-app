@@ -126,7 +126,6 @@ const OverrideMaintenanceWindows = ({ navigation }: OverrideMaintenanceWindowsPr
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debug.title')}
       backLabelOnPress={navigation.goBack}
       title={t('overrideMaintenanceWindows')}
       testID="overrideMaintenanceWindowsTestID"

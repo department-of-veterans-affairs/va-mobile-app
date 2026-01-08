@@ -433,7 +433,6 @@ function OverrideAPIScreen({ navigation }: OverrideAPIScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debug.title')}
       backLabelOnPress={navigation.goBack}
       title={t('overrideAPI')}
       testID="overrideAPITestID"

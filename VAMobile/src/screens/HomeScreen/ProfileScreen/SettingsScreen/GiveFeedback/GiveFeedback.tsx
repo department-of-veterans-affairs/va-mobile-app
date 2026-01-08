@@ -45,11 +45,7 @@ function GiveFeedbackScreen({ navigation }: GiveFeedbackScreenProps) {
   ])
 
   return (
-    <FeatureLandingTemplate
-      backLabel={t('settings.title')}
-      backLabelOnPress={navigation.goBack}
-      title={t('giveFeedback')}
-      testID="giveFeedbackID">
+    <FeatureLandingTemplate backLabelOnPress={navigation.goBack} title={t('giveFeedback')} testID="giveFeedbackID">
       <Box mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={items} />
       </Box>

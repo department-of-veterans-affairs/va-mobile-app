@@ -1,7 +1,6 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { LocationData } from '@department-of-veterans-affairs/mobile-component-library/src/utils/OSfunctions'
@@ -35,9 +34,6 @@ function PayBillScreen({ route, navigation }: PayBillScreenProps) {
   const theme = useTheme()
   const { gutter, cardPadding, condensedMarginBetween, contentMarginBottom, standardMarginBetween } = theme.dimensions
 
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'CopayDetails' ? t('copays.details.title') : t('copays.title')
-
   const copay = route.params?.copay
   const currentBalance: number = copay?.pHAmtDue ?? 0
   const accountNumber: string = copay?.accountNumber ?? ''
@@ -66,7 +62,6 @@ function PayBillScreen({ route, navigation }: PayBillScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       title={t('copays.payBill.title')}
       testID="payBillTestID"

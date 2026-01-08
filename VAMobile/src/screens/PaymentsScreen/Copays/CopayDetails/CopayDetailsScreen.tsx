@@ -178,7 +178,6 @@ function CopayDetailsScreen({ navigation, route }: CopayDetailsScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('copays.title')}
       backLabelOnPress={navigation.goBack}
       title={t('copays.details.title')}
       testID="copayDetailsTestID"

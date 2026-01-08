@@ -244,7 +244,6 @@ function LabsAndTestsListScreen({ navigation }: LabsAndTestsListScreenProps) {
   }
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaMedicalRecords.title')}
       backLabelOnPress={navigation.goBack}
       title={t('labsAndTests.title')}
       titleA11y={a11yLabelVA(t('labsAndTests.title'))}

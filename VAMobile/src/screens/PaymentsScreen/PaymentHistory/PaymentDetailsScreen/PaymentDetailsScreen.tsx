@@ -43,7 +43,6 @@ function PaymentDetailsScreen({ navigation, route }: PaymentDetailsScreenProps) 
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('history.title')}
       backLabelOnPress={navigation.goBack}
       title={t('paymentDetails.title')}
       backLabelTestID="paymentDetailsBackID">

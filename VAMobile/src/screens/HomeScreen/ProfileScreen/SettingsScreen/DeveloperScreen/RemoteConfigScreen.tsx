@@ -118,7 +118,6 @@ function RemoteConfigScreen({ navigation }: RemoteConfigScreenSettingsScreenProp
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('debug.title')}
       backLabelOnPress={navigation.goBack}
       title={t('remoteConfig.title')}
       testID="remoteConfigTestID">

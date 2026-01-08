@@ -92,7 +92,6 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount"

@@ -190,7 +190,6 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('settings.title')}
       backLabelOnPress={navigation.goBack}
       backLabelTestID="backToSettingsScreenID"
       title={t('notifications.title')}>

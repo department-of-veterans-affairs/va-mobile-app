@@ -33,7 +33,6 @@ function SendUsFeedbackScreen({ navigation }: SendUsFeedbackScreenProps) {
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('giveFeedback')}
       backLabelOnPress={navigation.goBack}
       title={t('giveFeedback.send')}
       testID="sendUsFeedbackID"

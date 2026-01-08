@@ -2,7 +2,6 @@ import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
 
-import { useNavigationState } from '@react-navigation/native'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { IconProps } from '@department-of-veterans-affairs/mobile-component-library'
@@ -32,8 +31,6 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const isEmpty = copays.length === 0
   const sorted = useMemo(() => sortStatementsByDate(copays), [copays])
   const copaysByUniqueFacility = useMemo(() => uniqBy(sorted, (c) => c.pSFacilityNum), [sorted])
-  const prevScreen = useNavigationState((state) => state.routes[state.routes.length - 2]?.name)
-  const backLabel = prevScreen === 'Health' ? t('health.title') : t('payments.title')
 
   const scrollViewRef = useRef<ScrollView | null>(null)
   const scrollViewProps: VAScrollViewProps = {
@@ -107,7 +104,6 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   return (
     <FeatureLandingTemplate
       headerButton={headerButton}
-      backLabel={backLabel}
       backLabelOnPress={navigation.goBack}
       scrollViewProps={scrollViewProps}
       title={t('copays.title')}
