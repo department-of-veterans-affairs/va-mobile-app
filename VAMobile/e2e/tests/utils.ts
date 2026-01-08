@@ -774,6 +774,7 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
 /** Toggle the specified remote config feature flag
  * @param flagName - name of flag to toggle
+ * @param makeState - optional boolean to set the flag to a specific state
  * */
 export async function toggleRemoteConfigFlag(flagName: string, makeState?: boolean) {
   await loginToDemoMode()
