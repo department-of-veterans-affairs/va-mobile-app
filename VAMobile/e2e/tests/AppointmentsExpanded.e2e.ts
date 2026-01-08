@@ -1,4 +1,5 @@
 import { by, device, element, expect, waitFor } from 'detox'
+import { t } from 'i18next'
 
 import { todaysDate } from 'utils/dateUtils'
 
@@ -9,6 +10,7 @@ import {
   openAppointments,
   openHealth,
   scrollToElement,
+  scrollToIDThenTap,
   toggleRemoteConfigFlag,
 } from './utils'
 
@@ -26,6 +28,7 @@ export const AppointmentsExpandede2eConstants = {
     'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment',
   CLAIM_EXAM_WEB_LINK: 'Learn more about claim exam appointments',
   GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID: 'goToVAGovTravelClaimStatus',
+  PAST_APPT_DETAILS_TEST_ID: 'PastApptDetailsTestID',
 }
 
 const checkTravelClaimAvailability = async (
@@ -141,7 +144,6 @@ const checkUpcomingApptDetails = async (
   } else {
     await expect(element(by.text('What'))).not.toExist()
   }
-
   if (healthcareProvider != undefined) {
     if (appointmentType != 'CC') {
       await expect(element(by.text('Who'))).toExist()
@@ -231,6 +233,11 @@ const checkUpcomingApptDetails = async (
   } else {
     await expect(element(by.text('Where to attend'))).not.toExist()
   }
+
+  if (appointmentType === 'CC') {
+    console.error('HERE in CC', appointmentStatus, pastAppointment)
+  }
+
   if (!pastAppointment) {
     if (appointmentStatus === 'Confirmed') {
       await expect(element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID))).toExist()
@@ -325,6 +332,7 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.text('Cancel request'))).toExist()
     }
   }
+
   if (pastAppointment && appointmentStatus === 'Confirmed') {
     await expect(element(by.text('This appointment happened in the past.'))).toExist()
     if (
@@ -366,6 +374,9 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1)).toExist()
     }
   }
+  if (appointmentType === 'CC') {
+    console.error('HERE in CC before check wording', appointmentStatus, pastAppointment)
+  }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
   await checkTravelClaimAvailability(
     appointmentType,
@@ -378,8 +389,27 @@ const checkUpcomingApptDetails = async (
   // If we have a claim
   // Also check if the appointment was in the past (to work with how the tests are constructed)
   if (travelClaimId && pastAppointment) {
-    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+    if (appointmentType === 'CC') {
+      console.error('HERE in CC with claim', appointmentStatus, pastAppointment, travelClaimId)
+    }
+    console.error('XXX', {
+      appointmentType,
+      appointmentStatus,
+      travelClaimId,
+      daysSinceAppointmentStart,
+      healthcareProvider,
+    })
+    await scrollToIDThenTap(
+      AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID,
+      AppointmentsExpandede2eConstants.PAST_APPT_DETAILS_TEST_ID,
+    )
     // await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
+    console.error('YYY', {
+      appointmentType,
+      appointmentStatus,
+      travelClaimId,
+      daysSinceAppointmentStart,
+    })
     await expect(element(by.id('goToClaimDetails-' + travelClaimId))).toExist()
     await expect(element(by.id('travelPayHelp'))).toExist()
   } else {
@@ -409,17 +439,23 @@ const checkUpcomingApptDetails = async (
       }
     } else {
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
+      if (appointmentType === 'CC') {
+        console.error('HERE in else with no claim and past 30 days', {
+          appointmentType,
+          appointmentStatus,
+          pastAppointment,
+          daysSinceAppointmentStart,
+        })
+      }
     }
   }
-
-  await element(by.text('Appointments')).tap()
+  await returnToAppointmentsFromDetails()
 }
 
 // Scroll to element, if not found, if enabled, go to next page and continue scrolling
 export async function scrollTo(text: string, shouldTap = false, shouldGoToNextPage = false, currScroll = 0) {
   const maxScrolls = 7
   try {
-    console.error('SHOULD TAP:', shouldTap)
     await scrollToElement(text, CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)
     if (shouldTap) {
       await element(by.text(text)).tap()
@@ -465,6 +501,7 @@ export async function clickAvsID(n?: number, text = 'Review after-visit summary'
       await element(by.text('Done')).tap()
     })
 }
+
 const sleep = (milliseconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, milliseconds))
 }
@@ -472,7 +509,7 @@ const sleep = (milliseconds: number) => {
 export async function returnToAppointmentsFromDetails() {
   await waitFor(element(by.text('Appointments')))
     .toBeVisible()
-    .withTimeout(20000)
+    .withTimeout(5000)
     .then(async () => {
       await element(by.text('Appointments')).tap()
     })
@@ -489,12 +526,13 @@ export function checkOHAVS() {
       await element(by.text('Apply')).tap()
       await sleep(1000) // Wait for the list to update
     })
+
     afterEach(async () => {
       await returnToAppointmentsFromDetails()
     })
+
     it('should open appointment with multiple AVS and click on first', async () => {
-      await scrollTo('Jane Smith CERNER 001', true)
-      console.error('Scrolled to appointment')
+      await scrollTo('Cern Er 001', true)
       await checkHasAvs(true, 1)
       await checkHasAvs(true, 2)
       await clickAvsID(1)
@@ -502,25 +540,25 @@ export function checkOHAVS() {
       // await clickAvsID(2)
     })
     it('should open appointment details with empty binary for AVS', async () => {
-      await scrollTo('Jane Smith CERNER 002', true)
+      await scrollTo('Cern Er 002', true)
       await checkHasAvs(false)
     })
     it('should open appointment with invalid binary data for AVS', async () => {
-      await scrollTo('Jane Smith CERNER 003', true)
+      await scrollTo('Cern Er 003', true)
       await checkHasAvs(false)
     })
     it('should open appointment with no currently supported type of AVS', async () => {
-      await scrollTo('Jane Smith CERNER 004', true)
+      await scrollTo('Cern Er 004', true)
       await checkHasAvs(false)
     })
     it('should open with two valid binary data but only one supported type of AVS', async () => {
-      await scrollTo('Jane Smith CERNER 005', true)
+      await scrollTo('Cern Er 005', true)
       await checkHasAvs(true) // no number means no suffix
       // Seems to have a similar problem as webview reopening in the same test flow
       // await clickAvsID(undefined, 'Review after-visit summary') // no number means no suffix
     })
     it('should open appointment with error alert for AVS PDF (no shown PDF even if there is data)', async () => {
-      await scrollTo('Jane Smith CERNER 006', true)
+      await scrollTo('Cern Er 006', true)
       // AVS error case
       await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
     })
@@ -593,6 +631,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     } else {
       await expect(element(by.text('Past community care appointment'))).toExist()
     }
+    console.error('Tapped confirmed CC appointment')
     await checkUpcomingApptDetails(
       'CC',
       'Confirmed',
@@ -614,7 +653,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Jim Smith', pastAppointmentString)
     await expect(element(by.text('Canceled community care appointment'))).toExist()
     await expect(element(by.text(AppointmentsExpandede2eConstants.PATIENT_CANCELLATION))).toExist()
-
+    console.error('Tapped canceled CC appointment')
     await checkUpcomingApptDetails(
       'CC',
       'Canceled',
@@ -1297,7 +1336,8 @@ export async function apppointmentVerification(pastAppointment = false) {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  // Guarantees that travel pay is enabled for these tests
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT, true)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
