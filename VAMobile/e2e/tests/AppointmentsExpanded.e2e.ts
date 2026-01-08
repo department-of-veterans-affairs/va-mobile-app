@@ -435,7 +435,7 @@ export async function scrollTo(text: string, shouldTap = false, shouldGoToNextPa
         throw new Error(`Could not find element with text: ${text} after ${maxScrolls} scrolls`)
       }
       await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
-      await scrollTo(text, shouldTap, true, currScroll + 1)
+      return await scrollTo(text, shouldTap, true, currScroll + 1)
     }
     throw new Error(`ERR: ${(e as Error).message}`)
   }
