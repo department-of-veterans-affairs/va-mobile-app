@@ -862,10 +862,6 @@ export async function iosSelectDateInPicker(selectDate: DateTime, pickerId: stri
   await element(by.text(`${dateToUseMonth} ${dateToUseYear}`))
     .atIndex(0)
     .tap()
-  console.error('dateToUseMonth:', dateToUseMonth)
-  console.error('dateToUseYear:', dateToUseYear)
-  console.error('selectDateMonth:', selectDateMonth)
-  console.error('selectDateYear:', selectDateYear)
   await element(by.type('UIPickerView')).setColumnToValue(1, `${selectDateYear}`)
   await element(by.type('UIPickerView')).setColumnToValue(0, `${selectDateMonth}`)
   await element(by.text('Apply')).tap()
@@ -905,7 +901,5 @@ export const getAppointmentPastDate = async ({ provider, location }: { provider?
     throw new Error('No appointment found matching the provided criteria')
   }
   const appointmentDates = appointments.map((appt) => getDateFromMock(appt.attributes.startDateLocal))
-  console.error('appointmentDates:', appointmentDates)
-  console.error('past:', appointmentDates[0].diffNow().as('days'))
   return appointmentDates
 }

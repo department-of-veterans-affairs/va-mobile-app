@@ -234,10 +234,6 @@ const checkUpcomingApptDetails = async (
     await expect(element(by.text('Where to attend'))).not.toExist()
   }
 
-  if (appointmentType === 'CC') {
-    console.error('HERE in CC', appointmentStatus, pastAppointment)
-  }
-
   if (!pastAppointment) {
     if (appointmentStatus === 'Confirmed') {
       await expect(element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID))).toExist()
@@ -374,9 +370,6 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(1)).toExist()
     }
   }
-  if (appointmentType === 'CC') {
-    console.error('HERE in CC before check wording', appointmentStatus, pastAppointment)
-  }
   await checkMedicationWording({ appointmentType, appointmentStatus, pastAppointment })
   await checkTravelClaimAvailability(
     appointmentType,
@@ -389,27 +382,11 @@ const checkUpcomingApptDetails = async (
   // If we have a claim
   // Also check if the appointment was in the past (to work with how the tests are constructed)
   if (travelClaimId && pastAppointment) {
-    if (appointmentType === 'CC') {
-      console.error('HERE in CC with claim', appointmentStatus, pastAppointment, travelClaimId)
-    }
-    console.error('XXX', {
-      appointmentType,
-      appointmentStatus,
-      travelClaimId,
-      daysSinceAppointmentStart,
-      healthcareProvider,
-    })
     await scrollToIDThenTap(
       AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID,
       AppointmentsExpandede2eConstants.PAST_APPT_DETAILS_TEST_ID,
     )
     // await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
-    console.error('YYY', {
-      appointmentType,
-      appointmentStatus,
-      travelClaimId,
-      daysSinceAppointmentStart,
-    })
     await expect(element(by.id('goToClaimDetails-' + travelClaimId))).toExist()
     await expect(element(by.id('travelPayHelp'))).toExist()
   } else {
@@ -439,14 +416,6 @@ const checkUpcomingApptDetails = async (
       }
     } else {
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
-      if (appointmentType === 'CC') {
-        console.error('HERE in else with no claim and past 30 days', {
-          appointmentType,
-          appointmentStatus,
-          pastAppointment,
-          daysSinceAppointmentStart,
-        })
-      }
     }
   }
   await returnToAppointmentsFromDetails()
@@ -631,7 +600,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     } else {
       await expect(element(by.text('Past community care appointment'))).toExist()
     }
-    console.error('Tapped confirmed CC appointment')
     await checkUpcomingApptDetails(
       'CC',
       'Confirmed',
@@ -653,7 +621,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Jim Smith', pastAppointmentString)
     await expect(element(by.text('Canceled community care appointment'))).toExist()
     await expect(element(by.text(AppointmentsExpandede2eConstants.PATIENT_CANCELLATION))).toExist()
-    console.error('Tapped canceled CC appointment')
     await checkUpcomingApptDetails(
       'CC',
       'Canceled',
