@@ -93,9 +93,8 @@ function CopaysScreen({ navigation }: CopaysScreenProps) {
   const renderContent = () => {
     return (
       <Box mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold">{t('copays.subtitle')}</TextView>
-        <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBody">
-          {t('copays.subtitle.description')}
+        <TextView mb={theme.dimensions.standardMarginBetween} variant="MobileBodyBold">
+          {t('copays.subtitle')}
         </TextView>
         {copaysToShow.map((copay, idx) => (
           <CopayCard key={idx} copay={copay} index={idx} totalCopays={copays.length} />
