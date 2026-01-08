@@ -49,7 +49,7 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-      ? t('copays.activityButton.subText', {
+      ? t('copays.amountDueForBills', {
           amount: numberToUSDollars(copaysSummary.amountDue),
           count: copaysSummary.count,
         })
@@ -76,22 +76,24 @@ function PaymentsScreen({}: PaymentsScreenProps) {
 
   return (
     <CategoryLanding title={t('payments.title')} testID="paymentsID">
-      {featureEnabled('overpayCopay') && (
-        <>
+      <>
+        {featureEnabled('copayments') && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
             subText={copaysSubText}
             showLoading={copaysLoading}
           />
+        )}
+        {featureEnabled('overpayments') && (
           <LargeNavButton
             title={t('debts.title')}
             onPress={() => navigateTo('Debts')}
             subText={debtsSubText}
             showLoading={debtsLoading}
           />
-        </>
-      )}
+        )}
+      </>
       <Box>
         <LargeNavButton title={t('vaPaymentHistory')} onPress={onPayments} testID="toPaymentHistoryID" />
         {userAuthorizedServices?.directDepositBenefits && (

@@ -10,8 +10,8 @@ import { displayedTextPhoneNumber } from 'utils/formattingUtils'
 
 context('EmptyStateMessage', () => {
   it('renders Copays empty state', () => {
-    const title = t('copays.empty.title')
-    const body = t('copays.empty.body')
+    const title = t('copays.none.header')
+    const body = t('copays.none.message')
     const phone = t('8664001238')
 
     render(<EmptyStateMessage title={title} body={body} phone={phone} />)
