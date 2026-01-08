@@ -5,6 +5,8 @@ import { Box, LinkWithAnalytics, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
+const HEALTH_TAB_INDEX = 1
+
 function NoTravelClaims() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
@@ -25,9 +27,11 @@ function NoTravelClaims() {
       </TextView>
       <LinkWithAnalytics
         type="custom"
-        onPress={() => navigateTo('Appointments', { tab: 1 })}
+        onPress={() =>
+          navigateTo('HealthTab', { screen: 'Appointments', params: { tab: HEALTH_TAB_INDEX }, initial: false })
+        }
         text={t('travelPay.statusList.noClaims.goToPastAppointments')}
-        testID={`goToVAGovTravelClaimStatus`}
+        testID={`goToPastAppointmentsLinkID`}
       />
     </Box>
   )

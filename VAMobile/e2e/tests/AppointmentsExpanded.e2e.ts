@@ -26,7 +26,6 @@ export const AppointmentsExpandede2eConstants = {
   CLAIM_EXAM_BULLET_2:
     'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment',
   CLAIM_EXAM_WEB_LINK: 'Learn more about claim exam appointments',
-  GO_TO_VA_GOV_TRAVEL_CLAIMS_STATUS_ID: 'goToVAGovTravelClaimStatus',
   PAST_APPT_DETAILS_TEST_ID: 'PastApptDetailsTestID',
 }
 
