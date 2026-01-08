@@ -35,7 +35,7 @@ type LabDisplayData = {
 }
 
 /**
- * Screen providing details on an lab or test
+ * Screen providing details on a lab or test
  */
 function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScreenProps) {
   const dispatch = useAppDispatch()
@@ -157,8 +157,6 @@ function LabsAndTestsDetailsScreen({ route, navigation }: LabsAndTestsDetailsScr
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('labsAndTests.details.backButton')}
-      backLabelA11y={a11yLabelVA(t('labsAndTests.details.backButton'))}
       backLabelOnPress={navigation.goBack}
       title={t('details')}
       backLabelTestID="labsAndTestsDetailsBackID"

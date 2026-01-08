@@ -47,7 +47,7 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
 
   const placeHolder = t('noneNoted')
 
-  // analtyics
+  // analytics
   useEffect(() => {
     logAnalyticsEvent(Events.vama_allergy_details())
   }, [dispatch, allergy])
@@ -110,8 +110,6 @@ function AllergyDetailsScreen({ route, navigation }: AllergyDetailsScreenProps) 
 
   return (
     <FeatureLandingTemplate
-      backLabel={t('vaAllergies')}
-      backLabelA11y={a11yLabelVA(t('vaAllergies'))}
       backLabelOnPress={navigation.goBack}
       title={t('allergies.details.heading')}
       backLabelTestID="allergiesDetailsBackID">
