@@ -3,6 +3,7 @@
 // Full test run - used by components, slices, translations, utils
 const fullTestRun = [
   'Allergies',
+  'AllergiesAccelerated',
   'Appeals',
   'AppealsExpanded',
   'Appointments',
@@ -30,6 +31,7 @@ const fullTestRun = [
   'SettingsScreen',
   'SignIn',
   'TravelPay',
+  'TravelPayClaims',
   'VaccineRecords',
   'VALetters',
   'VeteransCrisisLine',
@@ -89,7 +91,7 @@ const debtsArray = ['Payments']
 
 const detoxMapping = {
   directory: {
-    allergies: ['Allergies'],
+    allergies: ['Allergies', 'AllergiesAccelerated'],
     AppealDetailsScreen: ['Appeals', 'AppealsExpanded'],
     Appointments: appointmentsArray,
     authorizedServices: authorizedServicesArray,
@@ -101,7 +103,7 @@ const detoxMapping = {
     ClaimLettersScreen: ['Claims'],
     ClaimsAndAppealsListView: claimsAndAppealsArray,
     ClaimsHistoryScreen: ['Claims'],
-    ClaimsScreen: claimsAndAppealsArray,
+    ClaimsScreen: [...claimsAndAppealsArray, 'TravelPay'],
     claraJefferson: [],
     components: fullTestRun,
     contactInformation: contactInfoArray,
@@ -148,8 +150,8 @@ const detoxMapping = {
     styles: [],
     SyncScreen: [],
     translations: fullTestRun,
-    travelPay: ['TravelPay'],
-    TravelPay: ['TravelPay'],
+    travelPay: ['TravelPay', 'TravelPayClaims'],
+    TravelPay: ['TravelPay', 'TravelPayClaims'],
     types: fullTestRun,
     utils: fullTestRun,
     vaccines: ['VaccineRecords'],
@@ -160,8 +162,8 @@ const detoxMapping = {
   },
   files: {
     'accounts.ts': ['DirectDeposit'],
-    'allergies.json': ['Allergies'],
-    'allergies.ts': ['Allergies'],
+    'allergies.json': ['Allergies', 'AllergiesAccelerated'],
+    'allergies.ts': ['Allergies', 'AllergiesAccelerated'],
     'analytics.ts': [],
     'api.ts': fullTestRun,
     'App.test.tsx': [],
@@ -211,11 +213,12 @@ const detoxMapping = {
     'secureMessaging.ts': ['Messages'],
     'states.ts': ['ContactInformation'],
     'store.ts': [],
-    'travelPay.ts': ['TravelPay'],
+    'travelPay.ts': ['TravelPay', 'TravelPayClaims'],
     'users.ts': [],
     'utils.ts': [],
     'vaccine.json': ['VaccineRecords'],
     'vaccine.ts': ['VaccineRecords'],
+    'whatsNew.ts': [],
   },
 }
 

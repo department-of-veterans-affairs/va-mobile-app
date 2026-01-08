@@ -82,6 +82,18 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 20,
   },
+  DebtLabel: {
+    fontSize: 18,
+    lineHeight: 30,
+  },
+  DebtValue: {
+    fontSize: 22,
+    lineHeight: 28,
+  },
+  DebtValueLarge: {
+    fontSize: 26,
+    lineHeight: 28,
+  },
   DescriptiveBackButton: {
     fontSize: 16,
     lineHeight: 22,
@@ -268,6 +280,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.link),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
+    vadsFontBodySmall: buildFontFromMobileTokens(font.typography.vadsFontBodySmall, scheme),
+    vadsFontBodyXsmall: buildFontFromMobileTokens(font.typography.vadsFontBodyXsmall, scheme),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
     VeteranStatusBranch: buildFont(
@@ -290,6 +304,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     ),
     // TODO: update to pull in the full mobile design token typography
     vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
+    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
   }
 }
 
