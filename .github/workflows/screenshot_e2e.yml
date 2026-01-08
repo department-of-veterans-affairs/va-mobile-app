@@ -48,7 +48,7 @@ jobs:
     secrets: inherit
     with:
       channel_name: va-mobile-app-alerts
-      message: 'Generating new App Store images for iOS and Android. This process may take a while.'
+      message: 'Generating new App Store images for iOS and Android. This process may take a while. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for status.'
 
   generate-iphone-screenshots:
     name: Generate iPhone Screenshots
@@ -400,7 +400,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app-alerts
       message: 'App store images generated successfully. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
 
   failure-slack-message:
@@ -410,5 +410,5 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: va-mobile-sandbox
+      channel_name: va-mobile-app-alerts
       message: 'App store image generation failed. See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
