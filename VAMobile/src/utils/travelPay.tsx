@@ -8,9 +8,12 @@ import { DateTime } from 'luxon'
 import { sortBy } from 'underscore'
 
 import { travelPayMutationKeys } from 'api/travelPay'
-import { AppointmentData, TravelPayClaimData, TravelPayClaimSummary } from 'api/types'
+import { AppointmentData, TravelPayClaimData, TravelPayClaimDocument, TravelPayClaimSummary } from 'api/types'
+import { DefaultListItemObj, TextLineWithIconProps } from 'components'
 import { Events } from 'constants/analytics'
+import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { logAnalyticsEvent } from 'utils/analytics'
+import { getA11yLabelText } from 'utils/common'
 import { RouteNavigationFunction } from 'utils/hooks'
 
 export const FILTER_KEY_ALL = 'all'
@@ -151,6 +154,94 @@ export const logSMOCTimeTaken = (smocFlowStartDate?: string) => {
     logAnalyticsEvent(Events.vama_smoc_time_taken(totalTime))
   }
 }
+
+// ============================================================================
+// Travel Pay Document Helpers
+// ============================================================================
+
+/**
+ * Determines the document type based on filename patterns
+ * Used for analytics tracking
+ */
+export const getDocumentType = (filename: string): string => {
+  if (!filename) {
+    return 'unknown'
+  }
+  if (filename.includes('Rejection Letter')) {
+    return 'rejection_letter'
+  }
+  if (filename.includes('Decision Letter')) {
+    return 'decision_letter'
+  }
+  return 'user_submitted'
+}
+
+/**
+ * Helper function to create a document list item
+ * @param isDecisionLetter - If true, uses bold font and shows icon (for decision letters).
+ *                           If false, uses normal font and no icon (for user-submitted documents)
+ */
+export const createTravelPayDocumentListItem = (
+  document: TravelPayClaimDocument,
+  claimId: string,
+  claimStatus: string,
+  onDocumentPress: (docId: string, filename: string) => void,
+  theme: VATheme,
+  t: TFunction,
+  linkText?: string,
+  isDecisionLetter?: boolean,
+): DefaultListItemObj => {
+  const handlePress = () => {
+    // Log analytics before triggering download
+    const documentType = getDocumentType(document.filename)
+    logAnalyticsEvent(Events.vama_travel_pay_doc_dl(claimId, claimStatus, documentType, document.filename))
+    onDocumentPress(document.documentId, document.filename)
+  }
+
+  // Decision letters are bold with icon, user-submitted docs are normal with no icon
+  const variant = isDecisionLetter
+    ? ('MobileBodyBold' as keyof VATypographyThemeVariants)
+    : ('MobileBody' as keyof VATypographyThemeVariants)
+  const iconProps = isDecisionLetter
+    ? {
+        name: 'Description' as const,
+        width: 24,
+        height: 24,
+        fill: theme.colors.text.primary,
+      }
+    : undefined
+
+  const textLines: Array<TextLineWithIconProps> = [
+    {
+      text: linkText || document.filename,
+      variant,
+      iconProps,
+    },
+  ]
+
+  return {
+    textLines,
+    onPress: handlePress,
+    testId: getA11yLabelText(textLines),
+    a11yHintText: t('travelPay.claimDetails.document.decisionLetter'),
+  }
+}
+
+/**
+ * Converts a string to PascalCase format
+ * @param str - The string to convert
+ * @returns The string in PascalCase format
+ * @example
+ * toPascalCase('in manual review') // Returns: 'InManualReview'
+ * toPascalCase('denied') // Returns: 'Denied'
+ */
+export function toPascalCase(str: string): string {
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('')
+}
+
 /** Filters the claims based on the provided filter options
  * @param claims - The list of claims
  * @param filter - The filter options to apply
@@ -242,4 +333,15 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
   }
 
   return false
+}
+
+/**
+ * Navigates to the travel claims list screen from various entry points
+ * @param navigateTo - The navigation function to navigate between screens
+ */
+export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
+  navigateTo('BenefitsTab', {
+    screen: 'TravelPayClaims',
+    initial: false,
+  })
 }

@@ -6,8 +6,10 @@ import { Alert } from '@department-of-veterans-affairs/mobile-component-library'
 import { AppointmentData } from 'api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import { getDaysLeftToFileTravelPay, isEligibleForTravelPay } from 'utils/appointments'
-import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { useOfflineSnackbar, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useAppIsOnline } from 'utils/hooks/offline'
 import { useTravelClaimSubmissionMutationState } from 'utils/travelPay'
 
 type AppointmentFileTravelPayAlertProps = {
@@ -22,6 +24,8 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
   const navigateTo = useRouteNavigation()
   const mutationState = useTravelClaimSubmissionMutationState(appointment.id)
   const mutationStatus = mutationState?.status
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
 
   const eligibleForTravelPay = isEligibleForTravelPay(attributes)
   const daysLeftToFile = getDaysLeftToFileTravelPay(attributes.startDateUtc)
@@ -38,6 +42,11 @@ function AppointmentFileTravelPayAlert({ appointment, appointmentRouteKey }: App
         primaryButton={{
           label: t('travelPay.fileClaimAlert.button'),
           onPress: () => {
+            if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+              showOfflineSnackbar()
+              return
+            }
+
             navigateTo('SubmitTravelPayClaimScreen', {
               appointment,
               appointmentRouteKey,

@@ -74,6 +74,10 @@ const fontSizes = {
     fontSize: 16,
     lineHeight: 24,
   },
+  ClaimHeader: {
+    fontSize: 24,
+    lineHeight: 32,
+  },
   ClaimPhase: {
     fontSize: 20,
     lineHeight: 30,
@@ -257,6 +261,7 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       fontSizes.CategoryLandingAlert,
       scheme.text.categoryLandingWarning,
     ),
+    ClaimHeader: buildFont('Bitter-Bold', fontSizes.ClaimHeader, scheme.text.primary),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.vadsColorWhite),
     CrisisLineButton: buildFont('SourceSansPro-Regular', fontSizes.CrisisLineButton, scheme.text.crisisLineButton),
     DescriptiveBackButton: buildFont('SourceSansPro-Regular', fontSizes.DescriptiveBackButton, scheme.text.link),
@@ -280,6 +285,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel, scheme.text.bodyText),
     textWithIconButton: buildFont('SourceSansPro-Regular', fontSizes.textWithIconButton, scheme.text.link),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag, scheme.text.primaryContrast),
+    vadsFontBodySmall: buildFontFromMobileTokens(font.typography.vadsFontBodySmall, scheme),
+    vadsFontBodyXsmall: buildFontFromMobileTokens(font.typography.vadsFontBodyXsmall, scheme),
     VAHeader: buildFont('SourceSansPro-Bold', fontSizes.VAHeader, scheme.text.primary),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector, scheme.text.bodyText),
     VeteranStatusBranch: buildFont(
@@ -301,8 +308,8 @@ const buildTypography = (scheme: VAColorScheme): VATheme['typography'] => {
       scheme.text.primary,
     ),
     // TODO: update to pull in the full mobile design token typography
-    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
     vadsFontHeadingXsmall: buildFontFromMobileTokens(font.typography.vadsFontHeadingXsmall, scheme),
+    vadsFontHeadingMedium: buildFontFromMobileTokens(font.typography.vadsFontHeadingMedium, scheme),
   }
 }
 
@@ -361,6 +368,7 @@ let theme: VATheme = {
     BitterHeading: fontSizes.BitterHeading,
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     CategoryLandingAlert: fontSizes.CategoryLandingAlert,
+    ClaimHeader: fontSizes.ClaimHeader,
     ClaimPhase: fontSizes.ClaimPhase,
     CrisisLineButton: fontSizes.CrisisLineButton,
     HelperText: fontSizes.HelperText,

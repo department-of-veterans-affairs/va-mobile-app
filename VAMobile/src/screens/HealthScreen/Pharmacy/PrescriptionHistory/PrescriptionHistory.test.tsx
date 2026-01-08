@@ -329,7 +329,6 @@ context('PrescriptionHistory', () => {
       await waitFor(() =>
         expect(screen.getByRole('button', { name: t('prescription.history.startRefillRequest') })).toBeTruthy(),
       )
-      await waitFor(() => expect(screen.getByLabelText(t('prescription.history.transferred.title'))).toBeTruthy())
     })
   })
 

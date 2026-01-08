@@ -12,7 +12,7 @@ const importKimberlyWashingtonData = () => {
     import('store/api/demo/mocks/default/disabilityRating.json'),
     import('store/api/demo/mocks/default/decisionLetters.json'),
     import('store/api/demo/mocks/default/labsAndTests.json'),
-    import('store/api/demo/mocks/default/letters.json'),
+    import('./letters.json'),
     import('store/api/demo/mocks/default/payments.json'),
     import('store/api/demo/mocks/default/prescriptions.json'),
     import('store/api/demo/mocks/default/notifications.json'),
