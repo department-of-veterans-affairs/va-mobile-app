@@ -18,6 +18,7 @@ export type FeatureToggleType =
   | 'appointmentRequests'
   | 'cernerTrueForDemo'
   | 'COEAvailable'
+  | 'copayments'
   | 'appointmentsTestTime'
   | 'datePickerUpdate'
   | 'decisionLettersWaygate'
@@ -40,11 +41,12 @@ export type FeatureToggleType =
   | 'travelPayStatusList'
   | 'useOldLinkComponent'
   | 'internationalPhoneNumber'
+  | 'show5103Flow'
   | 'showCernerWarningAlert'
   | 'showCernerWhatsNew'
   | 'showEmailConfirmationAlert'
   | 'showTimezoneMessage'
-  | 'overpayCopay'
+  | 'overpayments'
   | 'offlineMode'
   | 'remoteConfigRefreshTest'
 
@@ -54,6 +56,7 @@ type FeatureToggleValues = {
   cernerTrueForDemo: boolean
   datePickerUpdate: boolean
   COEAvailable: boolean
+  copayments: boolean
   decisionLettersWaygate: boolean
   haptics: boolean
   hsScrollAnalytics: boolean
@@ -74,11 +77,12 @@ type FeatureToggleValues = {
   travelPayStatusList: boolean
   useOldLinkComponent: boolean
   internationalPhoneNumber: boolean
+  show5103Flow: boolean
   showCernerWarningAlert: boolean
   showCernerWhatsNew: boolean
   showEmailConfirmationAlert: boolean
   showTimezoneMessage: boolean
-  overpayCopay: boolean
+  overpayments: boolean
   offlineMode: boolean
   remoteConfigRefreshTest: boolean
 }
@@ -89,6 +93,7 @@ export const defaults: FeatureToggleValues = {
   cernerTrueForDemo: false,
   datePickerUpdate: true,
   COEAvailable: false,
+  copayments: false,
   decisionLettersWaygate: true,
   haptics: true,
   hsScrollAnalytics: false,
@@ -109,11 +114,12 @@ export const defaults: FeatureToggleValues = {
   travelPayStatusList: true,
   useOldLinkComponent: true,
   internationalPhoneNumber: false,
+  show5103Flow: false,
   showCernerWarningAlert: true,
   showCernerWhatsNew: false,
   showEmailConfirmationAlert: true,
   showTimezoneMessage: true,
-  overpayCopay: false,
+  overpayments: false,
   remoteConfigRefreshTest: false,
   offlineMode: false,
 }

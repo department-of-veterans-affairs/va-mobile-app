@@ -26,8 +26,14 @@ import { FileRequestStackParams } from 'screens/BenefitsScreen/ClaimsScreen/Clai
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yLabelVA } from 'utils/a11yLabel'
 import { logAnalyticsEvent } from 'utils/analytics'
-import { currentRequestsForVet, hasUploadedOrReceived, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import {
+  currentRequestsForVet,
+  hasUploadedOrReceived,
+  is5103Notice,
+  numberOfItemsNeedingAttentionFromVet,
+} from 'utils/claims'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
+import { featureEnabled } from 'utils/remoteConfig'
 
 type FileRequestProps = StackScreenProps<FileRequestStackParams, 'FileRequest'>
 
@@ -45,6 +51,7 @@ function FileRequest({ navigation, route }: FileRequestProps) {
   const requests = currentRequestsForVet(
     claim?.attributes.eventsTimeline || claimFallBack?.attributes.eventsTimeline || [],
   )
+
   const { condensedMarginBetween, contentMarginBottom, standardMarginBetween, gutter } = theme.dimensions
 
   useSubtaskProps({
@@ -62,7 +69,12 @@ function FileRequest({ navigation, route }: FileRequestProps) {
 
     const onDetailsPress = (request: ClaimEventData) => {
       logAnalyticsEvent(Events.vama_request_details(claimID, request.trackedItemId || null, request.type))
-      navigateTo('FileRequestDetails', { claimID, request })
+
+      if (featureEnabled('show5103Flow') && is5103Notice(request.displayName || '')) {
+        navigateTo('File5103RequestDetails', { claimID, request })
+      } else {
+        navigateTo('FileRequestDetails', { claimID, request })
+      }
     }
 
     const getA11yLabel = (requestIndex: number, displayName?: string, uploaded?: boolean) => {
@@ -150,22 +162,24 @@ function FileRequest({ navigation, route }: FileRequestProps) {
             accessibilityRole="header">
             {t('fileRequest.weSentYouALaterText')}
           </TextView>
-          <Box mt={standardMarginBetween}>
-            <TextArea>
-              <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-                {t('fileRequest.askForYourClaimEvaluationTitle')}
-              </TextView>
-              <TextView variant="MobileBody" paragraphSpacing={true}>
-                {t('fileRequest.askForYourClaimEvaluationBody')}
-              </TextView>
-              <Button
-                onPress={viewEvaluationDetailsPress}
-                label={t('fileRequest.viewEvaluationDetails')}
-                testID={t('fileRequest.viewEvaluationDetails')}
-                a11yHint={t('fileRequest.viewEvaluationDetails')}
-              />
-            </TextArea>
-          </Box>
+          {!featureEnabled('show5103Flow') && (
+            <Box mt={standardMarginBetween}>
+              <TextArea>
+                <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
+                  {t('fileRequest.askForYourClaimEvaluationTitle')}
+                </TextView>
+                <TextView variant="MobileBody" paragraphSpacing={true}>
+                  {t('fileRequest.askForYourClaimEvaluationBody')}
+                </TextView>
+                <Button
+                  onPress={viewEvaluationDetailsPress}
+                  label={t('fileRequest.viewEvaluationDetails')}
+                  testID={t('fileRequest.viewEvaluationDetails')}
+                  a11yHint={t('fileRequest.viewEvaluationDetails')}
+                />
+              </TextArea>
+            </Box>
+          )}
         </Box>
       )}
     </VAScrollView>

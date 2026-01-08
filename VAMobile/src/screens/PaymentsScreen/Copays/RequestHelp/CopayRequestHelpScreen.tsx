@@ -102,10 +102,6 @@ function CopayRequestHelpScreen({ navigation }: CopayRequestHelpScreenProps) {
                         boldedTextPrefix: t('copays.requestHelp.current.item2.term'),
                         text: t('copays.requestHelp.current.item2.desc'),
                       },
-                      {
-                        boldedTextPrefix: t('copays.requestHelp.current.item3.term'),
-                        text: t('copays.requestHelp.current.item3.desc'),
-                      },
                     ] as VABulletListText[]
                   }
                 />
