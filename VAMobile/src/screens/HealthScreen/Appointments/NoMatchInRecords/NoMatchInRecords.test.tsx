@@ -9,6 +9,7 @@ import { context, render } from 'testUtils'
 context('NoMatchInRecords', () => {
   it('initializes correctly', () => {
     render(<NoMatchInRecords />)
+    expect(screen.getByText(t('noMatch.alert.title'))).toBeTruthy()
     expect(screen.getByText(t('noMatch.title'))).toBeTruthy()
     expect(screen.getByText(t('noMatch.noMatch'))).toBeTruthy()
     expect(screen.getByText(t('noMatch.whatYouCanDo'))).toBeTruthy()

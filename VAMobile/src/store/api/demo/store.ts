@@ -24,7 +24,12 @@ import importDennisMadisonData from 'store/api/demo/mocks/dennisMadison'
 import importKimberlyWashingtonData from 'store/api/demo/mocks/kimberlyWashington'
 import { NotificationDemoApiReturnTypes, NotificationDemoStore } from 'store/api/demo/notifications'
 import { PaymenDemoStore, PaymentsDemoReturnTypes, getPaymentsHistory } from 'store/api/demo/payments'
-import { PrescriptionsDemoReturnTypes, PrescriptionsDemoStore, getPrescriptions } from 'store/api/demo/prescriptions'
+import {
+  PrescriptionsDemoReturnTypes,
+  PrescriptionsDemoStore,
+  getPrescriptions,
+  requestRefill,
+} from 'store/api/demo/prescriptions'
 import {
   ProfileDemoReturnTypes,
   ProfileDemoStore,
@@ -45,6 +50,7 @@ import {
 import {
   TravelPayDemoReturnTypes,
   TravelPayDemoStore,
+  getTravelPayClaimDetails,
   getTravelPayClaims,
   submitAppointmentClaim,
 } from 'store/api/demo/travelPay'
@@ -219,6 +225,16 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
     return store['/v0/push/prefs'] as DemoApiReturns
   }
 
+  // Handle dynamic travel pay claims details endpoint
+  if (endpoint.startsWith('/v0/travel-pay/claims/')) {
+    // Check if it's a specific claim ID that has its own endpoint
+    if (store[endpoint as keyof DemoStore]) {
+      return store[endpoint as keyof DemoStore] as DemoApiReturns
+    }
+    // Fall back to generic claim details
+    return getTravelPayClaimDetails(store)
+  }
+
   switch (endpoint) {
     /**
      * APPOINTMENTS
@@ -340,6 +356,12 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
      */
     case '/v0/user/preferred_name': {
       return updatePreferredName(store, params as PreferredNameUpdatePayload)
+    } /**
+     * PRESCRIPTIONS REFILL
+     */
+    case `/v0/health/rx/prescriptions/refill`:
+    case `/v1/health/rx/prescriptions/refill`: {
+      return requestRefill(store, params as { ids: string[] | Array<{ id: string; stationNumber: string }> })
     }
     default: {
       return undefined

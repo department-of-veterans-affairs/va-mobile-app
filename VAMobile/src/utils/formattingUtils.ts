@@ -6,6 +6,8 @@ import { DateTime, DateTimeFormatOptions } from 'luxon'
 
 import { GMTPrefix, GMTTimezones } from 'constants/gmtTimezones'
 
+export const EN_DASH = '\u2013'
+
 /**
  * Returns the formatted phone number
  *
@@ -137,6 +139,58 @@ export const getEpochSecondsOfDate = (date: string): number => {
     newDate.getUTCSeconds(),
     newDate.getUTCMilliseconds(),
   ).toSeconds()
+}
+
+/**
+ * Returns timezone-aware warning message about file upload date display discrepancies.
+ *
+ * Due to API returning date-only strings, files display with UTC date instead of local date.
+ *
+ * @param t - Translation function from i18next
+ * @returns Localized message string explaining upload time and display date behavior, or empty string if no discrepancy exists
+ *
+ * @example
+ * // West of UTC (PST):
+ * // "If you uploaded files after 4 PM PST, we'll show them as received on the next day"
+ *
+ * // East of UTC (JST):
+ * // "If you uploaded files before 9 AM GMT+9, we'll show them as received on the previous day"
+ *
+ * // At UTC+0 (GMT):
+ * // "" (empty string - no discrepancy exists)
+ */
+export const getFileUploadTimezoneMessage = (t: TFunction): string => {
+  // Get midnight UTC converted to local time
+  const localTime = DateTime.utc().startOf('day').toLocal()
+
+  // At UTC+0, local time matches UTC time - no date discrepancy exists
+  if (localTime.offset === 0) {
+    return ''
+  }
+
+  // Format as "9 AM GMT+9" or "4 PM PST"
+  let formattedTime = localTime.toLocaleString({
+    hour: 'numeric',
+    timeZoneName: 'short',
+  })
+
+  // Apply friendly abbreviation replacements for GMT-offset timezones (e.g., GMT+8 → PHT)
+  if (formattedTime.includes(GMTPrefix)) {
+    for (const { pattern, value } of GMTTimezones) {
+      formattedTime = formattedTime.replace(pattern, value)
+    }
+  }
+
+  // Determine message direction based on timezone offset
+  // - West of UTC (negative offset): Upload after cutoff → shows as next day
+  // - East of UTC (positive offset): Upload before cutoff → shows as previous day
+  const isEastOfUTC = localTime.offset > 0
+
+  return t('fileUpload.timezoneMessage', {
+    beforeAfter: isEastOfUTC ? 'before' : 'after',
+    time: formattedTime,
+    nextPrevious: isEastOfUTC ? 'previous' : 'next',
+  })
 }
 
 /**
@@ -315,11 +369,25 @@ export const getNumberAccessibilityLabelFromString = (text: string): string => {
 }
 
 /**
- * Converts 1234567890 to 123-456-7890
+ * Converts 1234567890 to 123-456-7890 and 12345678901 to +1-234-567-8901
  * @param phoneNumber - string that has the phone number
  */
 export const displayedTextPhoneNumber = (phoneNumber: string): string => {
-  return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  if (phoneNumber.length === 10) {
+    return phoneNumber.substring(0, 3) + '-' + phoneNumber.substring(3, 6) + '-' + phoneNumber.substring(6, 10)
+  } else if (phoneNumber.length === 11) {
+    return (
+      '+' +
+      phoneNumber.substring(0, 1) +
+      '-' +
+      phoneNumber.substring(1, 4) +
+      '-' +
+      phoneNumber.substring(4, 7) +
+      '-' +
+      phoneNumber.substring(7, 11)
+    )
+  }
+  return phoneNumber
 }
 
 /**
@@ -457,5 +525,13 @@ export const formatDateMMMMyyyy = (date: DateTime): string => {
  * @returns date range string formatted as MMM yyyy (e.g. "Jan 2025 - Feb 2025")
  */
 export const formatDateRangeMMMyyyy = (startDate: DateTime, endDate: DateTime): string => {
-  return `${formatDateMMMyyyy(startDate)} - ${formatDateMMMyyyy(endDate)}`
+  return `${formatDateMMMyyyy(startDate)} ${EN_DASH} ${formatDateMMMyyyy(endDate)}`
+}
+
+export const formatEpochReadable = (epoch?: number): string => {
+  if (!epoch) {
+    return ''
+  }
+
+  return DateTime.fromSeconds(epoch).toFormat('LLLL d, y H:mm ZZZZ')
 }

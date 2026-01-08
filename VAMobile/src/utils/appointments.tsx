@@ -20,7 +20,9 @@ import {
   AppointmentsMetaPagination,
 } from 'api/types'
 import { Box, DefaultList, DefaultListItemObj, TextLineWithIconProps } from 'components'
+import { DatePickerRange } from 'components/DatePicker/DatePicker'
 import { LabelTagTypeConstants } from 'components/LabelTag'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 import {
@@ -537,6 +539,39 @@ export const getPastAppointmentDateRange = (): AppointmentsDateRange => {
   }
 }
 
+/**
+ * Returns a date range to be used by DatePicker component
+ *
+ * @param apptsDateRange - type AppointmentsDateRange, with startDate and endDate as ISO strings
+ *
+ * @returns type DatePickerRange, with startDate and endDate as DateTime objs
+ */
+export const getDatePickerRange = (apptsDateRange: AppointmentsDateRange): DatePickerRange => {
+  return {
+    startDate: DateTime.fromISO(apptsDateRange.startDate).toLocal(),
+    endDate: DateTime.fromISO(apptsDateRange.endDate).toLocal(),
+  }
+}
+
+/**
+ * Returns the smallest past TimeFrame that encapsulates the given date range
+ *
+ * @param dateRange - type DatePickerRange, with startDate and endDate as DateTime objs
+ *
+ * @returns type TimeFrameType
+ */
+export const getPastTimeFrame = (dateRange: DatePickerRange): TimeFrameType => {
+  const todaysDate = DateTime.local().startOf('day')
+  const monthsFromToday = todaysDate.diff(dateRange.startDate, 'months').months
+
+  if (monthsFromToday <= 1) return TimeFrameTypeConstants.PAST_ONE_MONTH
+  else if (monthsFromToday <= 3) return TimeFrameTypeConstants.PAST_THREE_MONTHS
+  else if (monthsFromToday <= 6) return TimeFrameTypeConstants.PAST_SIX_MONTHS
+  else if (monthsFromToday <= 9) return TimeFrameTypeConstants.PAST_NINE_MONTHS
+  else if (monthsFromToday <= 12) return TimeFrameTypeConstants.PAST_ONE_YEAR
+  else return TimeFrameTypeConstants.PAST_TWO_YEARS
+}
+
 export type AppointmentDetailsScreenType =
   | 'ClaimExam'
   | 'CommunityCare'
@@ -602,10 +637,12 @@ export const AppointmentDetailsSubTypeConstants: {
  * - Past:
  *   - If it is a video appointment, show it in past if it started more than 4 hours ago
  *   - If it is not a video appointment, show it in past
+ *   - If a date range is provided and it is within the given date range, show it in past
  */
 export const filterAppointments = (
   appointments?: AppointmentsList,
   isPast: boolean = false,
+  dateRange?: DatePickerRange,
 ): AppointmentsList | undefined => {
   if (!appointments) {
     return undefined
@@ -613,6 +650,9 @@ export const filterAppointments = (
   const todaysDate = DateTime.local()
   const fourHoursAgo = todaysDate.minus({ hours: 4 }).valueOf()
   const oneHourAgo = todaysDate.minus({ hours: 1 }).valueOf()
+  const dateRangeUpperBounds = dateRange?.endDate.valueOf()
+  const dateRangeLowerBounds = dateRange?.startDate.valueOf()
+
   // If, by chance appointments is not undefined but is not an array, return undefined
   return appointments.filter?.((appointment) => {
     const startDate = DateTime.fromISO(appointment.attributes.startDateLocal).valueOf()
@@ -620,6 +660,14 @@ export const filterAppointments = (
     // Just looks for VIDEO in the type, which may include VA_VIDEO_CONNECT_ONSITE
     const isVideo = appointment.attributes.appointmentType?.includes('VIDEO')
     const filterDateTime = isVideo ? fourHoursAgo : oneHourAgo
-    return isPast ? startDate <= filterDateTime : startDate > filterDateTime
+
+    // Verify the appointment is within the provided the date range
+    const isInDateRange =
+      dateRangeLowerBounds &&
+      dateRangeUpperBounds &&
+      startDate >= dateRangeLowerBounds &&
+      startDate <= dateRangeUpperBounds
+
+    return isPast ? startDate <= filterDateTime && (isInDateRange || !dateRange) : startDate > filterDateTime
   })
 }

@@ -146,7 +146,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     (msg) => DateTime.fromISO(msg.attributes.sentDate).diffNow('days').days >= REPLY_WINDOW_IN_DAYS,
   )
   const replyDisabled = isReplyDraft && !hasRecentMessages
-  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber)
+  const [careSystem, setCareSystem] = useState(messageRecipient?.attributes.stationNumber || '')
   const [to, setTo] = useState<ComboBoxItem>()
   const [category, setCategory] = useState<CategoryTypes>(message?.category || '')
   const [subject, setSubject] = useState(message?.subject || '')
@@ -177,11 +177,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
 
   useEffect(() => {
     if (!loadingMessage && messageFetched) {
+      const toRecipientValue = messageRecipient != null ? messageRecipient.attributes.triageTeamId?.toString() : ''
+      const toRecipientLabel = messageRecipient != null ? messageRecipient.attributes.name?.toString() : ''
       setBody(message?.body || '')
       setCategory(message?.category || '')
       setSubject(message?.subject || '')
       setCareSystem(messageRecipient?.attributes.stationNumber || '')
-      setTo({ value: message.recipientId?.toString() || '', label: message.recipientName })
+      setTo({ value: toRecipientValue, label: toRecipientLabel })
     }
   }, [
     loadingMessage,
@@ -191,7 +193,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     message?.subject,
     message.recipientId,
     message.recipientName,
-    messageRecipient?.attributes.stationNumber,
+    messageRecipient,
   ])
 
   useEffect(() => {
@@ -409,6 +411,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     setTo(undefined)
   }
 
+  // Fallback in case messageRecipient is empty
+  useEffect(() => {
+    if (careSystems.length === 1) {
+      setCareSystem(careSystems[0].value)
+    }
+  }, [hasLoadedRecipients, careSystems])
+
   const onAddFiles = () => {
     logAnalyticsEvent(Events.vama_sm_attach('Add Files'))
     navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
@@ -484,6 +493,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           isRequiredField: true,
           testID: 'editDraftToTestID',
         },
+        hideField: !careSystem,
         fieldErrorMessage: t('secureMessaging.startNewMessage.to.fieldError'),
       },
       {
@@ -555,6 +565,16 @@ function EditDraft({ navigation, route }: EditDraftProps) {
     navigateTo('SecureMessaging', { activeTab: 0 })
   }
 
+  function isOhMessage(messageData: SecureMessagingFormData): boolean {
+    if (isReplyDraft) {
+      return message?.isOhMessage || false
+    }
+    return (
+      recipients?.find((recipient) => recipient.attributes.triageTeamId === messageData.recipient_id)?.attributes
+        .ohTriageGroup ?? false
+    )
+  }
+
   const onMessageSendOrSave = (): void => {
     const messageData = getMessageData()
     if (onSaveDraftClicked) {
@@ -593,13 +613,13 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           goToDraftFolder(false)
         },
       }
-      //Currently hardcoding isRecipientOh to false until we have isOhMessage available from draft endpoint
       const params: SendMessageParameters = {
         messageData: messageData,
         uploads: attachmentsList,
         replyToID: replyToID,
-        isRecipientOh: false,
+        isRecipientOh: isOhMessage(messageData),
       }
+
       sendMessage(params, mutateOptions)
     }
   }
@@ -609,7 +629,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
       <Box my={theme.dimensions.standardMarginBetween}>
         <AlertWithHaptics
           variant="warning"
-          header={t('secureMessaging.reply.youCanNoLonger')}
+          header={t('secureMessaging.reply.tooOldForReplies')}
           description={t('secureMessaging.reply.olderThan45Days')}
         />
       </Box>

@@ -23,8 +23,9 @@ export const HomeE2eIdConstants = {
   UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '6 in the next 30 days',
   PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '5 eligible for travel reimbursement',
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
+  CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT: '5 active with 1 evidence request',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
-  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '10 ready to refill',
+  PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '55 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
   DISABILITY_RATING_TITLE_TEXT: 'Disability rating',
   DISABILITY_RATING_SUBTEXT_TEXT: 'Service connected',
@@ -39,7 +40,6 @@ export const HomeE2eIdConstants = {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
   await loginToDemoMode()
 })
 
@@ -54,7 +54,6 @@ describe('Home Screen', () => {
     await device.installApp()
     await device.launchApp({ newInstance: true, permissions: { notifications: 'YES' } })
     await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
-    await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_STATUS_LIST_FLAG_TEXT)
     await loginToDemoMode()
   })
 
@@ -74,7 +73,7 @@ describe('Home Screen', () => {
   it('should verify the activity section content', async () => {
     await expect(element(by.text(HomeE2eIdConstants.UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT))).toExist()
   })
@@ -101,7 +100,7 @@ describe('Home Screen', () => {
   it('health tab tap: verify the health screen tab items', async () => {
     await element(by.text(CommonE2eIdConstants.HEALTH_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.APPOINTMENTS_BUTTON_ID))).toExist()
-    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTIONS_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MESSAGES_INBOX_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.MEDICAL_RECORDS_BUTTON_ID))).toExist()
@@ -111,6 +110,7 @@ describe('Home Screen', () => {
     await element(by.text(CommonE2eIdConstants.PAYMENTS_TAB_BUTTON_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.PAYMENT_HISTORY_BUTTON_ID))).toExist()
     await expect(element(by.id(CommonE2eIdConstants.DIRECT_DEPOSIT_BUTTON_ID))).toExist()
+    await expect(element(by.id(CommonE2eIdConstants.TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID))).toExist()
   })
 
   it('personalization: verify the health screen subtext', async () => {
@@ -147,11 +147,11 @@ describe('Home Screen', () => {
 
   it('taps home then jumps to claims from claims button', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
-    await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)))
+    await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
-    await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))).toExist()
   })
 
