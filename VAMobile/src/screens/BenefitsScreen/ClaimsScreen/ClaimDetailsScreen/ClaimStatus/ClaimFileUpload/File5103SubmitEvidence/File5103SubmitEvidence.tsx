@@ -1,12 +1,12 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { map } from 'underscore'
 
-import { Box, BoxProps, TextArea, TextView, VAScrollView } from 'components'
+import { Box, BoxProps, TextArea, TextView, VABulletList, VAScrollView } from 'components'
 import { useSubtaskProps } from 'components/Templates/MultiStepSubtask'
 import SubtaskTitle from 'components/Templates/SubtaskTitle'
 import { Events } from 'constants/analytics'
@@ -18,20 +18,20 @@ import { hasUploadedOrReceived } from 'utils/claims'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 
-type FileRequestDetailsProps = StackScreenProps<FileRequestStackParams, 'FileRequestDetails'>
+type File5103SubmitEvidenceProps = StackScreenProps<FileRequestStackParams, 'File5103SubmitEvidence'>
 
-function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
+// Similar logic to FileRequestDetails but has content specific to 5103 notices
+function File5103SubmitEvidence({ navigation, route }: File5103SubmitEvidenceProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { claimID, request } = route.params
   const { standardMarginBetween, contentMarginBottom, contentMarginTop, gutter } = theme.dimensions
-  const { displayName, type, status, description, uploadDate, documents } = request
+  const { type, status, uploadDate, documents, suspenseDate } = request
 
   useSubtaskProps({
     leftButtonText: t('back'),
     onLeftButtonPress: () => navigation.goBack(),
-    leftButtonTestID: 'fileRequestDetailsBackID',
   })
 
   const hasUploaded = hasUploadedOrReceived(request)
@@ -47,7 +47,7 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
     mt: contentMarginTop,
   }
 
-  const getUploadedFileNames = (): JSX.Element[] | JSX.Element => {
+  const getUploadedFileNames = (): React.ReactNode => {
     const uploadedFileNames = map(documents || [], (item, index) => {
       return (
         <TextView paragraphSpacing={true} variant="MobileBody" key={index}>
@@ -79,8 +79,8 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   }
 
   return (
-    <VAScrollView testID="fileRequestDetailsID">
-      <SubtaskTitle title={displayName || ''} />
+    <VAScrollView testID="file5103SubmitEvidenceID">
+      <SubtaskTitle title={t('claimDetails.5103.submit.evidence.how')} />
 
       <Box mb={contentMarginBottom} flex={1}>
         {hasUploaded && (
@@ -114,25 +114,40 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
         )}
         <TextArea>
           <TextView mb={standardMarginBetween} variant="MobileBodyBold" accessibilityRole="header">
-            {displayName}
+            {t('claimDetails.5103.submit.evidence.title')}
           </TextView>
-          <TextView variant="MobileBody">{description}</TextView>
+          <VABulletList
+            listOfText={[
+              t('claimDetails.5103.submit.evidence.bullet1'),
+              t('claimDetails.5103.submit.evidence.bullet2'),
+            ]}
+          />
+          <TextView mt={standardMarginBetween} variant="MobileBody">
+            {t('claimDetails.5103.submit.evidence.body')}
+          </TextView>
         </TextArea>
+        <TextView mx={standardMarginBetween} mt={standardMarginBetween} variant="MobileBody">
+          <Trans
+            i18nKey="claimDetails.5103.submit.evidence.note"
+            components={{ bold: <TextView variant="MobileBodyBold" /> }}
+            values={{ date: suspenseDate }}
+          />
+        </TextView>
       </Box>
       {!hasUploaded && (
         <Box {...boxProps}>
           <Box mt={standardMarginBetween} mx={gutter} mb={contentMarginBottom}>
             <Button
               onPress={onFilePress}
-              label={t('fileUpload.selectAFile')}
-              testID={t('fileUpload.selectAFile')}
+              label={t('fileUpload.selectAFile2')}
+              testID={t('fileUpload.selectAFile2')}
               buttonType={ButtonVariants.Secondary}
             />
             <Box mt={theme.dimensions.condensedMarginBetween}>
               <Button
                 onPress={onPhotoPress}
-                label={t('fileUpload.takePhotos')}
-                testID={t('fileUpload.takePhotos')}
+                label={t('fileUpload.takeOrSelectPhotos2')}
+                testID={t('fileUpload.takeOrSelectPhotos2')}
                 buttonType={ButtonVariants.Secondary}
               />
             </Box>
@@ -143,4 +158,4 @@ function FileRequestDetails({ navigation, route }: FileRequestDetailsProps) {
   )
 }
 
-export default FileRequestDetails
+export default File5103SubmitEvidence
