@@ -196,6 +196,9 @@ export const CommonE2eIdConstants = {
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID: 'toTravelPayClaimsLinkID',
   DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
   DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
+  SHOW_5103_FLOW: 'show5103Flow',
+  SUBMIT_EVIDENCE_5103_ID: 'file5103SubmitEvidenceID',
+  REQUEST_DETAILS_5103_ID: 'file5103RequestDetailsID',
 }
 
 /** Logs into demo mode.
