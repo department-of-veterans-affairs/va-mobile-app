@@ -247,7 +247,6 @@ export function AuthGuard() {
   )
   const [remoteConfigTimeoutId, setRemoteConfigTimeoutId] = useState<number>()
 
-  console.log('DELETE AFTER ALL THE E2E passes')
   // Refetch remote config
   useEffect(() => {
     const refetchTimeout = setTimeout(async () => {
