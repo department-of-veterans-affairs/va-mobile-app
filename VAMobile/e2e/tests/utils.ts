@@ -110,6 +110,7 @@ export const CommonE2eIdConstants = {
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
   LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
+  LABS_AND_TEST_SCROLL_ID: 'labs-and-tests-list-screen',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
