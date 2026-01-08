@@ -880,27 +880,3 @@ export async function iosPastApptDate({ to, from }: { to?: DateTime; from?: Date
     await iosSelectDateInPicker(from, 'datePickerFromFieldTestId')
   }
 }
-
-export const getAppointmentPastDate = async ({ provider, location }: { provider?: string; location?: string }) => {
-  if (!provider && !location) {
-    throw new Error('Either provider or location must be provided to get appointment past date')
-  }
-  const pastData = (await import('../../src/store/api/demo/mocks/default/appointments.json'))?.default?.[
-    '/v0/appointments'
-  ]?.past.data
-  const appointments = pastData.filter((appt) => {
-    if (provider && location) {
-      return appt.attributes.healthcareProvider === provider && appt.attributes.location.name === location
-    } else if (provider) {
-      return appt.attributes.healthcareProvider === provider
-    } else if (location) {
-      return appt.attributes.location.name === location
-    }
-    return false
-  })
-  if (appointments.length === 0) {
-    throw new Error('No appointment found matching the provided criteria')
-  }
-  const appointmentDates = appointments.map((appt) => getDateFromMock(appt.attributes.startDateLocal))
-  return appointmentDates
-}
