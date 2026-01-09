@@ -209,6 +209,7 @@ function DebtDetailsScreen({ route, navigation }: DebtDetailsScreenProps) {
             text={t('debts.help.askVA')}
             a11yLabel={a11yLabelVA(t('debts.help.askVA'))}
             a11yHint={t('debts.help.askVAA11yHint')}
+            testID='debtDetailsAskVA'
           />
         </TextArea>
       </Box>

@@ -645,7 +645,7 @@ function EditDraft({ navigation, route }: EditDraftProps) {
           description={t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled')}
           descriptionA11yLabel={a11yLabelVA(t('secureMessaging.startNewMessage.bothYouAndProviderMustBeEnrolled'))}
           scrollViewRef={scrollViewRef}>
-          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} />
+          <LinkWithAnalytics type="custom" text={t('secureMessaging.goToInbox')} onPress={onGoToInbox} testID='editDraftGoToInbox' />
         </AlertWithHaptics>
       )
     }
