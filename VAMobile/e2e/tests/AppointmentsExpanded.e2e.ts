@@ -664,7 +664,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Sami Alsahhar - ATLAS - Pending', pastAppointmentString)
     await expect(element(by.text('How you prefer to attend'))).toExist()
     await expect(element(by.text('Video'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - Home appt', async () => {
@@ -721,7 +721,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Sami Alsahhar - HOME - Pending', pastAppointmentString)
     await expect(element(by.text('How you prefer to attend'))).toExist()
     await expect(element(by.text('Video'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify confirmed VA video connect - GFE appt', async () => {
@@ -771,7 +771,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Sami Alsahhar - GFE - Pending', pastAppointmentString)
     await expect(element(by.text('How you prefer to attend'))).toExist()
     await expect(element(by.text('Video'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled claim exam', async () => {
@@ -867,7 +867,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('At LA VA Medical Center', pastAppointmentString)
     await expect(element(by.text('Type of care not noted'))).not.toExist()
     await expect(element(by.text('Provider not noted'))).not.toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - provider/typeOfCare/address/number', async () => {
@@ -907,7 +907,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('At VA Palo Alto Health Care System', pastAppointmentString)
     await expect(element(by.text('Type of care not noted'))).not.toExist()
     await expect(element(by.text('Provider not noted'))).not.toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no address/phone number & directions', async () => {
@@ -920,7 +920,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no address/phone number & directions', async () => {
@@ -936,7 +936,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await expect(element(by.id(CommonE2eIdConstants.GET_DIRECTIONS_ID))).toExist()
     }
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no address/number & directions link', async () => {
@@ -950,7 +950,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     ).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no address/number & directions link', async () => {
@@ -967,7 +967,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     }
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone & directions link', async () => {
@@ -998,7 +998,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no name/address/phone & directions link', async () => {
@@ -1014,7 +1014,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       await expect(element(by.id(CommonE2eIdConstants.GET_DIRECTIONS_ID))).toExist()
     }
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no address/phone/directions', async () => {
@@ -1027,7 +1027,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no address/phone/directions', async () => {
@@ -1040,7 +1040,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/directions', async () => {
@@ -1054,7 +1054,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     ).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no name/address/directions', async () => {
@@ -1068,7 +1068,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     ).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_PHONE_NUMBER_ID)).atIndex(0)).toExist()
     await expect(element(by.id(CommonE2eIdConstants.CALL_VA_TTY_PHONE_NUMBER_ID)).atIndex(0)).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify canceled VA appt - no name/address/phone/directions', async () => {
@@ -1103,7 +1103,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify upcoming VA appt - no name/address/phone/directions', async () => {
@@ -1116,7 +1116,7 @@ export async function apppointmentVerification(pastAppointment = false) {
       ),
     ).toExist()
     await expect(element(by.text('Go to VA.gov to find your VA facility'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it(pastAppointmentString + 'verify confirmed phone appt', async () => {
@@ -1168,7 +1168,7 @@ export async function apppointmentVerification(pastAppointment = false) {
     await expect(element(by.text('Phone'))).toExist()
     await expect(element(by.text('Facility'))).toExist()
     await expect(element(by.text('Test clinic 2'))).toExist()
-    await element(by.text('Appointments')).tap()
+    await element(by.text('Back')).tap()
   })
 }
 
