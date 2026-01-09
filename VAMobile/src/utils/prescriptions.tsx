@@ -11,53 +11,29 @@ export const getTextForRefillStatus = (
   t: TFunction,
   medicationsOracleHealthEnabled: boolean = false,
 ) => {
-  if (!medicationsOracleHealthEnabled) {
-    switch (status) {
-      case RefillStatusConstants.ACTIVE:
-        return t('prescription.history.tag.active')
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-        return t('prescription.history.tag.discontinued')
-      case RefillStatusConstants.EXPIRED:
-        return t('prescription.history.tag.expired')
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-        return t('prescription.history.tag.active.hold')
-      case RefillStatusConstants.ACTIVE_PARKED:
-        return t('prescription.history.tag.active.parked')
-      case RefillStatusConstants.REFILL_IN_PROCESS:
-        return t('prescription.history.tag.active.inProgress')
-      case RefillStatusConstants.TRANSFERRED:
-        return t('prescription.history.tag.transferred')
-      case RefillStatusConstants.SUBMITTED:
-        return t('prescription.history.tag.submitted')
-      case RefillStatusConstants.DELETED:
-      case RefillStatusConstants.UNKNOWN:
-        return t('prescription.history.tag.statusNotAvailable')
-    }
-  } else {
-    // v1
-    switch (status) {
-      case RefillStatusConstants.ACTIVE:
-      case RefillStatusConstants.ACTIVE_PARKED:
-        return t('prescription.history.tag.active')
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-      case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-        return t('prescription.history.tag.inactive')
-      case RefillStatusConstants.REFILL_IN_PROCESS:
-      case RefillStatusConstants.SUBMITTED:
-        return t('prescription.history.tag.active.inProgressv2')
-      case RefillStatusConstants.TRANSFERRED:
-        return t('prescription.history.tag.transferred')
-      case RefillStatusConstants.DELETED:
-      case RefillStatusConstants.UNKNOWN:
-        return t('prescription.history.tag.statusNotAvailable')
-    }
+  switch (status) {
+    case RefillStatusConstants.ACTIVE:
+      return t('prescription.history.tag.active')
+    case RefillStatusConstants.DISCONTINUED:
+    case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
+    case RefillStatusConstants.DISCONTINUED_EDIT:
+      return t('prescription.history.tag.discontinued')
+    case RefillStatusConstants.EXPIRED:
+      return t('prescription.history.tag.expired')
+    case RefillStatusConstants.HOLD:
+    case RefillStatusConstants.PROVIDER_HOLD:
+      return t('prescription.history.tag.active.hold')
+    case RefillStatusConstants.ACTIVE_PARKED:
+      return t('prescription.history.tag.active.parked')
+    case RefillStatusConstants.REFILL_IN_PROCESS:
+      return t('prescription.history.tag.active.inProgress')
+    case RefillStatusConstants.TRANSFERRED:
+      return t('prescription.history.tag.transferred')
+    case RefillStatusConstants.SUBMITTED:
+      return t('prescription.history.tag.submitted')
+    case RefillStatusConstants.DELETED:
+    case RefillStatusConstants.UNKNOWN:
+      return t('prescription.history.tag.statusNotAvailable')
   }
 }
 
@@ -104,19 +80,10 @@ export const getTagTypeForStatus = (status: string, medicationsOracleHealthEnabl
     // v1
     switch (status) {
       case RefillStatusConstants.ACTIVE:
-      case RefillStatusConstants.ACTIVE_PARKED:
         return LabelTagTypeConstants.tagBlue
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-      case RefillStatusConstants.EXPIRED:
-      case RefillStatusConstants.UNKNOWN:
-      case RefillStatusConstants.TRANSFERRED:
+      case RefillStatusConstants.INACTIVE:
         return LabelTagTypeConstants.tagInactive
-      case RefillStatusConstants.SUBMITTED:
-      case RefillStatusConstants.REFILL_IN_PROCESS:
+      case RefillStatusConstants.IN_PROGRESS:
         return LabelTagTypeConstants.tagGreen
       default:
         return LabelTagTypeConstants.tagInactive

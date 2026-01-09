@@ -19,7 +19,10 @@ function RefillTag({ status }: RefillTagProps) {
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
-  const statusText = getTextForRefillStatus(status, t, medicationsOracleHealthEnabled) || ''
+  let statusText: string = status
+  if (!medicationsOracleHealthEnabled) {
+    statusText = getTextForRefillStatus(status, t, medicationsOracleHealthEnabled) || ''
+  }
 
   const wrapperProps: BoxProps = {
     alignSelf: 'flex-start',

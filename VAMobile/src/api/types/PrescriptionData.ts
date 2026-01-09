@@ -31,6 +31,7 @@ export const RefillStatusConstants: {
   TRACKING: RefillStatus
   TRANSFERRED: RefillStatus
   SUBMITTED: RefillStatus
+  IN_PROGRESS: RefillStatus
 } = {
   ACTIVE: 'active',
   INACTIVE: 'inactive',
@@ -48,6 +49,7 @@ export const RefillStatusConstants: {
   TRACKING: 'tracking',
   TRANSFERRED: 'transferred',
   SUBMITTED: 'submitted',
+  IN_PROGRESS: 'In progress',
 }
 
 export type RefillStatus =
@@ -68,6 +70,7 @@ export type RefillStatus =
   | 'transferred'
   | 'submitted'
   | 'dateOfDeathEntered'
+  | 'In progress'
 
 export const DELIVERY_SERVICE_TYPES: {
   USPS: string
