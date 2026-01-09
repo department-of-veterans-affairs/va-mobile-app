@@ -4,6 +4,9 @@ need to know about this PR in order to understand why this PR was created? This 
 introduced, changes in behavior, pointers to more detailed documentation. The description should be more 
 than a link to an issue. -->
 
+## Target Release Date
+<!-- Please include a targeted release date or N/A if not urgent -->
+
 ## Link to Issue
 <!--Link to an issue by posting the issue link here. Your pull request is required to be linked to an issue in order for the pull request to Activate.-->
 
@@ -13,8 +16,12 @@ Before/after: <img src="" width="49%" />&nbsp;&nbsp;<img src="" width="49%" />
 Toggle: <details><summary></summary><img src="" width="49%" />&nbsp;&nbsp;<img src="" width="49%" /></details> -->
 
 ## Testing Requirements
-<!-- What testing was done to verify the changes (local/unit)? What testing remains? Note edge cases, or special
+<!-- **Valid Staging Test Users are a REQUIREMENT for QA to begin**
+What testing was done to verify the changes (local/unit)? What testing remains? Note edge cases, or special
 situations that could not be tested during development. -->
+
+Feature Flag
+<!--If changes are behind a feature flag, please document the required toggles for QA -->
 
 Acceptance Criteria
 <!-- AC should be written as should be a pass/fail statements and should include steps to carry out task if needed. -->
@@ -51,7 +58,6 @@ Test User(s)
 ### New features
 
 - [ ] UI changes
-- [ ] Code is attached to a feature flag, or reason is given for no feature flag
 - [ ] Design and UX has been approved by the code mobile team (documented on the PR or attached issue)
 
 ## Checklist for QA

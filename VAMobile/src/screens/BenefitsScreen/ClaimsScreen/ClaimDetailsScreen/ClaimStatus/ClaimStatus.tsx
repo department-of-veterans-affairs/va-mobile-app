@@ -59,7 +59,7 @@ function ClaimStatus({ claim, claimType, scrollIsEnabled, scrollViewRef }: Claim
           )}
           {false && <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={false} />}
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
+            <TextView accessible variant="MobileBodyBold" accessibilityRole="header">
               {t('claimDetails.whatYouHaveClaimed')}
             </TextView>
             {claim.attributes.contentionList && claim.attributes.contentionList.length > 0 ? (

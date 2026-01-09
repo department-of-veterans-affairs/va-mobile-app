@@ -23,6 +23,7 @@ export const HomeE2eIdConstants = {
   UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '6 in the next 30 days',
   PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT: '5 eligible for travel reimbursement',
   CLAIMS_BUTTON_SUBTEXT_TEXT: '5 active',
+  CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT: '5 active with 1 evidence request',
   MESSAGES_BUTTON_SUBTEXT_TEXT: '3 unread',
   PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT: '55 ready to refill',
   ANNOUNCEMENT_BANNER_TEXT: 'Learn about PACT Act on VA.gov',
@@ -72,7 +73,7 @@ describe('Home Screen', () => {
   it('should verify the activity section content', async () => {
     await expect(element(by.text(HomeE2eIdConstants.UPCOMING_APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.PAST_APPOINTMENTS_BUTTON_SUBTEXT_TEXT))).toExist()
-    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT))).toExist()
+    await expect(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.MESSAGES_BUTTON_SUBTEXT_TEXT))).toExist()
     await expect(element(by.text(HomeE2eIdConstants.PRESCRIPTIONS_BUTTON_SUBTEXT_TEXT))).toExist()
   })
@@ -146,11 +147,11 @@ describe('Home Screen', () => {
 
   it('taps home then jumps to claims from claims button', async () => {
     await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).tap()
-    await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)))
+    await waitFor(element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT)))
       .toBeVisible()
       .whileElement(by.id(CommonE2eIdConstants.HOME_SCREEN_SCROLL_ID))
       .scroll(200, 'down')
-    await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_TEXT)).tap()
+    await element(by.text(HomeE2eIdConstants.CLAIMS_BUTTON_SUBTEXT_WITH_EVIDENCE_TEXT)).tap()
     await expect(element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID))).toExist()
   })
 
