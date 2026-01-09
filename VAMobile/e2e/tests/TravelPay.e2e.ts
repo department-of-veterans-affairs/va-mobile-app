@@ -707,7 +707,7 @@ describe('Travel Pay', () => {
     })
   })
 
-  it('shows the travel claim detials after filing the travel pay claim', async () => {
+  it('shows the travel claim details after filing the travel pay claim', async () => {
     await waitFor(element(by.id(TravelPayE2eIdConstants.GO_TO_CLAIM_DETAILS_ID)))
       .toBeVisible()
       .whileElement(by.id(TravelPayE2eIdConstants.PAST_APPOINTMENT_DETAILS_SCROLL_ID))
@@ -717,7 +717,7 @@ describe('Travel Pay', () => {
   })
 
   it('updates the appointments cache when the travel pay claim is submitted', async () => {
-    await element(by.text(TravelPayE2eIdConstants.APPOINTMENTS_SCREEN_TEXT)).tap()
+    await element(by.text('Back')).tap()
     await openAppointmentInList('Sami Alsahhar - Onsite - Confirmed')
     await expect(element(by.id(TravelPayE2eIdConstants.FILE_TRAVEL_CLAIM_TEXT))).not.toExist()
     await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).not.toExist()
@@ -732,7 +732,7 @@ describe('Travel Pay', () => {
 
   describe('when the travel claim submission is partially successful', () => {
     it('shows partial success status on the Submit Success screen', async () => {
-      await element(by.text(TravelPayE2eIdConstants.APPOINTMENTS_SCREEN_TEXT)).tap()
+      await element(by.text('Back')).tap()
       await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
       // go to the next page
       await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
@@ -761,7 +761,7 @@ describe('Travel Pay', () => {
 
   describe('when the travel pay claim fails to submit due to an API error', () => {
     it('shows the error screen', async () => {
-      await element(by.text(TravelPayE2eIdConstants.APPOINTMENTS_SCREEN_TEXT)).tap()
+      await element(by.text('Back')).tap()
       await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('bottom')
       await element(by.id(CommonE2eIdConstants.PREVIOUS_PAGE_ID)).tap()
       await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
@@ -797,7 +797,7 @@ describe('Travel Pay', () => {
         element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_PRIMARY_BUTTON_ID)),
       ).toExist()
       await expect(element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_ID))).toExist()
-      await element(by.text(TravelPayE2eIdConstants.APPOINTMENTS_SCREEN_TEXT)).tap()
+      await element(by.text('Back')).tap()
       await openAppointmentInList('Sami Alsahhar - ATLAS - Confirmed')
       await expect(
         element(by.id(TravelPayE2eIdConstants.APPOINTMENT_FILE_TRAVEL_PAY_ALERT_PRIMARY_BUTTON_ID)),
