@@ -1,10 +1,15 @@
-import { by, device, element, expect, waitFor } from 'detox';
-import { setTimeout } from 'timers/promises';
+import { by, device, element, expect, waitFor } from 'detox'
+import { setTimeout } from 'timers/promises'
 
-
-
-import { CommonE2eIdConstants, checkImages, disableAF, enableAF, loginToDemoMode, toggleRemoteConfigFlag, verifyAF } from './utils';
-
+import {
+  CommonE2eIdConstants,
+  checkImages,
+  disableAF,
+  enableAF,
+  loginToDemoMode,
+  toggleRemoteConfigFlag,
+  verifyAF,
+} from './utils'
 
 export const HomeE2eIdConstants = {
   VETERAN_STATUS_TEXT: 'Veteran Status Card',
@@ -81,7 +86,7 @@ describe('Home Screen', () => {
   })
 
   it('home tab tap: verify the home screen tab items', async () => {
-    await element(by.text(CommonE2eIdConstants.HOME_TAB_BUTTON_TEXT)).atIndex(1).tap()
+    await element(by.text('Back')).tap()
     await expect(element(by.id(CommonE2eIdConstants.PROFILE_HEADER_BUTTON_ID))).toExist()
   })
 

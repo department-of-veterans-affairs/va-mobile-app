@@ -184,7 +184,7 @@ describe('Claims Screen', () => {
   })
 
   it('should back out of the file request screen and reenter a new file request screen', async () => {
-    await element(by.text('Back')).tap()
+    await element(by.text('Back')).atIndex(0).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
   })
 
