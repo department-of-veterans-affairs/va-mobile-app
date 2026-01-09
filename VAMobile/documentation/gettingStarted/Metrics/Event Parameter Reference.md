@@ -5,7 +5,7 @@ sidebar_position: 4
 
 ## Overview
 
-Event parameters provide additional context about the actions captured in our events. For these parameters to be tracked and analyzed in Google Analytics, each one must have a matching `custom dimension` defined in Firebase.
+Event parameters provide additional context about the actions captured in our events. While Google Analytics automatically collects some [standard dimensions and metrics](https://support.google.com/analytics/table/13948007?visit_id=639035750951446578-1775905048&rd=2), analyzing data not available through these built-in dimensions requires adding a custom parameter to the event and defining a corresponding custom dimension in Firebase.
 
 Because the number of available custom dimensions is limited, we recommend using the `generic parameter names (p1, p2, …, p9)` whenever possible.
 
