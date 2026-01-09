@@ -6,11 +6,7 @@ import { LabelTagTypeConstants } from 'components/LabelTag'
 import { a11yLabelID, a11yLabelVA } from 'utils/a11yLabel'
 import { formatDateUtc } from 'utils/formattingUtils'
 
-export const getTextForRefillStatus = (
-  status: RefillStatus,
-  t: TFunction,
-  medicationsOracleHealthEnabled: boolean = false,
-) => {
+export const getTextForRefillStatus = (status: RefillStatus, t: TFunction) => {
   switch (status) {
     case RefillStatusConstants.ACTIVE:
       return t('prescription.history.tag.active')
@@ -162,23 +158,16 @@ export const getStatusDefinitionTextForRefillStatus = (
     // v1
     switch (status) {
       case RefillStatusConstants.ACTIVE:
-      case RefillStatusConstants.ACTIVE_PARKED:
         return {
           text: t('statusDefinition.activev1'),
           a11yLabel: a11yLabelVA(t('statusDefinition.activev1')),
         }
-      case RefillStatusConstants.SUBMITTED:
-      case RefillStatusConstants.REFILL_IN_PROCESS:
+      case RefillStatusConstants.IN_PROGRESS:
         return {
           text: t('statusDefinition.active.inProgressv1'),
           a11yLabel: a11yLabelVA(t('statusDefinition.active.inProgressv1')),
         }
-      case RefillStatusConstants.HOLD:
-      case RefillStatusConstants.PROVIDER_HOLD:
-      case RefillStatusConstants.DISCONTINUED:
-      case RefillStatusConstants.DISCONTINUED_BY_PROVIDER:
-      case RefillStatusConstants.DISCONTINUED_EDIT:
-      case RefillStatusConstants.EXPIRED:
+      case RefillStatusConstants.INACTIVE:
         return {
           text: t('statusDefinition.inactive'),
           a11yLabel: a11yLabelVA(t('statusDefinition.inactive')),
@@ -188,7 +177,6 @@ export const getStatusDefinitionTextForRefillStatus = (
           text: t('statusDefinition.transferred'),
           a11yLabel: a11yLabelVA(t('statusDefinition.transferred')),
         }
-      case RefillStatusConstants.DELETED:
       case RefillStatusConstants.UNKNOWN:
         return {
           text: t('statusDefinition.statusNotAvailable'),

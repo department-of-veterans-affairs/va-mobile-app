@@ -21,7 +21,7 @@ function RefillTag({ status }: RefillTagProps) {
 
   let statusText: string = status
   if (!medicationsOracleHealthEnabled) {
-    statusText = getTextForRefillStatus(status, t, medicationsOracleHealthEnabled) || ''
+    statusText = getTextForRefillStatus(status, t) || ''
   }
 
   const wrapperProps: BoxProps = {
