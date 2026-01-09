@@ -535,7 +535,7 @@ describe('Messages Screen', () => {
   })
 
   it('verify that custom folders exist with messages', async () => {
-    await element(by.text('Sent')).tap()
+    await element(by.text('Back')).tap()
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
   })
