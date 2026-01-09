@@ -8,6 +8,7 @@ import { useDebts } from 'api/debts'
 import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { useMedicalCopays } from 'api/medicalCopays'
 import {
+  ClaimsAndAppealsListPayload,
   DisabilityRatingData,
   FacilitiesPayload,
   MilitaryServiceHistoryData,
@@ -128,6 +129,44 @@ const getMilitaryServiceHistoryPayload = (serviceHistory: ServiceHistoryAttribut
     attributes: serviceHistory,
   },
 })
+
+const mockClaimsAndAppealsPayload: ClaimsAndAppealsListPayload = {
+  data: [
+    {
+      id: '0',
+      type: 'appeal',
+      attributes: {
+        subtype: 'supplementalClaim',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-28',
+        displayTitle: 'supplemental claim for disability compensation',
+      },
+    },
+    {
+      id: '2',
+      type: 'claim',
+      attributes: {
+        subtype: 'Compensation',
+        completed: false,
+        decisionLetterSent: false,
+        dateFiled: '2020-10-22',
+        updatedAt: '2020-10-30',
+        displayTitle: 'Compensation',
+        documentsNeeded: true,
+      },
+    },
+  ],
+  meta: {
+    pagination: {
+      currentPage: 1,
+      perPage: 10,
+      totalEntries: 2,
+    },
+    activeClaimsCount: 3,
+  },
+}
 
 context('HomeScreen', () => {
   const mockFeatureEnabled = featureEnabled as jest.Mock
@@ -373,17 +412,18 @@ context('HomeScreen', () => {
   describe('Claims module', () => {
     it('displays active claims count when there are active claims', async () => {
       const activeClaimsCount = 3
+      const evidenceRequestCount = 1
       when(get as jest.Mock)
         .calledWith('/v0/claims-and-appeals-overview', expect.anything())
-        .mockResolvedValue(getClaimsAndAppealsPayload(activeClaimsCount))
+        .mockResolvedValue(mockClaimsAndAppealsPayload)
       initializeTestInstance()
       await waitFor(() => expect(screen.getByRole('link', { name: t('claims.title') })).toBeTruthy())
       await waitFor(() =>
         expect(
           screen.getByRole('link', {
-            name: t('claims.activityButton.subText', {
-              count: activeClaimsCount,
-            }),
+            name:
+              t('claims.activityButton.subText', { count: activeClaimsCount }) +
+              t('claims.evidenceRequest.subText', { count: evidenceRequestCount }),
           }),
         ).toBeTruthy(),
       )
@@ -520,7 +560,8 @@ context('HomeScreen', () => {
     })
 
     it('renders Copays and Debts with correct subtext when amount & count > 0', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 396.93, count: 6 },
         isLoading: false,
@@ -555,7 +596,8 @@ context('HomeScreen', () => {
     })
 
     it('hides Copays and Debts tiles when summaries are empty', async () => {
-      when(mockFeatureEnabled).calledWith('overpayCopay').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('overpayments').mockReturnValue(true)
+      when(mockFeatureEnabled).calledWith('copayments').mockReturnValue(true)
       ;(useMedicalCopays as jest.Mock).mockReturnValue({
         summary: { amountDue: 0, count: 0 },
         isLoading: false,

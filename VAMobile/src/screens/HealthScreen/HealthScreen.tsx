@@ -111,7 +111,7 @@ export function HealthScreen({}: HealthScreenProps) {
 
   const copaysSubText =
     !copaysLoading && !copaysError && copaysSummary.count > 0 && copaysSummary.amountDue > 0
-      ? t('copays.activityButton.subText', {
+      ? t('copays.amountDueForBills', {
           amount: numberToUSDollars(copaysSummary.amountDue),
           count: copaysSummary.count,
         })
@@ -160,7 +160,7 @@ export function HealthScreen({}: HealthScreenProps) {
           }
           testID="toAppointmentsID"
         />
-        {featureEnabled('overpayCopay') && (
+        {featureEnabled('copayments') && (
           <LargeNavButton
             title={t('copays.title')}
             onPress={() => navigateTo('Copays')}
@@ -252,7 +252,6 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={Appointments}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
-      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen name="FolderMessages" component={FolderMessages} options={{ headerShown: false }} />
       <HealthScreenStack.Screen
         name="PastAppointmentDetails"
@@ -304,6 +303,7 @@ function HealthStackScreen({}: HealthStackScreenProps) {
         component={MedicalRecordsScreen}
         options={FEATURE_LANDING_TEMPLATE_OPTIONS}
       />
+      <HealthScreenStack.Screen name="Copays" component={CopaysScreen} options={FEATURE_LANDING_TEMPLATE_OPTIONS} />
       <HealthScreenStack.Screen
         name="LabsAndTestsList"
         component={LabsAndTestsListScreen}
