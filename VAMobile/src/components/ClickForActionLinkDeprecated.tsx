@@ -1,12 +1,19 @@
-import React, { FC } from 'react'
-import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import React, { FC } from 'react';
+import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native';
 
-import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
-import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
 
-import { Box, ColorVariant, TextView, TextViewProps } from 'components'
-import { useExternalLink, useTheme } from 'utils/hooks'
-import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
+
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library';
+import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList';
+
+
+
+import { Box, ColorVariant, TextView, TextViewProps } from 'components';
+import { Events } from 'constants/analytics';
+import { EventParams, logAnalyticsEvent } from 'utils/analytics';
+import { useExternalLink, useTheme } from 'utils/hooks';
+import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar';
+
 
 /** Icon type for links, defaults to Chat */
 export enum LinkUrlIconType {
@@ -90,6 +97,8 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** Optional TestID */
   testID?: string
+
+  analyticsProps?: EventParams
 }
 
 /**
@@ -107,6 +116,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   colorOverride,
   iconColorOverride,
   customOnPress,
+  analyticsProps = {},
   hideIcon = false,
   disablePadding = false,
   testID,
@@ -134,6 +144,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
   const _onPress = async (): Promise<void> => {
     if (customOnPress) {
       customOnPress()
+      logAnalyticsEvent(Events.vama_link_click(analyticsProps))
       return
     }
 
@@ -143,6 +154,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
 
     if (linkType === LinkTypeOptionsConstants.calendar) {
       await onCalendarPress()
+      logAnalyticsEvent(Events.vama_link_click(analyticsProps))
       return
     }
 
@@ -155,7 +167,7 @@ const ClickForActionLinkDeprecated: FC<LinkButtonProps> = ({
 
     // ex. numbers: tel:${8008271000}, sms:${8008271000} (number must have no dashes)
     // ex. url: https://google.com (need https for url)
-    launchExternalLink(openUrlText)
+    launchExternalLink(openUrlText, analyticsProps)
   }
 
   const getUrlIcon = (): keyof typeof IconMap => {
