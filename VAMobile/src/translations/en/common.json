@@ -628,6 +628,7 @@
   "contactVA.va411.mainInfo": "Main information (MyVA411)",
   "contactVA.va411.techSupport": "Technical support",
   "contentUnavailable": "This content isn’t available while offline. Check your connection and try again.",
+  "contentUnavailable.maintenance": "This content isn’t available while maintenance is in progress, try again later.",
   "continue": "Continue",
   "continueToSignin": "Continue to sign in",
   "copays.activityButton.subText": "{{count}} copay bill",
