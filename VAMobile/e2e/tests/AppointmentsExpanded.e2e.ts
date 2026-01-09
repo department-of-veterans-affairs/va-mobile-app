@@ -401,7 +401,7 @@ const checkUpcomingApptDetails = async (
     }
   }
 
-  await element(by.text('Appointments')).tap()
+  await element(by.text('Back')).tap()
 }
 
 const scrollToThenTap = async (text: string, pastAppointment: string) => {
@@ -455,7 +455,7 @@ export async function apppointmentVerification(pastAppointment = false) {
 
   it(pastAppointmentString + 'verify confirmed CC appt', async () => {
     if (pastAppointment) {
-      await element(by.text('Health')).atIndex(0).tap()
+      await element(by.text('Back')).atIndex(0).tap()
       await openAppointments()
       await waitFor(element(by.text('Upcoming')))
         .toExist()

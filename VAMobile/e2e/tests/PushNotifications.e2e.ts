@@ -41,9 +41,9 @@ describe(':ios: Push Notifications', () => {
   })
 
   it('should navigate back to home screen after launch', async () => {
-    await backButton('Messages')
+    await element(by.text('Back')).atIndex(0).tap()
     await waitFor(element(by.text(PushNotificationsConstants.MESSAGE_COMPOSE_BUTTON_TEXT))).toExist()
-    await backButton('Health')
+    await element(by.text('Back')).atIndex(0).tap()
     await expect(element(by.text('Home'))).toExist()
   })
 
