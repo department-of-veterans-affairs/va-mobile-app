@@ -1,19 +1,14 @@
-import React, { FC } from 'react';
-import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native';
+import React, { FC } from 'react'
+import { AccessibilityProps, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 
+import { Icon } from '@department-of-veterans-affairs/mobile-component-library'
+import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList'
 
-
-import { Icon } from '@department-of-veterans-affairs/mobile-component-library';
-import { IconMap } from '@department-of-veterans-affairs/mobile-component-library/src/components/Icon/iconList';
-
-
-
-import { Box, ColorVariant, TextView, TextViewProps } from 'components';
-import { Events } from 'constants/analytics';
-import { EventParams, logAnalyticsEvent } from 'utils/analytics';
-import { useExternalLink, useTheme } from 'utils/hooks';
-import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar';
-
+import { Box, ColorVariant, TextView, TextViewProps } from 'components'
+import { Events } from 'constants/analytics'
+import { EventParams, logAnalyticsEvent } from 'utils/analytics'
+import { useExternalLink, useTheme } from 'utils/hooks'
+import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 
 /** Icon type for links, defaults to Chat */
 export enum LinkUrlIconType {

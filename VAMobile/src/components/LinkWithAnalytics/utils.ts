@@ -1,6 +1,6 @@
-import { LinkWithAnalyticsProps } from 'components/LinkWithAnalytics/types'
-import { pick } from 'underscore';
+import { pick } from 'underscore'
 
+import { LinkWithAnalyticsProps } from 'components/LinkWithAnalytics/types'
 
 export const getDefinedAnalyticsProps = ({ analyticsProps, ...props }: LinkWithAnalyticsProps) => {
   const { locationData, phoneNumber, textNumber, TTYnumber, url, type, text, testID } = props

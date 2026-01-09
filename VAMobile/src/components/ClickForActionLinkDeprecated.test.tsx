@@ -48,7 +48,7 @@ context('ClickForActionLinkDeprecated', () => {
   describe('when linkType is call', () => {
     it('should launch external link with the parameter tel:number', () => {
       fireEvent.press(screen.getByRole('link', { name: '111-453-3234' }))
-      expect(mockExternalLinkSpy).toBeCalledWith('tel:1114533234')
+      expect(mockExternalLinkSpy).toBeCalledWith('tel:1114533234', {})
     })
   })
 
@@ -58,7 +58,7 @@ context('ClickForActionLinkDeprecated', () => {
     })
     it('should call mockExternalLinkSpy with the parameter sms:number', () => {
       fireEvent.press(screen.getByRole('link', { name: '111-453-3234' }))
-      expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234')
+      expect(mockExternalLinkSpy).toBeCalledWith('sms:1114533234', {})
     })
   })
 
@@ -68,7 +68,7 @@ context('ClickForActionLinkDeprecated', () => {
     })
     it('should call mockExternalLinkSpy with the parameter given to urlLink, https://google.com', () => {
       fireEvent.press(screen.getByRole('link', { name: 'click me to go to google' }))
-      expect(mockExternalLinkSpy).toBeCalledWith('https://google.com')
+      expect(mockExternalLinkSpy).toBeCalledWith('https://google.com', {})
     })
   })
 
