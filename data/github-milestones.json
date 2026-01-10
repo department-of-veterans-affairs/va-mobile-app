@@ -4,12 +4,6 @@
     "due_on": "2026-01-13T00:00:00Z",
     "issues": [
       {
-        "title": "Accessibility: Voiceover reads a sentence as a heading but it should not be",
-        "number": 12187,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12187",
-        "isPR": true
-      },
-      {
         "title": "BUG - Low - iOS - Accessibility: Voiceover reads a sentence as a heading but it should not be.",
         "number": 12186,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12186",
@@ -40,34 +34,16 @@
         "isPR": true
       },
       {
-        "title": "chore/12076 - Trim ids from url passed to notification_click analytic",
-        "number": 12139,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12139",
-        "isPR": true
-      },
-      {
-        "title": "Added env check for webviews leading to va.gov",
-        "number": 12132,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12132",
-        "isPR": true
-      },
-      {
-        "title": "Add minimum height to AccordionCollapsible for a11y",
-        "number": 12129,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12129",
-        "isPR": true
-      },
-      {
         "title": "integrate with new flags and update whats new",
         "number": 12126,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12126",
         "isPR": true
       },
       {
-        "title": "removed need for WEBSITE_PREFIX in env script",
-        "number": 12121,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12121",
-        "isPR": true
+        "title": "BUG - [High] - [All] - Copay Help Request Screen A11y issues with accordion - touch point size and incomplete text being read back to user",
+        "number": 12120,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12120",
+        "isPR": false
       },
       {
         "title": "Fix iOS timezone offset display bug",
@@ -88,22 +64,16 @@
         "isPR": false
       },
       {
-        "title": "Added maintenance window refreshing functionality",
-        "number": 11978,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11978",
-        "isPR": true
+        "title": "CU - Change vama_notification_click to trim the url to avoid ID's",
+        "number": 12076,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12076",
+        "isPR": false
       },
       {
         "title": "Maintenance Window Refresh",
         "number": 11951,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11951",
         "isPR": false
-      },
-      {
-        "title": "Fixed UI temporarily unresponsive after screen loads with errors or warnings",
-        "number": 11936,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11936",
-        "isPR": true
       },
       {
         "title": "Offline Mode MVP",
@@ -124,10 +94,10 @@
     "due_on": "2025-12-16T00:00:00Z",
     "issues": [
       {
-        "title": "feature/12153-EnableClaimsStatusAndDetails",
-        "number": 12154,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12154",
-        "isPR": true
+        "title": "Make WhatsNew component initially expanded",
+        "number": 12161,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12161",
+        "isPR": false
       },
       {
         "title": "Go-Live Approval Request - Updates to Claims Status List & Claim Details Enhancements",
@@ -148,12 +118,6 @@
         "isPR": true
       },
       {
-        "title": "Updating What's New to use config rather than version numbers",
-        "number": 12090,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12090",
-        "isPR": true
-      },
-      {
         "title": "BUG: Fixed missing data",
         "number": 12043,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12043",
@@ -164,18 +128,6 @@
         "number": 12026,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12026",
         "isPR": false
-      },
-      {
-        "title": "Remote config refresh",
-        "number": 12011,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12011",
-        "isPR": true
-      },
-      {
-        "title": "Chore/11895 Test Coverage - Combobox",
-        "number": 12003,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12003",
-        "isPR": true
       },
       {
         "title": "Remove reason fields from Cerner/OH appointments",
@@ -244,12 +196,6 @@
         "isPR": true
       },
       {
-        "title": "Feature/120455/117933 - Travel claim entry points and a11y changes",
-        "number": 11747,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11747",
-        "isPR": true
-      },
-      {
         "title": "Feature 901 - Implement Request Help Screen for Overpayments",
         "number": 11746,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11746",
@@ -259,12 +205,6 @@
         "title": "Feature/900 - Implement the Pay debt screen (Overpayments)",
         "number": 11733,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11733",
-        "isPR": true
-      },
-      {
-        "title": "feature/11728-Binny-COEAdditions",
-        "number": 11729,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11729",
         "isPR": true
       },
       {
@@ -286,22 +226,10 @@
         "isPR": true
       },
       {
-        "title": "11630 | Sync email confirmation alert with web",
-        "number": 11666,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11666",
-        "isPR": true
-      },
-      {
         "title": "Email Alert does not show if profile has been updated",
         "number": 11630,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11630",
         "isPR": false
-      },
-      {
-        "title": "Feature/11396 Date Picker",
-        "number": 11628,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11628",
-        "isPR": true
       },
       {
         "title": "Feature/112328 - Travel claims list filtering",
@@ -352,21 +280,9 @@
         "isPR": true
       },
       {
-        "title": "Adding support for better deep linking",
-        "number": 11985,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11985",
-        "isPR": true
-      },
-      {
         "title": "MHV / update Labs to use auth services",
         "number": 11945,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11945",
-        "isPR": true
-      },
-      {
-        "title": "Date range selection a11y fixes",
-        "number": 11933,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11933",
         "isPR": true
       },
       {
@@ -448,69 +364,15 @@
     "due_on": "2025-11-18T00:00:00Z",
     "issues": [
       {
-        "title": "Reverting Privacy Screen changes",
-        "number": 11912,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11912",
-        "isPR": true
-      },
-      {
-        "title": "Disable analytics while in demo mode",
-        "number": 11878,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11878",
-        "isPR": true
-      },
-      {
-        "title": "IOS Suppress App Preview in App Switcher",
-        "number": 11877,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11877",
-        "isPR": true
-      },
-      {
-        "title": "Updated relative imports for components",
-        "number": 11876,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11876",
-        "isPR": true
-      },
-      {
-        "title": "Updated relative imports for screens",
-        "number": 11874,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11874",
-        "isPR": true
-      },
-      {
-        "title": "Updated relative imports for api",
-        "number": 11873,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11873",
-        "isPR": true
-      },
-      {
-        "title": "Updated relative imports for store and utils",
-        "number": 11872,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11872",
-        "isPR": true
-      },
-      {
         "title": "Disable analytic collection during demo mode",
         "number": 11871,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11871",
         "isPR": false
       },
       {
-        "title": "Updated Obfuscated Text to meet WCAG Contrast Criteria",
-        "number": 11842,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11842",
-        "isPR": true
-      },
-      {
         "title": "#121259 [Benefits Management Team 2] Update appeal explanation to only be displayed for `appeal`s and `legacyAppeal`s",
         "number": 11745,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11745",
-        "isPR": true
-      },
-      {
-        "title": "Chore/11281 Support 16kb page sizes",
-        "number": 11727,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11727",
         "isPR": true
       },
       {
@@ -578,6 +440,11 @@
   {
     "title": "v2.62.0",
     "due_on": "2025-11-04T00:00:00Z",
+    "issues": []
+  },
+  {
+    "title": "v2.61.0",
+    "due_on": "2025-10-21T00:00:00Z",
     "issues": [
       {
         "title": "Revert \"#121006 [Benefits Management Team 2] [Appeals] Show list item under appeal claims that shows the number of issues with null descriptions\"",
@@ -590,13 +457,7 @@
         "number": 11715,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11715",
         "isPR": true
-      }
-    ]
-  },
-  {
-    "title": "v2.61.0",
-    "due_on": "2025-10-21T00:00:00Z",
-    "issues": [
+      },
       {
         "title": "875 - Payment Screen: Update Overpayment and Copayment components",
         "number": 11655,
@@ -622,15 +483,33 @@
         "isPR": true
       },
       {
+        "title": "Initial screens and navigation for copays and overpayment debts",
+        "number": 11605,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11605",
+        "isPR": true
+      },
+      {
         "title": "Turn on Remote Config flag for NonVAMeds Alert and change default in the app",
         "number": 11600,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11600",
         "isPR": false
       },
       {
+        "title": "Feature/112331 claims list pagination",
+        "number": 11589,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11589",
+        "isPR": true
+      },
+      {
         "title": "Adding reactotron ",
         "number": 11572,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11572",
+        "isPR": true
+      },
+      {
+        "title": "FEATURE :: 115104 :: Update default values prescriptions",
+        "number": 11551,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11551",
         "isPR": true
       },
       {
@@ -644,6 +523,12 @@
         "number": 11434,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11434",
         "isPR": false
+      },
+      {
+        "title": "Refactor Travel Pay ",
+        "number": 11376,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11376",
+        "isPR": true
       }
     ]
   },
@@ -661,6 +546,12 @@
         "title": "815 - Added mock data for Overpay/Copay",
         "number": 11596,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11596",
+        "isPR": true
+      },
+      {
+        "title": "TICKET-118319 :: Remove cerneralert component",
+        "number": 11587,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11587",
         "isPR": true
       },
       {
@@ -688,9 +579,27 @@
         "isPR": true
       },
       {
+        "title": "Add Email Alert on Homescreen, Profile, and Health page",
+        "number": 11545,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11545",
+        "isPR": false
+      },
+      {
+        "title": "Email Update Alert on Homescreen, Profile, and Health page",
+        "number": 11544,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11544",
+        "isPR": false
+      },
+      {
         "title": "update SM to use api provided care systems list",
         "number": 11542,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11542",
+        "isPR": true
+      },
+      {
+        "title": "Feature/112333 - Travel pay get claim summaries - query and beginning screen.",
+        "number": 11499,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11499",
         "isPR": true
       },
       {
@@ -718,9 +627,15 @@
         "isPR": false
       },
       {
-        "title": "Add toggle for SM OH (cerner) alert",
-        "number": 11478,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11478",
+        "title": "User Story Add feature toggle to OH SM warning message in VAHB",
+        "number": 11475,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11475",
+        "isPR": false
+      },
+      {
+        "title": "116211 Simplify and refactor travel pay mobile e2e tests",
+        "number": 11462,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11462",
         "isPR": true
       },
       {
@@ -736,9 +651,15 @@
         "isPR": false
       },
       {
-        "title": "11435 hide care system selection",
-        "number": 11436,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11436",
+        "title": "User Story Only show Care System selection if user has 2+ associated care systems",
+        "number": 11435,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11435",
+        "isPR": false
+      },
+      {
+        "title": "112195 create file on btsss link component",
+        "number": 11325,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11325",
         "isPR": true
       },
       {
@@ -820,6 +741,12 @@
         "isPR": true
       },
       {
+        "title": "Chore/582 - Improve Claim Letter Download Analytics",
+        "number": 11342,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11342",
+        "isPR": true
+      },
+      {
         "title": "Replace custom checkbox implementation with design library implementation in form wrapper",
         "number": 11328,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11328",
@@ -830,6 +757,12 @@
         "number": 11317,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11317",
         "isPR": false
+      },
+      {
+        "title": "Add submission state",
+        "number": 11305,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11305",
+        "isPR": true
       },
       {
         "title": "Mhv/labs and tests/date picker",
@@ -848,6 +781,12 @@
         "number": 11294,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11294",
         "isPR": false
+      },
+      {
+        "title": "[#111520] Add travelPayEligible property in appointment object",
+        "number": 11257,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11257",
+        "isPR": true
       },
       {
         "title": "chore: Changes to UI and content for prepare for your appointment information",
@@ -877,6 +816,24 @@
         "title": "Add E2E test for non urgent messages alert",
         "number": 10546,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10546",
+        "isPR": false
+      },
+      {
+        "title": "BUG - [SEV 3] - [Android] - [Medical Records transition to Allergies, No Title and Heading Announcement]",
+        "number": 10535,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10535",
+        "isPR": false
+      },
+      {
+        "title": "BUG - [SEV 3] - [iOS] - [Allergy details page does not announce heading]",
+        "number": 10532,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10532",
+        "isPR": false
+      },
+      {
+        "title": "BUG - [SEV 3] - [All] - [Voiceover and Talkback Medical Records Blank Selection]",
+        "number": 10527,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10527",
         "isPR": false
       },
       {
@@ -922,6 +879,12 @@
         "isPR": true
       },
       {
+        "title": "Chore/536 Fix E2E Tests",
+        "number": 11223,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11223",
+        "isPR": true
+      },
+      {
         "title": "BUG - [SEVERITY-3] - [All] - Feedback function needs some styling work (text size, shadow under header, left text alignment)",
         "number": 11154,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11154",
@@ -958,6 +921,12 @@
         "isPR": false
       },
       {
+        "title": "Secure Messaging: FE Validation",
+        "number": 11050,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11050",
+        "isPR": false
+      },
+      {
         "title": "BUG - 1 - iOS - Accessibility: Exiting an option menu causes screen reader for focus on 'Back' button at top of page",
         "number": 10931,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10931",
@@ -970,9 +939,21 @@
         "isPR": false
       },
       {
+        "title": "Add new endpoint to demo mode store",
+        "number": 10782,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10782",
+        "isPR": false
+      },
+      {
         "title": "Upgrade React Native to v0.76.9",
         "number": 10718,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10718",
+        "isPR": false
+      },
+      {
+        "title": "Frontend - Secure Messaging, Group Facilities by Health Systems",
+        "number": 10620,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10620",
         "isPR": false
       }
     ]
@@ -981,6 +962,24 @@
     "title": "v2.54.0",
     "due_on": "2025-07-15T00:00:00Z",
     "issues": [
+      {
+        "title": "Addressed issue of confirmed status tag showing with travel pay tag in appointments",
+        "number": 11197,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11197",
+        "isPR": true
+      },
+      {
+        "title": "112508 - Travel Pay SMOC Mobile Fixes",
+        "number": 11170,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11170",
+        "isPR": true
+      },
+      {
+        "title": "112446 - Bug fix appointments more than 30 days old",
+        "number": 11155,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11155",
+        "isPR": true
+      },
       {
         "title": "BUG - [Sev-2] - [Android] - Single Sign On for Appointment scheduling doesn't scroll in web view",
         "number": 11144,
@@ -1066,15 +1065,21 @@
         "isPR": false
       },
       {
+        "title": "111328 add messaging for partial success and next steps to mobile",
+        "number": 11067,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11067",
+        "isPR": true
+      },
+      {
         "title": "Travel Pay eligible appointments on Home Screen",
         "number": 11063,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11063",
         "isPR": false
       },
       {
-        "title": "10872 Update various relative paths to absolute paths",
-        "number": 11027,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11027",
+        "title": "111083 add firebase metrics to mobile smoc",
+        "number": 11026,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/11026",
         "isPR": true
       },
       {
@@ -1093,6 +1098,12 @@
         "title": "Remove Phase two platform-level event tracking from the app",
         "number": 10942,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10942",
+        "isPR": false
+      },
+      {
+        "title": "CU - Update Relative Imports - /components (part 2)",
+        "number": 10872,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10872",
         "isPR": false
       },
       {
@@ -1198,6 +1209,12 @@
         "isPR": false
       },
       {
+        "title": "\"Start Scheduling\" button on Appointments list page",
+        "number": 10796,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10796",
+        "isPR": false
+      },
+      {
         "title": "Add Pagination to Claim Letters page",
         "number": 10791,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10791",
@@ -1210,10 +1227,40 @@
     "due_on": "2025-06-17T00:00:00Z",
     "issues": [
       {
+        "title": "499 - Revisiting Nametag component visibility (VSC)",
+        "number": 10982,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10982",
+        "isPR": true
+      },
+      {
+        "title": "Tweak vama_vsc_error_shown event handling",
+        "number": 10964,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10964",
+        "isPR": true
+      },
+      {
         "title": "(FE) Refill Request Floating Button",
         "number": 10945,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10945",
         "isPR": false
+      },
+      {
+        "title": "updated copy for MessageList read receipt tag",
+        "number": 10940,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10940",
+        "isPR": true
+      },
+      {
+        "title": "Fix Benefit Verification Letter demo data for date",
+        "number": 10938,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10938",
+        "isPR": false
+      },
+      {
+        "title": "Revert \"Chore/10541 release approval process\"",
+        "number": 10936,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10936",
+        "isPR": true
       },
       {
         "title": "Appeals status -- issues explanation",
@@ -1264,6 +1311,12 @@
         "isPR": true
       },
       {
+        "title": "Remove high traffic, non actionable events from the app code",
+        "number": 10834,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10834",
+        "isPR": false
+      },
+      {
         "title": "Implementation: Add link for non-VA medications",
         "number": 10769,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10769",
@@ -1273,6 +1326,12 @@
         "title": "Analytic Tracking for Homepage Scroll Depth",
         "number": 10735,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10735",
+        "isPR": false
+      },
+      {
+        "title": "Implement New Release Approval Process",
+        "number": 10541,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10541",
         "isPR": false
       },
       {
@@ -1288,9 +1347,15 @@
     "due_on": "2025-05-20T00:00:00Z",
     "issues": [
       {
-        "title": "Remove high traffic, non actionable events from the app code",
-        "number": 10834,
-        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10834",
+        "title": "Fix Veteran Status Card E2E Test",
+        "number": 10822,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10822",
+        "isPR": true
+      },
+      {
+        "title": "BUG - 2 - iOS/Android - Accessibility: Screen reader should read date/line item/payment as 1 focused object",
+        "number": 10774,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10774",
         "isPR": false
       },
       {
@@ -1303,6 +1368,12 @@
         "title": "Enable \"Submit Evidence\" by Default",
         "number": 10757,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10757",
+        "isPR": false
+      },
+      {
+        "title": "Add Analytics to New Actions",
+        "number": 10716,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10716",
         "isPR": false
       },
       {
@@ -1333,6 +1404,24 @@
         "title": "BUG - sev-3 - All - Claims file upload: error request screen reader callout for missing file/photo is inconsistent/less helpful",
         "number": 10325,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10325",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Pharmacy)",
+        "number": 10005,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10005",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Secure Messaging-3)",
+        "number": 10003,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10003",
+        "isPR": false
+      },
+      {
+        "title": "Install accessibility linting, evaluate errors and warnings",
+        "number": 4813,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/4813",
         "isPR": false
       }
     ]
@@ -1381,6 +1470,96 @@
         "title": "Implement Show/ Hide Disability Rating & Compensation",
         "number": 10645,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10645",
+        "isPR": false
+      },
+      {
+        "title": "chore/284-FixDemoPasswordEntryForLocalE2ETests",
+        "number": 10623,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10623",
+        "isPR": true
+      },
+      {
+        "title": "Update mobile homescreen to align with Web and reduce future calls to MPI",
+        "number": 10558,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10558",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Letters)",
+        "number": 10021,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10021",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Disability Rating)",
+        "number": 10020,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10020",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-9)",
+        "number": 10019,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10019",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-8)",
+        "number": 10018,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10018",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-6)",
+        "number": 10016,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10016",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-5)",
+        "number": 10015,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10015",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-4)",
+        "number": 10014,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10014",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-3)",
+        "number": 10013,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10013",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Benefits (Claims-1)",
+        "number": 10011,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10011",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Appointments-4)",
+        "number": 10010,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10010",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Appointments-3)",
+        "number": 10009,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10009",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Appointments-2)",
+        "number": 10008,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10008",
+        "isPR": false
+      },
+      {
+        "title": "Updating App Unit Tests to use i18n Translations - Health (Appointments-1)",
+        "number": 10007,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10007",
         "isPR": false
       },
       {
@@ -1459,6 +1638,18 @@
         "title": "BUG - Sev-3- All- Mismatching text color in Alerts throughout app",
         "number": 10502,
         "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10502",
+        "isPR": false
+      },
+      {
+        "title": "Update Allergy and Vaccine screens based on demo feedback",
+        "number": 10451,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/10451",
+        "isPR": true
+      },
+      {
+        "title": "BUG - sev-3 - All - Messaging: can get 'stuck' on empty page when moving the only message in a page to a new folder",
+        "number": 10330,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/10330",
         "isPR": false
       },
       {
