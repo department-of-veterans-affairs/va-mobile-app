@@ -145,6 +145,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                 }
             }
 
+            android.util.Log.d("CustomTabsIntentModule", "BEGINNING AUTH SESSION WITH URL: $authURI")
             context.currentActivity?.apply { customTabsIntent.launchUrl(this, authURI) }
             promise.resolve(true)
         } catch (e: Throwable) {

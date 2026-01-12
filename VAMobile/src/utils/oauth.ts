@@ -13,11 +13,13 @@ export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
   const verifier = urlEncode(await generateBase64(32))
   const challenge = await generateSHA256String(verifier)
   const state = await generateBase64(32)
-  return {
+  const params = {
     codeVerifier: verifier,
     codeChallenge: urlEncode(challenge),
     stateParam: urlEncode(state),
   }
+  console.debug('pkceAuthorizeParams: GENERATED PARAMS', params)
+  return params
 }
 
 /**

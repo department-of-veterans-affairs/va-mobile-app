@@ -27,6 +27,10 @@ export const useStartAuth = (): (() => Promise<void>) => {
   const startAuth = async () => {
     dispatch(sendLoginStartAnalytics(false))
     const iOS = isIOS()
+    console.debug('useStartAuth: STARTING AUTH', {
+      codeChallenge: codeChallenge ? 'PRESENT' : 'MISSING',
+      state: authorizeStateParam || 'MISSING',
+    })
     try {
       const callbackUrl = await startAuthSession(codeChallenge || '', authorizeStateParam || '')
       if (iOS) {

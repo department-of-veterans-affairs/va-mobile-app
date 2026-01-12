@@ -86,12 +86,14 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
       return
     }
+    print("RNAuthSession: BEGINNING AUTH SESSION WITH URL: \(url.absoluteString)")
     session = ASWebAuthenticationSession(url: url, callbackURLScheme: Environment.authScheme) {callbackUrl, error in
       if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
         reject("000", "RNAuthSession Cancelled", nil)
       } else if let error = error {
         reject("001", "RNAuthSession Error", error)
       } else if let url = callbackUrl {
+        print("RNAuthSession: RECEIVED CALLBACK URL: \(url.absoluteString)")
         resolve(url.absoluteString)
       }
     }

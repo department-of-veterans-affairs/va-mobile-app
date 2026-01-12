@@ -411,28 +411,41 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
   }
 }
 
-type StringMap = { [key: string]: string | undefined }
 const parseCallbackUrlParams = (url: string): { code: string; state?: string } => {
-  const urlParts = url.split('?')
-  const query = urlParts[1]
-  const queryParts = query?.split('&') || []
+  console.debug('handleTokenCallbackUrl: PARSING RAW URL:', url)
 
-  const obj: StringMap = {
-    code: undefined,
-    status: undefined,
+  const getParam = (paramName: string): string | undefined => {
+    const regex = new RegExp(`[?&#;]${paramName}=([^&#;]*)`)
+    const match = url.match(regex)
+    const value = match && match[1] ? decodeURIComponent(match[1]) : undefined
+    console.debug(`handleTokenCallbackUrl: Search for ${paramName} result:`, value ? 'FOUND' : 'NOT FOUND')
+    return value
   }
 
-  queryParts.forEach((qpRaw) => {
-    const [key, val] = qpRaw.split('=')
-    obj[key] = val
-  })
+  // Diagnostic: Log every parameter found in the URL
+  try {
+    const allFound: { [key: string]: string } = {}
+    const paramRegex = /[?&#;]([^=&#;]+)=([^&#;]*)/g
+    let match
+    while ((match = paramRegex.exec(url)) !== null) {
+      allFound[match[1]] = decodeURIComponent(match[2])
+    }
+    console.debug('handleTokenCallbackUrl: ALL DETECTED PARAMS:', allFound)
+  } catch (e) {
+    console.debug('handleTokenCallbackUrl: Failed to run diagnostic param sweep')
+  }
 
-  if (!obj.code) {
+  const code = getParam('code')
+  const state = getParam('state')
+
+  if (!code) {
+    console.error('handleTokenCallbackUrl: No code found in URL', url)
     throw new Error('invalid callback params')
   }
+
   return {
-    code: obj.code,
-    state: obj.state,
+    code,
+    state,
   }
 }
 
@@ -724,8 +737,13 @@ export const handleTokenCallbackUrl =
 
       // Validate state parameter to prevent CSRF attacks
       const storedState = getState().auth.authorizeStateParam
+      console.debug('handleTokenCallbackUrl: VALIDATING STATE', { receivedState: state, storedState })
+
       if (!state || state !== storedState) {
-        const error = new Error('State parameter mismatch - possible CSRF attack')
+        const error = new Error(
+          `State parameter mismatch - possible CSRF attack. Expected: ${storedState}, Received: ${state}`,
+        )
+        console.error('handleTokenCallbackUrl: STATE VALIDATION FAILED', error.message)
         logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: State validation failed`)
         await logAnalyticsEvent(Events.vama_login_fail(error, true))
         dispatch(dispatchFinishAuthLogin({ error }))
@@ -746,7 +764,9 @@ export const handleTokenCallbackUrl =
           code,
         }).toString(),
       })
+      console.debug('handleTokenCallbackUrl: TOKEN EXCHANGE STATUS', response.status)
       const authCredentials = await processAuthResponse(response)
+      console.debug('handleTokenCallbackUrl: LOGIN SUCCESSFUL')
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin({ authCredentials }))
       postLoggedIn()

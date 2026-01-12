@@ -347,9 +347,13 @@ export function AuthGuard() {
     } else if (!loggedIn) {
       dispatch(initializeAuth())
       const listener = (event: { url: string }): void => {
-        if (event.url?.startsWith('vamobile://login-success?')) {
+        console.debug('App: INCOMING DEEP LINK', event.url)
+        // Robust matching for login-success callback, regardless of query parameters or fragments
+        if (event.url?.includes('vamobile://login-success')) {
+          console.debug('App: MATCHED LOGIN SUCCESS, DISPATCHING CALLBACK HANDLER')
           dispatch(handleTokenCallbackUrl(event.url))
         } else if (event.url?.startsWith('vamobile://')) {
+          console.debug('App: MATCHED OTHER VAMOBILE LINK, SETTING INITIAL DEEP LINK')
           // Store non-auth result url for navigation after login
           setInitialDeepLink(event.url)
         }

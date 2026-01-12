@@ -16,6 +16,10 @@ const { AUTH_SIS_ENDPOINT } = getEnv()
  * url for log in with the OAuth exchange code query param.
  */
 export const startAuthSession = async (codeChallenge: string, state: string): Promise<string> => {
+  console.debug('startAuthSession: CALLING NATIVE', {
+    codeChallenge: codeChallenge ? 'PRESENT' : 'MISSING',
+    state: state || 'MISSING',
+  })
   if (isIOS()) {
     return await RnAuthSession.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge, state)
   } else {
