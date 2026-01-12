@@ -30,7 +30,7 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       static let authScheme = "vamobile"
   }
   
-  func generateUrl(authUrl: String, codeChallenge: String)-> URL? {
+  func generateUrl(authUrl: String, codeChallenge: String, state: String)-> URL? {
     guard let url = URL(string: authUrl), 
           let host = url.host else {
       return nil
@@ -47,6 +47,7 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
     var items = [
       URLQueryItem(name: "code_challenge_method", value: "S256"),
       URLQueryItem(name: "code_challenge", value: codeChallenge),
+      URLQueryItem(name: "state", value: state),
       URLQueryItem(name: "application", value: "vamobile"),
       URLQueryItem(name: "oauth", value: "true"),
     ]
@@ -73,18 +74,14 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   /// Kicks off an ASWebAuthenticationSession for ios devices
   /// - Parameters:
   ///   - authUrl: string with the authorization url
-  ///   - clientId: client id string for IAM
-  ///   - redirectUri: redirect uri string for successful logins
-  ///   - scope: space separated string of open ID scopes for IAM
   ///   - codeChallenge: PKCE code challenge string
-  ///   - state: state string for OAuth flow with IAM
-  ///   - SISEnabled: boolean of whether we are using SIS or not
+  ///   - state: state string for OAuth flow CSRF protection
   ///   - resolve: React Native Promise resolver.
   ///   - reject: React Native Promise rejecter.
   /// - Returns: resolves with the callback url or rejects with an error.
-  @objc(beginAuthSession:codeChallenge:resolver:rejecter:)
-  func beginAuthSession(_ authUrl: String, codeChallenge: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
-    let authUrl: URL? = generateUrl(authUrl: authUrl, codeChallenge: codeChallenge)
+  @objc(beginAuthSession:codeChallenge:state:resolver:rejecter:)
+  func beginAuthSession(_ authUrl: String, codeChallenge: String, state: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
+    let authUrl: URL? = generateUrl(authUrl: authUrl, codeChallenge: codeChallenge, state: state)
     guard let url = authUrl else {
       reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
       return

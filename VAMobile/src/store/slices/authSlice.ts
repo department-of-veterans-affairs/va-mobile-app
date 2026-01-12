@@ -720,8 +720,19 @@ export const handleTokenCallbackUrl =
     try {
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
-      const { code } = parseCallbackUrlParams(url)
-      // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
+      const { code, state } = parseCallbackUrlParams(url)
+
+      // Validate state parameter to prevent CSRF attacks
+      const storedState = getState().auth.authorizeStateParam
+      if (!state || state !== storedState) {
+        const error = new Error('State parameter mismatch - possible CSRF attack')
+        logNonFatalErrorToFirebase(error, `handleTokenCallbackUrl: State validation failed`)
+        await logAnalyticsEvent(Events.vama_login_fail(error, true))
+        dispatch(dispatchFinishAuthLogin({ error }))
+        return
+      }
+
+      console.debug('handleTokenCallbackUrl: State parameter validated successfully')
       console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
       await clearCookies()
       const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {

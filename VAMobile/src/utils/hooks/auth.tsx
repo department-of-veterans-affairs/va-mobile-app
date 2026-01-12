@@ -22,13 +22,13 @@ import { startAuthSession } from 'utils/rnAuthSesson'
  */
 export const useStartAuth = (): (() => Promise<void>) => {
   const dispatch = useAppDispatch()
-  const { codeChallenge } = useSelector<RootState, AuthState>((state) => state.auth)
+  const { codeChallenge, authorizeStateParam } = useSelector<RootState, AuthState>((state) => state.auth)
 
   const startAuth = async () => {
     dispatch(sendLoginStartAnalytics(false))
     const iOS = isIOS()
     try {
-      const callbackUrl = await startAuthSession(codeChallenge || '')
+      const callbackUrl = await startAuthSession(codeChallenge || '', authorizeStateParam || '')
       if (iOS) {
         dispatch(handleTokenCallbackUrl(callbackUrl))
       }

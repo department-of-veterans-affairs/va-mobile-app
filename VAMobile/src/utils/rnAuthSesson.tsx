@@ -10,14 +10,16 @@ const { AUTH_SIS_ENDPOINT } = getEnv()
 /**
  * This function fires the native iOS ASWebAuthenticationSession and Custom Tabs
  * in the case of Android
+ * @param codeChallenge - PKCE code challenge string
+ * @param state - OAuth state parameter for CSRF protection
  * @returns Promise<string> For iOS, returns a promise with the callback
  * url for log in with the OAuth exchange code query param.
  */
-export const startAuthSession = async (codeChallenge: string): Promise<string> => {
+export const startAuthSession = async (codeChallenge: string, state: string): Promise<string> => {
   if (isIOS()) {
-    return await RnAuthSession.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
+    return await RnAuthSession.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge, state)
   } else {
-    return await CustomTabs.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge)
+    return await CustomTabs.beginAuthSession(AUTH_SIS_ENDPOINT, codeChallenge, state)
   }
 }
 

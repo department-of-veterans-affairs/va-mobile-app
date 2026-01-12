@@ -35,6 +35,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
     fun beginAuthSession(
             authEndPoint: String,
             codeChallenge: String,
+            state: String,
             promise: Promise
     ) {
         try {
@@ -55,6 +56,7 @@ class CustomTabsIntentModule(private val context: ReactApplicationContext) :
                                 with(it) {
                                     appendQueryParameter("code_challenge_method", "S256")
                                     appendQueryParameter("code_challenge", codeChallenge)
+                                    appendQueryParameter("state", state)
                                     appendQueryParameter("application", "vamobile")
                                     appendQueryParameter("oauth", "true")
                                     
