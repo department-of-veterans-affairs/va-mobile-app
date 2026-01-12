@@ -1,3 +1,7 @@
+/**
+ * OldLinkComponent is used to resolve a crash on Android 14 as explained in issue #9064.
+ * Currently, all android users use this instead of the Mobile Design system link to avoid any further crashes.
+ * */
 import React, { FC } from 'react'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
