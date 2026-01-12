@@ -3,10 +3,10 @@ name: Automation Change Template
 about: Template for requesting a change to the automation pipeline for the application
 title: Automation - [Describe issue]
 labels: devops
-projects: ['department-of-veterans-affairs/1616']
-assignees:
-  - jbergman-oddball
+assignees: jbergman-oddball
+
 ---
+
 # Automation Ticket
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 ## Type of Change
@@ -42,4 +42,4 @@ assignees:
 
 ## Acceptability Criteria
 <!-- What is the Definition of Done -->
-- [ ] 
+- [ ]

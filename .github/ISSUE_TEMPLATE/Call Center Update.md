@@ -2,10 +2,10 @@
 name: Call Center Document Update
 about: Template for when Teams need to update the VAHB Call Center Guide
 title: VAHB Call Center Guide Update
-labels: call center 
-assignees:
----
+labels: ''
+assignees: ''
 
+---
 
 ## Description 
 As VAHB Mobile Team, I wantt to update the existing VAHB Call Center Guide so that [inclusion of what new / changed information] can be used to inform VA Call Center Reps in order to help Veterans calling in.
@@ -41,5 +41,3 @@ As part of this story we want to: <!-- List the desired outcome(s) for this tick
 - [ ] Acceptance criteria defined
 - [ ] Labels added (front-end, back-end, feature, team)
 - [ ] Linked to an Team's Epic
-
-

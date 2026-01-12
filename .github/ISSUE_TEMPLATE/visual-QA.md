@@ -1,12 +1,11 @@
 ---
-name: Visual and Interaction QA 
+name: Visual and Interaction QA
 about: Template for creating a ticket to document visual QA work for each epic
 title: Visual and Interaction QA
-labels: UX
-assignees: 
+labels: ''
+assignees: ''
+
 ---
-
-
 
 ## Visual and Interaction QA
 Every epic should go through a round of visual and interaction QA, before release. Review [the high-level UX QA process info](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/designing-ui#qa) if you've never done it while on the VA mobile app team. 
