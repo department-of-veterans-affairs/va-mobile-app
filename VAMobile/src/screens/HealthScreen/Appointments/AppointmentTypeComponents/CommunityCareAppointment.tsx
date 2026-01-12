@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { UseMutateFunction } from '@tanstack/react-query'
+import { MutateOptions } from '@tanstack/react-query'
 
 import { AppointmentAttributes } from 'api/types'
 import { Box, TextArea } from 'components'
@@ -31,7 +31,7 @@ type CommunityCareAppointmentProps = {
   attributes: AppointmentAttributes
   subType: AppointmentDetailsSubType
   goBack: () => void
-  cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>
+  cancelAppointment?: (cancelID: string, mutateOptions: MutateOptions<unknown, Error, string, unknown>) => void
 }
 
 function CommunityCareAppointment({

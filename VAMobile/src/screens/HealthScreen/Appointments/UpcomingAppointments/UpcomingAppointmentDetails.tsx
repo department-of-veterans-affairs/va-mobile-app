@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next'
 
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
+import { MutateOptions } from '@tanstack/react-query'
+
 import { useAppointments, useCancelAppointment } from 'api/appointments'
 import { AppointmentAttributes, AppointmentData, AppointmentStatusConstants, AppointmentTypeConstants } from 'api/types'
 import { ErrorComponent, FeatureLandingTemplate, LoadingComponent } from 'components'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import { CONNECTION_STATUS } from 'constants/offline'
 import {
   ClaimExamAppointment,
   CommunityCareAppointment,
@@ -29,7 +32,8 @@ import {
   getUpcomingAppointmentDateRange,
   isAPendingAppointment,
 } from 'utils/appointments'
-import { useOfflineEventQueue } from 'utils/hooks/offline'
+import { useOfflineSnackbar } from 'utils/hooks'
+import { useAppIsOnline, useOfflineEventQueue } from 'utils/hooks/offline'
 import { useReviewEvent } from 'utils/inAppReviews'
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
@@ -39,6 +43,8 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
   const { t } = useTranslation(NAMESPACE.COMMON)
   const registerReviewEvent = useReviewEvent(true)
   useOfflineEventQueue(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)
+  const connectionStatus = useAppIsOnline()
+  const showOfflineSnackbar = useOfflineSnackbar()
   const dateRange = getUpcomingAppointmentDateRange()
   const {
     data: apptsData,
@@ -50,7 +56,7 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
     enabled: !appointment,
   })
 
-  const { mutate: cancelAppointment, isPending: loadingAppointmentCancellation } = useCancelAppointment()
+  const { mutate: cancelAppointmentMutate, isPending: loadingAppointmentCancellation } = useCancelAppointment()
 
   const trueAppointment =
     appointment ||
@@ -105,6 +111,15 @@ function UpcomingAppointmentDetails({ route, navigation }: UpcomingAppointmentDe
         : pendingAppointment
           ? AppointmentDetailsSubTypeConstants.Pending
           : AppointmentDetailsSubTypeConstants.Upcoming
+
+  const cancelAppointment = (cancelID: string, mutateOptions: MutateOptions<unknown, Error, string, unknown>) => {
+    if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+      showOfflineSnackbar()
+      return
+    }
+
+    cancelAppointmentMutate(cancelID, mutateOptions)
+  }
 
   return (
     <FeatureLandingTemplate
