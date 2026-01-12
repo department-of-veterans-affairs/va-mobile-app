@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LayoutChangeEvent, StatusBar, View, ViewStyle, useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -11,12 +11,14 @@ import {
   HeaderBannerProps,
   HeaderButton,
   LastUpdatedTimestamp,
+  LoadingComponent,
   MaintenanceBanner,
   OfflineBanner,
   TextView,
   TextViewProps,
   WaygateWrapper,
 } from 'components'
+import ErrorComponent, { ErrorComponentProps } from 'components/CommonErrorComponents/ErrorComponent'
 import VAScrollView, { VAScrollViewProps } from 'components/VAScrollView'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from 'store/api'
@@ -28,6 +30,10 @@ import { useTheme } from 'utils/hooks'
 2. In the screen navigator update 'screenOptions={{ headerShown: false }}' to hide the previous navigation display for all screens in the navigator.
   Use 'options={{headerShown: false}}'(preferred method for subtask) in the individual screen if only an individual screen is supposed to do it.
 */
+export type ScreenError = Partial<ErrorComponentProps> & {
+  /** Boolean to determine if error should be displayed */
+  errorCheck: boolean
+}
 
 export type ChildTemplateProps = {
   /** Translated label text for descriptive back button */
@@ -50,8 +56,14 @@ export type ChildTemplateProps = {
   scrollViewProps?: VAScrollViewProps
   /** Optional TestID for scrollView */
   testID?: string
-  /** Required to show the maintenance banner **/
+  /** Optional boolean to display loading component */
+  isLoading?: boolean
+  /** Optional text for loading screen */
+  loadingText?: string
+  /** Optional screen id for the screen that has errors*/
   screenID?: ScreenIDTypes
+  /** Optional array of errors to be handled by the given screen */
+  errors?: Array<ScreenError>
   /** Optional timestamp that the data on this screen last updated */
   dataUpdatedAt?: number
 }
@@ -70,7 +82,10 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
   footerContent,
   scrollViewProps,
   testID,
+  isLoading,
+  loadingText,
   screenID,
+  errors,
   dataUpdatedAt,
 }) => {
   const insets = useSafeAreaInsets()
@@ -143,6 +158,26 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
     setTransitionHeaderHeight(height)
   }
 
+  /**
+   * Determines if there is an error to display based on the provided errors array.
+   * If a valid error with `errorCheck` is found, it renders the ErrorComponent.
+   */
+  const errorToDisplay = useMemo(() => {
+    if (!errors || !screenID) return null
+    const screenError = errors.find((error) => error.errorCheck)
+    return (
+      screenError && (
+        <ErrorComponent screenID={screenID} onTryAgain={screenError.onTryAgain} error={screenError.error} />
+      )
+    )
+  }, [errors, screenID])
+
+  const renderContent = () => {
+    if (isLoading) return <LoadingComponent text={loadingText} />
+    if (errorToDisplay) return errorToDisplay
+    return children
+  }
+
   return (
     <View style={fillStyle}>
       <StatusBar
@@ -168,7 +203,7 @@ export const ChildTemplate: FC<ChildTemplateProps> = ({
         ) : null}
         <WaygateWrapper>
           <Box display="flex" justifyContent="space-between" flex={1}>
-            <Box>{children}</Box>
+            <Box>{renderContent()}</Box>
             <LastUpdatedTimestamp datetime={dataUpdatedAt} />
           </Box>
         </WaygateWrapper>

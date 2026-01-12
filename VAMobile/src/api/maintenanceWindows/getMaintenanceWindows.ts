@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import { each } from 'underscore'
 
 import { maintenanceWindowsKeys } from 'api/maintenanceWindows/queryKeys'
-import { RootState } from 'store'
+import store, { RootState } from 'store'
 import { DowntimeFeatureType, MaintenanceWindowsGetData, get } from 'store/api'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
 import { AuthState, DowntimeWindowsByFeatureType } from 'store/slices'
@@ -22,7 +22,9 @@ const MAINTENANCE_WINDOW_REFETCH_INTERVAL = 180000 // 3 minutes
  * Fetch maintenance windows
  */
 const getMaintenanceWindows = async (): Promise<DowntimeWindowsByFeatureType> => {
-  if (__DEV__) {
+  const { demoMode } = store.getState().demo
+
+  if (demoMode) {
     const overrideStr = await AsyncStorage.getItem(MAINTENANCE_WINDOW_OVERRIDES)
 
     if (overrideStr) {
