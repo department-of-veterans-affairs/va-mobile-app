@@ -55,6 +55,7 @@ Add an event name with optional parameters to the `Events` constant in `constant
 - [Snake case](https://en.wikipedia.org/wiki/Snake_case)
 - Prefixed with `vama_`
 - Limited to 24 characters including the `vama_` prefix
+- Any additional parameters passed to the event must be named `p1, p2, ..., p9` in order to be automatically captured and analyzable in Google Analytics (See [Event Parameter Reference](Event%20Parameter%20Reference.md) for more info).
 
 See examples below or in our [analytics constants file](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/dbce4aeaac76b2a49d56b9fc46f4be5cd15bce23/VAMobile/src/constants/analytics.ts)
 
@@ -63,11 +64,11 @@ Additionally, if user properties need to be tracked, they can be added to the `U
 ```
 export const Events = {
   ... ,
-  vama_new_event_name: (): Event => {
+  vama_new_event_name: (paramName: string): Event => {
     return {
       name: 'vama_new_event_name',
       params: {
-        paramName,
+        p1: paramName,
       },
     }
   },

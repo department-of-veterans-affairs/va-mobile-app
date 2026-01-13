@@ -10,9 +10,8 @@ import {
   ClickToCallPhoneNumber,
   DefaultList,
   DefaultListItemObj,
-  ErrorComponent,
   FeatureLandingTemplate,
-  LoadingComponent,
+  ScreenError,
   TextLine,
   TextView,
 } from 'components'
@@ -88,7 +87,13 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
     ]
   }
 
-  const hasError = useBankDataError || !ddNotInDowntime
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !!useBankDataError || !ddNotInDowntime,
+      onTryAgain: refetchBankData,
+      error: useBankDataError,
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -96,38 +101,32 @@ function DirectDepositScreen({ navigation }: DirectDepositScreenProps) {
       backLabelOnPress={navigation.goBack}
       title={t('directDeposit.title')}
       testID="DirectDepositEditAccount"
-      backLabelTestID="directDepositPageBackID">
-      {loading ? (
-        <LoadingComponent text={t('directDeposit.loading')} />
-      ) : hasError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}
-          error={useBankDataError}
-          onTryAgain={refetchBankData}
-        />
-      ) : (
-        <>
-          <Box mx={gutter}>
-            {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
-            <TextView
-              variant="MobileBody"
-              mb={theme.dimensions.standardMarginBetween}
-              accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText.a11yLabel'))}>
-              {t('directDeposit.viewAndEditText')}
-            </TextView>
-          </Box>
-          <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
-          <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true} accessibilityRole={'text'}>
-            <TextView>
-              <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
-              <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
-            </TextView>
-          </Box>
-          <Box mx={gutter} mb={contentMarginBottom}>
-            <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
-          </Box>
-        </>
-      )}
+      backLabelTestID="directDepositPageBackID"
+      screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID}
+      isLoading={loading}
+      loadingText={t('directDeposit.loading')}
+      errors={screenErrors}>
+      <>
+        <Box mx={gutter}>
+          {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
+          <TextView
+            variant="MobileBody"
+            mb={theme.dimensions.standardMarginBetween}
+            accessibilityLabel={a11yLabelVA(t('directDeposit.viewAndEditText.a11yLabel'))}>
+            {t('directDeposit.viewAndEditText')}
+          </TextView>
+        </Box>
+        <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
+        <Box mx={gutter} my={theme.paragraphSpacing.spacing20FontSize} accessible={true} accessibilityRole={'text'}>
+          <TextView>
+            <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+            <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
+          </TextView>
+        </Box>
+        <Box mx={gutter} mb={contentMarginBottom}>
+          <ClickToCallPhoneNumber phone={displayedTextPhoneNumber(t('8008271000'))} />
+        </Box>
+      </>
     </FeatureLandingTemplate>
   )
 }
