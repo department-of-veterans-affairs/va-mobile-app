@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react'
+import { InteractionManager } from 'react-native'
 
 import { ParamListBase } from '@react-navigation/native'
 
@@ -340,8 +341,13 @@ export const isIndeterminate = (value: string, options: Array<CheckboxOption>, s
  * @param navigateTo - The navigation function to navigate between screens
  */
 export const navigateToTravelClaims = (navigateTo: RouteNavigationFunction<ParamListBase>) => {
-  navigateTo('BenefitsTab', {
-    screen: 'TravelPayClaims',
-    initial: false,
-  })
+  // #12898: This was changed from the previous implemention to fix an issue
+  // where navigating across tabs to the travel claims screen would result
+  // in App::OnNavStateChange firing twice and double logging screen view events
+  // for this screen.
+  navigateTo('BenefitsTab')
+
+  setTimeout(() => {
+    navigateTo('TravelPayClaims')
+  }, 100)
 }
