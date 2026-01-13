@@ -442,9 +442,6 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
-    // NOTE: PKCE (Proof Key for Code Exchange) with S256 method effectively protects against CSRF and
-    // authorization code injection attacks. The state parameter, while still generated for standard
-    // compliance, is functionally redundant when PKCE is correctly implemented and verified by the server.
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -719,8 +716,6 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-      // NOTE: state param verification is redundant here because PKCE is used.
-      // PKCE ensures that only the client that initiated the authorize request can exchange the code.
       console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
       await clearCookies()
       const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
