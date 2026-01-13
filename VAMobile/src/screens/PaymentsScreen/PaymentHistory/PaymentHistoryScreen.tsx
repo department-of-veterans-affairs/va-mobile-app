@@ -8,13 +8,12 @@ import { usePayments } from 'api/payments'
 import { PaymentsData } from 'api/types'
 import {
   Box,
-  ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  LoadingComponent,
   Pagination,
   PaginationProps,
   PickerItem,
+  ScreenError,
   VAModalPicker,
   VAModalPickerProps,
 } from 'components'
@@ -120,23 +119,25 @@ function PaymentHistoryScreen({ navigation }: PaymentHistoryScreenProps) {
     )
   }
 
-  const hasErrorOrDowntime = hasError || paymentsInDowntime
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !!hasError || paymentsInDowntime,
+      onTryAgain: refetchPayments,
+      error: hasError,
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
       backLabel={t('payments.title')}
       backLabelOnPress={navigation.goBack}
       title={t('history.title')}
-      testID="paymentHistoryTestID">
-      {loading ? (
-        <LoadingComponent text={t('payments.loading')} />
-      ) : hasErrorOrDowntime ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
-          error={hasError}
-          onTryAgain={refetchPayments}
-        />
-      ) : noPayments || !accessToPaymentHistory ? (
+      testID="paymentHistoryTestID"
+      screenID={ScreenIDTypesConstants.PAYMENTS_SCREEN_ID}
+      isLoading={loading}
+      loadingText={t('payments.loading')}
+      errors={screenErrors}>
+      {noPayments || !accessToPaymentHistory ? (
         <NoPaymentsScreen />
       ) : (
         <>
