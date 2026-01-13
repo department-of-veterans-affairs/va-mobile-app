@@ -236,7 +236,9 @@ const ComboBox: FC<ComboBoxProps> = ({
   return (
     <Box {...containerStyle}>
       <Box {...headerStyle}>
-        <TextView variant={'MobileBodyBold'}>{t(titleKey)}</TextView>
+        <TextView variant={'MobileBodyBold'} accessibilityRole={'header'}>
+          {t(titleKey)}
+        </TextView>
         <Pressable {...closeIconProps}>
           <Icon name={'Close'} width={30} height={30} fill={'base'} />
         </Pressable>
