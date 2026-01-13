@@ -7,7 +7,6 @@ import _ from 'underscore'
 import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE, LoginServiceTypeConstants } from 'store/api/types'
 import {
-  cancelWebLogin,
   checkFirstTimeLogin,
   dispatchInitializeAction,
   dispatchStoreAuthorizeParams,
@@ -18,7 +17,6 @@ import {
   setBiometricsPreference,
   setDisplayBiometricsPreferenceScreen,
   startBiometricsLogin,
-  startWebLogin,
 } from 'store/slices/authSlice'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import getEnv from 'utils/env'
@@ -99,6 +97,7 @@ context('authAction SIS', () => {
     encryptedComponent = generateRandomString()
     nonce = generateRandomString()
     testRefreshToken = `${encryptedComponent}.${nonce}.V0`
+    testDeviceSecret = generateRandomString()
     mockedAuthResponse = {
       data: {
         access_token: testAccessToken,
@@ -124,26 +123,6 @@ context('authAction SIS', () => {
           },
         },
       })
-  })
-
-  describe('startWebLogin', () => {
-    it('should set authUrl to be launched', async () => {
-      const store = realStore()
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-      await store.dispatch(startWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeTruthy()
-    })
-  })
-
-  describe('cancelWebLogin', () => {
-    it('should clear webLoginUrl', async () => {
-      const store = realStore()
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-      await store.dispatch(startWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeTruthy()
-      await store.dispatch(cancelWebLogin())
-      expect(store.getState().auth.webLoginUrl).toBeFalsy()
-    })
   })
 
   describe('logout', () => {
@@ -213,7 +192,7 @@ context('authAction SIS', () => {
     })
 
     it('should handle empty code', async () => {
-      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=&state=2355adfs'))
+      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code='))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })
       expect(startAction).toBeTruthy()
@@ -233,10 +212,9 @@ context('authAction SIS', () => {
         dispatchStoreAuthorizeParams({
           codeVerifier: 'mylongcodeverifier',
           codeChallenge: 'mycodechallenge',
-          authorizeStateParam: '2355adfs',
         }),
       )
-      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: ActionTypes.AUTH_START_LOGIN })
       expect(startAction).toBeTruthy()
@@ -244,8 +222,19 @@ context('authAction SIS', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.payload.authCredentials).toEqual(expect.objectContaining(mockedAuthResponse.data))
       expect(endAction?.payload.error).toBeFalsy()
-      // no biometrics available, don't save token
-      expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
+      // no biometrics available, don't save refresh token (but device secret is saved)
+      expect(Keychain.setInternetCredentials).toHaveBeenCalledWith(
+        'vamobileDeviceSecret',
+        'user',
+        testDeviceSecret,
+        expect.anything(),
+      )
+      expect(Keychain.setInternetCredentials).not.toHaveBeenCalledWith(
+        'vamobile',
+        'user',
+        expect.anything(),
+        expect.anything(),
+      )
 
       const tokenUrl = 'https://test.gov/v0/sign_in/token'
 
@@ -257,6 +246,26 @@ context('authAction SIS', () => {
         body: 'grant_type=authorization_code&code_verifier=mylongcodeverifier&code=FOO34asfa',
       })
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPayload)
+    })
+
+    it('should fail if PKCE verification fails (simulated by non-matching verifier/code)', async () => {
+      // In a real scenario, the backend would reject the exchange if the code_verifier
+      // doesn't match the code_challenge associated with the code.
+      // Here we simulate the backend rejecting the request.
+      fetch.mockResolvedValue({ status: 401, text: () => Promise.resolve('invalid_grant') })
+
+      store.dispatch(
+        dispatchStoreAuthorizeParams({
+          codeVerifier: 'wrong_verifier',
+          codeChallenge: 'somechallenge',
+        }),
+      )
+
+      await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=SOME_CODE'))
+      const actions = store.getActions()
+      const endAction = _.find(actions, { type: ActionTypes.AUTH_FINISH_LOGIN })
+      expect(endAction?.payload.error).toBeTruthy()
+      expect(store.getState().auth.loggedIn).toBeFalsy()
     })
 
     describe('when biometrics is available and biometrics is preferred', () => {
@@ -271,7 +280,7 @@ context('authAction SIS', () => {
           return Promise.resolve(mockedAuthResponse)
         }
         fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
-        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
         const authState = store.getState().auth
 
         // we shouldn't be logged in until the user decides how to store refreshToken
@@ -298,12 +307,23 @@ context('authAction SIS', () => {
           return Promise.resolve(mockedAuthResponse)
         }
         fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+        await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
         const authState = store.getState().auth
 
         // we shouldn't be logged in until the user decides how to store refreshToken
         expect(authState.loggedIn).toBeTruthy()
-        expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
+        expect(Keychain.setInternetCredentials).toHaveBeenCalledWith(
+          'vamobileDeviceSecret',
+          'user',
+          testDeviceSecret,
+          expect.anything(),
+        )
+        expect(Keychain.setInternetCredentials).not.toHaveBeenCalledWith(
+          'vamobile',
+          'user',
+          expect.anything(),
+          expect.anything(),
+        )
       })
 
       describe('when in the development environment (__DEV__=true)', () => {
@@ -321,7 +341,7 @@ context('authAction SIS', () => {
             return Promise.resolve(mockedAuthResponse)
           }
           fetch.mockResolvedValue({ status: 200, json: tokenResponse })
-          await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
+          await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa'))
           const authState = store.getState().auth
 
           // we shouldn't be logged in until the user decides how to store refreshToken

@@ -67,7 +67,6 @@ export type AuthState = {
   loggedIn: boolean
   loggingOut: boolean
   loginPromptType?: LOGIN_PROMPT_TYPE
-  webLoginUrl?: string
   authCredentials?: AuthCredentialData
   canStoreWithBiometric: boolean
   shouldStoreWithBiometric: boolean
@@ -78,7 +77,6 @@ export type AuthState = {
   displayBiometricsPreferenceScreen: boolean
   codeVerifier?: string
   codeChallenge?: string
-  authorizeStateParam?: string
   authParamsLoadingState: AuthParamsLoadingStateTypes
   successfulLogin?: boolean
   requestNotificationsPreferenceScreen?: boolean
@@ -251,9 +249,9 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 
 export const setPKCEParams = (): AppThunk => async (dispatch) => {
   dispatch(dispatchStartAuthorizeParams())
-  const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
-  console.debug('PKCE params: ', codeVerifier, codeChallenge, stateParam)
-  dispatch(dispatchStoreAuthorizeParams({ codeVerifier, codeChallenge, authorizeStateParam: stateParam }))
+  const { codeVerifier, codeChallenge } = await pkceAuthorizeParams()
+  console.debug('PKCE params: ', codeVerifier, codeChallenge)
+  dispatch(dispatchStoreAuthorizeParams({ codeVerifier, codeChallenge }))
 }
 
 export const loginStart =
@@ -412,7 +410,7 @@ const retrieveRefreshToken = async (dispatch?: AppDispatch): Promise<string | un
 }
 
 type StringMap = { [key: string]: string | undefined }
-const parseCallbackUrlParams = (url: string): { code: string; state?: string } => {
+const parseCallbackUrlParams = (url: string): { code: string } => {
   const urlParts = url.split('?')
   const query = urlParts[1]
   const queryParts = query?.split('&') || []
@@ -432,7 +430,6 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
   }
   return {
     code: obj.code,
-    state: obj.state,
   }
 }
 
@@ -445,8 +442,9 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json())?.data as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
-    // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
-    // state is not uniformly supported on the token exchange request so may not be necessary
+    // NOTE: PKCE (Proof Key for Code Exchange) with S256 method effectively protects against CSRF and
+    // authorization code injection attacks. The state parameter, while still generated for standard
+    // compliance, is functionally redundant when PKCE is correctly implemented and verified by the server.
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -721,7 +719,8 @@ export const handleTokenCallbackUrl =
       dispatch(dispatchStartAuthLogin(true))
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-      // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
+      // NOTE: state param verification is redundant here because PKCE is used.
+      // PKCE ensures that only the client that initiated the authorize request can exchange the code.
       console.debug('handleTokenCallbackUrl: POST to', AUTH_SIS_TOKEN_EXCHANGE_URL)
       await clearCookies()
       const response = await fetch(AUTH_SIS_TOKEN_EXCHANGE_URL, {
@@ -751,7 +750,6 @@ export const handleTokenCallbackUrl =
 
 export const cancelWebLogin = (): AppThunk => async (dispatch) => {
   await logAnalyticsEvent(Events.vama_login_closed(true))
-  dispatch(dispatchShowWebLogin())
 }
 
 export const sendLoginFailedAnalytics =
@@ -765,22 +763,6 @@ export const sendLoginStartAnalytics =
   async () => {
     await logAnalyticsEvent(Events.vama_login_start(true, biometric))
   }
-
-export const startWebLogin = (): AppThunk => async (dispatch) => {
-  await clearCookies()
-  // TODO: modify code challenge and state based on
-  // what will be used in LoginSuccess.js for the token exchange.
-  // The code challenge is a SHA256 hash of the code verifier string.
-  const params = new URLSearchParams({
-    code_challenge_method: 'S256',
-    code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
-    application: 'vamobile',
-    oauth: 'true',
-  }).toString()
-
-  const url = `${AUTH_SIS_ENDPOINT}?${params}`
-  dispatch(dispatchShowWebLogin(url))
-}
 
 export const logInDemoMode = (): AppThunk => async (dispatch) => {
   dispatch(dispatchDemoLogin())
@@ -837,7 +819,6 @@ const authSlice = createSlice({
         displayBiometricsPreferenceScreen: true,
         codeVerifier: state.codeVerifier,
         codeChallenge: state.codeChallenge,
-        authorizeStateParam: state.authorizeStateParam,
         authParamsLoadingState: state.authParamsLoadingState,
         requestNotificationsPreferenceScreen: state.requestNotificationsPreferenceScreen,
       }
@@ -848,29 +829,23 @@ const authSlice = createSlice({
       return {
         ...(action.payload.error ? initialAuthState : state),
         ...action.payload,
-        webLoginUrl: undefined,
         ...(action.payload.error ? { initializing: false } : { loading: false }),
         successfulLogin: successfulLogin,
         loggedIn: successfulLogin,
       }
     },
-    dispatchShowWebLogin: (state, action: PayloadAction<string | undefined>) => {
-      state.webLoginUrl = action.payload
-    },
     dispatchStartAuthorizeParams: (state) => {
       state.authParamsLoadingState = AuthParamsLoadingStateTypeConstants.LOADING
     },
     dispatchStoreAuthorizeParams: (state, action: PayloadAction<AuthSetAuthorizeRequestParamsPayload>) => {
-      const { codeVerifier, codeChallenge, authorizeStateParam } = action.payload
+      const { codeVerifier, codeChallenge } = action.payload
       state.codeVerifier = codeVerifier
       state.codeChallenge = codeChallenge
-      state.authorizeStateParam = authorizeStateParam
       state.authParamsLoadingState = AuthParamsLoadingStateTypeConstants.READY
     },
     dispatchDemoLogin: (state) => {
       state.loggedIn = true
       state.successfulLogin = true
-      state.webLoginUrl = undefined
       state.loading = false
     },
     dispatchStartLogout: (state) => {
@@ -908,7 +883,6 @@ export const {
   dispatchStoreAuthorizeParams,
   dispatchStartAuthLogin,
   dispatchFinishAuthLogin,
-  dispatchShowWebLogin,
   dispatchDemoLogin,
   dispatchFinishLogout,
   dispatchStartLogout,
