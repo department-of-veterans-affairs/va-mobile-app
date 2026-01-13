@@ -397,7 +397,9 @@ context('TravelPayClaimDetailsScreen', () => {
       expect(screen.getByTestId('TravelPayClaimDetailsScreen')).toBeTruthy()
 
       // Should render TravelPayClaimHeader component
-      expect(screen.getByTestId('travelPayClaimHeader')).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimHeaderTitle')).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimHeaderNumber')).toBeTruthy()
+      expect(screen.getByTestId('travelPayClaimHeaderStatus')).toBeTruthy()
 
       // Should render TravelPayClaimStatusDefinition component
       expect(screen.getByTestId('travelPayClaimStatusDefinitionTestID')).toBeTruthy()

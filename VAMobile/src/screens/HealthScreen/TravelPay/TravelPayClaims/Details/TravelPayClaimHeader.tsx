@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { DateTime } from 'luxon'
 
-import { Box, TextView } from 'components'
+import { TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { getIndividualCharactersFromText } from 'utils/accessibility'
 import { getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 import { useTheme } from 'utils/hooks'
 
@@ -36,9 +37,10 @@ function TravelPayClaimHeader({ appointmentDate, claimNumber, claimStatus }: Tra
   )
 
   return (
-    <Box testID="travelPayClaimHeader">
+    <>
       {/* Main title with appointment date */}
       <TextView
+        accessible
         variant="MobileBody"
         accessibilityRole="header"
         mb={theme.dimensions.standardMarginBetween}
@@ -47,10 +49,15 @@ function TravelPayClaimHeader({ appointmentDate, claimNumber, claimStatus }: Tra
       </TextView>
 
       {/* Claim number */}
+      {/* eslint-disable-next-line react-native-a11y/has-accessibility-hint */}
       <TextView
         variant="MobileBodyBold"
         accessibilityRole="header"
         selectable={true}
+        accessible
+        accessibilityLabel={t('travelPay.claimDetails.header.claimNumber', {
+          claimNumber: getIndividualCharactersFromText(claimNumber),
+        })}
         mb={theme.dimensions.condensedMarginBetween}
         testID="travelPayClaimHeaderNumber">
         {t('travelPay.claimDetails.header.claimNumber', { claimNumber })}
@@ -58,13 +65,14 @@ function TravelPayClaimHeader({ appointmentDate, claimNumber, claimStatus }: Tra
 
       {/* Claim status */}
       <TextView
+        accessible
         variant="MobileBodyBold"
         color="bodyText"
         accessibilityRole="header"
         testID="travelPayClaimHeaderStatus">
         {t('travelPay.claimDetails.header.claimStatus', { claimStatus })}
       </TextView>
-    </Box>
+    </>
   )
 }
 
