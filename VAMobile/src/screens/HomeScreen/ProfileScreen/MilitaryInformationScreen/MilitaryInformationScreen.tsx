@@ -12,10 +12,9 @@ import {
   Box,
   DefaultList,
   DefaultListItemObj,
-  ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  LoadingComponent,
+  ScreenError,
   TextLine,
 } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -73,31 +72,34 @@ function MilitaryInformationScreen({ navigation }: MilitaryInformationScreenProp
 
   const loadingCheck = loadingServiceHistory || loadingUserAuthorizedServices
 
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !mhNotInDowntime,
+    },
+    {
+      errorCheck: !!getUserAuthorizedServicesError,
+      onTryAgain: refetchAuthServices,
+      error: getUserAuthorizedServicesError,
+    },
+    {
+      errorCheck: !!useServiceHistoryError,
+      onTryAgain: refetchServiceHistory,
+      error: useServiceHistoryError,
+    },
+  ]
+
   return (
     <FeatureLandingTemplate
       backLabel={t('profile.title')}
       backLabelOnPress={navigation.goBack}
       title={t('militaryInformation.title')}
       backLabelTestID="backToProfileID"
-      screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}>
-      {!mhNotInDowntime ? (
-        <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
-      ) : loadingCheck ? (
-        <LoadingComponent text={t('militaryInformation.loading')} />
-      ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
-          error={getUserAuthorizedServicesError}
-          onTryAgain={refetchAuthServices}
-        />
-      ) : !userAuthorizedServices?.militaryServiceHistory ? (
+      screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
+      isLoading={loadingCheck}
+      loadingText={t('militaryInformation.loading')}
+      errors={screenErrors}>
+      {!userAuthorizedServices?.militaryServiceHistory ? (
         <NoMilitaryInformationAccess />
-      ) : useServiceHistoryError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID}
-          error={useServiceHistoryError}
-          onTryAgain={refetchServiceHistory}
-        />
       ) : serviceHistory.length < 1 ? (
         <NoMilitaryInformationAccess />
       ) : (

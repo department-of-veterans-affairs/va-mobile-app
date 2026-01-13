@@ -17,10 +17,9 @@ import {
   DefaultList,
   DefaultListItemObj,
   EmailConfirmationAlert,
-  ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  LoadingComponent,
+  ScreenError,
   TextArea,
   TextLine,
   TextView,
@@ -282,7 +281,20 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
   }
 
   const loadingCheck = loadingContactInformation || loadingUserAuthorizedServices
-  const contactInfoErrorCheck = contactInformationInDowntime || contactInformationError
+  const contactInfoErrorCheck = contactInformationInDowntime || !!contactInformationError
+
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: contactInfoErrorCheck,
+      onTryAgain: refetchContactInformation,
+      error: contactInformationError,
+    },
+    {
+      errorCheck: !!getUserAuthorizedServicesError,
+      onTryAgain: refetchUserAuthorizedServices,
+      error: getUserAuthorizedServicesError,
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -290,22 +302,11 @@ function ContactInformationScreen({ navigation }: ContactInformationScreenProps)
       backLabelOnPress={navigation.goBack}
       title={t('contactInformation.title')}
       testID="ContactInfoTestID"
-      screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}>
-      {loadingCheck ? (
-        <LoadingComponent text={t('contactInformation.loading')} />
-      ) : contactInfoErrorCheck ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
-          onTryAgain={refetchContactInformation}
-          error={contactInformationError}
-        />
-      ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
-          onTryAgain={refetchUserAuthorizedServices}
-          error={getUserAuthorizedServicesError}
-        />
-      ) : !userAuthorizedServices?.userProfileUpdate ? (
+      screenID={ScreenIDTypesConstants.CONTACT_INFORMATION_SCREEN_ID}
+      isLoading={loadingCheck}
+      loadingText={t('contactInformation.loading')}
+      errors={screenErrors}>
+      {!userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()
       ) : (
         <>

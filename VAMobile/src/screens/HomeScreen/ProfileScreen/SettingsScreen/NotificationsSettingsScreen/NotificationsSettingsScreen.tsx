@@ -25,10 +25,9 @@ import {
   AlertWithHaptics,
   Box,
   ButtonDecoratorType,
-  ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  LoadingComponent,
+  ScreenError,
   SimpleList,
   SimpleListItemObj,
   TextView,
@@ -187,6 +186,17 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
   }
 
   const loadingCheck = loadingPreferences || loadingSystemNotification || registeringDevice || settingPreference
+  const loadingText = settingPreference ? t('notifications.saving') : t('notifications.loading')
+
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck:
+        !!hasError ||
+        !!(systemNotificationData?.systemNotificationsOn && pushPreferences && pushPreferences.preferences.length < 1),
+      onTryAgain: fetchPreferences,
+      error: hasError,
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -194,72 +204,64 @@ function NotificationsSettingsScreen({ navigation }: NotificationsSettingsScreen
       backLabelOnPress={navigation.goBack}
       backLabelTestID="backToSettingsScreenID"
       title={t('notifications.title')}
-      screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}>
-      {loadingCheck ? (
-        <LoadingComponent text={settingPreference ? t('notifications.saving') : t('notifications.loading')} />
-      ) : hasError ||
-        (systemNotificationData?.systemNotificationsOn && pushPreferences && pushPreferences.preferences.length < 1) ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
-          error={hasError}
-          onTryAgain={fetchPreferences}
-        />
-      ) : (
-        <Box mb={contentMarginBottom}>
-          {!requestNotifications ? (
-            <AlertWithHaptics
-              variant="info"
-              description={t('requestNotifications.getNotified')}
-              primaryButton={{
-                label: t('requestNotifications.turnOn'),
-                onPress: onUseNotifications,
-              }}
-              testID="TurnOnNotificationsID"
-            />
-          ) : systemNotificationData?.systemNotificationsOn ? (
-            <>
-              <TextView variant={'MobileBody'} mx={gutter}>
-                {t('notifications.settings.personalize.text.systemNotificationsOn')}
-              </TextView>
-              {preferenceList()}
-            </>
-          ) : (
-            <AlertWithHaptics
-              variant="info"
-              description={t('notifications.settings.alert.text')}
-              primaryButton={{
-                label: t('notifications.settings.alert.openSettings'),
-                onPress: goToSettings,
-              }}
-            />
-          )}
-          <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
-            {t('notifications.settings.privacy')}
-          </TextView>
-          <Box mx={gutter}>
-            <LinkWithAnalytics
-              type="custom"
-              onPress={() => {
-                if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
-                  showOfflineSnackbar()
-                  return
-                }
+      screenID={ScreenIDTypesConstants.NOTIFICATIONS_SETTINGS_SCREEN}
+      isLoading={loadingCheck}
+      loadingText={loadingText}
+      errors={screenErrors}>
+      <Box mb={contentMarginBottom}>
+        {!requestNotifications ? (
+          <AlertWithHaptics
+            variant="info"
+            description={t('requestNotifications.getNotified')}
+            primaryButton={{
+              label: t('requestNotifications.turnOn'),
+              onPress: onUseNotifications,
+            }}
+            testID="TurnOnNotificationsID"
+          />
+        ) : systemNotificationData?.systemNotificationsOn ? (
+          <>
+            <TextView variant={'MobileBody'} mx={gutter}>
+              {t('notifications.settings.personalize.text.systemNotificationsOn')}
+            </TextView>
+            {preferenceList()}
+          </>
+        ) : (
+          <AlertWithHaptics
+            variant="info"
+            description={t('notifications.settings.alert.text')}
+            primaryButton={{
+              label: t('notifications.settings.alert.openSettings'),
+              onPress: goToSettings,
+            }}
+          />
+        )}
+        <TextView variant={'TableFooterLabel'} mx={gutter} mt={condensedMarginBetween}>
+          {t('notifications.settings.privacy')}
+        </TextView>
+        <Box mx={gutter}>
+          <LinkWithAnalytics
+            type="custom"
+            onPress={() => {
+              if (connectionStatus === CONNECTION_STATUS.DISCONNECTED) {
+                showOfflineSnackbar()
+                return
+              }
 
-                logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
-                navigateTo('Webview', {
-                  url: LINK_URL_VA_NOTIFICATIONS,
-                  displayTitle: vaGovWebviewTitle(t),
-                  loadingMessage: t('webview.notifications.loading'),
-                  useSSO: true,
-                })
-              }}
-              text={t('notifications.settings.link.text')}
-              a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
-              testID="noficationSettingsLinkID"
-            />
-          </Box>
+              logAnalyticsEvent(Events.vama_webview(LINK_URL_VA_NOTIFICATIONS))
+              navigateTo('Webview', {
+                url: LINK_URL_VA_NOTIFICATIONS,
+                displayTitle: vaGovWebviewTitle(t),
+                loadingMessage: t('webview.notifications.loading'),
+                useSSO: true,
+              })
+            }}
+            text={t('notifications.settings.link.text')}
+            a11yLabel={a11yLabelVA(t('notifications.settings.link.text'))}
+            testID="noficationSettingsLinkID"
+          />
         </Box>
-      )}
+      </Box>
     </FeatureLandingTemplate>
   )
 }
