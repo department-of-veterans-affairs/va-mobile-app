@@ -918,7 +918,7 @@
       },
       "prescriptionStatusCount": {
         "active": 55,
-        "isRefillable": 2,
+        "isRefillable": 1,
         "discontinued": 55,
         "expired": 55,
         "historical": 55,
