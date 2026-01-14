@@ -35,21 +35,24 @@ context('MaintenanceBanner', () => {
 
   it('should not render if no screenID', () => {
     initializeTestInstance()
-    expect(screen.queryByText('Hello World')).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header'))).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header.upcoming'))).toBeFalsy()
   })
 
   it('should not render if screen is not included in the white list', () => {
     initializeTestInstance({
       screenID: ScreenIDTypesConstants.ALLERGY_LIST_SCREEN_ID,
     })
-    expect(screen.queryByText('Hello World')).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header'))).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header.upcoming'))).toBeFalsy()
   })
 
   it('should not render if not in downtime and not in downtime window', () => {
     initializeTestInstance({
       screenID: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
     })
-    expect(screen.queryByText('Hello World')).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header'))).toBeFalsy()
+    expect(screen.queryByText(t('maintenanceBanner.header.upcoming'))).toBeFalsy()
   })
 
   it('renders in progress', async () => {
@@ -83,7 +86,7 @@ context('MaintenanceBanner', () => {
     const oneHourLater = new Date()
     oneHourLater.setHours(oneHourLater.getHours() + 1)
     const twoHourLater = new Date()
-    twoHourLater.setHours(twoHourLater.getHours() + 1)
+    twoHourLater.setHours(twoHourLater.getHours() + 2)
     when(get as jest.Mock)
       .calledWith('/v0/maintenance_windows')
       .mockReturnValue({
