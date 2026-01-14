@@ -53,6 +53,7 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  IOS_GS_PLIST_BASE64: ${{ secrets.IOS_GS_PLIST_BASE64 }}
 
 jobs:
   build_ios:
