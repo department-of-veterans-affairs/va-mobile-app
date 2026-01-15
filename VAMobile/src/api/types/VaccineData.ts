@@ -27,6 +27,7 @@ export type Vaccine = {
     doseNumber?: number | string | null
     doseSeries?: number | string | null
     groupName?: string | null
+    location?: string | null
     manufacturer?: string | null
     note?: string | null
     shortDescription?: string | null
