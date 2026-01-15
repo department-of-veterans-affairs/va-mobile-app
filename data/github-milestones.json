@@ -1,5 +1,83 @@
 [
   {
+    "title": "v2.67.0",
+    "due_on": "2026-01-27T00:00:00Z",
+    "issues": [
+      {
+        "title": "Fixing LabsandTests e2e",
+        "number": 12272,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12272",
+        "isPR": true
+      },
+      {
+        "title": "Bug/127692 - Fix past appointments link on no travel claims screen",
+        "number": 12231,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12231",
+        "isPR": true
+      },
+      {
+        "title": "Task/939 copay content updates",
+        "number": 12203,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/pull/12203",
+        "isPR": true
+      },
+      {
+        "title": "BUG - Low - iOS - Accessibility:  Voiceover reads",
+        "number": 12185,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12185",
+        "isPR": false
+      },
+      {
+        "title": "CU - Identify, Review, and Standardize analytic property naming reqs for GA",
+        "number": 12173,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12173",
+        "isPR": false
+      },
+      {
+        "title": "CU - Add ErrorComponent to Template(s) - Profile",
+        "number": 12010,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12010",
+        "isPR": false
+      },
+      {
+        "title": "CU - Add ErrorComponent to Template(s) - Payments",
+        "number": 12009,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/12009",
+        "isPR": false
+      },
+      {
+        "title": "5103 Evidence Submission Flow",
+        "number": 11993,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11993",
+        "isPR": false
+      },
+      {
+        "title": "5103 Review Waiver",
+        "number": 11992,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11992",
+        "isPR": false
+      },
+      {
+        "title": "5103 Evidence We May Need and Claims Drawer",
+        "number": 11991,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11991",
+        "isPR": false
+      },
+      {
+        "title": "Add Evidence Request Activity Subtext to Homescreen",
+        "number": 11518,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/11518",
+        "isPR": false
+      },
+      {
+        "title": "CU - Add ErrorComponent to Template(s)",
+        "number": 5924,
+        "url": "https://github.com/department-of-veterans-affairs/va-mobile-app/issues/5924",
+        "isPR": false
+      }
+    ]
+  },
+  {
     "title": "v2.66.0",
     "due_on": "2026-01-13T00:00:00Z",
     "issues": [
