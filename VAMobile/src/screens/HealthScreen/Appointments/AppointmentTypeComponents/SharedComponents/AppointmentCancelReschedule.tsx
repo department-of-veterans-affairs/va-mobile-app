@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, ButtonVariants } from '@department-of-veterans-affairs/mobile-component-library'
 import { useSnackbar } from '@department-of-veterans-affairs/mobile-component-library'
-import { UseMutateFunction } from '@tanstack/react-query'
+import { MutateOptions } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 
 import { AppointmentAttributes, AppointmentLocation } from 'api/types'
@@ -33,7 +33,7 @@ type AppointmentCancelRescheduleProps = {
   subType: AppointmentDetailsSubType
   type: AppointmentDetailsScreenType
   goBack: () => void
-  cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>
+  cancelAppointment?: (cancelID: string, mutateOptions: MutateOptions<unknown, Error, string, unknown>) => void
 }
 
 const cancelButton = (
@@ -46,7 +46,7 @@ const cancelButton = (
   snackbar: ReturnType<typeof useSnackbar>,
   confirmAlert: (options: ActionSheetProps, callback: (i?: number) => void | Promise<void>) => void,
   cancelId?: string,
-  cancelAppointment?: UseMutateFunction<unknown, Error, string, unknown>,
+  cancelAppointment?: (cancelID: string, mutateOptions: MutateOptions<unknown, Error, string, unknown>) => void,
 ) => {
   const onPress = () => {
     logAnalyticsEvent(
