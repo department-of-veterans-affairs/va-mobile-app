@@ -53,7 +53,6 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
-  IOS_GS_PLIST_BASE64: ${{ secrets.IOS_GS_PLIST_BASE64 }}
 
 jobs:
   build_ios:
@@ -91,9 +90,7 @@ jobs:
           # Do not print raw user-provided notes to logs; avoid leaking or formatting issues
           echo "Notes received"
           echo "${{ secrets.APPSTORE_CONNECT_BASE64 }}" | base64 --decode > "$APPSTORE_CONNECT_FILEPATH"
-          echo "${{ secrets.IOS_GS_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+          echo "${{ secrets.IOS_GS_PLIST_BASE64_TEMP }}" | base64 --decode > GoogleService-Info.plist
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
