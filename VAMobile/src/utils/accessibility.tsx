@@ -89,6 +89,14 @@ export const getTestIDFromTextLinesHyphen = (textLines: Array<TextLine>): string
 }
 
 /**
+ * Separates strings into comma separated characters to allow the screen reader to them individually
+ * @param text - string to be separated by letter
+ */
+export const getIndividualCharactersFromText = (text: string) => {
+  return text.toUpperCase().split("").join(", ")
+}
+
+/**
  * Sets focus point for screen reader.
  */
 export const setAccessibilityFocus = (ref: MutableRefObject<null> | ForwardedRef<unknown>) => {
