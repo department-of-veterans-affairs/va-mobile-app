@@ -1,11 +1,11 @@
 ---
-name: Content QA 
+name: Content QA
 about: Template for creating a ticket to document content QA work for each epic
 title: Content QA
 labels: content
-assignees: mistymg
----
+assignees: ''
 
+---
 
 ## Content QA
 Every epic should go through a round of content QA, before release. Review [the high-level content QA process info](https://department-of-veterans-affairs.github.io/va-mobile-app/docs/UX/How-We-Work/designing-ui#qa) if you've never done it while on the VA mobile app team. 

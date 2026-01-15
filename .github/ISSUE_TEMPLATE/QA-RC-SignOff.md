@@ -2,9 +2,11 @@
 name: QA Release Candidate Sign Off Template
 about: Template for QA Release Candidate Sign Off
 title: QA Release Candidate Sign Off
-labels: 
-assignees:
+labels: ''
+assignees: ''
+
 ---
+
 <!-- Please fill out all of the relevant sections of this template. Please do not delete any areas of this template. The tickets can be updated as the sections are finished and any section that doesn't need to have info should be labeled as NA -->
 
 ## Release Candidate Test run:

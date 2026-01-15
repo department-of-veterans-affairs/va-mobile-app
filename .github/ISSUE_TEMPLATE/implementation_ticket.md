@@ -1,11 +1,11 @@
 ---
 name: User Story
-about: Template for creating user stories and acceptance criteria 
+about: Template for creating user stories and acceptance criteria
 title: User Story
-labels: 
-assignees:
----
+labels: ''
+assignees: ''
 
+---
 
 ## Description 
 As a [type of user/persona], I want to [goal/objective], so that [benefit/desired result/some reason].
@@ -35,8 +35,4 @@ As part of this story we want to: <!-- List the desired outcome(s) for this tick
 - Test accounts needed?
 - Does this require QA? If so, is there a clear test plan? 
     
-- Additional Dev Notes: 
-
-
-
- 
+- Additional Dev Notes:

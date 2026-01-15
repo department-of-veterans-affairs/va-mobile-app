@@ -1,9 +1,12 @@
 ---
 name: Availability Framework Template
-about: Template implementing Availability Framework 
+about: Template implementing Availability Framework
 title: Availability Framework - Issues - Dates
-labels: front-end, content, qa, change management,
+labels: content, front-end
+assignees: ''
+
 ---
+
 ## Dscription
 <!-- What is it that needs to be changed for code maintenance -->
 As VAHB Mobile App, I need to use Availability Framework to 
@@ -31,5 +34,4 @@ As VAHB Mobile App, I need to use Availability Framework to
 - [ ] Pre Production Testing by QA 
 - [ ] Turn on AF at X ET MM/DD/YYYY  
 - [ ] Determine strategy to turn off AF 
-- [ ] Turn off AF at X ET MM/DD/YYYY  
-	
+- [ ] Turn off AF at X ET MM/DD/YYYY

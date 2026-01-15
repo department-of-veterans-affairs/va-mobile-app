@@ -1,10 +1,13 @@
 ---
 name: External Bug Report Template
-about: This bug template should be used by external parties (non-VA / non-mobile) when submitting concerns
+about: This bug template should be used by external parties (non-VA / non-mobile)
+  when submitting concerns
 title: BUG - [iOS/Android/All] - [Short description]
-labels: bug,qa, external-submission
-assignees: TKDickson
+labels: bug, external-submission
+assignees: ''
+
 ---
+
 ## Summary of the bug 
 General overview of what happened and where it happened. 
 
@@ -29,5 +32,3 @@ What did you expect to happen?
 
 ## Screen shot, recording or additional information
 Add any screen shots, video, gifs, json etc that will help the engineers track down the issue. Do not include any personally identifiable information for any real person, including screenshots.
-
-
