@@ -53,6 +53,7 @@ env:
   DEMO_PASSWORD: ${{ secrets.DEMO_PASSWORD }}
   # Slack API token used by fastlane
   SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
+  SLACK_API_TOKEN: ${{ secrets.SLACK_API_TOKEN }}
 
 jobs:
   build_ios:
@@ -71,6 +72,7 @@ jobs:
       # Fast lane patch password
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
     steps:
+
       - name: Generate token
         id: generate_token
         uses: actions/create-github-app-token@v1
@@ -81,6 +83,8 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           token: ${{ steps.generate_token.outputs.token }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
@@ -129,7 +133,7 @@ jobs:
       - name: Run fastlane with retries
         uses: nick-fields/retry@v2
         with:
-          timeout_minutes: 20
+          timeout_minutes: 45
           max_attempts: 3
           # Use sanitized notes from the environment to avoid injection/formatting issues
           command: cd VAMobile/ios && bundle exec fastlane ${{ inputs.lane }} version:"${{ inputs.version }}" notes:"$SANITIZED_NOTES" tfGroup:"${{ inputs.tf_group }}" --verbose
