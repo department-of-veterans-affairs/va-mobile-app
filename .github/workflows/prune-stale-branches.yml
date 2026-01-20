@@ -56,8 +56,8 @@ jobs:
           echo "Dry run mode: $DRY_RUN"
           echo ""
 
-          # Deletion criteria: branches that have at least one merged PR
-          echo "Deletion criteria: branches with a merged pull request (branches with open or draft PRs will be skipped)"
+          # Deletion criteria: branches older than 365 days with no open PRs
+          echo "Deletion criteria: branches with last commit older than 365 days (branches with open PRs will be skipped)"
           echo ""
           
           # Protected branch patterns (won't be deleted)
@@ -133,27 +133,39 @@ jobs:
               OLDEST_BRANCH_COMMITTER="$LAST_COMMITTER"
             fi
 
-            # Delete branch if it has at least one merged PR (skip open/draft PRs)
-            SEARCH_URL="https://api.github.com/search/issues?q=repo:${GITHUB_REPOSITORY}+type:pr+head:${REPO_OWNER}:${branch}+is:merged"
-            SEARCH=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$SEARCH_URL")
-            MERGED_COUNT=$(echo "$SEARCH" | grep -o '"total_count":[0-9]*' | head -n1 | sed 's/[^0-9]*//g')
-            if [[ -n "$MERGED_COUNT" && "$MERGED_COUNT" -gt 0 ]]; then
-              if [[ "$DRY_RUN" == "true" ]]; then
-                echo "🔍 WOULD DELETE: $branch (has $MERGED_COUNT merged PR(s), creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
-                ((DELETED_COUNT++))
+            # Calculate days since last commit
+            CURRENT_DATE=$(date +%s)
+            DAYS_OLD=$(( (CURRENT_DATE - LAST_COMMIT_DATE) / 86400 ))
+
+            # Delete branch if older than 365 days and has no open PRs
+            if [[ "$DAYS_OLD" -gt 365 ]]; then
+              # Check for open PRs
+              SEARCH_URL="https://api.github.com/search/issues?q=repo:${GITHUB_REPOSITORY}+type:pr+head:${REPO_OWNER}:${branch}+is:open"
+              SEARCH=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$SEARCH_URL")
+              OPEN_PR_COUNT=$(echo "$SEARCH" | grep -o '"total_count":[0-9]*' | head -n1 | sed 's/[^0-9]*//g')
+
+              if [[ -z "$OPEN_PR_COUNT" || "$OPEN_PR_COUNT" -eq 0 ]]; then
+                # No open PRs, safe to delete
+                if [[ "$DRY_RUN" == "true" ]]; then
+                  echo "🔍 WOULD DELETE: $branch ($DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                  DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  ((DELETED_COUNT++))
+                else
+                  echo "🗑️  DELETING: $branch ($DAYS_OLD days old, creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
+                  # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
+                  # if git push origin --delete "$branch" 2>&1; then
+                  #   DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  #   ((DELETED_COUNT++))
+                  # else
+                  #   echo "   ❌ Failed to delete $branch"
+                  # fi
+                  DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
+                  ((DELETED_COUNT++))
+                  echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
+                fi
               else
-                echo "🗑️  DELETING: $branch (has $MERGED_COUNT merged PR(s), creator: $BRANCH_CREATOR, last committer: $LAST_COMMITTER)"
-                # COMMENTED OUT FOR TESTING - UNCOMMENT AFTER VERIFICATION
-                # if git push origin --delete "$branch" 2>&1; then
-                #   DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER")
-                #   ((DELETED_COUNT++))
-                # else
-                #   echo "   ❌ Failed to delete $branch"
-                # fi
-                DELETED_BRANCHES+=("$branch|$BRANCH_CREATOR|$LAST_COMMITTER|$LAST_COMMIT_DATE")
-                ((DELETED_COUNT++))
-                echo "   ⚠️  DELETION DISABLED FOR TESTING - branch NOT actually deleted"
+                echo "⏸️  SKIPPING: $branch ($DAYS_OLD days old but has $OPEN_PR_COUNT open PR(s))"
+                ((ACTIVE_COUNT++))
               fi
             else
               ((ACTIVE_COUNT++))
@@ -178,7 +190,7 @@ jobs:
           {
             echo "### Branch Pruning Summary"
             echo ""
-            echo "**Deletion Criteria:** branches with a merged pull request"
+            echo "**Deletion Criteria:** branches with last commit older than 365 days (excludes branches with open PRs)"
             echo "**Mode:** $(if [[ "$DRY_RUN" == "true" ]]; then echo "Dry Run"; else echo "Live"; fi)"
             echo ""
             echo "- 🛡️ Protected branches: $PROTECTED_COUNT"
@@ -328,7 +340,7 @@ jobs:
       channel_name: 'va-mobile-sandbox'
       message: |
         🌿 *Branch Pruning Summary*
-        :alert: Branches with no commits in the last 365 days that would have been processed. :alert:
+        :alert: Branches with last commit older than 365 days (excludes branches with open PRs). :alert:
         
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
