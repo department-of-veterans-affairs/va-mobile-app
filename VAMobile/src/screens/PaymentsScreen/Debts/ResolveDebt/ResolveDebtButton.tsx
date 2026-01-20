@@ -12,7 +12,7 @@ import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type ResolveDebtButtonProps = {
   debt: DebtRecord
-  location: 'DebtsScreen' | 'DebtDetailsScreen'
+  location?: 'DebtsScreen' | 'DebtDetailsScreen'
 }
 
 function ResolveDebtButton({ debt, location }: ResolveDebtButtonProps) {
@@ -22,7 +22,7 @@ function ResolveDebtButton({ debt, location }: ResolveDebtButtonProps) {
   const showActionSheet = useShowActionSheet()
 
   function onButtonPress() {
-    logAnalyticsEvent(Events.vama_resolve_overpay_clk(location))
+    location && logAnalyticsEvent(Events.vama_resolve_overpay_clk(location))
     const options = [
       t('debts.resolveOverpayment.payDebt'),
       t('debts.resolveOverpayment.requestHelp'),
