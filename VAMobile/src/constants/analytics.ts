@@ -888,6 +888,14 @@ export const Events = {
       },
     }
   },
+  vama_overpay_copy_clk: (label: string): Event => {
+    return {
+      name: 'vama_overpay_copy_clk',
+      params: {
+        p1: label,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
