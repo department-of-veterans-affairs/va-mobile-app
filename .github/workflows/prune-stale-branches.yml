@@ -150,7 +150,7 @@ jobs:
           echo "TOTAL_BRANCHES=$TOTAL_COUNT" >> $GITHUB_ENV
           echo "=== Summary ==="
           echo "Protected branches: $PROTECTED_COUNT"
-          echo "Active branches (< 90 days): $ACTIVE_COUNT"
+          echo "Active branches (< 365 days): $ACTIVE_COUNT"
           echo "Total branches: $TOTAL_COUNT"
           if [[ "$DRY_RUN" == "true" ]]; then
             echo "Branches that would be deleted: $DELETED_COUNT"
@@ -232,7 +232,7 @@ jobs:
         with:
           name: deleted-branches-${{ github.run_id }}
           path: /tmp/deleted_branches.csv
-          retention-days: 90
+          retention-days: 365
 
       - name: Get artifact download URL
         id: get-artifact-url
@@ -282,7 +282,7 @@ jobs:
       channel_name: 'va-mobile-sandbox'
       message: |
         🌿 *Branch Pruning Summary*
-        :alert: Branches with no commits in the last 90 days that would have been processed. :alert:
+        :alert: Branches with no commits in the last 365 days that would have been processed. :alert:
         
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
