@@ -275,7 +275,7 @@ jobs:
   notify-slack:
     name: Notify Slack
     needs: prune-branches
-    if: always() && needs.prune-branches.outputs.deleted_count != '0'
+    if: always()
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
