@@ -1,7 +1,6 @@
 name: '[Admin] Prune Stale Branches'
 
 on:
-  push:
   schedule:
     # Run every Sunday at 2:00 AM UTC
     - cron: '0 2 * * 0'
@@ -51,7 +50,7 @@ jobs:
           DRY_RUN: ${{ github.event.inputs.dry_run == 'false' && 'false' || 'true' }}
         run: |
           set +e  # Don't exit on errors, handle them gracefully
-          
+
           echo "=== Pruning Stale Branches ==="
           echo "Dry run mode: $DRY_RUN"
           echo ""
@@ -59,7 +58,7 @@ jobs:
           # Deletion criteria: branches older than 365 days with no open PRs
           echo "Deletion criteria: branches with last commit older than 365 days (branches with open PRs will be skipped)"
           echo ""
-          
+
           # Protected branch patterns (won't be deleted)
           PROTECTED_PATTERNS=(
             "develop"
@@ -71,13 +70,13 @@ jobs:
             "staging"
             "production"
           )
-          
+
           # Get all remote branches
           git fetch --all --prune
 
           # Repo owner (used to query PRs by head)
           REPO_OWNER=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f1)
-          
+
           DELETED_COUNT=0
           PROTECTED_COUNT=0
           ACTIVE_COUNT=0
@@ -85,10 +84,10 @@ jobs:
           OLDEST_BRANCH=""
           OLDEST_COMMIT_DATE=9999999999
           OLDEST_BRANCH_COMMITTER=""
-          
+
           echo "=== Analyzing branches ==="
           echo ""
-          
+
           # Get all remote branches except HEAD
           for branch in $(git branch -r | grep -v 'HEAD' | sed 's/origin\///'); do
             # Check if branch matches any protected pattern
@@ -171,7 +170,7 @@ jobs:
               ((ACTIVE_COUNT++))
             fi
           done
-          
+
           echo ""
           TOTAL_COUNT=$(git branch -r | grep -v 'HEAD' | sed 's/origin\///' | wc -l | tr -d ' ')
           echo "Total branches: $TOTAL_COUNT"
@@ -185,7 +184,7 @@ jobs:
           else
             echo "Branches deleted: $DELETED_COUNT"
           fi
-          
+
           # Create a summary for GitHub Actions
           {
             echo "### Branch Pruning Summary"
@@ -203,7 +202,7 @@ jobs:
               echo "- 🗑️ Branches deleted: $DELETED_COUNT"
             fi
           } >> $GITHUB_STEP_SUMMARY
-          
+
           # Save deleted branches to file for next step (raw pipe-delimited)
           printf '%s\n' "${DELETED_BRANCHES[@]}" > /tmp/deleted_branches.txt
           # Also create a CSV artifact for easier consumption
@@ -238,7 +237,7 @@ jobs:
         run: |
           echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
           echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
-          
+
           # Format deleted branches list for Slack
           if [ -f /tmp/deleted_branches.txt ]; then
             BRANCH_LIST=""
@@ -341,7 +340,7 @@ jobs:
       message: |
         🌿 *Branch Pruning Summary*
         :alert: Branches with last commit older than 365 days (excludes branches with open PRs). :alert:
-        
+
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
         • Protected branches: ${{ needs.prune-branches.outputs.protected_count }}
