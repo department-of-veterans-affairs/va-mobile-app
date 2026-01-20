@@ -933,6 +933,14 @@ export const Events = {
       name: 'vama_prof_update_phone',
     }
   },
+  vama_resolve_overpay_clk: (location: string): Event => {
+    return {
+      name: 'vama_resolve_overpay_clk',
+      params: {
+        p1: location,
+      },
+    }
+  },
   vama_review_prompt: (): Event => {
     return {
       name: 'vama_review_prompt',

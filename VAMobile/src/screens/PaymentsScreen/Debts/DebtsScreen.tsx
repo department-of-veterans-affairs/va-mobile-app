@@ -178,7 +178,7 @@ function DebtsScreen({ navigation }: DebtsScreenProps) {
           {/* Review details link */}
           {renderReviewDetailsLink(debt)}
           {/* Resolve debt button */}
-          {debtInfo.resolvable && <ResolveDebtButton debt={debt} />}
+          {debtInfo.resolvable && <ResolveDebtButton debt={debt} location="DebtsScreen" />}
         </>
       )
       return (

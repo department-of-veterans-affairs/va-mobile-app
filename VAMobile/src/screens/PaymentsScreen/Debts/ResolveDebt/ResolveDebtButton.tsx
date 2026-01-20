@@ -5,20 +5,24 @@ import { Button } from '@department-of-veterans-affairs/mobile-component-library
 
 import { DebtRecord } from 'api/types/DebtData'
 import { Box } from 'components'
+import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
+import { logAnalyticsEvent } from 'utils/analytics'
 import { useRouteNavigation, useShowActionSheet, useTheme } from 'utils/hooks'
 
 type ResolveDebtButtonProps = {
   debt: DebtRecord
+  location: 'DebtsScreen' | 'DebtDetailsScreen'
 }
 
-function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
+function ResolveDebtButton({ debt, location }: ResolveDebtButtonProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const showActionSheet = useShowActionSheet()
 
   function onButtonPress() {
+    logAnalyticsEvent(Events.vama_resolve_overpay_clk(location))
     const options = [
       t('debts.resolveOverpayment.payDebt'),
       t('debts.resolveOverpayment.requestHelp'),
