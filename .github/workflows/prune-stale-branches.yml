@@ -25,6 +25,12 @@ jobs:
       total_branches: ${{ steps.set-summary.outputs.total_branches }}
       remaining_branches: ${{ steps.set-summary.outputs.remaining_branches }}
       artifact_url: ${{ steps.get-artifact-url.outputs.artifact_url }}
+      oldest_branch: ${{ steps.set-summary.outputs.oldest_branch }}
+      oldest_commit_date: ${{ steps.set-summary.outputs.oldest_commit_date }}
+      oldest_branch_committer: ${{ steps.set-summary.outputs.oldest_branch_committer }}
+      oldest_branch_days: ${{ steps.set-summary.outputs.oldest_branch_days }}
+      protected_count: ${{ steps.set-summary.outputs.protected_count }}
+      active_count: ${{ steps.set-summary.outputs.active_count }}
     steps:
       - name: Generate token
         id: generate_token
@@ -76,6 +82,9 @@ jobs:
           PROTECTED_COUNT=0
           ACTIVE_COUNT=0
           DELETED_BRANCHES=()
+          OLDEST_BRANCH=""
+          OLDEST_COMMIT_DATE=9999999999
+          OLDEST_BRANCH_COMMITTER=""
           
           echo "=== Analyzing branches ==="
           echo ""
@@ -116,7 +125,14 @@ jobs:
 
             # Get the last committer
             LAST_COMMITTER=$(git log -1 --format=%an origin/"$branch" 2>/dev/null)
-            
+
+            # Track oldest branch
+            if [[ -n "$LAST_COMMIT_DATE" && "$LAST_COMMIT_DATE" -lt "$OLDEST_COMMIT_DATE" ]]; then
+              OLDEST_COMMIT_DATE="$LAST_COMMIT_DATE"
+              OLDEST_BRANCH="$branch"
+              OLDEST_BRANCH_COMMITTER="$LAST_COMMITTER"
+            fi
+
             # Delete branch if it has at least one merged PR (skip open/draft PRs)
             SEARCH_URL="https://api.github.com/search/issues?q=repo:${GITHUB_REPOSITORY}+type:pr+head:${REPO_OWNER}:${branch}+is:merged"
             SEARCH=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$SEARCH_URL")
@@ -190,6 +206,11 @@ jobs:
           done < /tmp/deleted_branches.txt
           echo "DELETED_COUNT=$DELETED_COUNT" >> $GITHUB_ENV
           echo "DRY_RUN=$DRY_RUN" >> $GITHUB_ENV
+          echo "OLDEST_BRANCH=$OLDEST_BRANCH" >> $GITHUB_ENV
+          echo "OLDEST_COMMIT_DATE=$OLDEST_COMMIT_DATE" >> $GITHUB_ENV
+          echo "OLDEST_BRANCH_COMMITTER=$OLDEST_BRANCH_COMMITTER" >> $GITHUB_ENV
+          echo "PROTECTED_COUNT=$PROTECTED_COUNT" >> $GITHUB_ENV
+          echo "ACTIVE_COUNT=$ACTIVE_COUNT" >> $GITHUB_ENV
 
       - name: Set summary outputs
         id: set-summary
@@ -197,6 +218,11 @@ jobs:
           DELETED_COUNT: ${{ env.DELETED_COUNT }}
           DRY_RUN: ${{ env.DRY_RUN }}
           TOTAL_BRANCHES: ${{ env.TOTAL_BRANCHES }}
+          OLDEST_BRANCH: ${{ env.OLDEST_BRANCH }}
+          OLDEST_COMMIT_DATE: ${{ env.OLDEST_COMMIT_DATE }}
+          OLDEST_BRANCH_COMMITTER: ${{ env.OLDEST_BRANCH_COMMITTER }}
+          PROTECTED_COUNT: ${{ env.PROTECTED_COUNT }}
+          ACTIVE_COUNT: ${{ env.ACTIVE_COUNT }}
         run: |
           echo "deleted_count=$DELETED_COUNT" >> $GITHUB_OUTPUT
           echo "dry_run=$DRY_RUN" >> $GITHUB_OUTPUT
@@ -224,6 +250,26 @@ jobs:
           # Compute remaining branches (total - deleted)
           REMAINING=$((TOTAL_BRANCHES - DELETED_COUNT))
           echo "remaining_branches=$REMAINING" >> $GITHUB_OUTPUT
+
+          # Output oldest branch info
+          echo "oldest_branch=$OLDEST_BRANCH" >> $GITHUB_OUTPUT
+          echo "oldest_branch_committer=$OLDEST_BRANCH_COMMITTER" >> $GITHUB_OUTPUT
+          if [[ -n "$OLDEST_COMMIT_DATE" && "$OLDEST_COMMIT_DATE" != "9999999999" ]]; then
+            OLDEST_DATE_FORMATTED=$(date -u -d "@$OLDEST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || date -u -r "$OLDEST_COMMIT_DATE" '+%Y-%m-%d' 2>/dev/null || echo "unknown")
+            echo "oldest_commit_date=$OLDEST_DATE_FORMATTED" >> $GITHUB_OUTPUT
+
+            # Calculate days old
+            CURRENT_DATE=$(date +%s)
+            DAYS_OLD=$(( (CURRENT_DATE - OLDEST_COMMIT_DATE) / 86400 ))
+            echo "oldest_branch_days=$DAYS_OLD" >> $GITHUB_OUTPUT
+          else
+            echo "oldest_commit_date=none" >> $GITHUB_OUTPUT
+            echo "oldest_branch_days=0" >> $GITHUB_OUTPUT
+          fi
+
+          # Output counts
+          echo "protected_count=$PROTECTED_COUNT" >> $GITHUB_OUTPUT
+          echo "active_count=$ACTIVE_COUNT" >> $GITHUB_OUTPUT
 
       - name: Upload deleted branches list
         id: upload-artifact
@@ -286,8 +332,15 @@ jobs:
         
         *Results:*
         • Mode: ${{ needs.prune-branches.outputs.dry_run == 'true' && 'Dry Run 🔍' || 'Live Deletion 🗑️' }}
+        • Protected branches: ${{ needs.prune-branches.outputs.protected_count }}
+        • Active branches: ${{ needs.prune-branches.outputs.active_count }}
         • Branches ${{ needs.prune-branches.outputs.dry_run == 'true' && 'that would be deleted' || 'deleted' }}: ${{ needs.prune-branches.outputs.deleted_count }}
         • Total branches: ${{ needs.prune-branches.outputs.total_branches }}
         • Remaining branches: ${{ needs.prune-branches.outputs.remaining_branches }}
-        
+
+        *Oldest Branch:*
+        • Branch: `${{ needs.prune-branches.outputs.oldest_branch }}`
+        • Last commit: ${{ needs.prune-branches.outputs.oldest_commit_date }} (${{ needs.prune-branches.outputs.oldest_branch_days }} days ago)
+        • Last committer: ${{ needs.prune-branches.outputs.oldest_branch_committer }}
+
         View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
