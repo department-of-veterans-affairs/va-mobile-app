@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { formatDate } from 'utils/copays'
 import { useTheme } from 'utils/hooks'
 
-function PreviousPDFStatements({
+function PDFStatements({
   statements,
   downloadStatement,
 }: {
@@ -29,7 +29,7 @@ function PreviousPDFStatements({
   const content = (
     <Box mt={theme.dimensions.standardMarginBetween}>
       <TextView variant={'MobileBody'} mb={theme.dimensions.standardMarginBetween}>
-        {t('copays.previousStatements.description')}
+        {t('copays.pdfStatements.description')}
       </TextView>
       {statements.length > 0 ? (
         statements.map((statement, index) => (
@@ -38,8 +38,10 @@ function PreviousPDFStatements({
             onPress={() => downloadStatement(statement.id)}
             accessible={true}
             accessibilityRole="link"
-            accessibilityLabel={t('copays.goToStatement')}
-            accessibilityHint={t('copays.goToStatement.a11yLabel')}>
+            accessibilityLabel={t('copays.pdfStatements.statementDate', {
+              date: formatDate(statement.pSStatementDateOutput),
+            })}
+            accessibilityHint={t('copays.pdfStatements.statementDate.a11yLabel')}>
             <Box
               {...statementBoxProps}
               display={'flex'}
@@ -48,7 +50,9 @@ function PreviousPDFStatements({
               alignItems={'center'}
               minHeight={theme.dimensions.touchableMinHeight}>
               <TextView flex={1} variant={'MobileBody'}>
-                {t('copays.previousStatements.statementDate', { date: formatDate(statement.pSStatementDateOutput) })}
+                {index === 0
+                  ? t('copays.pdfStatements.currentStatement')
+                  : t('copays.pdfStatements.statementDate', { date: formatDate(statement.pSStatementDateOutput) })}
               </TextView>
               <Icon
                 name={'ChevronRight'}
@@ -68,7 +72,7 @@ function PreviousPDFStatements({
           alignItems={'center'}
           minHeight={theme.dimensions.touchableMinHeight}>
           <TextView flex={1} variant={'MobileBody'}>
-            {t('copays.previousStatements.noStatements')}
+            {t('copays.pdfStatements.noStatements')}
           </TextView>
         </Box>
       )}
@@ -77,7 +81,7 @@ function PreviousPDFStatements({
 
   return (
     <AccordionCollapsible
-      header={<TextView variant={'MobileBodyBold'}>{t('copays.previousStatements')}</TextView>}
+      header={<TextView variant={'MobileBodyBold'}>{t('copays.pdfStatements')}</TextView>}
       expandedContent={content}
       expandedInitialValue={false}
       noBorder
@@ -85,4 +89,4 @@ function PreviousPDFStatements({
   )
 }
 
-export default PreviousPDFStatements
+export default PDFStatements

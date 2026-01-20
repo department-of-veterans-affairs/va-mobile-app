@@ -34,7 +34,7 @@ context('AppealStatus', () => {
   it('should initialize', () => {
     expect(screen.getByRole('tab', { name: 'Review past events' })).toBeTruthy()
     expect(screen.getByRole('header', { name: 'Current status' })).toBeTruthy()
-    expect(screen.getByRole('header', { name: 'Your hearing has been scheduled' })).toBeTruthy()
+    expect(screen.getByText('Your hearing has been scheduled')).toBeTruthy()
     expect(screen.getByText('Your  hearing is scheduled for  at .')).toBeTruthy()
   })
 

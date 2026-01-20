@@ -47,8 +47,9 @@ jobs:
             "VAMobile/env/*"
             "VAMobile/package.json"
           )
+          shopt -s globstar
           EXCLUDE_PATTERNS=(
-            ".github/*" # Exclude anything in .github/
+            ".github/**" # Exclude anything in .github/ at any depth
             "VAMobile/src/*.test.tsx" # Exclude test files
           )
           for file in $CHANGED_FILES; do

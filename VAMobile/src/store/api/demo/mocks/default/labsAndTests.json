@@ -540,7 +540,7 @@
           "attributes": {
             "display": "X-Ray - Last Year",
             "testCode": "XR",
-            "dateCompleted": "{{now - 380 days}}",
+            "dateCompleted": "{{now - 1 years}}",
             "encodedData": "",
             "location": "VA RADIOLOGY LAB",
             "sampleTested": "Chest",

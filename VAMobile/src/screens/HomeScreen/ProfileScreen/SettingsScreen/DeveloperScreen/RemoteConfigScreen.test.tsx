@@ -7,7 +7,7 @@ import RemoteConfigScreen from 'screens/HomeScreen/ProfileScreen/SettingsScreen/
 import { logout } from 'store/slices/authSlice'
 import { QueriesData, context, mockNavProps, render } from 'testUtils'
 import { waitFor } from 'testUtils'
-import { devConfig, setDebugConfig } from 'utils/remoteConfig'
+import { FeatureToggleDescriptions, devConfig, setDebugConfig } from 'utils/remoteConfig'
 
 jest.mock('store/slices/authSlice', () => {
   const actual = jest.requireActual('store/slices/authSlice')
@@ -45,7 +45,10 @@ context('RemoteConfigScreen', () => {
     expect(screen.getByRole('header', { name: t('remoteConfig.title') })).toBeTruthy()
 
     for (const [key, value] of Object.entries(mockOverrides)) {
-      expect(screen.getByRole('switch', { name: key }).props.accessibilityState.checked).toBe(value)
+      expect(
+        screen.getByRole('switch', { name: `${key} ${FeatureToggleDescriptions[key] || ''}` }).props.accessibilityState
+          .checked,
+      ).toBe(value)
     }
   })
 

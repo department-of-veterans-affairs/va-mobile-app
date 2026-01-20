@@ -4,6 +4,27 @@ export type DebtHistory = {
   description: string
 }
 
+export type DebtTransaction = {
+  debtId: number
+  transactionDate: string
+  transactionTotalAmount?: number
+  transactionPrincipalAmount?: number
+  debtIncreaseAmount?: number
+  offsetAmount?: number
+  transactionDescription?: string
+  transactionExplanation?: string
+  hinesCode?: string
+  offsetType?: string
+  paymentType?: string
+  transactionAdminAmount?: number
+  transactionCourtAmount?: number
+  transactionFiscalCode?: string
+  transactionFiscalSource?: string
+  transactionFiscalYear?: string
+  transactionInterestAmount?: number
+  transactionMarshallAmount?: number
+}
+
 export type DebtRecord = {
   id: string
   type: string
@@ -22,6 +43,7 @@ export type DebtRecord = {
     currentAr: number
 
     debtHistory?: DebtHistory[]
+    fiscalTransactionData?: DebtTransaction[]
   }
 }
 

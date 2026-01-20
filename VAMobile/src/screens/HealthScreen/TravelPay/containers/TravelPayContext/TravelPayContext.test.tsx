@@ -95,7 +95,6 @@ describe('TravelPayContextProvider', () => {
         <Wrapper />
       </TravelPayContextProvider>,
       {
-        navigationProvided: true,
         queriesData: [
           {
             queryKey: contactInformationKeys.contactInformation,

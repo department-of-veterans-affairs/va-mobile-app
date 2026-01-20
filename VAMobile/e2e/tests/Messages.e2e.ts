@@ -11,17 +11,20 @@ import {
 } from './utils'
 
 export const MessagesE2eIdConstants = {
-  MESSAGE_1_ID: 'Unread: Martha Kaplan, Md October 26, 2024 Medication: Naproxen side effects',
-  MESSAGE_1_READ_ID: 'Martha Kaplan, Md October 26, 2024 Medication: Naproxen side effects',
-  MESSAGE_2_ID: 'Unread: Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
-  MESSAGE_2_READ_ID: 'Diana Persson, Md October 19, 2024 Has attachment COVID: Prepping for your visit',
+  MESSAGE_1_ID: 'Unread: Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
+  MESSAGE_1_READ_ID: 'Ratana, Narin  November 1, 2025 Medication: Naproxen side effects',
+  MESSAGE_2_ID: 'Unread: Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
+  MESSAGE_2_READ_ID: 'Diana Persson, Md November 1, 2025 Has attachment COVID: Prepping for your visit',
   MESSAGE_3_ID: 'Unread: Sarah Kotagal, Md August 26, 2024 General: Your requested info',
   MESSAGE_3_READ_ID: 'Sarah Kotagal, Md August 26, 2024 General: Your requested info',
   MESSAGE_4_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
+  MESSAGE_4_READ_ID: 'Cheryl Rodger, Md August 26, 2024 Appointment: Please read and prepare appropriately',
   MESSAGE_5_ID: 'Vija A. Ravi, Md July 21, 2024 General: Summary of visit',
   MESSAGE_6_ID: 'Ratana, Narin  July 21, 2024 Test: Preparing for your visit',
   MESSAGE_7_ID: 'Ratana, Narin  June 17, 2024 Education: Good morning to you',
-  MESSAGE_10_ID: 'Ratana, Narin  February 17, 2024 COVID: Test',
+  MESSAGE_8_ID: 'Johnson, Patricia A. August 1, 2024 Appointment: Follow-up from your last visit',
+  MESSAGE_10_ID: 'Leo Spaceman, Md August 1, 2024 Test: Lab results ready',
+  MESSAGE_10_READ_ID: 'Leo Spaceman, Md August 1, 2024 Test: Lab results ready',
   FOLDERS_ID: 'foldersID',
   MESSAGES_ID: 'messagesTestID',
   REVIEW_MESSAGE_REPLY_ID: 'replyTestID',
@@ -106,17 +109,18 @@ describe('Messages Screen', () => {
 
   it('should verify that the messages inbox is scrollable', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
-    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_ID))).toBeVisible()
+    await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_10_READ_ID))).toBeVisible()
   })
 
   it('verify message OLDER than 45 days information', async () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
     await expect(element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID))).toBeVisible()
     await element(by.id(MessagesE2eIdConstants.MESSAGE_3_ID)).tap()
+
     await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
-    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID)))
+    await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
   })
 
   it('verify message NEWER than 45 days information', async () => {
@@ -125,6 +129,8 @@ describe('Messages Screen', () => {
     await element(by.id(MessagesE2eIdConstants.MESSAGE_1_ID)).tap()
     await expect(element(by.text(MessagesE2eIdConstants.ONLY_USE_MESSAGES_TEXT))).toExist()
     await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
+    await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+    await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
     await expect(element(by.text('Medication: Naproxen side effects'))).toExist()
     await expect(element(by.text('RATANA, NARIN '))).toExist()
   })
@@ -532,5 +538,84 @@ describe('Messages Screen', () => {
     await element(by.text('Sent')).tap()
     await element(by.id(MessagesE2eIdConstants.FOLDERS_BACK_ID)).tap()
     await expect(element(by.text('Custom Folder 2'))).toExist()
+  })
+
+  describe('Triage Team Message Access', () => {
+    //happy path: recent message from triage team - should show Reply button
+    it('should show Reply button for recent messages from triage team', async () => {
+      await openHealth()
+      await openMessages()
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_1_READ_ID)).tap()
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).toExist()
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
+
+    it('should show expired alert for old messages from triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
+      await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_8_ID)))
+        .toBeVisible()
+        .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+        .scroll(100, 'down')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_8_ID)).tap()
+
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).toExist()
+      await expect(element(by.text('This conversation is too old for new replies'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
+
+    it('should show Start new message and alert when the message is recent and the user is NOT in triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('top')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_2_READ_ID)).tap()
+
+      await element(by.id(CommonE2eIdConstants.VIEW_MESSAGE_ID)).scrollTo('bottom')
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
+      await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
+
+      await expect(element(by.text('Find your VA facility'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
+
+    it('should show Start new message and alert for old message when user is NOT in triage team', async () => {
+      await element(by.id(MessagesE2eIdConstants.MESSAGES_ID)).scrollTo('bottom')
+      await waitFor(element(by.id(MessagesE2eIdConstants.MESSAGE_10_READ_ID)))
+        .toBeVisible()
+        .whileElement(by.id(MessagesE2eIdConstants.MESSAGES_ID))
+        .scroll(100, 'down')
+      await element(by.id(MessagesE2eIdConstants.MESSAGE_10_READ_ID)).tap()
+
+      await expect(element(by.id('secureMessagingYouCanNoLongerAlertID'))).toExist()
+      await expect(element(by.text('You can’t send messages to some of your care teams'))).toExist()
+
+      await expect(element(by.text('Find your VA facility'))).toExist()
+
+      await expect(element(by.id(CommonE2eIdConstants.START_NEW_MESSAGE_BUTTON_ID))).toExist()
+      await expect(element(by.id(MessagesE2eIdConstants.REVIEW_MESSAGE_REPLY_ID))).not.toExist()
+
+      await expect(element(by.id('secureMessagingOlderThan45DaysAlertID'))).not.toExist()
+
+      await element(by.id(MessagesE2eIdConstants.BACK_TO_MESSAGES_ID)).tap()
+    })
   })
 })

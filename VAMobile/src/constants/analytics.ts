@@ -13,8 +13,8 @@ export const Events = {
     return {
       name: 'vama_af_shown',
       params: {
-        af_status,
-        firebase_screen,
+        p1: af_status,
+        p2: firebase_screen,
       },
     }
   },
@@ -37,8 +37,8 @@ export const Events = {
     return {
       name: 'vama_lab_or_test_list',
       params: {
-        timeFrame,
-        count,
+        p1: timeFrame,
+        p2: count,
       },
     }
   },
@@ -46,7 +46,7 @@ export const Events = {
     return {
       name: 'vama_lab_or_test_details',
       params: {
-        labType,
+        p1: labType,
       },
     }
   },
@@ -61,10 +61,10 @@ export const Events = {
       name: 'vama_appt_cancel',
       params: {
         isPending: isPendingAppointment,
-        apt_id: apt_id,
-        apt_status: apt_status,
-        apt_type: apt_type,
-        days_to_apt: days_to_apt,
+        p1: apt_id,
+        p2: apt_status,
+        p3: apt_type,
+        p4: days_to_apt,
       },
     }
   },
@@ -72,7 +72,7 @@ export const Events = {
     return {
       name: 'vama_appt_deep_link_fail',
       params: {
-        vetext_id,
+        p1: vetext_id,
       },
     }
   },
@@ -87,10 +87,10 @@ export const Events = {
       name: 'vama_appt_view_details',
       params: {
         isPending: isPendingAppointment,
-        apt_id: apt_id,
-        apt_status: apt_status,
-        apt_type: apt_type,
-        days_to_apt: days_to_apt,
+        p1: apt_id,
+        p2: apt_status,
+        p3: apt_type,
+        p4: days_to_apt,
       },
     }
   },
@@ -98,10 +98,10 @@ export const Events = {
     return {
       name: 'vama_apt_add_cal',
       params: {
-        apt_id: apt_id,
-        apt_status: apt_status,
-        apt_type: apt_type,
-        days_to_apt: days_to_apt,
+        p1: apt_id,
+        p2: apt_status,
+        p3: apt_type,
+        p4: days_to_apt,
       },
     }
   },
@@ -115,11 +115,11 @@ export const Events = {
     return {
       name: 'vama_apt_cancel_clicks',
       params: {
-        apt_id: apt_id,
-        apt_status: apt_status,
-        apt_type: apt_type,
-        days_to_apt: days_to_apt,
-        step: step,
+        p1: apt_id,
+        p2: apt_status,
+        p3: apt_type,
+        p4: days_to_apt,
+        p5: step,
       },
     }
   },
@@ -142,33 +142,13 @@ export const Events = {
     return {
       name: 'vama_appt_time_frame',
       params: {
-        timeFrame,
+        p1: timeFrame,
       },
     }
   },
   vama_cerner_alert: (): Event => {
     return {
       name: 'vama_cerner_alert',
-    }
-  },
-  vama_blue_alert_sm: (): Event => {
-    return {
-      name: 'vama_blue_alert_sm',
-    }
-  },
-  vama_blue_alert_rx: (): Event => {
-    return {
-      name: 'vama_blue_alert_rx',
-    }
-  },
-  vama_blue_sm_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_sm_link_conf',
-    }
-  },
-  vama_blue_rx_link_conf: (): Event => {
-    return {
-      name: 'vama_blue_rx_link_conf',
     }
   },
   vama_cerner_alert_exp: (): Event => {
@@ -198,13 +178,13 @@ export const Events = {
     return {
       name: 'vama_claim_details_exp',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        step_expanded,
-        claim_step_change,
-        claim_submitted_date,
-        claim_current_step,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: step_expanded,
+        p5: claim_step_change,
+        p6: claim_submitted_date,
+        p7: claim_current_step,
       },
     }
   },
@@ -220,13 +200,13 @@ export const Events = {
     return {
       name: 'vama_claim_details_open',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        claim_step_change,
-        claim_submitted_date,
-        claim_type_code,
-        is_disability_comp_claim,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: claim_step_change,
+        p5: claim_submitted_date,
+        p6: claim_type_code,
+        p7: is_disability_comp_claim,
       },
     }
   },
@@ -239,10 +219,10 @@ export const Events = {
     return {
       name: 'vama_claim_details_tab',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        claim_submitted_date,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: claim_submitted_date,
       },
     }
   },
@@ -257,12 +237,12 @@ export const Events = {
     return {
       name: 'vama_claim_details_ttv',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        claim_step_change,
-        claim_submitted_date,
-        ttv_claim_details,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: claim_step_change,
+        p5: claim_submitted_date,
+        p6: ttv_claim_details,
       },
     }
   },
@@ -270,9 +250,9 @@ export const Events = {
     return {
       name: 'vama_claim_disag',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
       },
     }
   },
@@ -280,10 +260,10 @@ export const Events = {
     return {
       name: 'vama_claim_eval',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        num_requests,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: num_requests,
       },
     }
   },
@@ -291,10 +271,10 @@ export const Events = {
     return {
       name: 'vama_claim_eval_cancel',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        num_requests,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: num_requests,
       },
     }
   },
@@ -302,9 +282,9 @@ export const Events = {
     return {
       name: 'vama_claim_eval_check',
       params: {
-        claim_id,
-        claim_type,
-        num_requests,
+        p1: claim_id,
+        p2: claim_type,
+        p3: num_requests,
       },
     }
   },
@@ -312,9 +292,9 @@ export const Events = {
     return {
       name: 'vama_claim_eval_conf',
       params: {
-        claim_id,
-        claim_type,
-        num_requests,
+        p1: claim_id,
+        p2: claim_type,
+        p3: num_requests,
       },
     }
   },
@@ -322,9 +302,27 @@ export const Events = {
     return {
       name: 'vama_claim_eval_submit',
       params: {
+        p1: claim_id,
+        p2: claim_type,
+        p3: num_requests,
+      },
+    }
+  },
+  vama_5103_wvr_submit: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_5103_wvr_submit',
+      params: {
         claim_id,
         claim_type,
-        num_requests,
+      },
+    }
+  },
+  vama_5103_wvr_submit_err: (claim_id: string, claim_type: string): Event => {
+    return {
+      name: 'vama_5103_wvr_submit_err',
+      params: {
+        claim_id,
+        claim_type,
       },
     }
   },
@@ -332,7 +330,7 @@ export const Events = {
     return {
       name: 'vama_claim_file_request',
       params: {
-        claim_id,
+        p1: claim_id,
       },
     }
   },
@@ -345,9 +343,9 @@ export const Events = {
     return {
       name: 'vama_claim_review',
       params: {
-        claim_id,
-        claim_type,
-        num_requests,
+        p1: claim_id,
+        p2: claim_type,
+        p3: num_requests,
       },
     }
   },
@@ -360,10 +358,10 @@ export const Events = {
     return {
       name: 'vama_claim_status_tab',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
-        claim_submitted_date,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
+        p4: claim_submitted_date,
       },
     }
   },
@@ -371,7 +369,7 @@ export const Events = {
     return {
       name: 'vama_claim_submit_ev',
       params: {
-        claim_id,
+        p1: claim_id,
       },
     }
   },
@@ -379,8 +377,8 @@ export const Events = {
     return {
       name: 'vama_claim_submit_tap',
       params: {
-        claim_id,
-        claim_type,
+        p1: claim_id,
+        p2: claim_type,
       },
     }
   },
@@ -393,10 +391,10 @@ export const Events = {
     return {
       name: 'vama_claim_upload_compl',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -409,10 +407,10 @@ export const Events = {
     return {
       name: 'vama_claim_upload_start',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -420,9 +418,9 @@ export const Events = {
     return {
       name: 'vama_claim_why_combine',
       params: {
-        claim_id,
-        claim_type,
-        claim_step,
+        p1: claim_id,
+        p2: claim_type,
+        p3: claim_step,
       },
     }
   },
@@ -430,9 +428,9 @@ export const Events = {
     return {
       name: 'vama_click',
       params: {
-        text_clicked,
+        p1: text_clicked,
         screen_name,
-        additional_details,
+        p2: additional_details,
       },
     }
   },
@@ -440,7 +438,7 @@ export const Events = {
     return {
       name: 'vama_copay_stmt_download',
       params: {
-        id,
+        p1: id,
       },
     }
   },
@@ -472,11 +470,11 @@ export const Events = {
     return {
       name: 'vama_error',
       params: {
-        errorName,
+        p1: errorName,
         errorMessage,
-        callStack,
-        statusCode,
-        endpoint,
+        p2: callStack,
+        p3: statusCode,
+        p4: endpoint,
       },
     }
   },
@@ -484,8 +482,8 @@ export const Events = {
     return {
       name: 'vama_error_json_resp',
       params: {
-        statusCode,
-        endpoint,
+        p1: statusCode,
+        p2: endpoint,
       },
     }
   },
@@ -513,10 +511,10 @@ export const Events = {
     return {
       name: 'vama_claim_cancel_1',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -529,10 +527,10 @@ export const Events = {
     return {
       name: 'vama_claim_cancel_2',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -545,10 +543,10 @@ export const Events = {
     return {
       name: 'vama_evidence_conf',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -561,10 +559,10 @@ export const Events = {
     return {
       name: 'vama_evidence_cont_1',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -579,12 +577,12 @@ export const Events = {
     return {
       name: 'vama_evidence_cont_2',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
-        upload_size,
-        num_photos,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
+        p5: upload_size,
+        p6: num_photos,
       },
     }
   },
@@ -597,10 +595,10 @@ export const Events = {
     return {
       name: 'vama_evidence_cont_3',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -613,10 +611,10 @@ export const Events = {
     return {
       name: 'vama_evidence_start',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
       },
     }
   },
@@ -630,11 +628,11 @@ export const Events = {
     return {
       name: 'vama_evidence_type',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
-        evidence_method,
-        evidence_type,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
+        p4: evidence_method,
+        p5: evidence_type,
       },
     }
   },
@@ -684,7 +682,7 @@ export const Events = {
     return {
       name: 'vama_givefb_close',
       params: {
-        screenName,
+        p1: screenName,
       },
     }
   },
@@ -692,7 +690,7 @@ export const Events = {
     return {
       name: 'vama_givefb_open',
       params: {
-        linkType,
+        p1: linkType,
       },
     }
   },
@@ -711,7 +709,7 @@ export const Events = {
     return {
       name: 'vama_hs_appts_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -719,7 +717,7 @@ export const Events = {
     return {
       name: 'vama_hs_claims_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -727,7 +725,7 @@ export const Events = {
     return {
       name: 'vama_hs_rx_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -750,7 +748,7 @@ export const Events = {
     return {
       name: 'vama_hs_sm_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -759,7 +757,7 @@ export const Events = {
     return {
       name: 'vama_hs_load_time',
       params: {
-        loadTime,
+        p1: loadTime,
       },
     }
   },
@@ -805,7 +803,7 @@ export const Events = {
       name: 'vama_login_start',
       params: {
         sis: isSIS.toString(),
-        login_start_biometric: isBiometric.toString(),
+        p1: isBiometric.toString(),
       },
     }
   },
@@ -837,7 +835,7 @@ export const Events = {
     return {
       name: 'vama_login_token_store',
       params: {
-        success,
+        p1: success,
       },
     }
   },
@@ -861,13 +859,42 @@ export const Events = {
       },
     }
   },
+  vama_offline_access: (screen_name: string): Event => {
+    return {
+      name: 'vama_offline_access',
+      params: {
+        value: screen_name,
+      },
+    }
+  },
+  vama_offline_action: (): Event => {
+    return {
+      name: 'vama_offline_action',
+    }
+  },
+  vama_offline_cache: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_cache',
+      params: {
+        value: queryKey,
+      },
+    }
+  },
+  vama_offline_no_data: (queryKey: string): Event => {
+    return {
+      name: 'vama_offline_no_data',
+      params: {
+        value: queryKey,
+      },
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
       params: {
-        pages: pages,
-        to_page: to_page,
-        tab: tab,
+        p1: pages,
+        p2: to_page,
+        p3: tab,
       },
     }
   },
@@ -915,9 +942,9 @@ export const Events = {
     return {
       name: 'vama_request_details',
       params: {
-        claim_id,
-        claim_request_id,
-        claim_request_type,
+        p1: claim_id,
+        p2: claim_request_id,
+        p3: claim_request_type,
       },
     }
   },
@@ -925,7 +952,7 @@ export const Events = {
     return {
       name: 'vama_rx_details ',
       params: {
-        rx_id: rx_id,
+        p1: rx_id,
       },
     }
   },
@@ -943,8 +970,8 @@ export const Events = {
     return {
       name: 'vama_rx_filter_sel',
       params: {
-        filter,
-        sort,
+        p1: filter,
+        p2: sort,
       },
     }
   },
@@ -967,7 +994,7 @@ export const Events = {
     return {
       name: 'vama_rx_refill_fail',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -975,7 +1002,7 @@ export const Events = {
     return {
       name: 'vama_rx_refill_retry',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -983,7 +1010,7 @@ export const Events = {
     return {
       name: 'vama_rx_refill_success',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -991,7 +1018,7 @@ export const Events = {
     return {
       name: 'vama_rx_request_cancel ',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -999,7 +1026,7 @@ export const Events = {
     return {
       name: 'vama_rx_request_confirm',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -1007,7 +1034,7 @@ export const Events = {
     return {
       name: 'vama_rx_request_start',
       params: {
-        rx_ids: rx_ids,
+        p1: rx_ids,
       },
     }
   },
@@ -1015,8 +1042,8 @@ export const Events = {
     return {
       name: 'vama_rx_status',
       params: {
-        status: status,
-        ttv: ttv,
+        p1: status,
+        p2: ttv,
       },
     }
   },
@@ -1024,7 +1051,7 @@ export const Events = {
     return {
       name: 'vama_rx_trackdet',
       params: {
-        rx_id: rx_id,
+        p1: rx_id,
       },
     }
   },
@@ -1032,7 +1059,7 @@ export const Events = {
     return {
       name: 'vama_rx_trackdet_close',
       params: {
-        rx_id: rx_id,
+        p1: rx_id,
       },
     }
   },
@@ -1040,7 +1067,7 @@ export const Events = {
     return {
       name: 'vama_sm_attach',
       params: {
-        type: type,
+        p1: type,
       },
     }
   },
@@ -1048,7 +1075,7 @@ export const Events = {
     return {
       name: 'vama_sm_attach_outcome',
       params: {
-        attached: attached,
+        p1: attached,
       },
     }
   },
@@ -1056,8 +1083,8 @@ export const Events = {
     return {
       name: 'vama_sm_change_category',
       params: {
-        messageCategory,
-        previousCategory,
+        p1: messageCategory,
+        p2: previousCategory,
       },
     }
   },
@@ -1065,7 +1092,7 @@ export const Events = {
     return {
       name: 'vama_sm_folder_open',
       params: {
-        folder: folder,
+        p1: folder,
       },
     }
   },
@@ -1073,7 +1100,7 @@ export const Events = {
     return {
       name: 'vama_sm_folders',
       params: {
-        draft_count: draft_count,
+        p1: draft_count,
       },
     }
   },
@@ -1086,7 +1113,7 @@ export const Events = {
     return {
       name: 'vama_sm_move_outcome',
       params: {
-        outcome: outcome,
+        p1: outcome,
       },
     }
   },
@@ -1104,9 +1131,9 @@ export const Events = {
     return {
       name: 'vama_sm_open',
       params: {
-        sm_id: sm_id,
-        location: location,
-        status: status,
+        p1: sm_id,
+        p2: location,
+        p3: status,
       },
     }
   },
@@ -1114,7 +1141,7 @@ export const Events = {
     return {
       name: 'vama_sm_save_draft',
       params: {
-        messageCategory,
+        p1: messageCategory,
       },
     }
   },
@@ -1122,8 +1149,8 @@ export const Events = {
     return {
       name: 'vama_sm_send_message',
       params: {
-        messageCategory,
-        replyToID,
+        p1: messageCategory,
+        p2: replyToID,
       },
     }
   },
@@ -1136,7 +1163,7 @@ export const Events = {
     return {
       name: 'vama_sso_cookie_received',
       params: {
-        received,
+        p1: received,
       },
     }
   },
@@ -1144,8 +1171,8 @@ export const Events = {
     return {
       name: 'vama_toggle',
       params: {
-        toggle_name,
-        status,
+        p1: toggle_name,
+        p2: status,
         screen_name,
       },
     }
@@ -1159,7 +1186,7 @@ export const Events = {
     return {
       name: 'vama_user_call',
       params: {
-        status_code,
+        p1: status_code,
       },
     }
   },
@@ -1167,7 +1194,7 @@ export const Events = {
     return {
       name: 'vama_vaccine_details',
       params: {
-        groupName,
+        p1: groupName,
       },
     }
   },
@@ -1185,7 +1212,7 @@ export const Events = {
     return {
       name: 'vama_vet_status_zStatus',
       params: {
-        charOfDis,
+        p1: charOfDis,
       },
     }
   },
@@ -1202,7 +1229,7 @@ export const Events = {
       name: 'vama_webview',
       params: {
         url,
-        id,
+        p1: id,
       },
     }
   },
@@ -1224,9 +1251,12 @@ export const Events = {
       name: 'vama_whatsnew_close',
     }
   },
-  vama_whatsnew_dont_show: (): Event => {
+  vama_whatsnew_dont_show: (skippedFeatures?: string[]): Event => {
     return {
       name: 'vama_whatsnew_dont_show',
+      params: {
+        q1: skippedFeatures,
+      },
     }
   },
   vama_whatsnew_more: (): Event => {
@@ -1240,7 +1270,7 @@ export const Events = {
       name: 'vama_obf_textview',
       params: {
         card_name: cardName,
-        revealed,
+        p1: revealed,
       },
     }
   },
@@ -1280,10 +1310,10 @@ export const Events = {
     return {
       name: 'vama_travel_pay_doc_dl',
       params: {
-        claim_id,
-        claim_status,
-        document_type,
-        document_filename,
+        p1: claim_id,
+        p2: claim_status,
+        p3: document_type,
+        p4: document_filename,
       },
     }
   },

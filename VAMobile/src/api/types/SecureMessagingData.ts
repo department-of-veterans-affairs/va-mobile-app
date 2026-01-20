@@ -73,6 +73,9 @@ export type SecureMessagingSaveDraftData = {
 
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
+  meta: {
+    userInTriageTeam: boolean
+  }
   included: Array<{
     attributes: {
       name: string

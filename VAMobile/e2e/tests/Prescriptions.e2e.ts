@@ -21,7 +21,6 @@ export const PrescriptionsE2eIdConstants = {
   PRESCRIPTION_FILTER_BUTTON_ID: 'openFilterAndSortTestID',
   PRESCRIPTION_FILTER_MODAL_ID: 'ModalTestID',
   PRESCRIPTION_FILTER_APPLY_ID: 'radioButtonApplyTestID',
-  PRESCRIPTION_REFILL_WARNING_ID: 'prescriptionRefillWarningTestID',
   PRESCRIPTION_ALL_DESCRIPTION_LABEL:
     'This list only shows prescriptions filled by  V-A  pharmacies and may not include all your medications.',
   PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT: 'All prescriptions (32), sorted by status (A to Z)',
@@ -63,6 +62,7 @@ const trackingIndex = device.getPlatform() === 'android' ? 0 : 1
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_FEEDBACK_TOGGLE_TEXT)
   await loginToDemoMode()
   await changeDemoModeUser(PrescriptionsE2eIdConstants.DESIRED_DEMO_MODE_USER_ID)
   await openHealth()
@@ -165,7 +165,6 @@ describe('Prescriptions Screen', () => {
     checkImages(tempPath)
     await expect(element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID))).toExist()
     await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID))).toExist()
-    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID))).toExist()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_DESCRIPTION_LABEL))).toExist()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_ALL_NUMBER_OF_PRESCRIPTIONS_TEXT))).toExist()
     await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
@@ -180,27 +179,6 @@ describe('Prescriptions Screen', () => {
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_FILL_DATE_TEXT)).atIndex(0)).toBeVisible()
     await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_VA_FACILITY_TEXT)).atIndex(0)).toBeVisible()
     await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0)).toBeVisible()
-  })
-
-  it('verify prescription refill warning label information', async () => {
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_WARNING_ID)).tap()
-    await expect(element(by.text("We can't refill some of your prescriptions in the app"))).toExist()
-    await expect(element(by.label('Some  V-A  health facilities use a new electronic health record system.'))).toExist()
-    await expect(
-      element(
-        by.label(
-          'Prescriptions affected by this change have a "Transferred" status. You can manage your prescriptions at these facilities using the My  V-A  Health portal.',
-        ),
-      ),
-    ).toExist()
-    await expect(element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID))).toExist()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_GO_TO_MY_VA_HEALTH_LINK_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.LEAVING_APP_LEAVE_TEXT)).tap()
-    await setTimeout(5000)
-    await device.takeScreenshot('PrescriptionVAHealthLink')
-    await device.launchApp({ newInstance: false })
-    await element(by.text("We can't refill some of your prescriptions in the app")).tap()
   })
 
   it('verify status label information', async () => {
@@ -394,103 +372,6 @@ describe('Prescriptions Screen', () => {
       ),
     ).toExist()
     await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
-  })
-
-  it('verify refill request screen information', async () => {
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID)).scrollTo('top')
-    await element(by.id(CommonE2eIdConstants.PRESCRIPTION_REFILL_BUTTON_ID)).tap()
-    await expect(element(by.text('Refill request'))).toExist()
-    await expect(element(by.text('Request refills at least 15 days before you need more medication.'))).toExist()
-    await expect(
-      element(by.text("We'll mail your refills to the address on file at your local VA Pharmacy.")),
-    ).toExist()
-    await expect(element(by.text('Prescriptions for refill (10)'))).toExist()
-    await expect(element(by.label('0 of 10 selected'))).toExist()
-    await expect(element(by.text('Select all'))).toExist()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0)).toExist()
-    await expect(element(by.label('Prescription number 3 6 3 6 7 1 1 A')).atIndex(0)).toExist()
-    await expect(element(by.label('Refills left: 5')).atIndex(0)).toExist()
-    await expect(element(by.label('Fill date June 06, 2022')).atIndex(0)).toExist()
-    await expect(element(by.label(' V-A  facility: SLC10 TEST LAB')).atIndex(0)).toExist()
-  })
-
-  it('verify error when nothing is selected for request refills', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await expect(element(by.text('Please select a prescription'))).toExist()
-  })
-
-  it('verify action sheet for request refill', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_NAME_TEXT)).atIndex(0).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await expect(element(by.text('Request prescription refill?'))).toExist()
-    if (device.getPlatform() === 'android') {
-      await element(by.text('Cancel ')).tap()
-    } else {
-      await element(by.label('Cancel')).atIndex(1).tap()
-    }
-  })
-
-  it('verify refill request summary screen information', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)),
-    ).toExist()
-  })
-
-  it('verify pending prescriptions are displayed on pending refills button tap', async () => {
-    await element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)).tap()
-    await expect(element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_DESCRIPTION_LABEL))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_PENDING_NUMBER_OF_PRESCRIPTIONS_TEXT)),
-    ).toExist()
-  })
-
-  it('verify user can request refill from get prescriptions details', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_BUTTON_ID)).tap()
-    await element(by.text('Active (24)')).atIndex(0).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_FILTER_APPLY_ID)).tap()
-    await waitFor(element(by.label('CAPECITABINE 500MG TAB')))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.PRESCRIPTION_HISTORY_SCROLL_ID))
-      .scroll(500, 'down', 0.5, 0.5)
-    await element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_DETAILS_LABEL)).atIndex(0).tap()
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_REQUEST_REFILL_ID)).tap()
-    await element(by.text(CommonE2eIdConstants.PRESCRIPTION_REFILL_DIALOG_YES_TEXT)).tap()
-    await expect(element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_TEXT))).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_HEADER_TEXT)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_NAME_TEXT)).atIndex(0),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_1_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.label(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_DESCRIPTION_2_LABEL)),
-    ).toExist()
-    await expect(
-      element(by.text(PrescriptionsE2eIdConstants.PRESCRIPTION_REFILL_REQUEST_SUMMARY_PENDING_BUTTON_TEXT)),
-    ).toExist()
-  })
-
-  it('verify tapping close from refill request summary', async () => {
-    await element(by.id(PrescriptionsE2eIdConstants.PRESCRIPTION_BACK_ID)).tap()
-    await expect(element(by.text('AMLODIPINE BESYLATE 10MG TAB'))).toExist()
   })
 
   validateSort('Fill date (newest to oldest)', 'LAMIVUDINE 100MG TAB', 'OLANZAPINE 10MG RAPID DISINTEGRATING TAB', true)

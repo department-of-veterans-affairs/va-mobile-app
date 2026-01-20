@@ -20,9 +20,9 @@ function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
 
   function onButtonPress() {
     const options = [
-      t('debts.resolveDebt.payDebt'),
-      t('debts.resolveDebt.requestHelp'),
-      t('debts.resolveDebt.disputeDebt'),
+      t('debts.resolveOverpayment.payDebt'),
+      t('debts.resolveOverpayment.requestHelp'),
+      t('debts.resolveOverpayment.disputeDebt'),
       t('cancel'),
     ]
     const routeNames = ['PayDebt', 'DebtRequestHelp', 'DisputeDebt']
@@ -30,8 +30,8 @@ function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
     showActionSheet(
       {
         options,
-        title: t('debts.resolveDebt'),
-        message: t('debts.resolveDebt.how'),
+        title: t('debts.resolveOverpayment'),
+        message: t('debts.resolveOverpayment.how'),
         cancelButtonIndex: 3,
       },
       (buttonIndex) => {
@@ -44,7 +44,7 @@ function ResolveDebtButton({ debt }: ResolveDebtButtonProps) {
 
   return (
     <Box my={theme.dimensions.buttonPadding}>
-      <Button label={t('debts.resolveDebt')} onPress={onButtonPress} />
+      <Button label={t('debts.resolveOverpayment')} onPress={onButtonPress} />
     </Box>
   )
 }

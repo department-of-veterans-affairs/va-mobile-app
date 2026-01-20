@@ -1,8 +1,8 @@
 import React, { RefObject, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView } from 'react-native'
-import { useSelector } from 'react-redux'
 
+import { useMaintenanceWindows } from 'api/maintenanceWindows/getMaintenanceWindows'
 import { AppointmentData, AppointmentsDateRange, AppointmentsGetData } from 'api/types'
 import { AlertWithHaptics, Box, LoadingComponent, Pagination, PaginationProps, VAModalPicker } from 'components'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
@@ -10,9 +10,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameDropDatePickerValue } from 'constants/timeframes'
 import NoAppointments from 'screens/HealthScreen/Appointments/NoAppointments/NoAppointments'
-import { RootState } from 'store'
 import { DowntimeFeatureTypeConstants } from 'store/api/types'
-import { ErrorsState } from 'store/slices'
 import { filterAppointments, getGroupedAppointments } from 'utils/appointments'
 import { getPickerOptions } from 'utils/dateUtils'
 import { useDowntime, useRouteNavigation, useTheme } from 'utils/hooks'
@@ -42,9 +40,8 @@ function PastAppointmentsOld({
   const navigateTo = useRouteNavigation()
 
   const travelPayInDowntime = useDowntime(DowntimeFeatureTypeConstants.travelPayFeatures)
-  const { downtimeWindowsByFeature } = useSelector<RootState, ErrorsState>((state) => state.errors)
-  const endTime =
-    downtimeWindowsByFeature[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
+  const { maintenanceWindows } = useMaintenanceWindows()
+  const endTime = maintenanceWindows[DowntimeFeatureTypeConstants.travelPayFeatures]?.endTime?.toFormat('EEEE, fff')
   const includeTravelClaims = !travelPayInDowntime && featureEnabled('travelPaySMOC')
 
   const pagination = {

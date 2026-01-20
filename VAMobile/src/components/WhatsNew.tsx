@@ -136,7 +136,7 @@ export const WhatsNew = () => {
   const closeCollapsible = () => logAnalyticsEvent(Events.vama_whatsnew_close())
 
   const onDismiss = async () => {
-    logAnalyticsEvent(Events.vama_whatsnew_dont_show())
+    logAnalyticsEvent(Events.vama_whatsnew_dont_show(skippedFeatures))
     await setFeaturesSkipped(featuresDisplayed)
     const storedSkippedFeatures = await getFeaturesSkipped()
     setSkippedFeatures(storedSkippedFeatures)

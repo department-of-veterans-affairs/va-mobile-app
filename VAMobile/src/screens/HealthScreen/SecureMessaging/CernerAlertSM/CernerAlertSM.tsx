@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LinkProps } from '@department-of-veterans-affairs/mobile-component-library/src/components/Link/Link'
 
-import { useAuthorizedServices } from 'api/authorizedServices/getAuthorizedServices'
-import { useFacilitiesInfo } from 'api/facilities/getFacilitiesInfo'
-import { Facility } from 'api/types/FacilityData'
-import { AlertWithHaptics, Box, LinkWithAnalytics, TextView, VABulletList, VABulletListText } from 'components'
+import { AlertWithHaptics, Box, LinkWithAnalytics, TextView } from 'components'
 import { Events } from 'constants/analytics'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yLabelVA } from 'utils/a11yLabel'
@@ -19,10 +16,6 @@ const { LINK_URL_GO_TO_PATIENT_PORTAL } = getEnv()
 function CernerAlertSM() {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { data: facilitiesInfo } = useFacilitiesInfo()
-  const { data: authorizedServices } = useAuthorizedServices()
-
-  const cernerFacilities = facilitiesInfo?.filter((f) => f.cerner) || []
 
   const linkProps: LinkProps = {
     type: 'url',
@@ -33,82 +26,19 @@ function CernerAlertSM() {
     variant: 'base',
   }
 
-  useEffect(() => {
-    cernerFacilities.length && logAnalyticsEvent(Events.vama_cerner_alert())
-  }, [cernerFacilities.length])
-
-  if (!facilitiesInfo) {
-    return <></>
-  }
-
-  // if no cerner facilities then do not show the alert
-  if (!cernerFacilities.length) {
-    return <></>
-  }
-
-  if (authorizedServices?.secureMessagingOracleHealthEnabled) {
-    logAnalyticsEvent(Events.vama_blue_alert_sm())
-    return (
-      <AlertWithHaptics
-        variant="info"
-        expandable={true}
-        analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}
-        focusOnError={false}
-        header={t('healthHelp.cernerTransitionInfoBanner.header')}
-        headerA11yLabel={a11yLabelVA(t('healthHelp.cernerTransitionInfoBanner.header'))}
-        testID="smCernerInfoAlertTestID">
-        <TextView variant="MobileBody">
-          {t('healthHelp.cernerTransitionInfoBanner.content')}
-          <TextView variant="MobileBodyBold">{t('healthHelp.cernerTransitionInfoBanner.note')}</TextView>
-          {t('healthHelp.cernerTransitionInfoBanner.noteContent')}
-        </TextView>
-        <Box mb={theme.dimensions.standardMarginBetween}>
-          <LinkWithAnalytics
-            {...linkProps}
-            analyticsOnPress={() => logAnalyticsEvent(Events.vama_blue_sm_link_conf())}
-          />
-        </Box>
-      </AlertWithHaptics>
-    )
-  }
-
-  const allCernerFacilities = facilitiesInfo.length === cernerFacilities.length
-  const headerText = allCernerFacilities ? t('healthHelp.usesVAHealth') : t('cernerAlert.header.some')
-  const headerA11yLabel = allCernerFacilities
-    ? a11yLabelVA(t('healthHelp.usesVAHealth'))
-    : a11yLabelVA(t('cernerAlert.header.some'))
-
   function accordionContent() {
-    const bullets: VABulletListText[] = cernerFacilities.map((facility: Facility) => ({
-      variant: 'MobileBody',
-      text: facility.name,
-      a11yLabel: a11yLabelVA(facility.name),
-    }))
-
     return (
       <>
-        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-          {t('cernerAlertSM.sendingAMessage')}
-        </TextView>
-        <VABulletList listOfText={bullets} paragraphSpacing={true} />
-        {/*eslint-disable-next-line react-native-a11y/has-accessibility-hint*/}
         <TextView
           variant="MobileBody"
-          accessibilityLabel={a11yLabelVA(t('cernerAlertSM.youllNeedToGoThere'))}
-          mb={theme.dimensions.standardMarginBetween}>
-          {t('cernerAlertSM.youllNeedToGoThere')}
+          mb={theme.dimensions.standardMarginBetween}
+          accessibilityLabel={a11yLabelVA(t('cernerAlertSM.sendingAMessage'))}
+          accessibilityHint={a11yLabelVA(t('cernerAlertSM.sendingAMessage'))}>
+          {t('cernerAlertSM.sendingAMessage')}
         </TextView>
-        <Box mb={allCernerFacilities ? undefined : theme.dimensions.standardMarginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <LinkWithAnalytics {...linkProps} />
         </Box>
-        {allCernerFacilities ? (
-          <></>
-        ) : (
-          // eslint-disable-next-line react-native-a11y/has-accessibility-hint
-          <TextView variant="MobileBody" accessibilityLabel={a11yLabelVA(t('cernerAlertSM.footer'))}>
-            {t('cernerAlertSM.footer')}
-          </TextView>
-        )}
       </>
     )
   }
@@ -118,8 +48,8 @@ function CernerAlertSM() {
       variant="warning"
       expandable={true}
       focusOnError={false}
-      header={headerText}
-      headerA11yLabel={headerA11yLabel}
+      header={t('cernerAlert.header.some')}
+      headerA11yLabel={a11yLabelVA(t('cernerAlert.header.some'))}
       analytics={{ onExpand: () => logAnalyticsEvent(Events.vama_cerner_alert_exp()) }}
       testID="cernerAlertTestID">
       {accordionContent()}

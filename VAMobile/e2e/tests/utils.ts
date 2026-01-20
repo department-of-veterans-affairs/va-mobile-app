@@ -62,6 +62,8 @@ export const CommonE2eIdConstants = {
   VETERANS_CRISIS_LINE_CHAT_ID: 'veteransCrisisLineConfidentialChatTestID',
   MILITARY_BRANCH_COAST_GUARD: 'United States Coast Guard',
   MILITARY_PERIOD_OF_SERVICE: 'July 13, 1970 – August 31, 1998',
+  // Components
+  SELECTION_LIST_ITEM_BUTTON_ID: 'selectionListItemButtonId',
   //login, home, nav bar
   VA_LOGO_ICON_ID: 'va-icon',
   DEMO_MODE_INPUT_ID: 'demo-mode-password',
@@ -108,6 +110,7 @@ export const CommonE2eIdConstants = {
   ALLERGIES_BUTTON_ID: 'toAllergyListID',
   LABS_AND_TEST_BUTTON_ID: 'toLabsAndTestListID',
   LABS_AND_TEST_TOGGLE_TEXT: 'labsAndTests',
+  LABS_AND_TEST_SCROLL_ID: 'labs-and-tests-list-screen',
   MEDICAL_RECORDS_BUTTON_ID: 'toMedicalRecordsListID',
   CHEYENNE_FACILITY_TEXT: 'Cheyenne VA Medical Center',
   //benefits
@@ -146,6 +149,7 @@ export const CommonE2eIdConstants = {
   REMOTE_CONFIG_TEST_ID: 'remoteConfigTestID',
   REMOTE_CONFIG_BUTTON_TEXT: 'Remote Config',
   APPLY_OVERRIDES_BUTTON_TEXT: 'Apply Overrides',
+  IN_APP_FEEDBACK_TOGGLE_TEXT: 'inAppFeedback',
   IN_APP_REVIEW_TOGGLE_TEXT: 'inAppReview',
   AF_APP_UPDATE_BUTTON_TOGGLE_ID: 'remoteConfigAppUpdateTestID',
   AF_ENABLE_TOGGLE_ID: 'remoteConfigEnableTestID',
@@ -192,6 +196,9 @@ export const CommonE2eIdConstants = {
   TRAVEL_PAY_CLAIMS_NATIVE_LINK_ID: 'toTravelPayClaimsLinkID',
   DEMO_MODE_USERS_BUTTON_ID: 'DemoModeUsers',
   DEMO_MODE_USERS_SAVE_BUTTON_ID: 'demoModeUserSave',
+  SHOW_5103_FLOW: 'show5103Flow',
+  SUBMIT_EVIDENCE_5103_ID: 'file5103SubmitEvidenceID',
+  REQUEST_DETAILS_5103_ID: 'file5103RequestDetailsID',
 }
 
 /** Logs into demo mode.
@@ -528,11 +535,7 @@ export async function enableAF(AFFeature, AFUseCase, AFAppUpdate = false) {
     .scroll(200, 'down')
   await element(by.text(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
   if (AFUseCase === 'DenyAccess') {
-    await waitFor(element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)))
-      .toBeVisible()
-      .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
-      .scroll(600, 'down')
-    await element(by.text(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)).tap()
+    await scrollToIDThenTap(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   }
   await waitFor(element(by.text(AFFeature)))
     .toBeVisible()
@@ -776,8 +779,9 @@ export async function toggleRemoteConfigFlag(flagName: string) {
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
-  await element(by.id(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT)).tap()
-  await scrollToThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+
+  await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
+  await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 

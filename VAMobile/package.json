@@ -40,6 +40,7 @@
     "e2e:attached-build": "yarn run bundle:android && detox build -c attached",
     "e2e:attached-test": "yarn jest:clear && detox test -c attached --cleanup",
     "docs": "yarn && cd documentation && yarn && yarn build && yarn start",
+    "docs:localProd": "yarn && cd documentation && yarn && yarn build && yarn serve",
     "nodes": "rm -rf node_modules && yarn install --ignore-scripts",
     "pods": "cd ios && pod install && cd .."
   },
@@ -50,6 +51,7 @@
     "@expo/react-native-action-sheet": "^4.1.1",
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-native-clipboard/clipboard": "^1.16.3",
+    "@react-native-community/netinfo": "^11.4.1",
     "@react-native-cookies/cookies": "^6.2.1",
     "@react-native-firebase/analytics": "^18.9.0",
     "@react-native-firebase/app": "^18.9.0",

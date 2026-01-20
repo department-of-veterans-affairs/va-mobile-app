@@ -15,10 +15,9 @@ import {
   BoxProps,
   DefaultList,
   DefaultListItemObj,
-  ErrorComponent,
   FeatureLandingTemplate,
   LinkWithAnalytics,
-  LoadingComponent,
+  ScreenError,
   TextArea,
   TextView,
   VAScrollView,
@@ -146,8 +145,20 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
   }
 
   const birthdate = personalInfo?.birthDate || t('personalInformation.informationNotAvailable')
-  const errorCheck = personalInformationInDowntime || getDemographicsError
   const loadingCheck = loadingPersonalInfo || loadingDemographics || loadingUserAuthorizedServices
+
+  const screenErrors: Array<ScreenError> = [
+    {
+      errorCheck: !!(personalInformationInDowntime || getDemographicsError),
+      onTryAgain,
+      error: getDemographicsError,
+    },
+    {
+      errorCheck: !!getUserAuthorizedServicesError,
+      onTryAgain: refetchUserAuthorizedServices,
+      error: getUserAuthorizedServicesError,
+    },
+  ]
 
   return (
     <FeatureLandingTemplate
@@ -155,22 +166,12 @@ function PersonalInformationScreen({ navigation }: PersonalInformationScreenProp
       backLabelOnPress={navigation.goBack}
       title={t('personalInformation.title')}
       testID="PersonalInformationTestID"
-      backLabelTestID="backToProfileID">
-      {loadingCheck ? (
-        <LoadingComponent text={t('personalInformation.loading')} />
-      ) : errorCheck ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
-          onTryAgain={onTryAgain}
-          error={getDemographicsError}
-        />
-      ) : getUserAuthorizedServicesError ? (
-        <ErrorComponent
-          screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
-          onTryAgain={refetchUserAuthorizedServices}
-          error={getUserAuthorizedServicesError}
-        />
-      ) : !userAuthorizedServices?.userProfileUpdate ? (
+      backLabelTestID="backToProfileID"
+      screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID}
+      isLoading={loadingCheck}
+      loadingText={t('personalInformation.loading')}
+      errors={screenErrors}>
+      {!userAuthorizedServices?.userProfileUpdate ? (
         getNoAuth()
       ) : (
         <>

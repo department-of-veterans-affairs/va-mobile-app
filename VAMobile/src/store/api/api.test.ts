@@ -10,12 +10,21 @@ jest.mock('store/slices', () => {
   }
 })
 
+jest.mock('@expo/react-native-action-sheet', () => {
+  return {
+    useActionSheet: () => {
+      return { showActionSheetWithOptions: jest.fn() }
+    },
+  }
+})
+
 jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   OS: 'android',
   constants: {
     Model: 'Google Pixel 8 Pro',
     Release: '15',
   },
+  select: jest.fn(),
 }))
 
 context('api', () => {
