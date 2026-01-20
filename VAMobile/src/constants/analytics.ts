@@ -896,6 +896,11 @@ export const Events = {
       },
     }
   },
+  vama_overpay_help_clk: (): Event => {
+    return {
+      name: 'vama_overpay_help_clk',
+    }
+  },
   vama_pagination: (pages: number, to_page: number, tab?: string): Event => {
     return {
       name: 'vama_pagination',
