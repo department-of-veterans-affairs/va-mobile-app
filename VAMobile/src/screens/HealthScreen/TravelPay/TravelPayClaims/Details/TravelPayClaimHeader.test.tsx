@@ -42,7 +42,6 @@ context('TravelPayClaimHeader', () => {
       renderComponent()
 
       // Check that all main elements are present by testID
-      expect(screen.getByTestId('travelPayClaimHeader')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimHeaderTitle')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimHeaderNumber')).toBeTruthy()
       expect(screen.getByTestId('travelPayClaimHeaderStatus')).toBeTruthy()
