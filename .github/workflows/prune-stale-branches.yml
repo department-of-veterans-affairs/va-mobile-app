@@ -336,7 +336,7 @@ jobs:
     uses: ./.github/workflows/start_slack_thread.yml
     secrets: inherit
     with:
-      channel_name: 'va-mobile-sandbox'
+      channel_name: 'va-mobile-app-alerts'
       message: |
         🌿 *Branch Pruning Summary*
         :alert: Branches with last commit older than 365 days (excludes branches with open PRs). :alert:
