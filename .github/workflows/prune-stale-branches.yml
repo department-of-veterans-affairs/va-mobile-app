@@ -290,7 +290,7 @@ jobs:
         with:
           name: deleted-branches-${{ github.run_id }}
           path: /tmp/deleted_branches.csv
-          retention-days: 365
+          retention-days: 90
 
       - name: Get artifact download URL
         id: get-artifact-url
@@ -355,4 +355,4 @@ jobs:
         • Last commit: ${{ needs.prune-branches.outputs.oldest_commit_date }} (${{ needs.prune-branches.outputs.oldest_branch_days }} days ago)
         • Last committer: ${{ needs.prune-branches.outputs.oldest_branch_committer }}
 
-        View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        See <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for details.
