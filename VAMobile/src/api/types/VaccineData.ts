@@ -7,8 +7,8 @@ export type VaccineListPayload = {
     next: string
     last: string
   }
-  meta: {
-    pagination: {
+  meta?: {
+    pagination?: {
       currentPage: number
       perPage: number
       totalPages: number
