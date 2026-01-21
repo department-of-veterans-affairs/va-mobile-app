@@ -283,33 +283,13 @@ def readAppLabel() {
     return name['appName']
 }
 
-def incrementVersionNumber(def type = "build") {
+
+def saveVersionProperties(mj, mn, pt, build) {
     def versionFile = new File(project.rootDir, 'version.properties')
     def version = readVersion()
-    def latestVersion = project.hasProperty('latestVersion') ? project.property('latestVersion') : "1.0.0"
-    def latestBuild = project.hasProperty('latestBuild') ? project.property('latestBuild') as int : 1
-    def (mj, mn, pt ) = latestVersion.tokenize('.')
-    def build = latestBuild
-    def major = mj as int
-    def minor = mn as int
-    def patch = pt as int
-
-    if (type == 'major') {
-        major++
-        minor = 0
-        patch = 0
-    } else if (type == 'minor') {
-        minor++
-        patch = 0
-    } else if (type == 'patch') {
-        patch++
-    }
-
-    build++
-
-    version['major'] = major.toString()
-    version['minor'] = minor.toString()
-    version['patch'] = patch.toString()
+    version['major'] = mj.toString()
+    version['minor'] = mn.toString()
+    version['patch'] = pt.toString()
     version['build'] = build.toString()
 
     def stream = new FileOutputStream(versionFile)
@@ -318,28 +298,6 @@ def incrementVersionNumber(def type = "build") {
     } finally {
         stream.close()
     }
-    return build
-}
-
-def setVersionNumber() {
-  print "setVersionNumber\n"
-  def versionFile = new File(project.rootDir, 'version.properties')
-  def versionNumber = project.hasProperty('version') ? project.property('version') : "1.0.0"
-  def build = project.hasProperty('latestBuild') ? project.property('latestBuild') as int : 1
-  def version = readVersion()
-  def v = versionNumber.split('\\.')
-  build++
-  version['major'] = v[0].toString()
-  version['minor'] = v[1].toString()
-  version['patch'] = v[2].toString()
-  version['build'] = build.toString()
-  def stream = new FileOutputStream(versionFile)
-  try {
-      version.store(stream, null)
-  } finally {
-      stream.close()
-  }
-  return build
 }
 
 def renameApp(newName) {
@@ -355,30 +313,15 @@ def renameApp(newName) {
     return name
 }
 
-task doNewMajorVersion() {
-    doLast {
-        println "Incrementing Major version..."
-        incrementVersionNumber('major')
-    }
-}
-
-task doNewMinorVersion {
-    doLast {
-        println "Incrementing Minor Version..."
-        incrementVersionNumber('minor')
-    }
-}
-
-task doNewPatchVersion {
-    doLast {
-        println "Incrementing Patch Number..."
-        incrementVersionNumber('patch')
-    }
-}
 
 task doNewQaVersion {
     doLast {
-        incrementVersionNumber('qa')
+        def latestVersion = project.hasProperty('latestVersion') ? project.property('latestVersion') : "1.0.0"
+        def buildNumber = project.hasProperty('buildNumber') ? project.property('buildNumber') : "1"
+        def (mj, mn, pt) = latestVersion.tokenize('.')
+        
+        saveVersionProperties(mj, mn, pt, buildNumber)
+        
         println "Renaming for QA Build"
         renameApp("VA-QA")
     }
@@ -403,8 +346,10 @@ task getBuildNum {
 
 task updateVersionNumber {
   doLast {
-    print "updateVersionNumber\n"
-    def build = setVersionNumber()
-    return
+    def versionNumber = project.hasProperty('version') ? project.property('version') : "1.0.0"
+    def buildNumber = project.hasProperty('buildNumber') ? project.property('buildNumber') : "1"
+    def v = versionNumber.split('\\.')
+    
+    saveVersionProperties(v[0], v[1], v[2], buildNumber)
   }
 }

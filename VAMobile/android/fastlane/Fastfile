@@ -131,18 +131,19 @@ platform :android do
 
 # method to update the version and build in the repo
   def update_version_and_build(version)
-    latestBuild = get_latest_build_num
+    build_number = Time.now.utc.strftime("%y%m%d%H%M")
+    puts('version: ' + version.to_s)
+    puts('build_number: ' + build_number)
+    
     if version=='qa'
       latestVersion = get_latest_version_name
-      puts('latest build is ' + latestBuild.to_s)
       puts('latest version is ' + latestVersion.to_s)
-      props = { latestBuild: latestBuild, latestVersion: latestVersion }
+      props = { buildNumber: build_number, latestVersion: latestVersion }
       gradle(task: 'doNewQaVersion', properties: props)
     else
       versionNumber = /\d+\.\d+\.\d+/.match(version)
-      puts('latest build is ' + latestBuild.to_s)
       puts('release version is ' + versionNumber.to_s)
-      props = { latestBuild: latestBuild, version: versionNumber }
+      props = { buildNumber: build_number, version: versionNumber }
       gradle(task: 'updateVersionNumber', properties: props)
     end
     ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
@@ -150,18 +151,6 @@ platform :android do
   end
 
 
-# method to get the highest build number from all tracks in the Play Store
-  def get_latest_build_num
-    allLanes = ["production", "Development Team", "Pre-Prod Stash"]
-    highest = 0
-    allLanes.each do |track|
-      builds = google_play_track_version_codes(track:track.to_s, package_name:"gov.va.mobileapp")
-      if builds.max > highest
-        highest = builds.max
-      end
-    end
-    highest
-  end
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
