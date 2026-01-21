@@ -140,8 +140,12 @@ platform :ios do
 
   # updates the build and version number
   def update_version (version)
-    puts('version: ' + version.to_s)
     build_number = Time.now.utc.strftime("%y%m%d%H%M")
+
+    UI.important("************************************************")
+    UI.important("  BUILD VERSION: #{version}")
+    UI.important("  BUILD NUMBER:  #{build_number}")
+    UI.important("************************************************")
     # get the latest version of the app in test flight.
     latest_testflight_build_number
     # set the version to the what is in app store, just in case there was drift
