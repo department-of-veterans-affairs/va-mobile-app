@@ -79,7 +79,6 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           token: ${{ steps.generate_token.outputs.token }}
-          fetch-depth: 0
       - name: Set git config
         run: |
           git config --global user.name 'VA Mobile Automation Bot'

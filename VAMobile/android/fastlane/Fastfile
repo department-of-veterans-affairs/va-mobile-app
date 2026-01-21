@@ -176,6 +176,8 @@ platform :android do
 
   # parses all git tags to find the highest build number used in 'android-build-#' format
   def get_highest_build_from_tags
+    # Ensure we have the latest tags from the remote before checking, but only for build tags to avoid case conflicts
+    sh("git fetch --tags --filter=blob:none origin 'refs/tags/android-build-*:refs/tags/android-build-*'")
     tags = sh("git tag -l 'android-build-*'").split("\n")
     build_numbers = tags.map { |t| t.split('-').last.to_i }
     build_numbers.max || 0
