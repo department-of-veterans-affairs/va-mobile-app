@@ -53,6 +53,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
     prescriptionNumber,
     expirationDate,
     orderedDate,
+    dispStatus,
   } = prescription?.attributes
 
   const { mutate: requestRefill, isPending: loadingHistory } = useRequestRefills()
@@ -182,7 +183,7 @@ function PrescriptionDetails({ route, navigation }: PrescriptionDetailsProps) {
                 {rxNumber}
               </TextView>
               <Box pt={theme.dimensions.standardMarginBetween}>
-                <RefillTag status={refillStatus} />
+                <RefillTag status={refillStatus} dispStatus={dispStatus} />
               </Box>
               <DetailsTextSections
                 leftSectionTitle={t('prescription.details.instructionsHeader')}

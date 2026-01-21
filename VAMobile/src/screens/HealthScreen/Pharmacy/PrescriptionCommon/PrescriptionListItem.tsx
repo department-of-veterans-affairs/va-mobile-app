@@ -23,7 +23,16 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
-  const { instructions, refillRemaining, prescriptionName, prescriptionNumber, facilityName, refillDate } = prescription
+  const {
+    instructions,
+    refillRemaining,
+    prescriptionName,
+    prescriptionNumber,
+    facilityName,
+    refillDate,
+    dispStatus,
+    refillStatus,
+  } = prescription
 
   const [rxNumber, rxNumberA11yLabel] = getRxNumberTextAndLabel(t, prescriptionNumber)
   const [dateMMddyyyy, dateA11yLabel] = getDateTextAndLabel(
@@ -68,7 +77,7 @@ function PrescriptionListItem({ prescription, hideInstructions, includeRefillTag
       </TextView>
       {includeRefillTag && (
         <Box mt={20}>
-          <RefillTag status={prescription.refillStatus} />
+          <RefillTag status={refillStatus} dispStatus={dispStatus} />
         </Box>
       )}
       {renderInstructions()}

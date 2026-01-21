@@ -32,6 +32,7 @@ export const RefillStatusConstants: {
   TRANSFERRED: RefillStatus
   SUBMITTED: RefillStatus
   IN_PROGRESS: RefillStatus
+  RENEWABLE: RefillStatus
 } = {
   ACTIVE: 'active',
   INACTIVE: 'inactive',
@@ -49,7 +50,8 @@ export const RefillStatusConstants: {
   TRACKING: 'tracking',
   TRANSFERRED: 'transferred',
   SUBMITTED: 'submitted',
-  IN_PROGRESS: 'In progress',
+  IN_PROGRESS: 'in progress',
+  RENEWABLE: 'renewable',
 }
 
 export type RefillStatus =
@@ -70,7 +72,8 @@ export type RefillStatus =
   | 'transferred'
   | 'submitted'
   | 'dateOfDeathEntered'
-  | 'In progress'
+  | 'in progress'
+  | 'renewable'
 
 export const DELIVERY_SERVICE_TYPES: {
   USPS: string
@@ -104,6 +107,8 @@ export type PrescriptionAttributeDataBase = {
   instructions: string | null
   dispensedDate: string | null
   stationNumber: string | null
+  dispStatus: string | null
+  isRenewable: boolean
 }
 
 export type PrescriptionAttributeDataBasev1 = {
@@ -129,6 +134,7 @@ export type PrescriptionAttributeDataBasev1 = {
   cmopNdcNumber: string | null
   remarks: string | null
   dispStatus: string | null
+  isRenewable: boolean
 }
 
 // request meta data
@@ -165,6 +171,7 @@ export type PrescriptionStatusCountData = {
   hold: number
   unknown: number
   total: number
+  isRenewable: number
 }
 
 export type PrescriptionsPaginationData = {

@@ -17,18 +17,18 @@ import { getStatusDefinitionTextForRefillStatus } from 'utils/prescriptions'
 type StatusDefinitionProps = StackScreenProps<HealthStackParamList, 'StatusDefinition'>
 
 function StatusDefinition({ navigation, route }: StatusDefinitionProps) {
-  const { display, value } = route.params
+  const { value, display } = route.params
   const { t } = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
-  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t, medicationsOracleHealthEnabled)
+  const { text, a11yLabel } = getStatusDefinitionTextForRefillStatus(value, t, true)
   const timeOpened = DateTime.now().toMillis()
 
   useBeforeNavBackListener(navigation, () => {
     const timeClosed = DateTime.now().toMillis()
-    logAnalyticsEvent(Events.vama_rx_status(display, timeClosed - timeOpened))
+    logAnalyticsEvent(Events.vama_rx_status(value, timeClosed - timeOpened))
   })
 
   return (

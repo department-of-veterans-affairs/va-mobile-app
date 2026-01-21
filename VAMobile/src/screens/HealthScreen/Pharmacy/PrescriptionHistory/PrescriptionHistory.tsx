@@ -104,6 +104,9 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
   const shippedPrescriptions = filter(allPrescriptions, (prescription) => {
     return prescription.attributes.isTrackable
   })
+  const renewablePrescriptions = filter(allPrescriptions, (prescription) => {
+    return prescription.attributes.isRenewable
+  })
   const inactivePrescriptions =
     (prescriptionData?.meta?.prescriptionStatusCount?.discontinued ?? 0) +
     (prescriptionData?.meta?.prescriptionStatusCount?.expired ?? 0)
@@ -237,6 +240,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
         },
       ]
     } else {
+      // Updated filter options for Oracle Health Medicines
       return [
         {
           display: 'prescription.filter.all',
@@ -252,7 +256,7 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
 
         {
           display: 'prescription.history.tag.active.inProgressv1',
-          value: RefillStatusConstants.PENDING,
+          value: RefillStatusConstants.IN_PROGRESS,
           count: pendingPrescriptions?.length || 0,
           additionalLabelText: [t('prescription.history.tag.active.inProgress.helpText')],
         },
@@ -261,6 +265,12 @@ function PrescriptionHistory({ navigation, route }: PrescriptionHistoryProps) {
           value: RefillStatusConstants.TRACKING,
           count: shippedPrescriptions?.length || 0,
           additionalLabelText: [t('prescription.history.tag.tracking.helpText')],
+        },
+        {
+          display: 'prescription.history.tag.renewable',
+          value: RefillStatusConstants.RENEWABLE,
+          count: renewablePrescriptions?.length || 0,
+          additionalLabelText: [t('prescription.history.tag.renewable.helpText')],
         },
         {
           display: 'prescription.history.tag.inactive',

@@ -1727,6 +1727,8 @@
   "prescription.history.tag.tracking": "Tracking",
   "prescription.history.tag.shipped": "Shipped",
   "prescription.history.tag.tracking.helpText": "Includes refills with current tracking information available",
+  "prescription.history.tag.renewable": "Renewal needed before refill",
+  "prescription.history.tag.renewable.helpText": "Includes prescriptions you're taking that have no refills left",
   "prescription.history.tag.transferred": "Transferred",
   "prescription.history.tag.transferred.helpText": "A prescription moved to VA's new electronic health record",
   "prescription.history.tag.unknown": "Unknown",

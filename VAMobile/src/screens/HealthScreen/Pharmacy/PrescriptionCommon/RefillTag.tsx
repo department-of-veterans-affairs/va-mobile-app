@@ -11,15 +11,16 @@ import { getTagTypeForStatus, getTextForRefillStatus } from 'utils/prescriptions
 
 export type RefillTagProps = {
   status: RefillStatus
+  dispStatus: string | null
 }
 
-function RefillTag({ status }: RefillTagProps) {
+function RefillTag({ status, dispStatus }: RefillTagProps) {
   const { t } = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
   const { data: userAuthorizedServices } = useAuthorizedServices()
   const { medicationsOracleHealthEnabled = false } = userAuthorizedServices || {}
 
-  let statusText: string = status
+  let statusText: string = dispStatus || ''
   if (!medicationsOracleHealthEnabled) {
     statusText = getTextForRefillStatus(status, t) || ''
   }
@@ -31,7 +32,7 @@ function RefillTag({ status }: RefillTagProps) {
   const labelTagProps: LabelTagProps = {
     text: statusText,
     a11yLabel: statusText,
-    labelType: getTagTypeForStatus(status, medicationsOracleHealthEnabled),
+    labelType: getTagTypeForStatus(status),
     onPress: () => navigateTo('StatusDefinition', { display: statusText, value: status }),
     a11yHint: t('prescription.history.a11yHint.status'),
     a11yRole: 'link',
