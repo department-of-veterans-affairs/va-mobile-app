@@ -135,11 +135,6 @@ platform :ios do
 
   ### UTILITIES ###
 
-  desc "Verify versioning logic without building"
-  lane :verify_version do |options|
-    update_version(options[:version] || "qa")
-  end
-
   # updates the build and version number
   def update_version (version)
     puts('version: ' + version.to_s)

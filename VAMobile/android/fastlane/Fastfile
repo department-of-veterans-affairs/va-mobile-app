@@ -116,11 +116,6 @@ platform :android do
     bundle("Release")
   end
 
-  desc "Verify versioning logic without building"
-  lane :verify_version do |options|
-    update_version_and_build(options[:version] || "qa")
-  end
-
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
   end
