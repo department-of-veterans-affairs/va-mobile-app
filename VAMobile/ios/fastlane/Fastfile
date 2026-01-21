@@ -207,7 +207,7 @@ platform :ios do
     # Use ls-remote to query the server directly. This avoids case-insensitive filesystem issues and local state drift.
     remote_tags = sh("git ls-remote --tags origin 'refs/tags/ios-build-*'").split("\n")
     # ls-remote returns lines like: "sha\trefs/tags/ios-build-123"
-    build_numbers = remote_tags.map { |line| line.split('/').last.split('^{}').first.to_i }
+    build_numbers = remote_tags.map { |line| line.split('/').last.split('-').last.to_i }
     build_numbers.max || 0
   rescue => e
     UI.error("Error fetching build numbers from remote tags: #{e}")
