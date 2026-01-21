@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppVersion } from 'api/device/getAppVersion'
 import { Box, TextView } from 'components'
+import { EnvironmentTypesConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 import { getBuildNumber } from 'utils/deviceData'
+import getEnv from 'utils/env'
 import { useTheme } from 'utils/hooks'
 
 export type AppVersionAndBuildProps = {
@@ -23,20 +25,24 @@ const AppVersionAndBuild: FC<AppVersionAndBuildProps> = ({ textColor = 'bodyText
   const theme = useTheme()
   const [buildNumber, setBuildNumber] = useState<number>()
   const appVersionQuery = useAppVersion()
+  const { ENVIRONMENT } = getEnv()
 
   useEffect(() => {
     async function getVersionAndBuild() {
-      const build = await getBuildNumber()
-      setBuildNumber(build)
+      if (ENVIRONMENT !== EnvironmentTypesConstants.Production) {
+        const build = await getBuildNumber()
+        setBuildNumber(build)
+      }
     }
 
     getVersionAndBuild()
-  }, [])
+  }, [ENVIRONMENT])
 
   return (
     <Box mb={theme.dimensions.contentMarginBottom} justifyContent={'center'} alignItems={'center'}>
       <TextView testID="AppVersionTestID" variant={textWeight} flexDirection="row" color={textColor}>
-        {t('versionAndBuild', { versionName: appVersionQuery.data, buildNumber })}
+        {t('version', { versionName: appVersionQuery.data })}
+        {buildNumber ? ` (${buildNumber})` : ''}
       </TextView>
     </Box>
   )

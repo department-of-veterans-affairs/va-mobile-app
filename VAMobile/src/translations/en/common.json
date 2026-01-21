@@ -2258,7 +2258,7 @@
   "vaccines.missingDetails.description": "Please contact your health care team if you have questions about this vaccine.",
   "vaccines.noDate": "No date noted",
   "vaccines.vaccineName": "{{name}} vaccine",
-  "versionAndBuild": "Version: {{versionName}} ({{buildNumber}})",
+  "version": "Version: {{versionName}}",
   "veteransCrisisLine.connectWithResponders": "If you're a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
   "veteransCrisisLine.crisisCallNumberDisplayed": "Call 988 and select 1",
   "veteransCrisisLine.crisisCallNumberDisplayed.a11y": "Call 9 8 8 and select 1",
