@@ -148,14 +148,18 @@ platform :ios do
     # 3. Get the absolute highest build number ever uploaded, including builds still "Processing" (robust check)
     # This prevents collisions during retries when the previous build is still being processed by Apple.
     highest_processing_build = get_highest_build_number_from_asc
-    UI.message("Highest build number found (including processing): #{highest_processing_build}")
-
+    
     # 4. Check Git tags for the highest build number ever used (safety fallback)
     highest_tag_build = get_highest_build_from_tags
-    UI.message("Highest build number found in Git tags: #{highest_tag_build}")
     
     # 5. Determine the next build number by taking the MAX of all sources + 1
     standard_highest_build = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER].to_i
+    
+    UI.message("Build Number Sources:")
+    UI.message(" - TestFlight API (Standard): #{standard_highest_build}")
+    UI.message(" - App Store Connect (Processing): #{highest_processing_build}")
+    UI.message(" - Git Tags (Remote): #{highest_tag_build}")
+
     next_build_number = [standard_highest_build + 1, highest_processing_build + 1, highest_tag_build + 1].max
     
     UI.important("Calculated Next Build Number: #{next_build_number}")
@@ -198,15 +202,15 @@ platform :ios do
     0
   end
 
-  # parses all git tags to find the highest build number used in 'ios-build-#' format
+  # parses all remote git tags to find the highest build number used in 'ios-build-#' format
   def get_highest_build_from_tags
-    # Ensure we have the latest tags from the remote before checking, but only for build tags to avoid case conflicts
-    sh("git fetch --tags --filter=blob:none origin 'refs/tags/ios-build-*:refs/tags/ios-build-*'")
-    tags = sh("git tag -l 'ios-build-*'").split("\n")
-    build_numbers = tags.map { |t| t.split('-').last.to_i }
+    # Use ls-remote to query the server directly. This avoids case-insensitive filesystem issues and local state drift.
+    remote_tags = sh("git ls-remote --tags origin 'refs/tags/ios-build-*'").split("\n")
+    # ls-remote returns lines like: "sha\trefs/tags/ios-build-123"
+    build_numbers = remote_tags.map { |line| line.split('/').last.split('^{}').first.to_i }
     build_numbers.max || 0
   rescue => e
-    UI.error("Error fetching build numbers from tags: #{e}")
+    UI.error("Error fetching build numbers from remote tags: #{e}")
     0
   end
 
