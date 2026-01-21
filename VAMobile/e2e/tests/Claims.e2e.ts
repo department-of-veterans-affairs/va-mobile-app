@@ -40,7 +40,9 @@ export const ClaimsE2eIdConstants = {
   FILE_REQUEST_BUTTON_ID: 'Step3FileRequestButton',
   CURRENT_STEP_TEXT: 'Current step',
   SELECT_A_FILE_TEXT: 'Select a file',
+  SELECT_A_FILE_TEXT2: 'Select a file\uFEFF',
   TAKE_OR_SELECT_PHOTOS_TEXT: 'Take or select photos',
+  TAKE_OR_SELECT_PHOTOS_TEXT2: 'Take or select photos\uFEFF',
   ACCEPTED_FILE_TYPES_TEXT: 'PDF (unlocked), GIF, JPEG, JPG, BMP, TXT',
   MAXIMUM_FILE_SIZE_LABEL: '50 megabytes',
   CLAIMS_STATUS_ID: 'claimsStatusID',
@@ -56,10 +58,16 @@ export const ClaimsE2eIdConstants = {
   CLAIMS_LEARN_WHAT_TO_DO: 'claimDetailsLearnWhatToDoIFDisagreeLinkID',
   CLAIMS_DECISION_REVIEW_OPTIONS: 'ClaimsDecisionReviewOptionsTestID',
   CLAIMS_LEARN_WHAT_TO_DO_BACK: 'claimsWhatToDoDisagreementCloseID',
+  NOTICE_5103_REVIEW_WAIVER: 'Review waiver',
+  NOTICE_5103_SUBMIT_WAIVER: 'Submit waiver',
+  NOTICE_5103_SUBMIT_WAIVER_ERROR: 'You must confirm you’re done adding evidence for now before submitting the waiver',
+  NOTICE_5103_SUBMIT_EVIDENCE: 'Submit evidence',
+  NOTICE_5103_REQUEST_DETAILS_ID: 'file5103RequestDetailsID',
 }
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.SHOW_5103_FLOW)
   await loginToDemoMode()
   await openBenefits()
   await openClaims()
@@ -167,13 +175,13 @@ describe('Claims Screen', () => {
   })
 
   it('should verify that the review file request alert is visible', async () => {
-    await expect(element(by.label('You have 3 file requests')).atIndex(1)).toExist()
+    await expect(element(by.label('You have 4 file requests')).atIndex(1)).toExist()
     await waitFor(element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID))).toExist()
   })
 
   it('should verify that user is sent to File requests screen', async () => {
     await element(by.id(CommonE2eIdConstants.ALERT_FILE_REQUEST_BUTTON_ID)).tap()
-    await expect(element(by.text('You have 3 file requests from VA'))).toExist()
+    await expect(element(by.text('You have 4 file requests from VA'))).toExist()
     await expect(element(by.text('Dental disability - More information needed'))).toExist()
   })
 
@@ -186,31 +194,38 @@ describe('Claims Screen', () => {
   it('should back out of the file request screen and reenter a new file request screen', async () => {
     await element(by.text('Back')).tap()
     await element(by.text('Accidental injury - 21-4176 needed')).tap()
-  })
-
-  it('verify Review evaluation details', async () => {
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_BACK)).tap()
-    await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_DETAILS_PAGE)).scrollTo('bottom')
-    await element(by.id('Review evaluation details')).tap()
-    await expect(element(by.text('Claim evaluation'))).toExist()
-    await expect(
-      element(
-        by.text(
-          'I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided. (Required)',
-        ),
-      ),
-    ).toExist()
-    await expect(element(by.id('Request claim evaluation'))).toExist()
   })
 
-  it('verify error is displayed when request claim evaluation isnt checked', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_PAGE)).scrollTo('bottom')
-    await element(by.id('Request claim evaluation')).tap()
-    await expect(element(by.text('Check the box to confirm the information is correct.'))).toExist()
+  it('should be able to open the 5103 notice', async () => {
+    await element(by.text('Automated 5103 Notice Response')).tap()
+
+    await expect(element(by.text('5103 notice - Evidence we may need'))).toExist()
+    await element(by.id(ClaimsE2eIdConstants.NOTICE_5103_REQUEST_DETAILS_ID)).scrollTo('bottom')
+
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE))).toExist()
+
+    // Review waiver screen, error content should appear if checkbox is not checked
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_REVIEW_WAIVER)).tap()
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER)).tap()
+    await expect(element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_WAIVER_ERROR))).toExist()
+    await element(by.text('Back')).tap()
+
+    // Submit evidence screen
+    await element(by.id(CommonE2eIdConstants.REQUEST_DETAILS_5103_ID)).scrollTo('bottom')
+
+    await element(by.text(ClaimsE2eIdConstants.NOTICE_5103_SUBMIT_EVIDENCE)).tap()
+
+    await element(by.id(CommonE2eIdConstants.SUBMIT_EVIDENCE_5103_ID)).scrollTo('bottom')
+
+    await expect(element(by.text(ClaimsE2eIdConstants.SELECT_A_FILE_TEXT2))).toExist()
+    await expect(element(by.text(ClaimsE2eIdConstants.TAKE_OR_SELECT_PHOTOS_TEXT2))).toExist()
+    await element(by.text('Back')).tap()
+    await element(by.text('Back')).tap()
   })
 
   it('should verify details of claim on step 1', async () => {
-    await element(by.id(ClaimsE2eIdConstants.ASK_FOR_CLAIM_DECISION_BACK)).tap()
     await element(by.id(ClaimsE2eIdConstants.FILE_REQUEST_BACK)).tap()
     await element(by.id(CommonE2eIdConstants.CLAIMS_DETAILS_BACK_ID)).tap()
     await element(by.id(CommonE2eIdConstants.CLAIMS_HISTORY_SCROLL_ID)).scrollTo('top')

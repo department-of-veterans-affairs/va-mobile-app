@@ -1,4 +1,7 @@
 import { by, element, expect, waitFor } from 'detox'
+import { DateTime } from 'luxon'
+
+import { EN_DASH } from 'utils/formattingUtils'
 
 import {
   CommonE2eIdConstants,
@@ -212,5 +215,49 @@ describe('Travel Pay Claims Screen', () => {
 
     // Changing the date picker resets the filter, so we should see all text again
     await expect(element(by.text(ALL_RESULTS_TEXT))).toExist()
+  })
+
+  it('navigates to the appointments page from the travel claims No Claims link', async () => {
+    const { TRAVEL_PAY_CLAIMS_TEST_ID, DATE_PICKER_ID, DATE_PICKER_HEADER_TEXT, DATE_PICKER_DONE_BUTTON_ID } =
+      TravePayClaimsE2eIds
+
+    await element(by.id(TRAVEL_PAY_CLAIMS_TEST_ID)).scrollTo('top')
+
+    await element(by.id(DATE_PICKER_ID)).tap()
+    await waitFor(element(by.text(DATE_PICKER_HEADER_TEXT)))
+      .toExist()
+      .withTimeout(4000)
+
+    const todaysDate = DateTime.local()
+    const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month')
+    const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month')
+
+    const monthStart = eightMonthsEarlier.toFormat('MMM')
+    const yearStart = eightMonthsEarlier.year
+    const monthEnd = sixMonthsEarlier.toFormat('MMM')
+    const yearEnd = sixMonthsEarlier.year
+
+    const dateRangeText = `${monthStart} ${yearStart} ${EN_DASH} ${monthEnd} ${yearEnd}`
+    await waitFor(element(by.label(dateRangeText)))
+      .toBeVisible()
+      .withTimeout(4000)
+    await element(by.label(dateRangeText)).tap()
+    await element(by.id(DATE_PICKER_DONE_BUTTON_ID)).tap()
+
+    // Wait for modal to dismiss to make sure we're testing the correct text
+    await waitFor(element(by.id(DATE_PICKER_HEADER_TEXT)))
+      .not.toExist()
+      .withTimeout(4000)
+
+    // Should be on No claims state of the screen with the go to appointments
+    await expect(element(by.text(`You don't have any travel claims`))).toExist()
+    await expect(element(by.id('goToPastAppointmentsLinkID'))).toExist()
+
+    // Tapping link should take you to the past appointments screen
+    await element(by.id('goToPastAppointmentsLinkID')).tap()
+    // Indicates we're on the Past Appointments page)
+    await waitFor(element(by.text('Select a past date range')))
+      .toExist()
+      .withTimeout(6000)
   })
 })
