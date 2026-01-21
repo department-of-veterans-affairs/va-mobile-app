@@ -109,6 +109,9 @@ export const oneOfFeaturesInDowntime = (
   return !!features?.some((feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
+/**
+ * Returns the list of features currently under maintenance
+ */
 export const getFeaturesInDowntime = (
   features: DowntimeFeatureType[],
   downtimeWindows: DowntimeWindowsByFeatureType,
@@ -120,6 +123,10 @@ export const getFeaturesInDowntime = (
   return _.filter(features, (feature) => featureInDowntime(feature as DowntimeFeatureType, downtimeWindows))
 }
 
+/**
+ * Returns the list of features either under maintenance or have maintenance upcoming within the window
+ * defined by MAINTENANCE_UPCOMING_WINDOW_LEAD_TIME_HOURS
+ */
 export const getFeaturesInDowntimeWindow = (
   features: DowntimeFeatureType[],
   downtimeWindows: DowntimeWindowsByFeatureType,
