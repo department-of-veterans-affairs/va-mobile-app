@@ -131,12 +131,12 @@ platform :android do
     latestBuildFromStore = get_latest_build_num
     latestBuildFromTags = get_highest_build_from_tags
 
-    UI.message("Build Number Sources:")
-    UI.message(" - Google Play (Store): #{latestBuildFromStore}")
-    UI.message(" - Git Tags (Remote): #{latestBuildFromTags}")
+    puts("Build Number Sources:")
+    puts(" - Google Play (Store): #{latestBuildFromStore}")
+    puts(" - Git Tags (Remote): #{latestBuildFromTags}")
 
     latestBuild = [latestBuildFromStore, latestBuildFromTags].max
-    UI.important("Calculated Next Build Number: #{latestBuild + 1}")
+    puts("Calculated Next Build Number: #{latestBuild + 1}")
     latestBuild = latestBuild + 1 # Increment for the new build
 
     if version=='qa'

@@ -155,14 +155,14 @@ platform :ios do
     # 5. Determine the next build number by taking the MAX of all sources + 1
     standard_highest_build = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER].to_i
     
-    UI.message("Build Number Sources:")
-    UI.message(" - TestFlight API (Standard): #{standard_highest_build}")
-    UI.message(" - App Store Connect (Processing): #{highest_processing_build}")
-    UI.message(" - Git Tags (Remote): #{highest_tag_build}")
+    puts("Build Number Sources:")
+    puts(" - TestFlight API (Standard): #{standard_highest_build}")
+    puts(" - App Store Connect (Processing): #{highest_processing_build}")
+    puts(" - Git Tags (Remote): #{highest_tag_build}")
 
     next_build_number = [standard_highest_build + 1, highest_processing_build + 1, highest_tag_build + 1].max
     
-    UI.important("Calculated Next Build Number: #{next_build_number}")
+    puts("Calculated Next Build Number: #{next_build_number}")
 
     # 6. Apply the new build number to the project
     increment_build_number(build_number: next_build_number, xcodeproj: ENV['IOS_PROJ_FILE'])
@@ -192,7 +192,7 @@ platform :ios do
 
   # queries App Store Connect for the highest build number across all versions, including processing builds
   def get_highest_build_number_from_asc
-    UI.message("Fetching highest build number from App Store Connect...")
+    puts("Fetching highest build number from App Store Connect...")
     app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
     builds = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, sort: "-uploadedDate", limit: 50, includes: nil)
     highest_build = builds.map { |b| b.version.to_i }.max || 0
