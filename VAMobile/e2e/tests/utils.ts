@@ -90,6 +90,7 @@ export const CommonE2eIdConstants = {
   LATEST_PAYMENT_GO_TO_PAYMENT_HISTORY_BUTTON_ID: 'GoToPaymentHistoryTestID',
   CONFIRM_EMAIL_TEXT: 'Confirm',
   SKIP_EMAIL_TEXT: 'Skip adding email',
+  DISMISS_WHATS_NEW_TEXT: 'Dismiss this message',
   //health
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
@@ -259,6 +260,11 @@ export async function loginToDemoMode(skipOnboarding = true, pushNotifications?:
   )
   if (turnOnNotificationsBtnExist) {
     await element(by.text(CommonE2eIdConstants.TURN_ON_NOTIFICATIONS_TEXT)).tap()
+  }
+
+  const confirmWhatsNewBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.DISMISS_WHATS_NEW_TEXT, true)
+  if (confirmWhatsNewBtnExist) {
+    await element(by.text(CommonE2eIdConstants.DISMISS_WHATS_NEW_TEXT)).tap()
   }
 
   const confirmEmailBtnExist = await checkIfElementIsPresent(CommonE2eIdConstants.CONFIRM_EMAIL_TEXT, true)
