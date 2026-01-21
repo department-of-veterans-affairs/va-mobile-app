@@ -28,7 +28,6 @@ const buildDebtsSummary = (payload?: DebtsPayload): DebtsSummary => {
 export const getDebts = async (countOnly?: boolean): Promise<DebtsPayload | undefined> => {
   const params: Params = countOnly ? { countOnly: 'true' } : {}
   const res = await get<DebtsPayload>('/v0/debts', params)
-  console.log('getDebts response:', res)
   return res
 }
 
@@ -38,7 +37,7 @@ export const getDebts = async (countOnly?: boolean): Promise<DebtsPayload | unde
 export const useDebts = (options?: { enabled?: boolean }) => {
   const query = useQuery({
     ...options,
-    queryKey: [...debtKeys.debts, 'full'],
+    queryKey: debtKeys.debts,
     queryFn: () => getDebts(false),
     meta: {
       errorName: 'getDebts: Service error',
@@ -59,14 +58,14 @@ export const useDebtsCount = (options?: { enabled?: boolean }) => {
 
   return useQuery({
     ...options,
-    queryKey: [...debtKeys.debts, 'count'],
+    queryKey: debtKeys.debtsCount,
     queryFn: async () => {
       const result = await getDebts(true)
 
       // If count-only query returns zero, pre-populate the full query cache
       // so the full query won't need to fetch later
       if (result?.debtsCount === 0) {
-        queryClient.setQueryData([...debtKeys.debts, 'full'], { data: [] })
+        queryClient.setQueryData(debtKeys.debts, { data: [] })
       }
 
       return result
