@@ -41,7 +41,9 @@ function PDFStatements({
             accessibilityLabel={t('copays.pdfStatements.statementDate', {
               date: formatDate(statement.pSStatementDateOutput),
             })}
-            accessibilityHint={t('copays.pdfStatements.statementDate.a11yLabel')}>
+            accessibilityHint={t('copays.pdfStatements.statementDate.a11yLabel', {
+              date: formatDate(statement.pSStatementDateOutput),
+            })}>
             <Box
               {...statementBoxProps}
               display={'flex'}
