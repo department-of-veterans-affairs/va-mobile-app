@@ -46,7 +46,7 @@ jobs:
   #     message: 'On demand build started by ${{ github.actor }}: "${{ needs.sanitize_inputs.outputs.notes_sanitized }}"  (:git: `${{ github.ref_name }}`). This process may take a while. See :thread: or <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|workflow run> for results.'
   ios:
     name: iOS On Demand Build
-    needs: [queue_build, start_slack_thread, sanitize_inputs]
+    needs: [queue_build, sanitize_inputs]
     uses: ./.github/workflows/build_ios.yml
     secrets: inherit
     with:
@@ -54,7 +54,7 @@ jobs:
       ref: ${{ github.ref_name }}
       environment: ${{ inputs.environment }}
       notes: ${{ needs.sanitize_inputs.outputs.notes_sanitized }}
-      slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
+      # slack_thread_ts: ${{ needs.start_slack_thread.outputs.thread_ts }}
   # android:
   #   name: Android On Demand Build
   #   needs: [queue_build, start_slack_thread, sanitize_inputs]
