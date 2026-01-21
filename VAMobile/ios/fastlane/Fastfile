@@ -40,7 +40,6 @@ platform :ios do
     build("QA")
     notes = "New QA version for " + Time.new.strftime("%m.%d.%Y") if notes.to_s.empty?
     upload_tf(notes, "Development Team")
-    tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New QA build successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
@@ -80,7 +79,6 @@ platform :ios do
     rcVersion = "#{Gem::Version.new(lane_context[SharedValues::VERSION_NUMBER]).bump}.0"
     notes = "Release Candidate build for version #{rcVersion} - #{Time.new.strftime("%m.%d.%Y")}"
     upload_tf(notes, "Development Team")
-    tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New RC for #{rcVersion} successfully uploaded to TestFlight Group - Development Team"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Release Candidate", message, "iOS", ENV['SLACK_THREAD_TS'])
   end
@@ -93,7 +91,6 @@ platform :ios do
     sign
     build
     upload_app_store
-    tag_build(lane_context[SharedValues::BUILD_NUMBER])
     message = "New Production build successfully uploaded to App Store for review"
     slack_sent_for_review(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], message, "iOS", ENV['SLACK_THREAD_TS'])
   end
@@ -138,15 +135,42 @@ platform :ios do
 
   ### UTILITIES ###
 
+  desc "Verify versioning logic without building"
+  lane :verify_version do |options|
+    update_version(options[:version] || "qa")
+  end
+
   # updates the build and version number
   def update_version (version)
     puts('version: ' + version.to_s)
-    # get the latest version of the app in test flight.
+    # 1. Get the latest version/build info from TestFlight (standard check)
+    # This populates lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION] and LATEST_TESTFLIGHT_BUILD_NUMBER
     latest_testflight_build_number
-    # set the version to the what is in app store, just in case there was drift
+    
+    # 2. Sync the local marketing version (e.g., 2.66.1) with what's actually in TestFlight
     increment_version_number(version_number: lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
-    # increment the build app_store_build_number
-    increment_build_number(build_number: lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER] + 1, xcodeproj: ENV['IOS_PROJ_FILE'])
+    
+    # 3. Get the absolute highest build number ever uploaded, including builds still "Processing" (robust check)
+    # This prevents collisions during retries when the previous build is still being processed by Apple.
+    highest_processing_build = get_highest_build_number_from_asc
+    UI.message("Highest build number found (including processing): #{highest_processing_build}")
+
+    # 4. Check Git tags for the highest build number ever used (safety fallback)
+    highest_tag_build = get_highest_build_from_tags
+    UI.message("Highest build number found in Git tags: #{highest_tag_build}")
+    
+    # 5. Determine the next build number by taking the MAX of all sources + 1
+    standard_highest_build = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER].to_i
+    next_build_number = [standard_highest_build + 1, highest_processing_build + 1, highest_tag_build + 1].max
+    
+    UI.important("Calculated Next Build Number: #{next_build_number}")
+
+    # 6. Apply the new build number to the project
+    increment_build_number(build_number: next_build_number, xcodeproj: ENV['IOS_PROJ_FILE'])
+    
+    # Tag early to avoid collisions on retries
+    tag_build(next_build_number)
+
     if version=='qa'
     # if its a qa version, we need to check the app store because it will fail if we try and upload
     # the same version as the live version to test flight
@@ -165,6 +189,28 @@ platform :ios do
       # non-qa build should use the version from the tag
       increment_version_number(version_number: /\d+\.\d+\.\d+/.match(version).to_s)
     end
+  end
+
+  # queries App Store Connect for the highest build number across all versions, including processing builds
+  def get_highest_build_number_from_asc
+    UI.message("Fetching highest build number from App Store Connect...")
+    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+    builds = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, sort: "-uploadedDate", limit: 50, includes: nil)
+    highest_build = builds.map { |b| b.version.to_i }.max || 0
+    highest_build
+  rescue => e
+    UI.error("Error fetching highest build number from App Store Connect: #{e}")
+    0
+  end
+
+  # parses all git tags to find the highest build number used in 'ios-build-#' format
+  def get_highest_build_from_tags
+    tags = sh("git tag -l 'ios-build-*'").split("\n")
+    build_numbers = tags.map { |t| t.split('-').last.to_i }
+    build_numbers.max || 0
+  rescue => e
+    UI.error("Error fetching build numbers from tags: #{e}")
+    0
   end
 
   desc "Tagging iOS build number"
