@@ -81,6 +81,8 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           token: ${{ steps.generate_token.outputs.token }}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Setup ssh-agent with VA Mobile Automation ssh key for fastlane match
         uses: webfactory/ssh-agent@v0.7.0
         with:
