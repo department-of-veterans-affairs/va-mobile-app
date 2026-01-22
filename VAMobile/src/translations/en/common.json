@@ -1545,7 +1545,7 @@
   "ohAlert.error.appointments.title": "You can't manage appointments online for some facilities right now",
   "ohAlert.error.linkText": "Find your facility's contact information",
   "ohAlert.error.medicalRecords.body": "Medical records from <bold>{{transitionDate}}</bold>, to <bold>{{endDate}}</bold>, may not be updated for these facilities until <bold>{{endDate}}</bold>:",
-  "ohAlert.error.medicalRecords.title": "New medical records may not be updated for some facilities right now",
+  "ohAlert.error.medicalRecords.title": "New medical records may not appear here until {{endDate}}",
   "ohAlert.error.medications.body": "You can't manage your medications online for these facilities until <bold>{{endDate}}</bold>:",
   "ohAlert.error.medications.note": "If you need to manage your medications now, call the facility directly.",
   "ohAlert.error.medications.title": "You can't manage medications online for some facilities right now",

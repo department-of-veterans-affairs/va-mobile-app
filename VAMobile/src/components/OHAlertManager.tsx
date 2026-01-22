@@ -28,7 +28,6 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
   const theme = useTheme()
   const { t } = useTranslation(NAMESPACE.COMMON)
 
-  console.log('Authorized Services:', authorizedServices.migratingFacilitiesList)
   const parentScreenToPhaseMap = {
     appointments: {
       warning: ['p0', 'p1'],
@@ -116,7 +115,7 @@ export const OHAlertManager = ({ parentScreen, authorizedServices }: OHAlertMana
             expandable={true}
             initializeExpanded={true}
             variant="error"
-            header={t(`ohAlert.error.${parentScreen}.title`, { date: startDate })}
+            header={t(`ohAlert.error.${parentScreen}.title`, { endDate: endDate })}
             description={''}>
             <TextView style={{ marginTop: theme.dimensions.tinyMarginBetween }}>
               <Trans
