@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import ReactNativeBlobUtil, { ReactNativeBlobUtilConfig } from 'react-native-blob-util'
 
 import { DocumentPickerResponse } from 'screens/BenefitsScreen/BenefitsStackScreens'
@@ -6,6 +7,7 @@ import { refreshAccessToken } from 'store/slices/authSlice'
 import { logNonFatalErrorToFirebase } from 'utils/analytics'
 
 const DocumentDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DocumentDir}/`
+const DownloadDirectoryPath = `${ReactNativeBlobUtil.fs.dirs.DownloadDir}/`
 
 // TODO: verify this time on the service side and match
 const FETCH_TIMEOUT_MS = 60000
@@ -204,4 +206,35 @@ export const isPdfEncrypted = async (document: DocumentPickerResponse): Promise<
   // Returns Unicode value [47, 69, 110, 99, 114, 121, 112, 116]
   const encryptSig = [...'/Encrypt'].map((str) => str.charCodeAt(0))
   return arrayIncludesArray(bytes, encryptSig)
+}
+
+// Via MDN web docs to support base64 validation and conversion just in case we get UTF-8 data
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa#unicode_strings
+export function base64ToBytes(base64: string) {
+  const binString = atob(base64)
+  return Uint8Array.from(binString, (m, _) => m.codePointAt(0)!)
+}
+
+export function bytesToBase64(bytes: Uint8Array) {
+  const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join('')
+  return btoa(binString)
+}
+
+// Validates if a string is valid base64 data - handles either UTF-8 or ASCII base64 strings
+export const isValidBase64 = (base64String: string): boolean => {
+  // Checks valid base 64 data
+  try {
+    if (bytesToBase64(base64ToBytes(base64String)) === base64String) return true
+  } catch (e) {
+    return false
+  }
+  return false
+}
+
+// Creates a file from a base64 string and returns the file path - generally used for PDFs from appointments e.g. avsPdf
+export const createFileFromBase64 = async (base64String: string, fileName: string): Promise<string> => {
+  const basePath = Platform.OS === 'ios' ? DocumentDirectoryPath : DownloadDirectoryPath
+  const filePath = basePath + fileName
+  await ReactNativeBlobUtil.fs.writeFile(filePath, base64String, 'base64')
+  return filePath
 }

@@ -1,6 +1,17 @@
-import { by, device, element, expect, waitFor } from 'detox'
+import { by, element, expect, waitFor } from 'detox'
 
-import { CommonE2eIdConstants, loginToDemoMode, openAppointments, openHealth, toggleRemoteConfigFlag } from './utils'
+import { todaysDate } from 'utils/dateUtils'
+
+import {
+  CommonE2eIdConstants,
+  iosPastApptDate,
+  loginToDemoMode,
+  openAppointments,
+  openHealth,
+  scrollToElement,
+  scrollToIDThenTap,
+  toggleRemoteConfigFlag,
+} from './utils'
 
 export const AppointmentsExpandede2eConstants = {
   PATIENT_CANCELLATION: 'You canceled this appointment.',
@@ -15,6 +26,7 @@ export const AppointmentsExpandede2eConstants = {
   CLAIM_EXAM_BULLET_2:
     'If you have any new non-VA medication records (like records from a recent surgery or illness), be sure to submit them before your appointment',
   CLAIM_EXAM_WEB_LINK: 'Learn more about claim exam appointments',
+  PAST_APPT_DETAILS_TEST_ID: 'PastApptDetailsTestID',
 }
 
 const checkTravelClaimAvailability = async (
@@ -130,7 +142,6 @@ const checkUpcomingApptDetails = async (
   } else {
     await expect(element(by.text('What'))).not.toExist()
   }
-
   if (healthcareProvider != undefined) {
     if (appointmentType != 'CC') {
       await expect(element(by.text('Who'))).toExist()
@@ -220,6 +231,7 @@ const checkUpcomingApptDetails = async (
   } else {
     await expect(element(by.text('Where to attend'))).not.toExist()
   }
+
   if (!pastAppointment) {
     if (appointmentStatus === 'Confirmed') {
       await expect(element(by.id(CommonE2eIdConstants.ADD_TO_CALENDAR_ID))).toExist()
@@ -314,6 +326,7 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.text('Cancel request'))).toExist()
     }
   }
+
   if (pastAppointment && appointmentStatus === 'Confirmed') {
     await expect(element(by.text('This appointment happened in the past.'))).toExist()
     if (
@@ -367,7 +380,10 @@ const checkUpcomingApptDetails = async (
   // If we have a claim
   // Also check if the appointment was in the past (to work with how the tests are constructed)
   if (travelClaimId && pastAppointment) {
-    await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).toExist()
+    await scrollToIDThenTap(
+      AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID,
+      AppointmentsExpandede2eConstants.PAST_APPT_DETAILS_TEST_ID,
+    )
     // await expect(element(by.id('goToVAGovID-' + travelClaimId))).toExist()
     await expect(element(by.id('goToClaimDetails-' + travelClaimId))).toExist()
     await expect(element(by.id('travelPayHelp'))).toExist()
@@ -400,8 +416,120 @@ const checkUpcomingApptDetails = async (
       await expect(element(by.id(AppointmentsExpandede2eConstants.TRAVEL_PAY_CLAIM_DETAILS_ID))).not.toExist()
     }
   }
+  await returnToAppointmentsFromDetails()
+}
 
-  await element(by.text('Appointments')).tap()
+// Scroll to element, if not found, if enabled, go to next page and continue scrolling
+export async function scrollTo(text: string, shouldTap = false, shouldGoToNextPage = false, currScroll = 0) {
+  const maxScrolls = 7
+  try {
+    await scrollToElement(text, CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)
+    if (shouldTap) {
+      await element(by.text(text)).tap()
+    }
+    return
+  } catch (e) {
+    if (shouldGoToNextPage) {
+      if (currScroll >= maxScrolls) {
+        throw new Error(`Could not find element with text: ${text} after ${maxScrolls} scrolls`)
+      }
+      await element(by.id(CommonE2eIdConstants.NEXT_PAGE_ID)).tap()
+      return await scrollTo(text, shouldTap, true, currScroll + 1)
+    }
+    throw new Error(`ERR: ${(e as Error).message}`)
+  }
+}
+
+export async function checkHasAvs(
+  hasAvs: boolean,
+  i?: number,
+  prefixText: string = 'Review after-visit summary',
+  nonExistingId = 'NoAvsAvailable',
+) {
+  if (hasAvs) {
+    if (i !== undefined) {
+      await expect(element(by.text(`${prefixText} ${i}`))).toExist()
+    } else {
+      await expect(element(by.text(`${prefixText}`))).toExist()
+    }
+  } else {
+    await expect(element(by.id(nonExistingId))).toExist()
+  }
+}
+
+// In text, elements are 1-based
+export async function clickAvsID(n?: number, text = 'Review after-visit summary') {
+  await element(by.text(`${text}${n !== undefined ? ` ${n}` : ''}`)).tap()
+  await waitFor(element(by.text('Done')))
+    .toBeVisible()
+    .withTimeout(20000)
+    .then(async () => {
+      await sleep(4000)
+      await element(by.text('Done')).tap()
+    })
+}
+
+const sleep = (milliseconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+export async function returnToAppointmentsFromDetails() {
+  await waitFor(element(by.text('Appointments')))
+    .toBeVisible()
+    .withTimeout(5000)
+    .then(async () => {
+      await element(by.text('Appointments')).tap()
+    })
+}
+
+export function checkOHAVS() {
+  describe('OH AVS Tests', () => {
+    beforeAll(async () => {
+      // Test Cerner 001 is 48 days in past, all are prior (But less than default 3 months)
+      const back48days = todaysDate.minus({ days: 48 })
+      await element(by.id(CommonE2eIdConstants.APPOINTMENTS_SCROLL_ID)).scrollTo('top')
+      await element(by.text('Past')).tap()
+      await iosPastApptDate({ to: back48days })
+      await element(by.text('Apply')).tap()
+      await sleep(1000) // Wait for the list to update
+    })
+
+    afterEach(async () => {
+      await returnToAppointmentsFromDetails()
+    })
+
+    it('should open appointment with multiple AVS and click on first', async () => {
+      await scrollTo('Cern Er 001', true)
+      await checkHasAvs(true, 1)
+      await checkHasAvs(true, 2)
+      await clickAvsID(1)
+      // Seems to have a similar problem as webview reopening in the same test flow
+      // await clickAvsID(2)
+    })
+    it('should open appointment details with empty binary for AVS', async () => {
+      await scrollTo('Cern Er 002', true)
+      await checkHasAvs(false)
+    })
+    it('should open appointment with invalid binary data for AVS', async () => {
+      await scrollTo('Cern Er 003', true)
+      await checkHasAvs(false)
+    })
+    it('should open appointment with no currently supported type of AVS', async () => {
+      await scrollTo('Cern Er 004', true)
+      await checkHasAvs(false)
+    })
+    it('should open with two valid binary data but only one supported type of AVS', async () => {
+      await scrollTo('Cern Er 005', true)
+      await checkHasAvs(true) // no number means no suffix
+      // Seems to have a similar problem as webview reopening in the same test flow
+      // await clickAvsID(undefined, 'Review after-visit summary') // no number means no suffix
+    })
+    it('should open appointment with error alert for AVS PDF (no shown PDF even if there is data)', async () => {
+      await scrollTo('Cern Er 006', true)
+      // AVS error case
+      await checkHasAvs(false, undefined, undefined, 'avs-error-alert')
+    })
+  })
 }
 
 const scrollToThenTap = async (text: string, pastAppointment: string) => {
@@ -491,7 +619,6 @@ export async function apppointmentVerification(pastAppointment = false) {
     await scrollToThenTap('Jim Smith', pastAppointmentString)
     await expect(element(by.text('Canceled community care appointment'))).toExist()
     await expect(element(by.text(AppointmentsExpandede2eConstants.PATIENT_CANCELLATION))).toExist()
-
     await checkUpcomingApptDetails(
       'CC',
       'Canceled',
@@ -1174,7 +1301,8 @@ export async function apppointmentVerification(pastAppointment = false) {
 
 beforeAll(async () => {
   await toggleRemoteConfigFlag(CommonE2eIdConstants.IN_APP_REVIEW_TOGGLE_TEXT)
-  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT)
+  // Guarantees that travel pay is enabled for these tests
+  await toggleRemoteConfigFlag(CommonE2eIdConstants.TRAVEL_PAY_CONFIG_FLAG_TEXT, true)
   await loginToDemoMode()
   await openHealth()
   await openAppointments()
@@ -1186,4 +1314,5 @@ beforeAll(async () => {
 describe(':ios: Appointments Screen Expansion', () => {
   apppointmentVerification()
   apppointmentVerification(true)
+  checkOHAVS()
 })

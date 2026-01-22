@@ -183,6 +183,10 @@ jest.mock('react-native-blob-util', () => {
       dirs: {
         DocumentDir: 'DocumentDir',
       },
+      writeFile: jest.fn(() => Promise.resolve()),
+      exists: jest.fn(() => Promise.resolve(true)),
+      mkdir: jest.fn(() => Promise.resolve()),
+      unlink: jest.fn(() => Promise.resolve()),
     },
     config: jest.fn(({ path }) => {
       return {

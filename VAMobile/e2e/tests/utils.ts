@@ -6,7 +6,11 @@ New functions/constants should be added when anything is created that might effe
 */
 import { expect as jestExpect } from '@jest/globals'
 import { by, device, element, expect, waitFor } from 'detox'
+import { DateTime } from 'luxon'
 import { setTimeout } from 'timers/promises'
+
+import { getDateFromMock } from 'store/api/demo/dateHelpers'
+import { todaysDate } from 'utils/dateUtils'
 
 import getEnv from '../../src/utils/env'
 
@@ -91,6 +95,7 @@ export const CommonE2eIdConstants = {
   CONFIRM_EMAIL_TEXT: 'Confirm',
   SKIP_EMAIL_TEXT: 'Skip adding email',
   //health
+  CALENDAR_AVS_RANGE: 'apptCalendarAVSRange',
   APPOINTMENTS_TEST_TIME: 'appointmentsTestTime',
   UPCOMING_APPT_BUTTON_TEXT: 'Upcoming',
   APPOINTMENTS_SCROLL_ID: 'appointmentsTestID',
@@ -773,15 +778,28 @@ export async function verifyAF(featureNavigationArray, AFUseCase, AFUseCaseUpgra
 
 /** Toggle the specified remote config feature flag
  * @param flagName - name of flag to toggle
+ * @param makeState - optional boolean to set the flag to a specific state
  * */
-export async function toggleRemoteConfigFlag(flagName: string) {
+export async function toggleRemoteConfigFlag(flagName: string, makeState?: boolean) {
   await loginToDemoMode()
   await openProfile()
   await openSettings()
   await openDeveloperScreen()
 
   await scrollToThenTap(CommonE2eIdConstants.REMOTE_CONFIG_BUTTON_TEXT, CommonE2eIdConstants.DEVELOPER_SCREEN_SCROLL_ID)
-  await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  if (makeState !== undefined) {
+    try {
+      await waitFor(element(by.id(flagName)))
+        .toBeVisible()
+        .whileElement(by.id(CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID))
+        .scroll(200, 'down')
+      await expect(element(by.id(flagName))).toHaveToggleValue(!makeState)
+      await element(by.id(flagName)).tap()
+    } catch (ex) {}
+  } else {
+    await scrollToIDThenTap(flagName, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
+  }
+
   await scrollToThenTap(CommonE2eIdConstants.APPLY_OVERRIDES_BUTTON_TEXT, CommonE2eIdConstants.REMOTE_CONFIG_TEST_ID)
 }
 
@@ -834,4 +852,35 @@ export async function changeDemoModeUser(testIdOfDesiredUser: string) {
   await element(by.id(testIdOfDesiredUser)).tap()
   await element(by.id(CommonE2eIdConstants.DEMO_MODE_USERS_SAVE_BUTTON_ID)).tap()
   await loginToDemoMode()
+}
+
+// Helper function to use the date picker for past appointments in iOS
+export async function iosSelectDateInPicker(selectDate: DateTime, pickerId: string) {
+  const dateToUse = pickerId.includes('From') ? todaysDate.minus({ months: 3 }) : todaysDate
+  const selectDateMonth = selectDate.monthLong
+  const selectDateYear = selectDate.year.toString()
+  const selectDateDay = selectDate.day.toString() // not 0 based
+  const dateToUseMonth = dateToUse.monthLong
+  const dateToUseYear = dateToUse.year.toString()
+
+  await element(by.id(pickerId)).tap()
+  await element(by.text(`${dateToUseMonth} ${dateToUseYear}`))
+    .atIndex(0)
+    .tap()
+  await element(by.type('UIPickerView')).setColumnToValue(1, `${selectDateYear}`)
+  await element(by.type('UIPickerView')).setColumnToValue(0, `${selectDateMonth}`)
+  await element(by.text('Apply')).tap()
+  await element(by.id(pickerId)).tap()
+  await expect(element(by.text(`${selectDateMonth} ${selectDateYear}`)).atIndex(0)).toBeVisible()
+  const el = element(by.text(new RegExp(`^${selectDateDay}$`)).withAncestor(by.type('UIDatePicker')))
+  await el.atIndex(1).tap()
+}
+
+export async function iosPastApptDate({ to, from }: { to?: DateTime; from?: DateTime }) {
+  if (to) {
+    await iosSelectDateInPicker(to, 'datePickerToFieldTestId')
+  }
+  if (from) {
+    await iosSelectDateInPicker(from, 'datePickerFromFieldTestId')
+  }
 }
